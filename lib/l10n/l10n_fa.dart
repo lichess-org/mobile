@@ -12,7 +12,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAccountPreferences => 'تنظیمات حساب کاربری';
 
   @override
-  String get mobileAccountPreferencesHelp => 'این تنظیمات به اکانت لیچس‌تان اعمال می‌شود و در سراسر دستگاه های شما استفاده می‌شود.';
+  String get mobileAccountPreferencesHelp =>
+      'این تنظیمات به اکانت لیچس‌تان اعمال می‌شود و در سراسر دستگاه های شما استفاده می‌شود.';
 
   @override
   String get mobileAllGames => 'همه بازی‌ها';
@@ -70,7 +71,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileNoSearchResults => 'بدون پیامد';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'توجه داشته باشین که تمام غابلیت های نرم‌افزار های قدیمی و وبسایت در حال حاضر موجود هستند، ولی ما در تمام مدت داریم غابلیت های جدید اضافه میکنیم.';
+  String get mobileNotAllFeaturesAreAvailable =>
+      'توجه داشته باشین که تمام غابلیت های نرم‌افزار های قدیمی و وبسایت در حال حاضر موجود هستند، ولی ما در تمام مدت داریم غابلیت های جدید اضافه میکنیم.';
 
   @override
   String get mobileNotFollowingAnyUser => 'شما هیچ کاربری را نمی‌دنبالید.';
@@ -99,7 +101,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را به پایان برسانید؟';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'چیزی برای نمایش نیست، خواهشمندیم فیلتر ها را عوض کنید';
+  String get mobilePuzzleStormFilterNothingToShow =>
+      'چیزی برای نمایش نیست، خواهشمندیم فیلتر ها را عوض کنید';
 
   @override
   String get mobilePuzzleStormNothingToShow => 'چیزی برای نمایش نیست، چند دور معماباران بازی کنید.';
@@ -108,10 +111,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'هر چند تا معما را که می‌توانید در ۳ دقیقه حل کنید.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.';
+  String get mobilePuzzleStreakAbortWarning =>
+      'شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'معماهایی را از گشایش دلخواه‌تان بازی کنید، یا جستاری را برگزینید.';
+  String get mobilePuzzleThemesSubtitle =>
+      'معماهایی را از گشایش دلخواه‌تان بازی کنید، یا جستاری را برگزینید.';
 
   @override
   String get mobilePuzzlesTab => 'معماها';
@@ -147,7 +152,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'حالت فراگیر';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.';
+  String get mobileSettingsImmersiveModeSubtitle =>
+      'پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'مهره‌های زده‌شده';
@@ -156,7 +162,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'انتخاب عکس';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'پس زمینه انتخوابی فقط در حالت سیاه کار میکند. عکس سیاه پیشنهاد میشود';
+  String get mobileSettingsPickAnImageHelp =>
+      'پس زمینه انتخوابی فقط در حالت سیاه کار میکند. عکس سیاه پیشنهاد میشود';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'تصویر را تار کنید';
@@ -168,7 +175,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'پدیدار کردن صفحه';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'برای نمایش تنظیمات دیگر انگشت خود را بکشید';
+  String get mobileSettingsPickAnImageSwipeToDisplay =>
+      'برای نمایش تنظیمات دیگر انگشت خود را بکشید';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'یا بکشید یا ضربه بزنید';
@@ -180,7 +188,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'فلش کشیدن';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'فلش ها را با دو انگشت بکشید: یک انگشت در یک خانه ی خالی و انگشت دیگر را بکشید تا بتوانسد فلش بکشید.';
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'فلش ها را با دو انگشت بکشید: یک انگشت در یک خانه ی خالی و انگشت دیگر را بکشید تا بتوانسد فلش بکشید.';
 
   @override
   String get mobileSettingsShowBorder => 'نمایش حاشیه';
@@ -189,7 +198,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'بازخورد لمسی';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'در صورت فعال شدن ، دستگاه شما زمانی که حرکتی انجام میدهید یا مهره ای را میگیرید و ویبره میشود';
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'در صورت فعال شدن ، دستگاه شما زمانی که حرکتی انجام میدهید یا مهره ای را میگیرید و ویبره میشود';
 
   @override
   String get mobileSettingsTab => 'تنظیمات';
@@ -463,7 +473,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaIsItRated => 'آیا رسمی است؟';
 
   @override
-  String get arenaWillBeNotified => 'هنگامی که مسابقات می‌آغازد آگاهانده خواهید شد، بنابراین می‌توانید هنگام انتظار، در زبانهٔ دیگری بازی کنید.';
+  String get arenaWillBeNotified =>
+      'هنگامی که مسابقات می‌آغازد آگاهانده خواهید شد، بنابراین می‌توانید هنگام انتظار، در زبانهٔ دیگری بازی کنید.';
 
   @override
   String get arenaIsRated => 'این مسابقات رسمی است و بر درجه‌بندی‌تان اثر می‌گذارد.';
@@ -478,37 +489,43 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'امتیازات چگونه محاسبه می‌شود؟';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'هر برد ۲ امتیاز پایه دارد، هر مساوی ۱ امتیاز، و هر باخت هیچ امتیازی ندارد.\nاگر شما دو بازی پیاپی را ببرید، شما دنبالهٔ امتیازیِ دو برابر را می‌آغازید که با نقشک شعله نمایانده می‌شود.\nبازی‌های بعدی هم، ارزشِ امتیازیِ دو برابر را حفظ خواهند کرد تا زمانی که یک بازی را نَبَرید.\nیعنی در حالت شعله، ارزش هر برد ۴ امتیاز، هر مساوی ۲ امتیاز خواهد شد، و هر باخت باز هم هیچ امتیازی ندارد.\n\nبرای مثال، دو برد و سپس یک مساوی ارزشش ۶ امتیاز می‌شود: (۱×۲)+۲+۲';
+  String get arenaHowAreScoresCalculatedAnswer =>
+      'هر برد ۲ امتیاز پایه دارد، هر مساوی ۱ امتیاز، و هر باخت هیچ امتیازی ندارد.\nاگر شما دو بازی پیاپی را ببرید، شما دنبالهٔ امتیازیِ دو برابر را می‌آغازید که با نقشک شعله نمایانده می‌شود.\nبازی‌های بعدی هم، ارزشِ امتیازیِ دو برابر را حفظ خواهند کرد تا زمانی که یک بازی را نَبَرید.\nیعنی در حالت شعله، ارزش هر برد ۴ امتیاز، هر مساوی ۲ امتیاز خواهد شد، و هر باخت باز هم هیچ امتیازی ندارد.\n\nبرای مثال، دو برد و سپس یک مساوی ارزشش ۶ امتیاز می‌شود: (۱×۲)+۲+۲';
 
   @override
   String get arenaBerserk => 'دیوانگیِ راوان';
 
   @override
-  String get arenaBerserkAnswer => 'هنگامی که بازیکنی در آغاز بازی روی دکمهٔ «دیوانگی» می‌تِلیکد، نیمی از زمانش را از دست می‌دهد، اما بُرد یک امتیاز اضافی برایش در مسابقات دارد.\n\nرفتن به «دیوانگی» در زمان‌بندی افزایشی، آن افزایش را هم لغو می‌کند (۱+۲ یک استثناست، ۱+۰ می‌دهد).\n\nدیوانگی در بازی‌های با زمان آغازین صفر (۰+۱، ۰+۲) دسترس‌پذیر نیست.\n\nدیوانگی تنها هنگامی یک امتیاز اضافی به شما می دهد که دست‌کم ۷ حرکت در بازی انجام دهید.';
+  String get arenaBerserkAnswer =>
+      'هنگامی که بازیکنی در آغاز بازی روی دکمهٔ «دیوانگی» می‌تِلیکد، نیمی از زمانش را از دست می‌دهد، اما بُرد یک امتیاز اضافی برایش در مسابقات دارد.\n\nرفتن به «دیوانگی» در زمان‌بندی افزایشی، آن افزایش را هم لغو می‌کند (۱+۲ یک استثناست، ۱+۰ می‌دهد).\n\nدیوانگی در بازی‌های با زمان آغازین صفر (۰+۱، ۰+۲) دسترس‌پذیر نیست.\n\nدیوانگی تنها هنگامی یک امتیاز اضافی به شما می دهد که دست‌کم ۷ حرکت در بازی انجام دهید.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'برنده چگونه تعیین می‌شود؟';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'بازیکن(ها) با بیشترین امتیاز در پایان زمان مسابقه به عنوان برنده(برندگان) اعلام خواهند شد.\nزمانی که دو یا چند بازیکن تعداد امتیازات یکسانی داشته باشند، ملاک سنجش عملکرد مسابقه به وقت اضافه است.';
+  String get arenaHowIsTheWinnerDecidedAnswer =>
+      'بازیکن(ها) با بیشترین امتیاز در پایان زمان مسابقه به عنوان برنده(برندگان) اعلام خواهند شد.\nزمانی که دو یا چند بازیکن تعداد امتیازات یکسانی داشته باشند، ملاک سنجش عملکرد مسابقه به وقت اضافه است.';
 
   @override
   String get arenaHowDoesPairingWork => 'رویارویی بازیکنان با یکدیگر چگونه انجام میشود؟';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'در آغاز مسابقات، بازیکنان بر پایه درجه‌بندی‌شان برابر هم قرار می‌گیرند.\nبه محض پایان یک بازی، به سَرسَرا بازگردید: سپس برابر بازیکنی نزدیک به رتبه‌تان قرار می‌گیرید. این شیوه، دست‌کم زمان انتظار را تضمین می‌کند، با این حال، ممکن است با همه بازیکنان این مسابقات روبرو نشوید.\nبه سرعت بازی کنید و به سَرسَرا بازگردید تا بازی‌های بیشتری کنید و امتیاز بیشتری کسب کنید.';
+  String get arenaHowDoesPairingWorkAnswer =>
+      'در آغاز مسابقات، بازیکنان بر پایه درجه‌بندی‌شان برابر هم قرار می‌گیرند.\nبه محض پایان یک بازی، به سَرسَرا بازگردید: سپس برابر بازیکنی نزدیک به رتبه‌تان قرار می‌گیرید. این شیوه، دست‌کم زمان انتظار را تضمین می‌کند، با این حال، ممکن است با همه بازیکنان این مسابقات روبرو نشوید.\nبه سرعت بازی کنید و به سَرسَرا بازگردید تا بازی‌های بیشتری کنید و امتیاز بیشتری کسب کنید.';
 
   @override
   String get arenaHowDoesItEnd => 'چگونه به پایان می رسد؟';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'این مسابقات دارای یک ساعت معکوس است. وقتی به صفر رسید، رتبه‌بندی مسابقات ثابت می‌شود و برنده اعلام می‌شود. بازی‌های ناپایان، باید به پایان رسند، با این حال، آنها جز مسابقات شمرده نمی‌شوند.';
+  String get arenaHowDoesItEndAnswer =>
+      'این مسابقات دارای یک ساعت معکوس است. وقتی به صفر رسید، رتبه‌بندی مسابقات ثابت می‌شود و برنده اعلام می‌شود. بازی‌های ناپایان، باید به پایان رسند، با این حال، آنها جز مسابقات شمرده نمی‌شوند.';
 
   @override
   String get arenaOtherRules => 'قوانین مهم دیگر';
 
   @override
-  String get arenaThereIsACountdown => 'برای اولین حرکت شما یک شمارش معکوس وجود دارد. اگر در این زمان نتوانید حرکت خود را انجام دهید، بازی برای حریف شما باطل خواهد شد.';
+  String get arenaThereIsACountdown =>
+      'برای اولین حرکت شما یک شمارش معکوس وجود دارد. اگر در این زمان نتوانید حرکت خود را انجام دهید، بازی برای حریف شما باطل خواهد شد.';
 
   @override
   String get arenaThisIsPrivate => 'این یک مسابقهٔ خصوصی است';
@@ -524,7 +541,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants => 'حداقل حرکت برای بازی‌های مساوی‌شدهٔ امتیازدار، بر پایهٔ وَرتا، متفاوت است. جدول زیر، آستانهٔ هر وَرتا را می‌نمایاند.';
+  String get arenaDrawStreakVariants =>
+      'حداقل حرکت برای بازی‌های مساوی‌شدهٔ امتیازدار، بر پایهٔ وَرتا، متفاوت است. جدول زیر، آستانهٔ هر وَرتا را می‌نمایاند.';
 
   @override
   String get arenaVariant => 'وَرتا';
@@ -542,13 +560,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaCustomStartDate => 'تنظیم تاریخ شروع';
 
   @override
-  String get arenaCustomStartDateHelp => 'در منطقه زمانی محلی خودتان. تنظیمات \"زمان قبل شروع شدن مسابقه\" را نادیده می گیرد';
+  String get arenaCustomStartDateHelp =>
+      'در منطقه زمانی محلی خودتان. تنظیمات \"زمان قبل شروع شدن مسابقه\" را نادیده می گیرد';
 
   @override
   String get arenaAllowBerserk => 'اجازهٔ دیوانگی';
 
   @override
-  String get arenaAllowBerserkHelp => 'به بازیکنان اجازه دهید زمان خود را نصف کنند تا یک امتیاز بیشتر بگیرند';
+  String get arenaAllowBerserkHelp =>
+      'به بازیکنان اجازه دهید زمان خود را نصف کنند تا یک امتیاز بیشتر بگیرند';
 
   @override
   String get arenaAllowChatHelp => 'اجازه‌دهی به بازیکنان برای بحث در گپ‌سَرا';
@@ -587,10 +607,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaPickYourTeam => 'تیم خود را انتخاب کنید';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle => 'نماینده کدام تیم در این نبرد خواهید بود؟';
+  String get arenaWhichTeamWillYouRepresentInThisBattle =>
+      'نماینده کدام تیم در این نبرد خواهید بود؟';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'برای شرکت کردن، شما باید عضو یکی از این تیم ها شوید!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
+      'برای شرکت کردن، شما باید عضو یکی از این تیم ها شوید!';
 
   @override
   String get arenaCreated => 'ایجاد شده';
@@ -605,7 +627,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaTournamentStats => 'آمار مسابقه';
 
   @override
-  String get arenaRankAvgHelp => 'میانگین رتبه دهی، درصدبندی از جایگاه شما است. پایین‌تر بهتر است.\n\nبه عنوان مثال، رتبه 3 در مسابقاتی با 100 بازیکن = 3٪. رتبه 10 در مسابقاتی با 1000 بازیکن = 1٪.';
+  String get arenaRankAvgHelp =>
+      'میانگین رتبه دهی، درصدبندی از جایگاه شما است. پایین‌تر بهتر است.\n\nبه عنوان مثال، رتبه 3 در مسابقاتی با 100 بازیکن = 3٪. رتبه 10 در مسابقاتی با 1000 بازیکن = 1٪.';
 
   @override
   String get arenaMedians => 'میانه';
@@ -692,7 +715,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastHowToUseLichessBroadcasts => 'نحوه استفاده از پخش همگانی Lichess.';
 
   @override
-  String get broadcastTheNewRoundHelp => 'دور جدید، همان اعضا و مشارکت‌کنندگان دور قبلی را خواهد داشت.';
+  String get broadcastTheNewRoundHelp =>
+      'دور جدید، همان اعضا و مشارکت‌کنندگان دور قبلی را خواهد داشت.';
 
   @override
   String get broadcastAddRound => 'اضافه کردن یک دور';
@@ -724,7 +748,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'وب‌نشانیِ PGN';
 
   @override
-  String get broadcastSourceUrlHelp => 'وب‌نشانی‌ای که Lichess برای دریافت به‌روزرسانی‌های PGN می‌بررسد. آن باید از راه اینترنت در دسترس همگان باشد.';
+  String get broadcastSourceUrlHelp =>
+      'وب‌نشانی‌ای که Lichess برای دریافت به‌روزرسانی‌های PGN می‌بررسد. آن باید از راه اینترنت در دسترس همگان باشد.';
 
   @override
   String get broadcastSourceGameIds => 'تا ۶۴ شناسهٔ بازی Lichess، جداشده با فاصله.';
@@ -753,7 +778,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'این دور و همه بازی‌هایش را به طور کامل حذف کن.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'همه بازی‌های این دور را حذف کن. منبع باید فعال باشد تا بتوان آنها را بازساخت.';
+  String get broadcastDeleteAllGamesOfThisRound =>
+      'همه بازی‌های این دور را حذف کن. منبع باید فعال باشد تا بتوان آنها را بازساخت.';
 
   @override
   String get broadcastEditRoundStudy => 'ویرایش مطالعه دور';
@@ -762,7 +788,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastDeleteTournament => 'حذف این مسابقات';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'کل مسابقات، شامل همه دورها و بازی‌هایش را به طور کامل حذف کن.';
+  String get broadcastDefinitivelyDeleteTournament =>
+      'کل مسابقات، شامل همه دورها و بازی‌هایش را به طور کامل حذف کن.';
 
   @override
   String get broadcastShowScores => 'نمایش امتیاز بازیکنان بر پایه نتیجه بازی‌ها';
@@ -810,13 +837,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastOverview => 'نمای کلی';
 
   @override
-  String get broadcastSubscribeTitle => 'مشترک شوید تا از آغاز هر دور باخبر شوید. می‌توانید اعلان‌های زنگی یا رانشی برای پخش‌های زنده را در تنظیمات حساب‌تان تغییر دهید.';
+  String get broadcastSubscribeTitle =>
+      'مشترک شوید تا از آغاز هر دور باخبر شوید. می‌توانید اعلان‌های زنگی یا رانشی برای پخش‌های زنده را در تنظیمات حساب‌تان تغییر دهید.';
 
   @override
   String get broadcastUploadImage => 'بارگذاری تصویر مسابقات';
 
   @override
-  String get broadcastNoBoardsYet => 'تاکنون هیچی. وقتی بازی‌ها بارگذاری شدند، میزها پدیدار خواهند شد.';
+  String get broadcastNoBoardsYet =>
+      'تاکنون هیچی. وقتی بازی‌ها بارگذاری شدند، میزها پدیدار خواهند شد.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -891,7 +920,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastBackToLiveMove => 'بازگشت به حرکت زنده';
 
   @override
-  String get broadcastSinceHideResults => 'چون شما پنهان کردن نتایج را انتخاب کردید، تمام صفحه‌های پیش‌نمایش برای جلوگیری از لو رفتن نتیجه، خالی هستند.';
+  String get broadcastSinceHideResults =>
+      'چون شما پنهان کردن نتایج را انتخاب کردید، تمام صفحه‌های پیش‌نمایش برای جلوگیری از لو رفتن نتیجه، خالی هستند.';
 
   @override
   String get broadcastLiveboard => 'صفحه زنده';
@@ -944,7 +974,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get challengeChallengeCanceled => 'پیشنهاد بازی لغو شد.';
 
   @override
-  String get challengeRegisterToSendChallenges => 'برای پیشنهاد بازی دادن به این کاربر، لطفا نام‌نویسی کنید.';
+  String get challengeRegisterToSendChallenges =>
+      'برای پیشنهاد بازی دادن به این کاربر، لطفا نام‌نویسی کنید.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
@@ -975,13 +1006,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get challengeDeclineGeneric => 'من فعلا پیشنهاد بازی نمی‌پذیرم.';
 
   @override
-  String get challengeDeclineLater => 'الان زمان مناسبی برای من نیست، لطفا بعدا دوباره درخواست دهید.';
+  String get challengeDeclineLater =>
+      'الان زمان مناسبی برای من نیست، لطفا بعدا دوباره درخواست دهید.';
 
   @override
-  String get challengeDeclineTooFast => 'این زمان‌بندی برایم خیلی کم است، لطفا دوباره با زمان‌بندی بیشتر پیشنهاد بازی دهید.';
+  String get challengeDeclineTooFast =>
+      'این زمان‌بندی برایم خیلی کم است، لطفا دوباره با زمان‌بندی بیشتر پیشنهاد بازی دهید.';
 
   @override
-  String get challengeDeclineTooSlow => 'این زمان‌بندی برایم خیلی زیاد است، لطفا دوباره با زمان‌بندی کمتر پیشنهاد بازی دهید.';
+  String get challengeDeclineTooSlow =>
+      'این زمان‌بندی برایم خیلی زیاد است، لطفا دوباره با زمان‌بندی کمتر پیشنهاد بازی دهید.';
 
   @override
   String get challengeDeclineTimeControl => 'من با این زمان‌بندی، پیشنهاد بازی را نمی‌پذیرم.';
@@ -1030,25 +1064,32 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard => 'دانستن همآرای صفحه شطرنج، مهارت خیلی مهمی است، به چند دلیل:';
+  String get coordinatesKnowingTheChessBoard =>
+      'دانستن همآرای صفحه شطرنج، مهارت خیلی مهمی است، به چند دلیل:';
 
   @override
-  String get coordinatesMostChessCourses => 'بیشتر دوره‌ها و تمرین‌های شطرنج، از نشانه‌گذاری جبری استفاده می‌کنند.';
+  String get coordinatesMostChessCourses =>
+      'بیشتر دوره‌ها و تمرین‌های شطرنج، از نشانه‌گذاری جبری استفاده می‌کنند.';
 
   @override
-  String get coordinatesTalkToYourChessFriends => 'صحبت با دوستان شطرنجی‌تان را آسان‌تر می‌کند، زیرا هر دوی‌تان «زبان شطرنج» را می‌فهمید.';
+  String get coordinatesTalkToYourChessFriends =>
+      'صحبت با دوستان شطرنجی‌تان را آسان‌تر می‌کند، زیرا هر دوی‌تان «زبان شطرنج» را می‌فهمید.';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'اگر بتوانید همآرا را به‌تندی تشخیص دهید، می‌توانید یک بازی را موثرتر واکاوید.';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'اگر بتوانید همآرا را به‌تندی تشخیص دهید، می‌توانید یک بازی را موثرتر واکاوید.';
 
   @override
-  String get coordinatesACoordinateAppears => 'همآرا روی صفحه ظاهر می‌شود و شما باید روی خانهٔ همنوا بزنید.';
+  String get coordinatesACoordinateAppears =>
+      'همآرا روی صفحه ظاهر می‌شود و شما باید روی خانهٔ همنوا بزنید.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation => 'یک خانه روی صفحه رنگی شده است و شما باید همآرای آن را وارد کنید (مثال «e4»).';
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'یک خانه روی صفحه رنگی شده است و شما باید همآرای آن را وارد کنید (مثال «e4»).';
 
   @override
-  String get coordinatesYouHaveThirtySeconds => 'شما 30 ثانیه فرصت دارید تا هر چه بیشتر خانه‌ها را به‌درستی بیابید!';
+  String get coordinatesYouHaveThirtySeconds =>
+      'شما 30 ثانیه فرصت دارید تا هر چه بیشتر خانه‌ها را به‌درستی بیابید!';
 
   @override
   String get coordinatesGoAsLongAsYouWant => 'بدون محدودیت زمانی';
@@ -1095,7 +1136,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get perfStatProvisional => 'موقت';
 
   @override
-  String get perfStatNotEnoughRatedGames => 'بازی های رسمی کافی برای تعیین کردن یک درجه‌بندی قابل‌اتکا انجام نشده است.';
+  String get perfStatNotEnoughRatedGames =>
+      'بازی های رسمی کافی برای تعیین کردن یک درجه‌بندی قابل‌اتکا انجام نشده است.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1237,7 +1279,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesShowFlairs => 'نمایش نشان بازیکنان';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'این گزینه همه درجه‌بندی‌ها در Lichess را پنهان می‌کند تا کمک کند روی شطرنج تمرکز کنید. بازی‌های رسمی همچنان بر درجه‌بندی‌تان تاثیر می‌گذارند، این گزینه فقط مربوط به دیدن/ندیدن درجه‌بندی‌هاست.';
+  String get preferencesExplainShowPlayerRatings =>
+      'این گزینه همه درجه‌بندی‌ها در Lichess را پنهان می‌کند تا کمک کند روی شطرنج تمرکز کنید. بازی‌های رسمی همچنان بر درجه‌بندی‌تان تاثیر می‌گذارند، این گزینه فقط مربوط به دیدن/ندیدن درجه‌بندی‌هاست.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'نمایش دستگیره برای تغییر اندازه صفحه';
@@ -1258,7 +1301,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesTenthsOfSeconds => 'دهم ثانیه';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'وقتی زمان باقی مانده کمتر از ده ثانیه می باشد';
+  String get preferencesWhenTimeRemainingLessThanTenSeconds =>
+      'وقتی زمان باقی مانده کمتر از ده ثانیه می باشد';
 
   @override
   String get preferencesHorizontalGreenProgressBars => 'نمودار زمان سبز رنگ افقی';
@@ -1297,22 +1341,26 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'ارتقا خودکار به وزیر';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => '<ctrl> را در هنگام تبلیغ بزنید تا به طور موقت تبلیغات خودکار را غیرفعال کنید';
+  String get preferencesExplainPromoteToQueenAutomatically =>
+      '<ctrl> را در هنگام تبلیغ بزنید تا به طور موقت تبلیغات خودکار را غیرفعال کنید';
 
   @override
   String get preferencesWhenPremoving => 'در زمان پیش حرکت';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'ادعای خودکار تساوی، در تکرار سه‌گانه';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
+      'ادعای خودکار تساوی، در تکرار سه‌گانه';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'وقتی زمان باقی مانده کمتر از سی ثانیه است';
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds =>
+      'وقتی زمان باقی مانده کمتر از سی ثانیه است';
 
   @override
   String get preferencesMoveConfirmation => 'تایید حرکت';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'می‌تواند هنگام بازی با «گزینگان صفحه‌بازی» خاموش شود';
+  String get preferencesExplainCanThenBeTemporarilyDisabled =>
+      'می‌تواند هنگام بازی با «گزینگان صفحه‌بازی» خاموش شود';
 
   @override
   String get preferencesInCorrespondenceGames => 'در حال بازی مکاتبه ای';
@@ -1321,7 +1369,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'مکاتبه ای و نامحدود';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'نیاز به تایید دوباره؛ زمانی که تسلیم می شوید یا پیشنهاد تساوی می دهید';
+  String get preferencesConfirmResignationAndDrawOffers =>
+      'نیاز به تایید دوباره؛ زمانی که تسلیم می شوید یا پیشنهاد تساوی می دهید';
 
   @override
   String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'روش قلعه‌روی';
@@ -1342,16 +1391,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'چسبیدن پیکان‌ها به حرکت‌های ممکن';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'گفتن \"بازی خوبی بود، خوب بازی کردی\" در هنگام باخت یا تساوی';
+  String get preferencesSayGgWpAfterLosingOrDrawing =>
+      'گفتن \"بازی خوبی بود، خوب بازی کردی\" در هنگام باخت یا تساوی';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'تغییرات شما ذخیره شده است';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'برای بازپخش حرکت‌ها، روی صفحه بازی بِنَوَردید';
+  String get preferencesScrollOnTheBoardToReplayMoves =>
+      'برای بازپخش حرکت‌ها، روی صفحه بازی بِنَوَردید';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'فهرست رایانامهٔ روزانه از بازی‌های مکاتبه‌ای‌تان';
+  String get preferencesCorrespondenceEmailNotification =>
+      'فهرست رایانامهٔ روزانه از بازی‌های مکاتبه‌ای‌تان';
 
   @override
   String get preferencesNotifyStreamStart => 'بَرخَط-محتواساز روی پخش است';
@@ -1441,7 +1493,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleDownVote => 'معمای بدی بود';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'درجه‌بندی معمایی شما تغییری نخواهد کرد. توجه داشته باشید که معماها یک رقابت نیستند. درجه‌بندی‌تان به انتخاب بهترین معماها برای سطح مهارت فعلی‌تان کمک می‌کند.';
+  String get puzzleYourPuzzleRatingWillNotChange =>
+      'درجه‌بندی معمایی شما تغییری نخواهد کرد. توجه داشته باشید که معماها یک رقابت نیستند. درجه‌بندی‌تان به انتخاب بهترین معماها برای سطح مهارت فعلی‌تان کمک می‌کند.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'بهترین حرکت سفید را بیابید.';
@@ -1488,10 +1541,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'معماها بر اساس گشایش‌ها';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'گشایش‌هایی که بیش از همه در بازی‌های امتیازی کرده‌اید';
+  String get puzzleOpeningsYouPlayedTheMost =>
+      'گشایش‌هایی که بیش از همه در بازی‌های امتیازی کرده‌اید';
 
   @override
-  String get puzzleUseFindInPage => 'از گزینه «جستجو در صفحه» مرورگر استفاده کنید تا گشایش دلخواه‌تان را بیابید!';
+  String get puzzleUseFindInPage =>
+      'از گزینه «جستجو در صفحه» مرورگر استفاده کنید تا گشایش دلخواه‌تان را بیابید!';
 
   @override
   String get puzzleUseCtrlF => 'از Ctrl+f برای یابیدن گشایش دلخواه‌تان استفاده کنید!';
@@ -1567,7 +1622,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleFailed => 'شکست!';
 
   @override
-  String get puzzleStreakDescription => 'به تدریج معماهای سخت‌تری را حل کنید و یک دنباله بُرد بسازید. محدویت زمانی وجود ندارد، پس عجله نکنید. با یک حرکت اشتباه، بازی تمام می‌شود! در هر دور، می‌توانید یک حرکت را رَد کنید.';
+  String get puzzleStreakDescription =>
+      'به تدریج معماهای سخت‌تری را حل کنید و یک دنباله بُرد بسازید. محدویت زمانی وجود ندارد، پس عجله نکنید. با یک حرکت اشتباه، بازی تمام می‌شود! در هر دور، می‌توانید یک حرکت را رَد کنید.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1575,7 +1631,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation => 'این حرکت را رد کنید تا رکورد خود را حفظ کنید! فقط یک بار در هر دور امکان‌پذیر است.';
+  String get puzzleStreakSkipExplanation =>
+      'این حرکت را رد کنید تا رکورد خود را حفظ کنید! فقط یک بار در هر دور امکان‌پذیر است.';
 
   @override
   String get puzzleContinueTheStreak => 'توالی را ادامه دهید';
@@ -1593,7 +1650,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleSearchPuzzles => 'جستجوی معما';
 
   @override
-  String get puzzleFromMyGamesNone => 'شما هیچ معمایی در دادگان ندارید، اما Lichess همچنان شما را بسیار دوست دارد.\n\nبازی‌های سریع و فکری را انجام دهید تا بخت‌تان را برای افزودن معمایی از خودتان بیفزایید!';
+  String get puzzleFromMyGamesNone =>
+      'شما هیچ معمایی در دادگان ندارید، اما Lichess همچنان شما را بسیار دوست دارد.\n\nبازی‌های سریع و فکری را انجام دهید تا بخت‌تان را برای افزودن معمایی از خودتان بیفزایید!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'آموزش، واکاوی، بهبود';
@@ -1682,43 +1740,50 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'پیاده پیش رفته';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription => 'یکی از پیاده‌های‌تان به اردوگاه حریف پیش رفته، شاید تهدید به ارتقا دارد.';
+  String get puzzleThemeAdvancedPawnDescription =>
+      'یکی از پیاده‌های‌تان به اردوگاه حریف پیش رفته، شاید تهدید به ارتقا دارد.';
 
   @override
   String get puzzleThemeAdvantage => 'برتری';
 
   @override
-  String get puzzleThemeAdvantageDescription => 'از بخت‌تان برای رسیدن به برتری قطعی بهره برید. (۲۰۰ص‌پ ≤ ارزیابی ≤ ۶۰۰ص‌پ)';
+  String get puzzleThemeAdvantageDescription =>
+      'از بخت‌تان برای رسیدن به برتری قطعی بهره برید. (۲۰۰ص‌پ ≤ ارزیابی ≤ ۶۰۰ص‌پ)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'مات آناستازیا';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => 'یک اسب و یک رخ به همدیگر کمک میکنند تا شاه حریف را بین گوشه های زمین و یک مهره از حریف زندانی کنند.';
+  String get puzzleThemeAnastasiaMateDescription =>
+      'یک اسب و یک رخ به همدیگر کمک میکنند تا شاه حریف را بین گوشه های زمین و یک مهره از حریف زندانی کنند.';
 
   @override
   String get puzzleThemeArabianMate => 'مات عربی';
 
   @override
-  String get puzzleThemeArabianMateDescription => 'یک اسب و یک رخ برای به دام انداختن شاه حریف در گوشه صفحه همکاری می کنند.';
+  String get puzzleThemeArabianMateDescription =>
+      'یک اسب و یک رخ برای به دام انداختن شاه حریف در گوشه صفحه همکاری می کنند.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'حمله به خانه f2 یا f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description => 'حمله ای که در آن روی پیاده های f2 و f7 تمرکز می شود، مانند دفاع دو اسب.';
+  String get puzzleThemeAttackingF2F7Description =>
+      'حمله ای که در آن روی پیاده های f2 و f7 تمرکز می شود، مانند دفاع دو اسب.';
 
   @override
   String get puzzleThemeAttraction => 'جلب کردن';
 
   @override
-  String get puzzleThemeAttractionDescription => 'تبادل یا فداکاری یک مهره برای تشویق یا وادار کردن حریف به حرکتی که امکان تاکتیک بعدی را فراهم میکند.';
+  String get puzzleThemeAttractionDescription =>
+      'تبادل یا فداکاری یک مهره برای تشویق یا وادار کردن حریف به حرکتی که امکان تاکتیک بعدی را فراهم میکند.';
 
   @override
   String get puzzleThemeBackRankMate => 'مات عرض آخر';
 
   @override
-  String get puzzleThemeBackRankMateDescription => 'به دام انداختن شاه حریف در عرض اولیه خود زمانی که با مهره های خودی به دام افتاده است.';
+  String get puzzleThemeBackRankMateDescription =>
+      'به دام انداختن شاه حریف در عرض اولیه خود زمانی که با مهره های خودی به دام افتاده است.';
 
   @override
   String get puzzleThemeBishopEndgame => 'آخربازی فیل';
@@ -1730,79 +1795,92 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeBodenMate => 'مات بودِن یا دوشمشیر';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'دو فیل به حالت ضربدری که به گوشه زمین حمله می کنند یک شاه که راهش با مهره های خودش سد شده را مات می کنند.';
+  String get puzzleThemeBodenMateDescription =>
+      'دو فیل به حالت ضربدری که به گوشه زمین حمله می کنند یک شاه که راهش با مهره های خودش سد شده را مات می کنند.';
 
   @override
   String get puzzleThemeCastling => 'قلعه‌روی';
 
   @override
-  String get puzzleThemeCastlingDescription => 'شاه خود را ایمن کنید و رخ خود را برای حمله مستقر کنید.';
+  String get puzzleThemeCastlingDescription =>
+      'شاه خود را ایمن کنید و رخ خود را برای حمله مستقر کنید.';
 
   @override
   String get puzzleThemeCapturingDefender => 'مهره دفاع کننده را بگیرید';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => 'گرفتن یک مهره که برای دفاع از یک مهره دیگر حیاتی است، اجازه می دهد مهره ای که اکنون بدون دفاع است در حرکت بعدی گرفته شود.';
+  String get puzzleThemeCapturingDefenderDescription =>
+      'گرفتن یک مهره که برای دفاع از یک مهره دیگر حیاتی است، اجازه می دهد مهره ای که اکنون بدون دفاع است در حرکت بعدی گرفته شود.';
 
   @override
   String get puzzleThemeCrushing => 'تخریب';
 
   @override
-  String get puzzleThemeCrushingDescription => 'تشخیص اشتباه فاحش حریف، برای رسیدن به برتری‌ای کوبنده. (ارزیابی ≥ ۶۰۰ص‌پ)';
+  String get puzzleThemeCrushingDescription =>
+      'تشخیص اشتباه فاحش حریف، برای رسیدن به برتری‌ای کوبنده. (ارزیابی ≥ ۶۰۰ص‌پ)';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'مات با دو فیل';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription => 'دو فیل که همزمان به گوشه های مجاور حمله می کنند، شاهی که راهش با مهره های خودش سد شده را مات می کنند.';
+  String get puzzleThemeDoubleBishopMateDescription =>
+      'دو فیل که همزمان به گوشه های مجاور حمله می کنند، شاهی که راهش با مهره های خودش سد شده را مات می کنند.';
 
   @override
   String get puzzleThemeDovetailMate => 'مات بوسه ای';
 
   @override
-  String get puzzleThemeDovetailMateDescription => 'وزیری که شاه مجاور خودش را که تنها دو خانه ای که برای فرارش باقی مانده توسط مهره های خودش سد شده، مات می کند.';
+  String get puzzleThemeDovetailMateDescription =>
+      'وزیری که شاه مجاور خودش را که تنها دو خانه ای که برای فرارش باقی مانده توسط مهره های خودش سد شده، مات می کند.';
 
   @override
   String get puzzleThemeEquality => 'برابری';
 
   @override
-  String get puzzleThemeEqualityDescription => 'از وضعیت باخت در‌آیید و به وضعیت تساوی یا تعادل برسید. (ارزیابی ≤ ۲۰۰ ص‌پ)';
+  String get puzzleThemeEqualityDescription =>
+      'از وضعیت باخت در‌آیید و به وضعیت تساوی یا تعادل برسید. (ارزیابی ≤ ۲۰۰ ص‌پ)';
 
   @override
   String get puzzleThemeKingsideAttack => 'حمله به جناح شاه';
 
   @override
-  String get puzzleThemeKingsideAttackDescription => 'حمله به شاه حریف، پس از آنکه آنها قلعه کوچک رفتند.';
+  String get puzzleThemeKingsideAttackDescription =>
+      'حمله به شاه حریف، پس از آنکه آنها قلعه کوچک رفتند.';
 
   @override
   String get puzzleThemeClearance => 'آزادسازی';
 
   @override
-  String get puzzleThemeClearanceDescription => 'حرکتی، اغلب با زمان، که خانه، عرض، ستون یا قطری را برای پیشبُرد اندیشه‌ای راهکنشی، آزاد می‌کند.';
+  String get puzzleThemeClearanceDescription =>
+      'حرکتی، اغلب با زمان، که خانه، عرض، ستون یا قطری را برای پیشبُرد اندیشه‌ای راهکنشی، آزاد می‌کند.';
 
   @override
   String get puzzleThemeDefensiveMove => 'حرکت تدافعی';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription => 'حرکت یا دنباله ای از حرکات که برای جلوگیری از دست دادن مهره یا مزیت لازم است.';
+  String get puzzleThemeDefensiveMoveDescription =>
+      'حرکت یا دنباله ای از حرکات که برای جلوگیری از دست دادن مهره یا مزیت لازم است.';
 
   @override
   String get puzzleThemeDeflection => 'منحرف کردن';
 
   @override
-  String get puzzleThemeDeflectionDescription => 'حرکتی که حواس مهره حریف را از وظیفه ای که دارد پرت کند (مانند نگهبانی از یک خانه). گاهی اوقات \"بارگذاری بیش از حد\" نیز نامیده می شود.';
+  String get puzzleThemeDeflectionDescription =>
+      'حرکتی که حواس مهره حریف را از وظیفه ای که دارد پرت کند (مانند نگهبانی از یک خانه). گاهی اوقات \"بارگذاری بیش از حد\" نیز نامیده می شود.';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'حمله برخاست';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => 'حرکت دادن یک مهره (مانند اسب)، که قبلا جلوی حمله مهره خودمان به یکی از مهره های دور حریف (مانند رخ)، از جلوی راه مهره حمله کننده.';
+  String get puzzleThemeDiscoveredAttackDescription =>
+      'حرکت دادن یک مهره (مانند اسب)، که قبلا جلوی حمله مهره خودمان به یکی از مهره های دور حریف (مانند رخ)، از جلوی راه مهره حمله کننده.';
 
   @override
   String get puzzleThemeDoubleCheck => 'کیش دوگانه';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => 'کیش دادن به حریف با دو مهره به صورت هم زمان در نتیجهء یک حمله برخاستی که در آن هم مهره برخاست کننده و هم مهره پشت سر آن به شاه حریف حمله می کنند.';
+  String get puzzleThemeDoubleCheckDescription =>
+      'کیش دادن به حریف با دو مهره به صورت هم زمان در نتیجهء یک حمله برخاستی که در آن هم مهره برخاست کننده و هم مهره پشت سر آن به شاه حریف حمله می کنند.';
 
   @override
   String get puzzleThemeEndgame => 'آخربازی';
@@ -1817,49 +1895,57 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeExposedKing => 'شاه در معرض خطر';
 
   @override
-  String get puzzleThemeExposedKingDescription => 'تاکتیکی که در آن شاه مدافعان زیادی ندارد،اغلب این تاکتیک به مات ختم می شود.';
+  String get puzzleThemeExposedKingDescription =>
+      'تاکتیکی که در آن شاه مدافعان زیادی ندارد،اغلب این تاکتیک به مات ختم می شود.';
 
   @override
   String get puzzleThemeFork => 'چنگال';
 
   @override
-  String get puzzleThemeForkDescription => 'حرکتی که در آن مهره ای که حرکت می کند دو مهره حریف را به صورت همزمان مورد حمله قرار می دهد.';
+  String get puzzleThemeForkDescription =>
+      'حرکتی که در آن مهره ای که حرکت می کند دو مهره حریف را به صورت همزمان مورد حمله قرار می دهد.';
 
   @override
   String get puzzleThemeHangingPiece => 'مهره بی دفاع';
 
   @override
-  String get puzzleThemeHangingPieceDescription => 'تاکتیکی که در آن مهره های حریف برای گرفتن، بدون دفاع یا با دفاع ناکافی است.';
+  String get puzzleThemeHangingPieceDescription =>
+      'تاکتیکی که در آن مهره های حریف برای گرفتن، بدون دفاع یا با دفاع ناکافی است.';
 
   @override
   String get puzzleThemeHookMate => 'مات قُلاب';
 
   @override
-  String get puzzleThemeHookMateDescription => 'مات با یک رخ، اسب و یک پیاده در برابر یک پیاده حریف برای محدود کردن راه های فرار شاه دشمن.';
+  String get puzzleThemeHookMateDescription =>
+      'مات با یک رخ، اسب و یک پیاده در برابر یک پیاده حریف برای محدود کردن راه های فرار شاه دشمن.';
 
   @override
   String get puzzleThemeInterference => 'میان‌زَنِش';
 
   @override
-  String get puzzleThemeInterferenceDescription => 'حرکت یک مهره به میان دو مهره حریف برای بی‌دفاع کردن یک یا هر دو مهره حریف، برای نمونه گذاشتن اسبی در خانه دفاع‌شده میان دو رخ.';
+  String get puzzleThemeInterferenceDescription =>
+      'حرکت یک مهره به میان دو مهره حریف برای بی‌دفاع کردن یک یا هر دو مهره حریف، برای نمونه گذاشتن اسبی در خانه دفاع‌شده میان دو رخ.';
 
   @override
   String get puzzleThemeIntermezzo => 'میان‌آیند';
 
   @override
-  String get puzzleThemeIntermezzoDescription => 'به جای انجام حرکت موردانتظار، نخست حرکت دیگری را روید که تهدیدی فوری‌ست و حریف باید به آن پاسخ دهد. همچنین به آن «قطار میانی - Zwischenzug» یا «در میانه» می‌گویند.';
+  String get puzzleThemeIntermezzoDescription =>
+      'به جای انجام حرکت موردانتظار، نخست حرکت دیگری را روید که تهدیدی فوری‌ست و حریف باید به آن پاسخ دهد. همچنین به آن «قطار میانی - Zwischenzug» یا «در میانه» می‌گویند.';
 
   @override
   String get puzzleThemeKillBoxMate => 'مات جعبه مرگ';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
+  String get puzzleThemeKillBoxMateDescription =>
+      'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
   String get puzzleThemeVukovicMate => 'مات ووکویچ';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'یک رخ و یک اسب برای مات کردن شاه همکاری می‌کنند. رخ در حالی که توسط مهرهٔ سومی پشتیبانی می‌شود، مات می‌کند و اسب برای مسدود کردن خانه‌های فرار شاه استفاده می‌شود.';
+  String get puzzleThemeVukovicMateDescription =>
+      'یک رخ و یک اسب برای مات کردن شاه همکاری می‌کنند. رخ در حالی که توسط مهرهٔ سومی پشتیبانی می‌شود، مات می‌کند و اسب برای مسدود کردن خانه‌های فرار شاه استفاده می‌شود.';
 
   @override
   String get puzzleThemeKnightEndgame => 'آخربازی اسب';
@@ -1883,7 +1969,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeMasterVsMaster => 'بازی‌های استادان برابر هم';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'معماهای برگرفته از بازی‌های میان دو بازیکن عنوان‌دار.';
+  String get puzzleThemeMasterVsMasterDescription =>
+      'معماهای برگرفته از بازی‌های میان دو بازیکن عنوان‌دار.';
 
   @override
   String get puzzleThemeMate => 'کیش و مات';
@@ -1949,13 +2036,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemePin => 'آچمزی';
 
   @override
-  String get puzzleThemePinDescription => 'راهکنش آچمزی، که یک مهره نمی‌تواند حرکت کند، مگر اینکه به مهره ارزشمندتر پشتش حمله می‌شود.';
+  String get puzzleThemePinDescription =>
+      'راهکنش آچمزی، که یک مهره نمی‌تواند حرکت کند، مگر اینکه به مهره ارزشمندتر پشتش حمله می‌شود.';
 
   @override
   String get puzzleThemePromotion => 'ارتقا';
 
   @override
-  String get puzzleThemePromotionDescription => 'یکی از پیاده‌های‌تان را به وزیر یا سواری دیگر ارتقا دهید.';
+  String get puzzleThemePromotionDescription =>
+      'یکی از پیاده‌های‌تان را به وزیر یا سواری دیگر ارتقا دهید.';
 
   @override
   String get puzzleThemeQueenEndgame => 'آخربازی وزیر';
@@ -1967,19 +2056,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeQueenRookEndgame => 'وزیر و رخ';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription => 'آخربازی، تنها با وزیرها، رُخ‌ها و پیاده‌ها.';
+  String get puzzleThemeQueenRookEndgameDescription =>
+      'آخربازی، تنها با وزیرها، رُخ‌ها و پیاده‌ها.';
 
   @override
   String get puzzleThemeQueensideAttack => 'حمله به جناح وزیر';
 
   @override
-  String get puzzleThemeQueensideAttackDescription => 'حمله به شاه حریف، پس از آنکه آنها قلعه بزرگ رفتند.';
+  String get puzzleThemeQueensideAttackDescription =>
+      'حمله به شاه حریف، پس از آنکه آنها قلعه بزرگ رفتند.';
 
   @override
   String get puzzleThemeQuietMove => 'حرکت آرام';
 
   @override
-  String get puzzleThemeQuietMoveDescription => 'حرکتی که نه کیش ایجاد می کند و نه مهره ای را می گیرد و نه تهدید فوری را در پی دارد اما یک تهدید غیر قابل پیشگیری را در حرکات بعد به همراه دارد.';
+  String get puzzleThemeQuietMoveDescription =>
+      'حرکتی که نه کیش ایجاد می کند و نه مهره ای را می گیرد و نه تهدید فوری را در پی دارد اما یک تهدید غیر قابل پیشگیری را در حرکات بعد به همراه دارد.';
 
   @override
   String get puzzleThemeRookEndgame => 'آخربازی رخ';
@@ -1991,7 +2083,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeSacrifice => 'قربانی';
 
   @override
-  String get puzzleThemeSacrificeDescription => 'یک تاکتیک شامل کنار از دست دادن مهره در کوتاه مدت، برای به دست آوردن مزیت دوباره پس از یک سری حرکات اجباری.';
+  String get puzzleThemeSacrificeDescription =>
+      'یک تاکتیک شامل کنار از دست دادن مهره در کوتاه مدت، برای به دست آوردن مزیت دوباره پس از یک سری حرکات اجباری.';
 
   @override
   String get puzzleThemeShort => 'معمای کوتاه';
@@ -2003,13 +2096,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeSkewer => 'سیخ‌کشی یا سیخ‌کباب';
 
   @override
-  String get puzzleThemeSkewerDescription => 'سیخ‌کشی، که به یک مهره باارزش حمله شده، به گونه‌ای جابجا می‌شود، و حالا امکان می‌دهد که مهره کم‌ارزش پشتش زده شود یا زیر ضرب قرار گیرد. برعکس آچمزی است.';
+  String get puzzleThemeSkewerDescription =>
+      'سیخ‌کشی، که به یک مهره باارزش حمله شده، به گونه‌ای جابجا می‌شود، و حالا امکان می‌دهد که مهره کم‌ارزش پشتش زده شود یا زیر ضرب قرار گیرد. برعکس آچمزی است.';
 
   @override
   String get puzzleThemeSmotheredMate => 'مات مختنق';
 
   @override
-  String get puzzleThemeSmotheredMateDescription => 'ماتی که با یک اسب انجام می‌شود و در آن شاه قادر به حرکت نیست زیرا با مهره‌های خودش احاطه (یا خفه) شده است.';
+  String get puzzleThemeSmotheredMateDescription =>
+      'ماتی که با یک اسب انجام می‌شود و در آن شاه قادر به حرکت نیست زیرا با مهره‌های خودش احاطه (یا خفه) شده است.';
 
   @override
   String get puzzleThemeSuperGM => 'بازی اَبَر استاد بزرگان';
@@ -2021,7 +2116,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeTrappedPiece => 'مهره به‌دام‌افتاده';
 
   @override
-  String get puzzleThemeTrappedPieceDescription => 'یک مهره قادر به فرار کردن از زده شدن نیست چون حرکات محدودی دارد.';
+  String get puzzleThemeTrappedPieceDescription =>
+      'یک مهره قادر به فرار کردن از زده شدن نیست چون حرکات محدودی دارد.';
 
   @override
   String get puzzleThemeUnderPromotion => 'کم‌ارتقا';
@@ -2039,25 +2135,29 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'حمله پیکانی';
 
   @override
-  String get puzzleThemeXRayAttackDescription => 'یک مهره از طریق مهره حریف به یک خانه حمله میکند یا از آن دفاع می کند.';
+  String get puzzleThemeXRayAttackDescription =>
+      'یک مهره از طریق مهره حریف به یک خانه حمله میکند یا از آن دفاع می کند.';
 
   @override
   String get puzzleThemeZugzwang => 'زوگزوانگ';
 
   @override
-  String get puzzleThemeZugzwangDescription => 'حریف در حرکت‌هایش محدود است و همه‌شان وضعیتش را بدتر می‌کند.';
+  String get puzzleThemeZugzwangDescription =>
+      'حریف در حرکت‌هایش محدود است و همه‌شان وضعیتش را بدتر می‌کند.';
 
   @override
   String get puzzleThemeMix => 'آمیزهٔ همگن';
 
   @override
-  String get puzzleThemeMixDescription => 'کمی از هر چیزی. شما نمی‌دانید چه چیزی پیش روی شماست، بنابراین برای هر چیزی آماده می‌مانید! درست مانند بازی‌های واقعی.';
+  String get puzzleThemeMixDescription =>
+      'کمی از هر چیزی. شما نمی‌دانید چه چیزی پیش روی شماست، بنابراین برای هر چیزی آماده می‌مانید! درست مانند بازی‌های واقعی.';
 
   @override
   String get puzzleThemePlayerGames => 'بازی‌های بازیکن';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'دنبال معماهای ایجادشده از بازی‌های خودتان یا بازی‌های سایر بازیکنان، بگردید.';
+  String get puzzleThemePlayerGamesDescription =>
+      'دنبال معماهای ایجادشده از بازی‌های خودتان یا بازی‌های سایر بازیکنان، بگردید.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2077,7 +2177,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'حساب‌تان مدیریت می‌شود و نمی‌توان آن را بست.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'شما نمی توانید حساب جدیدی با این نام کاربری باز کنید، حتی اگر با دستگاه دیگری وارد شوید.';
+  String get settingsCantOpenSimilarAccount =>
+      'شما نمی توانید حساب جدیدی با این نام کاربری باز کنید، حتی اگر با دستگاه دیگری وارد شوید.';
 
   @override
   String get settingsCancelKeepAccount => 'لغو و نگهداری حساب کاربری';
@@ -2107,7 +2208,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get youPlayAs => 'You play as';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت یک نفر به بازی، این آدرس را به او بدهید';
+  String get toInviteSomeoneToPlayGiveThisUrl =>
+      'برای دعوت یک نفر به بازی، این آدرس را به او بدهید';
 
   @override
   String get gameOver => 'پایان بازی';
@@ -2205,7 +2307,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get newOpponent => 'حریف جدید';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'حریفتان می‌خواهد یک بازی جدید با شما انجام دهد';
+  String get yourOpponentWantsToPlayANewGameWithYou =>
+      'حریفتان می‌خواهد یک بازی جدید با شما انجام دهد';
 
   @override
   String get joinTheGame => 'به بازی بپیوندید';
@@ -2217,7 +2320,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get blackPlays => 'نوبت سیاه';
 
   @override
-  String get opponentLeftChoices => 'ممکن است حریف شما بازی را ترک کرده باشد. شما می توانید ادعای پیروزی کنید, اعلام تساوی کنید یا منتظر او بمانید.';
+  String get opponentLeftChoices =>
+      'ممکن است حریف شما بازی را ترک کرده باشد. شما می توانید ادعای پیروزی کنید, اعلام تساوی کنید یا منتظر او بمانید.';
 
   @override
   String get forceResignation => 'ادعای پیروزی';
@@ -2229,7 +2333,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get talkInChat => 'لطفا در گپ‌زنی بااَدب باشید!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'نخستین کسی که به این وب‌نشانی آید با شما بازی خواهد کرد.';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
+      'نخستین کسی که به این وب‌نشانی آید با شما بازی خواهد کرد.';
 
   @override
   String get whiteResigned => 'سفید تسلیم شد';
@@ -2376,7 +2481,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' با گرد کردن، بر اساس تعداد حرکات نیمه تا زمان دستگیری یا حرکت پیاده بعدی';
+  String get dtzWithRounding =>
+      'DTZ50\'\' با گرد کردن، بر اساس تعداد حرکات نیمه تا زمان دستگیری یا حرکت پیاده بعدی';
 
   @override
   String get noGameFound => 'هیچ بازی یافت نشد';
@@ -2385,7 +2491,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get maxDepthReached => 'عمق به حداکثر رسیده!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'شاید بازی‌های بیشتری با توجه به نام‌چین تنظیمات، وجود داشته باشد.';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
+      'شاید بازی‌های بیشتری با توجه به نام‌چین تنظیمات، وجود داشته باشد.';
 
   @override
   String get openings => 'گشایش‌ها';
@@ -2417,7 +2524,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'باخت یا ۵٠ حرکت از اشتباه قبلی';
 
   @override
-  String get unknownDueToRounding => 'برد یا باخت تنها زمانی تضمین شده است که شاخه پیشنهاد شده توسط دیتابیس پس از آخرین گرفتن مهره یا حرکت پیاده اجرا شود. علت رند کردن احتمالی مقدار های DTZ در دیتابیس است.';
+  String get unknownDueToRounding =>
+      'برد یا باخت تنها زمانی تضمین شده است که شاخه پیشنهاد شده توسط دیتابیس پس از آخرین گرفتن مهره یا حرکت پیاده اجرا شود. علت رند کردن احتمالی مقدار های DTZ در دیتابیس است.';
 
   @override
   String get allSet => 'همه چیز آماده است!';
@@ -2530,7 +2638,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get signUp => 'نام نویسی';
 
   @override
-  String get computersAreNotAllowedToPlay => 'رایانه ها و بازیکنان رایانه-یاریده، مجاز به بازی نیستند. لطفا هنگام بازی از موتورهای شطرنج، دادگان‌ها یا دیگر بازیکنان کمک نگیرید. همچنین توجه کنید که ساخت چندین حساب به شدت ممنوع است و چند حسابی افزاینده، منجر به بستن‌تان می‌شود.';
+  String get computersAreNotAllowedToPlay =>
+      'رایانه ها و بازیکنان رایانه-یاریده، مجاز به بازی نیستند. لطفا هنگام بازی از موتورهای شطرنج، دادگان‌ها یا دیگر بازیکنان کمک نگیرید. همچنین توجه کنید که ساخت چندین حساب به شدت ممنوع است و چند حسابی افزاینده، منجر به بستن‌تان می‌شود.';
 
   @override
   String get games => 'بازی ها';
@@ -2607,13 +2716,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get changeUsername => 'تغییر نام کاربری';
 
   @override
-  String get changeUsernameNotSame => 'تنها اندازه حروف میتوانند تغییر کنند. برای مثال \"johndoe\" به \"JohnDoe\".';
+  String get changeUsernameNotSame =>
+      'تنها اندازه حروف میتوانند تغییر کنند. برای مثال \"johndoe\" به \"JohnDoe\".';
 
   @override
-  String get changeUsernameDescription => 'نام کاربری خود را تغییر دهید. این تنها یک بار انجام پذیر است و شما تنها مجازید اندازه حروف نام کاربری‌تان را تغییر دهید.';
+  String get changeUsernameDescription =>
+      'نام کاربری خود را تغییر دهید. این تنها یک بار انجام پذیر است و شما تنها مجازید اندازه حروف نام کاربری‌تان را تغییر دهید.';
 
   @override
-  String get signupUsernameHint => 'مطمئن شوید که یک نام کاربری مناسب انتخاب میکنید. بعداً نمی توانید آن را تغییر دهید و هر حسابی با نام کاربری نامناسب بسته می شود!';
+  String get signupUsernameHint =>
+      'مطمئن شوید که یک نام کاربری مناسب انتخاب میکنید. بعداً نمی توانید آن را تغییر دهید و هر حسابی با نام کاربری نامناسب بسته می شود!';
 
   @override
   String get signupEmailHint => 'ما فقط برای بازنشاندن گذرواژه، از آن استفاده خواهیم کرد.';
@@ -2643,7 +2755,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get error_namePassword => 'خواهشانه از نام کاربری‌تان برای گذرواژه‌تان استفاده نکنید.';
 
   @override
-  String get blankedPassword => 'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهراییده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب لیچس‌تان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
+  String get blankedPassword =>
+      'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهراییده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب لیچس‌تان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
 
   @override
   String get youAreLeavingLichess => 'در حال ترک lichess هستید';
@@ -2657,10 +2770,12 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion => 'از رمز عبور پیشنهاد شده از شخص دیگر استفاده نکنید. در این صورت احتمال سرقت حساب شما وجود دارد.';
+  String get passwordSuggestion =>
+      'از رمز عبور پیشنهاد شده از شخص دیگر استفاده نکنید. در این صورت احتمال سرقت حساب شما وجود دارد.';
 
   @override
-  String get emailSuggestion => 'از ایمیلی که از شخص دیگر به شما پیشنهاد داده است استفاده نکنید. در این صورت احتمال سرقت حساب شما وجود دارد.';
+  String get emailSuggestion =>
+      'از ایمیلی که از شخص دیگر به شما پیشنهاد داده است استفاده نکنید. در این صورت احتمال سرقت حساب شما وجود دارد.';
 
   @override
   String get emailConfirmHelp => 'کمک با تائید ایمیل';
@@ -2677,7 +2792,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount => 'شما می توانید از این نام کاربری برای ایجاد یک حساب کاربری جدید استفاده کنید';
+  String get usernameCanBeUsedForNewAccount =>
+      'شما می توانید از این نام کاربری برای ایجاد یک حساب کاربری جدید استفاده کنید';
 
   @override
   String emailSent(String param) {
@@ -2688,10 +2804,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get emailCanTakeSomeTime => 'ممکن است کمی طول بکشد تا برسد.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => '5 دقیقه صبر کنید و صندوق ورودی ایمیل خود را تازه کنید.';
+  String get refreshInboxAfterFiveMinutes =>
+      '5 دقیقه صبر کنید و صندوق ورودی ایمیل خود را تازه کنید.';
 
   @override
-  String get checkSpamFolder => 'پوشه هرزنامه خود را نیز بررسی کنید، ممکن است در آنجا باشد. اگر چنین است، آن را به عنوان غیر هرزنامه علامت‌گذاری کنید.';
+  String get checkSpamFolder =>
+      'پوشه هرزنامه خود را نیز بررسی کنید، ممکن است در آنجا باشد. اگر چنین است، آن را به عنوان غیر هرزنامه علامت‌گذاری کنید.';
 
   @override
   String get emailForSignupHelp => 'اگر تمام موارد ناموفق بود، این ایمیل را برای ما ارسال کنید:';
@@ -2702,7 +2820,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get waitForSignupHelp => 'ما به زودی با شما تماس خواهیم گرفت تا به شما کمک کنیم ثبت نام خود را تکمیل کنید.';
+  String get waitForSignupHelp =>
+      'ما به زودی با شما تماس خواهیم گرفت تا به شما کمک کنیم ثبت نام خود را تکمیل کنید.';
 
   @override
   String accountConfirmed(String param) {
@@ -2943,7 +3062,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get backToTournament => 'بازگشت به مسابقات';
 
   @override
-  String get noDrawBeforeSwissLimit => 'شما نمی‌توانید در مسابقات سوییس تا قبل از حرکت ۳۰ام بازی را مساوی کنید.';
+  String get noDrawBeforeSwissLimit =>
+      'شما نمی‌توانید در مسابقات سوییس تا قبل از حرکت ۳۰ام بازی را مساوی کنید.';
 
   @override
   String get thematic => 'موضوعی';
@@ -2954,7 +3074,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional =>
+      'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -2995,7 +3116,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get backToGame => 'بازگشت به بازی';
 
   @override
-  String get siteDescription => 'کارساز برخط و رایگان شطرنج. با میانایی روان، شطرنج بازی کنید. بدون نام‌نویسی، بدون تبلیغ، بدون نیاز به افزونه. با رایانه، دوستان یا حریفان تصادفی شطرنج بازی کنید.';
+  String get siteDescription =>
+      'کارساز برخط و رایگان شطرنج. با میانایی روان، شطرنج بازی کنید. بدون نام‌نویسی، بدون تبلیغ، بدون نیاز به افزونه. با رایانه، دوستان یا حریفان تصادفی شطرنج بازی کنید.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -3064,16 +3186,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get importGame => 'بارگذاری بازی';
 
   @override
-  String get importGameExplanation => 'برای دریافت بازپخش مرورپذیر، واکاوی رایانه‌ای، گپ‌های بازی، و وب‌نشانی همگانی همرسانی‌پذیر، PGN یک بازی را جای‌گذاری کنید.';
+  String get importGameExplanation =>
+      'برای دریافت بازپخش مرورپذیر، واکاوی رایانه‌ای، گپ‌های بازی، و وب‌نشانی همگانی همرسانی‌پذیر، PGN یک بازی را جای‌گذاری کنید.';
 
   @override
-  String get importGameDataPrivacyWarning => 'این PGN برای عموم در دسترس است، برای وارد کردن یک بازی خصوصی، از *مطالعه* استفاده کنید.';
+  String get importGameDataPrivacyWarning =>
+      'این PGN برای عموم در دسترس است، برای وارد کردن یک بازی خصوصی، از *مطالعه* استفاده کنید.';
 
   @override
   String get thisIsAChessCaptcha => 'این یک کپچا [کد امنیتی] شطرنجی است';
 
   @override
-  String get clickOnTheBoardToMakeYourMove => 'روی صفحه بزنید تا حرکت‌تان را بروید و اثبات کنید که انسانید.';
+  String get clickOnTheBoardToMakeYourMove =>
+      'روی صفحه بزنید تا حرکت‌تان را بروید و اثبات کنید که انسانید.';
 
   @override
   String get captcha_fail => 'لطفا captcha را حل کنید';
@@ -3183,7 +3308,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get safeTournamentName => 'یک نام بسیار امن برای مسابقات انتخاب کنید.';
 
   @override
-  String get inappropriateNameWarning => 'هرچیز حتی کمی نامناسب ممکن است باعث بسته شدن حساب کاربری شما بشود.';
+  String get inappropriateNameWarning =>
+      'هرچیز حتی کمی نامناسب ممکن است باعث بسته شدن حساب کاربری شما بشود.';
 
   @override
   String get emptyTournamentName => 'برای نامیدن مسابقات به نام یک شطرنج‌باز برجسته، خالی بگذارید.';
@@ -3349,7 +3475,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get activePlayers => 'بازیکنان فعال';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => 'مراقب باشید،این بازی رتبه بندی میشود اما بدون ساعت!';
+  String get bewareTheGameIsRatedButHasNoClock =>
+      'مراقب باشید،این بازی رتبه بندی میشود اما بدون ساعت!';
 
   @override
   String get success => 'موفق شدید';
@@ -3376,7 +3503,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get descPrivate => 'توضیحات خصوصی';
 
   @override
-  String get descPrivateHelp => 'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین وصف همگانی برای هم‌تیمی‌ها می‌شود خواهد شد.';
+  String get descPrivateHelp =>
+      'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین وصف همگانی برای هم‌تیمی‌ها می‌شود خواهد شد.';
 
   @override
   String get no => 'نه';
@@ -3445,13 +3573,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get other => 'دیگر';
 
   @override
-  String get reportCheatBoostHelp => 'پیوند بازی(ها) را جای‌گذارید و بشرحید که چه رفتاری از این کاربر مشکل دارد. فقط نگویید «آنها تقلب‌کارند»، بلکه به ما بگویید چطور به این نتیجه رسیده‌اید.';
+  String get reportCheatBoostHelp =>
+      'پیوند بازی(ها) را جای‌گذارید و بشرحید که چه رفتاری از این کاربر مشکل دارد. فقط نگویید «آنها تقلب‌کارند»، بلکه به ما بگویید چطور به این نتیجه رسیده‌اید.';
 
   @override
-  String get reportUsernameHelp => 'بشرحید چه چیز این نام‌کاربری آزارنده است. فقط نگویید «آزارنده/نامناسب است»، بلکه به ما بگویید چطور به این نتیجه رسیده‌اید، به‌ویژه اگر توهین: گنگ است، انگلیسی نیست، کوچه‌بازاری است، یا یک ارجاع تاریخی/فرهنگی است.';
+  String get reportUsernameHelp =>
+      'بشرحید چه چیز این نام‌کاربری آزارنده است. فقط نگویید «آزارنده/نامناسب است»، بلکه به ما بگویید چطور به این نتیجه رسیده‌اید، به‌ویژه اگر توهین: گنگ است، انگلیسی نیست، کوچه‌بازاری است، یا یک ارجاع تاریخی/فرهنگی است.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'اگر انگلیسی بنویسید، زودتر به گزارش‌تان رسیدگی خواهد شد.';
+  String get reportProcessedFasterInEnglish =>
+      'اگر انگلیسی بنویسید، زودتر به گزارش‌تان رسیدگی خواهد شد.';
 
   @override
   String get error_provideOneCheatedGameLink => 'لطفآ حداقل یک نمونه تقلب در بازی را مطرح کنید.';
@@ -3601,7 +3732,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get allInformationIsPublicAndOptional => 'تمامی اطلاعات عمومی و اختیاری است.';
 
   @override
-  String get biographyDescription => 'درباره ی خودتان بگویید - به چه چیزی در شطرنج علاقه داریدو گشایش ها - بازی ها و بازیکنان مورد علاقه تان…';
+  String get biographyDescription =>
+      'درباره ی خودتان بگویید - به چه چیزی در شطرنج علاقه داریدو گشایش ها - بازی ها و بازیکنان مورد علاقه تان…';
 
   @override
   String get listBlockedPlayers => 'فهرست بازیکنانی که مسدود کرده‌اید';
@@ -3649,7 +3781,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get error_email => 'آدرس ایمیل غیر معتبر است';
 
   @override
-  String get error_email_acceptable => 'این نشانی رایانامه پذیرفتنی نیست. لطفا باز به آن سر زنید و دوباره بکوشید.';
+  String get error_email_acceptable =>
+      'این نشانی رایانامه پذیرفتنی نیست. لطفا باز به آن سر زنید و دوباره بکوشید.';
 
   @override
   String get error_email_unique => 'آدرس ایمیل نامعتبر است یا قبلا در سیستم ثبت شده است';
@@ -3780,7 +3913,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get hostANewSimul => 'میزبانی نمایش همزمان جدید';
 
   @override
-  String get signUpToHostOrJoinASimul => 'ثبت‌نام کنید تا در بازی های سیمولتانه شرکت، یا برگزار کنید';
+  String get signUpToHostOrJoinASimul =>
+      'ثبت‌نام کنید تا در بازی های سیمولتانه شرکت، یا برگزار کنید';
 
   @override
   String get noSimulFound => 'نمایش هم زمان پیدا نشد';
@@ -3798,25 +3932,31 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aboutSimulImage => 'از ۵۰ بازی فیشر موفق به کسب ۴۷ برد و ۲ تساوی و یک باخت شد.';
 
   @override
-  String get aboutSimulRealLife => 'این مفهوم از رویدادهای واقعی الهام گرفته شده است. در آن جا میزبان میز به میز برای انجام حرکت خود، حرکت می کند.';
+  String get aboutSimulRealLife =>
+      'این مفهوم از رویدادهای واقعی الهام گرفته شده است. در آن جا میزبان میز به میز برای انجام حرکت خود، حرکت می کند.';
 
   @override
-  String get aboutSimulRules => 'وقتی نمایش همزمان شروع شود، هر بازیکن یک بازی را با میزبان که با مهره سفید بازی میکند آغاز میکند. نمایش وقتی تمام می شود که تمام بازی ها تمام شده باشند.';
+  String get aboutSimulRules =>
+      'وقتی نمایش همزمان شروع شود، هر بازیکن یک بازی را با میزبان که با مهره سفید بازی میکند آغاز میکند. نمایش وقتی تمام می شود که تمام بازی ها تمام شده باشند.';
 
   @override
-  String get aboutSimulSettings => 'نمایشگاه همزمان همیشه نارسمی است. بازرویارویی، برگرداندن و زمان افزاینده نافعال شده‌اند.';
+  String get aboutSimulSettings =>
+      'نمایشگاه همزمان همیشه نارسمی است. بازرویارویی، برگرداندن و زمان افزاینده نافعال شده‌اند.';
 
   @override
   String get create => 'ساختن';
 
   @override
-  String get whenCreateSimul => 'وقتی یک نمایش همزمان ایجاد میکنید باید با چند نفر همزمان بازی کنید.';
+  String get whenCreateSimul =>
+      'وقتی یک نمایش همزمان ایجاد میکنید باید با چند نفر همزمان بازی کنید.';
 
   @override
-  String get simulVariantsHint => 'اگر چندین وَرتا را برگزینید، هر بازیکن می‌تواند انتخاب کند که کدام‌یک را بازی کند.';
+  String get simulVariantsHint =>
+      'اگر چندین وَرتا را برگزینید، هر بازیکن می‌تواند انتخاب کند که کدام‌یک را بازی کند.';
 
   @override
-  String get simulClockHint => 'تنظیم ساعت فیشر. هرچه از بازیکنان بیشتری برنده شوید، زمان بیشتری نیاز دارید';
+  String get simulClockHint =>
+      'تنظیم ساعت فیشر. هرچه از بازیکنان بیشتری برنده شوید، زمان بیشتری نیاز دارید';
 
   @override
   String get simulAddExtraTime => 'برای کمک به شما میتوانید برای خود زمان اضافی در نظر بگیرید.';
@@ -3825,7 +3965,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get simulHostExtraTime => 'زمان اضافی میزبان';
 
   @override
-  String get simulAddExtraTimePerPlayer => 'به ازای پیوستن هر بازیکن، به زمان اولیه خود اضافه کنید.';
+  String get simulAddExtraTimePerPlayer =>
+      'به ازای پیوستن هر بازیکن، به زمان اولیه خود اضافه کنید.';
 
   @override
   String get simulHostExtraTimePerPlayer => 'زمان اضافه میزبان به ازای بازیکن';
@@ -3897,7 +4038,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get togglePositionAnnotations => 'تغییر حرکت‌نویسی وضعیت';
 
   @override
-  String get variationArrowsInfo => 'پیکان های وَرتِش به شما امکان ناوِش بدون استفاده از فهرستِ حرکت را می‌دهد.';
+  String get variationArrowsInfo =>
+      'پیکان های وَرتِش به شما امکان ناوِش بدون استفاده از فهرستِ حرکت را می‌دهد.';
 
   @override
   String get playSelectedMove => 'حرکت انتخاب شده را بازی کن';
@@ -3909,7 +4051,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tournamentHomeTitle => 'مسابقات شطرنج با وَرتاها و زمان‌بندی‌های گوناگون';
 
   @override
-  String get tournamentHomeDescription => 'هرچه زودتر شطرنج بازی کنید! به یک مسابقه رسمی برنامه‌ریزی‌شده بپیوندید یا مسابقات خودتان را بسازید. شطرنج گلوله‌ای، برق‌آسا، فکری، ۹۶۰، پادشاه تپه‌ها، سه‌کیش و دیگر گزینه‌ها، برای لذت بی‌پایان از شطرنج در دسترسند.';
+  String get tournamentHomeDescription =>
+      'هرچه زودتر شطرنج بازی کنید! به یک مسابقه رسمی برنامه‌ریزی‌شده بپیوندید یا مسابقات خودتان را بسازید. شطرنج گلوله‌ای، برق‌آسا، فکری، ۹۶۰، پادشاه تپه‌ها، سه‌کیش و دیگر گزینه‌ها، برای لذت بی‌پایان از شطرنج در دسترسند.';
 
   @override
   String get tournamentNotFound => 'مسابقات یافت نشد';
@@ -3918,7 +4061,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tournamentDoesNotExist => 'این مسابقات وجود ندارد';
 
   @override
-  String get tournamentMayHaveBeenCanceled => 'ممکن است مسابقه لغو شده باشد,شاید همه ی بازیکنان مسابقه را قبل از شروع ترک کرده باشند';
+  String get tournamentMayHaveBeenCanceled =>
+      'ممکن است مسابقه لغو شده باشد,شاید همه ی بازیکنان مسابقه را قبل از شروع ترک کرده باشند';
 
   @override
   String get returnToTournamentsHomepage => 'بازگشت به صفحه اصلی مسابقات';
@@ -3966,10 +4110,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get checkYourEmail => 'به رایانامه‌تان سر زنید';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'ما به شما ایمیل فرستادیم. روی لینکی که در ایمیل است کلیک کنید';
+  String get weHaveSentYouAnEmailClickTheLink =>
+      'ما به شما ایمیل فرستادیم. روی لینکی که در ایمیل است کلیک کنید';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'اگر رایانامه را نمی‌بینید، مکان‌های دیگری مانند پوشه‌های ناخواسته، هرزنامه، اجتماعی یا سایر موردها را بررسی کنید.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
+      'اگر رایانامه را نمی‌بینید، مکان‌های دیگری مانند پوشه‌های ناخواسته، هرزنامه، اجتماعی یا سایر موردها را بررسی کنید.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'اگر ایمیل را در 5 دقیقه دریافت نکرده اید';
@@ -4022,13 +4168,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'برای حرکت، روی صفحه بازی بِنَوَردید.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem => 'برای پیش‌نمایش آن‌ها، روی وَرتِش‌های رایانه‌ای بِغَرالید.';
+  String get scrollOverComputerVariationsToPreviewThem =>
+      'برای پیش‌نمایش آن‌ها، روی وَرتِش‌های رایانه‌ای بِغَرالید.';
 
   @override
-  String get analysisShapesHowTo => 'برای رسم دایره و پیکان روی تخته، shift+click یا راست-تِلیک را بفشارید.';
+  String get analysisShapesHowTo =>
+      'برای رسم دایره و پیکان روی تخته، shift+click یا راست-تِلیک را بفشارید.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo =>
+      'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
   String get letOtherPlayersMessageYou => 'ارسال پیام توسط بقیه به شما';
@@ -4055,7 +4204,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get kidModeIsEnabled => 'حالت کودک فعال است.';
 
   @override
-  String get kidModeExplanation => 'این دربارهٔ ایمنی است. در حالت کودک، همهٔ ارتباط‌های وبگاه نافعال است. این را برای فرزندان و شطرنج‌آموزان مدرسه خود فعال کنید تا از آنها در برابر دیگر کاربران اینترنت حفاظت کنید.';
+  String get kidModeExplanation =>
+      'این دربارهٔ ایمنی است. در حالت کودک، همهٔ ارتباط‌های وبگاه نافعال است. این را برای فرزندان و شطرنج‌آموزان مدرسه خود فعال کنید تا از آنها در برابر دیگر کاربران اینترنت حفاظت کنید.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -4063,7 +4213,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode => 'حسابتان مدیریت می‌شود. از آموزگار شطرنج‌تان درباره برداشتن حالت کودک بپرسید.';
+  String get askYourChessTeacherAboutLiftingKidMode =>
+      'حسابتان مدیریت می‌شود. از آموزگار شطرنج‌تان درباره برداشتن حالت کودک بپرسید.';
 
   @override
   String get enableKidMode => 'فعال‌سازی حالت کودک';
@@ -4170,7 +4321,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get embedInYourWebsite => 'قرار دادن در وبگاه خود';
 
   @override
-  String get usernameAlreadyUsed => 'این نام کاربری در حال حاضر انتخاب شده است.لطفا نام دیگری انتخاب کنید.';
+  String get usernameAlreadyUsed =>
+      'این نام کاربری در حال حاضر انتخاب شده است.لطفا نام دیگری انتخاب کنید.';
 
   @override
   String get usernamePrefixInvalid => 'نام کاربری باید با حرف شروع شود.';
@@ -4179,7 +4331,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get usernameSuffixInvalid => 'نام کاربری باید با حرف یا شماره خاتمه یابد.';
 
   @override
-  String get usernameCharsInvalid => 'نام کاربری فقط می تواند شامل حروف،اعداد،خط فاصله یا زیر خط(under line) باشد.';
+  String get usernameCharsInvalid =>
+      'نام کاربری فقط می تواند شامل حروف،اعداد،خط فاصله یا زیر خط(under line) باشد.';
 
   @override
   String get usernameUnacceptable => 'این نام کاربری پذیرفتنی نیست.';
@@ -4347,7 +4500,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get addCurrentVariation => 'افزودن وَرتِش جاری';
 
   @override
-  String get playVariationToCreateConditionalPremoves => 'بازی کردن یک وَرتِش، برای ایجاد پیش‌حرکت‌های شرطی';
+  String get playVariationToCreateConditionalPremoves =>
+      'بازی کردن یک وَرتِش، برای ایجاد پیش‌حرکت‌های شرطی';
 
   @override
   String get noConditionalPremoves => 'بدون پیش‌حرکت‌های شرطی';
@@ -4381,7 +4535,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get pleasantChessExperience => 'هدف ما مهیا ساختن تجربه لذت بخش شطرنج به همه افراد است.';
 
   @override
-  String get goodPractice => 'به همین منظور، ما باید اطمینان حاصل کنیم که تمام بازیکنان تمرین خوب را دنبال میکنند.';
+  String get goodPractice =>
+      'به همین منظور، ما باید اطمینان حاصل کنیم که تمام بازیکنان تمرین خوب را دنبال میکنند.';
 
   @override
   String get potentialProblem => 'زمانی که مشکلی احتمالی شناسایی شد ، این پیام را نمایش می دهیم.';
@@ -4414,7 +4569,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get currentMatchScore => 'امتیاز بازی فعلی';
 
   @override
-  String get agreementAssistance => 'من موافقم که در طول بازی‌هایم هیچگاه کمکی نخواهم گرفت (از یک رایانه شطرنج، کتاب، دادگان یا شخص دیگری).';
+  String get agreementAssistance =>
+      'من موافقم که در طول بازی‌هایم هیچگاه کمکی نخواهم گرفت (از یک رایانه شطرنج، کتاب، دادگان یا شخص دیگری).';
 
   @override
   String get agreementNice => 'می‌پذیرم که همواره به بازیکنان دیگر احترام گزارم.';
@@ -4515,7 +4671,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'هنوز نمی‌توانید در انجمن‌ها فرسته گذارید. چند بازی کنید!';
+  String get youCannotPostYetPlaySomeGames =>
+      'هنوز نمی‌توانید در انجمن‌ها فرسته گذارید. چند بازی کنید!';
 
   @override
   String get subscribe => 'مشترک شدن';
@@ -4568,7 +4725,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator => 'شما برابر کسی که قانون‌های Lichess را نقض کرده، امتیاز درجه‌بندی از دست دادید';
+  String get lostAgainstTOSViolator =>
+      'شما برابر کسی که قانون‌های Lichess را نقض کرده، امتیاز درجه‌بندی از دست دادید';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -4597,7 +4755,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tournDescription => 'توضیحات مسابقه';
 
   @override
-  String get tournDescriptionHelp => 'نکته خاصی را می‌خواهید به شرکت‌کنندگان گویید؟ بکوشید کوتاه باشد. پیوندهای فرونشان موجودند:\n[name](https://url)';
+  String get tournDescriptionHelp =>
+      'نکته خاصی را می‌خواهید به شرکت‌کنندگان گویید؟ بکوشید کوتاه باشد. پیوندهای فرونشان موجودند:\n[name](https://url)';
 
   @override
   String get ratedFormHelp => 'بازی‌ها رسمی هستند\nو روی درجه‌بندی بازیکنان تاثیر می‌گذارند';
@@ -4653,7 +4812,8 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get embedsAvailable => 'وب‌نشانی بازی یا وب‌نشانی بخشی از مطالعه را، برای جاسازی آن، جایگذاری کنید.';
+  String get embedsAvailable =>
+      'وب‌نشانی بازی یا وب‌نشانی بخشی از مطالعه را، برای جاسازی آن، جایگذاری کنید.';
 
   @override
   String get inYourLocalTimezone => 'ذر منطقه زمانی شما';
@@ -4698,7 +4858,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reopenYourAccount => 'باز کردن مجدد حساب کاربری';
 
   @override
-  String get reopenYourAccountDescription => 'اگر حسابتان را بسته اید ولی نظرتان عوض شده، فرصت بازپس‌گیری آن را دارید.';
+  String get reopenYourAccountDescription =>
+      'اگر حسابتان را بسته اید ولی نظرتان عوض شده، فرصت بازپس‌گیری آن را دارید.';
 
   @override
   String get emailAssociatedToaccount => 'آدرس ایمیلی که به حساب کاربری مربوط شده است';
@@ -4724,7 +4885,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get resignTheGame => 'تسلیم';
 
   @override
-  String get youCantStartNewGame => 'تا وقتی که این بازی تمام نشده، نمی‌توانید بازی جدیدی را بیاغازید.';
+  String get youCantStartNewGame =>
+      'تا وقتی که این بازی تمام نشده، نمی‌توانید بازی جدیدی را بیاغازید.';
 
   @override
   String get since => 'از وقتی که';
@@ -4739,7 +4901,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get switchSides => 'تعویض سمت';
 
   @override
-  String get closingAccountWithdrawAppeal => 'با بستن حساب خود درخواست تجدید نظر خود را پس خواهید گرفت';
+  String get closingAccountWithdrawAppeal =>
+      'با بستن حساب خود درخواست تجدید نظر خود را پس خواهید گرفت';
 
   @override
   String get ourEventTips => 'پیشنهادهای ما برای برگزاری رویدادها';
@@ -4751,7 +4914,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showMeEverything => 'همه چیز را به من نشان بده';
 
   @override
-  String get lichessPatronInfo => 'لایچس یک خیریه و کاملا رایگان و نرم افزاری متن باز است. تمام هزینه های اجرا، توسعه و محتوا تنها بر پایه هدایای کاربران بنا شده است.';
+  String get lichessPatronInfo =>
+      'لایچس یک خیریه و کاملا رایگان و نرم افزاری متن باز است. تمام هزینه های اجرا، توسعه و محتوا تنها بر پایه هدایای کاربران بنا شده است.';
 
   @override
   String get nothingToSeeHere => 'فعلا هیچی اینجا نیست.';
@@ -5285,10 +5449,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormMoveToStart => 'شروع کنید';
 
   @override
-  String get stormYouPlayTheWhitePiecesInAllPuzzles => 'شما در همه معماها با مهره سفید بازی می‌کنید';
+  String get stormYouPlayTheWhitePiecesInAllPuzzles =>
+      'شما در همه معماها با مهره سفید بازی می‌کنید';
 
   @override
-  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'شما در همه معماها با مهره سیاه بازی می‌کنید';
+  String get stormYouPlayTheBlackPiecesInAllPuzzles =>
+      'شما در همه معماها با مهره سیاه بازی می‌کنید';
 
   @override
   String get stormPuzzlesSolved => 'معما حل شد';
@@ -5411,7 +5577,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormSkipHelp => 'در هر تاخت می‌توانید یک حرکت را رد کنید:';
 
   @override
-  String get stormSkipExplanation => 'این حرکت را برای حفظ توالی‌تان رَد کنید! در هر تاخت، فقط یک بار شدنی است.';
+  String get stormSkipExplanation =>
+      'این حرکت را برای حفظ توالی‌تان رَد کنید! در هر تاخت، فقط یک بار شدنی است.';
 
   @override
   String get stormFailedPuzzles => 'معماهای ناموفق';
@@ -5528,7 +5695,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyInviteToTheStudy => 'دعوت به این مطالعه';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'لطفا تنها کسانی را دعوت کنید که شما را می‌شناسند و کنشگرانه می‌خواهند به این مطالعه بپیوندند.';
+  String get studyPleaseOnlyInvitePeopleYouKnow =>
+      'لطفا تنها کسانی را دعوت کنید که شما را می‌شناسند و کنشگرانه می‌خواهند به این مطالعه بپیوندند.';
 
   @override
   String get studySearchByUsername => 'جستجو بر اساس نام کاربری';
@@ -5576,16 +5744,20 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyTheChapterIsTooShortToBeAnalysed => 'این بخش برای تحلیل، بسیار کوتاه است.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'تنها مشارکت‌گران این مطالعه، می‌توانند درخواست تحلیل رایانه‌ای دهند.';
+  String get studyOnlyContributorsCanRequestAnalysis =>
+      'تنها مشارکت‌گران این مطالعه، می‌توانند درخواست تحلیل رایانه‌ای دهند.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'یک تحلیلِ رایانه‌ای کارساز-سوی کامل از شاخه اصلی بگیرید.';
+  String get studyGetAFullComputerAnalysis =>
+      'یک تحلیلِ رایانه‌ای کارساز-سوی کامل از شاخه اصلی بگیرید.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete => 'مطمئن شوید که بخش کامل است. شما فقط یک بار می‌توانید درخواست تحلیل دهید.';
+  String get studyMakeSureTheChapterIsComplete =>
+      'مطمئن شوید که بخش کامل است. شما فقط یک بار می‌توانید درخواست تحلیل دهید.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'همه‌ی عضوهای همگام در وضعیت یکسانی باقی می‌مانند';
+  String get studyAllSyncMembersRemainOnTheSamePosition =>
+      'همه‌ی عضوهای همگام در وضعیت یکسانی باقی می‌مانند';
 
   @override
   String get studyShareChanges => 'هم‌رسانی تغییرها با تماشاگران و ذخیره‌شان در کارساز';
@@ -5630,7 +5802,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyCurrentChapterUrl => 'وب‌نشانی بخش جاری';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'می‌توانید این را در انجمن یا وبنوشت Lichessتان برای جاسازی قرار دهید';
+  String get studyYouCanPasteThisInTheForumToEmbed =>
+      'می‌توانید این را در انجمن یا وبنوشت Lichessتان برای جاسازی قرار دهید';
 
   @override
   String get studyStartAtInitialPosition => 'در وضعیت نخستین بیاغازید';
@@ -5647,7 +5820,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyReadMoreAboutEmbedding => 'درباره قرار دادن (در سایت) بیشتر بخوانید';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'فقط مطالعه‌های همگانی می‌توانند جایگذاری شوند!';
+  String get studyOnlyPublicStudiesCanBeEmbedded =>
+      'فقط مطالعه‌های همگانی می‌توانند جایگذاری شوند!';
 
   @override
   String get studyOpen => 'بگشایید';
@@ -5696,7 +5870,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyDeleteThisChapter => 'حذف این بخش. بازگشت وجود ندارد!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'همه دیدگاه‌ها، نمادها و شکل‌های ترسیم شده در این بخش، پاک شوند';
+  String get studyClearAllCommentsInThisChapter =>
+      'همه دیدگاه‌ها، نمادها و شکل‌های ترسیم شده در این بخش، پاک شوند';
 
   @override
   String get studyRightUnderTheBoard => 'درست زیر صفحهٔ بازی';
@@ -5936,13 +6111,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'به بخش مطالعه لیچس خوش‌آمدید!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'این یک تختهٔ تحلیل اشتراکی است. از آن برای تحلیل و یادداشت‌گذاری بازی‌ها، گفتگو دربارهٔ وضعیت‌ها با دوستان و البته برای درس‌های شطرنج استفاده کنید! این یک ابزار قدرتمند است؛ بیایید با نحوهٔ کار آن آشنا شویم.';
+  String get studyWelcomeToLichessStudyText =>
+      'این یک تختهٔ تحلیل اشتراکی است. از آن برای تحلیل و یادداشت‌گذاری بازی‌ها، گفتگو دربارهٔ وضعیت‌ها با دوستان و البته برای درس‌های شطرنج استفاده کنید! این یک ابزار قدرتمند است؛ بیایید با نحوهٔ کار آن آشنا شویم.';
 
   @override
   String get studySharedAndSaveTitle => 'اشتراک‌گذاری و ذخیره‌سازی';
 
   @override
-  String get studySharedAndSavedText => 'سایر اعضا می‌توانند حرکات شما را به‌صورت زنده ببینند! به‌علاوه، همه‌چیز برای همیشه ذخیره می‌شود.';
+  String get studySharedAndSavedText =>
+      'سایر اعضا می‌توانند حرکات شما را به‌صورت زنده ببینند! به‌علاوه، همه‌چیز برای همیشه ذخیره می‌شود.';
 
   @override
   String get studyStudyMembersTitle => 'اعضای مطالعه';
@@ -5961,7 +6138,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyStudyChaptersTitle => 'فصل های قابل مطالعه';
 
   @override
-  String get studyStudyChaptersText => 'یک مطالعه می‌تواند شامل چندین فصل باشد. هر فصل یک وضعیت اولیه و درخت حرکات مشخص دارد.';
+  String get studyStudyChaptersText =>
+      'یک مطالعه می‌تواند شامل چندین فصل باشد. هر فصل یک وضعیت اولیه و درخت حرکات مشخص دارد.';
 
   @override
   String get studyCommentPositionTitle => 'نظر دادن روی یک وضعیت';
@@ -5975,25 +6153,29 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'یادداشت‌گذاری روی یک وضعیت';
 
   @override
-  String get studyAnnotatePositionText => 'روی دکمهٔ !؟ کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. علائم یادداشت‌گذاری به اشتراک گذاشته و ذخیره می‌شوند.';
+  String get studyAnnotatePositionText =>
+      'روی دکمهٔ !؟ کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. علائم یادداشت‌گذاری به اشتراک گذاشته و ذخیره می‌شوند.';
 
   @override
   String get studyConclusionTitle => 'ممنون از وقتی که گذاشتید';
 
   @override
-  String get studyConclusionText => 'شما می‌توانید مطالعه‌های قبلی خود را از صفحهٔ پروفایلتان پیدا کنید، همچنین یک پست وبلاگ دربارهٔ مطالعه‌ها وجود دارد. کاربران حرفه‌ای می‌توانند کلید «؟» را برای دیدن میان‌برهای صفحه‌کلید فشار دهند. خوش بگذره!';
+  String get studyConclusionText =>
+      'شما می‌توانید مطالعه‌های قبلی خود را از صفحهٔ پروفایلتان پیدا کنید، همچنین یک پست وبلاگ دربارهٔ مطالعه‌ها وجود دارد. کاربران حرفه‌ای می‌توانند کلید «؟» را برای دیدن میان‌برهای صفحه‌کلید فشار دهند. خوش بگذره!';
 
   @override
   String get studyCreateChapterTitle => 'بیایید یک فصل مطالعه بسازیم';
 
   @override
-  String get studyCreateChapterText => 'یک مطالعه می‌تواند چندین فصل داشته باشد. هر فصل درخت حرکات متمایزی دارد و می‌تواند به روش‌های مختلفی ایجاد شود.';
+  String get studyCreateChapterText =>
+      'یک مطالعه می‌تواند چندین فصل داشته باشد. هر فصل درخت حرکات متمایزی دارد و می‌تواند به روش‌های مختلفی ایجاد شود.';
 
   @override
   String get studyFromInitialPositionTitle => 'از وضعیت اولیه';
 
   @override
-  String get studyFromInitialPositionText => 'فقط چیدمان مهره‌ها برای یک بازی جدید. مناسب برای بررسی شروع بازی‌ها.';
+  String get studyFromInitialPositionText =>
+      'فقط چیدمان مهره‌ها برای یک بازی جدید. مناسب برای بررسی شروع بازی‌ها.';
 
   @override
   String get studyCustomPositionTitle => 'وضعیت سفارشی';
@@ -6005,28 +6187,33 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'بازی قبلی در لیچس را بارگذاری کن';
 
   @override
-  String get studyLoadExistingLichessGameText => 'یک آدرس بازی از لیچس (مانند lichess.org/7fHIU0XI) جای‌گذاری کنید تا حرکات بازی در این فصل بارگذاری شود.';
+  String get studyLoadExistingLichessGameText =>
+      'یک آدرس بازی از لیچس (مانند lichess.org/7fHIU0XI) جای‌گذاری کنید تا حرکات بازی در این فصل بارگذاری شود.';
 
   @override
   String get studyFromFenStringTitle => 'از یک رشتهٔ FEN';
 
   @override
-  String get studyFromFenStringText => 'یک وضعیت با فرمت FEN مانند r1b2rk1/pp3ppp/1qnbpn2/3p4/3P1B2/2PB1N2/PP1N1PPP/R2Q1RK1 w - - 1 10 جای‌گذاری کنید تا فصل از آن وضعیت شروع شود.';
+  String get studyFromFenStringText =>
+      'یک وضعیت با فرمت FEN مانند r1b2rk1/pp3ppp/1qnbpn2/3p4/3P1B2/2PB1N2/PP1N1PPP/R2Q1RK1 w - - 1 10 جای‌گذاری کنید تا فصل از آن وضعیت شروع شود.';
 
   @override
   String get studyFromPgnGameTitle => 'از بازی یک فایل PGN';
 
   @override
-  String get studyFromPgnGameText => 'یک بازی با فرمت PGN جای‌گذاری کنید تا حرکات، نظرات و شاخه‌ها در این فصل بارگذاری شوند.';
+  String get studyFromPgnGameText =>
+      'یک بازی با فرمت PGN جای‌گذاری کنید تا حرکات، نظرات و شاخه‌ها در این فصل بارگذاری شوند.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'مطالعه‌ها از واریانت‌ها پشتیبانی می‌کنند';
 
   @override
-  String get studyVariantsAreSupportedText => 'بله، شما می‌توانید شطرنج دیوانه‌وار (Crazyhouse) و تمام واریانت‌های لیچس را مطالعه کنید!';
+  String get studyVariantsAreSupportedText =>
+      'بله، شما می‌توانید شطرنج دیوانه‌وار (Crazyhouse) و تمام واریانت‌های لیچس را مطالعه کنید!';
 
   @override
-  String get studyChapterConclusionText => 'فصل‌ها برای همیشه ذخیره می‌شوند. از سازماندهی محتوای شطرنجی خود لذت ببرید!';
+  String get studyChapterConclusionText =>
+      'فصل‌ها برای همیشه ذخیره می‌شوند. از سازماندهی محتوای شطرنجی خود لذت ببرید!';
 
   @override
   String get studyDoubleDefeat => 'باخت دوطرفه';
