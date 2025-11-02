@@ -27,12 +27,14 @@ Color blackBoxColor(BuildContext context) => Theme.of(context).brightness == Bri
 
 class ExplorerView extends ConsumerWidget {
   const ExplorerView({
+    required this.pov,
     required this.position,
     required this.onMoveSelected,
     required this.isComputerAnalysisAllowed,
     this.opening,
   });
 
+  final Side pov;
   final Position position;
   final bool isComputerAnalysisAllowed;
   final Opening? opening;
@@ -60,6 +62,7 @@ class ExplorerView extends ConsumerWidget {
     }
 
     return OpeningExplorerView(
+      pov: pov,
       shouldDisplayGames: isComputerAnalysisAllowed,
       position: position,
       opening: opening,

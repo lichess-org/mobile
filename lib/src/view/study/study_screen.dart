@@ -470,6 +470,7 @@ class _Body extends ConsumerWidget {
           case AnalysisTab.explorer:
             if (studyState.isOpeningExplorerAvailable && studyState.currentNode.position != null) {
               return ExplorerView(
+                pov: pov,
                 position: studyState.currentNode.position!,
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(id).notifier).onUserMove(move);

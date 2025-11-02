@@ -377,6 +377,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final state = ref.watch(ctrlProvider).requireValue;
 
     return ExplorerView(
+      pov: state.pov,
       position: state.currentNode.position,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
       isComputerAnalysisAllowed: true,
