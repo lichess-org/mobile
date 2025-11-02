@@ -13,6 +13,7 @@
   <string name="gameStart">Partistart</string>
   <string name="moveToRank">Flytt til rad 1 til 8.</string>
   <string name="moveToFile">Flytt til linje a til h.</string>
+  <string name="movePiece">Bruk standard algebraisk notasjon for å flytte en brikke.</string>
   <string name="king">konge</string>
   <string name="whiteKing">hvit konge</string>
   <string name="blackKing">svart konge</string>
