@@ -37,10 +37,5 @@ Future<void> main() async {
     await androidDisplayInitialization(widgetsBinding);
   }
 
-  runApp(
-    ProviderScope(
-      observers: [ProviderLogger()],
-      child: const AppInitializationScreen(),
-    ),
-  );
+  runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
 }
