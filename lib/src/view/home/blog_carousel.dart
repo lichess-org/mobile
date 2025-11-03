@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show homeTabInteraction;
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const kDefaultBlogImage = AssetImage('assets/images/broadcast_image.png');
@@ -251,7 +252,7 @@ class _BlogCarouselItemState extends State<BlogCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<ImageProvider, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd().add_jm();
+final _dateFormat = DateFormat.MMMd();
 
 class _BlogCardContent extends StatelessWidget {
   const _BlogCardContent({required this.post, required _CardColors? cardColors})
@@ -276,13 +277,14 @@ class _BlogCardContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
+                  UserFullNameWidget(user: post.author, showPatron: false, showFlair: false),
                   Text(
                     _dateFormat.format(post.createdAt),
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
                     overflow: TextOverflow.clip,
                     softWrap: false,
                     maxLines: 1,
