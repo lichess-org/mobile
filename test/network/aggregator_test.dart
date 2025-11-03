@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -204,6 +205,7 @@ void main() {
       final challengesUri = Uri(path: '/api/challenge');
       final tournamentsUri = Uri(path: '/tournament/featured');
       final inboxUri = Uri(path: '/inbox/unread-count');
+      final blogCarouselUri = Uri(path: '/api/blog/carousel');
 
       final [
         account,
@@ -212,6 +214,7 @@ void main() {
         challenges,
         tournaments,
         inbox,
+        blog,
       ] = await Future.wait([
         aggregator.readJson(
           accountUri,
@@ -253,6 +256,7 @@ void main() {
             return (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false);
           },
         ),
+        aggregator.readJsonList(blogCarouselUri, mapper: BlogPost.fromServerJson),
       ]);
 
       expect(requestsCount, 1);
@@ -441,7 +445,39 @@ const homeEndpointResponse = '''
   "tournaments": {"featured": []},
   "inbox": {
     "unread": 5
-  }
+  },
+  "blog": [
+    {
+        "author": {
+            "flair": "activity.lichess",
+            "id": "lichess",
+            "name": "Lichess",
+            "patron": true,
+            "patronColor": 10
+        },
+        "createdAt": 1762044297287,
+        "id": "Mm8spZRW",
+        "image": "https://image.lichess1.org/display?fmt=webp&h=250&op=thumbnail&path=ublog:Mm8spZRW:f9i5OHkG.webp&w=400&sig=0537d74ff41d1edec4a4001af4a13ea7a3dc5d17",
+        "slug": "lichess-game-of-the-month-september-25",
+        "title": "Lichess Game of the Month: September '25",
+        "url": "/@/lichess/blog/lichess-game-of-the-month-september-25/Mm8spZRW"
+    },
+    {
+        "author": {
+            "flair": "activity.lichess",
+            "id": "lichess",
+            "name": "Lichess",
+            "patron": true,
+            "patronColor": 10
+        },
+        "createdAt": 1761953269711,
+        "id": "JK7LSvqX",
+        "image": "https://image.lichess1.org/display?fmt=webp&h=250&op=thumbnail&path=ublog:JK7LSvqX:aPzUgGnx.webp&w=400&sig=7e18082daf825dcd868112766aad9a69b920a4be",
+        "slug": "stage-set-for-the-fide-world-cup-2025",
+        "title": "Stage Set for the FIDE World Cup 2025",
+        "url": "/@/lichess/blog/stage-set-for-the-fide-world-cup-2025/JK7LSvqX"
+    }
+  ]
 }
 ''';
 
