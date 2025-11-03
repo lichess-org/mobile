@@ -1458,7 +1458,7 @@
   "moreThanNbRatedGames": "{count, plural, =1{≥ {count} jogos valendo pontos} other{≥ {count} jogos valendo pontos}}",
   "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} partida {param2} valendo pontos} other{≥ {count} {param2} partidas valendo pontos}}",
   "needNbMorePerfGames": "{count, plural, =1{Você precisa jogar mais {count} partida de {param2} valendo pontos} other{Você precisa jogar mais {count} partidas de {param2} valendo pontos}}",
-  "needNbMoreGames": "{count, plural, =1{Você precisa jogar ainda {count} partidas valendo pontos} other{Você precisa jogar ainda {count} partidas valendo pontos}}",
+  "needNbMoreGames": "{count, plural, =1{Você precisa jogar ainda {count} partida valendo pontos} other{Você precisa jogar ainda {count} partidas valendo pontos}}",
   "nbImportedGames": "{count, plural, =1{{count} de partidas importadas} other{{count} de partidas importadas}}",
   "nbFriendsOnline": "{count, plural, =1{{count} amigo online} other{{count} amigos online}}",
   "nbFollowers": "{count, plural, =1{{count} seguidores} other{{count} seguidores}}",

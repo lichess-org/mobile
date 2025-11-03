@@ -33,6 +33,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) {},
             isComputerAnalysisAllowed: true,
@@ -57,6 +58,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) => {},
             isComputerAnalysisAllowed: true,
@@ -81,6 +83,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) => {},
             isComputerAnalysisAllowed: true,
@@ -103,6 +106,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) => {},
             isComputerAnalysisAllowed: true,
@@ -132,6 +136,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) => {},
             isComputerAnalysisAllowed: true,
@@ -154,6 +159,7 @@ void main() {
         tester,
         home: Scaffold(
           body: ExplorerView(
+            pov: Side.white,
             position: position,
             onMoveSelected: (move) => {},
             isComputerAnalysisAllowed: true,

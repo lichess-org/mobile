@@ -1383,6 +1383,7 @@
   "simulFeaturedHelp": "Pokaż symultanę wszystkim na {param}. Wyłącz dla prywatnych symultan.",
   "simulDescription": "Opis symultany",
   "simulDescriptionHelp": "Wiadomość do przekazania uczestnikom",
+  "markdownIsAvailable": "{param} jest dostępny do formatowania.",
   "embedsAvailable": "Wklej adres URL partii lub adres URL rozdziału opracowania, aby go osadzć.",
   "inYourLocalTimezone": "W Twojej lokalnej strefie czasowej",
   "tournChat": "Czat turniejowy",

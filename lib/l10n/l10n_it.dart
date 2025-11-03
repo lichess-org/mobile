@@ -2101,7 +2101,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameMode => 'Modalità di gioco';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Crea una partita nella lobby';
 
   @override
   String get youPlayAs => 'Giochi come';
@@ -4028,7 +4028,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analysisShapesHowTo => 'Premere MAIUSC+click o tasto destro del mouse per disegnare cerchi e frecce sulla scacchiera.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl o shift = rosso; comand, alt, o meta = blu; un tasto da ogni combinazione = giallo.';
 
   @override
   String get letOtherPlayersMessageYou => 'Lascia che gli altri giocatori ti inviino messaggi';
@@ -4649,7 +4649,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param è disponibile per la formattazione.';
   }
 
   @override
@@ -5516,7 +5516,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetico';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'Pertinenti';
 
   @override
   String get studyAddNewChapter => 'Aggiungi un nuovo capitolo';

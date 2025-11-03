@@ -11374,7 +11374,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       count,
       locale: localeName,
       other: 'Você precisa jogar ainda $count partidas valendo pontos',
-      one: 'Você precisa jogar ainda $count partidas valendo pontos',
+      one: 'Você precisa jogar ainda $count partida valendo pontos',
     );
     return '$_temp0';
   }

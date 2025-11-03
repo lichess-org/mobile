@@ -1256,7 +1256,7 @@
   "notifications": "알림",
   "notificationsX": "알림: {param1}",
   "perfRatingX": "레이팅: {param}",
-  "yourRatingIsX": "귀하의 레이팅: {param}",
+  "yourRatingIsX": "{param} 귀하의 평가는",
   "practiceWithComputer": "컴퓨터와 연습하기",
   "anotherWasX": "다른 수는 {param}",
   "bestWasX": "최선의 수는 {param}",

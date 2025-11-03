@@ -9,15 +9,9 @@ import 'package:sqflite/sqflite.dart';
 part 'openings_database.g.dart';
 
 // The dataset is from https://github.com/lichess-org/chess-openings
-// and was simply imported in sqlite with:
-//   sqlite> .mode tabs
-//   sqlite> .import a.tsv openings
-//   sqlite> .import b.tsv openings
-//   sqlite> .import c.tsv openings
-//   sqlite> .import d.tsv openings
-//   sqlite> .import e.tsv openings
+// It can be updated by running the script at scripts/update_openings_db.py
 
-const _kDatabaseVersion = 2;
+const _kDatabaseVersion = 3;
 const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 
 @Riverpod(keepAlive: true)

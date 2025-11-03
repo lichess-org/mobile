@@ -4189,7 +4189,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return '귀하의 레이팅: $param';
+    return '$param 귀하의 평가는';
   }
 
   @override

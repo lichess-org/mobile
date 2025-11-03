@@ -4649,7 +4649,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param er tilgjengelig for formatering.';
   }
 
   @override

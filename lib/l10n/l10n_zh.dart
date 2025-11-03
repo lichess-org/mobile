@@ -663,13 +663,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastNewBroadcast => '新建实况转播';
 
   @override
-  String get broadcastSubscribedBroadcasts => '已订阅的转播';
+  String get broadcastSubscribedBroadcasts => '订阅的转播';
 
   @override
   String get broadcastAboutBroadcasts => '关于转播';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => '如何使用 Lichess 转播';
+  String get broadcastHowToUseLichessBroadcasts => '如何使用 Lichess 转播。';
 
   @override
   String get broadcastTheNewRoundHelp => '新一轮的成员和贡献者将与前一轮相同。';
@@ -681,19 +681,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastOngoing => '进行中';
 
   @override
-  String get broadcastUpcoming => '即将举行';
+  String get broadcastUpcoming => '即将开始';
 
   @override
   String get broadcastRoundName => '轮次名称';
 
   @override
-  String get broadcastTournamentName => '锦标赛名称';
+  String get broadcastTournamentName => '比赛名称';
 
   @override
-  String get broadcastTournamentDescription => '锦标赛简短描述';
+  String get broadcastTournamentDescription => '比赛简短描述';
 
   @override
-  String get broadcastFullDescription => '赛事详情';
+  String get broadcastFullDescription => '比赛简介';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
@@ -707,11 +707,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastSourceUrlHelp => 'Lichess 将从该网址搜查 PGN 的更新。它必须是公开的。';
 
   @override
-  String get broadcastSourceGameIds => '多达 64 个 Lichess 棋局 ID，用空格隔开。';
+  String get broadcastSourceGameIds => '最多 64 个 Lichess 棋局 ID，用空格隔开。';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return '锦标赛本地时区的开始时间：$param';
+    return '比赛本地时区开始时间：$param';
   }
 
   @override
@@ -2088,7 +2088,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get waitingForOpponent => '正在等待对手';
 
   @override
-  String get orLetYourOpponentScanQrCode => '也可以让对方扫描这个二维码：';
+  String get orLetYourOpponentScanQrCode => '或让对方扫描这个二维码';
 
   @override
   String get waiting => '等待中';
@@ -4621,7 +4621,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param 可用于格式化。';
   }
 
   @override

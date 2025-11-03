@@ -236,9 +236,9 @@ class GameBody extends ConsumerWidget {
               ref.read(ctrlProvider.notifier).onFocusRegained();
             }
           },
-          onFocusLost: () {
+          onForegroundLost: () {
             if (context.mounted) {
-              ref.read(ctrlProvider.notifier).onFocusLost();
+              ref.read(ctrlProvider.notifier).onForegroundLost();
             }
           },
           child: WakelockWidget(

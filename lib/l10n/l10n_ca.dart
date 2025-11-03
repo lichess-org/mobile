@@ -4649,7 +4649,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return 'Es pot utilitzar $param per descriure el format.';
   }
 
   @override

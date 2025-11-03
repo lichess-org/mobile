@@ -21,6 +21,7 @@ class BroadcastSearchScreen extends StatefulWidget {
 }
 
 class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
+  late final TextEditingController _searchController;
   String? searchTerm;
 
   void onSubmitted(String term) {
@@ -30,8 +31,21 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final searchBar = PlatformSearchBar(
+      controller: _searchController,
       hintText: context.l10n.searchSearch,
       autoFocus: true,
       onSubmitted: onSubmitted,

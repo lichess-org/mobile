@@ -4621,7 +4621,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return 'フォーマット方法として $param が使えます。';
   }
 
   @override
