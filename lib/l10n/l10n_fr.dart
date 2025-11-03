@@ -2098,7 +2098,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get playAgainstComputer => 'Jouer contre l\'ordinateur';
 
   @override
-  String get gameMode => 'Mode de la partie';
+  String get gameMode => 'Mode de jeu';
 
   @override
   String get createLobbyGame => 'Créer une partie dans le salon';
@@ -2318,7 +2318,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get copyVariationPgn => 'Copier le PGN de la variante';
 
   @override
-  String get copyMainLinePgn => 'Copier la ligne principale (PGN)';
+  String get copyMainLinePgn => 'Copier la ligne principale en tant que PGN';
 
   @override
   String get move => 'Coup';
@@ -4028,7 +4028,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get analysisShapesHowTo => 'Utilisez maj+clic ou clic-droit pour dessiner des cercles et des flèches sur l\'échiquier.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl ou Maj = rouge ; Commande, Alt, ou Windows = bleu ; Les deux touches en même temps = jaune.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permettre à d\'autres joueurs de vous envoyer des messages';

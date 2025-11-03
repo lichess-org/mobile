@@ -1028,7 +1028,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get contactContact => 'Контакт';
 
   @override
-  String get contactContactLichess => 'Контактирајте Личес';
+  String get contactContactLichess => 'Контактирај Lichess';
 
   @override
   String get coordinatesCoordinates => 'Координате';
@@ -4447,7 +4447,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get searchOrStartNewDiscussion => 'Претражи или започни нови разговор';
 
   @override
-  String get edit => 'Промени';
+  String get edit => 'Уреди';
 
   @override
   String get bullet => 'Муњевити';

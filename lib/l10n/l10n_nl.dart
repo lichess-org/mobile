@@ -4028,7 +4028,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get analysisShapesHowTo => 'Druk op shift+linkermuisknop of rechtermuisknop om cirkels en pijlen op het bord te tekenen.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl of shift = rood; command, alt, of meta-toets = blauw; allen tegelijk = geel.';
 
   @override
   String get letOtherPlayersMessageYou => 'Andere spelers mogen je berichten zenden';
@@ -4359,7 +4359,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return '$param uitdagen';
   }
 
   @override

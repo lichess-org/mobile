@@ -1382,6 +1382,7 @@
   "simulFeaturedHelp": "{param} 上の全員に表示します。非公開の同時対局では無効にしてください。",
   "simulDescription": "同時対局の説明",
   "simulDescriptionHelp": "参加者に伝えたいことがあればどうぞ",
+  "markdownIsAvailable": "フォーマット方法として {param} が使えます。",
   "embedsAvailable": "棋譜の URL、研究の章の URL をペーストすると埋め込みできます。",
   "inYourLocalTimezone": "自分のタイムゾーンで",
   "tournChat": "トーナメント チャット",

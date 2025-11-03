@@ -4705,7 +4705,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param jest dostępny do formatowania.';
   }
 
   @override
