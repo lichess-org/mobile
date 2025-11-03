@@ -142,7 +142,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
