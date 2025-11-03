@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
@@ -74,7 +75,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends ConsumerWidget {
+class BroadcastPreview extends ConsumerStatefulWidget {
   const BroadcastPreview({
     required this.tournamentId,
     required this.roundId,
@@ -99,9 +100,28 @@ class BroadcastPreview extends ConsumerWidget {
   final String title;
   final String tournamentSlug;
   final String roundSlug;
+  @override
+  ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
+}
+
+class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
+  String _searchQuery = '';
+  late final TextEditingController _searchController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final showEvaluationBar = ref.watch(
       broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
     );
@@ -119,48 +139,85 @@ class BroadcastPreview extends ConsumerWidget {
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
+    final IList<BroadcastGame>? games = widget.games == null
+        ? null
+        : _searchQuery.isEmpty
+        ? widget.games
+        : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
+    final showSearchBar = widget.games != null && widget.games!.length > 6;
 
-    return GridView.builder(
-      padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: numberOfBoardsByRow,
-        crossAxisSpacing: boardSpacing,
-        mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
-        childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
-      ),
-      itemCount: games == null ? numberLoadingBoards : games!.length,
-      itemBuilder: (context, index) {
-        final boardSize =
-            boardWithMaybeEvalBarWidth -
-            (showEvaluationBar
-                ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
-                : 0);
+    return CustomScrollView(
+      slivers: [
+        if (showSearchBar)
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverPadding(
+              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              sliver: SliverToBoxAdapter(
+                child: PlatformSearchBar(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  onClear: () {
+                    _searchController.clear();
+                    setState(() {
+                      _searchQuery = '';
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+        SliverPadding(
+          padding: Styles.bodyPadding.add(
+            // top media query padding is already included in the SliverSafeArea above
+            EdgeInsetsGeometry.only(bottom: MediaQuery.paddingOf(context).bottom),
+          ),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final boardSize =
+                  boardWithMaybeEvalBarWidth -
+                  (showEvaluationBar
+                      ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                      : 0);
 
-        if (games == null) {
-          return BoardThumbnail.loading(
-            size: boardSize,
-            header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-            footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-          );
-        }
+              if (games == null) {
+                return BoardThumbnail.loading(
+                  size: boardSize,
+                  header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                  footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                );
+              }
 
-        final game = games![index];
-        final playingSide = Setup.parseFen(game.fen).turn;
+              final game = games[index];
+              final playingSide = Setup.parseFen(game.fen).turn;
 
-        return ObservedBoardThumbnail(
-          roundId: roundId,
-          game: game,
-          title: title,
-          tournamentId: tournamentId,
-          tournamentSlug: tournamentSlug,
-          roundSlug: roundSlug,
-          showEvaluationBar: showEvaluationBar,
-          boardSize: boardSize,
-          boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-          playingSide: playingSide,
-        );
-      },
+              return ObservedBoardThumbnail(
+                roundId: widget.roundId,
+                game: game,
+                title: widget.title,
+                tournamentId: widget.tournamentId,
+                tournamentSlug: widget.tournamentSlug,
+                roundSlug: widget.roundSlug,
+                showEvaluationBar: showEvaluationBar,
+                boardSize: boardSize,
+                boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+                playingSide: playingSide,
+              );
+            }, childCount: games == null ? numberLoadingBoards : games.length),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: numberOfBoardsByRow,
+              crossAxisSpacing: boardSpacing,
+              mainAxisSpacing: boardSpacing,
+              mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+              childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -339,4 +396,9 @@ class _PlayerWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _containsPlayer(BroadcastGame game, String query) {
+  final q = query.toLowerCase();
+  return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
 }
