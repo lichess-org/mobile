@@ -147,13 +147,13 @@ class _BodyState extends ConsumerState<_Body> {
       setState(() {
         _worker = worker;
       });
+      ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+        if (current.hasValue && !_imageAreCached) {
+          _imageAreCached = true;
+          await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
+        }
+      });
     }
-    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
-      if (current.hasValue && !_imageAreCached) {
-        _imageAreCached = true;
-        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
-      }
-    });
   }
 
   @override

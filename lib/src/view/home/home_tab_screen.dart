@@ -118,13 +118,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       setState(() {
         _worker = worker;
       });
+      ref.listenManual(blogCarouselProvider, (_, current) async {
+        if (current.hasValue && !_imageAreCached) {
+          _imageAreCached = true;
+          await preCacheBlogImages(context, posts: current.value!, worker: worker);
+        }
+      });
     }
-    ref.listenManual(blogCarouselProvider, (_, current) async {
-      if (current.hasValue && !_imageAreCached) {
-        _imageAreCached = true;
-        await preCacheBlogImages(context, posts: current.value!, worker: worker);
-      }
-    });
   }
 
   Future<bool> shouldDisplayWelcomeMessage() async {
