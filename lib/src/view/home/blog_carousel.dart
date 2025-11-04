@@ -346,7 +346,7 @@ Future<void> preCacheBlogImages(
   required Iterable<BlogPost> posts,
   required ImageColorWorker worker,
 }) async {
-  for (final post in posts) {
+  for (final post in posts.take(5)) {
     final imageUrl = post.imageUrl;
     if (imageUrl != null) {
       final provider = NetworkImage(imageUrl.toString());
