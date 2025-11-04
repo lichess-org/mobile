@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -125,7 +124,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             );
           }
           return FullScreenRetryRequest(
-            onRetry: () => ref.invalidate(userProvider(id: widget.user.id)),
+            onRetry: () => ref.invalidate(_userScreenDataProvider(widget.user.id)),
           );
         },
       ),
@@ -166,9 +165,7 @@ class _UserProfileListView extends ConsumerWidget {
     Future<void> userAction(Future<void> Function(LichessClient client) action) async {
       setIsLoading(true);
       try {
-        await ref
-            .withClient(action)
-            .then((_) => ref.invalidate(userAndStatusProvider(id: user.id)));
+        await ref.withClient(action).then((_) => ref.invalidate(_userScreenDataProvider(user.id)));
       } finally {
         setIsLoading(false);
       }
