@@ -12,8 +12,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileAccountPreferences => 'Հաշվի նախընտրություններ';
 
   @override
-  String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
 
   @override
   String get mobileAllGames => 'All games';
@@ -71,8 +70,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileNoSearchResults => 'No results';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable =>
-      'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
@@ -110,12 +108,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning =>
-      'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleThemesSubtitle =>
-      'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
 
   @override
   String get mobilePuzzlesTab => 'խնդիրներ';
@@ -151,8 +147,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Immersive mode';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
@@ -161,8 +156,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Pick an image';
 
   @override
-  String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
@@ -186,8 +180,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Shape drawing';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
   String get mobileSettingsShowBorder => 'Show border';
@@ -196,8 +189,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Settings';
@@ -471,12 +463,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaIsItRated => 'Ի՞նչ կլինի վարկանիշիս հետ';
 
   @override
-  String get arenaWillBeNotified =>
-      'Դուք կտեղեկացվեք մրցաշարի սկզբի մասին, այնպես որ հանգիստ սպասեք:';
+  String get arenaWillBeNotified => 'Դուք կտեղեկացվեք մրցաշարի սկզբի մասին, այնպես որ հանգիստ սպասեք:';
 
   @override
-  String get arenaIsRated =>
-      'Այս մրցաշարում վարկանիշի հաշվարկ կա, այնպես որ այն կազդի Ձեր վարկանիշի վրա:';
+  String get arenaIsRated => 'Այս մրցաշարում վարկանիշի հաշվարկ կա, այնպես որ այն կազդի Ձեր վարկանիշի վրա:';
 
   @override
   String get arenaIsNotRated => 'Այս մրցաշարը առանց վարկանիշի է և այն չի ազդի Ձեր վարկանիշի վրա:';
@@ -488,43 +478,37 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Ինչպե՞ս են հաշվարկվում միավորները';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer =>
-      'Հաղթանակը գնահատվում է 2 միավոր, ոչ-ոքին՝ 1, իսկ պարտության համար միավոր չի տրվում:\nԵթե հաղթում եք երկու խաղում անընդմեջ՝ ակտիվանում է միավորների կրկնապատկումը, որը ցուցադրվում է կրակի պատկերով:\nՀաջորդ խաղերում նույնպես միավորները կկրկնապատկվեն՝ մինչև առաջին պարտություն:\nԱյսինքն` հաղթանակը 4 միավոր է, ոչ-ոքին՝ 2 , իսկ պարտությունը՝ 0:\n\nՕրինակ, երկու հաղթանակը և ոչ-ոքին իրար հետ ընդհանուր կդառնան 6 միավոր՝ 2 + 2 + (2 х 1)։';
+  String get arenaHowAreScoresCalculatedAnswer => 'Հաղթանակը գնահատվում է 2 միավոր, ոչ-ոքին՝ 1, իսկ պարտության համար միավոր չի տրվում:\nԵթե հաղթում եք երկու խաղում անընդմեջ՝ ակտիվանում է միավորների կրկնապատկումը, որը ցուցադրվում է կրակի պատկերով:\nՀաջորդ խաղերում նույնպես միավորները կկրկնապատկվեն՝ մինչև առաջին պարտություն:\nԱյսինքն` հաղթանակը 4 միավոր է, ոչ-ոքին՝ 2 , իսկ պարտությունը՝ 0:\n\nՕրինակ, երկու հաղթանակը և ոչ-ոքին իրար հետ ընդհանուր կդառնան 6 միավոր՝ 2 + 2 + (2 х 1)։';
 
   @override
   String get arenaBerserk => 'Բերսերքն Արենայում';
 
   @override
-  String get arenaBerserkAnswer =>
-      'Եթե խաղից առաջ խաղացողը սեղմում է Բերսերքի կոճակը, ապա կորցնում է իր ժամանակի կեսը, սակայն հաղթանակի դեպքում ստանում է լրացուցիչ միավոր:\n\nԺամանակի ավելացման դեպքում էլ Բերսերքը չեղարկում է այդ ավելացումը (1+2-ը բացառություն է՝ այն դառնում է 1+0)։\n\nԲերսերքը հասանելի չէ 0 րոպեով սկսվող պարտիաներում՝ (0+1, 0+2)։\n\nԲերսերքը կտա Ձեզ հավելյալ միավոր, եթե պարտիայում կատարվել է ամենաքիչը 7 քայլ:';
+  String get arenaBerserkAnswer => 'Եթե խաղից առաջ խաղացողը սեղմում է Բերսերքի կոճակը, ապա կորցնում է իր ժամանակի կեսը, սակայն հաղթանակի դեպքում ստանում է լրացուցիչ միավոր:\n\nԺամանակի ավելացման դեպքում էլ Բերսերքը չեղարկում է այդ ավելացումը (1+2-ը բացառություն է՝ այն դառնում է 1+0)։\n\nԲերսերքը հասանելի չէ 0 րոպեով սկսվող պարտիաներում՝ (0+1, 0+2)։\n\nԲերսերքը կտա Ձեզ հավելյալ միավոր, եթե պարտիայում կատարվել է ամենաքիչը 7 քայլ:';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Ինչպե՞ս է որոշվում հաղթողը';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer =>
-      'Հաղթող է ճանաչվում այն մասնակիցը, ով հատկացված ժամանակում կհավաքի ամենաշատ միավորները:';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Հաղթող է ճանաչվում այն մասնակիցը, ով հատկացված ժամանակում կհավաքի ամենաշատ միավորները:';
 
   @override
   String get arenaHowDoesPairingWork => 'Ինչպե՞ս են կազմվում զույգերը';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer =>
-      'Մրցաշարի սկզբում զույգերը կազմվում են ըստ անհատական վարկանիշների:\nԽաղի ավարտից հետո սեղմեք «Դեպի մրցաշար» վերադարձի կոճակը, որից հետո Դուք կստանաք նոր մրցակից՝ ըստ Ձեր զբաղեցրած դիրքի: Վիճակահանությունը կտևի ոչ այդքան երկար, սակայն բոլորի հետ խաղալ չեք կարող, միայն Ձեր մոտակայքում գտնվող խաղացողներից կկազմվի զույգը:\nԽաղացեք արագ և վերադարձեք մրցաշարի հիմնական էջ, որպեսզի խաղաք շատ խաղեր և հավաքեք շատ միավորներ:';
+  String get arenaHowDoesPairingWorkAnswer => 'Մրցաշարի սկզբում զույգերը կազմվում են ըստ անհատական վարկանիշների:\nԽաղի ավարտից հետո սեղմեք «Դեպի մրցաշար» վերադարձի կոճակը, որից հետո Դուք կստանաք նոր մրցակից՝ ըստ Ձեր զբաղեցրած դիրքի: Վիճակահանությունը կտևի ոչ այդքան երկար, սակայն բոլորի հետ խաղալ չեք կարող, միայն Ձեր մոտակայքում գտնվող խաղացողներից կկազմվի զույգը:\nԽաղացեք արագ և վերադարձեք մրցաշարի հիմնական էջ, որպեսզի խաղաք շատ խաղեր և հավաքեք շատ միավորներ:';
 
   @override
   String get arenaHowDoesItEnd => 'Ինչպե՞ս է ավարտվում մրցաշարը';
 
   @override
-  String get arenaHowDoesItEndAnswer =>
-      'Մրցաշարում գործում է ժամանակի հետհաշվարկ։ Երբ այն հասնում է զրոյի, մրցաշարային միավորները սառեցվում են, և հայտարարվում է հաղթողը։ Այդ պահին խաղացվող բոլոր պարտիաները պետք է ավարտվեն (և եթե մրցաշարը վարկանիշային է, կազդեն վարկանիշի վրա), բայց մրցաշարում դրանք չեն հաշվարկվի։';
+  String get arenaHowDoesItEndAnswer => 'Մրցաշարում գործում է ժամանակի հետհաշվարկ։ Երբ այն հասնում է զրոյի, մրցաշարային միավորները սառեցվում են, և հայտարարվում է հաղթողը։ Այդ պահին խաղացվող բոլոր պարտիաները պետք է ավարտվեն (և եթե մրցաշարը վարկանիշային է, կազդեն վարկանիշի վրա), բայց մրցաշարում դրանք չեն հաշվարկվի։';
 
   @override
   String get arenaOtherRules => 'Կարևոր այլ կանոններ';
 
   @override
-  String get arenaThereIsACountdown =>
-      'Ժամանակի հետհաշվարկը մինչև Ձեր առաջին քայլն է։ Եթե ​​այդ ընթացքում քայլ չկատարեք, ապա հաղթանակը կշնորհվի մրցակցին։';
+  String get arenaThereIsACountdown => 'Ժամանակի հետհաշվարկը մինչև Ձեր առաջին քայլն է։ Եթե ​​այդ ընթացքում քայլ չկատարեք, ապա հաղթանակը կշնորհվի մրցակցին։';
 
   @override
   String get arenaThisIsPrivate => 'Սա փակ մրցաշար է';
@@ -540,8 +524,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants =>
-      'Ոչ-ոքի ավարտված պարտիաների նվազագույն քայլերի քանակը, որի համար տրվում են միավորներ. կախված է խաղի տարբերակից։ Ներքևի աղյուսակում բերված են յուրաքանչյուր տարբերակի համար սահմանային արժեքները։';
+  String get arenaDrawStreakVariants => 'Ոչ-ոքի ավարտված պարտիաների նվազագույն քայլերի քանակը, որի համար տրվում են միավորներ. կախված է խաղի տարբերակից։ Ներքևի աղյուսակում բերված են յուրաքանչյուր տարբերակի համար սահմանային արժեքները։';
 
   @override
   String get arenaVariant => 'Տարբերակ';
@@ -559,15 +542,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaCustomStartDate => 'Սկսելու հատուկ ամսաթիվ';
 
   @override
-  String get arenaCustomStartDateHelp =>
-      'Ձեր ժամագոտում։ Դա կանխորոշում է «Մրցաշարի մեկնարկին մնացել է» կարգավորումը';
+  String get arenaCustomStartDateHelp => 'Ձեր ժամագոտում։ Դա կանխորոշում է «Մրցաշարի մեկնարկին մնացել է» կարգավորումը';
 
   @override
   String get arenaAllowBerserk => 'Թույլատրել Բերսերքը';
 
   @override
-  String get arenaAllowBerserkHelp =>
-      'Խաղացողներին թույլատրում է ստանալ լրացուցիչ միավորներ, եթե նրանք կրճատեն իրենց խաղաժամանակը կիսով չափ';
+  String get arenaAllowBerserkHelp => 'Խաղացողներին թույլատրում է ստանալ լրացուցիչ միավորներ, եթե նրանք կրճատեն իրենց խաղաժամանակը կիսով չափ';
 
   @override
   String get arenaAllowChatHelp => 'Խաղացողներին թույլատրել քննարկումը զրուցարանում';
@@ -576,8 +557,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaArenaStreaks => '«Արենայի» շարքեր';
 
   @override
-  String get arenaArenaStreaksHelp =>
-      'Երկու անընդմեջ հաղթանակից հետո յուրաքանչյուր հաջորդ հաղթանակը տալիս է ոչ թե 2, այլ 4 միավոր։';
+  String get arenaArenaStreaksHelp => 'Երկու անընդմեջ հաղթանակից հետո յուրաքանչյուր հաջորդ հաղթանակը տալիս է ոչ թե 2, այլ 4 միավոր։';
 
   @override
   String get arenaNoBerserkAllowed => 'Բերսերկ չի թույլատրվում';
@@ -607,12 +587,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Which team will you represent in this battle?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Which team will you represent in this battle?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'You must join one of these teams to participate!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'You must join one of these teams to participate!';
 
   @override
   String get arenaCreated => 'Created';
@@ -627,8 +605,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp =>
-      'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -715,8 +692,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
 
   @override
-  String get broadcastTheNewRoundHelp =>
-      'The new round will have the same members and contributors as the previous one.';
+  String get broadcastTheNewRoundHelp => 'The new round will have the same members and contributors as the previous one.';
 
   @override
   String get broadcastAddRound => 'Ավելացնել խաղափուլ';
@@ -748,8 +724,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN Source URL';
 
   @override
-  String get broadcastSourceUrlHelp =>
-      'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
+  String get broadcastSourceUrlHelp => 'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
 
   @override
   String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
@@ -778,8 +753,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound =>
-      'Delete all games of this round. The source will need to be active in order to re-create them.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Delete all games of this round. The source will need to be active in order to re-create them.';
 
   @override
   String get broadcastEditRoundStudy => 'Խմբագրել խաղափուլի ստուդիան';
@@ -788,8 +762,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastDeleteTournament => 'Հեռացնել այս մրցաշարը';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament =>
-      'Վերջնականապես հեռացնել ամբողջ մրցաշարը, նրա խաղափուլերը և պարտիաները։';
+  String get broadcastDefinitivelyDeleteTournament => 'Վերջնականապես հեռացնել ամբողջ մրցաշարը, նրա խաղափուլերը և պարտիաները։';
 
   @override
   String get broadcastShowScores => 'Show players scores based on game results';
@@ -837,8 +810,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastOverview => 'Overview';
 
   @override
-  String get broadcastSubscribeTitle =>
-      'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
 
   @override
   String get broadcastUploadImage => 'Upload tournament image';
@@ -919,8 +891,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Back to live move';
 
   @override
-  String get broadcastSinceHideResults =>
-      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -1004,16 +975,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get challengeDeclineGeneric => 'Այս պահին մարտահրավերներ չեմ ընդունում։';
 
   @override
-  String get challengeDeclineLater =>
-      'Այս պահին մարտահրավերներ չեմ ընդունում, խնդրում եմ, հրավիրեք ինձ ավելի ուշ։';
+  String get challengeDeclineLater => 'Այս պահին մարտահրավերներ չեմ ընդունում, խնդրում եմ, հրավիրեք ինձ ավելի ուշ։';
 
   @override
-  String get challengeDeclineTooFast =>
-      'Այդ ժամակարգն ինձ համար շատ արագ է, խնդրում եմ, հրավիրեք ինձ ավելի երկար ժամակարգով խաղի։';
+  String get challengeDeclineTooFast => 'Այդ ժամակարգն ինձ համար շատ արագ է, խնդրում եմ, հրավիրեք ինձ ավելի երկար ժամակարգով խաղի։';
 
   @override
-  String get challengeDeclineTooSlow =>
-      'Այդ ժամակարգն ինձ համար շատ դանդաղ է, խնդրում եմ, հրավիրեք ինձ ավելի կարճ ժամակարգով խաղի։';
+  String get challengeDeclineTooSlow => 'Այդ ժամակարգն ինձ համար շատ դանդաղ է, խնդրում եմ, հրավիրեք ինձ ավելի կարճ ժամակարգով խաղի։';
 
   @override
   String get challengeDeclineTimeControl => 'Այդպիսի ժամակարգով մարտահրավերներ չեմ ընդունում։';
@@ -1025,8 +993,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get challengeDeclineCasual => 'Հրավիրեք ինձ ընկերական խաղի, խնդրում եմ։';
 
   @override
-  String get challengeDeclineStandard =>
-      'Ես չեմ ընդունում ոչ դասական շախմատի մարտահրավերներ հենց հիմա։';
+  String get challengeDeclineStandard => 'Ես չեմ ընդունում ոչ դասական շախմատի մարտահրավերներ հենց հիմա։';
 
   @override
   String get challengeDeclineVariant => 'Ես չեմ ցանկանում շախմատի այս տարբերակը խաղալ հիմա։';
@@ -1063,36 +1030,28 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard =>
-      'Շախմատի կոորդինատները իմանալը շատ կարևոր հմտություն է:';
+  String get coordinatesKnowingTheChessBoard => 'Շախմատի կոորդինատները իմանալը շատ կարևոր հմտություն է:';
 
   @override
-  String get coordinatesMostChessCourses =>
-      'Շախմատային դասընթացներում և խնդիրներում լայնորեն կիրառվում է նոտագրությունը:';
+  String get coordinatesMostChessCourses => 'Շախմատային դասընթացներում և խնդիրներում լայնորեն կիրառվում է նոտագրությունը:';
 
   @override
-  String get coordinatesTalkToYourChessFriends =>
-      'Հեշտանում է ընկերների հետ խոսելը, երբ երկուսն էլ հասկանում են «շախմատի լեզուն»:';
+  String get coordinatesTalkToYourChessFriends => 'Հեշտանում է ընկերների հետ խոսելը, երբ երկուսն էլ հասկանում են «շախմատի լեզուն»:';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'Պարտիաներ վերլուծելն ավելի արդյունավետ է, եթե կոորդինատներով դաշտերը փնտելու վրա ժամանակ չի ծախսվում:';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Պարտիաներ վերլուծելն ավելի արդյունավետ է, եթե կոորդինատներով դաշտերը փնտելու վրա ժամանակ չի ծախսվում:';
 
   @override
-  String get coordinatesACoordinateAppears =>
-      'Կոորդինատները հայտնվում են տախտակին, և Ձեզ անհրաժեշտ է նշել դրանց համապատասխանող դաշտը։';
+  String get coordinatesACoordinateAppears => 'Կոորդինատները հայտնվում են տախտակին, և Ձեզ անհրաժեշտ է նշել դրանց համապատասխանող դաշտը։';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation =>
-      'Դաշտը լուսավորված է տախտակի վրա, և դուք պետք է մուտքագրեք դրա կոորդինատները (օրինակ ՝ \"e4\"):';
+  String get coordinatesASquareIsHighlightedExplanation => 'Դաշտը լուսավորված է տախտակի վրա, և դուք պետք է մուտքագրեք դրա կոորդինատները (օրինակ ՝ \"e4\"):';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      'Դուք ունեք 30 վայրկյան՝ հնարավորինս շատ դաշտեր ճիշտ նշելու համար:';
+  String get coordinatesYouHaveThirtySeconds => 'Դուք ունեք 30 վայրկյան՝ հնարավորինս շատ դաշտեր ճիշտ նշելու համար:';
 
   @override
-  String get coordinatesGoAsLongAsYouWant =>
-      'Գնացեք այնքան հեռու, որքան կարող եք: Ժամանակը սահմանափակ չէ:';
+  String get coordinatesGoAsLongAsYouWant => 'Գնացեք այնքան հեռու, որքան կարող եք: Ժամանակը սահմանափակ չէ:';
 
   @override
   String get coordinatesShowCoordinates => 'Ցույց տալ կոորդինատները';
@@ -1136,8 +1095,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get perfStatProvisional => 'նախնական';
 
   @override
-  String get perfStatNotEnoughRatedGames =>
-      'Ճշգրիտ վարկանիշն իմանալու համար վարկանիշային պարտիաների քանակը բավարար չէ։';
+  String get perfStatNotEnoughRatedGames => 'Ճշգրիտ վարկանիշն իմանալու համար վարկանիշային պարտիաների քանակը բավարար չէ։';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1279,12 +1237,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesShowFlairs => 'Show player flairs';
 
   @override
-  String get preferencesExplainShowPlayerRatings =>
-      'Հնարավորություն է տալիս թաքցնելու կայքի բոլոր վարկանիշները՝ խաղի վրա կենտրոնանալու համար։ Պարտիաները մնում են վարկանիշային, պարզապես Դուք դա չեք տեսնի։';
+  String get preferencesExplainShowPlayerRatings => 'Հնարավորություն է տալիս թաքցնելու կայքի բոլոր վարկանիշները՝ խաղի վրա կենտրոնանալու համար։ Պարտիաները մնում են վարկանիշային, պարզապես Դուք դա չեք տեսնի։';
 
   @override
-  String get preferencesDisplayBoardResizeHandle =>
-      'Ցույց տալ խաղատախտակի չափսի փոփոխության պատկերագիրը';
+  String get preferencesDisplayBoardResizeHandle => 'Ցույց տալ խաղատախտակի չափսի փոփոխության պատկերագիրը';
 
   @override
   String get preferencesOnlyOnInitialPosition => 'Միայն սկզբնական դիրքում';
@@ -1329,12 +1285,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Երկուսն էլ';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn =>
-      'Նախնական քայլ (քանի դեռ մրցակիցը մտածում է)';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Նախնական քայլ (քանի դեռ մրցակիցը մտածում է)';
 
   @override
-  String get preferencesTakebacksWithOpponentApproval =>
-      'քայլը հետ վերցնելու առաջարկ (հակառակորդի թույլտվությամբ)';
+  String get preferencesTakebacksWithOpponentApproval => 'քայլը հետ վերցնելու առաջարկ (հակառակորդի թույլտվությամբ)';
 
   @override
   String get preferencesInCasualGamesOnly => 'Միայն ընկերական խաղերում';
@@ -1343,15 +1297,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Ավտոմատ փոխակերպվել թագուհու';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically =>
-      'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Նախաքայլ անելիս';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
-      'Քայլերի եռակի կրկնության դեպքում ինքնաբերաբար պահանջել ոչ-ոքի';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Քայլերի եռակի կրկնության դեպքում ինքնաբերաբար պահանջել ոչ-ոքի';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Երբ մնում է < 30 վայրկյանից քիչ';
@@ -1360,8 +1312,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Քայլի հաստատում';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled =>
-      'Can be disabled during a game with the board menu';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
 
   @override
   String get preferencesInCorrespondenceGames => 'Նամակագրական խաղեր';
@@ -1370,8 +1321,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'Նամակագրական և առանց ժամանակի սահմանափակման';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers =>
-      'Հաստատել պարտությունը և ոչ-ոքիի առաջարկը';
+  String get preferencesConfirmResignationAndDrawOffers => 'Հաստատել պարտությունը և ոչ-ոքիի առաջարկը';
 
   @override
   String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Փոխատեղման եղանակը';
@@ -1392,19 +1342,16 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Սլաքներով ցույց տալ միայն թույլատրելի քայլերը';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing =>
-      'Պարտությունից կամ ոչ-ոքիից հետո զրուցարանում գրել. «Good game, well played»';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Պարտությունից կամ ոչ-ոքիից հետո զրուցարանում գրել. «Good game, well played»';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Ձեր նախընտրությունները պահպանված են';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves =>
-      'Քայլերը դիտելու համար մկնիկի անիվը պտտեք խաղատախտակի վրա';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Քայլերը դիտելու համար մկնիկի անիվը պտտեք խաղատախտակի վրա';
 
   @override
-  String get preferencesCorrespondenceEmailNotification =>
-      'Daily email listing your correspondence games';
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
 
   @override
   String get preferencesNotifyStreamStart => 'Streamer goes live';
@@ -1494,8 +1441,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleDownVote => 'Խնդիրը չհավանեցի';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange =>
-      'Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Գտե՛ք սպիտակների լավագույն քայլը։';
@@ -1542,12 +1488,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Դեբյուտային խնդիրներ';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost =>
-      'Դեբյուտներ, որոնք դուք խաղացել եք վարկանիշային կուսակցությունների մեծ մասում';
+  String get puzzleOpeningsYouPlayedTheMost => 'Դեբյուտներ, որոնք դուք խաղացել եք վարկանիշային կուսակցությունների մեծ մասում';
 
   @override
-  String get puzzleUseFindInPage =>
-      'Օգտագործեք \"Գտել էջում \" զննարկչի ընտրացանկում՝ ձեր նախընտրած դեբյուտը գտնելու՛ համար:';
+  String get puzzleUseFindInPage => 'Օգտագործեք \"Գտել էջում \" զննարկչի ընտրացանկում՝ ձեր նախընտրած դեբյուտը գտնելու՛ համար:';
 
   @override
   String get puzzleUseCtrlF => 'Օգտագործեք Ctrl + f ՝ Ձեր նախընտրած դեբյուտը գտնելու՛ համար։';
@@ -1623,8 +1567,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleFailed => 'անհաջող';
 
   @override
-  String get puzzleStreakDescription =>
-      'Լուծե՛ք աստիճանաբար բարդացող խնդիրները և ստեղծե՛ք հաղթական շարք։ Այստեղ չկա ժամացույց, այնպես որ՝ մի՛ շտապեք։ Մեկ անհաջող քայլ, և խաղն ավարտված է։ Բայց մեկ խաղաշարի ընթացքում կարելի է բաց թողնել մեկ քայլ։';
+  String get puzzleStreakDescription => 'Լուծե՛ք աստիճանաբար բարդացող խնդիրները և ստեղծե՛ք հաղթական շարք։ Այստեղ չկա ժամացույց, այնպես որ՝ մի՛ շտապեք։ Մեկ անհաջող քայլ, և խաղն ավարտված է։ Բայց մեկ խաղաշարի ընթացքում կարելի է բաց թողնել մեկ քայլ։';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1632,8 +1575,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation =>
-      'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Կարելի է օգտագործել միայն մեկ անգամ։';
+  String get puzzleStreakSkipExplanation => 'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Կարելի է օգտագործել միայն մեկ անգամ։';
 
   @override
   String get puzzleContinueTheStreak => 'Շարունակել շարքը';
@@ -1651,8 +1593,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Փնտրել խնդիրներ';
 
   @override
-  String get puzzleFromMyGamesNone =>
-      'Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։';
+  String get puzzleFromMyGamesNone => 'Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Մարզվե՛ք, վերլուծե՛ք, բարելավե՛ք';
@@ -1666,12 +1607,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleNoPuzzlesToShow => 'Ոչինչ չկա, սկսելու համար լուծե՛ք մի քանի խնդիր։';
 
   @override
-  String get puzzleImprovementAreasDescription =>
-      'Մարզե՛ք այս թեմաները՝ Ձեր առաջընթացը բարելավելու համար։';
+  String get puzzleImprovementAreasDescription => 'Մարզե՛ք այս թեմաները՝ Ձեր առաջընթացը բարելավելու համար։';
 
   @override
-  String get puzzleStrengthDescription =>
-      'Դուք ցուցադրում եք լավագույն արդյունքները այս թեմաներում';
+  String get puzzleStrengthDescription => 'Դուք ցուցադրում եք լավագույն արդյունքները այս թեմաներում';
 
   @override
   String puzzlePlayedXTimes(int count) {
@@ -1743,50 +1682,43 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Առաջ գնացած զինվոր';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription =>
-      'Զինվորը վերածվելու կամ զինվորը վերածվելու սպառնալիքի հետ կապված մարտավարություն։';
+  String get puzzleThemeAdvancedPawnDescription => 'Զինվորը վերածվելու կամ զինվորը վերածվելու սպառնալիքի հետ կապված մարտավարություն։';
 
   @override
   String get puzzleThemeAdvantage => 'Առավելություն';
 
   @override
-  String get puzzleThemeAdvantageDescription =>
-      'Օգտագործեք որոշիչ առավելություն ստանալու Ձեր հնարավորությունը (200-ից 600 սանտիզինվոր)';
+  String get puzzleThemeAdvantageDescription => 'Օգտագործեք որոշիչ առավելություն ստանալու Ձեր հնարավորությունը (200-ից 600 սանտիզինվոր)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Անաստասիայի մատ';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription =>
-      'Ձին և նավակը (կամ թագուհին) մրցակցի արքային մատ են անում խաղատախտակի եզրի և մրցակցի այլ խաղաքարի միջև։';
+  String get puzzleThemeAnastasiaMateDescription => 'Ձին և նավակը (կամ թագուհին) մրցակցի արքային մատ են անում խաղատախտակի եզրի և մրցակցի այլ խաղաքարի միջև։';
 
   @override
   String get puzzleThemeArabianMate => 'Արաբական մատ';
 
   @override
-  String get puzzleThemeArabianMateDescription =>
-      'Ձին և նավակը մրցակցի արքային մատ են անում խաղատախտակի անկյունում։';
+  String get puzzleThemeArabianMateDescription => 'Ձին և նավակը մրցակցի արքային մատ են անում խաղատախտակի անկյունում։';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'Գրոհ f2-ի կամ f7-ի վրա';
 
   @override
-  String get puzzleThemeAttackingF2F7Description =>
-      'f2 կամ f7 զինվորների վրա ուղղված գրոհ, օրինակ, Ֆեգատելլոյի գրոհում (տապակած լյարդի սկզբնախաղում)։';
+  String get puzzleThemeAttackingF2F7Description => 'f2 կամ f7 զինվորների վրա ուղղված գրոհ, օրինակ, Ֆեգատելլոյի գրոհում (տապակած լյարդի սկզբնախաղում)։';
 
   @override
   String get puzzleThemeAttraction => 'Հրապուրում';
 
   @override
-  String get puzzleThemeAttractionDescription =>
-      'Փոխանակում կամ զոհաբերություն, որը ստիպում կամ մղում է մրցակցի խաղաքարին զբաղեցնել դաշտը, որից հետո հնարավոր է դառնում հետագա մարտավարական հնարքը։';
+  String get puzzleThemeAttractionDescription => 'Փոխանակում կամ զոհաբերություն, որը ստիպում կամ մղում է մրցակցի խաղաքարին զբաղեցնել դաշտը, որից հետո հնարավոր է դառնում հետագա մարտավարական հնարքը։';
 
   @override
   String get puzzleThemeBackRankMate => 'Մատ վերջին հորիզոնականում';
 
   @override
-  String get puzzleThemeBackRankMateDescription =>
-      'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
+  String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
 
   @override
   String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
@@ -1798,92 +1730,79 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Բոդենի մատ';
 
   @override
-  String get puzzleThemeBodenMateDescription =>
-      'Խաչվող անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
+  String get puzzleThemeBodenMateDescription => 'Խաչվող անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
 
   @override
   String get puzzleThemeCastling => 'Փոխատեղում';
 
   @override
-  String get puzzleThemeCastlingDescription =>
-      'Արքայի տեղափոխումն ապահով տեղ և նավակի դուրսբերումը մարտի։';
+  String get puzzleThemeCastlingDescription => 'Արքայի տեղափոխումն ապահով տեղ և նավակի դուրսբերումը մարտի։';
 
   @override
   String get puzzleThemeCapturingDefender => 'Պաշտպանի վերացում';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription =>
-      'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
+  String get puzzleThemeCapturingDefenderDescription => 'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
 
   @override
   String get puzzleThemeCrushing => 'Ջախջախում';
 
   @override
-  String get puzzleThemeCrushingDescription =>
-      'Օգտագործեք մրցակցի վրիպումը՝ ջախջախիչ առավելություն (600 և ավելի սանտիզինվոր) ստանալու համար';
+  String get puzzleThemeCrushingDescription => 'Օգտագործեք մրցակցի վրիպումը՝ ջախջախիչ առավելություն (600 և ավելի սանտիզինվոր) ստանալու համար';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Մատ երկու փղով';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription =>
-      'Հարակից անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
+  String get puzzleThemeDoubleBishopMateDescription => 'Հարակից անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
 
   @override
   String get puzzleThemeDovetailMate => '«Ծիծեռնակի պոչ» մատ';
 
   @override
-  String get puzzleThemeDovetailMateDescription =>
-      'Մատ թագուհով կողքին կանգնած արքային, որի նահանջի միակ երկու դաշտերը զբաղեցնում են սեփական խաղաքարերը։';
+  String get puzzleThemeDovetailMateDescription => 'Մատ թագուհով կողքին կանգնած արքային, որի նահանջի միակ երկու դաշտերը զբաղեցնում են սեփական խաղաքարերը։';
 
   @override
   String get puzzleThemeEquality => 'Հավասարեցում';
 
   @override
-  String get puzzleThemeEqualityDescription =>
-      'Պարտված դիրքից հավասարեցրեք խաղը. պարտիան ավարտեք ոչ-ոքի կամ ստացեք նյութական հավասարություն (200 սանտիզինվորից պակաս)';
+  String get puzzleThemeEqualityDescription => 'Պարտված դիրքից հավասարեցրեք խաղը. պարտիան ավարտեք ոչ-ոքի կամ ստացեք նյութական հավասարություն (200 սանտիզինվորից պակաս)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Գրոհ արքայական թևում';
 
   @override
-  String get puzzleThemeKingsideAttackDescription =>
-      'Գրոհ մրցակցի՝ կարճ կողմում փոխատեղում կատարած արքայի վրա։';
+  String get puzzleThemeKingsideAttackDescription => 'Գրոհ մրցակցի՝ կարճ կողմում փոխատեղում կատարած արքայի վրա։';
 
   @override
   String get puzzleThemeClearance => 'Գծի կամ դաշտի ազատում';
 
   @override
-  String get puzzleThemeClearanceDescription =>
-      'Որպես կանոն, տեմպով կատարվող քայլ, որն ազատում է դաշտը, գիծը կամ անկյունագիծը՝ մարտավարական մտահղացումն իրագործելու նպատակով։';
+  String get puzzleThemeClearanceDescription => 'Որպես կանոն, տեմպով կատարվող քայլ, որն ազատում է դաշտը, գիծը կամ անկյունագիծը՝ մարտավարական մտահղացումն իրագործելու նպատակով։';
 
   @override
   String get puzzleThemeDefensiveMove => 'Պաշտպանական քայլ';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription =>
-      'Ճշգրիտ քայլ կամ քայլերի հաջորդականություն, որոնք անհրաժեշտ են նյութական կամ առավելության կորստից խուսափելու համար։';
+  String get puzzleThemeDefensiveMoveDescription => 'Ճշգրիտ քայլ կամ քայլերի հաջորդականություն, որոնք անհրաժեշտ են նյութական կամ առավելության կորստից խուսափելու համար։';
 
   @override
   String get puzzleThemeDeflection => 'Շեղում';
 
   @override
-  String get puzzleThemeDeflectionDescription =>
-      'Քայլ, որը մրցակցի խաղաքարը շեղում է կարևոր խնդրից, օրինակ, հանգուցային դաշտի պաշտպանությունից։';
+  String get puzzleThemeDeflectionDescription => 'Քայլ, որը մրցակցի խաղաքարը շեղում է կարևոր խնդրից, օրինակ, հանգուցային դաշտի պաշտպանությունից։';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Բացված հարձակում';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription =>
-      'Քայլ խաղաքարով, որ ծածկում է հեռահար խաղաքարի գրոհի գիծը։ Օրինակ, քայլ ձիով, որով բացվում է գիծը նրա հետևում կանգնած նավակի համար։';
+  String get puzzleThemeDiscoveredAttackDescription => 'Քայլ խաղաքարով, որ ծածկում է հեռահար խաղաքարի գրոհի գիծը։ Օրինակ, քայլ ձիով, որով բացվում է գիծը նրա հետևում կանգնած նավակի համար։';
 
   @override
   String get puzzleThemeDoubleCheck => 'Կրկնակի շախ';
 
   @override
-  String get puzzleThemeDoubleCheckDescription =>
-      'Շախ միաժամանակ երկու խաղաքարով՝ բաց հարձակման միջոցով։ Հնարավոր չէ վերցնել երկու գրոհող խաղաքարերը և հնարավոր չէ ծածկվել դրանցից, հետևաբար արքան կարող է միայն հեռանալ շախից։';
+  String get puzzleThemeDoubleCheckDescription => 'Շախ միաժամանակ երկու խաղաքարով՝ բաց հարձակման միջոցով։ Հնարավոր չէ վերցնել երկու գրոհող խաղաքարերը և հնարավոր չէ ծածկվել դրանցից, հետևաբար արքան կարող է միայն հեռանալ շախից։';
 
   @override
   String get puzzleThemeEndgame => 'Վերջնախաղ';
@@ -1892,64 +1811,55 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Մարտավարություն խաղի վերջնամասում։';
 
   @override
-  String get puzzleThemeEnPassantDescription =>
-      'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
+  String get puzzleThemeEnPassantDescription => 'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
 
   @override
   String get puzzleThemeExposedKing => 'Մերկ արքա';
 
   @override
-  String get puzzleThemeExposedKingDescription =>
-      'Անպաշտպան կամ թույլ պաշտպանված արքան հաճախ դառնում է մատային գրոհի զոհը։';
+  String get puzzleThemeExposedKingDescription => 'Անպաշտպան կամ թույլ պաշտպանված արքան հաճախ դառնում է մատային գրոհի զոհը։';
 
   @override
   String get puzzleThemeFork => 'Պատառաքաղ';
 
   @override
-  String get puzzleThemeForkDescription =>
-      'Քայլ, որի դեպքում հարվածի տակ է հայտնվում մրցակցի երկու խաղաքար։';
+  String get puzzleThemeForkDescription => 'Քայլ, որի դեպքում հարվածի տակ է հայտնվում մրցակցի երկու խաղաքար։';
 
   @override
   String get puzzleThemeHangingPiece => 'Անպաշտպան խաղաքար';
 
   @override
-  String get puzzleThemeHangingPieceDescription =>
-      'Մարտավարություն, որի ժամանակ մրցակցի խաղաքարը պաշտպանված չէ կամ լավ պաշտպանված չէ և կարող է վերցվել։';
+  String get puzzleThemeHangingPieceDescription => 'Մարտավարություն, որի ժամանակ մրցակցի խաղաքարը պաշտպանված չէ կամ լավ պաշտպանված չէ և կարող է վերցվել։';
 
   @override
   String get puzzleThemeHookMate => 'Հուք մատ';
 
   @override
-  String get puzzleThemeHookMateDescription =>
-      'Մատ զինվորով պաշտպանված ձիով և նավակով, ընդ որում` մրցակցի զինվորներից մեկը զբաղեցնում է նրա արքայի նահանջի միակ դաշտը։';
+  String get puzzleThemeHookMateDescription => 'Մատ զինվորով պաշտպանված ձիով և նավակով, ընդ որում` մրցակցի զինվորներից մեկը զբաղեցնում է նրա արքայի նահանջի միակ դաշտը։';
 
   @override
   String get puzzleThemeInterference => 'Ծածկում';
 
   @override
-  String get puzzleThemeInterferenceDescription =>
-      'Քայլ, որով ծածկվում է մրցակցի հեռահար խաղաքարերի համագործակցության գիծը, որի արդյունքում այդ խաղաքարերը կամ նրանցից մեկը դառնում են անպաշտպան։ Օրինակ, ձին կանգնում է նավակների միջև գտնվող պաշտպանված վանդակին։';
+  String get puzzleThemeInterferenceDescription => 'Քայլ, որով ծածկվում է մրցակցի հեռահար խաղաքարերի համագործակցության գիծը, որի արդյունքում այդ խաղաքարերը կամ նրանցից մեկը դառնում են անպաշտպան։ Օրինակ, ձին կանգնում է նավակների միջև գտնվող պաշտպանված վանդակին։';
 
   @override
   String get puzzleThemeIntermezzo => 'Միջանկյալ քայլ';
 
   @override
-  String get puzzleThemeIntermezzoDescription =>
-      'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
+  String get puzzleThemeIntermezzoDescription => 'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
 
   @override
   String get puzzleThemeKillBoxMate => '«Մահացու տուփ» մատ';
 
   @override
-  String get puzzleThemeKillBoxMateDescription =>
-      'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
+  String get puzzleThemeKillBoxMateDescription => 'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
 
   @override
   String get puzzleThemeVukovicMate => 'Վուկովիչի մատ';
 
   @override
-  String get puzzleThemeVukovicMateDescription =>
-      'Նավակը և ձին համատեղ մատ են անում արքային։ Մեկ խաղաքարով պաշտպանված նավակը մատ է անում, իսկ ձին կտրում է մրցակցի արքայի նահանջի դաշտերը։';
+  String get puzzleThemeVukovicMateDescription => 'Նավակը և ձին համատեղ մատ են անում արքային։ Մեկ խաղաքարով պաշտպանված նավակը մատ է անում, իսկ ձին կտրում է մրցակցի արքայի նահանջի դաշտերը։';
 
   @override
   String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
@@ -1967,15 +1877,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeMaster => 'Վարպետների պարտիաներ';
 
   @override
-  String get puzzleThemeMasterDescription =>
-      'Խնդիրներ տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
+  String get puzzleThemeMasterDescription => 'Խնդիրներ տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Երկու վարպետների պարտիաներ';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription =>
-      'Խնդիրներ երկու տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
+  String get puzzleThemeMasterVsMasterDescription => 'Խնդիրներ երկու տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
 
   @override
   String get puzzleThemeMate => 'Մատ';
@@ -2041,15 +1949,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemePin => 'Կապ';
 
   @override
-  String get puzzleThemePinDescription =>
-      'Կապի օգտագործումով մարտավարություն, երբ խաղաքարը չի կարող քայլել, այլապես գրոհի տակ կհայտնվի նրա հետևում գտնվող ավելի արժեքավոր խաղաքարը։';
+  String get puzzleThemePinDescription => 'Կապի օգտագործումով մարտավարություն, երբ խաղաքարը չի կարող քայլել, այլապես գրոհի տակ կհայտնվի նրա հետևում գտնվող ավելի արժեքավոր խաղաքարը։';
 
   @override
   String get puzzleThemePromotion => 'Վերածում';
 
   @override
-  String get puzzleThemePromotionDescription =>
-      'Քայլ, որի ժամանակ զինվորը հասնում է վերջին հորիզոնականին և վերածվում նույն գույնի ցանկացած խաղաքարի, բացի արքայից։';
+  String get puzzleThemePromotionDescription => 'Քայլ, որի ժամանակ զինվորը հասնում է վերջին հորիզոնականին և վերածվում նույն գույնի ցանկացած խաղաքարի, բացի արքայից։';
 
   @override
   String get puzzleThemeQueenEndgame => 'Թագուհու վերջնախաղ';
@@ -2061,22 +1967,19 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeQueenRookEndgame => 'Թագուհով և նավակով վերջնախաղ';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription =>
-      'Միայն թագուհիներով, նավակներով և զինվորներով վերջնախաղ։';
+  String get puzzleThemeQueenRookEndgameDescription => 'Միայն թագուհիներով, նավակներով և զինվորներով վերջնախաղ։';
 
   @override
   String get puzzleThemeQueensideAttack => 'Գրոհ թագուհու թևում';
 
   @override
-  String get puzzleThemeQueensideAttackDescription =>
-      'Գրոհ մրցակցի՝ երկար կողմում փոխատեղում կատարած արքայի վրա։';
+  String get puzzleThemeQueensideAttackDescription => 'Գրոհ մրցակցի՝ երկար կողմում փոխատեղում կատարած արքայի վրա։';
 
   @override
   String get puzzleThemeQuietMove => 'Հանգիստ քայլ';
 
   @override
-  String get puzzleThemeQuietMoveDescription =>
-      'Քայլ առանց շախի կամ խաղաքար վերցնելու, որն այնուամենայնիվ նախապատրաստում է անխուսափելի սպառնալիք։';
+  String get puzzleThemeQuietMoveDescription => 'Քայլ առանց շախի կամ խաղաքար վերցնելու, որն այնուամենայնիվ նախապատրաստում է անխուսափելի սպառնալիք։';
 
   @override
   String get puzzleThemeRookEndgame => 'Նավակային վերջնախաղ';
@@ -2088,8 +1991,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeSacrifice => 'Զոհաբերություն';
 
   @override
-  String get puzzleThemeSacrificeDescription =>
-      'Մարտավարություն, որի ժամանակ տրվում է որևէ խաղաքար` առավելություն ստանալու, մատ հայտարարելու կամ պարտիան ոչ-ոքի ավարտելու նպատակով։';
+  String get puzzleThemeSacrificeDescription => 'Մարտավարություն, որի ժամանակ տրվում է որևէ խաղաքար` առավելություն ստանալու, մատ հայտարարելու կամ պարտիան ոչ-ոքի ավարտելու նպատակով։';
 
   @override
   String get puzzleThemeShort => 'Երկքայլանի խնդիր';
@@ -2101,36 +2003,31 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeSkewer => 'Գծային հարձակում';
 
   @override
-  String get puzzleThemeSkewerDescription =>
-      'Կապի տեսակ է, բայց այս դեպքում հակառակն է՝ ավելի թանկ խաղաքարը հայտնվում է պակաս արժեքավոր կամ համարժեք խաղաքարի գրոհի գծում։';
+  String get puzzleThemeSkewerDescription => 'Կապի տեսակ է, բայց այս դեպքում հակառակն է՝ ավելի թանկ խաղաքարը հայտնվում է պակաս արժեքավոր կամ համարժեք խաղաքարի գրոհի գծում։';
 
   @override
   String get puzzleThemeSmotheredMate => 'Խեղդուկ մատ';
 
   @override
-  String get puzzleThemeSmotheredMateDescription =>
-      'Մատ ձիով արքային, որը չի կարող փախչել, որովհետև շրջափակված է (խեղդված է) սեփական խաղաքարերով։';
+  String get puzzleThemeSmotheredMateDescription => 'Մատ ձիով արքային, որը չի կարող փախչել, որովհետև շրջափակված է (խեղդված է) սեփական խաղաքարերով։';
 
   @override
   String get puzzleThemeSuperGM => 'Սուպերգրոսմայստերների պարտիաներ';
 
   @override
-  String get puzzleThemeSuperGMDescription =>
-      'Խնդիրներ աշխարհի լավագույն շախմատիստների պարտիաներից։';
+  String get puzzleThemeSuperGMDescription => 'Խնդիրներ աշխարհի լավագույն շախմատիստների պարտիաներից։';
 
   @override
   String get puzzleThemeTrappedPiece => 'Խաղաքարի որսում';
 
   @override
-  String get puzzleThemeTrappedPieceDescription =>
-      'Խաղաքարը չի կարող հեռանալ հարձակումից, քանի որ չունի նահանջի ազատ դաշտեր, կամ այդ դաշտերը ևս հարվածի տակ են։';
+  String get puzzleThemeTrappedPieceDescription => 'Խաղաքարը չի կարող հեռանալ հարձակումից, քանի որ չունի նահանջի ազատ դաշտեր, կամ այդ դաշտերը ևս հարվածի տակ են։';
 
   @override
   String get puzzleThemeUnderPromotion => 'Թույլ վերածում';
 
   @override
-  String get puzzleThemeUnderPromotionDescription =>
-      'Զինվորի վերածում ոչ թե թագուհու, այլ ձիու, փղի կամ նավակի։';
+  String get puzzleThemeUnderPromotionDescription => 'Զինվորի վերածում ոչ թե թագուհու, այլ ձիու, փղի կամ նավակի։';
 
   @override
   String get puzzleThemeVeryLong => 'Բազմաքայլ խնդիր';
@@ -2142,29 +2039,25 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Ռենտգեն';
 
   @override
-  String get puzzleThemeXRayAttackDescription =>
-      'Իրավիճակ, երբ հեռահար խաղաքարի հարձակման կամ պաշտպանության գծին կանգնած է մրցակցի խաղաքարը։';
+  String get puzzleThemeXRayAttackDescription => 'Իրավիճակ, երբ հեռահար խաղաքարի հարձակման կամ պաշտպանության գծին կանգնած է մրցակցի խաղաքարը։';
 
   @override
   String get puzzleThemeZugzwang => 'Ցուգցվանգ';
 
   @override
-  String get puzzleThemeZugzwangDescription =>
-      'Մրցակիցը ստիպված է անել հնարավոր փոքրաթիվ քայլերից մեկը,  բայց քայլերից ցանկացածը տանում է դիրքի վատացման։';
+  String get puzzleThemeZugzwangDescription => 'Մրցակիցը ստիպված է անել հնարավոր փոքրաթիվ քայլերից մեկը,  բայց քայլերից ցանկացածը տանում է դիրքի վատացման։';
 
   @override
   String get puzzleThemeMix => 'Խառը խնդիրներ';
 
   @override
-  String get puzzleThemeMixDescription =>
-      'Ամեն ինչից` քիչ-քիչ։ Դուք չգիտեք` ինչ է սպասվում, այնպես որ, պատրաստ եղեք ամեն ինչի։ Ինչպես իսկական պարտիայում։';
+  String get puzzleThemeMixDescription => 'Ամեն ինչից` քիչ-քիչ։ Դուք չգիտեք` ինչ է սպասվում, այնպես որ, պատրաստ եղեք ամեն ինչի։ Ինչպես իսկական պարտիայում։';
 
   @override
   String get puzzleThemePlayerGames => 'Խաղացողի պարտիաները';
 
   @override
-  String get puzzleThemePlayerGamesDescription =>
-      'Գտնել խնդիրներ, որոնք ստեղծվել են Ձեր պարտիաներից, կամ այլ խաղացողների պարտիաներից։';
+  String get puzzleThemePlayerGamesDescription => 'Գտնել խնդիրներ, որոնք ստեղծվել են Ձեր պարտիաներից, կամ այլ խաղացողների պարտիաներից։';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2184,8 +2077,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ձեր հաշիվը կառավարվում է և չի կարող փակվել։';
 
   @override
-  String get settingsCantOpenSimilarAccount =>
-      'Դուք չեք կարողանա ստեղծել նույն անունով մասնակցային հաշիվ, նույնիսկ եթե տառաշարերը (մեծատառ-փոքրատառ) տարբերվեն։';
+  String get settingsCantOpenSimilarAccount => 'Դուք չեք կարողանա ստեղծել նույն անունով մասնակցային հաշիվ, նույնիսկ եթե տառաշարերը (մեծատառ-փոքրատառ) տարբերվեն։';
 
   @override
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
@@ -2215,8 +2107,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get youPlayAs => 'You play as';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl =>
-      'Որևէ մեկին խաղի հրավիրելու համար ուղարկեք ստորև տրված հղումը';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Որևէ մեկին խաղի հրավիրելու համար ուղարկեք ստորև տրված հղումը';
 
   @override
   String get gameOver => 'Խաղն ավարտված է';
@@ -2314,8 +2205,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get newOpponent => 'Գտնել նոր հակառակորդ';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou =>
-      'Ձեր հակառակորդը ուզում է կրկին խաղալ Ձեզ հետ';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Ձեր հակառակորդը ուզում է կրկին խաղալ Ձեզ հետ';
 
   @override
   String get joinTheGame => 'Միանալ խաղին';
@@ -2327,8 +2217,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get blackPlays => 'Խաղում են սևերը';
 
   @override
-  String get opponentLeftChoices =>
-      'Հակառակորդը լքել է խաղը։ Դուք կարող եք պահանջել հաղթանակ, ոչ-ոքի կամ սպասել։';
+  String get opponentLeftChoices => 'Հակառակորդը լքել է խաղը։ Դուք կարող եք պահանջել հաղթանակ, ոչ-ոքի կամ սպասել։';
 
   @override
   String get forceResignation => 'Պահանջել հաղթանակ';
@@ -2340,8 +2229,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get talkInChat => 'Խնդրում ենք զրուցարանում լինել բարեհամբույր:';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'Առաջինը, ով կայցելի այս հղումով, կխաղա Ձեզ հետ։';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Առաջինը, ով կայցելի այս հղումով, կխաղա Ձեզ հետ։';
 
   @override
   String get whiteResigned => 'Սպիտակները հանձնվեցին';
@@ -2488,8 +2376,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding =>
-      'DTZ50\'\' կլորացումով` կախված կիսաքայլերի քանակից մինչև հաջորդ վերցնելը կամ զինվորի քայլը';
+  String get dtzWithRounding => 'DTZ50\'\' կլորացումով` կախված կիսաքայլերի քանակից մինչև հաջորդ վերցնելը կամ զինվորի քայլը';
 
   @override
   String get noGameFound => 'Ոչ մի խաղ չի գտնվել';
@@ -2498,8 +2385,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get maxDepthReached => 'Արձանագրված է առավելագույն խորություն։';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Փորձեք կարգավորումներում միացնել ավելի շատ խաղեր։';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Փորձեք կարգավորումներում միացնել ավելի շատ խաղեր։';
 
   @override
   String get openings => 'Սկզբնախաղեր';
@@ -2516,8 +2402,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove =>
-      'Խաղալ սկզբնախաղեր­/վերջնախաղեր սովորողի առաջին քայլը';
+  String get playFirstOpeningEndgameExplorerMove => 'Խաղալ սկզբնախաղեր­/վերջնախաղեր սովորողի առաջին քայլը';
 
   @override
   String get winPreventedBy50MoveRule => 'Հաղթանակը կասեցված Է 50 քայլի օրենքի համաձայն';
@@ -2532,8 +2417,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Պարտություն կամ 50 քայլ վերջին սխալից հետո';
 
   @override
-  String get unknownDueToRounding =>
-      'Հաղթանակը երաշխավորված է միայն այն դեպքում, եթե առաջարկվող քայլերի հաջորդականությունը կատարվել է վերջին անգամ խաղաքարը վերցնելուց կամ զինվորական քայլից՝ Syzygy-ի բազաներում DTZ արժեքների հնարավոր կլորացման պատճառով:';
+  String get unknownDueToRounding => 'Հաղթանակը երաշխավորված է միայն այն դեպքում, եթե առաջարկվող քայլերի հաջորդականությունը կատարվել է վերջին անգամ խաղաքարը վերցնելուց կամ զինվորական քայլից՝ Syzygy-ի բազաներում DTZ արժեքների հնարավոր կլորացման պատճառով:';
 
   @override
   String get allSet => 'Ամեն ինչ պատրաստ է։';
@@ -2581,8 +2465,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get infiniteAnalysis => 'Անվերջ վերլուծություն';
 
   @override
-  String get removesTheDepthLimit =>
-      'Վերացնում է խորության սահմանափակումը և տաք պահում ձեր համակարգիչը';
+  String get removesTheDepthLimit => 'Վերացնում է խորության սահմանափակումը և տաք պահում ձեր համակարգիչը';
 
   @override
   String get blunder => 'Վրիպում';
@@ -2647,8 +2530,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get signUp => 'Գրանցվել';
 
   @override
-  String get computersAreNotAllowedToPlay =>
-      'Համակարգիչներն ու համակարգչից օգնություն վերցնող խաղացողներն իրավունք չունեն խաղալ։ Խնդրում ենք խաղալիս չօգտվել շախմատային ծրագրերից, տվյալների բազաներից և այլ մարդկանց օգնությունից:';
+  String get computersAreNotAllowedToPlay => 'Համակարգիչներն ու համակարգչից օգնություն վերցնող խաղացողներն իրավունք չունեն խաղալ։ Խնդրում ենք խաղալիս չօգտվել շախմատային ծրագրերից, տվյալների բազաներից և այլ մարդկանց օգնությունից:';
 
   @override
   String get games => 'Խաղեր';
@@ -2725,16 +2607,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get changeUsername => 'Փոխել օգտանունը';
 
   @override
-  String get changeUsernameNotSame =>
-      'Կարելի է փոխել միայն նշանների ստեղնաշարքը։ Օրինակ, «hayktadevosyan»-ը դարձնել «HaykTadevosyan»։';
+  String get changeUsernameNotSame => 'Կարելի է փոխել միայն նշանների ստեղնաշարքը։ Օրինակ, «hayktadevosyan»-ը դարձնել «HaykTadevosyan»։';
 
   @override
-  String get changeUsernameDescription =>
-      'Փոխել օգտանունը։ Սա կարող է արվել ընդամենը մեկ անգամ, միայն թույլատրվում է օգտանվան փոքրատառերը դարձնել մեծատառ և հակառակը։';
+  String get changeUsernameDescription => 'Փոխել օգտանունը։ Սա կարող է արվել ընդամենը մեկ անգամ, միայն թույլատրվում է օգտանվան փոքրատառերը դարձնել մեծատառ և հակառակը։';
 
   @override
-  String get signupUsernameHint =>
-      'Համոզվեք, որ ընտրել եք պարկեշտ մասնակցային անուն։ Հետագայում այն փոխել չեք կարողանա, ընդ որում, անպարկեշտ անուններով մասնակցային հաշիվները կփակվեն։';
+  String get signupUsernameHint => 'Համոզվեք, որ ընտրել եք պարկեշտ մասնակցային անուն։ Հետագայում այն փոխել չեք կարողանա, ընդ որում, անպարկեշտ անուններով մասնակցային հաշիվները կփակվեն։';
 
   @override
   String get signupEmailHint => 'Մենք այն օգտագործելու ենք միայն գաղտնաբառը չեղարկելու համար։';
@@ -2761,12 +2640,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get error_weakPassword => 'Այդ գաղտնաբառը շատ տարածված է, և այն չափազանց հեշտ է գուշակել։';
 
   @override
-  String get error_namePassword =>
-      'Խնդրում ենք՝ Ձեր մասնակցային անունը մի՛ օգտագործեք որպես գաղտնաբառ։';
+  String get error_namePassword => 'Խնդրում ենք՝ Ձեր մասնակցային անունը մի՛ օգտագործեք որպես գաղտնաբառ։';
 
   @override
-  String get blankedPassword =>
-      'Նույն գաղտնաբառը Դուք օգտագործել եք այլ կայքում, իսկ այդ կայքը վարկաբեկվել է։ Այժմ Lichess-ի Ձեր մասնակցային հաշվի անվտանգության համար անհրաժեշտ է սահմանել նոր գաղտնաբառ։ Շնորհակալություն ըմբռնումով մոտենալու համար։';
+  String get blankedPassword => 'Նույն գաղտնաբառը Դուք օգտագործել եք այլ կայքում, իսկ այդ կայքը վարկաբեկվել է։ Այժմ Lichess-ի Ձեր մասնակցային հաշվի անվտանգության համար անհրաժեշտ է սահմանել նոր գաղտնաբառ։ Շնորհակալություն ըմբռնումով մոտենալու համար։';
 
   @override
   String get youAreLeavingLichess => 'Դուք լքում եք Lichess-ը';
@@ -2780,12 +2657,10 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion =>
-      'Մի՛ ընտրեք այլ անձանց առաջարկած գաղտնաբառը։ Նրանք դրա օգնությամբ կգողանան Ձեր մասնակցային հաշիվը։';
+  String get passwordSuggestion => 'Մի՛ ընտրեք այլ անձանց առաջարկած գաղտնաբառը։ Նրանք դրա օգնությամբ կգողանան Ձեր մասնակցային հաշիվը։';
 
   @override
-  String get emailSuggestion =>
-      'Մի՛ ընտրեք այլ անձանց առաջարկած էլեկտրոնային փոստի հասցեն։ Նրանք դրա օգնությամբ կգողանան Ձեր մասնակցային հաշիվը։';
+  String get emailSuggestion => 'Մի՛ ընտրեք այլ անձանց առաջարկած էլեկտրոնային փոստի հասցեն։ Նրանք դրա օգնությամբ կգողանան Ձեր մասնակցային հաշիվը։';
 
   @override
   String get emailConfirmHelp => 'Օգնություն էլեկտրոնային փոստի հաստատման հարցում';
@@ -2802,8 +2677,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount =>
-      'Նոր հաշիվ ստեղծելու համար Դուք կարող եք օգտագործել այս օգտանունը';
+  String get usernameCanBeUsedForNewAccount => 'Նոր հաշիվ ստեղծելու համար Դուք կարող եք օգտագործել այս օգտանունը';
 
   @override
   String emailSent(String param) {
@@ -2814,16 +2688,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get emailCanTakeSomeTime => 'Հասնելու համար կարող է որոշ ժամանակ պահանջվել։';
 
   @override
-  String get refreshInboxAfterFiveMinutes =>
-      'Սպասեք 5 րոպե և թարմացրեք Ձեր էլփոստի մուտքային արկղը։';
+  String get refreshInboxAfterFiveMinutes => 'Սպասեք 5 րոպե և թարմացրեք Ձեր էլփոստի մուտքային արկղը։';
 
   @override
-  String get checkSpamFolder =>
-      'Ստուգեք նաև սպամի պանակը, նամակը կարող է հայտնվել այնտեղ: Եթե ​​այդպես է, այն նշեք որպես ոչ սպամ:';
+  String get checkSpamFolder => 'Ստուգեք նաև սպամի պանակը, նամակը կարող է հայտնվել այնտեղ: Եթե ​​այդպես է, այն նշեք որպես ոչ սպամ:';
 
   @override
-  String get emailForSignupHelp =>
-      'Եթե ​​մնացած ամեն ինչը ձախողվի, ապա գրեք մեզ այս էլեկտրոնային հասցեով.';
+  String get emailForSignupHelp => 'Եթե ​​մնացած ամեն ինչը ձախողվի, ապա գրեք մեզ այս էլեկտրոնային հասցեով.';
 
   @override
   String copyTextToEmail(String param) {
@@ -2831,8 +2702,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get waitForSignupHelp =>
-      'Մենք շուտով կվերադառնանք Ձեզ, որպեսզի օգնենք լրացնել Ձեր գրանցումը:';
+  String get waitForSignupHelp => 'Մենք շուտով կվերադառնանք Ձեզ, որպեսզի օգնենք լրացնել Ձեր գրանցումը:';
 
   @override
   String accountConfirmed(String param) {
@@ -3073,8 +2943,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get backToTournament => 'Վերադարձ դեպի մրցաշարը';
 
   @override
-  String get noDrawBeforeSwissLimit =>
-      'Դուք չեք կարող ոչ-ոքի առաջարկել մինչև 30-րդ քայլը շվեյցարական համակարգով մրցաշարում։';
+  String get noDrawBeforeSwissLimit => 'Դուք չեք կարող ոչ-ոքի առաջարկել մինչև 30-րդ քայլը շվեյցարական համակարգով մրցաշարում։';
 
   @override
   String get thematic => 'Թեմատիկա';
@@ -3085,8 +2954,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional =>
-      'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3127,8 +2995,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get backToGame => 'Վերադառնալ պարտիային';
 
   @override
-  String get siteDescription =>
-      'Անվճար օնլայն շախմատ: Խաղացեք հաճելի ինտերֆեյսով, առանց գրանցման և գովազդի: Խաղացեք համակարգչի, ընկերների կամ անծանոթների հետ:';
+  String get siteDescription => 'Անվճար օնլայն շախմատ: Խաղացեք հաճելի ինտերֆեյսով, առանց գրանցման և գովազդի: Խաղացեք համակարգչի, ընկերների կամ անծանոթների հետ:';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -3197,19 +3064,16 @@ class AppLocalizationsHy extends AppLocalizations {
   String get importGame => 'Խաղ ներմուծել';
 
   @override
-  String get importGameExplanation =>
-      'Տեղադրեք պարտիայի գրառումը PGN ձևաչափով, և հնարավորություն կստանաք վերախաղարկելու պարտիան, կատարելու համակարգչային վերլուծություն, շփվելու զրուցարանում և կիսվելու այդ պարտիայի հղումով։';
+  String get importGameExplanation => 'Տեղադրեք պարտիայի գրառումը PGN ձևաչափով, և հնարավորություն կստանաք վերախաղարկելու պարտիան, կատարելու համակարգչային վերլուծություն, շփվելու զրուցարանում և կիսվելու այդ պարտիայի հղումով։';
 
   @override
-  String get importGameDataPrivacyWarning =>
-      'Այս PGN ֆայլը կարող է հասանելի լինել բոլորին։ Պարտիան անհատապես ներբեռնելու համար օգտագործեք ստուդիան։';
+  String get importGameDataPrivacyWarning => 'Այս PGN ֆայլը կարող է հասանելի լինել բոլորին։ Պարտիան անհատապես ներբեռնելու համար օգտագործեք ստուդիան։';
 
   @override
   String get thisIsAChessCaptcha => 'Սա շախմատային CAPTCHA է';
 
   @override
-  String get clickOnTheBoardToMakeYourMove =>
-      'Սեղմեք դաշտին, որ անեք ձեր քայլը և ապացուցեք, որ մարդ եք:';
+  String get clickOnTheBoardToMakeYourMove => 'Սեղմեք դաշտին, որ անեք ձեր քայլը և ապացուցեք, որ մարդ եք:';
 
   @override
   String get captcha_fail => 'Խնդրում ենք լուծել շախմատային CAPTCHA-ն։';
@@ -3319,12 +3183,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get safeTournamentName => 'Ընտրեք շատ ապահով անվանում մրցաշարի համար։';
 
   @override
-  String get inappropriateNameWarning =>
-      'Եթե անվանումը թվա նույնիսկ փոքր-ինչ անհարիր, Ձեզ կարող են արգելափակել։';
+  String get inappropriateNameWarning => 'Եթե անվանումը թվա նույնիսկ փոքր-ինչ անհարիր, Ձեզ կարող են արգելափակել։';
 
   @override
-  String get emptyTournamentName =>
-      'Թողեք դատարկ` մրցաշարը պատահական գրոսմայստերի պատվին կոչելու համար։';
+  String get emptyTournamentName => 'Թողեք դատարկ` մրցաշարը պատահական գրոսմայստերի պատվին կոչելու համար։';
 
   @override
   String get makePrivateTournament => 'Մրցաշարը դարձնել փակ և մուտքը սահմանափակել գաղտնաբառով';
@@ -3451,8 +3313,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get flair => 'Էմոջի';
 
   @override
-  String get youCanHideFlair =>
-      'Այս կարգավորումը թաքցնում է օգտատերերի բոլոր էմոջիներն ամբողջ կայքում։';
+  String get youCanHideFlair => 'Այս կարգավորումը թաքցնում է օգտատերերի բոլոր էմոջիներն ամբողջ կայքում։';
 
   @override
   String get biography => 'Կենսագրություն';
@@ -3473,8 +3334,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get inlineNotation => 'Տողային նոտագրություն';
 
   @override
-  String get makeAStudy =>
-      'Պահպանելու և կիսվելու համար դիտարկեք ստուդիա ստեղծելու հնարավորությունը։';
+  String get makeAStudy => 'Պահպանելու և կիսվելու համար դիտարկեք ստուդիա ստեղծելու հնարավորությունը։';
 
   @override
   String get clearSavedMoves => 'Մաքրել քայլերը';
@@ -3489,15 +3349,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get activePlayers => 'Ակտիվ խաղացողներ';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock =>
-      'Զգուշացում. խաղը վարկանիշային է, սակայն առանց ժամանակի';
+  String get bewareTheGameIsRatedButHasNoClock => 'Զգուշացում. խաղը վարկանիշային է, սակայն առանց ժամանակի';
 
   @override
   String get success => 'Հաջողված է';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving =>
-      'Հակառակորդի քայլից հետո ավտոմատ կերպով անցնել հաջորդ քայլին';
+  String get automaticallyProceedToNextGameAfterMoving => 'Հակառակորդի քայլից հետո ավտոմատ կերպով անցնել հաջորդ քայլին';
 
   @override
   String get autoSwitch => 'միանգամից անցնել հաջորդ խաղին';
@@ -3518,8 +3376,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get descPrivate => 'Մասնավոր նկարագրություն';
 
   @override
-  String get descPrivateHelp =>
-      'Նկարագրություն, որը կտեսնեն միայն ակումբի անդամները։ Եթե սահմանված է, ապա փոխարինում է ակումբի բոլոր անդամների հրապարակային նկարագրությունը։';
+  String get descPrivateHelp => 'Նկարագրություն, որը կտեսնեն միայն ակումբի անդամները։ Եթե սահմանված է, ապա փոխարինում է ակումբի բոլոր անդամների հրապարակային նկարագրությունը։';
 
   @override
   String get no => 'Ոչ';
@@ -3588,20 +3445,16 @@ class AppLocalizationsHy extends AppLocalizations {
   String get other => 'այլ';
 
   @override
-  String get reportCheatBoostHelp =>
-      'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
 
   @override
-  String get reportUsernameHelp =>
-      'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish =>
-      'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink =>
-      'Խնդրում ենք ավելացնել առնվազն մեկ խաղի հղում, որտեղ ձեր կարծիքով խախտվել են կանոնները:';
+  String get error_provideOneCheatedGameLink => 'Խնդրում ենք ավելացնել առնվազն մեկ խաղի հղում, որտեղ ձեր կարծիքով խախտվել են կանոնները:';
 
   @override
   String by(String param) {
@@ -3745,12 +3598,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get starting => 'Սկիզբը՝';
 
   @override
-  String get allInformationIsPublicAndOptional =>
-      'Այստեղ նշվող բոլոր տեղեկությունները հասանելի են լինելու բոլորին, ավելացրեք դրանք սեփական ցանկությամբ։';
+  String get allInformationIsPublicAndOptional => 'Այստեղ նշվող բոլոր տեղեկությունները հասանելի են լինելու բոլորին, ավելացրեք դրանք սեփական ցանկությամբ։';
 
   @override
-  String get biographyDescription =>
-      'Պատմեք Ձեր մասին. ինչն եք սիրում շախմատում, որոնք են Ձեր սիրելի սկզբնախաղերը, պարտիաները, շախմատիստները…';
+  String get biographyDescription => 'Պատմեք Ձեր մասին. ինչն եք սիրում շախմատում, որոնք են Ձեր սիրելի սկզբնախաղերը, պարտիաները, շախմատիստները…';
 
   @override
   String get listBlockedPlayers => 'Այն խաղացողների ցանկը, որոնց Դուք արգելափակել եք';
@@ -3941,54 +3792,43 @@ class AppLocalizationsHy extends AppLocalizations {
   String get returnToSimulHomepage => 'Վերադառնալ խաղաշարերի էջ';
 
   @override
-  String get aboutSimul =>
-      'Խաղաշարերը ենթադրում են մեկ խաղացողի մենամարտը միաժամանակ մի քանի խաղացողի հետ։';
+  String get aboutSimul => 'Խաղաշարերը ենթադրում են մեկ խաղացողի մենամարտը միաժամանակ մի քանի խաղացողի հետ։';
 
   @override
-  String get aboutSimulImage =>
-      'Ընդհանուր 50 պարտիայից Ֆիշերը հաղթել է 47-ում, ոչ-ոքի արել 2-ում և պարտվել 1-ում։';
+  String get aboutSimulImage => 'Ընդհանուր 50 պարտիայից Ֆիշերը հաղթել է 47-ում, ոչ-ոքի արել 2-ում և պարտվել 1-ում։';
 
   @override
-  String get aboutSimulRealLife =>
-      'Գաղափարը կրկնում է կենդանի շախմատում ընդունված հայեցակարգը, երբ խաղաշար անցկացնողը տեղաշարժվում է սեղանից սեղան` մեկ քայլ կատարելու համար։';
+  String get aboutSimulRealLife => 'Գաղափարը կրկնում է կենդանի շախմատում ընդունված հայեցակարգը, երբ խաղաշար անցկացնողը տեղաշարժվում է սեղանից սեղան` մեկ քայլ կատարելու համար։';
 
   @override
-  String get aboutSimulRules =>
-      'Երբ սկսվում է միաժամանակյա խաղաշարը, յուրաքանչյուր խաղացող սկսում է պարտիան խաղաշարն անցկացնողի հետ, որը խաղում է սպիտակներով։ Խաղաշարն ավարտվում է, երբ խաղացվում են բոլոր պարտիաները։';
+  String get aboutSimulRules => 'Երբ սկսվում է միաժամանակյա խաղաշարը, յուրաքանչյուր խաղացող սկսում է պարտիան խաղաշարն անցկացնողի հետ, որը խաղում է սպիտակներով։ Խաղաշարն ավարտվում է, երբ խաղացվում են բոլոր պարտիաները։';
 
   @override
-  String get aboutSimulSettings =>
-      'Միաժամանակյա խաղաշարերը չեն ենթադրում վարկանիշային պարտիաներ։ Վերախաղարկումները, քայլերի չեղարկումները և ժամանակի հավելումները արգելված են։';
+  String get aboutSimulSettings => 'Միաժամանակյա խաղաշարերը չեն ենթադրում վարկանիշային պարտիաներ։ Վերախաղարկումները, քայլերի չեղարկումները և ժամանակի հավելումները արգելված են։';
 
   @override
   String get create => 'Ստեղծել';
 
   @override
-  String get whenCreateSimul =>
-      'Եթե ստեղծեք միաժամանակյա խաղաշար, ստիպված կլինեք խաղալու միաժամանակ մի քանի խաղացողի դեմ։';
+  String get whenCreateSimul => 'Եթե ստեղծեք միաժամանակյա խաղաշար, ստիպված կլինեք խաղալու միաժամանակ մի քանի խաղացողի դեմ։';
 
   @override
-  String get simulVariantsHint =>
-      'Եթե ընտրեք խաղի մի քանի տարբերակ, յուրաքանչյուր խաղացող կընտրի դրանցից այն մեկը, որը կցանկանա խաղալ ձեզ հետ։';
+  String get simulVariantsHint => 'Եթե ընտրեք խաղի մի քանի տարբերակ, յուրաքանչյուր խաղացող կընտրի դրանցից այն մեկը, որը կցանկանա խաղալ ձեզ հետ։';
 
   @override
-  String get simulClockHint =>
-      'Ֆիշերի ժամացույցի կարգավորումներ։ Որքան շատ մրցակից ունենաք, այնքան շատ ժամանակ ձեզ պետք կգա։';
+  String get simulClockHint => 'Ֆիշերի ժամացույցի կարգավորումներ։ Որքան շատ մրցակից ունենաք, այնքան շատ ժամանակ ձեզ պետք կգա։';
 
   @override
-  String get simulAddExtraTime =>
-      'Պարտիաներում մտորելու համար դուք կարող եք ստանալ լրացուցիչ ժամանակ։';
+  String get simulAddExtraTime => 'Պարտիաներում մտորելու համար դուք կարող եք ստանալ լրացուցիչ ժամանակ։';
 
   @override
   String get simulHostExtraTime => 'Խաղաշար անցկացնողի լրացուցիչ ժամանակը';
 
   @override
-  String get simulAddExtraTimePerPlayer =>
-      'Ձեր ժամացույցի վրա ավելացրեք մեկնարկային ժամանակը յուրաքանչյուր խաղացողի համար, ով մուտք է գործել Ձեր միաժամանակյա խաղի նստաշրջան:';
+  String get simulAddExtraTimePerPlayer => 'Ձեր ժամացույցի վրա ավելացրեք մեկնարկային ժամանակը յուրաքանչյուր խաղացողի համար, ով մուտք է գործել Ձեր միաժամանակյա խաղի նստաշրջան:';
 
   @override
-  String get simulHostExtraTimePerPlayer =>
-      'Յուրաքանչյուր խաղացողի համար նստաշրջանի ժամանակի լրացում';
+  String get simulHostExtraTimePerPlayer => 'Յուրաքանչյուր խաղացողի համար նստաշրջանի ժամանակի լրացում';
 
   @override
   String get lichessTournaments => 'Lichess մրցաշարեր';
@@ -4024,8 +3864,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get keyEnterOrExitVariation => 'բացել/փակել տարբերակը';
 
   @override
-  String get keyRequestComputerAnalysis =>
-      'Պատվիրեք համակարգչային վերլուծություն, սովորեք սեփական սխալներից';
+  String get keyRequestComputerAnalysis => 'Պատվիրեք համակարգչային վերլուծություն, սովորեք սեփական սխալներից';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Հաջորդը (Սովորեք ձեր սխալներից)';
@@ -4058,8 +3897,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
-  String get variationArrowsInfo =>
-      'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
   String get playSelectedMove => 'play selected move';
@@ -4071,8 +3909,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get tournamentHomeTitle => 'Շախմատի զանազան տարբերակներով և ժամակարգերով մրցաշարեր';
 
   @override
-  String get tournamentHomeDescription =>
-      'Մրցաշարում խաղացե՜ք արագ շախմատ։ Ընտրեք Lichess-ի պաշտոնական մրցաշարերից ցանկացածը կամ ստեղծեք ձերը։ Գնդակ (Bullet), կայծակնային (Blitz), դասական, շախմատ-960 (Ֆիշերի շախմատ, Chess960), արքան կենտրոնում (King of the Hill), երեք շախ (Threecheck) և խաղի այլ տարբերակներ. դրանք կապահովեն ձեր շախմատային հաճույքը։';
+  String get tournamentHomeDescription => 'Մրցաշարում խաղացե՜ք արագ շախմատ։ Ընտրեք Lichess-ի պաշտոնական մրցաշարերից ցանկացածը կամ ստեղծեք ձերը։ Գնդակ (Bullet), կայծակնային (Blitz), դասական, շախմատ-960 (Ֆիշերի շախմատ, Chess960), արքան կենտրոնում (King of the Hill), երեք շախ (Threecheck) և խաղի այլ տարբերակներ. դրանք կապահովեն ձեր շախմատային հաճույքը։';
 
   @override
   String get tournamentNotFound => 'Մրցաշարը չի գտնվել';
@@ -4081,8 +3918,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get tournamentDoesNotExist => 'Այդպիսի մրցաշար գոյություն չունի։';
 
   @override
-  String get tournamentMayHaveBeenCanceled =>
-      'Կարող է չեղարկվել այն դեպքում, եթե բոլոր խաղացողները լքել են այն մինչև մեկնարկը։';
+  String get tournamentMayHaveBeenCanceled => 'Կարող է չեղարկվել այն դեպքում, եթե բոլոր խաղացողները լքել են այն մինչև մեկնարկը։';
 
   @override
   String get returnToTournamentsHomepage => 'Մրցաշարերի գլխավոր էջ';
@@ -4130,12 +3966,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get checkYourEmail => 'Ստուգեք ձեր էլ. փոստը';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink =>
-      'Ձեզ նամակ ենք ուղարկել։ Մասնակցային հաշիվն ակտիվացնելու համար սեղմեք նամակում եղած հղումը։';
+  String get weHaveSentYouAnEmailClickTheLink => 'Ձեզ նամակ ենք ուղարկել։ Մասնակցային հաշիվն ակտիվացնելու համար սեղմեք նամակում եղած հղումը։';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'Եթե նամակը չկա, ստուգեք սպամի և այլ պանակները, որտեղ այն կարող էր հասնել:';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Եթե նամակը չկա, ստուգեք սպամի և այլ պանակները, որտեղ այն կարող էր հասնել:';
 
   @override
   String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
@@ -4164,8 +3998,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get networkLagBetweenYouAndLichess =>
-      'Ձեր և Lichess-ի սերվերների միջև տվյալների փոխանցման հետաձգում:';
+  String get networkLagBetweenYouAndLichess => 'Ձեր և Lichess-ի սերվերների միջև տվյալների փոխանցման հետաձգում:';
 
   @override
   String get timeToProcessAMoveOnLichessServer => 'Քայլի մշակման ժամանակը Lichess-ի սերվերում';
@@ -4186,24 +4019,19 @@ class AppLocalizationsHy extends AppLocalizations {
   String get crosstable => 'Հաշիվ';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Քայլերը թերթելու համար կարելի է մկնիկի անիվը պտտել տախտակի վրա։';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'Քայլերը թերթելու համար կարելի է մկնիկի անիվը պտտել տախտակի վրա։';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem =>
-      'Թերթեք տարբերակները դրանք դիտելու համար:';
+  String get scrollOverComputerVariationsToPreviewThem => 'Թերթեք տարբերակները դրանք դիտելու համար:';
 
   @override
-  String get analysisShapesHowTo =>
-      'Խաղատախտակի վրա շրջանակներ և սլաքներ պատկերելու համար օգտագործեք Shift+մկնիկի ձախ կոճակը կամ աջ կոճակը։';
+  String get analysisShapesHowTo => 'Խաղատախտակի վրա շրջանակներ և սլաքներ պատկերելու համար օգտագործեք Shift+մկնիկի ձախ կոճակը կամ աջ կոճակը։';
 
   @override
-  String get primaryColorArrowsHowTo =>
-      'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
-  String get letOtherPlayersMessageYou =>
-      'Թույլ տալ այլ խաղացողներին Ձեզ հաղորդագրություններ ուղարկել';
+  String get letOtherPlayersMessageYou => 'Թույլ տալ այլ խաղացողներին Ձեզ հաղորդագրություններ ուղարկել';
 
   @override
   String get receiveForumNotifications => 'Ստանալ ծանուցումներ ֆորումում հիշատակվելու դեպքում';
@@ -4227,8 +4055,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get kidModeIsEnabled => 'Kid mode is enabled.';
 
   @override
-  String get kidModeExplanation =>
-      'Սա անվտանգության համար է։ Մանկական ռեժիմում անջատված են կայքի հաղորդակցության բոլոր միջոցները։ Միացրեք այս ռեժիմը ձեր երեխաների և աշակերտների համար` նրանց այլ օգտատերերից պաշտպանելու համար։';
+  String get kidModeExplanation => 'Սա անվտանգության համար է։ Մանկական ռեժիմում անջատված են կայքի հաղորդակցության բոլոր միջոցները։ Միացրեք այս ռեժիմը ձեր երեխաների և աշակերտների համար` նրանց այլ օգտատերերից պաշտպանելու համար։';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -4236,8 +4063,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode =>
-      'Ձեր հաշիվը կառավարվում է: Հարցրեք ձեր շախմատի ուսուցիչին երեխաների ռեժիմը հեռացնելու մասին:';
+  String get askYourChessTeacherAboutLiftingKidMode => 'Ձեր հաշիվը կառավարվում է: Հարցրեք ձեր շախմատի ուսուցիչին երեխաների ռեժիմը հեռացնելու մասին:';
 
   @override
   String get enableKidMode => 'Միացնել մանկական ռեժիմը';
@@ -4344,8 +4170,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get embedInYourWebsite => 'Ստանալ կոդ՝ կայքում տեղադրելու համար';
 
   @override
-  String get usernameAlreadyUsed =>
-      'Մասնակցային այս անունն արդեն զբաղված է։ Խնդրում ենք փորձել ուրիշը';
+  String get usernameAlreadyUsed => 'Մասնակցային այս անունն արդեն զբաղված է։ Խնդրում ենք փորձել ուրիշը';
 
   @override
   String get usernamePrefixInvalid => 'Մասնակցային անունը պետք է սկսվի տառով';
@@ -4354,8 +4179,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get usernameSuffixInvalid => 'Մասնակցային անունը պետք է վերջանա տառով կամ թվով։';
 
   @override
-  String get usernameCharsInvalid =>
-      'Մասնակցային անունը պետք է բաղկացած լինի միայն տառերից, թվերից, ընդգծումներից և գծիկներից։';
+  String get usernameCharsInvalid => 'Մասնակցային անունը պետք է բաղկացած լինի միայն տառերից, թվերից, ընդգծումներից և գծիկներից։';
 
   @override
   String get usernameUnacceptable => 'Մասնակցային այս անունն արդեն զբաղված է կամ անթույլատրելի է։.';
@@ -4523,8 +4347,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get addCurrentVariation => 'Ավելացնել ընթացիկ տարբերակը';
 
   @override
-  String get playVariationToCreateConditionalPremoves =>
-      'Պայմանական նախաքայլերն առաջադրելու համար խաղատախտակի վրա կատարեք քայլեր';
+  String get playVariationToCreateConditionalPremoves => 'Պայմանական նախաքայլերն առաջադրելու համար խաղատախտակի վրա կատարեք քայլեր';
 
   @override
   String get noConditionalPremoves => 'Անպայմանական նախաքայլեր';
@@ -4558,12 +4381,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get pleasantChessExperience => 'Մեր նպատակը շախմատը բոլորի համար հետաքրքիր դարձնելն է։';
 
   @override
-  String get goodPractice =>
-      'Դրան հասնելու համար մենք պետք է այնպես անենք, որ բոլոր խաղացողները հետևեն բարեկրթության կանոններին։';
+  String get goodPractice => 'Դրան հասնելու համար մենք պետք է այնպես անենք, որ բոլոր խաղացողները հետևեն բարեկրթության կանոններին։';
 
   @override
-  String get potentialProblem =>
-      'Երբ հայտնաբերում ենք հավանական խնդիր, մենք ցուցադրում ենք այս հաղորդագրությունը։';
+  String get potentialProblem => 'Երբ հայտնաբերում ենք հավանական խնդիր, մենք ցուցադրում ենք այս հաղորդագրությունը։';
 
   @override
   String get howToAvoidThis => 'Ինչպե՞ս խուսափել սրանից';
@@ -4578,8 +4399,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get resignLostGames => 'Հանձնվե՛ք պարտված խաղերում (մի\' թողեք ժամանակը սպառվի)։';
 
   @override
-  String get temporaryInconvenience =>
-      'Մենք հայցում ենք Ձեր ներողամտությունը անհարմարության համար,';
+  String get temporaryInconvenience => 'Մենք հայցում ենք Ձեր ներողամտությունը անհարմարության համար,';
 
   @override
   String get wishYouGreatGames => 'և մաղթում հաճելի հաղեր lichess.org-ում։';
@@ -4594,8 +4414,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get currentMatchScore => 'Հաշիվն ընթացիկ խաղում';
 
   @override
-  String get agreementAssistance =>
-      'Հաստատում եմ, որ իմ խաղերում երբեք չեմ օգտվի կողմնակի օգնությունից (շախմատային ծրագրերից, գրքերից, տվյալների բազաներից և այլ խաղացողներից)։';
+  String get agreementAssistance => 'Հաստատում եմ, որ իմ խաղերում երբեք չեմ օգտվի կողմնակի օգնությունից (շախմատային ծրագրերից, գրքերից, տվյալների բազաներից և այլ խաղացողներից)։';
 
   @override
   String get agreementNice => 'Հաստատում եմ, որ հարգանքով եմ վերաբերվելու այլ խաղացողներին։';
@@ -4683,8 +4502,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get theForumEtiquette => 'ֆորումի վարվելակարգը';
 
   @override
-  String get thisTopicIsArchived =>
-      'Այս թեման տեղափոխվել է արխիվ, և այն այլևս հնարավոր չէ մեկնաբանել։';
+  String get thisTopicIsArchived => 'Այս թեման տեղափոխվել է արխիվ, և այն այլևս հնարավոր չէ մեկնաբանել։';
 
   @override
   String joinTheTeamXToPost(String param1) {
@@ -4697,8 +4515,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames =>
-      'Դուք առայժմ չեք կարող գրել այս ֆորումում։ Խաղացե՛ք մի քանի պարտիա։';
+  String get youCannotPostYetPlaySomeGames => 'Դուք առայժմ չեք կարող գրել այս ֆորումում։ Խաղացե՛ք մի քանի պարտիա։';
 
   @override
   String get subscribe => 'Բաժանորդագրվել';
@@ -4751,8 +4568,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator =>
-      'Դուք պարտվել եք նրան, ով խախտել է Lichess-ի օգտվողի համաձայնագիրը';
+  String get lostAgainstTOSViolator => 'Դուք պարտվել եք նրան, ով խախտել է Lichess-ի օգտվողի համաձայնագիրը';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -4781,12 +4597,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get tournDescription => 'Մրցաշարի նկարագրությունը';
 
   @override
-  String get tournDescriptionHelp =>
-      'Անկանու՞մ եք ինչ-որ բան ասել օգտվողներին: Փորձեք լինել հակիրճ. Markdown ձևաչափով հղումները [name](https://url) մատչելի են: ';
+  String get tournDescriptionHelp => 'Անկանու՞մ եք ինչ-որ բան ասել օգտվողներին: Փորձեք լինել հակիրճ. Markdown ձևաչափով հղումները [name](https://url) մատչելի են: ';
 
   @override
-  String get ratedFormHelp =>
-      'Խաղերն ընթանում են վարկանիշի հաշվարկով և ազդում են խաղացողների վարկանիշի վրա';
+  String get ratedFormHelp => 'Խաղերն ընթանում են վարկանիշի հաշվարկով և ազդում են խաղացողների վարկանիշի վրա';
 
   @override
   String get onlyMembersOfTeam => 'Միայն ակումբի անդամների համար';
@@ -4884,8 +4698,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get reopenYourAccount => 'Վերաբացեք Ձեր մասնակցային հաշիվը';
 
   @override
-  String get reopenYourAccountDescription =>
-      'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'Այս մասնակցային հաշվին կցված էլ. փոստի հասցեն։';
@@ -4938,8 +4751,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo =>
-      'Lichess-ը բարեգործական կազմակերպություն է, որը տրամադրում է բաց նախնական կոդով ազատ և անվճար ծրագրային ապահովում։\nՕպերացիոն բոլոր ծախսերը, մշակումները և կոնտենտը ֆինանսավորվում են բացառապես օգտատերերի նվիրաբերությունների հաշվին։';
+  String get lichessPatronInfo => 'Lichess-ը բարեգործական կազմակերպություն է, որը տրամադրում է բաց նախնական կոդով ազատ և անվճար ծրագրային ապահովում։\nՕպերացիոն բոլոր ծախսերը, մշակումները և կոնտենտը ֆինանսավորվում են բացառապես օգտատերերի նվիրաբերությունների հաշվին։';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -5473,12 +5285,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get stormMoveToStart => 'Սկսելու համար քայլ կատարեք';
 
   @override
-  String get stormYouPlayTheWhitePiecesInAllPuzzles =>
-      'Դուք խաղում եք սպիտակ խաղաքարերով բոլոր խնդիրներում';
+  String get stormYouPlayTheWhitePiecesInAllPuzzles => 'Դուք խաղում եք սպիտակ խաղաքարերով բոլոր խնդիրներում';
 
   @override
-  String get stormYouPlayTheBlackPiecesInAllPuzzles =>
-      'Դուք խաղում եք սև խաղաքարերով բոլոր խնդիրներում';
+  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'Դուք խաղում եք սև խաղաքարերով բոլոր խնդիրներում';
 
   @override
   String get stormPuzzlesSolved => 'խնդիրներ լուծվել են';
@@ -5601,8 +5411,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get stormSkipHelp => 'Մրցավազքի ընթացքում Դուք կարող եք բաց թողնել մեկ քայլ.';
 
   @override
-  String get stormSkipExplanation =>
-      'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Մրցավազքի ընթացքում կարելի է օգտագործել միայն մեկ անգամ։';
+  String get stormSkipExplanation => 'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Մրցավազքի ընթացքում կարելի է օգտագործել միայն մեկ անգամ։';
 
   @override
   String get stormFailedPuzzles => 'Չլուծված խնդիրներ';
@@ -5719,8 +5528,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyInviteToTheStudy => 'Հրավիրել ստուդիա';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Հրավիրեք միայն այն մասնակիցներին, որոնց ճանաչում եք, և որոնք ակտիվորեն ցանկանում են միանալ այս ստուդիային։';
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Հրավիրեք միայն այն մասնակիցներին, որոնց ճանաչում եք, և որոնք ակտիվորեն ցանկանում են միանալ այս ստուդիային։';
 
   @override
   String get studySearchByUsername => 'Որոնում ըստ մասնակցային անվան';
@@ -5768,24 +5576,19 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyTheChapterIsTooShortToBeAnalysed => 'Վերլուծության համար գլուխը չափազանց կարճ է։';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis =>
-      'Միայն ստուդիայի խմբագիրները կարող են խնդրել համակարգչային վերլուծություն։';
+  String get studyOnlyContributorsCanRequestAnalysis => 'Միայն ստուդիայի խմբագիրները կարող են խնդրել համակարգչային վերլուծություն։';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Սերվերից ստանալ գլխավոր գծի ամբողջական համակարգչային վերլուծություն։';
+  String get studyGetAFullComputerAnalysis => 'Սերվերից ստանալ գլխավոր գծի ամբողջական համակարգչային վերլուծություն։';
 
   @override
-  String get studyMakeSureTheChapterIsComplete =>
-      'Համոզվեք, որ գլուխն ավարտված է։ Համակարգչային վերլուծություն կարող եք խնդրել միայն մեկ անգամ։';
+  String get studyMakeSureTheChapterIsComplete => 'Համոզվեք, որ գլուխն ավարտված է։ Համակարգչային վերլուծություն կարող եք խնդրել միայն մեկ անգամ։';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'Բոլոր սինքրոնիզացված մասնակիցները մնում են նույն դիրքում';
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Բոլոր սինքրոնիզացված մասնակիցները մնում են նույն դիրքում';
 
   @override
-  String get studyShareChanges =>
-      'Փոփոխությունները տարածել հանդիսականների շրջանում և դրանք պահպանել սերվերում';
+  String get studyShareChanges => 'Փոփոխությունները տարածել հանդիսականների շրջանում և դրանք պահպանել սերվերում';
 
   @override
   String get studyPlaying => 'Ակտիվ';
@@ -5827,8 +5630,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Այս գլխի հղումը';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed =>
-      'Ֆորումում կամ Lichess-ի բլոգում ներդնելու համար տեղադրեք այս կոդը';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Ֆորումում կամ Lichess-ի բլոգում ներդնելու համար տեղադրեք այս կոդը';
 
   @override
   String get studyStartAtInitialPosition => 'Բացել սկզբնական դիրքում';
@@ -5845,8 +5647,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyReadMoreAboutEmbedding => 'Մանրամասն կայքում ներդնելու մասին';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded =>
-      'Կայքում կարելի է ներդնել միայն հրապարակային ստուդիաները։';
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Կայքում կարելի է ներդնել միայն հրապարակային ստուդիաները։';
 
   @override
   String get studyOpen => 'Բացել';
@@ -5895,8 +5696,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyDeleteThisChapter => 'Հեռացնե՞լ գլուխը։ Վերականգնել հնարավոր չի լինի։';
 
   @override
-  String get studyClearAllCommentsInThisChapter =>
-      'Մաքրե՞լ այս գլխի բոլոր մեկնաբանություններն ու նշումները';
+  String get studyClearAllCommentsInThisChapter => 'Մաքրե՞լ այս գլխի բոլոր մեկնաբանություններն ու նշումները';
 
   @override
   String get studyRightUnderTheBoard => 'Անմիջապես տախտակի տակ';
@@ -5991,8 +5791,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyYesKeepEveryoneOnTheSamePosition => 'Այո. բոլորի համար դնել միևնույն դիրքը';
 
   @override
-  String get studyNoLetPeopleBrowseFreely =>
-      'Ոչ. թույլատրել մասնակիցներին ազատ ուսումնասիրել բոլոր դիրքերը';
+  String get studyNoLetPeopleBrowseFreely => 'Ոչ. թույլատրել մասնակիցներին ազատ ուսումնասիրել բոլոր դիրքերը';
 
   @override
   String get studyPinnedStudyComment => 'Ստուդիայի ամրակցված մեկնաբանություն';
@@ -6007,8 +5806,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyClearChat => 'Մաքրել զրուցարանը';
 
   @override
-  String get studyDeleteTheStudyChatHistory =>
-      'Հեռացնե՞լ ստուդիայի զրուցարանը։ Վերականգնել հնարավոր չի լինի։';
+  String get studyDeleteTheStudyChatHistory => 'Հեռացնե՞լ ստուդիայի զրուցարանը։ Վերականգնել հնարավոր չի լինի։';
 
   @override
   String get studyDeleteStudy => 'Հեռացնել ստուդիան';
@@ -6138,15 +5936,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
 
   @override
-  String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
 
   @override
   String get studyStudyMembersTitle => 'Study members';
@@ -6165,8 +5961,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Study chapters';
 
   @override
-  String get studyStudyChaptersText =>
-      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
   String get studyCommentPositionTitle => 'Comment on a position';
@@ -6180,29 +5975,25 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText =>
-      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText =>
-      'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
@@ -6214,33 +6005,28 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
-  String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
 
   @override
-  String get studyFromFenStringText =>
-      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText =>
-      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
 
   @override
-  String get studyChapterConclusionText =>
-      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String get studyDoubleDefeat => 'Double defeat';

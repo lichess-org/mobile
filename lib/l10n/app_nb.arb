@@ -1384,6 +1384,7 @@
   "simulFeaturedHelp": "Vis simultanen din til alle på {param}. Skru av for private simultaner.",
   "simulDescription": "Beskrivelse av simultanen",
   "simulDescriptionHelp": "Er det noe du vil si til deltakerne?",
+  "markdownIsAvailable": "{param} er tilgjengelig for formatering.",
   "embedsAvailable": "Lim inn en URL til et parti eller et kapittel i en studie for å bygge det inn.",
   "inYourLocalTimezone": "I tidssonen din",
   "tournChat": "Turneringssamtale",

@@ -1383,6 +1383,7 @@
   "simulFeaturedHelp": "Mostra la teva simultània a tothom a {param}. Desactiva-ho per a simultànies privades.",
   "simulDescription": "Descripció de la simultània",
   "simulDescriptionHelp": "Cap cosa per mencionar als participants?",
+  "markdownIsAvailable": "Es pot utilitzar {param} per descriure el format.",
   "embedsAvailable": "Enganxa un URL d'un joc o d'un capítol d'estudi per incrustar-ho.",
   "inYourLocalTimezone": "El la teva zona horària",
   "tournChat": "Xat del tornament",
