@@ -142,18 +142,18 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
       });
+      ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+        if (current.hasValue && !_imageAreCached) {
+          _imageAreCached = true;
+          await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
+        }
+      });
     }
-    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
-      if (current.hasValue && !_imageAreCached) {
-        _imageAreCached = true;
-        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
-      }
-    });
   }
 
   @override

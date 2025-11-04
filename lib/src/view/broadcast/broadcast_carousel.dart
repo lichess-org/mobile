@@ -207,7 +207,7 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
       });
     } else if (widget.worker.closed == false) {
       await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
       final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
       if (response != null) {
@@ -502,65 +502,9 @@ Future<void> preCacheBroadcastImages(
     if (imageUrl != null) {
       final provider = NetworkImage(imageUrl);
       await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
       await _computeImageColors(worker, imageUrl, imageBytes!);
     }
   }
-}
-
-// Scale image size down to reduce computation time of color extraction.
-Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
-  const double maxDimension = 112.0;
-  final ImageStream stream = imageProvider.resolve(
-    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
-  );
-  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
-  late ImageStreamListener listener;
-  late ui.Image scaledImage;
-  Timer? loadFailureTimeout;
-
-  listener = ImageStreamListener(
-    (ImageInfo info, bool sync) async {
-      loadFailureTimeout?.cancel();
-      stream.removeListener(listener);
-      final ui.Image image = info.image;
-      final int width = image.width;
-      final int height = image.height;
-      double paintWidth = width.toDouble();
-      double paintHeight = height.toDouble();
-      assert(width > 0 && height > 0);
-
-      final bool rescale = width > maxDimension || height > maxDimension;
-      if (rescale) {
-        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
-      }
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder);
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
-        image: image,
-        filterQuality: FilterQuality.none,
-      );
-
-      final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
-    },
-    onError: (Object exception, StackTrace? stackTrace) {
-      stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
-    },
-  );
-
-  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
-    stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
-  });
-
-  stream.addListener(listener);
-  await imageCompleter.future;
-  return scaledImage;
 }
