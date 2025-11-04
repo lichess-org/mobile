@@ -22,7 +22,6 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
     (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$')),
     (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$')),
     (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$')),
-    (key: 'blog', pathRegexp: RegExp(r'^\/api\/blog\/carousel$')),
   }),
   _watchUri: ISet({
     (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$')),
