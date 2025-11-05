@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -206,7 +207,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               _ => const SizedBox.shrink(),
             },
           ),
-          body: PopScope(canPop: false, child: loadingBoard),
+          body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
         );
     }
   }
