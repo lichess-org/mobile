@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -207,7 +208,27 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               _ => const SizedBox.shrink(),
             },
           ),
-          body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
+          body: PopScope(
+            canPop: false,
+            child: FocusDetector(
+              onFocusLost: () {
+                if (!mounted) return;
+                // Cancel the seek or challenge if the user leaves the screen while waiting, otherwise the game will be created but the user won't see it.
+                switch (widget.source) {
+                  case LobbySource():
+                    ref.read(createGameServiceProvider).cancelSeek();
+                    Navigator.of(context).pop();
+                  case UserChallengeSource():
+                    ref.read(createGameServiceProvider).cancelChallenge();
+                    Navigator.of(context).pop();
+                  case ExistingGameSource():
+                    break;
+                }
+              },
+              onFocusGained: () => {},
+              child: WakelockWidget(child: loadingBoard),
+            ),
+          ),
         );
     }
   }
