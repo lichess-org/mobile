@@ -297,7 +297,7 @@ class NotificationService {
         }
 
       case ChallengeCreateFcmMessage():
-        // nothing to do here as it should be handled by the socket
+        // nothing to do here in foreground as it should be handled by the socket
         break;
 
       case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
