@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
@@ -94,17 +93,4 @@ Future<BroadcastPlayerWithGameResults> broadcastPlayer(
 @riverpod
 Future<IList<BroadcastTeamMatch>> broadcastTeamMatches(Ref ref, BroadcastRoundId roundId) {
   return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
-}
-
-@Riverpod(keepAlive: true)
-BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
-  return const BroadcastImageWorkerFactory();
-}
-
-class BroadcastImageWorkerFactory {
-  const BroadcastImageWorkerFactory();
-
-  Future<ImageColorWorker> spawn() {
-    return ImageColorWorker.spawn();
-  }
 }

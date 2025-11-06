@@ -74,6 +74,23 @@ extension type const StudyChapterId(String value) implements StringId {
 extension type const FideId(int value) implements IntId {}
 
 extension IDPick on Pick {
+  StringId asStringIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return StringId(value);
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to StringId");
+  }
+
+  StringId? asStringIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asStringIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   UserId asUserIdOrThrow() {
     final value = required().value;
     if (value is String) {

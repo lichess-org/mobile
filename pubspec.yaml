@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.17.14+001714 # See README.md for details about versioning
+version: 0.17.15+001715 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -33,8 +33,8 @@ dependencies:
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
-  flutter_appauth: ^10.0.0
-  flutter_displaymode: ^0.6.0
+  flutter_appauth: ^11.0.0
+  flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0
   flutter_local_notifications: ^19.0.0

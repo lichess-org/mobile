@@ -851,6 +851,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Для перелистывания ходов можно использовать колёсико мыши над доской.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Пролистывайте варианты для их просмотра.</string>
   <string name="analysisShapesHowTo">Чтобы рисовать на доске кружки и стрелки, используйте Shift+левую кнопку мыши или правую кнопку.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl или Shif = красный; Command, Alt, или meta = синий; каждая вышеперечисленная = желтый.</string>
   <string name="letOtherPlayersMessageYou">Разрешить присылать вам сообщения</string>
   <string name="receiveForumNotifications">Получать уведомления при упоминании на форуме</string>
   <string name="shareYourInsightsData">Делиться вашей шахматной аналитикой</string>
@@ -1064,6 +1065,7 @@
   <string name="simulFeaturedHelp">Показывать сеанс на %s. Отключите для частных сеансов.</string>
   <string name="simulDescription">Описание сеанса</string>
   <string name="simulDescriptionHelp">Хотите что-нибудь сказать участникам?</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s доступен для форматирования.</string>
   <string name="embedsAvailable">Вставьте URL игры или ссылку на студию, чтобы встроить её.</string>
   <string name="inYourLocalTimezone">В вашем часовом поясе</string>
   <string name="tournChat">Чат турнира</string>
