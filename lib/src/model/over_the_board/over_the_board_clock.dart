@@ -40,7 +40,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
     });
 
     return OverTheBoardClockState.fromTimeIncrement(
-      TimeIncrement(const Duration(minutes: 5).inSeconds, const Duration(seconds: 3).inSeconds),
+      TimeIncrement.blitzDefault(),
     );
   }
 
