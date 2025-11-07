@@ -14,7 +14,9 @@ class TimeIncrement implements Comparable<TimeIncrement> {
 
   const TimeIncrement.infinite() : time = 0, increment = 0;
 
-  TimeIncrement.blitzDefault() : time = const Duration(minutes: 5).inSeconds, increment = const Duration(seconds: 3).inSeconds;
+  TimeIncrement.blitzDefault()
+    : time = const Duration(minutes: 5).inSeconds,
+      increment = const Duration(seconds: 3).inSeconds;
 
   /// Clock initial time in seconds
   final int time;

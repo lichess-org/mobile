@@ -39,9 +39,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
       }
     });
 
-    return OverTheBoardClockState.fromTimeIncrement(
-      TimeIncrement.blitzDefault(),
-    );
+    return OverTheBoardClockState.fromTimeIncrement(TimeIncrement.blitzDefault());
   }
 
   void setupClock(TimeIncrement timeIncrement) {
