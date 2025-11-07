@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -97,7 +98,8 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
         final elementWidth = widgetWidth * flexWeights[0] / flexWeights.reduce((a, b) => a + b);
         final pictureHeight = elementWidth / 2;
         final elementHeightFactor = flexWeights.length == 2 ? 0.75 : 0.6;
-        final elementHeight = pictureHeight + (pictureHeight * elementHeightFactor);
+        final infoHeight = math.max(120, pictureHeight * elementHeightFactor);
+        final elementHeight = pictureHeight + infoHeight;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(

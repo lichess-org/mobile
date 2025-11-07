@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -84,8 +85,9 @@ class _BlogCarouselState extends State<BlogCarousel> {
         final widgetWidth = constraints.maxWidth;
         final elementWidth = widgetWidth * flexWeights[0] / flexWeights.reduce((a, b) => a + b);
         final pictureHeight = elementWidth / 2;
-        final elementHeightFactor = flexWeights.length == 2 ? 0.75 : 0.6;
-        final elementHeight = pictureHeight + (pictureHeight * elementHeightFactor);
+        const elementHeightFactor = 0.65;
+        final infoHeight = math.max(120, pictureHeight * elementHeightFactor);
+        final elementHeight = pictureHeight + infoHeight;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(
@@ -103,9 +105,18 @@ class _BlogCarouselState extends State<BlogCarousel> {
               children: [
                 if (widget._isLoading)
                   for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
-                    BlogCarouselItem.loading(worker: widget.worker, flexWeights: flexWeights),
+                    BlogCarouselItem.loading(
+                      carouselWidth: widgetWidth,
+                      worker: widget.worker,
+                      flexWeights: flexWeights,
+                    ),
                 for (final post in widget.posts)
-                  BlogCarouselItem(post: post, worker: widget.worker, flexWeights: flexWeights),
+                  BlogCarouselItem(
+                    carouselWidth: widgetWidth,
+                    post: post,
+                    worker: widget.worker,
+                    flexWeights: flexWeights,
+                  ),
               ],
             ),
           ),
@@ -117,21 +128,27 @@ class _BlogCarouselState extends State<BlogCarousel> {
 
 class BlogCarouselItem extends StatefulWidget {
   const BlogCarouselItem({
+    required this.carouselWidth,
     required this.post,
     required this.flexWeights,
     required this.worker,
     super.key,
   });
 
-  BlogCarouselItem.loading({required this.flexWeights, required this.worker, super.key})
-    : post = BlogPost(
-        id: const StringId(''),
-        title: '',
-        slug: '',
-        url: Uri(),
-        createdAt: DateTime.now(),
-      );
+  BlogCarouselItem.loading({
+    required this.carouselWidth,
+    required this.flexWeights,
+    required this.worker,
+    super.key,
+  }) : post = BlogPost(
+         id: const StringId(''),
+         title: '',
+         slug: '',
+         url: Uri(),
+         createdAt: DateTime.now(),
+       );
 
+  final double carouselWidth;
   final BlogPost post;
   final ImageColorWorker worker;
   final List<int> flexWeights;
@@ -195,8 +212,7 @@ class _BlogCarouselItemState extends State<BlogCarouselItem> {
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final double width = screenWidth - 16.0;
+    final double width = widget.carouselWidth - 16.0;
     final paddingWidth = kBlogCarouselItemPadding.horizontal;
     final flexWeights = widget.flexWeights;
     final totalFlex = flexWeights.reduce((a, b) => a + b);
@@ -219,9 +235,10 @@ class _BlogCarouselItemState extends State<BlogCarouselItem> {
           minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image(
+                fit: BoxFit.cover,
                 image: imageProvider,
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   return AnimatedOpacity(
