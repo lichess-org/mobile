@@ -69,6 +69,28 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'challengeCreate':
+          final challengeId = message.data['lichess.challengeId'] as String?;
+          if (challengeId != null) {
+            return ChallengeCreateFcmMessage(
+              ChallengeId(challengeId),
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
+        case 'challengeAccept':
+          final challengeId = message.data['lichess.challengeId'] as String?;
+          final fullId = message.data['lichess.fullId'] as String?;
+          if (challengeId != null && fullId != null) {
+            return ChallengeAcceptFcmMessage(
+              ChallengeId(challengeId),
+              GameFullId(fullId),
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
@@ -97,6 +119,29 @@ class CorresGameUpdateFcmMessage extends FcmMessage {
 
   final GameFullId fullId;
   final PlayableGame? game;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a challenge is created.
+@immutable
+class ChallengeCreateFcmMessage extends FcmMessage {
+  const ChallengeCreateFcmMessage(this.id, {required this.notification});
+
+  final ChallengeId id;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a challenge is accepted.
+@immutable
+class ChallengeAcceptFcmMessage extends FcmMessage {
+  const ChallengeAcceptFcmMessage(this.id, this.fullId, {required this.notification});
+
+  final ChallengeId id;
+  final GameFullId fullId;
 
   @override
   final RemoteNotification? notification;
@@ -175,6 +220,12 @@ sealed class LocalNotification {
         return ChallengeNotification.fromJson(json);
       case 'playban':
         return PlaybanNotification.fromJson(json);
+      case 'newMessage':
+        return NewMessageNotification.fromJson(json);
+      case 'challengeAccept':
+        return ChallengeAcceptedNotification.fromJson(json);
+      case 'challengeCreate':
+        return ChallengeCreatedNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
@@ -240,6 +291,13 @@ class NewMessageNotification extends LocalNotification {
   final UserId conversationId;
   final String _title;
   final String _message;
+
+  factory NewMessageNotification.fromJson(Map<String, dynamic> json) {
+    final conversationId = UserId.fromJson(json['conversationId'] as String);
+    final title = json['title'] as String;
+    final message = json['message'] as String;
+    return NewMessageNotification(conversationId, title, message);
+  }
 
   factory NewMessageNotification.fromFcmMessage(NewMessageFcmMessage message) {
     return NewMessageNotification(
@@ -320,6 +378,123 @@ class CorresGameUpdateNotification extends LocalNotification {
   @override
   Map<String, dynamic> get _concretePayload => {
     'fullId': fullId.toJson(),
+    'title': _title,
+    'body': _body,
+  };
+
+  @override
+  String title(_) => _title;
+
+  @override
+  String? body(_) => _body;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      l10n.preferencesNotifyGameEvent,
+      importance: Importance.high,
+      priority: Priority.defaultPriority,
+      autoCancel: true,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
+}
+
+/// A notification for a challenge acceptance.
+///
+/// This notification is shown when a challenge is accepted on the server.
+class ChallengeAcceptedNotification extends LocalNotification {
+  const ChallengeAcceptedNotification(this.fullId, String title, String body)
+    : _title = title,
+      _body = body;
+
+  final GameFullId fullId;
+
+  final String _title;
+  final String _body;
+
+  factory ChallengeAcceptedNotification.fromJson(Map<String, dynamic> json) {
+    final gameId = GameFullId.fromJson(json['fullId'] as String);
+    final title = json['title'] as String;
+    final body = json['body'] as String;
+    return ChallengeAcceptedNotification(gameId, title, body);
+  }
+
+  factory ChallengeAcceptedNotification.fromFcmMessage(ChallengeAcceptFcmMessage message) {
+    final title = message.notification?.title ?? '';
+    final body = message.notification?.body ?? '';
+    return ChallengeAcceptedNotification(message.fullId, title, body);
+  }
+
+  @override
+  String get channelId => 'challengeAccept';
+
+  @override
+  int get id => fullId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'fullId': fullId.toJson(),
+    'title': _title,
+    'body': _body,
+  };
+
+  @override
+  String title(_) => _title;
+
+  @override
+  String? body(_) => _body;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      l10n.preferencesNotifyGameEvent,
+      importance: Importance.high,
+      priority: Priority.defaultPriority,
+      autoCancel: true,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
+}
+
+/// A notification for a challenge creation.
+///
+/// This notification is shown when a challenge is created on the server while the user is not connected to lichess (e.g., app is in background).
+/// If the user is connected, challenges are handled by Websocket and a [ChallengeNotification] is shown instead.
+class ChallengeCreatedNotification extends LocalNotification {
+  const ChallengeCreatedNotification(this.challengeId, String title, String body)
+    : _title = title,
+      _body = body;
+
+  final ChallengeId challengeId;
+
+  final String _title;
+  final String _body;
+
+  factory ChallengeCreatedNotification.fromJson(Map<String, dynamic> json) {
+    final challengeId = ChallengeId.fromJson(json['challengeId'] as String);
+    final title = json['title'] as String;
+    final body = json['body'] as String;
+    return ChallengeCreatedNotification(challengeId, title, body);
+  }
+
+  factory ChallengeCreatedNotification.fromFcmMessage(ChallengeCreateFcmMessage message) {
+    final title = message.notification?.title ?? '';
+    final body = message.notification?.body ?? '';
+    return ChallengeCreatedNotification(message.id, title, body);
+  }
+
+  @override
+  String get channelId => 'challengeAccept';
+
+  @override
+  int get id => challengeId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'challengeId': challengeId.toJson(),
     'title': _title,
     'body': _body,
   };
