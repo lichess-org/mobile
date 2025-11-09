@@ -137,6 +137,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
+      // We pump and settle because followingStatusesProvider has to make the following request
       await tester.pumpAndSettle();
 
       expect(find.byType(CenterLoadingIndicator), findsNothing);
@@ -189,6 +190,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
+      // We pump and settle because followingStatusesProvider has to make the following request
       await tester.pumpAndSettle();
 
       expect(find.byType(CenterLoadingIndicator), findsNothing);
@@ -221,6 +223,7 @@ void main() {
 
         await tester.pumpWidget(app);
 
+        // We pump and settle because followingStatusesProvider has to make the following request
         await tester.pumpAndSettle();
 
         expect(find.byType(CenterLoadingIndicator), findsNothing);
@@ -228,6 +231,8 @@ void main() {
         final followingTab = find.text('0 following');
         expect(followingTab, findsOneWidget);
         await tester.tap(followingTab);
+
+        // We pump and settle because the switch between tabs is animated
         await tester.pumpAndSettle();
 
         expect(find.text('You are not following any user.'), findsOneWidget);
