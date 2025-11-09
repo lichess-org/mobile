@@ -77,12 +77,8 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
                   text: context.l10n.nbFriendsOnline(
                     value.$2.where((status) => status.online ?? false).length,
                   ),
-                  key: const Key('online_tab'),
                 ),
-                Tab(
-                  text: context.l10n.nbFollowing(value.$1.length),
-                  key: const Key('following_tab'),
-                ),
+                Tab(text: context.l10n.nbFollowing(value.$1.length)),
               ],
             ),
           ),
@@ -181,7 +177,6 @@ class _Online extends ConsumerWidget {
     switch (onlineFriends) {
       case AsyncData(:final value):
         return ListView.separated(
-          key: const Key('online_tab_view'),
           itemCount: value.length,
           separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider(height: 1)
@@ -207,7 +202,6 @@ class _Following extends ConsumerWidget {
       case AsyncData(:final value):
         IList<User> following = value.$1;
         return StatefulBuilder(
-          key: const Key('following_tab_view'),
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
               return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));

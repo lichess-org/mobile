@@ -109,8 +109,9 @@ void main() {
 
       expect(find.byType(CenterLoadingIndicator), findsOneWidget);
 
-      expect(find.byKey(const Key('online_tab')), findsNothing);
-      expect(find.byKey(const Key('following_tab')), findsNothing);
+      expect(find.byType(Tab), findsNothing);
+      expect(find.text('0 friends online'), findsNothing);
+      expect(find.text('0 following'), findsNothing);
     });
 
     testWidgets('shows _Online and _Following tabs after request completes with empty list', (
@@ -140,9 +141,7 @@ void main() {
 
       expect(find.byType(CenterLoadingIndicator), findsNothing);
 
-      expect(find.byKey(const Key('online_tab')), findsOneWidget);
-      expect(find.byKey(const Key('following_tab')), findsOneWidget);
-
+      expect(find.byType(Tab), findsNWidgets(2));
       expect(find.text('0 friends online'), findsOneWidget);
       expect(find.text('0 following'), findsOneWidget);
     });
@@ -194,9 +193,7 @@ void main() {
 
       expect(find.byType(CenterLoadingIndicator), findsNothing);
 
-      expect(find.byKey(const Key('online_tab')), findsOneWidget);
-      expect(find.byKey(const Key('following_tab')), findsOneWidget);
-
+      expect(find.byType(Tab), findsNWidgets(2));
       expect(find.text('1 friend online'), findsOneWidget);
       expect(find.text('1 following'), findsOneWidget);
     });
