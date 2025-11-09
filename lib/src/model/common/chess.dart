@@ -19,7 +19,7 @@ sealed class SanMove with _$SanMove {
 
   factory SanMove.fromJson(Map<String, dynamic> json) => _$SanMoveFromJson(json);
 
-  bool get isCheck => san.contains('+');
+  bool get isCheck => san.endsWith('+');
   bool get isCheckmate => san.endsWith('#');
   bool get isCapture => san.contains('x');
   // Using startsWith here because of possible check/checkmate symbol at the end.
