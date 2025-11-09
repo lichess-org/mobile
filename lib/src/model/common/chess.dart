@@ -21,6 +21,9 @@ sealed class SanMove with _$SanMove {
 
   bool get isCheck => san.contains('+');
   bool get isCapture => san.contains('x');
+  // Using startsWith here because of possible check/checkmate symbol at the end.
+  // It's sufficient to check for O-O here, because that of course also covers O-O-O.
+  bool get isCastles => san.startsWith('O-O');
 
   bool isIrreversible(Variant variant) {
     if (isCheck) return true;
