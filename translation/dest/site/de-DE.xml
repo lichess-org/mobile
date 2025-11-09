@@ -974,7 +974,7 @@ Leer lassen, um Partien von der normalen Ausgangsstellung aus zu starten.</strin
   <string name="simulFeaturedHelp">Zeige allen auf %s deine Simultan-Veranstaltung. Für private Simultan-Veranstaltungen deaktivieren.</string>
   <string name="simulDescription">Simultan Beschreibung</string>
   <string name="simulDescriptionHelp">Möchtest du den Teilnehmern etwas mitteilen?</string>
-  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s ist zur Formatierung verfügbar.</string>
+  <string name="markdownIsAvailable">%s ist zur Formatierung verfügbar.</string>
   <string name="embedsAvailable">Füge eine Partie-URL oder eine Studienkapitel-URL ein, um sie einzubetten.</string>
   <string name="inYourLocalTimezone">In deiner eigenen lokalen Zeitzone</string>
   <string name="tournChat">Turnierchat</string>
