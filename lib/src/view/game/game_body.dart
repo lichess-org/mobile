@@ -107,11 +107,6 @@ class GameBody extends ConsumerWidget {
         debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
         return const LoadGameError('Sorry, we could not load the game. Please try again later.');
       case AsyncData(value: final gameState, isRefreshing: false):
-        if (gameState.game.status != GameStatus.created &&
-            gameState.game.status != GameStatus.started) {
-          WakelockPlus.disable();
-        }
-
         final youAre = gameState.game.youAre ?? Side.white;
 
         // If playing against Stockfish, user is null
@@ -339,6 +334,10 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
+      if (state.requireValue.game.status != GameStatus.created &&
+          state.requireValue.game.status != GameStatus.started) {
+        WakelockPlus.disable();
+      }
       if (prev?.valueOrNull?.isZenModeActive == true &&
           state.requireValue.isZenModeActive == false) {
         if (context.mounted) {
