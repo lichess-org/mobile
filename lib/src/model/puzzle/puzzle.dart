@@ -27,9 +27,8 @@ sealed class Puzzle with _$Puzzle {
     for (var i = 0; i < sanMoves.length; i++) {
       final sanMove = sanMoves.elementAt(i);
       final uci = sanMove.move.uci;
-      final isCheckmate = sanMove.san.endsWith('#');
       final solutionUci = puzzle.solution.getOrNull(i);
-      if (isCheckmate) {
+      if (sanMove.isCheckmate) {
         return true;
       }
       if (uci != solutionUci && (!altCastles.containsKey(uci) || altCastles[uci] != solutionUci)) {
