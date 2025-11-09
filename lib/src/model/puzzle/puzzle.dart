@@ -31,7 +31,7 @@ sealed class Puzzle with _$Puzzle {
       if (sanMove.isCheckmate) {
         return true;
       }
-      if (uci != solutionUci && (!altCastles.containsKey(uci) || altCastles[uci] != solutionUci)) {
+      if (uci != solutionUci && (!sanMove.isCastles || altCastles[uci] != solutionUci)) {
         return false;
       }
     }
