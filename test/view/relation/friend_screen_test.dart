@@ -143,7 +143,7 @@ void main() {
       expect(find.byType(CenterLoadingIndicator), findsNothing);
 
       expect(find.byType(Tab), findsNWidgets(2));
-      expect(find.text('0 friends online'), findsOneWidget);
+      expect(find.text('0 friends online'), findsNWidgets(2));
       expect(find.text('0 following'), findsOneWidget);
     });
 
@@ -235,7 +235,7 @@ void main() {
         // We pump and settle because the switch between tabs is animated
         await tester.pumpAndSettle();
 
-        expect(find.text('You are not following any user.'), findsOneWidget);
+        expect(find.text('You are not following any users.'), findsOneWidget);
       },
     );
   });

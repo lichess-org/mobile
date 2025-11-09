@@ -176,6 +176,9 @@ class _Online extends ConsumerWidget {
 
     switch (onlineFriends) {
       case AsyncData(:final value):
+        if (value.isEmpty) {
+          return Center(child: Text(context.l10n.nbFriendsOnline(0)));
+        }
         return ListView.separated(
           itemCount: value.length,
           separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
