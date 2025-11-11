@@ -59,7 +59,7 @@ sealed class Step with _$Step {
   /// Cannot be used in chess960 variant where this notation is already forced and
   /// where it would conflict with the actual move.
   UCIMove get castleSafeUCI {
-    if (sanMove.san == 'O-O' || sanMove.san == 'O-O-O') {
+    if (sanMove.isCastles) {
       return _castleMoves.containsKey(sanMove.move.uci)
           ? _castleMoves[sanMove.move.uci]!
           : sanMove.move.uci;

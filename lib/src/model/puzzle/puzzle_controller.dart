@@ -148,10 +148,9 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       if (isGoodMove) {
         state = state.copyWith(feedback: PuzzleFeedback.good);
 
-        final isCheckmate = movesToTest.last.san.endsWith('#');
         final nextUci = state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
-        if (isCheckmate) {
+        if (movesToTest.last.isCheckmate) {
           _completePuzzle();
         }
         // another puzzle move: let's continue

@@ -27,7 +27,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
-  String get mobileClearButton => 'Elimina';
+  String get mobileClearButton => 'Pulisci';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
@@ -40,11 +40,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Buona sera, $param';
+    return 'Buonasera, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Buona sera';
+  String get mobileGoodEveningWithoutName => 'Buonasera';
 
   @override
   String mobileGoodDay(String param) {
@@ -111,10 +111,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'Perderai la tua serie corrente e il tuo punteggio verrà salvato.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '.';
+  String get mobilePuzzleThemesSubtitle => 'Gioca a puzzle dalle tue aperture preferite, o scegli un tema.';
 
   @override
-  String get mobilePuzzlesTab => 'Tattiche';
+  String get mobilePuzzlesTab => 'Puzzle';
 
   @override
   String get mobileRecentSearches => 'Ricerche recenti';
@@ -135,7 +135,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Obiettivo pezzo trascinato';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circolare';
+  String get mobileSettingsDraggedTargetCircle => 'Cerchio';
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Quadrato';
@@ -147,7 +147,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Modalità immersiva';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alle schermate delle partite e dei puzzle.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pezzi catturati';
@@ -165,7 +165,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageHideBoard => 'Nascondi scacchiera';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Mostra la scacchiera';
+  String get mobileSettingsPickAnImageShowBoard => 'Mostra scacchiera';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Scorri per visualizzare altri sfondi';
@@ -177,10 +177,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocca due caselle';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Disegno della forma';
+  String get mobileSettingsShapeDrawing => 'Disegna la mossa';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Disegna le forme usando due dita: mantenere un dito su un quadrato vuoto e trascinare un altro dito per disegnare una forma.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Disegna le mosse usando due dita: mantenere un dito su un quadrato vuoto e trascinare un altro dito per disegnare una forma.';
 
   @override
   String get mobileSettingsShowBorder => 'Mostra bordo';
@@ -204,13 +204,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSharePositionAsFEN => 'Condividi posizione come FEN';
 
   @override
-  String get mobileSharePuzzle => 'Condividi questa tattica';
+  String get mobileSharePuzzle => 'Condividi questo puzzle';
 
   @override
   String get mobileShowComments => 'Mostra commenti';
 
   @override
-  String get mobileShowResult => 'Mostra il risultato';
+  String get mobileShowResult => 'Mostra risultato';
 
   @override
   String get mobileShowVariations => 'Mostra varianti';
@@ -219,7 +219,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Si è verificato un errore.';
 
   @override
-  String get mobileSystemColors => 'Tema app';
+  String get mobileSystemColors => 'Colori di sistema';
 
   @override
   String get mobileTheme => 'Tema';
@@ -2116,7 +2116,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get waitingForOpponent => 'In attesa dell\'avversario';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Oppure fai scansionare questo codice QR al tuo avversario';
+  String get orLetYourOpponentScanQrCode => 'O fai scansionare questo codice QR al tuo avversario';
 
   @override
   String get waiting => 'In attesa';
@@ -2169,7 +2169,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createAGame => 'Crea una partita';
 
   @override
-  String get createTheGame => 'Inizia una partita';
+  String get createTheGame => 'Inizia la partita';
 
   @override
   String get whiteIsVictorious => 'Vince il Bianco';
@@ -2306,7 +2306,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteFromHere => 'Elimina da qui';
 
   @override
-  String get collapseVariations => 'Riduci varianti';
+  String get collapseVariations => 'Comprimi varianti';
 
   @override
   String get expandVariations => 'Espandi varianti';

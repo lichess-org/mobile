@@ -2073,13 +2073,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get gameMode => 'Chế độ chơi';
 
   @override
-  String get createLobbyGame => 'Tạo ván đấu sảnh';
+  String get createLobbyGame => 'Tạo sảnh ván đấu';
 
   @override
   String get youPlayAs => 'Bạn cầm quân';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Để mời ai đó chơi, hãy gửi URL này';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Để mời ai đó chơi, hãy gửi đường dẫn này';
 
   @override
   String get gameOver => 'Ván cờ kết thúc';
@@ -2105,22 +2105,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get level => 'Cấp độ';
 
   @override
-  String get strength => 'Sức mạnh';
+  String get strength => 'Độ mạnh';
 
   @override
   String get toggleTheChat => 'Bật/Tắt trò chuyện';
 
   @override
-  String get chat => 'Trò chuyện';
+  String get chat => 'Tán gẫu';
 
   @override
-  String get resign => 'Chịu thua';
+  String get resign => 'Đầu hàng';
 
   @override
   String get checkmate => 'Chiếu hết';
 
   @override
-  String get stalemate => 'Hết nước đi';
+  String get stalemate => 'Hết nước đi hợp lệ';
 
   @override
   String get white => 'Quân Trắng';
@@ -2135,7 +2135,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get asBlack => 'khi chơi quân đen';
 
   @override
-  String get randomColor => 'Màu quân ngẫu nhiên';
+  String get randomColor => 'Chọn màu quân ngẫu nhiên';
 
   @override
   String get createAGame => 'Tạo một ván cờ';
@@ -2251,7 +2251,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get calculatingMoves => 'Đang tính nước đi...';
 
   @override
-  String get engineFailed => 'Lỗi khi đang tải động cơ';
+  String get engineFailed => 'Lỗi khi đang tải máy cờ vua';
 
   @override
   String get cloudAnalysis => 'Phân tích đám mây';
@@ -2323,7 +2323,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get drawn => 'Hòa cờ';
 
   @override
-  String get unknown => 'Không chắc';
+  String get unknown => 'Không biết';
 
   @override
   String get database => 'Cơ sở dữ liệu';

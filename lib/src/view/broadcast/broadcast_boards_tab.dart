@@ -145,6 +145,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         ? widget.games
         : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
     final showSearchBar = widget.games != null && widget.games!.length > 6;
+    final mediaQueryPadding = MediaQuery.paddingOf(context);
 
     return CustomScrollView(
       slivers: [
@@ -173,8 +174,11 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
           ),
         SliverPadding(
           padding: Styles.bodyPadding.add(
-            // top media query padding is already included in the SliverSafeArea above
-            EdgeInsetsGeometry.only(bottom: MediaQuery.paddingOf(context).bottom),
+            EdgeInsetsGeometry.only(
+              // top media query padding is already included in the SliverSafeArea above
+              top: showSearchBar ? 0.0 : mediaQueryPadding.top,
+              bottom: mediaQueryPadding.bottom,
+            ),
           ),
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate((context, index) {

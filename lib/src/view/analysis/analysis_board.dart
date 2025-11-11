@@ -147,8 +147,7 @@ abstract class AnalysisBoardState<
           : null,
       shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
       annotations: sanMove != null && annotation != null
-          ? (sanMove.san == 'O-O' || sanMove.san == 'O-O-O') &&
-                    altCastles.containsKey(sanMove.move.uci)
+          ? sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
                 ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                 : IMap({sanMove.move.to: annotation})
           : null,

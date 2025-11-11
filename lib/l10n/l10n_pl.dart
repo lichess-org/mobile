@@ -2282,7 +2282,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get forceDraw => 'Ogłoś remis';
 
   @override
-  String get talkInChat => 'Zachowuj się miło na czacie!';
+  String get talkInChat => 'Bądź miły na czacie!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Pierwsza osoba, która przejdzie pod ten adres, dołączy do twojej partii.';
@@ -5768,7 +5768,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopiuj PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Skopiuj PGN';
 
   @override
   String get studyDownloadGame => 'Pobierz partię';

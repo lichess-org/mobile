@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
@@ -701,6 +703,85 @@ void main() {
     expect(captured.length, 1);
     expect(captured[0].solved.length, 0);
   });
+
+  testWidgets(
+    'Regression test for false positive alternative castling notation (#2345)',
+    variant: kPlatformVariant,
+    (tester) async {
+      final buggyPuzzle = Puzzle(
+        puzzle: PuzzleData(
+          id: const PuzzleId('G9zOq'),
+          initialPly: 91,
+          plays: 2380,
+          rating: 1387,
+          solution: IList(const [
+            // There was a bug where e8a8 would be interpreted as alternative castling notation and thus normalized to e8c8,
+            // fooling the logic into thinking it was the correct move.
+            'e8c8', 'b6c7', 'c8c7', 'c6c7', 'b1b2',
+          ]),
+          themes: ISet(const ['advantage', 'long', 'middlegame']),
+        ),
+        game: const PuzzleGame(
+          rated: true,
+          id: GameId('5gVQo79W'),
+          perf: Perf.rapid,
+          pgn:
+              'e4 c6 Nf3 d5 e5 Bg4 Be2 Nd7 d4 e6 Nc3 c5 b3 cxd4 Nxd4 Bxe2 Qxe2 Bb4 Bb2 Qc7 Nb5 Qc6 Nd6+ Bxd6 exd6 Qxd6 O-O-O Ngf6 g4 O-O-O Nb5 Qb6 Bd4 Qa5 Nxa7+ Kb8 a4 Ne4 Qe3 f6 f3 Nec5 g5 Qxa7 gxf6 gxf6 b4 b6 bxc5 bxc5 Ba1 Rhe8 Kd2 Qxa4 Rb1+ Kc7 Bb2 Qa5+ c3 Rb8 f4 Qa2 Kc2 Qa4+ Kd2 Qa2 Kc2 c4 Qc1 Qb3+ Kd2 Nc5 Ke2 Qb6 Ba3 Nb3 Qc2 Ra8 Qxh7+ Kc6 Bb2 Ra2 Qg6 Rd8 Qxf6 Rd6 Qf7 Nc5 Qe8+ Nd7 Kf3 Rxb2',
+          black: PuzzleGamePlayer(side: Side.black, name: 'Kostas123451'),
+          white: PuzzleGamePlayer(side: Side.white, name: 'ash44'),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: buggyPuzzle.puzzle.id,
+        ),
+        overrides: [
+          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        ],
+      );
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id),
+      ).thenAnswer((_) async => buggyPuzzle);
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => batch);
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+
+      // await for first move to be played
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      expect(find.byKey(const Key('b2-blackrook')), findsOneWidget);
+
+      await playMove(tester, 'e8', 'a8', orientation: Side.white);
+
+      expect(find.text("That's not the move!"), findsOneWidget);
+
+      // wait for move cancel and animation
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+    },
+  );
 }
 
 const batchOf1 = '''

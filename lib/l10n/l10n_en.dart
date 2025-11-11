@@ -73,7 +73,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -2374,7 +2374,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move';
+  String get dtzWithRounding => 'DTZ50\'\' with rounding, based on number of half-moves until next capture, pawn move, or checkmate';
 
   @override
   String get noGameFound => 'No game found';
@@ -6326,7 +6326,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -7490,7 +7490,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesShowFlairs => 'Show player flairs';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'This hides all ratings on Lichess to help you focus on the chess. Rated games still impact your rating; this only effects what you get to see.';
+  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Show board resize handle';

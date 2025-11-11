@@ -205,6 +205,28 @@ class NotificationService {
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
     switch (parsedMessage) {
+      case final ChallengeCreateFcmMessage challengeCreateMessage:
+        final notification = ChallengeCreatedNotification.fromFcmMessage(challengeCreateMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final ChallengeAcceptFcmMessage challengeAcceptMessage:
+        final notification = ChallengeAcceptedNotification.fromFcmMessage(challengeAcceptMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       case final CorresGameUpdateFcmMessage corresMessage:
         final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
         _responseStreamController.add((
@@ -272,6 +294,17 @@ class NotificationService {
       case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
         if (fromBackground == false && notification != null) {
           await show(NewMessageNotification(userId, notification.title!, notification.body!));
+        }
+
+      case ChallengeCreateFcmMessage():
+        // nothing to do here in foreground as it should be handled by the socket
+        break;
+
+      case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
+        if (fromBackground == false && notification != null) {
+          await show(
+            ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
         }
 
       case UnhandledFcmMessage(data: final data):
