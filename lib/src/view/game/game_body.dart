@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -334,8 +333,7 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
-      if (state.requireValue.game.status != GameStatus.created &&
-          state.requireValue.game.status != GameStatus.started) {
+      if (!state.requireValue.game.playable) {
         WakelockPlus.disable();
       }
       if (prev?.valueOrNull?.isZenModeActive == true &&
