@@ -93,6 +93,7 @@ dev_dependencies:
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
   stream_channel: ^2.1.2
+  wakelock_plus_platform_interface: ^1.3.0
 
 dependency_overrides:
   flutter_secure_storage_linux:

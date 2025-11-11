@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -35,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
 
@@ -332,6 +334,10 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
+      if (state.requireValue.game.status != GameStatus.created &&
+          state.requireValue.game.status != GameStatus.started) {
+        WakelockPlus.disable();
+      }
       if (prev?.valueOrNull?.isZenModeActive == true &&
           state.requireValue.isZenModeActive == false) {
         if (context.mounted) {
