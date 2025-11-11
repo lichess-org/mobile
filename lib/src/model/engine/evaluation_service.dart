@@ -230,13 +230,15 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    switch (work.evalCache) {
-      // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-      case CloudEval _:
-        return null;
-      case _:
-        break;
+    if (work.threatMode == false) {
+      switch (work.evalCache) {
+        // if the search time is greater than the current search time, don't evaluate again
+        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case CloudEval _:
+          return null;
+        case _:
+          break;
+      }
     }
 
     final evalStream = engine
