@@ -25,6 +25,7 @@ void main() {
         multiPv: 1,
         initialPosition: Chess.initial,
         steps: IList(),
+        threatMode: false,
       );
 
       final (_, eval) = await stockfishEngine.start(work).first;

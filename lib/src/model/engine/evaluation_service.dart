@@ -230,7 +230,7 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    if (work.threatMode == false) {
+    if (!work.threatMode) {
       switch (work.evalCache) {
         // if the search time is greater than the current search time, don't evaluate again
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:

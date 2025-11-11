@@ -22,7 +22,7 @@ sealed class Work with _$Work {
     required UciPath path,
     required Duration searchTime,
     required int multiPv,
-    bool? threatMode,
+    required bool threatMode,
     bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,

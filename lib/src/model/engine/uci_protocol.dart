@@ -129,7 +129,7 @@ class UCIProtocol {
 
       if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-      final pivot = _work!.threatMode == true ? Side.black : Side.white;
+      final pivot = _work!.threatMode ? Side.black : Side.white;
       final ev = _work!.position.turn == pivot ? povEv : -povEv;
 
       // For now, ignore most upperbound/lowerbound messages.
@@ -140,7 +140,7 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = LocalEval(
-          position: _work!.threatMode == true ? _work!.threatModePosition : _work!.position,
+          position: _work!.threatMode ? _work!.threatModePosition : _work!.position,
           searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,
           nodes: nodes,
@@ -148,7 +148,7 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
-          threatMode: _work!.threatMode == true,
+          threatMode: _work!.threatMode,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(
@@ -192,7 +192,7 @@ class UCIProtocol {
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 
       _sendAndLog(
-        _work!.threatMode == true
+        _work!.threatMode
             ? 'position fen ${_work!.threatModePosition.fen}'
             : [
                 'position fen',
