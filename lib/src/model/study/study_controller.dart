@@ -407,7 +407,7 @@ class StudyController extends _$StudyController
       requestEval();
     }
   }
-  
+
   void _sendMoveToSocket(NormalMove move) {
     if (state.requireValue.isWriteable == false) return;
 
