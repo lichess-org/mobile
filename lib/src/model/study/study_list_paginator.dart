@@ -38,6 +38,6 @@ class StudyListPaginator extends _$StudyListPaginator {
     final repo = ref.read(studyRepositoryProvider);
     return search == null
         ? repo.getStudies(category: category, order: order, page: nextPage)
-        : repo.searchStudies(query: search!, page: nextPage);
+        : repo.searchStudies(query: search!, order: order, page: nextPage);
   }
 }
