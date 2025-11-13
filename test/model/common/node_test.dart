@@ -170,6 +170,7 @@ void main() {
         pvs: IList([
           PvData(moves: IList(const ['e2e4'])),
         ]),
+        threatMode: false,
       );
 
       final newNode = root.updateAt(nodePath, (node) {
@@ -194,6 +195,7 @@ void main() {
         pvs: IList([
           PvData(moves: IList(const ['e2e4'])),
         ]),
+        threatMode: false,
       );
 
       root.updateAll((node) {
@@ -438,6 +440,7 @@ void main() {
           millis: 1230900,
           searchTime: const Duration(milliseconds: 1230900),
           cp: 23,
+          threatMode: false,
         );
         root.mainline.last.eval = localEval;
 

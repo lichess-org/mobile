@@ -399,6 +399,15 @@ class StudyController extends _$StudyController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+      requestEval();
+    }
+  }
+
   void _sendMoveToSocket(NormalMove move) {
     if (state.requireValue.isWriteable == false) return;
 
@@ -494,6 +503,7 @@ class StudyController extends _$StudyController
     }
 
     if (pathChange) {
+      this.state = AsyncData(this.state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
   }
@@ -550,6 +560,8 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
+
+    @Default(false) bool engineInThreatMode,
   }) = _StudyState;
 
   /// Whether the current user is the owner of the study.

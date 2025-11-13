@@ -22,7 +22,7 @@ sealed class Work with _$Work {
     required UciPath path,
     required Duration searchTime,
     required int multiPv,
-    bool? threatMode,
+    required bool threatMode,
     bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,
@@ -30,8 +30,14 @@ sealed class Work with _$Work {
 
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The work ply.
-  int get ply => steps.lastOrNull?.position.ply ?? initialPosition.ply;
+  Position get threatModePosition {
+    // TODO maybe add a playNullMove() to dartchess' Position class instead?
+    return position.copyWith(
+      turn: position.turn.opposite,
+      halfmoves: position.halfmoves + 1,
+      fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
+    );
+  }
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;

@@ -564,13 +564,25 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
     final session = ref.read(authSessionProvider);
     final mySide = session != null
         ? analysisState.archivedGame?.playerSideOf(session.user.id)
         : null;
+
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        if (analysisState.isEngineAvailable(evalPrefs))
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              analysisState.engineInThreatMode
+                  ? 'Stop showing threat' // TODO l10n
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () =>
+                ref.read(analysisControllerProvider(options).notifier).toggleEngineThreatMode(),
+          ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
