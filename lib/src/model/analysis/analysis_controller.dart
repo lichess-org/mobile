@@ -663,6 +663,15 @@ class AnalysisController extends _$AnalysisController
     }
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+      requestEval();
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -744,7 +753,10 @@ class AnalysisController extends _$AnalysisController
       );
     }
 
-    if (pathChange) requestEval();
+    if (pathChange) {
+      state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
+      requestEval();
+    }
   }
 
   Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
@@ -897,6 +909,8 @@ sealed class AnalysisState
     ///
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
+
+    @Default(false) bool engineInThreatMode,
   }) = _AnalysisState;
 
   @override
