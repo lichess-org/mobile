@@ -99,7 +99,7 @@ abstract class AnalysisBoardState<
       // Same colors as in the Web UI with a slightly different opacity
       // The best move has a different color than the other moves
       bestMoveColor: const Color(0x66003088),
-      otherMovesColor: const Color(0x664A4A4A),
+      nextBestMovesColor: const Color(0x664A4A4A),
     );
 
     if (localEval?.threatMode == true) {
@@ -108,7 +108,7 @@ abstract class AnalysisBoardState<
         currentPosition.turn.opposite,
         pieceAssets,
         bestMoveColor: LichessColors.red.withValues(alpha: 0.6),
-        otherMovesColor: LichessColors.red.withValues(alpha: 0.4),
+        nextBestMovesColor: LichessColors.red.withValues(alpha: 0.4),
       );
       return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first}.toISet();
     }

@@ -30,8 +30,8 @@ sealed class Work with _$Work {
 
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
+  /// The (fake) position to use in threat mode searches.
   Position get threatModePosition {
-    // TODO maybe add a playNullMove() to dartchess' Position class instead?
     return position.copyWith(
       turn: position.turn.opposite,
       halfmoves: position.halfmoves + 1,

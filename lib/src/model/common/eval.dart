@@ -275,8 +275,12 @@ ISet<Shape> computeBestMoveShapes(
   IList<MoveWithWinningChances> moves,
   Side sideToMove,
   PieceAssets pieceAssets, {
+
+  /// Color for the best move arrow (index 0)
   required Color bestMoveColor,
-  required Color otherMovesColor,
+
+  /// Color for the next best moves arrows (when Stockfish MultiPv > 1)
+  required Color nextBestMovesColor,
 }) {
   // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
   // (assume moves are ordered by their winning chances, so index==0 is the best move)
@@ -304,7 +308,7 @@ ISet<Shape> computeBestMoveShapes(
           final move = m.move;
           // Same colors as in the Web UI with a slightly different opacity
           // The best move has a different color than the other moves
-          final color = (i == 0) ? bestMoveColor : otherMovesColor;
+          final color = (i == 0) ? bestMoveColor : nextBestMovesColor;
 
           return moveShapes(
             move: move,
