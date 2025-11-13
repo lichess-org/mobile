@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -70,12 +69,69 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
+  AppLifecycleListener? _appLifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cancel pending seek or challenges when app goes to background to prevent games being created
+    // while the user is away from the app.
+    _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeekOrChallenge);
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _cancelSeekOrChallenge() async {
+    if (!mounted) return;
+    final loader = ref.read(gameScreenLoaderProvider(widget.source));
+    // Only cancel if we are still seeking or waiting for challenge to be accepted
+    if (loader is! AsyncLoading<GameScreenState>) {
+      return;
+    }
+    switch (widget.source) {
+      case LobbySource():
+        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
+        await ref.read(createGameServiceProvider).cancelSeek();
+      case UserChallengeSource():
+        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
+        await ref.read(createGameServiceProvider).cancelChallenge();
+      case ExistingGameSource():
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
+      case AsyncData(value: SeekCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: const SocketPingRatingIcon(),
+            title: switch (widget.source) {
+              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              _ => const SizedBox.shrink(),
+            },
+          ),
+          body: const LoadGameError('The game search was cancelled.', showBackButton: true),
+        );
+      case AsyncData(value: ChallengeCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: const SocketPingRatingIcon(),
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: const LoadGameError('The challenge was cancelled.', showBackButton: true),
+        );
       case AsyncData(
         value: ChallengeDeclinedState(
           response: ChallengeResponseDeclined(:final challenge, :final declineReason),
@@ -208,27 +264,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               _ => const SizedBox.shrink(),
             },
           ),
-          body: PopScope(
-            canPop: false,
-            child: FocusDetector(
-              onFocusLost: () {
-                if (!mounted) return;
-                // Cancel the seek or challenge if the user leaves the screen while waiting, otherwise the game will be created but the user won't see it.
-                switch (widget.source) {
-                  case LobbySource():
-                    ref.read(createGameServiceProvider).cancelSeek();
-                    Navigator.of(context).pop();
-                  case UserChallengeSource():
-                    ref.read(createGameServiceProvider).cancelChallenge();
-                    Navigator.of(context).pop();
-                  case ExistingGameSource():
-                    break;
-                }
-              },
-              onFocusGained: () => {},
-              child: WakelockWidget(child: loadingBoard),
-            ),
-          ),
+          body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
         );
     }
   }
