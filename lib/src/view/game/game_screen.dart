@@ -94,11 +94,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
     switch (widget.source) {
       case LobbySource():
-        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
-        await ref.read(createGameServiceProvider).cancelSeek();
+        await ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
       case UserChallengeSource():
-        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
-        await ref.read(createGameServiceProvider).cancelChallenge();
+        await ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
       case ExistingGameSource():
         break;
     }
@@ -113,24 +111,24 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const BackButton(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
               _ => const SizedBox.shrink(),
             },
           ),
-          body: const LoadGameError('The game search was cancelled.', showBackButton: true),
+          body: const LoadGameError('The game search was cancelled.', showBottomBar: false),
         );
       case AsyncData(value: ChallengeCancelledState()):
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const BackButton(),
             title: _ChallengeGameTitle(
               challenge: (widget.source as UserChallengeSource).challengeRequest,
             ),
           ),
-          body: const LoadGameError('The challenge was cancelled.', showBackButton: true),
+          body: const LoadGameError('The challenge was cancelled.', showBottomBar: false),
         );
       case AsyncData(
         value: ChallengeDeclinedState(

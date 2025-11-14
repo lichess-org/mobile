@@ -287,10 +287,10 @@ class LoadingPlayerWidget extends StatelessWidget {
 }
 
 class LoadGameError extends StatelessWidget {
-  const LoadGameError(this.errorMessage, {this.showBackButton = false});
+  const LoadGameError(this.errorMessage, {this.showBottomBar = true});
 
   final String errorMessage;
-  final bool showBackButton;
+  final bool showBottomBar;
 
   @override
   Widget build(BuildContext context) {
@@ -310,12 +310,13 @@ class LoadGameError extends StatelessWidget {
         ),
         BottomBar(
           children: [
-            BottomBarButton(
-              onTap: () => Navigator.of(context).pop(),
-              label: showBackButton ? 'Back' : context.l10n.cancel,
-              icon: CupertinoIcons.xmark,
-              showLabel: true,
-            ),
+            if (showBottomBar)
+              BottomBarButton(
+                onTap: () => Navigator.of(context).pop(),
+                label: context.l10n.cancel,
+                icon: CupertinoIcons.xmark,
+                showLabel: true,
+              ),
           ],
         ),
       ],
