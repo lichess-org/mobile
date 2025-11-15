@@ -4,14 +4,14 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class UserListTile extends StatelessWidget {
   const UserListTile._(
     this.username,
     this.title,
     this.isOnline,
-    this.isPatron,
+    this.patronColor,
     this.flair,
     this.onTap,
     this.userPerfs,
@@ -22,7 +22,7 @@ class UserListTile extends StatelessWidget {
       user.username,
       user.title,
       isOnline,
-      user.isPatron,
+      user.patronColor,
       user.flair,
       onTap,
       user.perfs,
@@ -34,7 +34,7 @@ class UserListTile extends StatelessWidget {
       user.name,
       user.title,
       user.isOnline,
-      user.isPatron,
+      user.patronColor,
       user.flair,
       onTap,
       null,
@@ -45,7 +45,7 @@ class UserListTile extends StatelessWidget {
   final String username;
   final String? flair;
   final bool? isOnline;
-  final bool? isPatron;
+  final int? patronColor;
   final VoidCallback? onTap;
 
   final IMap<Perf, UserPerf>? userPerfs;
@@ -61,7 +61,7 @@ class UserListTile extends StatelessWidget {
           name: username,
           title: title,
           flair: flair,
-          isPatron: isPatron,
+          patronColor: patronColor,
           isOnline: isOnline,
         ),
       ),

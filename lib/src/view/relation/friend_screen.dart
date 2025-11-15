@@ -12,13 +12,13 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
@@ -149,13 +149,14 @@ class _OnlineFriendListTile extends ConsumerWidget {
               icon: const Icon(Icons.live_tv),
             )
           : null,
-      onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
+      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user)),
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
         builder: (context) => UserContextMenu(userId: user.id),
       ),
     );
@@ -233,8 +234,7 @@ class _Following extends ConsumerWidget {
                         backgroundColor: context.lichessColors.error,
                         foregroundColor: Colors.white,
                         icon: Icons.person_remove,
-                        // TODO translate
-                        label: 'Unfollow',
+                        label: context.l10n.unfollow,
                       ),
                     ],
                   ),
@@ -242,7 +242,9 @@ class _Following extends ConsumerWidget {
                     user,
                     _isOnline(user, value.$2),
                     onTap: () => {
-                      Navigator.of(context).push(UserScreen.buildRoute(context, user.lightUser)),
+                      Navigator.of(
+                        context,
+                      ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
                     },
                   ),
                 );

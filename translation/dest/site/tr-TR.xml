@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Bir arkadaşınla oyna</string>
-  <string name="playWithTheMachine">Bilgisayara karşı oyna</string>
+  <string name="gameSetup">Oyun ayarları</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Bir arkadaşınız oynayın</string>
+  <string name="playAgainstComputer">Bilgisayara karsı oyna</string>
+  <string name="gameMode">Oyun modü</string>
+  <string name="createLobbyGame">Oyun lobisi oluştur</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Oyuna davet etmek için, bu linki gönderin</string>
   <string name="gameOver">Oyun bitti</string>
   <string name="waitingForOpponent">Rakip bekleniyor</string>
@@ -280,7 +283,6 @@
   <string name="blackTimeOut">Siyahın zamanı tükendi</string>
   <string name="drawOfferSent">Beraberlik teklifi gönderildi</string>
   <string name="drawOfferAccepted">Beraberlik teklifi kabul edildi</string>
-  <string name="drawOfferCanceled">Beraberlik teklifi iptal edildi</string>
   <string name="whiteOffersDraw">Beyaz beraberlik teklif ediyor</string>
   <string name="blackOffersDraw">Siyah beraberlik teklif ediyor</string>
   <string name="whiteDeclinesDraw">Beyaz beraberlik teklifini geri çevirdi</string>
@@ -342,7 +344,6 @@
     <item quantity="other">%s oynuyor</item>
   </plurals>
   <string name="exportGames">Oyunları indir</string>
-  <string name="ratingRange">Puan aralığı</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">%s saniye ver</item>
     <item quantity="other">%s saniye ver</item>
@@ -428,7 +429,6 @@
   <string name="toStudy">Çalışma oluştur</string>
   <string name="importGame">Oyun yükle</string>
   <string name="importGameExplanation">Göz atılabilir bir oyun tekrarı, bilgisayar analizi, oyun sohbeti ve paylaşılabilir bir URL edinmek için bir oyun PGN\'si yapıştırın.</string>
-  <string name="importGameCaveat">Varyasyonlar silinecek. Varyasyonları saklamak için bir çalışma aracılığıyla PGN\'yi içe aktarın.</string>
   <string name="importGameDataPrivacyWarning">Bu PGN herkes tarafından erişilebilir. Bir oyunu özel olarak yüklemek istiyorsanız bir çalışma kullanın.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s yüklenen oyun</item>
@@ -968,7 +968,6 @@ Başlangıç pozisyonundan oynamak için boş bırakınız.</string>
   <string name="simulFeaturedHelp">Eş zamanlı gösteriyi %s adresinden herkese görünür kılar. Özel gösteriler için devre dışı bırakın.</string>
   <string name="simulDescription">Eş zamanlı gösterinin açıklaması</string>
   <string name="simulDescriptionHelp">Katılımcılara söylemek istediğiniz bir şey var mı?</string>
-  <string name="markdownAvailable">%s kullanarak metni daha ayrıntılı bir şekilde biçimlendirebilirsiniz.</string>
   <string name="embedsAvailable">Bir maç veya çalışma bölümü eklemek için bağlantıyı buraya yapıştırın.</string>
   <string name="inYourLocalTimezone">Yerel zaman diliminizde</string>
   <string name="tournChat">Turnuva sohbeti</string>
@@ -1008,4 +1007,8 @@ Başlangıç pozisyonundan oynamak için boş bırakınız.</string>
   <string name="enableBlindMode">Kör modunu aktifleştir</string>
   <string name="disableBlindMode">Kör modunu devre dışı bırak</string>
   <string name="copyToClipboard">Panoya kopyala</string>
+  <string name="online" comment="status of a user">çevrımıcı</string>
+  <string name="offline" comment="status of a user">çevrimdışı</string>
+  <string name="search">Ara</string>
+  <string name="clearSearch">Aramayı temizle</string>
 </resources>

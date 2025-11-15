@@ -5,7 +5,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -79,10 +78,7 @@ class PuzzleRepository {
 
   Future<void> postStreakRun(int run) async {
     final uri = Uri(path: '/api/streak/$run');
-    final response = await client.post(uri);
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to post streak run: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri);
   }
 
   Future<PuzzleStormResponse> storm() {

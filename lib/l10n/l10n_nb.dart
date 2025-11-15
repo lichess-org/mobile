@@ -12,7 +12,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileAccountPreferences => 'Kontoinnstillinger';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Disse innstillingene gjelder for din Lichess-konto og vil bli brukt på alle enhetene dine.';
 
   @override
   String get mobileAllGames => 'Alle partier';
@@ -70,7 +70,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileNoSearchResults => 'Ingen treff';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ikke alle funksjoner fra den gamle appen eller fra nettstedet er tilgjengelige for øyeblikket, men vi legger til funksjoner hele tiden.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Du følger ingen brukere.';
@@ -129,10 +129,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Klokkeposisjon';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Forhåndsinnstillinger';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Feltmarkering';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Sirkel';
@@ -141,7 +141,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Kvadrat';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Hjem-widgeter';
 
   @override
   String get mobileSettingsImmersiveMode => 'Fordypelsesmodus';
@@ -150,16 +150,16 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Skjul systemgrensesnittet mens du spiller. Bruk dette hvis du blir forstyrret av systemets navigasjonsgester på skjermkanten. Gjelder for partier og nøtter.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Slåtte brikker';
 
   @override
   String get mobileSettingsPickAnImage => 'Velg et bilde';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Egendefinert bakgrunn fungerer bare i mørk modus. Et mørkt bilde anbefales.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Gjør bildet uskarpt';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Skjul brettet';
@@ -168,28 +168,28 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Vis brettet';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Sveip for å vise andre bakgrunner';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Trykk eller dra';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Trykk på to felt';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Formtegning';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Tegn med to fingre: hold én finger på et tomt felt og dra en annen finger for å tegne en form.';
 
   @override
   String get mobileSettingsShowBorder => 'Vis kantlinje';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Vibrasjon ved trekk';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Enheten vibrerer kort når du flytter en brikke.';
 
   @override
   String get mobileSettingsTab => 'Valg';
@@ -705,9 +705,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Rundenavn';
-
-  @override
-  String get broadcastRoundNumber => 'Rundenummer';
 
   @override
   String get broadcastTournamentName => 'Turneringsnavn';
@@ -2092,10 +2089,22 @@ class AppLocalizationsNb extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Denne kontoen er avsluttet.';
 
   @override
-  String get playWithAFriend => 'Spill mot en venn';
+  String get gameSetup => 'Partioppsett';
 
   @override
-  String get playWithTheMachine => 'Spill mot maskinen';
+  String get challengeAFriend => 'Utfordre en venn';
+
+  @override
+  String get playAgainstComputer => 'Spill mot maskinen';
+
+  @override
+  String get gameMode => 'Modus';
+
+  @override
+  String get createLobbyGame => 'Opprett lobbyparti';
+
+  @override
+  String get youPlayAs => 'Dine brikker';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'For å invitere noen til å spille, gi dem denne lenken';
@@ -2748,9 +2757,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get drawOfferAccepted => 'Remistilbud godtatt';
 
   @override
-  String get drawOfferCanceled => 'Remistilbud trukket tilbake';
-
-  @override
   String get whiteOffersDraw => 'Hvit tilbyr remis';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get exportGames => 'Eksporter partier';
 
   @override
-  String get ratingRange => 'Ratingspenn';
+  String get ratingFilter => 'Ratingfilter';
 
   @override
   String get thisAccountViolatedTos => 'Denne kontoen brøt vilkårene for å bruke Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '$param-ratingen din er provisorisk';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Ratingfiltrene er låst fordi ratingen din er ustabil. Stabiliteten øker når du spiller ratede partier.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Lim inn PGN for gjennomblaing, maskinanalyse, partisamtale og delbar URL.';
-
-  @override
-  String get importGameCaveat => 'Varianter importeres ikke. Bruk en studie for å importere PGN med varianter.';
 
   @override
   String get importGameDataPrivacyWarning => 'Denne PGN-en er offentlig tilgjengelig. Bruk en studie for å importere et parti privat.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get analysisShapesHowTo => 'Trykk shift+klikk eller høyreklikk for å tegne sirkler og piler på brettet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = rød, Shift = gul, Command eller Alt = blå.';
+
+  @override
   String get letOtherPlayersMessageYou => 'La andre spillere kontakte deg.';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Ratingen din er $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Øv med maskinen';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsNb extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Spill $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Utfordre $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsNb extends AppLocalizations {
   String get simulDescriptionHelp => 'Er det noe du vil si til deltakerne?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param er tilgjengelig for utforming.';
+  String markdownIsAvailable(String param) {
+    return '$param er tilgjengelig for formatering.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopier til utklippstavlen';
+
+  @override
+  String get online => 'pålogget';
+
+  @override
+  String get offline => 'frakoblet';
+
+  @override
+  String get search => 'Søk';
+
+  @override
+  String get clearSearch => 'Tøm søk';
+
+  @override
+  String get tags => 'Merkelapper';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetisk';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Legg til kapittel';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopier PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Kopier rå PGN';
 
   @override
   String get studyDownloadGame => 'Last ned partiet';
@@ -5704,11 +5744,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL for partiene, én pr. linje';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Last inn partier fra $param1 eller $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Opprett kapittel';

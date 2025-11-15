@@ -12,7 +12,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileAccountPreferences => 'Kontoeinstellungen';
 
   @override
-  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess-Konto angewendet und werden auf allen Geräten verwendet.';
+  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess - Konto angewendet und werden auf allen Geräten verwendet.';
 
   @override
   String get mobileAllGames => 'Alle Partien';
@@ -502,7 +502,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get arenaHowDoesItEnd => 'Wann endet das Turnier?';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'Während des Turniers wird die Zeit heruntergezählt. Wenn sie null erreicht, wird die Rangliste eingefroren und der Gewinner bekanntgegeben. Laufende Partien müssen beendet werden, zählen aber nicht mehr für das Turnier.';
+  String get arenaHowDoesItEndAnswer => 'Während des Turniers wird die Zeit heruntergezählt. Wenn sie null erreicht, wird die Rangliste eingefroren und der Gewinner bekannt gegeben. Laufende Partien müssen beendet werden, zählen aber nicht mehr für das Turnier.';
 
   @override
   String get arenaOtherRules => 'Andere wichtige Regeln';
@@ -524,13 +524,13 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants => 'Die minimale Partielänge, um für remisierte Partien Punkte zu erhalten, unterscheidet sich je nach gespielter Variante. Die Tabelle unten listet die Grenzen für jede Variante auf.';
+  String get arenaDrawStreakVariants => 'Die minimale Partie-Länge, um für remisierte Partien Punkte zu erhalten, unterscheidet sich je nach gespielter Variante. Die Tabelle unten listet die Grenzen für jede Variante auf.';
 
   @override
   String get arenaVariant => 'Variante';
 
   @override
-  String get arenaMinimumGameLength => 'Minimale Partielänge';
+  String get arenaMinimumGameLength => 'Minimale Partie-Länge';
 
   @override
   String get arenaHistory => 'Arena-Historie';
@@ -689,7 +689,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastAboutBroadcasts => 'Über Übertragungen';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'Wie man Lichess-Übertragungen benutzt.';
+  String get broadcastHowToUseLichessBroadcasts => 'Wie man Lichess -Übertragungen benutzt.';
 
   @override
   String get broadcastTheNewRoundHelp => 'Die nächste Runde wird die gleichen Mitspieler und Mitwirkende haben wie die vorhergehende.';
@@ -705,9 +705,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Rundenname';
-
-  @override
-  String get broadcastRoundNumber => 'Rundennummer';
 
   @override
   String get broadcastTournamentName => 'Turniername';
@@ -734,7 +731,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Startdatum in der Zeitzone des Tunierstandortes: $param';
+    return 'Startdatum in der Zeitzone des Turnierstandortes: $param';
   }
 
   @override
@@ -1613,7 +1610,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleImprovementAreasDescription => 'Übe das, um deinen Fortschritt zu optimieren!';
 
   @override
-  String get puzzleStrengthDescription => 'Bei diesen Themen schneiden Sie am besten ab';
+  String get puzzleStrengthDescription => 'Bei diesen Themen schneidest du am besten ab';
 
   @override
   String puzzlePlayedXTimes(int count) {
@@ -2092,10 +2089,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Dieses Benutzerkonto ist geschlossen.';
 
   @override
-  String get playWithAFriend => 'Spiele mit einem Freund';
+  String get gameSetup => 'Spieleinstellungen';
 
   @override
-  String get playWithTheMachine => 'Spiele mit dem Computer';
+  String get challengeAFriend => 'Einen Freund herausfordern';
+
+  @override
+  String get playAgainstComputer => 'Gegen den Computer spielen';
+
+  @override
+  String get gameMode => 'Spielmodus';
+
+  @override
+  String get createLobbyGame => 'Neue Partie erstellen';
+
+  @override
+  String get youPlayAs => 'Du spielst als';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Versende diese URL, um jemanden zum Spiel einzuladen';
@@ -2748,9 +2757,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get drawOfferAccepted => 'Remisangebot angenommen';
 
   @override
-  String get drawOfferCanceled => 'Remisangebot zurückgezogen';
-
-  @override
   String get whiteOffersDraw => 'Weiß bietet Remis';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportGames => 'Partien exportieren';
 
   @override
-  String get ratingRange => 'Wertungsbereich';
+  String get ratingFilter => 'Bewertungsfilter';
 
   @override
   String get thisAccountViolatedTos => 'Dieses Konto hat gegen die Lichess-Nutzungsbedingungen verstoßen';
@@ -2946,6 +2952,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Deine $param Wertung ist provisorisch';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Die Filter nach Wertungszahl sind gesperrt, da deine Wertungszahl nicht stabil ist. Gewertete Partien zu spielen erhöht die Stabilität deiner Wertung.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Wenn du ein PGN einfügst, hast du Zugriff auf eine Spielwiederholung, eine Computeranalyse, einen Spielchat und eine teilbare URL.';
-
-  @override
-  String get importGameCaveat => 'Varianten werden gelöscht. Importiere die PGN mittels einer Studie, um sie zu behalten.';
 
   @override
   String get importGameDataPrivacyWarning => 'Diese PGN ist öffentlich zugänglich. Nutze eine Studie, um eine Partie nur für dich zu importieren.';
@@ -3879,7 +3885,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get keyNextBranch => 'Nächste Verzweigung';
 
   @override
-  String get toggleVariationArrows => 'Variantenpfeile ein-/auschalten';
+  String get toggleVariationArrows => 'Varianten-Pfeile ein-/auschalten';
 
   @override
   String get cyclePreviousOrNextVariation => 'Durch vorherige/nächste Variante schalten';
@@ -3891,7 +3897,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get togglePositionAnnotations => 'Positionsanmerkungen umschalten';
 
   @override
-  String get variationArrowsInfo => 'Mit Variantenpfeilen navigierst du durch die Zugliste.';
+  String get variationArrowsInfo => 'Mit Varianten-Pfeilen navigierst du durch die Zugliste.';
 
   @override
   String get playSelectedMove => 'den ausgewählten Zug ausführen';
@@ -4020,6 +4026,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get analysisShapesHowTo => 'Drücke Shift+Mausklick oder Rechtsklick, um Kreise und Pfeile auf dem Brett zu zeichnen.';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
   String get letOtherPlayersMessageYou => 'Erlaube anderen Spielern dich zu kontaktieren';
@@ -4207,6 +4216,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Deine Wertungszahl beträgt $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Übe mit dem Computer';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Spiele $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Fordere $param heraus';
   }
 
   @override
@@ -4480,7 +4499,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get theForumEtiquette => 'die Forumsetikette';
+  String get theForumEtiquette => 'Die Forums-Etikette';
 
   @override
   String get thisTopicIsArchived => 'Dieses Thema wurde archiviert und kann nicht mehr beantwortet werden.';
@@ -4549,7 +4568,7 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator => 'Du hast Elo an jemanden verloren, der gegen die Lichess-AGB verstoßen hat';
+  String get lostAgainstTOSViolator => 'Du hast Elo an jemanden verloren, der gegen die Lichess -AGB verstoßen hat';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -4629,8 +4648,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get simulDescriptionHelp => 'Möchtest du den Teilnehmern etwas mitteilen?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param ist für erweiterte Formatierung verfügbar.';
+  String markdownIsAvailable(String param) {
+    return '$param ist zur Formatierung verfügbar.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'In die Zwischenablage kopieren';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Suchen';
+
+  @override
+  String get clearSearch => 'Neue Suche';
+
+  @override
+  String get tags => 'Schlagwörter';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studyAlphabetical => 'Alphabetisch';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Neues Kapitel hinzufügen';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'PGN kopieren';
+
+  @override
+  String get studyCopyRawChapterPgn => 'PGN -Rohdaten kopieren';
 
   @override
   String get studyDownloadGame => 'Lade die Partie herunter';
@@ -5704,11 +5744,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL der Partie';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Partie von $param1 oder $param2 laden';
-  }
 
   @override
   String get studyCreateChapter => 'Kapitel erstellen';
@@ -5898,7 +5933,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studyGetTheTour => 'Brauchst du Hilfe? Hol dir die Tour!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Willkommen bei den Lichess-Studien!';
+  String get studyWelcomeToLichessStudyTitle => 'Willkommen bei den Lichess -Studien!';
 
   @override
   String get studyWelcomeToLichessStudyText => 'Dies ist ein geteiltes Analysebrett.<br><br>Verwende es, um Spiele zu analysieren und zu kommentieren,<br>diskutiere Stellungen mit Freunden,<br>und verwende es natürlich für den Schachunterricht!<br><br>Es ist ein mächtiges Werkzeug, nehmen wir uns etwas Zeit, um zu sehen, wie es funktioniert.';
@@ -5907,7 +5942,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studySharedAndSaveTitle => 'Geteilt und gespeichert';
 
   @override
-  String get studySharedAndSavedText => 'Andere Mitglieder können deine Züge in Echtzeit sehen!<br>Zusätzlich wird alles für immer gespeichert.';
+  String get studySharedAndSavedText => 'Andere Mitglieder können deine Züge in Echtzeit sehen!<br> Zusätzlich wird alles für immer gespeichert.';
 
   @override
   String get studyStudyMembersTitle => 'Studienmitglieder';
@@ -5919,28 +5954,28 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Klicke auf den $param Knopf.<br>Entscheide dann, wer oder wer nicht beitragen darf.';
+    return 'Klicke auf den $param Knopf.<br> Entscheide dann, wer oder wer nicht beitragen darf.';
   }
 
   @override
   String get studyStudyChaptersTitle => 'Studienkapitel';
 
   @override
-  String get studyStudyChaptersText => 'Eine Studie kann mehrere Kapitel beinhalten.<br>Jedes Kapitel hat eine vordefinierte Ausgangsstellung und Zugbaum.';
+  String get studyStudyChaptersText => 'Eine Studie kann mehrere Kapitel beinhalten.<br> Jedes Kapitel hat eine vordefinierte Ausgangsstellung und Zugbaum.';
 
   @override
   String get studyCommentPositionTitle => 'Kommentiere diese Stellung';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Klicke auf den $param Knopf oder rechtsklicke auf die Zugliste auf der rechten Seite.<br>Kommentare werden geteilt und gespeichert.';
+    return 'Klicke auf den $param Knopf oder rechts-klicke auf die Zugliste auf der rechten Seite.<br> Kommentare werden geteilt und gespeichert.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'Kommentiere die Stellung';
 
   @override
-  String get studyAnnotatePositionText => 'Klicke auf den !? Knopf oder rechtsklicke auf die Zugliste auf der rechten Seite.<br>Kommentarsymbole werden geteilt und gespeichert.';
+  String get studyAnnotatePositionText => 'Klicke auf den !? Knopf oder rechts-klicke auf die Zugliste auf der rechten Seite.<br> Kommentar-Symbole werden geteilt und gespeichert.';
 
   @override
   String get studyConclusionTitle => 'Danke für Deine Zeit';
@@ -5988,10 +6023,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studyVariantsAreSupportedTitle => 'Studien unterstützen Schachvarianten';
 
   @override
-  String get studyVariantsAreSupportedText => 'Ja, du kannst Crazyhouse<br>und alle Lichess-Varianten studieren!';
+  String get studyVariantsAreSupportedText => 'Ja, du kannst Crazyhouse<br>und alle Lichess -Varianten studieren!';
 
   @override
-  String get studyChapterConclusionText => 'Kapitel werden für immer gespeichert.<br>Viel Spaß beim Organisieren deines Schachinhalts!';
+  String get studyChapterConclusionText => 'Kapitel werden für immer gespeichert.<br> Viel Spaß beim Organisieren deines Schachinhalts!';
 
   @override
   String get studyDoubleDefeat => 'Doppelte Niederlage';
@@ -6047,10 +6082,10 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get timeagoJustNow => 'gerade eben';
+  String get timeagoJustNow => 'in Kürze';
 
   @override
-  String get timeagoRightNow => 'gerade jetzt';
+  String get timeagoRightNow => 'vor Kurzem';
 
   @override
   String get timeagoCompleted => 'abgeschlossen';

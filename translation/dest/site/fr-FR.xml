@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Inviter à une partie</string>
-  <string name="playWithTheMachine">Jouer contre l\'ordinateur</string>
+  <string name="gameSetup">Paramètres de la partie</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Défi</string>
+  <string name="playAgainstComputer">Jouer contre l\'ordinateur</string>
+  <string name="gameMode">Mode de jeu</string>
+  <string name="createLobbyGame">Créer une partie dans le salon</string>
+  <string name="youPlayAs">Couleur</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Pour inviter quelqu\'un à jouer, donnez-lui ce lien</string>
   <string name="gameOver">Partie terminée</string>
   <string name="waitingForOpponent">En attente de votre adversaire</string>
@@ -75,7 +79,7 @@
   <string name="expandVariations">Afficher les variantes</string>
   <string name="forceVariation">Forcer la variante</string>
   <string name="copyVariationPgn">Copier le PGN de la variante</string>
-  <string name="copyMainLinePgn">Copier la ligne principale (PGN)</string>
+  <string name="copyMainLinePgn">Copier la ligne principale en tant que PGN</string>
   <string name="move">Coup</string>
   <string name="variantLoss">Perte (variante)</string>
   <string name="variantWin">Gain (variante)</string>
@@ -280,7 +284,6 @@
   <string name="blackTimeOut">Temps noir écoulé</string>
   <string name="drawOfferSent">Proposition de nulle envoyée</string>
   <string name="drawOfferAccepted">Proposition de nulle acceptée</string>
-  <string name="drawOfferCanceled">Proposition de nulle annulée</string>
   <string name="whiteOffersDraw">Les Blancs proposent la nulle</string>
   <string name="blackOffersDraw">Les Noirs proposent la nulle</string>
   <string name="whiteDeclinesDraw">Les Blancs refusent la nulle</string>
@@ -342,7 +345,7 @@
     <item quantity="other">%s en cours</item>
   </plurals>
   <string name="exportGames">Exporter les parties</string>
-  <string name="ratingRange">Classement de vos adversaires</string>
+  <string name="ratingFilter">Filtre de classement</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Rajouter %s seconde</item>
     <item quantity="other">Rajouter %s secondes</item>
@@ -398,6 +401,7 @@
     <item quantity="other">Vous devez encore jouer %s parties classées</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Votre classement %s est provisoire</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Les filtres de classement sont verrouillés parce que votre classement (votre cote) n\'est pas stable. Jouer davantage de parties classées contribuera à stabiliser votre classement.</string>
   <string name="yourPerfRatingIsTooHigh">Votre cote %1$s (%2$s) est trop élevée</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Votre meilleure cote hebdomadaire de %1$s (%2$s) est trop élevée</string>
   <string name="yourPerfRatingIsTooLow">Votre cote de %1$s (%2$s) est trop faible</string>
@@ -428,7 +432,6 @@
   <string name="toStudy">Étude</string>
   <string name="importGame">Importer une partie</string>
   <string name="importGameExplanation">Quand vous collez une partie en PGN vous pouvez la rejouer, consulter l\'analyse de l\'ordinateur, utiliser le tchat et partager le lien.</string>
-  <string name="importGameCaveat">Les variantes seront effacées. Pour les conserver, importez le PGN dans une étude.</string>
   <string name="importGameDataPrivacyWarning">Cette partie en format PGN n\'est pas privée. Pour importer une partie en privé, utilisez une étude.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s partie importée</item>
@@ -594,8 +597,8 @@
   <string name="newPasswordAgain">Nouveau mot de passe (encore)</string>
   <string name="newPasswordsDontMatch">Les nouveaux mots de passe ne correspondent pas</string>
   <string name="newPasswordStrength">Robustesse du mot de passe</string>
-  <string name="clockInitialTime">Temps initial à la pendule</string>
-  <string name="clockIncrement">Incrément de la pendule</string>
+  <string name="clockInitialTime">Temps initial</string>
+  <string name="clockIncrement">Incrément</string>
   <string name="privacy">Confidentialité</string>
   <string name="privacyPolicy">Politique de confidentialité</string>
   <string name="letOtherPlayersFollowYou">Autoriser les autres joueurs à vous suivre</string>
@@ -766,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Vous pouvez aussi utiliser la molette sur l\'échiquier pour faire défiler la partie.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Survolez les variantes du moteur d\'analyse avec la souris pour les visualiser.</string>
   <string name="analysisShapesHowTo">Utilisez maj+clic ou clic-droit pour dessiner des cercles et des flèches sur l\'échiquier.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl ou Maj = rouge ; Commande, Alt, ou Windows = bleu ; Les deux touches en même temps = jaune.</string>
   <string name="letOtherPlayersMessageYou">Permettre à d\'autres joueurs de vous envoyer des messages</string>
   <string name="receiveForumNotifications">Recevoir une notification lorsque votre nom est mentionné dans le forum</string>
   <string name="shareYourInsightsData">Partager les statistiques de vos parties générées par lichess</string>
@@ -827,6 +831,7 @@
   <string name="notifications">Notifications</string>
   <string name="notificationsX">Notifications : %1$s</string>
   <string name="perfRatingX">Classement : %s</string>
+  <string name="yourRatingIsX">Votre classement : %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s seconde pour jouer le premier coup</item>
     <item quantity="other">%s secondes pour jouer le premier coup</item>
@@ -878,6 +883,7 @@
   <string name="playVariationToCreateConditionalPremoves">Jouer une variante pour créer des précoups conditionnels</string>
   <string name="noConditionalPremoves">Pas de précoups conditionnels</string>
   <string name="playX">Jouer %s</string>
+  <string name="challengeX">Défier %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">et enregistrer %s variante de précoups</item>
     <item quantity="other">et enregistrer %s variantes de précoups</item>
@@ -969,7 +975,7 @@ Laissez vide pour commencer les parties à partir de la position initiale normal
   <string name="simulFeaturedHelp">Montrez votre simultanée à tout le monde sur %s. Désactivez cette option pour les simultanées privées.</string>
   <string name="simulDescription">Description de la simultanée</string>
   <string name="simulDescriptionHelp">Voulez-vous dire quelque chose aux participants ?</string>
-  <string name="markdownAvailable">%s offre des options de formatage supplémentaires.</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s est disponible pour aider au formatage.</string>
   <string name="embedsAvailable">Collez l\'URL d\'une partie ou d\'un chapitre d\'étude pour l\'intégrer.</string>
   <string name="inYourLocalTimezone">Dans votre fuseau horaire</string>
   <string name="tournChat">Salon de discussion du tournoi</string>
@@ -1010,4 +1016,9 @@ Tous les coûts d\'exploitation, le développement et le contenu sont financés 
   <string name="enableBlindMode">Activer le mode pour non-voyant</string>
   <string name="disableBlindMode">Désactiver le mode pour non-voyant</string>
   <string name="copyToClipboard">Copier dans le presse-papier</string>
+  <string name="online" comment="status of a user">en ligne</string>
+  <string name="offline" comment="status of a user">hors ligne</string>
+  <string name="search">Rechercher</string>
+  <string name="clearSearch">Réinitialiser la recherche</string>
+  <string name="tags">Étiquettes</string>
 </resources>

@@ -29,7 +29,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 

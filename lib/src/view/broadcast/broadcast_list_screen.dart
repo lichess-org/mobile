@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 
@@ -103,7 +104,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
 
-    return RefreshIndicator.adaptive(
+    return HapticRefreshIndicator(
       onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
       child: broadcastList.when(
         data: (value) {

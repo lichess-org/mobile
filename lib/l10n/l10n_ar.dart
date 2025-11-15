@@ -70,7 +70,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNoSearchResults => 'لا توجد نتائج';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما';
 
   @override
   String get mobileNotFollowingAnyUser => 'أنت لا تتابع أي مستخدم.';
@@ -123,7 +123,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRemoveBookmark => 'إزالة الإشارة المرجعية';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'تحليل الخادم';
 
   @override
   String get mobileSettingsClockPosition => 'موضع الساعة';
@@ -785,9 +785,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'اسم الجولة';
-
-  @override
-  String get broadcastRoundNumber => 'الشوط';
 
   @override
   String get broadcastTournamentName => 'اسم البطولة';
@@ -2204,10 +2201,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
 
   @override
-  String get playWithAFriend => 'اللعب مع صديق';
+  String get gameSetup => 'ترتيب اللعبة';
 
   @override
-  String get playWithTheMachine => 'اللعب مع الحاسوب';
+  String get challengeAFriend => 'تحدي صديق';
+
+  @override
+  String get playAgainstComputer => 'لعب ضد الحاسوب';
+
+  @override
+  String get gameMode => 'نمط اللعب';
+
+  @override
+  String get createLobbyGame => 'إنشاء ساحة لعب';
+
+  @override
+  String get youPlayAs => 'لعب ك';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'لدعوة شخص ما للعب، أرسل له هذا الرابط';
@@ -2216,7 +2225,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gameOver => 'انتهت المباراة';
 
   @override
-  String get waitingForOpponent => 'في إنتظار الخصم';
+  String get waitingForOpponent => 'في انتظار المنافس';
 
   @override
   String get orLetYourOpponentScanQrCode => 'أو أجعل خصمك يمسح رمز QR هذا';
@@ -2860,9 +2869,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get drawOfferAccepted => 'تم قبول عرض التعادل';
 
   @override
-  String get drawOfferCanceled => 'أُلغي عرض التعادل';
-
-  @override
   String get whiteOffersDraw => 'الأبيض يعرض التعادل';
 
   @override
@@ -2986,7 +2992,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportGames => 'تصدير المباريات';
 
   @override
-  String get ratingRange => 'نطاق التقييم';
+  String get ratingFilter => 'تصفية التصنيف ';
 
   @override
   String get thisAccountViolatedTos => 'هذا الحساب انتهك شروط خدمة lichess';
@@ -3058,6 +3064,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'تقييمك في $param مؤقت';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'تصفية اللعب مغلق حاليا لأن تصنيفك غير مستقر، لعب مباريات مصنفة سوف يزيد من ثبات تصنيفك';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3168,9 +3177,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'عند لصق مباراة PGN تحصل على إمكانية كرار استعراضها وتحليل حاسوبي ودردشة للمباراة ورابط قابل للمشاركة.';
-
-  @override
-  String get importGameCaveat => 'سيتم محو التغييرات. للحفاظ عليها، يرجى استيراد PGN (تنسيق لعبة الشطرنج المحمول) عبر تبويب دراسة.';
 
   @override
   String get importGameDataPrivacyWarning => 'يمكن لأي أحد الوصول إلى PGN، إذا أردت إنشاء تحليل خاص، استخدم قسم دراسة.';
@@ -4134,6 +4140,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get analysisShapesHowTo => 'استخدم ز الفأرة الأيمن لرسم دوائر وأسهم على الرقعة';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'السماح للاعبين بمراسلتك';
 
   @override
@@ -4319,6 +4328,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'الممارسة مع الكمبيوتر';
 
   @override
@@ -4453,6 +4467,11 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String playX(String param) {
     return 'إلعب $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4741,8 +4760,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get simulDescriptionHelp => 'أي شيء تريد أن تخبره للمشاركين؟';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param متاح لتركيبات الأكثر تطوراً.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4862,7 +4881,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get disableBlindMode => 'تعطيل الوضع الأعمى';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'نسخ للحافظة';
+
+  @override
+  String get online => 'متصل';
+
+  @override
+  String get offline => 'غير متصل ';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get clearSearch => 'مسح البحث';
+
+  @override
+  String get tags => 'تصنيفات';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5782,6 +5816,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyAlphabetical => 'أبجدي';
 
   @override
+  String get studyRelevant => 'ذات صلة';
+
+  @override
   String get studyAddNewChapter => 'أضف فصلاً جديدا';
 
   @override
@@ -5879,6 +5916,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'نسخ PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'حمل لعبة';
@@ -6004,11 +6044,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'رابط اللعبة';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'استيراد لعبة من $param1 او $param2';
-  }
 
   @override
   String get studyCreateChapter => 'أنشئ الفصل';

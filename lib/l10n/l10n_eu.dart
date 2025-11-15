@@ -707,9 +707,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastRoundName => 'Txandaren izena';
 
   @override
-  String get broadcastRoundNumber => 'Txanda zenbaki';
-
-  @override
   String get broadcastTournamentName => 'Txapelketaren izena';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Kontu hau itxita dago.';
 
   @override
-  String get playWithAFriend => 'Lagun baten aurka jokatu';
+  String get gameSetup => 'Partidaren konfigurazioa';
 
   @override
-  String get playWithTheMachine => 'Ordenagailuaren aurka jokatu';
+  String get challengeAFriend => 'Erronka jo lagun bati';
+
+  @override
+  String get playAgainstComputer => 'Jokatu ordenagailuaren aurka';
+
+  @override
+  String get gameMode => 'Jokuaren modua';
+
+  @override
+  String get createLobbyGame => 'Sortu egongelako partida';
+
+  @override
+  String get youPlayAs => 'Kolore hau izango duzu';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norbait jokatzera gonbidatzeko, URL hau bidali iezaiozu';
@@ -2748,9 +2757,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get drawOfferAccepted => 'Berdintzeko eskaintza onartu da';
 
   @override
-  String get drawOfferCanceled => 'Berdintzeko eskaintza ezeztatu da';
-
-  @override
   String get whiteOffersDraw => 'Zuriak berdinketa eskaintzen du';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get exportGames => 'Partidak esportatu';
 
   @override
-  String get ratingRange => 'Aurkariaren puntuazio-tartea';
+  String get ratingFilter => 'Puntuazioaren filtroa';
 
   @override
   String get thisAccountViolatedTos => 'Kontu honek Lichessen Erabilera Baldintzak urratu egin ditu';
@@ -2946,6 +2952,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Zure $param sailkapena behin-behinekoa';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Zure puntuazioa egonkorra ez denez, filtroak blokeatuta daude. Jokatu puntuaziorako balio duten partidak egonkortasuna handitzeko.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'PGN partida bat itsastean ikusi daitekeen partida bat lortuko duzu, partidare eta analisiarekin, txatarekin eta elkarbanatu dezakezun helbide batekin.';
-
-  @override
-  String get importGameCaveat => 'Aldaerak ezabatu egingo dira. Mantendu nahi badituzu inportatu PGNa azterlan gisa.';
 
   @override
   String get importGameDataPrivacyWarning => 'PGN hau edonork deskargatu dezake. Partida bat era pribatuan inportatzeko azterlan bat erabili behar duzu.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get analysisShapesHowTo => 'Zirkuluak eta geziak marrazteko, egizu shift+klik edo eskuin-klik.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl edo Maius = gorria; komando, alt edo meta = urdina; bietako bana = horia.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Utzi beste jokalariei zuri mezuak bidaltzen';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Zure puntuazioa $param da';
+  }
+
+  @override
   String get practiceWithComputer => 'Ordenagailuarekin praktikatu';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsEu extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param jokatu';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Jo erronda $param erabiltzaileari';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsEu extends AppLocalizations {
   String get simulDescriptionHelp => 'Parte-hartzaileei zerbait esan nahi diezu?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param erabili dezakezu.';
+  String markdownIsAvailable(String param) {
+    return '$param erabili dezakezu formatua emateko.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopiatu arbelera';
+
+  @override
+  String get online => 'konektatuta';
+
+  @override
+  String get offline => 'deskonektatuta';
+
+  @override
+  String get search => 'Bilatu';
+
+  @override
+  String get clearSearch => 'Garbitu bilaketa';
+
+  @override
+  String get tags => 'Etiketak';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetikoa';
 
   @override
+  String get studyRelevant => 'Garrantzitsua';
+
+  @override
   String get studyAddNewChapter => 'Kapitulu berria gehitu';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopiatu PGNa';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Kopiatu jatorrizko PGNa';
 
   @override
   String get studyDownloadGame => 'Partida deskargatu';
@@ -5704,11 +5744,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Partidaren URLa';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Hemendik kargatu partida bat: $param1 edo $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Kapitulua sortu';
@@ -5967,7 +6002,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyCustomPositionText => 'Konfiguratu taula zuk nahi duzun moduan.<br>Adibidez finalak aztertzeko.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Igo Lichess-en dagoen joko bat';
+  String get studyLoadExistingLichessGameTitle => 'Kargatu Lichess-en dagoen partida bat';
 
   @override
   String get studyLoadExistingLichessGameText => 'Itsatsi lichesseko partida batn URLa<br>(adibidez lichess.org/7fHIU0XI)<br>partidaren jokaldiak kapituluan kargatzeko.';
@@ -5997,10 +6032,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyDoubleDefeat => 'Porrot bikoitza';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Beltzen porrota, baina Txuriek irabazi ezin';
+  String get studyBlackDefeatWhiteCanNotWin => 'Beltzaren porrota, baina Zuriak ezin du irabazi';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'Txurien porrota, baina Beltzek irabazi ezin';
+  String get studyWhiteDefeatBlackCanNotWin => 'Zuriaren porrota, baina Beltzak ezin du irabazi';
 
   @override
   String studyNbChapters(int count) {

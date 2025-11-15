@@ -61,42 +61,35 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(clockToolControllerProvider);
-
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return (orientation == Orientation.portrait ? Column.new : Row.new)(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ClockTile(
-                orientation: orientation,
-                playerType: ClockSide.top,
-                clockState: state,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: ClockTile(
+            orientation: Orientation.portrait,
+            playerType: ClockSide.top,
+            clockState: state,
+          ),
+        ),
+        const Opacity(
+          opacity: 0.8,
+          child: SizedBox(
+            width: double.infinity,
+            height: 88,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: ClockSettings(orientation: Orientation.portrait),
             ),
-            Opacity(
-              opacity: 0.8,
-              child: SizedBox(
-                width: orientation == Orientation.portrait ? double.infinity : 88,
-                height: orientation == Orientation.portrait ? 88 : double.infinity,
-                child: Padding(
-                  padding: orientation == Orientation.portrait
-                      ? const EdgeInsets.symmetric(vertical: 8.0)
-                      : const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ClockSettings(orientation: orientation),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ClockTile(
-                orientation: orientation,
-                playerType: ClockSide.bottom,
-                clockState: state,
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ),
+        Expanded(
+          child: ClockTile(
+            orientation: Orientation.portrait,
+            playerType: ClockSide.bottom,
+            clockState: state,
+          ),
+        ),
+      ],
     );
   }
 }

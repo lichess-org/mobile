@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="challengesX">Uitdagingen: %1$s</string>
-  <string name="challengeToPlay">Uitdagen voor een partij</string>
+  <string name="challengeToPlay" comment="Appears as a button on profiles and on a challenge modal; lets you challenge that player to a game.&#10;&quot;Challenge&quot; is used as a verb.&#10;&#10;This text used to state &quot;Challenge to a game&quot;. Please shorten to just &quot;Challenge&quot; if you see a translation of the old version of the string.">Uitdagen voor een partij</string>
   <string name="challengeDeclined">Uitdaging geweigerd</string>
   <string name="challengeAccepted">Uitdaging aangenomen!</string>
   <string name="challengeCanceled">Uitdaging geannuleerd.</string>
-  <string name="registerToSendChallenges" comment="This used to say &quot;Please register to send challenges.&quot;&#10;We have since added &quot;[...] to this user.&quot; to the end of the string for absolute clarity, given the context this appears in. Please update translations as needed.">Gelieve te registreren om uitdagingen te versturen.</string>
+  <string name="registerToSendChallenges">Gelieve te registreren om uitdagingen te versturen.</string>
   <string name="youCannotChallengeX">Je kunt %s niet uitdagen.</string>
   <string name="xDoesNotAcceptChallenges">%s neemt geen uitdagingen aan.</string>
   <string name="yourXRatingIsTooFarFromY">Je rating van %1$s wijkt te veel af van %2$s.</string>

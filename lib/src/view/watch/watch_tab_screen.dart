@@ -23,10 +23,11 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 const kThumbnailImageSize = 40.0;
 
@@ -94,7 +95,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
-                  return RefreshIndicator.adaptive(
+                  return HapticRefreshIndicator(
                     edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                         ? MediaQuery.paddingOf(context).top + kToolbarHeight
                         : 0.0,
@@ -141,18 +142,18 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
       });
+      ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+        if (current.hasValue && !_imageAreCached) {
+          _imageAreCached = true;
+          await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
+        }
+      });
     }
-    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
-      if (current.hasValue && !_imageAreCached) {
-        _imageAreCached = true;
-        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
-      }
-    });
   }
 
   @override

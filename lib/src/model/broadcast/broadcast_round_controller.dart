@@ -74,8 +74,12 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
-
-    return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
+    return BroadcastRoundState(
+      round: round.round,
+      games: round.games,
+      observedGames: ISet(),
+      isTeamTournament: round.tournament.teamTable == true,
+    );
   }
 
   Future<void> _syncRound() async {
@@ -85,14 +89,19 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
     // check provider is still mounted
     if (key == _key) {
+      final isTeamTournament = round.tournament.teamTable == true;
       state = AsyncData(
         BroadcastRoundState(
           round: round.round,
           games: round.games,
           observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
+          isTeamTournament: isTeamTournament,
         ),
       );
       _sendEvalMultiGet();
+      if (isTeamTournament) {
+        ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId));
+      }
     }
   }
 
@@ -174,12 +183,13 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     _sendEvalMultiGet();
-
-    // Add delay before invalidating team matches to allow server to update scores
-    Future.delayed(
-      const Duration(seconds: 5),
-      () => ref.refresh(broadcastTeamMatchesProvider(broadcastRoundId)),
-    );
+    if (state.requireValue.isTeamTournament) {
+      // Add delay before invalidating team matches to allow server to update scores
+      Future.delayed(
+        const Duration(seconds: 5),
+        () => ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId)),
+      );
+    }
   }
 
   void _handleClockEvent(SocketEvent event) {
@@ -287,5 +297,8 @@ sealed class BroadcastRoundState with _$BroadcastRoundState {
     ///
     /// The controller has the responsibility to maintain [observedGames] as a subset of [games].
     required ISet<BroadcastGameId> observedGames,
+
+    /// Whether the tournament is a team event
+    required bool isTeamTournament,
   }) = _BroadcastRoundState;
 }

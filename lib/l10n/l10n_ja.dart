@@ -9,10 +9,10 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'アカウント設定';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'これらの設定は、あなたの Lichess アカウントを使用しているすべての端末で有効になります。';
 
   @override
   String get mobileAllGames => 'すべて';
@@ -21,7 +21,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => '盤面の設定';
 
   @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
@@ -40,19 +40,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'こんばんは、$param さん';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'こんばんは';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'こんにちは、$param さん';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'こんにちは';
 
   @override
   String get mobileHideVariation => '変化手順を隠す';
@@ -120,7 +120,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRecentSearches => '最近の検索';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'ブックマークから削除';
 
   @override
   String get mobileServerAnalysis => 'サーバ解析';
@@ -129,19 +129,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsClockPosition => '時計の位置';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'プリセット';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => '丸';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => '四角';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'ホーム画面のウィジェット';
 
   @override
   String get mobileSettingsImmersiveMode => '没入モード';
@@ -150,46 +150,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => '捕獲された駒';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => '画像を選択';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => '選んだ背景はダークモードでのみ有効になります。暗い画像を選ぶことをおすすめします。';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => '画像をぼかす';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => '盤面を隠す';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => '盤面を表示する';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'スワイプして他の背景を表示';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'タップとドラッグの両方';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => '2つのマスをタップ';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => '図形の描画';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => '2本の指を使って図形を描くことができます。まず、片方の指で何も無いマスに触れ続けます。その状態で、もう一方の指で盤面をドラッグすると図形を描けます。';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => '盤面のフチの表示';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => '触覚フィードバック';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => '有効にすると、着手・捕獲したときに端末が少し震えます。';
 
   @override
   String get mobileSettingsTab => '設定';
@@ -239,7 +239,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileWatchTab => '見る';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Lichess アプリにようこそ！';
 
   @override
   String get activityActivity => '活動';
@@ -685,9 +685,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'ラウンド名';
-
-  @override
-  String get broadcastRoundNumber => 'ラウンド';
 
   @override
   String get broadcastTournamentName => '大会名';
@@ -1230,7 +1227,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInGameOnly => '対局中のみ';
 
   @override
-  String get preferencesExceptInGame => 'チェスゲームリクエストアクセプトする';
+  String get preferencesExceptInGame => 'ゲーム中のみ非表示';
 
   @override
   String get preferencesChessClock => '時間表示';
@@ -1320,7 +1317,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInputMovesWithVoice => '手を声で入力';
 
   @override
-  String get preferencesSnapArrowsToValidMoves => '可能な手を矢印で表示';
+  String get preferencesSnapArrowsToValidMoves => '有効な動きに矢印をスナップ';
 
   @override
   String get preferencesSayGgWpAfterLosingOrDrawing => '負けかドローの際に「Good game, well played」と言う';
@@ -2064,10 +2061,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
 
   @override
-  String get playWithAFriend => '友達と対局する';
+  String get gameSetup => 'ゲームの設定';
 
   @override
-  String get playWithTheMachine => 'コンピュータと対戦';
+  String get challengeAFriend => '友達に挑戦';
+
+  @override
+  String get playAgainstComputer => 'コンピュータと対戦';
+
+  @override
+  String get gameMode => '対局モード';
+
+  @override
+  String get createLobbyGame => 'ロビー対局を作成';
+
+  @override
+  String get youPlayAs => '色（白/黒）';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
@@ -2720,9 +2729,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get drawOfferAccepted => 'ドロー提案が承諾されました';
 
   @override
-  String get drawOfferCanceled => 'ドローの提案をキャンセルしました';
-
-  @override
   String get whiteOffersDraw => '白が引き分けを提案しました';
 
   @override
@@ -2846,7 +2852,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get exportGames => '対局をエクスポートする';
 
   @override
-  String get ratingRange => 'レーティングの範囲';
+  String get ratingFilter => 'レーティング指定';
 
   @override
   String get thisAccountViolatedTos => 'このアカウントは Lichess の利用規約に違反しました';
@@ -2918,6 +2924,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'あなたの $param レーティングは仮レートです';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'あなたのレーティングが不安定なため、レーティングフィルタは使用できません。レート戦をプレイすると安定度が上がります。';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3028,9 +3037,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'ゲームの PGN を貼りつけると、ブラウザ上でのリプレイ、\nコンピュータ解析、ゲームチャット、共有可能 URL が得られます。';
-
-  @override
-  String get importGameCaveat => '変化手順は消えます。残したい場合は研究を経由して PGN をインポートしてください。';
 
   @override
   String get importGameDataPrivacyWarning => 'この PGN はすべての人に公開されます。非公開の状態で棋譜をインポートするには「研究」機能でどうぞ。';
@@ -3994,6 +4000,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift + クリックや右クリックで盤上に丸や矢印が描けます。';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => '他のプレイヤーからのメッセージを受け付ける';
 
   @override
@@ -4179,6 +4188,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'あなたのレーティングは $param';
+  }
+
+  @override
   String get practiceWithComputer => 'コンピューターと練習する';
 
   @override
@@ -4313,6 +4327,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String playX(String param) {
     return '指し手は $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return '$param に挑戦';
   }
 
   @override
@@ -4601,8 +4620,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get simulDescriptionHelp => '参加者に伝えたいことがあればどうぞ';
 
   @override
-  String markdownAvailable(String param) {
-    return '高度な修飾方法として $param も使えます。';
+  String markdownIsAvailable(String param) {
+    return 'フォーマット方法として $param が使えます。';
   }
 
   @override
@@ -4723,6 +4742,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'クリップボードにコピー';
+
+  @override
+  String get online => 'オンライン';
+
+  @override
+  String get offline => 'オフライン';
+
+  @override
+  String get search => '検索';
+
+  @override
+  String get clearSearch => '検索をクリア';
+
+  @override
+  String get tags => 'タグ';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5407,6 +5441,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyAlphabetical => 'アルファベット順';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => '新たな章を追加';
 
   @override
@@ -5504,6 +5541,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'PGN をコピー';
+
+  @override
+  String get studyCopyRawChapterPgn => 'コメント抜きの PGN をコピー';
 
   @override
   String get studyDownloadGame => '1 局をダウンロード';
@@ -5629,11 +5669,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => '棋譜の URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 か $param2 から棋譜を読み込み';
-  }
 
   @override
   String get studyCreateChapter => '章を作成';

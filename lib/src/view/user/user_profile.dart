@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -19,7 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
 class UserProfileWidget extends ConsumerWidget {
-  const UserProfileWidget({required this.user, this.bioMaxLines = 10});
+  const UserProfileWidget({required this.user, this.bioMaxLines = 15});
 
   final User user;
 
@@ -28,6 +29,7 @@ class UserProfileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authSession = ref.watch(authSessionProvider);
     final userFullName = user.profile?.realName != null
         ? Text(user.profile!.realName!, style: _userNameStyle)
         : null;
@@ -39,7 +41,7 @@ class UserProfileWidget extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user.tosViolation == true)
+            if (user.tosViolation == true && authSession?.user.id != user.id)
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
@@ -64,7 +66,7 @@ class UserProfileWidget extends ConsumerWidget {
               Linkify(
                 onOpen: (link) => onLinkifyOpen(context, link),
                 linkifiers: kLichessLinkifiers,
-                text: user.profile!.bio!.replaceAll('\n', ' '),
+                text: user.profile!.bio!,
                 maxLines: bioMaxLines,
                 style: bioStyle,
                 overflow: TextOverflow.ellipsis,

@@ -25,7 +25,7 @@ sealed class Study with _$Study {
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
-    required IList<StudyMember> members,
+    required IMap<UserId, StudyMember> members,
     ChatData? chat,
 
     /// Hints to display in "gamebook"/"interactive" mode
@@ -37,6 +37,9 @@ sealed class Study with _$Study {
     /// Index corresponds to the current ply.
     required IList<String?> deviationComments,
   }) = _Study;
+
+  /// The owner of the study.
+  StudyMember? get owner => ownerId != null ? members[ownerId!]! : null;
 
   /// Returns the index of the chapter with the given [chapterId].
   ///
@@ -89,9 +92,8 @@ Study _studyFromPick(RequiredPick pick) {
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
     members: study('members')
         .asMapOrThrow<String, Map<String, Object?>>()
-        .values
-        .map((p) => StudyMember.fromJson(p))
-        .toIList(),
+        .map((key, value) => MapEntry(UserId(key), StudyMember.fromJson(value)))
+        .toIMap(),
     hints: hints.lock,
     deviationComments: deviationComments.lock,
   );

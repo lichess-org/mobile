@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">与好友下棋</string>
-  <string name="playWithTheMachine">与电脑下棋</string>
+  <string name="gameSetup">棋局设置</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">双人对弈</string>
+  <string name="playAgainstComputer">人机对弈</string>
+  <string name="gameMode">游戏模式</string>
+  <string name="createLobbyGame">创建对局</string>
+  <string name="youPlayAs">你执</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">分享这个网址以邀请好友下棋</string>
   <string name="gameOver">棋局结束</string>
   <string name="waitingForOpponent">正在等待对手</string>
-  <string name="orLetYourOpponentScanQrCode">也可以让对方扫描这个二维码：</string>
+  <string name="orLetYourOpponentScanQrCode">或让对方扫描这个二维码</string>
   <string name="waiting">等待中</string>
   <string name="yourTurn">你的回合</string>
   <string name="aiNameLevelAiLevel">%1$s 级别%2$s</string>
@@ -78,7 +82,7 @@
   <string name="move">着法</string>
   <string name="variantLoss">变种输棋</string>
   <string name="variantWin">变种胜利</string>
-  <string name="insufficientMaterial">棋子不足</string>
+  <string name="insufficientMaterial">子力不足</string>
   <string name="pawnMove">走兵</string>
   <string name="capture">吃子</string>
   <string name="close">关闭</string>
@@ -87,7 +91,7 @@
   <string name="drawn">和棋</string>
   <string name="unknown">未知</string>
   <string name="database">数据库</string>
-  <string name="whiteDrawBlack">白胜／和棋／黑胜</string>
+  <string name="whiteDrawBlack">白胜 / 和棋 / 黑胜</string>
   <string name="averageRatingX">平均等级分：%s</string>
   <string name="recentGames">最近棋局</string>
   <string name="topGames">名局</string>
@@ -193,7 +197,7 @@
   <string name="realTime">实时棋局</string>
   <string name="correspondence">通讯棋</string>
   <string name="daysPerTurn">每步允许天数</string>
-  <string name="oneDay">1天</string>
+  <string name="oneDay">1 天</string>
   <plurals name="nbDays">
     <item quantity="other">%s 天</item>
   </plurals>
@@ -210,7 +214,7 @@
   <string name="usernameOrEmail">用户名 或 邮箱</string>
   <string name="changeUsername">更改用户名</string>
   <string name="changeUsernameNotSame">只能更改字母大小写。例如，将“johndoe”改为“JohnDoe”。</string>
-  <string name="changeUsernameDescription">更改用户名。注意只能更改一次，之后只能更改用户名字母的大小写。</string>
+  <string name="changeUsernameDescription">更改用户名。注意只能更改一次，且只能更改用户名字母的大小写。</string>
   <string name="signupUsernameHint">请务必选择一个和谐的用户名，用户名设置后无法更改，并且不合规的用户名会导致账户被封禁！</string>
   <string name="signupEmailHint">仅用于重置密码</string>
   <string name="password">密码</string>
@@ -262,7 +266,6 @@
   <string name="blackTimeOut">黑方超时</string>
   <string name="drawOfferSent">和棋请求已发送</string>
   <string name="drawOfferAccepted">对方同意和棋</string>
-  <string name="drawOfferCanceled">和棋请求已取消</string>
   <string name="whiteOffersDraw">白方提出和棋</string>
   <string name="blackOffersDraw">黑方提出和棋</string>
   <string name="whiteDeclinesDraw">白方拒绝和棋</string>
@@ -319,7 +322,7 @@
     <item quantity="other">%s 正在进行</item>
   </plurals>
   <string name="exportGames">导出棋局</string>
-  <string name="ratingRange">对方等级分范围</string>
+  <string name="ratingFilter">等级分范围</string>
   <plurals name="giveNbSeconds">
     <item quantity="other">添加对方 %s 秒</item>
   </plurals>
@@ -367,6 +370,7 @@
     <item quantity="other">你需要再完成 %s 局排位赛</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">你的 %s 等级分是暂时的</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">你的等级分不稳定，暂时无法选择等级分范围。下排位棋局会增加稳定性。</string>
   <string name="yourPerfRatingIsTooHigh">你的 %1$s 等级分 (%2$s) 过高</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">你本周 %1$s 的最高等级分 (%2$s) 过高</string>
   <string name="yourPerfRatingIsTooLow">你的 %1$s 等级分 (%2$s) 过低</string>
@@ -397,7 +401,6 @@
   <string name="toStudy">研讨</string>
   <string name="importGame">导入棋局</string>
   <string name="importGameExplanation">粘贴 PGN 棋谱后可重放棋局、使用电脑分析、使用对局聊天室以及获得通往本局的链接。</string>
-  <string name="importGameCaveat">变着分支将被删除。若要保存这些变着，请通过研讨导入 PGN。</string>
   <string name="importGameDataPrivacyWarning">该 PGN（用以记录棋类游戏棋谱的文件格式）可被公众访问。私人导入游戏请用研究研究</string>
   <plurals name="nbImportedGames">
     <item quantity="other">%s 盘导入的棋局</item>
@@ -725,6 +728,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">你也可以用鼠标滚轮浏览棋局。</string>
   <string name="scrollOverComputerVariationsToPreviewThem">移到电脑给出的变着上进行预览</string>
   <string name="analysisShapesHowTo">按shift+左键单击或右键单击在棋盘上绘制圆圈和箭头。</string>
+  <string name="primaryColorArrowsHowTo">Ctrl = 红，Shift = 黄，Command 或 Alt = 蓝</string>
   <string name="letOtherPlayersMessageYou">允许其他人给您发私信</string>
   <string name="receiveForumNotifications">在论坛中被提及时接收通知</string>
   <string name="shareYourInsightsData">分享你的对局洞察</string>
@@ -785,6 +789,7 @@
   <string name="notifications">通知</string>
   <string name="notificationsX">通知：%1$s</string>
   <string name="perfRatingX">等级分：%s</string>
+  <string name="yourRatingIsX">你的等级分是 %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="other">还剩 %s 秒走第一步</item>
   </plurals>
@@ -827,13 +832,14 @@
     <item quantity="other">%s 秒</item>
   </plurals>
   <string name="opening">开局</string>
-  <string name="middlegame">中盘</string>
+  <string name="middlegame">中局</string>
   <string name="endgame">残局</string>
   <string name="conditionalPremoves">条件预先走棋</string>
   <string name="addCurrentVariation">添加当前变着</string>
   <string name="playVariationToCreateConditionalPremoves">走一步变着以创建条件预先走棋</string>
   <string name="noConditionalPremoves">没有条件预先走棋</string>
   <string name="playX">走 %s</string>
+  <string name="challengeX">挑战 %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="other">已保存 %s 条先前的走子</item>
   </plurals>
@@ -924,7 +930,7 @@
   <string name="simulFeaturedHelp">在 %s 上向所有人展示你主持的车轮战，对私人车轮战无效。</string>
   <string name="simulDescription">车轮战描述</string>
   <string name="simulDescriptionHelp">写下你想要告诉参与者的任何内容</string>
-  <string name="markdownAvailable">%s 可用于更高级的格式。</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s 可用于格式化。</string>
   <string name="embedsAvailable">粘贴对局 URL 或学习章节 URL 来嵌入。</string>
   <string name="inYourLocalTimezone">在你的本地时区</string>
   <string name="tournChat">比赛聊天</string>
@@ -964,4 +970,9 @@
   <string name="enableBlindMode">打开视障模式</string>
   <string name="disableBlindMode">关闭视障模式</string>
   <string name="copyToClipboard">复制到剪贴板</string>
+  <string name="online" comment="status of a user">在线</string>
+  <string name="offline" comment="status of a user">离线</string>
+  <string name="search">搜索</string>
+  <string name="clearSearch">清除搜索</string>
+  <string name="tags">标签</string>
 </resources>

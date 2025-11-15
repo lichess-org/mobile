@@ -45,7 +45,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
     final isRatingRangeAvailable = widget.perf.provisional != true;
     return isRatingRangeAvailable
         ? ListTile(
-            title: Text(context.l10n.ratingRange),
+            title: Text(context.l10n.ratingFilter),
             subtitle: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -107,7 +107,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
           )
         : ListTile(
             enabled: false,
-            title: Text(context.l10n.ratingRange),
+            title: Text(context.l10n.ratingFilter),
             subtitle: Row(
               mainAxisSize: MainAxisSize.max,
               children: [

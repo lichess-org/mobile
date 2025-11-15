@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Усе гульні</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Вы ўпэўнены?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Наладкі дошкі</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Ачысціць</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Далучыцца да гульні</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры вечар, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры вечар</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры дзень, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры дзень</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Схаваць варыянт</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Галоўная</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма вынікаў</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Добра</string>
@@ -17,6 +25,9 @@
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Налады</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Падзяліцца PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Падзяліцца спасылкай на гульню</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Паказаць каментары</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Паказаць вынік</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Паказаць варыянты</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Дошка</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варыянт %s не падтрымліваецца гэтай версіяй.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Назіраць</string>

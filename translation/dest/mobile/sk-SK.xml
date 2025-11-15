@@ -22,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Upozorňujeme, že v súčasnosti nie sú k dispozícii všetky funkcie zo starej aplikácie alebo webstránky. Funkcie však neustále pridávame.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Nesledujete žiadneho používateľa.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Hrať offline, na jednom zariadení</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Hrať offline, na jednom zariadení</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Hráči s \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vľavo</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Vpravo</string>
@@ -57,6 +57,7 @@
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Kreslenie šípok/kruhov</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Kreslenie šípok/kruhov pomocou dvoch prstov: podržte jeden prst na prázdnom štvorci a ťahaním druhého prsta nakreslite požadovaný útvar.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Zobraziť okraj</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Hmatová odozva</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavenia</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Zdieľať PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Zdieľať URL partie</string>

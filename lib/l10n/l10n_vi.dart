@@ -687,9 +687,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastRoundName => 'Tên vòng';
 
   @override
-  String get broadcastRoundNumber => 'Vòng đấu số';
-
-  @override
   String get broadcastTournamentName => 'Tên giải đấu';
 
   @override
@@ -2064,10 +2061,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';
 
   @override
-  String get playWithAFriend => 'Chơi với bạn bè';
+  String get gameSetup => 'Thiết lập ván đấu';
 
   @override
-  String get playWithTheMachine => 'Chơi với máy tính';
+  String get challengeAFriend => 'Thách đấu một người bạn';
+
+  @override
+  String get playAgainstComputer => 'Chơi với máy';
+
+  @override
+  String get gameMode => 'Chế độ chơi';
+
+  @override
+  String get createLobbyGame => 'Tạo ván đấu sảnh';
+
+  @override
+  String get youPlayAs => 'Bạn cầm quân';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Để mời ai đó chơi, hãy gửi URL này';
@@ -2720,9 +2729,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get drawOfferAccepted => 'Đề nghị hoà được chấp nhận';
 
   @override
-  String get drawOfferCanceled => 'Đã hủy bỏ đề nghị hoà';
-
-  @override
   String get whiteOffersDraw => 'Bên trắng đề nghị hòa';
 
   @override
@@ -2846,7 +2852,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get exportGames => 'Xuất các ván cờ';
 
   @override
-  String get ratingRange => 'Phạm vi hệ số';
+  String get ratingFilter => 'Bộ lọc hệ số';
 
   @override
   String get thisAccountViolatedTos => 'Tài khoản này đã vi phạm Điều khoản Dịch vụ của Lichess';
@@ -2918,6 +2924,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Hệ số $param của bạn là tạm thời';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Bộ lọc xếp hạng bị khóa vì xếp hạng của bạn không ổn định. Chơi các ván cờ có xếp hạng sẽ tăng tính ổn định.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3028,9 +3037,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Dán PGN của ván đấu để xem lại trên trình duyệt, phân tích bằng máy tính, \ntrò chuyện trong ván đấu và có một URL có thể chia sẻ công khai.';
-
-  @override
-  String get importGameCaveat => 'Các biến sẽ bị xóa. Để giữ chúng, hãy nhập PGN thông qua một nghiên cứu.';
 
   @override
   String get importGameDataPrivacyWarning => 'Ai cũng có thể truy cập PGN này. Để nhập ván cờ một cách riêng tư, hãy sử dụng nghiên cứu.';
@@ -3994,6 +4000,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get analysisShapesHowTo => 'Nhấn Shift+click hoặc nhấp chuột phải để vẽ vòng tròn và mũi tên trên bàn cờ.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl hoặc shift = đỏ; command, alt hoặc meta = xanh; mỗi phím = vàng.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Cho phép người chơi khác gửi tin nhắn cho bạn';
 
   @override
@@ -4179,6 +4188,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Hệ số của bạn là $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Luyện tập với máy tính';
 
   @override
@@ -4313,6 +4327,11 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Chơi $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Thách đấu $param';
   }
 
   @override
@@ -4601,8 +4620,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get simulDescriptionHelp => 'Bạn có muốn nói điều gì với những người tham gia không?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param khả dụng cho những cấu trúc nâng cao hơn.';
+  String markdownIsAvailable(String param) {
+    return '$param có thể dùng để định dạng.';
   }
 
   @override
@@ -4723,6 +4742,21 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Sao chép vào bảng nhớ tạm';
+
+  @override
+  String get online => 'trực tuyến';
+
+  @override
+  String get offline => 'ngoại tuyến';
+
+  @override
+  String get search => 'Tìm kiếm';
+
+  @override
+  String get clearSearch => 'Xóa nội dung tìm kiếm';
+
+  @override
+  String get tags => 'Thẻ';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5407,6 +5441,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyAlphabetical => 'Theo thứ tự chữ cái';
 
   @override
+  String get studyRelevant => 'Liên quan';
+
+  @override
   String get studyAddNewChapter => 'Thêm một chương mới';
 
   @override
@@ -5504,6 +5541,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Sao chép PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Sao chép bản PGN thô';
 
   @override
   String get studyDownloadGame => 'Tải về ván cờ';
@@ -5629,11 +5669,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL của các ván, một URL mỗi dòng';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Tải ván cờ từ $param1 hoặc $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Tạo chương';

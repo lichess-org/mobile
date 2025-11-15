@@ -10,11 +10,11 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
@@ -205,8 +205,9 @@ class _MessageBubble extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                       color: _textColor(context, brightness),
                     ),
-                    onTap: () =>
-                        Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(UserOrProfileScreen.buildRoute(context, message.user!)),
                   ),
                 Linkify(
                   onOpen: (link) => onLinkifyOpen(context, link),

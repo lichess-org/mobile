@@ -6,9 +6,11 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/edit_profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
@@ -17,10 +19,12 @@ import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -59,6 +63,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             semanticsLabel: context.l10n.editProfile,
             onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
           ),
+          account.when(
+            data: (user) => user == null
+                ? const SizedBox.shrink()
+                : SemanticIconButton(
+                    icon: const PlatformShareIcon(),
+                    semanticsLabel: 'Share profile',
+                    onPressed: () => launchShareDialog(
+                      context,
+                      ShareParams(uri: lichessUri('/@/${user.username}')),
+                    ),
+                  ),
+            loading: () => const SizedBox.shrink(),
+            error: (error, _) => const SizedBox.shrink(),
+          ),
         ],
       ),
       body: account.when(
@@ -69,7 +87,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
-          return RefreshIndicator.adaptive(
+          return HapticRefreshIndicator(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight
                 : 0.0,

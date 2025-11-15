@@ -29,14 +29,14 @@ import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -470,6 +470,7 @@ class _Body extends ConsumerWidget {
           case AnalysisTab.explorer:
             if (studyState.isOpeningExplorerAvailable && studyState.currentNode.position != null) {
               return ExplorerView(
+                pov: pov,
                 position: studyState.currentNode.position!,
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(id).notifier).onUserMove(move);
@@ -595,11 +596,11 @@ class _StudyMembersSheet extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        for (final member in state.study.members)
+        for (final member in state.study.members.values)
           ListTile(
             title: UserFullNameWidget(user: member.user),
             onTap: () {
-              Navigator.of(context).push(UserScreen.buildRoute(context, member.user));
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, member.user));
             },
           ),
       ],

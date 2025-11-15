@@ -31,7 +31,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -40,7 +40,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
 
@@ -1041,7 +1041,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                         onTap: tournamentState.valueOrNull?.isSpectator == true
                             ? () => Navigator.of(
                                 context,
-                              ).push(UserScreen.buildRoute(context, player.user))
+                              ).push(UserOrProfileScreen.buildRoute(context, player.user))
                             : null,
                       ),
                     ),

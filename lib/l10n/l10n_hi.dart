@@ -707,9 +707,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastRoundName => 'दौर का नाम';
 
   @override
-  String get broadcastRoundNumber => 'दौर संख्या';
-
-  @override
   String get broadcastTournamentName => 'प्रतियोगिता का नाम';
 
   @override
@@ -2090,10 +2087,22 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'यह ख़ाता बंद है|';
 
   @override
-  String get playWithAFriend => 'मित्र के साथ खेलें';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'कंप्यूटर के साथ खेलें';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'इस खेल में किसी को आमंत्रित करने के लिए उन्हें ये पता दें';
@@ -2746,9 +2755,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get drawOfferAccepted => 'बराबरी पे खेल समाप्त करने का प्रस्ताव स्वीकारित किया गया';
 
   @override
-  String get drawOfferCanceled => 'बराबरी पे खेल समाप्त करने का प्रस्ताव रद्द किया गया.';
-
-  @override
   String get whiteOffersDraw => 'सफ़ेद खिलाड़ी का बराबरी पे खेल समाप्त करने का प्रस्ताव';
 
   @override
@@ -2872,7 +2878,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get exportGames => 'खेल को निर्यात (एक्सपोर्ट) करें';
 
   @override
-  String get ratingRange => 'अंकों की सीमा';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'इस खाते ने सेवा की शर्तों का उल्लंघन किया';
@@ -2944,6 +2950,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'आपके $param रेटिंग अनंतिम है';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3054,9 +3063,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'जब एक खेल PGN चिपकाने आप एक ब्राउसेबल पुनरावृत्ति, एक कंप्यूटर विश्लेषण, एक खेल चैट और एक साझा यूआरएल मिलता है ।';
-
-  @override
-  String get importGameCaveat => 'विविधताएं मिट जाएंगी. उन्हें रखने के लिए, एक अध्ययन के माध्यम से PGN आयात करें।';
 
   @override
   String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
@@ -4020,6 +4026,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get analysisShapesHowTo => 'बोर्ड पर मंडलियां और तीरों को आकर्षित करने के लिए shift + click या right-click दबाएं';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'अन्य खिलाड़ियों को आपको संदेश देने दें';
 
   @override
@@ -4205,6 +4214,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'कंप्यूटर के साथ अभ्यास';
 
   @override
@@ -4339,6 +4353,11 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param खेलें';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4627,8 +4646,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get simulDescriptionHelp => 'क्या आप प्रतिभागियों को कुछ बताना चाहते हैं?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param अत्याधुनिक स्वरूपण के लिए उपलब्ध है।';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4749,6 +4768,21 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5480,6 +5514,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyAlphabetical => 'वर्णक्रमानुसार';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'एक नया अध्याय जोड़ें';
 
   @override
@@ -5577,6 +5614,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'पीजीएन की नकल लें';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'खेल नीचे लादें';
@@ -5702,11 +5742,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'खेल का URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 या $param2 से एक गेम लोड करें';
-  }
 
   @override
   String get studyCreateChapter => 'अध्याय बनाएँ';

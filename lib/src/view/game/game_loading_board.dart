@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class LobbyScreenLoadingContent extends StatefulWidget {
   const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
@@ -31,70 +31,54 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            child: GameLayout(
-              orientation: Side.white,
-              fen: kEmptyFen,
-              topTable: const SizedBox.shrink(),
-              bottomTable: const SizedBox.shrink(),
-              moves: const [],
-              boardOverlay: Card(
-                color: Theme.of(context).dialogTheme.backgroundColor,
-                elevation: 2.0,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(context.l10n.mobileWaitingForOpponentToJoin),
-                      const SizedBox(height: 26.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            widget.seek.perf.icon,
-                            color: DefaultTextStyle.of(context).style.color,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Text(
-                            widget.seek.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${widget.seek.days}',
-                            style: TextTheme.of(context).titleLarge,
-                          ),
-                        ],
-                      ),
-                      if (widget.seek.ratingRange != null) ...[
-                        const SizedBox(height: 8.0),
-                        Text(
-                          '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
-                          style: TextTheme.of(context).titleMedium,
-                        ),
-                      ],
-                      //Do not show rating range if the default values (-500, +500) are used
-                      if (widget.seek.ratingRange != null &&
-                          !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
-                        const SizedBox(height: 8.0),
-                        RatingPrefAware(
-                          child: Text(
-                            '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
-                            style: TextTheme.of(context).titleMedium,
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 16.0),
-                      _LobbyNumbers(),
-                    ],
-                  ),
+    return SafeArea(
+      child: GameLayout(
+        orientation: Side.white,
+        fen: kEmptyFen,
+        topTable: const SizedBox.shrink(),
+        bottomTable: const SizedBox.shrink(),
+        moves: const [],
+        boardOverlay: Card(
+          color: Theme.of(context).dialogTheme.backgroundColor,
+          elevation: 2.0,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(context.l10n.mobileWaitingForOpponentToJoin),
+                const SizedBox(height: 26.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(widget.seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      widget.seek.timeIncrement?.display ??
+                          '${context.l10n.daysPerTurn}: ${widget.seek.days}',
+                      style: TextTheme.of(context).titleLarge,
+                    ),
+                  ],
                 ),
-              ),
+                //Do not show rating range if the default values (-500, +500) are used
+                if (widget.seek.ratingRange != null &&
+                    !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
+                  const SizedBox(height: 8.0),
+                  RatingPrefAware(
+                    child: Text(
+                      '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
+                      style: TextTheme.of(context).titleMedium,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16.0),
+                _LobbyNumbers(),
+              ],
             ),
           ),
         ),
-        BottomBar(
+        userActionsBar: BottomBar(
           children: [
             FutureBuilder(
               future: _cancelGameCreationFuture,
@@ -129,7 +113,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -149,55 +133,49 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            child: GameLayout(
-              orientation: Side.white,
-              fen: kEmptyFen,
-              topTable: const SizedBox.shrink(),
-              bottomTable: const SizedBox.shrink(),
-              moves: const [],
-              boardOverlay: Card(
-                color: Theme.of(context).dialogTheme.backgroundColor,
-                elevation: 2.0,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(context.l10n.waitingForOpponent),
-                      const SizedBox(height: 16.0),
-                      UserFullNameWidget(
-                        user: widget.challenge.destUser,
-                        style: TextTheme.of(context).titleLarge,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            widget.challenge.perf.icon,
-                            color: DefaultTextStyle.of(context).style.color,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Text(
-                            widget.challenge.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
-                            style: TextTheme.of(context).titleLarge,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+    return SafeArea(
+      child: GameLayout(
+        orientation: Side.white,
+        fen: kEmptyFen,
+        topTable: const SizedBox.shrink(),
+        bottomTable: const SizedBox.shrink(),
+        moves: const [],
+        boardOverlay: Card(
+          color: Theme.of(context).dialogTheme.backgroundColor,
+          elevation: 2.0,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(context.l10n.waitingForOpponent),
+                const SizedBox(height: 16.0),
+                UserFullNameWidget(
+                  user: widget.challenge.destUser,
+                  style: TextTheme.of(context).titleLarge,
                 ),
-              ),
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      widget.challenge.perf.icon,
+                      color: DefaultTextStyle.of(context).style.color,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      widget.challenge.timeIncrement?.display ??
+                          '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
+                      style: TextTheme.of(context).titleLarge,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        BottomBar(
+        userActionsBar: BottomBar(
           children: [
             FutureBuilder(
               future: _cancelChallengeFuture,
@@ -232,7 +210,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -356,7 +356,7 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     flair: pick('flair').asStringOrNull(),
-    patron: pick('patron').asBoolOrNull(),
+    patronColor: pick('patronColor').asIntOrNull(),
     online: pick('online').asBoolOrNull(),
     rating: pick(
       'perfs',
@@ -385,7 +385,7 @@ LeaderboardUser _top1userFromPick(RequiredPick pick, Perf perf) {
     username: pick('username').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     flair: pick('flair').asStringOrNull(),
-    patron: pick('patron').asBoolOrNull(),
+    patronColor: pick('patronColor').asIntOrNull(),
     rating: pick('perfs', perf.name, 'rating').asIntOrThrow(),
     progress: pick('perfs', perf.name, 'progress').asIntOrThrow(),
   );

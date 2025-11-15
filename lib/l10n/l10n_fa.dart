@@ -707,9 +707,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastRoundName => 'نام دور';
 
   @override
-  String get broadcastRoundNumber => 'شماره دور';
-
-  @override
   String get broadcastTournamentName => 'نام مسابقات';
 
   @override
@@ -730,7 +727,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastSourceUrlHelp => 'وب‌نشانی‌ای که Lichess برای دریافت به‌روزرسانی‌های PGN می‌بررسد. آن باید از راه اینترنت در دسترس همگان باشد.';
 
   @override
-  String get broadcastSourceGameIds => 'تا ۶۴ شناسهٔ بازی لیچس، جداشده با فاصله.';
+  String get broadcastSourceGameIds => 'تا ۶۴ شناسهٔ بازی Lichess، جداشده با فاصله.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -1381,7 +1378,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesNotifyTimeAlarm => 'هشدار تنگی زمان';
 
   @override
-  String get preferencesNotifyBell => 'اعلان زنگی در لیچس';
+  String get preferencesNotifyBell => 'اعلان زنگی در Lichess';
 
   @override
   String get preferencesNotifyPush => 'اعلان اَفزاره، هنگامی که در Lichess نیستید';
@@ -2092,10 +2089,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'این حساب بسته شده است';
 
   @override
-  String get playWithAFriend => 'بازی با دوستان';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'بازی با رایانه';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت یک نفر به بازی، این آدرس را به او بدهید';
@@ -2748,9 +2757,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get drawOfferAccepted => 'پیشنهاد تساوی پذیرفته شد';
 
   @override
-  String get drawOfferCanceled => 'پیشنهاد تساوی لغو شد';
-
-  @override
   String get whiteOffersDraw => 'سفید پیشنهاد تساوی می دهد';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get exportGames => 'برون‏بُرد بازی‌ها';
 
   @override
-  String get ratingRange => 'محدوده درجه‌بندی';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'این حساب قوانین را نقض کرده است';
@@ -2946,6 +2952,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'درجه‌بندی $param شما موقتی است';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'برای دریافت بازپخش مرورپذیر، واکاوی رایانه‌ای، گپ‌های بازی، و وب‌نشانی همگانی همرسانی‌پذیر، PGN یک بازی را جای‌گذاری کنید.';
-
-  @override
-  String get importGameCaveat => 'ورتش‌ها پاک خواهند شد. برای حفظشان، PGN را از طریق مطالعه درون‌بَرید.';
 
   @override
   String get importGameDataPrivacyWarning => 'این PGN برای عموم در دسترس است، برای وارد کردن یک بازی خصوصی، از *مطالعه* استفاده کنید.';
@@ -3334,7 +3340,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get clearSavedMoves => 'حرکت های واضح';
 
   @override
-  String get previouslyOnLichessTV => 'بازی پیشین در لیچس';
+  String get previouslyOnLichessTV => 'بازی پیشین در Lichess';
 
   @override
   String get onlinePlayers => 'بازیکنان بَرخط';
@@ -4022,6 +4028,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get analysisShapesHowTo => 'برای رسم دایره و پیکان روی تخته، shift+click یا راست-تِلیک را بفشارید.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'ارسال پیام توسط بقیه به شما';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'تمرین با رایانه';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param را انجام دهید';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String get simulDescriptionHelp => 'آیا می‌خواهید مطلبی را به شرکت‌کنندگان بگویید؟';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param برای کُدهای دستوری پیچیده‌تر در دسترس است.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'کپی در کلیپ‌بورد';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5429,7 +5463,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'استریمر های لیچس';
+  String get streamerLichessStreamers => 'بَرخَط-محتواسازان Lichess';
 
   @override
   String get studyPrivate => 'خصوصی';
@@ -5480,6 +5514,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'براساس حروف الفبا';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'بخش جدیدی اضافه کن';
@@ -5579,6 +5616,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'رونوشت‌گیری PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'بارگیری بازی';
@@ -5704,11 +5744,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'وب‌نشانی بازی‌ها، یکی در هر خط';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'بازی‌ها را از $param1 یا $param2 بارگذاری نمایید';
-  }
 
   @override
   String get studyCreateChapter => 'ساخت بخش';

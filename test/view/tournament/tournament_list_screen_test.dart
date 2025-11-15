@@ -231,6 +231,7 @@ const kTournamentApiResponse = '''
       "winner": {
         "name": "Kurald_Galain",
         "patron": true,
+        "patronColor": 1,
         "id": "kurald_galain"
       }
     }

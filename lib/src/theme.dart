@@ -146,6 +146,7 @@ ThemeData _makeDefaultTheme(
       color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
+    searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
     cardTheme: isIOS
@@ -255,6 +256,7 @@ ThemeData _makeBackgroundImageTheme({
           : seedColor,
       elevation: isIOS ? 0 : null,
     ),
+    searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
@@ -320,6 +322,15 @@ const _kCupertinoCardTheme = CardThemeData(
   elevation: 0,
   margin: EdgeInsets.zero,
   shape: RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
+);
+
+const _kCupertinoSearchBarTheme = SearchBarThemeData(
+  elevation: WidgetStatePropertyAll(0),
+  shape: WidgetStatePropertyAll(
+    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+  ),
+  constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
+  padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 7)),
 );
 
 InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {

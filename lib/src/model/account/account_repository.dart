@@ -1,7 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -44,11 +43,7 @@ class AccountRepository {
 
   Future<void> saveProfile(Map<String, String> profile) async {
     final uri = Uri(path: '/account/profile');
-    final response = await client.post(uri, headers: {'Accept': 'application/json'}, body: profile);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to post save profile: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri, headers: {'Accept': 'application/json'}, body: profile);
   }
 
   Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
@@ -79,20 +74,13 @@ class AccountRepository {
   Future<void> setPreference<T>(String prefKey, AccountPref<T> pref) async {
     final uri = Uri(path: '/api/account/preferences/$prefKey');
 
-    final response = await client.post(uri, body: {prefKey: pref.toFormData});
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to set preference: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri, body: {prefKey: pref.toFormData});
   }
 
   /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
   Future<void> bookmark(GameId id, {required bool bookmark}) async {
     final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
-    final response = await client.post(uri);
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to bookmark game: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri);
   }
 }
 

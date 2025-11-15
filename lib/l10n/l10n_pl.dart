@@ -747,9 +747,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastRoundName => 'Nazwa rundy';
 
   @override
-  String get broadcastRoundNumber => 'Numer rundy';
-
-  @override
   String get broadcastTournamentName => 'Nazwa turnieju';
 
   @override
@@ -2148,10 +2145,22 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
 
   @override
-  String get playWithAFriend => 'Zagraj ze znajomym';
+  String get gameSetup => 'Ustawienia gry';
 
   @override
-  String get playWithTheMachine => 'Zagraj z komputerem';
+  String get challengeAFriend => 'Rzuć wyzwanie znajomemu';
+
+  @override
+  String get playAgainstComputer => 'Zagraj z komputerem';
+
+  @override
+  String get gameMode => 'Tryby gry';
+
+  @override
+  String get createLobbyGame => 'Utwórz grę w poczekalni';
+
+  @override
+  String get youPlayAs => 'Grasz';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Przekaż ten adres, by zaprosić kogoś do wspólnej gry';
@@ -2804,9 +2813,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get drawOfferAccepted => 'Przyjęto propozycję remisu';
 
   @override
-  String get drawOfferCanceled => 'Wycofano propozycję remisu';
-
-  @override
   String get whiteOffersDraw => 'Białe proponują remis';
 
   @override
@@ -2930,7 +2936,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get exportGames => 'Eksportuj partie';
 
   @override
-  String get ratingRange => 'Przedział rankingowy';
+  String get ratingFilter => 'Filtr rankingu';
 
   @override
   String get thisAccountViolatedTos => 'Użytkownik tego konta naruszył warunki korzystania z Lichess';
@@ -3002,6 +3008,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Twój ranking ($param) jest prowizoryczny';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtry rankingu są zablokowane, ponieważ Twój ranking nie jest stabilny. Rozegranie partii rankingowych zwiększy tę stabilność.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3112,9 +3121,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Wklejenie PGN partii daje możliwość jej odtworzenia, analizy komputerowej, rozmowy i udostępnienia.';
-
-  @override
-  String get importGameCaveat => 'Warianty zostaną usunięte. Aby je zachować, zaimportuj plik PGN jako opracowanie.';
 
   @override
   String get importGameDataPrivacyWarning => 'Ten zapis PGN będzie dostępny publicznie. Aby zaimportować partię tylko dla siebie, stwórz prywatne opracowanie.';
@@ -4078,6 +4084,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknij podczas trzymania Shift lub przytrzymaj prawy przycisk myszy aby rysować okręgi i strzałki na szachownicy.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Zezwól na wiadomości od innych graczy';
 
   @override
@@ -4263,6 +4272,11 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Twój ranking wynosi $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Trening z komputerem';
 
   @override
@@ -4397,6 +4411,11 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Zagraj $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Rzuć wyzwanie $param';
   }
 
   @override
@@ -4685,8 +4704,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String get simulDescriptionHelp => 'Wiadomość do przekazania uczestnikom';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param jest dostępny dla bardziej zaawansowanej składni.';
+  String markdownIsAvailable(String param) {
+    return '$param jest dostępny do formatowania.';
   }
 
   @override
@@ -4807,6 +4826,21 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopiuj do schowka';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Szukaj';
+
+  @override
+  String get clearSearch => 'Wyczyść wyszukiwanie';
+
+  @override
+  String get tags => 'Tagi';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5632,6 +5666,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetycznie';
 
   @override
+  String get studyRelevant => 'Powiązane';
+
+  @override
   String get studyAddNewChapter => 'Dodaj nowy rozdział';
 
   @override
@@ -5729,6 +5766,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopiuj PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Pobierz partię';
@@ -5854,11 +5894,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Link do partii';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Zaimportuj partię z $param1 lub $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Stwórz rozdział';

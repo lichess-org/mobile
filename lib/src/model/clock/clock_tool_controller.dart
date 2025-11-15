@@ -95,11 +95,22 @@ class ClockToolController extends _$ClockToolController {
           : state.bottomMoves,
     );
     ref.read(soundServiceProvider).play(Sound.clock);
-    _clock.startSide(playerType.opposite.chessClockSide);
     _clock.incTime(
       playerType.chessClockSide,
       playerType == ClockSide.top ? state.options.topIncrement : state.options.bottomIncrement,
     );
+    // Start the countdown only if either this is not a zero-start clock
+    // or the new active side has already made at least one move.
+    final Duration initialOfNewActive = playerType.opposite == ClockSide.top
+        ? state.options.topTime
+        : state.options.bottomTime;
+    final bool hasNewActiveMoved =
+        (playerType.opposite == ClockSide.top ? state.topMoves : state.bottomMoves) > 0;
+    if (initialOfNewActive.inMilliseconds != 0 || hasNewActiveMoved) {
+      _clock.startSide(playerType.opposite.chessClockSide);
+    } else {
+      _clock.stop();
+    }
   }
 
   void updateDuration(ClockSide playerType, Duration duration) {
@@ -167,8 +178,18 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void start(ClockSide playerType) {
-    _clock.startSide(playerType.opposite.chessClockSide);
+    final Duration initialOfStartingPlayer = playerType.opposite == ClockSide.top
+        ? state.options.topTime
+        : state.options.bottomTime;
     state = state.copyWith(activeSide: playerType.opposite);
+    // If the new active side starts at zero time, do not start their countdown yet.
+    // We only begin decreasing a side's clock after that side has completed at least one move.
+    // This makes 0+increment modes usable.
+    if (initialOfStartingPlayer.inMilliseconds == 0) {
+      _clock.stop();
+    } else {
+      _clock.startSide(playerType.opposite.chessClockSide);
+    }
   }
 
   void pause() {
@@ -177,7 +198,19 @@ class ClockToolController extends _$ClockToolController {
   }
 
   void resume() {
-    _clock.start();
+    final active = state.activeSide;
+    // If the active side started at zero, only resume ticking after that side
+    // has completed at least one move; otherwise behave normally.
+    final Duration initialOfActive = active == ClockSide.top
+        ? state.options.topTime
+        : state.options.bottomTime;
+    final bool hasActiveMoved = active == ClockSide.top
+        ? state.topMoves > 0
+        : state.bottomMoves > 0;
+
+    if (active != null && (initialOfActive.inMilliseconds != 0 || hasActiveMoved)) {
+      _clock.start();
+    }
     state = state.copyWith(paused: false);
   }
 

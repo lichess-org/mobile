@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">o musi lon poka pi jan pona</string>
-  <string name="playWithTheMachine">o musi lon poka ilo</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">sina wile kama e jan la o pana e linja ni</string>
   <string name="gameOver">musi li pini</string>
   <string name="waitingForOpponent">o awen. jan ante li kama.</string>
@@ -270,7 +268,6 @@
   <string name="blackTimeOut">tenpo pimeja li pini</string>
   <string name="drawOfferSent">sina toki e ni: sina wile e pini pi anpa ala</string>
   <string name="drawOfferAccepted">jan ante li wile kin e pini pi anpa ala</string>
-  <string name="drawOfferCanceled">jan ante li weka e wile sina</string>
   <string name="whiteOffersDraw">walo li wile e pini pi anpa ala</string>
   <string name="blackOffersDraw">pimeja li wile e pini pi anpa ala</string>
   <string name="whiteDeclinesDraw">walo li wile ala e pini pi anpa ala</string>
@@ -332,7 +329,6 @@
     <item quantity="other">musi %s</item>
   </plurals>
   <string name="exportGames">o kama jo e musi</string>
-  <string name="ratingRange">nanpa Glicko</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">o pana e tenpo Sekunta %s</item>
     <item quantity="other">o pana e tenpo Sekunta %s</item>
@@ -928,7 +924,6 @@ sina wile kepeken e nasin ijo pi ante ala, o sitelen ala.</string>
   <string name="simulFeaturedHelp">sina ken pana lukin e musi mute sina tawa jan ale lon lipu \"%s\". sina wile len e musi mute sina la, o kepeken ala e nasin ni.</string>
   <string name="simulDescription">sitelen sona pi musi pi tenpo sama</string>
   <string name="simulDescriptionHelp">sina wile ala wile pana e sona tawa jan musi?</string>
-  <string name="markdownAvailable">sina ken pali e ijo sin kepeken nasin \"%s\".</string>
   <string name="embedsAvailable">sina wile pana lukin e musi ni kepeken lipu ilo la, o pana e nimi \"URL\" musi anu nimi \"URL\" pi musi sona.</string>
   <string name="inYourLocalTimezone">tenpo pi ma tenpo sina</string>
   <string name="tournChat">toki pi utala musi</string>

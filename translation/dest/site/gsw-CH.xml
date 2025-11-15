@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Schpill mit eme Fründ</string>
-  <string name="playWithTheMachine">Schpill mit em Computer</string>
+  <string name="gameSetup">Schpielischtellige</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">En Fründ usefordere</string>
+  <string name="playAgainstComputer">Schpill gäge de Computer</string>
+  <string name="gameMode">Schpielart</string>
+  <string name="createLobbyGame">Es Schpiel erschtelle</string>
+  <string name="youPlayAs">Du schpillsch mit</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Wottsch öpper zum Schpille ilade - schick die URL</string>
   <string name="gameOver">Schpiel verbi</string>
   <string name="waitingForOpponent">Uf de Gägner warte</string>
@@ -168,7 +172,7 @@
   <string name="drawByMutualAgreement">Remis dur Einigung</string>
   <string name="fiftyMovesWithoutProgress">50 Züg ohni Fortschritt</string>
   <string name="currentGames">Laufendi Schpiel</string>
-  <string name="joinedX">Biträte am %s</string>
+  <string name="joinedX">Biträte %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s Schpiel</item>
     <item quantity="other">%s Schpiel</item>
@@ -281,7 +285,6 @@ Au vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multiko
   <string name="blackTimeOut">Schwarz hät d\'Zit überschritte</string>
   <string name="drawOfferSent">Remis-Agebot gsändet</string>
   <string name="drawOfferAccepted">Remis-Agebot akzeptiert</string>
-  <string name="drawOfferCanceled">Remis-Agebot zruggzoge</string>
   <string name="whiteOffersDraw">Wiss offeriert Remis</string>
   <string name="blackOffersDraw">Schwarz offeriert Remis</string>
   <string name="whiteDeclinesDraw">Wiss wott keis Remis</string>
@@ -343,7 +346,7 @@ Au vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multiko
     <item quantity="other">%s am Schpille</item>
   </plurals>
   <string name="exportGames">Schpiel exportiere</string>
-  <string name="ratingRange">Wertigsbereich</string>
+  <string name="ratingFilter">Wertigsfilter</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Gib dim Gägner %s Sekunde</item>
     <item quantity="other">Gib dim Gägner %s Sekunde</item>
@@ -399,6 +402,7 @@ Au vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multiko
     <item quantity="other">Du bruchsch no %s g\'werteti Schpiel meh</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Dini %s Wertig isch provisorisch</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">D\'Bewertigsfilter sind geschperrt, will dini Wertig nöd schtabil isch. Durs Schpiele vu bewertete Schpiel wird die Schtabilität erhöht.</string>
   <string name="yourPerfRatingIsTooHigh">Dini %1$s Wertig (%2$s) isch z\'höch</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Dini höchschti %1$s Wertig (%2$s) isch z\'höch</string>
   <string name="yourPerfRatingIsTooLow">Dini %1$s Wertig (%2$s) isch z\'tüf</string>
@@ -429,7 +433,6 @@ Au vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multiko
   <string name="toStudy">Schtudie</string>
   <string name="importGame">Schpiel importiere</string>
   <string name="importGameExplanation">Füeg e Schpiel-PGN i, für Zuegriff uf Schpielwiderholig, Computeranalyse, Chat und e teilbari URL.</string>
-  <string name="importGameCaveat">d\'Variazione werded glöscht. Zums b\'halte, muesch d\'PGN mit ere Schtudie importiere.</string>
   <string name="importGameDataPrivacyWarning">De PGN isch öffentlich zuegänglich. Zum es Schpiel privat importiere, nimmsch e Schtudie.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s importierts Schpiel</item>
@@ -836,6 +839,7 @@ gits nöd und es isch nie g\'wertet.</string>
   <string name="notifications">Benachrichtigunge</string>
   <string name="notificationsX">Benachrichtigunge: %1$s</string>
   <string name="perfRatingX">Wertig: %s</string>
+  <string name="yourRatingIsX">Dini Wertig: %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s Sekunde für de 1. Zug</item>
     <item quantity="other">%s Sekunde für de 1. Zug</item>
@@ -887,6 +891,7 @@ gits nöd und es isch nie g\'wertet.</string>
   <string name="playVariationToCreateConditionalPremoves">Schpill e Variante, um bedingti Voruszüg z\'kreiere</string>
   <string name="noConditionalPremoves">Kei bedingti Voruszüg</string>
   <string name="playX">Schpill %s</string>
+  <string name="challengeX">Gforderet wird: %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">und speicher %s Voruszug Zile</item>
     <item quantity="other">und speicher %s Voruszug Zile</item>
@@ -979,7 +984,7 @@ Fäld leer lah und all Schpiel normal schtarte.</string>
   <string name="simulFeaturedHelp">Zeig allne uf %s dis Simultanschach. Privats Simultanschach deaktiviert.</string>
   <string name="simulDescription">Simultanschach Beschribig</string>
   <string name="simulDescriptionHelp">Wottsch de Teilnehmer öppis mitteile?</string>
-  <string name="markdownAvailable">%s isch für erwitereti Syntax verfüegbar.</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s isch zur Formatierig verfüegbar.</string>
   <string name="embedsAvailable">Füeg zum Ibette e Schpil-URL oder e Schtudiekapitel-URL i.</string>
   <string name="inYourLocalTimezone">I dinere lokale Zitzone</string>
   <string name="tournChat">Turnier Chat</string>
@@ -1020,4 +1025,9 @@ Alli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur B
   <string name="enableBlindMode">Blindmodus aktiviere</string>
   <string name="disableBlindMode">Blindmodus deaktiviere</string>
   <string name="copyToClipboard">Kopier ufs Clipboard</string>
+  <string name="online" comment="status of a user">online</string>
+  <string name="offline" comment="status of a user">offline</string>
+  <string name="search">Suechi</string>
+  <string name="clearSearch">Suechi lösche</string>
+  <string name="tags">Tags</string>
 </resources>

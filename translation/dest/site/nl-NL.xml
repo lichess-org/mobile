@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Speel tegen een vriend</string>
-  <string name="playWithTheMachine">Speel tegen de computer</string>
+  <string name="gameSetup">Spelinstellingen</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Daag een vriend uit</string>
+  <string name="playAgainstComputer">Speel tegen de computer</string>
+  <string name="gameMode">Spelmodus</string>
+  <string name="createLobbyGame">Maak een lobby spel aan</string>
+  <string name="youPlayAs">Je speelt als</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Deel deze link als u iemand wil uitnodigen om met u te spelen</string>
   <string name="gameOver">Partij afgelopen</string>
   <string name="waitingForOpponent">Wachten op een tegenstander</string>
@@ -274,13 +278,12 @@
     <item quantity="one">%s partij met u</item>
     <item quantity="other">%s partijen met u</item>
   </plurals>
-  <string name="ok">Oké</string>
+  <string name="ok">OK</string>
   <string name="cancel">Annuleren</string>
   <string name="whiteTimeOut">Tijd om voor wit</string>
   <string name="blackTimeOut">Tijd om voor zwart</string>
   <string name="drawOfferSent">Remiseaanbod verstuurd</string>
   <string name="drawOfferAccepted">Remiseaanbod geaccepteerd</string>
-  <string name="drawOfferCanceled">Remiseaanbod geannuleerd</string>
   <string name="whiteOffersDraw">Wit biedt remise aan</string>
   <string name="blackOffersDraw">Zwart biedt remise aan</string>
   <string name="whiteDeclinesDraw">Wit weigert remise</string>
@@ -342,7 +345,7 @@
     <item quantity="other">%s bezig</item>
   </plurals>
   <string name="exportGames">Partijen exporteren</string>
-  <string name="ratingRange">Ratingbereik</string>
+  <string name="ratingFilter">Filter van rating</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Geef %s seconde</item>
     <item quantity="other">Geef %s seconden</item>
@@ -398,6 +401,7 @@
     <item quantity="other">Je moet %s partijen meer met rating spelen</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Je %s rating is een voorlopige</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Raitingfilters zijn vergrendeld omdat je rating niet stabiel is. Het spelen van partijen met rating zal de stabiliteit vergroten.</string>
   <string name="yourPerfRatingIsTooHigh">Je rating %1$s (%2$s) is te hoog</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Je beste hoogste rating deze week %1$s (%2$s) is te hoog</string>
   <string name="yourPerfRatingIsTooLow">Je rating %1$s (%2$s) is te laag</string>
@@ -428,7 +432,6 @@
   <string name="toStudy">Studie</string>
   <string name="importGame">Importeer partij</string>
   <string name="importGameExplanation">Als je een PGN in het venster plakt, krijg je een doorzoekbare replay, een computeranalyse, een chatbox bij de partij en een deelbare URL.</string>
-  <string name="importGameCaveat">Variaties worden gewist. Om ze te behouden, importeer de PGN via een studie.</string>
   <string name="importGameDataPrivacyWarning">Deze PGN kan toegankelijk zijn voor iedereen. Gebruik een studie om een partij privé te importeren.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s Geïmporteerde partij</item>
@@ -766,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Je kunt ook over het bord scrollen om je zetten uit te voeren.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Beweeg de muis over computervarianten om ze te bekijken.</string>
   <string name="analysisShapesHowTo">Druk op shift+linkermuisknop of rechtermuisknop om cirkels en pijlen op het bord te tekenen.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl of shift = rood; command, alt, of meta-toets = blauw; allen tegelijk = geel.</string>
   <string name="letOtherPlayersMessageYou">Andere spelers mogen je berichten zenden</string>
   <string name="receiveForumNotifications">Ontvang meldingen wanneer je genoemd wordt op het forum</string>
   <string name="shareYourInsightsData">Deel de data van je partijen</string>
@@ -827,6 +831,7 @@
   <string name="notifications">Meldingen</string>
   <string name="notificationsX">Meldingen: %1$s</string>
   <string name="perfRatingX">Rating: %s</string>
+  <string name="yourRatingIsX">Uw rating is %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s seconde om de eerste zet te spelen</item>
     <item quantity="other">%s seconden om de eerste zet te spelen</item>
@@ -878,6 +883,7 @@
   <string name="playVariationToCreateConditionalPremoves">Speel een variant om voorwaardelijke zetten vooruit te maken</string>
   <string name="noConditionalPremoves">Geen voorwaardelijke zetten vooruit</string>
   <string name="playX">Speel %s</string>
+  <string name="challengeX">%s uitdagen</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">en bewaar %s premove-variant</item>
     <item quantity="other">en bewaar %s premove-varianten</item>
@@ -969,7 +975,7 @@ Laat leeg om partijen te starten vanaf de normale beginstelling.</string>
   <string name="simulFeaturedHelp">De simultaan voor iedereen weergeven op %s. Schakel dit uit voor privésimultaans.</string>
   <string name="simulDescription">Omschrijving van de simultaan</string>
   <string name="simulDescriptionHelp">Is er nog iets wat de deelnemers moeten weten?</string>
-  <string name="markdownAvailable">%s is beschikbaar voor meer geavanceerde opmaak.</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s is beschikbaar voor opmaak.</string>
   <string name="embedsAvailable">Plak de URL van een partij of een studie om deze in te voegen.</string>
   <string name="inYourLocalTimezone">In je eigen lokale tijdzone</string>
   <string name="tournChat">Toernooichat</string>
@@ -1010,4 +1016,9 @@ Alle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door do
   <string name="enableBlindMode">Modus voor blinden inschakelen</string>
   <string name="disableBlindMode">Modus voor blinden uitschakelen</string>
   <string name="copyToClipboard">Kopiëren naar klembord</string>
+  <string name="online" comment="status of a user">online</string>
+  <string name="offline" comment="status of a user">offline</string>
+  <string name="search">Zoeken</string>
+  <string name="clearSearch">Zoekopdracht wissen</string>
+  <string name="tags">Labels</string>
 </resources>

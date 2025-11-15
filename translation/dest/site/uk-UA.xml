@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Грати з другом</string>
-  <string name="playWithTheMachine">Грати з комп’ютером</string>
+  <string name="gameSetup">Налаштування гри</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Кинути виклик другові</string>
+  <string name="playAgainstComputer">Зіграти проти комп\'ютера</string>
+  <string name="gameMode">Режим гри</string>
+  <string name="createLobbyGame">Створити запит на гру</string>
+  <string name="youPlayAs">Ви граєте за</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Щоб запросити когось до гри, дайте це посилання</string>
   <string name="gameOver">Гру завершено</string>
   <string name="waitingForOpponent">Очікування на суперника</string>
@@ -316,7 +320,6 @@
   <string name="blackTimeOut">Час чорних вийшов</string>
   <string name="drawOfferSent">Пропозицію нічиєї надіслано</string>
   <string name="drawOfferAccepted">Пропозицію нічиєї прийнято</string>
-  <string name="drawOfferCanceled">Пропозицію нічиєї скасовано</string>
   <string name="whiteOffersDraw">Білі пропонують нічию</string>
   <string name="blackOffersDraw">Чорні пропонують нічию</string>
   <string name="whiteDeclinesDraw">Білі відхилили нічию</string>
@@ -388,7 +391,7 @@
     <item quantity="other">%s грають</item>
   </plurals>
   <string name="exportGames">Експортувати ігри</string>
-  <string name="ratingRange">Діапазон рейтингу</string>
+  <string name="ratingFilter">Фільтр рейтингу</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Додати %s секунду</item>
     <item quantity="few">Додати %s секунди</item>
@@ -460,6 +463,7 @@
     <item quantity="other">Ви повинні зіграти ще %s рейтингових ігор</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Ваш рейтинг %s є умовним</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Фільтри за рейтингом заблоковано, бо ваш рейтинг нестабільний. Стабільність підвищуватиметься, коли ви гратимете в рейтингові ігри.</string>
   <string name="yourPerfRatingIsTooHigh">Ваш рейтинг у %1$s (%2$s) занадто високий</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Ваш щотижневий рейтинг %1$s (%2$s) занадто високий</string>
   <string name="yourPerfRatingIsTooLow">Ваш рейтинг у %1$s (%2$s) занадто низький</string>
@@ -490,7 +494,6 @@
   <string name="toStudy">Дослідження</string>
   <string name="importGame">Імпортувати гру</string>
   <string name="importGameExplanation">Вставте PGN гри щоб отримати повтор в браузері, комп\'ютерний аналіз, ігровий чат та посилання, яким можна поділитися.</string>
-  <string name="importGameCaveat">Варіації будуть видалені. Для збереження імпортуйте PGN через дослідження.</string>
   <string name="importGameDataPrivacyWarning">Цей PGN може бути у вільному доступі. Для імпорту гри в приватному режимі використовуйте студії.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s імпортована гра</item>
@@ -848,6 +851,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Прокручуйте коліщатко миші над шахівницею для перегляду ходів у грі.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Прокрутіть коліщатком миші по комп\'ютерних варіаціях для їх попереднього перегляду.</string>
   <string name="analysisShapesHowTo">Натисніть shift+ЛКМ або ПКМ, щоби намалювати кола та стрілки на шахівниці.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl = червоний, Shift = жовтий, command або alt = синій.</string>
   <string name="letOtherPlayersMessageYou">Дозволити іншим гравцям надсилати Вам повідомлення</string>
   <string name="receiveForumNotifications">Отримувати сповіщення при згадці на форумі</string>
   <string name="shareYourInsightsData">Надавати доступ до вашої шахової аналітики</string>
@@ -911,6 +915,7 @@
   <string name="notifications">Сповіщення</string>
   <string name="notificationsX">Сповіщення: %1$s</string>
   <string name="perfRatingX">Рейтинг: %s</string>
+  <string name="yourRatingIsX">Ваш рейтинг — %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s секунда на перший хід</item>
     <item quantity="few">%s секунди на перший хід</item>
@@ -966,6 +971,7 @@
   <string name="playVariationToCreateConditionalPremoves">Виконайте ходи на шахівниці, щоб встановити умовні ходи на випередження</string>
   <string name="noConditionalPremoves">Безумовні ходи на випередження</string>
   <string name="playX">Зіграти %s</string>
+  <string name="challengeX">Кинути виклик %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">і зберегти %s послідовність</item>
     <item quantity="few">і зберегти %s послідовності</item>
@@ -1058,7 +1064,6 @@
   <string name="simulFeaturedHelp">Показати ваш сеанс для всіх на %s. Вимикати для приватних сеансів.</string>
   <string name="simulDescription">Опис сеансу</string>
   <string name="simulDescriptionHelp">Чи хочете ви щось повідомити учасникам?</string>
-  <string name="markdownAvailable">%s доступний для більш детального форматування.</string>
   <string name="embedsAvailable">Вставте посилання на гру чи розділ дослідження, щоб вставити його.</string>
   <string name="inYourLocalTimezone">У вашому місцевому часовому поясі</string>
   <string name="tournChat">Турнірний чат</string>
@@ -1099,4 +1104,9 @@
   <string name="enableBlindMode">Увімкнути режим для незрячих</string>
   <string name="disableBlindMode">Вимкнути режим для незрячих</string>
   <string name="copyToClipboard">Скопіювати до буферу обміну</string>
+  <string name="online" comment="status of a user">у мережі</string>
+  <string name="offline" comment="status of a user">не в мережі</string>
+  <string name="search">Пошук</string>
+  <string name="clearSearch">Очистити пошук</string>
+  <string name="tags">Теги</string>
 </resources>

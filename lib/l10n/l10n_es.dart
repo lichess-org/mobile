@@ -707,9 +707,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastRoundName => 'Nombre de la ronda';
 
   @override
-  String get broadcastRoundNumber => 'Número de ronda';
-
-  @override
   String get broadcastTournamentName => 'Nombre del torneo';
 
   @override
@@ -1252,7 +1249,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesInGameOnly => 'Solo durante la partida';
 
   @override
-  String get preferencesExceptInGame => 'Excepto en el juego';
+  String get preferencesExceptInGame => 'Excepto en la partida';
 
   @override
   String get preferencesChessClock => 'Reloj de ajedrez';
@@ -2092,10 +2089,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Esta cuenta fue cerrada.';
 
   @override
-  String get playWithAFriend => 'Jugar contra un amigo';
+  String get gameSetup => 'Configuración de la partida';
 
   @override
-  String get playWithTheMachine => 'Jugar contra el ordenador';
+  String get challengeAFriend => 'Desafía a un amigo';
+
+  @override
+  String get playAgainstComputer => 'Jugar contra el ordenador';
+
+  @override
+  String get gameMode => 'Tipo de partida';
+
+  @override
+  String get createLobbyGame => 'Crear partida en la sala de espera';
+
+  @override
+  String get youPlayAs => 'Juegas con';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Para invitar a alguien a jugar, comparte este enlace';
@@ -2408,7 +2417,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Derrota o 50 movimientos por error anterior';
 
   @override
-  String get unknownDueToRounding => 'Victoria o derrota segura solo si se siguió la línea de movimientos recomendados desde la última captura o movimiento de peón, a causa del posible redondeo de valores DTZ de las tablas de finales Syzygy.';
+  String get unknownDueToRounding => 'Victoria o derrota segura solo si se siguió la línea de movimientos recomendados desde la última captura o movimiento de peón, a causa del posible redondeo de valores DTZ de las tablas de finales Sizigia.';
 
   @override
   String get allSet => '¡Listo!';
@@ -2748,9 +2757,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get drawOfferAccepted => 'Oferta de tablas aceptada';
 
   @override
-  String get drawOfferCanceled => 'Oferta de tablas cancelada';
-
-  @override
   String get whiteOffersDraw => 'Las blancas ofrecen tablas';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get exportGames => 'Exportar partidas';
 
   @override
-  String get ratingRange => 'Rango de puntuación';
+  String get ratingFilter => 'Filtro de valoración';
 
   @override
   String get thisAccountViolatedTos => 'Este usuario no cumple los términos de servicio de Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Tu puntuación de $param es provisional';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Los filtros de valoración están bloqueados porque tu puntuación no es estable. Jugar partidas valoradas aumentará la estabilidad.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Al pegar el PGN de una partida, se obtiene una repetición navegable, un análisis por ordenador, un chat de juego y un enlace para compartir.';
-
-  @override
-  String get importGameCaveat => 'Las variaciones serán borradas. Para mantenerlas, importa el PGN a través de un estudio.';
 
   @override
   String get importGameDataPrivacyWarning => 'Este PGN es de acceso público. Para importar una partida de forma privada, utiliza un estudio.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analysisShapesHowTo => 'Haz clic con el botón derecho o Máyus+clic para dibujar círculos y flechas en el tablero.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl o mayúsculas = rojo; comando, alt, o meta = azul; una tecla de cada = amarillo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permitir que otras personas te envíen mensajes';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Tu valoración es $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Practicar con el ordenador';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Jugar $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Desafía a $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get simulDescriptionHelp => '¿Quieres decirle algo a los participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Se puede usar $param para formatear el texto.';
+  String markdownIsAvailable(String param) {
+    return 'El formato de $param está disponible.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copiar al portapapeles';
+
+  @override
+  String get online => 'conectado';
+
+  @override
+  String get offline => 'desconectado';
+
+  @override
+  String get search => 'Buscar';
+
+  @override
+  String get clearSearch => 'Borrar búsqueda';
+
+  @override
+  String get tags => 'Etiquetas';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get studyAlphabetical => 'Alfabético';
 
   @override
+  String get studyRelevant => 'Relevante';
+
+  @override
   String get studyAddNewChapter => 'Añadir nuevo capítulo';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Copiar PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copiar PGN sin formato';
 
   @override
   String get studyDownloadGame => 'Descargar partida';
@@ -5704,11 +5744,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL de la partida';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Cargar una partida desde $param1 o $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Crear capítulo';

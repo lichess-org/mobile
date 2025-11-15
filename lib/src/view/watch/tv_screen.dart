@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})

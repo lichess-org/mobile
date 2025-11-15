@@ -18,10 +18,10 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
@@ -105,19 +105,15 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[
-                Icon(
-                  player.onGame == true ? Icons.cloud : Icons.cloud_off,
-                  color: player.onGame == true ? LichessColors.green : null,
-                  size: 14,
+                ConnectedIcon(
+                  isConnected: player.onGame == true,
+                  shouldShowIsOnGameLabels: true,
+                  size: DefaultTextStyle.of(context).style.fontSize,
                 ),
               ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[
-                Icon(
-                  LichessIcons.patron,
-                  size: playerFontSize,
-                  semanticLabel: context.l10n.patronLichessPatron,
-                ),
+                PatronIcon(size: playerFontSize, color: player.user?.patronColor),
                 const SizedBox(width: 5),
               ],
               if (player.user?.title != null) ...[
@@ -224,11 +220,9 @@ class GamePlayer extends StatelessWidget {
                                   if (mePlaying) {
                                     ref.invalidate(accountProvider);
                                   }
-                                  Navigator.of(context).push(
-                                    mePlaying
-                                        ? ProfileScreen.buildRoute(context)
-                                        : UserScreen.buildRoute(context, player.user!),
-                                  );
+                                  Navigator.of(
+                                    context,
+                                  ).push(UserOrProfileScreen.buildRoute(context, player.user!));
                                 }
                               : null,
                           child: playerWidget,

@@ -40,19 +40,19 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Қайырлы кеш, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Қайырлы кеш';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Қайырлы күн, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Қайырлы күн';
 
   @override
   String get mobileHideVariation => 'Тармақты жасыру';
@@ -705,9 +705,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Айналым атауы';
-
-  @override
-  String get broadcastRoundNumber => 'Раунд нөмірі';
 
   @override
   String get broadcastTournamentName => 'Жарыс атауы';
@@ -1464,7 +1461,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzlePuzzleOfTheDay => 'Бүгінгі жұмбақ';
 
   @override
-  String get puzzleDailyPuzzle => 'күнделікті жұмбақтар';
+  String get puzzleDailyPuzzle => 'Күнделікті жұмбақ';
 
   @override
   String get puzzleClickToSolve => 'Шешу үшін басыңыз';
@@ -2092,10 +2089,22 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Бұл тіркелгі жабылды.';
 
   @override
-  String get playWithAFriend => 'Доспен ойнау';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Компьютермен ойнау';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Компьютермен ойнау';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Ойынға біреуді шақыру үшін бұл сілтемені жіберіңіз';
@@ -2748,9 +2757,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get drawOfferAccepted => 'Тепе-теңдікке келісті';
 
   @override
-  String get drawOfferCanceled => 'Тепе-теңдік сұрау тоқтатылды';
-
-  @override
   String get whiteOffersDraw => 'Ақ тепе-теңдік сұрауда';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get exportGames => 'Ойынды жүктеп алу';
 
   @override
-  String get ratingRange => 'Рейтинг ауқымы';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Бұл тіркелгі Личес-тің Қызмет көрсету шартын бұзды';
@@ -2946,6 +2952,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Сіздің $param рейтингіңіз болжамалы';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3043,7 +3052,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get orUploadPgnFile => 'Не PGN файлын жүктеп салыңыз';
 
   @override
-  String get fromPosition => 'Күйден бастап';
+  String get fromPosition => 'Бір күйден бастап';
 
   @override
   String get continueFromHere => 'Осы жерден жалғастыру';
@@ -3056,9 +3065,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Ойынның PGN-ын салыңыз.\nБұл ойынды қайта көру, компьютерлік талдау, чат пен бөліспелі URL-ға жол ашады.';
-
-  @override
-  String get importGameCaveat => 'Вариациялар жойылады. Оларды сақтау үшін зерттеу арқылы PGN импорттаңыз.';
 
   @override
   String get importGameDataPrivacyWarning => 'Бұл PGN - жалпыға жария болады. Жеке болуын қаласаңыз, Зерттеу арқылы салуыңыз керек.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get analysisShapesHowTo => 'Тақтада шеңбер мен нұсқағыш сызу үшін тінтуірмен оң шертіңіз немесе shift баса сол шертіңіз.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Ойыншыларға сізге хабар жіберу рұқсат па?';
 
   @override
@@ -4078,7 +4087,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get everybodyGetsAllFeaturesForFree => 'Барлық құралдары барлық адам үшін тегін';
 
   @override
-  String get viewTheSolution => 'Жауабты қарау';
+  String get viewTheSolution => 'Жауабын қарау';
 
   @override
   String get noChallenges => 'Шақыру жоқ.';
@@ -4204,6 +4213,11 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Рейтинг: $param';
+  }
+
+  @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
   }
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param жүріңіз';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsKk extends AppLocalizations {
   String get simulDescriptionHelp => 'Қатысушыларға тағы айтар сөзіңіз бар ма?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Кеңейтілген синтаксис үшін $param.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyAlphabetical => 'Әліппе ретімен';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Жаңа бөлім құру';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'PGN-ді көшіру';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Ойынды жүктеп алу';
@@ -5704,11 +5744,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Ойындардың сілтемесі, әр жолға бір-бірден';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 не $param2 ойындарын жүктеп салу';
-  }
 
   @override
   String get studyCreateChapter => 'Бөлім құру';

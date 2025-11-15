@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class ChallengeListItem extends ConsumerWidget {
   const ChallengeListItem({

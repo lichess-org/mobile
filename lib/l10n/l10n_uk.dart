@@ -747,9 +747,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastRoundName => 'Назва раунду';
 
   @override
-  String get broadcastRoundNumber => 'Номер раунду';
-
-  @override
   String get broadcastTournamentName => 'Назва турніру';
 
   @override
@@ -2148,10 +2145,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Цей обліковий запис видалено.';
 
   @override
-  String get playWithAFriend => 'Грати з другом';
+  String get gameSetup => 'Налаштування гри';
 
   @override
-  String get playWithTheMachine => 'Грати з комп’ютером';
+  String get challengeAFriend => 'Кинути виклик другові';
+
+  @override
+  String get playAgainstComputer => 'Зіграти проти комп\'ютера';
+
+  @override
+  String get gameMode => 'Режим гри';
+
+  @override
+  String get createLobbyGame => 'Створити запит на гру';
+
+  @override
+  String get youPlayAs => 'Ви граєте за';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Щоб запросити когось до гри, дайте це посилання';
@@ -2804,9 +2813,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get drawOfferAccepted => 'Пропозицію нічиєї прийнято';
 
   @override
-  String get drawOfferCanceled => 'Пропозицію нічиєї скасовано';
-
-  @override
   String get whiteOffersDraw => 'Білі пропонують нічию';
 
   @override
@@ -2930,7 +2936,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get exportGames => 'Експортувати ігри';
 
   @override
-  String get ratingRange => 'Діапазон рейтингу';
+  String get ratingFilter => 'Фільтр рейтингу';
 
   @override
   String get thisAccountViolatedTos => 'Цей обліковий запис порушив умови використання Lichess';
@@ -3002,6 +3008,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Ваш рейтинг $param є умовним';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Фільтри за рейтингом заблоковано, бо ваш рейтинг нестабільний. Стабільність підвищуватиметься, коли ви гратимете в рейтингові ігри.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3112,9 +3121,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Вставте PGN гри щоб отримати повтор в браузері, комп\'ютерний аналіз, ігровий чат та посилання, яким можна поділитися.';
-
-  @override
-  String get importGameCaveat => 'Варіації будуть видалені. Для збереження імпортуйте PGN через дослідження.';
 
   @override
   String get importGameDataPrivacyWarning => 'Цей PGN може бути у вільному доступі. Для імпорту гри в приватному режимі використовуйте студії.';
@@ -4078,6 +4084,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get analysisShapesHowTo => 'Натисніть shift+ЛКМ або ПКМ, щоби намалювати кола та стрілки на шахівниці.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = червоний, Shift = жовтий, command або alt = синій.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Дозволити іншим гравцям надсилати Вам повідомлення';
 
   @override
@@ -4263,6 +4272,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Ваш рейтинг — $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Тренування з комп\'ютером';
 
   @override
@@ -4397,6 +4411,11 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Зіграти $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Кинути виклик $param';
   }
 
   @override
@@ -4685,8 +4704,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get simulDescriptionHelp => 'Чи хочете ви щось повідомити учасникам?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param доступний для більш детального форматування.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4807,6 +4826,21 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Скопіювати до буферу обміну';
+
+  @override
+  String get online => 'у мережі';
+
+  @override
+  String get offline => 'не в мережі';
+
+  @override
+  String get search => 'Пошук';
+
+  @override
+  String get clearSearch => 'Очистити пошук';
+
+  @override
+  String get tags => 'Теги';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5632,6 +5666,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyAlphabetical => 'За алфавітом';
 
   @override
+  String get studyRelevant => 'Релевантні';
+
+  @override
   String get studyAddNewChapter => 'Додати новий розділ';
 
   @override
@@ -5729,6 +5766,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Скопіювати PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Скопіювати чистий PGN';
 
   @override
   String get studyDownloadGame => 'Завантажити гру';
@@ -5854,11 +5894,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Посилання на гру';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Завантажити гру з $param1 або $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Створити розділ';

@@ -10,8 +10,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 final messageSearchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
 
@@ -107,7 +108,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             )
-          : RefreshIndicator.adaptive(
+          : HapticRefreshIndicator(
               onRefresh: () => ref.refresh(contactsProvider.future),
               child: ContactsListView(openConvo: pushConversationScreen),
             ),
@@ -173,9 +174,7 @@ class ContactTile extends ConsumerWidget {
 
     final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
     return ListTile(
-      leading: contact.user.isOnline == true
-          ? const Icon(Icons.cloud, color: Colors.green)
-          : const Icon(Icons.cloud_off, color: Colors.grey),
+      leading: ConnectedIcon(isConnected: contact.user.isOnline == true),
       title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
       subtitle: Text(contact.lastMessage.text, style: isRead ? null : unreadStyle),
       trailing: Text(

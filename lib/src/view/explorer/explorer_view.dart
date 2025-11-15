@@ -27,12 +27,14 @@ Color blackBoxColor(BuildContext context) => Theme.of(context).brightness == Bri
 
 class ExplorerView extends ConsumerWidget {
   const ExplorerView({
+    required this.pov,
     required this.position,
     required this.onMoveSelected,
     required this.isComputerAnalysisAllowed,
     this.opening,
   });
 
+  final Side pov;
   final Position position;
   final bool isComputerAnalysisAllowed;
   final Opening? opening;
@@ -40,7 +42,7 @@ class ExplorerView extends ConsumerWidget {
 
   bool get tablebaseRelevant {
     final pieceCount = position.board.pieces.length;
-    return pieceCount <= 8;
+    return pieceCount <= 9;
   }
 
   @override
@@ -54,12 +56,13 @@ class ExplorerView extends ConsumerWidget {
     if (position.isInsufficientMaterial) {
       return Center(child: Text(context.l10n.insufficientMaterial));
     }
-    // Tablebase is only relevant for positions with 8 or fewer pieces and not allowed for Correspondence games.
+    // Tablebase is only relevant for positions with 9 or fewer pieces and not allowed for Correspondence games.
     if (tablebaseRelevant && isComputerAnalysisAllowed) {
       return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }
 
     return OpeningExplorerView(
+      pov: pov,
       shouldDisplayGames: isComputerAnalysisAllowed,
       position: position,
       opening: opening,

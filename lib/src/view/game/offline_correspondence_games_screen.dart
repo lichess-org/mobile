@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   const OfflineCorrespondenceGamesScreen({super.key});
@@ -71,7 +71,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
           UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
             Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
-          Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),
+          Icon(game.perf.icon, size: 32, color: DefaultTextStyle.of(context).style.color),
         ],
       ),
       onTap: () {

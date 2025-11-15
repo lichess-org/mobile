@@ -74,6 +74,13 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   };
 }
 
+class UnsupportedVariantException implements Exception {
+  final Variant variant;
+  final GameId gameId;
+
+  const UnsupportedVariantException(this.variant, this.gameId);
+}
+
 enum AnalysisGameResult {
   whiteWins,
   blackWins,
@@ -166,8 +173,11 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.watch(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
           _variant = archivedGame!.meta.variant;
+          if (!_variant.isReadSupported) {
+            throw UnsupportedVariantException(_variant, gameId);
+          }
           pgn = archivedGame.makePgn();
           opening = archivedGame.data.opening;
           serverAnalysis = archivedGame.serverAnalysis;
@@ -759,7 +769,7 @@ class AnalysisController extends _$AnalysisController
   void _listenToServerAnalysisEvents() {
     final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
     if (event != null && event.$1 == state.requireValue.gameId) {
-      _mergeOngoingAnalysis(_root, event.$2.tree);
+      ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
       state = AsyncData(
         state.requireValue.copyWith(
           acplChartData: _makeAcplChartData(),
@@ -769,55 +779,6 @@ class AnalysisController extends _$AnalysisController
           root: _root.view,
         ),
       );
-    }
-  }
-
-  void _mergeOngoingAnalysis(Node n1, Map<String, dynamic> n2) {
-    final eval = n2['eval'] as Map<String, dynamic>?;
-    final cp = eval?['cp'] as int?;
-    final mate = eval?['mate'] as int?;
-    final pgnEval = cp != null
-        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
-        : mate != null
-        ? PgnEvaluation.mate(mate: mate)
-        : null;
-    final glyphs = n2['glyphs'] as List<dynamic>?;
-    final glyph = glyphs?.first as Map<String, dynamic>?;
-    final comments = n2['comments'] as List<dynamic>?;
-    final comment = (comments?.first as Map<String, dynamic>?)?['text'] as String?;
-    final children = n2['children'] as List<dynamic>? ?? [];
-    final pgnComment = pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
-    if (n1 is Branch) {
-      if (pgnComment != null) {
-        if (n1.lichessAnalysisComments == null) {
-          n1.lichessAnalysisComments = [pgnComment];
-        } else {
-          n1.lichessAnalysisComments!.removeWhere((c) => c.eval != null);
-          n1.lichessAnalysisComments!.add(pgnComment);
-        }
-      }
-      if (glyph != null) {
-        n1.nags ??= [glyph['id'] as int];
-      }
-    }
-    for (final c in children) {
-      final n2child = c as Map<String, dynamic>;
-      final id = n2child['id'] as String;
-      final n1child = n1.childById(UciCharPair.fromStringId(id));
-      if (n1child != null) {
-        _mergeOngoingAnalysis(n1child, n2child);
-      } else {
-        final uci = n2child['uci'] as String;
-        final san = n2child['san'] as String;
-        final move = Move.parse(uci)!;
-        n1.addChild(
-          Branch(
-            position: n1.position.playUnchecked(move),
-            sanMove: SanMove(san, move),
-            isCollapsed: children.length > 1,
-          ),
-        );
-      }
     }
   }
 

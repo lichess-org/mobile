@@ -707,9 +707,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastRoundName => 'Tur ismi';
 
   @override
-  String get broadcastRoundNumber => 'Tur sayısı';
-
-  @override
   String get broadcastTournamentName => 'Turnuva ismi';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
 
   @override
-  String get playWithAFriend => 'Bir arkadaşınla oyna';
+  String get gameSetup => 'Oyun ayarları';
 
   @override
-  String get playWithTheMachine => 'Bilgisayara karşı oyna';
+  String get challengeAFriend => 'Bir arkadaşınız oynayın';
+
+  @override
+  String get playAgainstComputer => 'Bilgisayara karsı oyna';
+
+  @override
+  String get gameMode => 'Oyun modü';
+
+  @override
+  String get createLobbyGame => 'Oyun lobisi oluştur';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Oyuna davet etmek için, bu linki gönderin';
@@ -2748,9 +2757,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get drawOfferAccepted => 'Beraberlik teklifi kabul edildi';
 
   @override
-  String get drawOfferCanceled => 'Beraberlik teklifi iptal edildi';
-
-  @override
   String get whiteOffersDraw => 'Beyaz beraberlik teklif ediyor';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exportGames => 'Oyunları indir';
 
   @override
-  String get ratingRange => 'Puan aralığı';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Bu hesap Lichess Hizmet Şartları\'nı ihlal etti';
@@ -2946,6 +2952,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '$param puanınız geçicidir';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Göz atılabilir bir oyun tekrarı, bilgisayar analizi, oyun sohbeti ve paylaşılabilir bir URL edinmek için bir oyun PGN\'si yapıştırın.';
-
-  @override
-  String get importGameCaveat => 'Varyasyonlar silinecek. Varyasyonları saklamak için bir çalışma aracılığıyla PGN\'yi içe aktarın.';
 
   @override
   String get importGameDataPrivacyWarning => 'Bu PGN herkes tarafından erişilebilir. Bir oyunu özel olarak yüklemek istiyorsanız bir çalışma kullanın.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisShapesHowTo => 'Tahta üzerinde çember ya da ok çizmek için lütfen shift+click ya da right+click kullanın.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj yollayabilsinler mi?';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Bilgisayar ile pratik yapın';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param oyna';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get simulDescriptionHelp => 'Katılımcılara söylemek istediğiniz bir şey var mı?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param kullanarak metni daha ayrıntılı bir şekilde biçimlendirebilirsiniz.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Panoya kopyala';
+
+  @override
+  String get online => 'çevrımıcı';
+
+  @override
+  String get offline => 'çevrimdışı';
+
+  @override
+  String get search => 'Ara';
+
+  @override
+  String get clearSearch => 'Aramayı temizle';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetik';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Yeni bir bölüm ekle';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'PGN \'yi kopyala';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Oyunu indir';
@@ -5704,11 +5744,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Oyunun bağlantısı';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 veya $param2 kullanarak oyun yükle';
-  }
 
   @override
   String get studyCreateChapter => 'Bölüm oluştur';

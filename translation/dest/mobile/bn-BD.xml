@@ -13,19 +13,30 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ সন্ধ্যা</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ দিন, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ দিন</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">বিকল্পপথ লুকান</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">হোম</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">লাইভ স্ট্রীমার</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">এই পাতাটি দেখতে হলে লগইন করুন।</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">অনুগ্রহ করে লক্ষ্য করুন, পুরনো অ্যাপ অথবা ওয়েবসাইটের সমস্ত উপাদান ও বৈশিষ্ট্য সমূহ বর্তমানে উপলব্ধ নয়, কিন্ত আমরা উপাদানগুলি সর্বদা যুক্ত করতে থাকছি.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">আপনি কোনো ব্যবহারকারীকে ফলো করছেন না.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">কোনো সমস্যা নেই</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">একই বোর্ড/ডিভাইসে</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">একই বোর্ড/ডিভাইসে</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">যে খেলোয়াড়-দের নামে \"%s\" আছে।</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">বামদিকে</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ডানদিকে</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">আপনি এই পর্ব শেষ করতে চান?</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">৩ মিনিটে যত বেশি পারেন ধাঁধাঁ সমাধান করেন।</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ধাঁধা</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ঘড়ির অবস্থান</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">বৃত্ত</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">বর্গ</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">সেটিংস</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN শেয়ার করুন</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">খেলার লিংক শেয়ার করুন</string>
   <string name="showComments" comment="Shown in the analysis screen.">কমেন্টগুলো দেখুন</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ফলাফল দেখান</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">কিছু সমস্যা হয়েছে।</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">প্রতিপক্ষের জন্য অপেক্ষারত...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">দেখুন</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">লীচেস অ্যাপ-এ স্বাগতম!</string>
 </resources>

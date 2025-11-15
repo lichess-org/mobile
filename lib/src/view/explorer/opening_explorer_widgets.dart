@@ -308,12 +308,14 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
 /// A game tile for the opening explorer.
 class OpeningExplorerGameTile extends ConsumerStatefulWidget {
   const OpeningExplorerGameTile({
+    required this.pov,
     required this.game,
     required this.color,
     required this.ply,
     super.key,
   });
 
+  final Side pov;
   final OpeningExplorerGame game;
   final Color color;
   final int ply;
@@ -337,7 +339,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
             AnalysisScreen.buildRoute(
               context,
               AnalysisOptions.archivedGame(
-                orientation: Side.white,
+                orientation: widget.pov,
                 gameId: widget.game.id,
                 initialMoveCursor: widget.ply,
               ),

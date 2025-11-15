@@ -23,7 +23,6 @@ sealed class TablebaseEntry with _$TablebaseEntry {
 
   const factory TablebaseEntry({
     required int? dtz,
-    required int? preciseDtz,
     required int? dtc,
     required int? dtm,
     required bool checkmate,
@@ -39,12 +38,11 @@ sealed class TablebaseEntry with _$TablebaseEntry {
   factory TablebaseEntry.fromPick(RequiredPick pick) {
     return TablebaseEntry(
       dtz: pick('dtz').asIntOrNull(),
-      preciseDtz: pick('precise_dtz').asIntOrNull(),
       dtc: pick('dtc').asIntOrNull(),
       dtm: pick('dtm').asIntOrNull(),
-      checkmate: pick('checkmate').asBoolOrThrow(),
-      stalemate: pick('stalemate').asBoolOrThrow(),
-      insufficientMaterial: pick('insufficient_material').asBoolOrThrow(),
+      checkmate: pick('checkmate').asBoolOrFalse(),
+      stalemate: pick('stalemate').asBoolOrFalse(),
+      insufficientMaterial: pick('insufficient_material').asBoolOrFalse(),
       category: pick('category').letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
       moves: pick('moves').asListOrEmpty((p) => TablebaseMove.fromPick(p.required())).toIList(),
     );
@@ -59,10 +57,10 @@ sealed class TablebaseMove with _$TablebaseMove {
     required String uci,
     required String san,
     required int? dtz,
-    required int? preciseDtz,
     required int? dtc,
     required int? dtm,
-    required bool? zeroing,
+    required bool zeroing,
+    required bool conversion,
     required bool checkmate,
     required bool stalemate,
     required bool insufficientMaterial,
@@ -77,13 +75,13 @@ sealed class TablebaseMove with _$TablebaseMove {
       uci: pick('uci').asStringOrThrow(),
       san: pick('san').asStringOrThrow(),
       dtz: pick('dtz').asIntOrNull(),
-      preciseDtz: pick('precise_dtz').asIntOrNull(),
       dtc: pick('dtc').asIntOrNull(),
       dtm: pick('dtm').asIntOrNull(),
-      zeroing: pick('zeroing').asBoolOrNull(),
-      checkmate: pick('checkmate').asBoolOrThrow(),
-      stalemate: pick('stalemate').asBoolOrThrow(),
-      insufficientMaterial: pick('insufficient_material').asBoolOrThrow(),
+      zeroing: pick('zeroing').asBoolOrFalse(),
+      conversion: pick('conversion').asBoolOrFalse(),
+      checkmate: pick('checkmate').asBoolOrFalse(),
+      stalemate: pick('stalemate').asBoolOrFalse(),
+      insufficientMaterial: pick('insufficient_material').asBoolOrFalse(),
       category: pick('category').letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
     );
   }
@@ -102,5 +100,20 @@ TablebaseCategory _parseTablebaseCategory(String value) {
     'syzygy-loss' => TablebaseCategory.syzygyLoss,
     'loss' => TablebaseCategory.loss,
     _ => TablebaseCategory.unknown,
+  };
+}
+
+TablebaseCategory invertTablebaseCategory(TablebaseCategory category) {
+  return switch (category) {
+    TablebaseCategory.win => TablebaseCategory.loss,
+    TablebaseCategory.unknown => TablebaseCategory.unknown,
+    TablebaseCategory.syzygyWin => TablebaseCategory.syzygyLoss,
+    TablebaseCategory.maybeWin => TablebaseCategory.maybeLoss,
+    TablebaseCategory.cursedWin => TablebaseCategory.blessedLoss,
+    TablebaseCategory.draw => TablebaseCategory.draw,
+    TablebaseCategory.blessedLoss => TablebaseCategory.cursedWin,
+    TablebaseCategory.maybeLoss => TablebaseCategory.maybeWin,
+    TablebaseCategory.syzygyLoss => TablebaseCategory.syzygyWin,
+    TablebaseCategory.loss => TablebaseCategory.win,
   };
 }

@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A screen that displays a paginated list of studies
 class StudyListScreen extends ConsumerStatefulWidget {

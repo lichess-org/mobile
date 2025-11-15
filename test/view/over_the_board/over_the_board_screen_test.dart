@@ -179,6 +179,16 @@ void main() {
 Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
   final app = await makeTestProviderScopeApp(tester, home: const OverTheBoardScreen());
   await tester.pumpWidget(app);
+
+  // Wait for bottom sheet to show up
+  await tester.pumpAndSettle();
+
+  // User taps Play to start game now
+  await tester.tap(find.text('Play'));
+
+  // Wait for bottom sheet to disappear
+  await tester.pumpAndSettle();
+
   await tester.tap(find.byIcon(CupertinoIcons.play));
 
   final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));

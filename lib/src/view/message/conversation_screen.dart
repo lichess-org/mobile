@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 sealed class DisplayItem {}
 
@@ -84,7 +84,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           showPatron: true,
           shouldShowOnline: true,
           onTap: () {
-            Navigator.push(context, UserScreen.buildRoute(context, widget.user));
+            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
           },
         ),
       ),

@@ -707,9 +707,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastRoundName => 'Ronde se naam';
 
   @override
-  String get broadcastRoundNumber => 'Ronde getal';
-
-  @override
   String get broadcastTournamentName => 'Toernooi se naam';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsAf extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Hierdie rekening is gesluit.';
 
   @override
-  String get playWithAFriend => 'Speel teen \'n vriend';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Speel teen die rekenaar';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Nooi iemand vir \'n spel, gebruik hierdie URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get drawOfferAccepted => 'Gelykop aanbod aanvaar';
 
   @override
-  String get drawOfferCanceled => 'Gelykop aanbod gekanselleer';
-
-  @override
   String get whiteOffersDraw => 'Wit maak gelykspel aanbod';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get exportGames => 'Spelle aflaai (export)';
 
   @override
-  String get ratingRange => 'Gradering reeks';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Hierdie rekening oortree die diensvoorwaardes van Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Jou $param gradering is voorlopig';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Plak \'n wedstryd PGN om dit deursoekbaar te herspeel,\nrekenaar analise, kletskamer en deelbare URL te kry.';
-
-  @override
-  String get importGameCaveat => 'Variasies sal uitgevee word. Voer die PGN in d.m.v. \'n studie om hulle te behou.';
 
   @override
   String get importGameDataPrivacyWarning => 'Hierdie PGN is toeganklik vir die algemene publiek. Gebruik \'n studie om \'n spel privaat in te voer.';
@@ -4022,6 +4028,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get analysisShapesHowTo => 'Druk shift+klik of regs-kliek om sirkels en pyle te trek op die bord.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Laat ander spelers boodskappe aan jou stuur';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Oefen met \'n rekenaar';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Speel $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsAf extends AppLocalizations {
   String get simulDescriptionHelp => 'Enige iets wat jy vir die deelnemers wil vertel?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is beskikbaar vir meer ingewikkelde sintaks.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyAlphabetical => 'Alfabeties';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Voeg \'n nuwe hoofstuk by';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopieer PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Aflaai spel';
@@ -5704,11 +5744,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL van die wedstryd';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Laai \'n wedstryd van $param1 of $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Skep \'n hoofstuk';

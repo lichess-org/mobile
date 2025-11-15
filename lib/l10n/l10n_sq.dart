@@ -9,10 +9,10 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Parapëlqime llogarie';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Këto parapëlqime aplikohen te llogaria juaj Lichess dhe do të përdoren në krejt pajisjet.';
 
   @override
   String get mobileAllGames => 'Krejt lojërat';
@@ -21,7 +21,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Rregullime fushe';
 
   @override
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
@@ -40,19 +40,19 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Mirëmbrëma, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Mirëmbrëma';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Mirëdita, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Mirëdita';
 
   @override
   String get mobileHideVariation => 'Fshihe variantin';
@@ -70,7 +70,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileNoSearchResults => 'Nuk ka rezultate';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ju nuk po ndiqni asnjë përdorues.';
@@ -120,28 +120,28 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileRecentSearches => 'Kërkime së fundi';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Hiqe faqerojtësin';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analizë shërbyesi';
 
   @override
   String get mobileSettingsClockPosition => 'Pozicion sahati';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Paracaktime';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Vendndodhje e synuar për gurin e tërhequr';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Rreth';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Katror';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widget-e kreu';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modaliteti zhytës';
@@ -150,46 +150,46 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Fshihe UI-n e sistemit kur luhet. Përdoreni këtë nëse ju bezdisin gjestet e sistemit për lëvizje në skaje të ekranit. Vlen për skena lojërash dhe puzzle-sh.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Gurë të fituar';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Zgjidhni një figurë';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Sfondet e përshtatur funksionojnë vetëm nën mënyrën e errët. Rekomandohet një figurë e errët.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Turbulloje pamjen';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Fshihe fushën';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Shfaqe fushën';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Që të shfaqen sfonde të tjerë, fërkojeni';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Ose prekeni, ose tërhiqeni';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Prekni dy kuadrate';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Vizatim formash';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Vizatoni figura duke përdorur dy gishta: mbajeni njërin gisht në një kuadrat të zbrazët dhe lëvizni gishtin tjetër që të vizatoni një formë.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Shfa anë';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Reagim me prekje';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Kur është i aktivizuar, pajisja do të dridhet për pak, kur lëvizni apo fitoni një gur.';
 
   @override
   String get mobileSettingsTab => 'Rregullime';
@@ -239,7 +239,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileWatchTab => 'Shiheni';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Mirë se vini te aplikacioni Lichess!';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -707,9 +707,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastRoundName => 'Emër raundi';
 
   @override
-  String get broadcastRoundNumber => 'Numër raundi';
-
-  @override
   String get broadcastTournamentName => 'Emër turneu';
 
   @override
@@ -1075,7 +1072,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get coordinatesNameSquare => 'Emërtoni kuadratin';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Ushtrohuni vetëm me disa shtylla & rreshta';
 
   @override
   String get patronDonate => 'Dhuroni';
@@ -2092,10 +2089,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Kjo llogari është e mbyllur';
 
   @override
-  String get playWithAFriend => 'Luani me një shok';
+  String get gameSetup => 'Ujdisje loje';
 
   @override
-  String get playWithTheMachine => 'Luaj me kompjuterin';
+  String get challengeAFriend => 'Sfidoni një shok';
+
+  @override
+  String get playAgainstComputer => 'Luani kundër kompjuterit';
+
+  @override
+  String get gameMode => 'Mënyrë loje';
+
+  @override
+  String get createLobbyGame => 'Krijoni lojë holli';
+
+  @override
+  String get youPlayAs => 'Ju luani si';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Për të ftuar dikë të luajë, jepni këtë URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get drawOfferAccepted => 'Oferta për barazim u pranua';
 
   @override
-  String get drawOfferCanceled => 'Oferta për barazim u anulua';
-
-  @override
   String get whiteOffersDraw => 'I bardhi ofron barazim';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get exportGames => 'Eksporto lojërat';
 
   @override
-  String get ratingRange => 'Shtrirja e vlerësimit';
+  String get ratingFilter => 'Filtër vlerësimesh';
 
   @override
   String get thisAccountViolatedTos => 'Kjo llogari ka shkelur Kushtet e Shërbimit të Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Vlerësimi juaj $param është i përkohshëm';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtrat e vlerësimit janë kyçur, ngaqë vlerësimi juaj s’është i qëndrueshëm. Luajtja e lojërave të vlerësuara do të rritë qëndrueshmërinë.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3058,9 +3067,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get importGameExplanation => 'Ngjitni një PGN loje, që të merrni një përsëritje\ntë lojës në shfletues, analizë kompjuterike, bisedë\nloje dhe URL për ta ndarë me të tjerë.';
 
   @override
-  String get importGameCaveat => 'Variacionet do të fshihen. Për t\'i mbajtur ato, importoni PGN përmes një studimi.';
-
-  @override
   String get importGameDataPrivacyWarning => 'Kjo PGN mund të shihet nga publiku. Që të importoni privatisht një lojë, përdorni një ushtrim.';
 
   @override
@@ -3159,7 +3165,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get winner => 'Fituesi';
 
   @override
-  String get standings => 'Standings';
+  String get standings => 'Renditja';
 
   @override
   String get createANewTournament => 'Krijoni një turne të ri';
@@ -4022,6 +4028,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get analysisShapesHowTo => 'Që të vizatoni rrathë dhe shigjeta në fushë, shtypni shift+klikim, ose djathtasklikoni.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = e kuqe, shift = e verdhë, command ose alt = blu.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lejoni lojtarë të tjerë t’ju dërgojnë mesazh';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Vlerësimi juaj është $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Ushtrohuni me kompjuterin';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsSq extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Luani $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Sfidoni $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsSq extends AppLocalizations {
   String get simulDescriptionHelp => 'Ndonjë gjë që doni t’u thoni pjesëmarrësve?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Për sintaksë më të thelluar mund të përdoret $param-i.';
+  String markdownIsAvailable(String param) {
+    return 'Për formatim mund të përdorni $param.';
   }
 
   @override
@@ -4750,7 +4769,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get disableBlindMode => 'Çaktivizo mënyrën për të verbër';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopjoje në të papastër';
+
+  @override
+  String get online => 'në linjë';
+
+  @override
+  String get offline => 'jashtë linje';
+
+  @override
+  String get search => 'Kërko';
+
+  @override
+  String get clearSearch => 'Spastro kërkimin';
+
+  @override
+  String get tags => 'Etiketa';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetik';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Shto një kapitull të ri';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopjo PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Kopjo PNG të Papërpunuar';
 
   @override
   String get studyDownloadGame => 'Shkarko lojën';
@@ -5704,11 +5744,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL e lojërave, një për rresht';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Ngarko lojëra nga $param1 ose $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Krijo kapitull';
@@ -5940,7 +5975,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Vini shënim për një pozicion';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Klikoni butonin !? , ose djathtasklikoni mbi listën e lëvizjeve djathtas.<br>Tregohen shenja shënimi dhe ruhen.';
 
   @override
   String get studyConclusionTitle => 'Faleminderit për kohën që harxhoni';

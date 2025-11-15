@@ -727,9 +727,6 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastRoundName => 'Ime kola';
 
   @override
-  String get broadcastRoundNumber => 'Zaokružen broj';
-
-  @override
   String get broadcastTournamentName => 'Naziv turnira';
 
   @override
@@ -2120,10 +2117,22 @@ class AppLocalizationsBs extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ovaj račun je zatvoren.';
 
   @override
-  String get playWithAFriend => 'Igrajte protiv prijatelja';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Igrajte protiv računara';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Da bi ste pozvali nekoga na partiju, pošaljite ovaj link';
@@ -2776,9 +2785,6 @@ class AppLocalizationsBs extends AppLocalizations {
   String get drawOfferAccepted => 'Ponuda za remi prihvaćena';
 
   @override
-  String get drawOfferCanceled => 'Ponuda za remi povučena';
-
-  @override
   String get whiteOffersDraw => 'Bijeli nudi remi';
 
   @override
@@ -2902,7 +2908,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get exportGames => 'Izvezite odigrane partije';
 
   @override
-  String get ratingRange => 'Raspon rejtinga';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Korisnik ovog računa prekršio je Lichessove uvjete korištenja';
@@ -2974,6 +2980,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Vaš $param rejting je privremen';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3084,9 +3093,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Kada zalijepite PGN neke partije, dobijate reprizu partije koju možete detaljno pregledati, \nračunarsku analizu, mogućnost dopisivanja i link za slanje drugima.';
-
-  @override
-  String get importGameCaveat => 'Varijante će biti izbrisane. Da ih sačuvate, uvezite PGN posredstvom studije.';
 
   @override
   String get importGameDataPrivacyWarning => 'Ovom PGN-u može pristupiti javnost. Za privatni uvoz igre, koristite studiju.';
@@ -4050,6 +4056,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisnite shift + lijevi ili desni klik miša kako bi ste nacrtali krugove i strelice na ploči.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Dopustite drugim igračima da Vam mogu poslati poruku';
 
   @override
@@ -4235,6 +4244,11 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Vježbajte sa računarom';
 
   @override
@@ -4369,6 +4383,11 @@ class AppLocalizationsBs extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Igraj $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4657,8 +4676,8 @@ class AppLocalizationsBs extends AppLocalizations {
   String get simulDescriptionHelp => 'Želite li nešto reći učesnicima?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je dostupan za više napredniju sintaksu.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4779,6 +4798,21 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopiraj u međuspremnik';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5557,6 +5591,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyAlphabetical => 'Abecedno';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Dodajte novo poglavlje';
 
   @override
@@ -5654,6 +5691,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopirajte PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Skini partiju';
@@ -5779,11 +5819,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Link partije';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Učitajte partiju sa $param1 ili $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Kreirajte poglavlje';

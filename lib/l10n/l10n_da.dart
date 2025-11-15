@@ -707,9 +707,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastRoundName => 'Rundenavn';
 
   @override
-  String get broadcastRoundNumber => 'Rundenummer';
-
-  @override
   String get broadcastTournamentName => 'Turneringsnavn';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsDa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Denne konto er lukket.';
 
   @override
-  String get playWithAFriend => 'Spil mod en ven';
+  String get gameSetup => 'Opsætning af parti';
 
   @override
-  String get playWithTheMachine => 'Spil mod computeren';
+  String get challengeAFriend => 'Spil mod en ven';
+
+  @override
+  String get playAgainstComputer => 'Spil mod computer';
+
+  @override
+  String get gameMode => 'Spiltype';
+
+  @override
+  String get createLobbyGame => 'Opret lobbyparti';
+
+  @override
+  String get youPlayAs => 'Du spiller som';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Invitér nogen til at spille ved at give dem denne URL';
@@ -2235,10 +2244,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get blackLeftTheGame => 'Sort forlod partiet';
 
   @override
-  String get whiteDidntMove => 'Hvid flyttede ikke';
+  String get whiteDidntMove => 'Hvid trak ikke';
 
   @override
-  String get blackDidntMove => 'Sort flyttede ikke';
+  String get blackDidntMove => 'Sort trak ikke';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';
@@ -2622,7 +2631,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get email => 'E-mail';
 
   @override
-  String get passwordReset => 'Nulstil adgangskode';
+  String get passwordReset => 'Nulstilling af adgangskode';
 
   @override
   String get forgotPassword => 'Glemt adgangskode?';
@@ -2748,9 +2757,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get drawOfferAccepted => 'Remistilbud accepteret';
 
   @override
-  String get drawOfferCanceled => 'Remistilbud trukket tilbage';
-
-  @override
   String get whiteOffersDraw => 'Hvid tilbyder remis';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get exportGames => 'Eksporter spil';
 
   @override
-  String get ratingRange => 'Rating-interval';
+  String get ratingFilter => 'Ratingfilter';
 
   @override
   String get thisAccountViolatedTos => 'Denne konto overtrådte Lichess servicevilkår';
@@ -2946,6 +2952,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Din $param rating er provisorisk';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating-filtre er låst, fordi din rating ikke er stabil. Stabiliteten øges ved at spille ratede partier.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Når du indsætter et partis PGN, får du en afspillelig gengivelse, en computeranalyse, en spilchat og en URL til deling.';
-
-  @override
-  String get importGameCaveat => 'Varianter vil blive slettet. Hvis du vil beholde dem, skal du importere PGN\'en via et studie.';
 
   @override
   String get importGameDataPrivacyWarning => 'Denne PGN kan tilgås af offentligheden. For at importere et parti privat, skal du bruge et studie.';
@@ -3215,7 +3221,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get resume => 'Genoptag';
 
   @override
-  String get youArePlaying => 'Du spiller nu!';
+  String get youArePlaying => 'Du spiller!';
 
   @override
   String get winRate => 'Sejrsrate';
@@ -4022,6 +4028,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get analysisShapesHowTo => 'Tryk shift + klik eller højreklik for at tegne cirkler og pile på brættet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = rød, shift = gul, command eller alt = blå.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lad andre spillere sende en besked til dig';
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Din rating er $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Træn med computer';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Spil $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Udfordr $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsDa extends AppLocalizations {
   String get simulDescriptionHelp => 'Noget du ønsker at fortælle deltagerne?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param er tilgængelig for mere avanceret syntaks.';
+  String markdownIsAvailable(String param) {
+    return '$param er tilgængelig til formatering.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopiér til udklipsholder';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Søg';
+
+  @override
+  String get clearSearch => 'Ryd søgning';
+
+  @override
+  String get tags => 'Etiketter';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetisk';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Tilføj et nyt kapitel';
 
   @override
@@ -5515,7 +5552,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyYouAreNowASpectator => 'Du er nu tilskuer';
 
   @override
-  String get studyPgnTags => 'PGN tags';
+  String get studyPgnTags => 'PGN-etiketter';
 
   @override
   String get studyLike => 'Synes godt om';
@@ -5579,6 +5616,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Kopier PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Kopiér rå PGN';
 
   @override
   String get studyDownloadGame => 'Download parti';
@@ -5704,11 +5744,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL for partiet';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Indlæs et parti fra $param1 eller $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Opret kapitel';

@@ -55,16 +55,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'শুভ দিন';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'বিকল্পপথ লুকান';
 
   @override
   String get mobileHomeTab => 'হোম';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'লাইভ স্ট্রীমার';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে হলে লগইন করুন।';
 
   @override
   String get mobileNoSearchResults => 'No results';
@@ -83,7 +83,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'যে খেলোয়াড়-দের নামে \"$param\" আছে।';
   }
 
   @override
@@ -96,7 +96,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'আপনি এই পর্ব শেষ করতে চান?';
 
   @override
   String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
@@ -105,7 +105,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => '৩ মিনিটে যত বেশি পারেন ধাঁধাঁ সমাধান করেন।';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
@@ -135,10 +135,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'বৃত্ত';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'বর্গ';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -210,13 +210,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileShowComments => 'কমেন্টগুলো দেখুন';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'ফলাফল দেখান';
 
   @override
   String get mobileShowVariations => 'Show variations';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'কিছু সমস্যা হয়েছে।';
 
   @override
   String get mobileSystemColors => 'System colors';
@@ -239,7 +239,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileWatchTab => 'দেখুন';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'লীচেস অ্যাপ-এ স্বাগতম!';
 
   @override
   String get activityActivity => 'কার্যকলাপ';
@@ -705,9 +705,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Round name';
-
-  @override
-  String get broadcastRoundNumber => 'গোল নম্বর';
 
   @override
   String get broadcastTournamentName => 'Tournament name';
@@ -2092,10 +2089,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'এই একাউন্টটি বন্ধ করা হয়েছে';
 
   @override
-  String get playWithAFriend => 'বন্ধুর সাথে খেলো';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'কম্পিউটারের সাথে খেলতে চান';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'কম্পিউটারের বিপরীতে খেলুন';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন';
@@ -2748,9 +2757,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get drawOfferAccepted => 'সমান অফার গ্রহণ করা হয়েছে';
 
   @override
-  String get drawOfferCanceled => 'সমান অফার বাতিল করা হয়েছে';
-
-  @override
   String get whiteOffersDraw => 'সাদা অফার সমান';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get exportGames => 'খেলা রপ্তানী';
 
   @override
-  String get ratingRange => 'রেটিং সীমা';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'এই অ্যাকাউন্টটি লিচেস্‌-এর পরিষেবার শর্তসমূহ লঙ্ঘন করেছে';
@@ -2889,31 +2895,31 @@ class AppLocalizationsBn extends AppLocalizations {
   String get proposeATakeback => 'চাল ফিরিয়ে নেবার সুযোগ দিন';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'সাদা দান-ফেরত প্রস্তাব করেছেন';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'কালো দান-ফেরত প্রস্তাব করেছেন';
 
   @override
   String get takebackPropositionSent => 'চাল ফিরিয়ে সুযোগ পাঠানো হয়েছে';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'সাদা দান-ফেরত প্রত্যাখ্যান করেছেন';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'কালো দান-ফেরত প্রত্যাখ্যান করেছেন';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'সাদা দান দান-ফেরত প্রস্তাব গ্রহণ করেছেন';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'কালো দান ফিরানোর প্রস্তাব গ্রহণ করেছেন';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'সাদা দান-ফেরত বাতিল করেছেন';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'কালো দান-ফেরত বাতিল করেছেন';
 
   @override
   String get yourOpponentProposesATakeback => 'আপনার প্রতিপক্ষ চাল ফিরিয়ে নেবার সুযোগ দিতে চান';
@@ -2946,6 +2952,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'আপনার $param অনুপাত হয় সাময়িক';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
-
-  @override
-  String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
 
   @override
   String get importGameDataPrivacyWarning => 'এই PGN জনসাধারণের দ্বারা অধিগত করা যেতে পারে। ব্যক্তিগতভাবে একটি গেম ইমপোর্ট করতে, একটি স্টাডি ব্যবহার করুন.';
@@ -3439,10 +3445,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get other => 'অন্য কোনো কারণ';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'গেম(গুলোর) লিঙ্ক পেস্ট করুন এবং ওই ব্যবহারকারীর আচরণে কী সন্দেহজনক তা ব্যখ্যা করুন। শুধু \"তারা চিট করে\" বলবেন না, আপনি কিভাবে এই উপসংহারে এলেন তা আমাদের বলুন.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'ব্যখ্যা করুন এই ব্যবহারকারীর নাম কোন দিক দিয়ে অশোভন। শুধু \"এটি অশোভন/অশালীন\" বলবেন না, আপনি কিভাবে এই উপসংহারে এলেন তা আমাদের বলুন, বিশেষ করে যদি এটি কোনো অপমান যা লুকানো হয়, ইংরেজিতে নয় এমন হয়, গালি হয়, অথবা কোনো ঐতিহাসিক/সাংস্কৃতিক দিকে হয়।';
 
   @override
   String get reportProcessedFasterInEnglish => 'ইংরেজিতে লেখা হলে আপনার রিপোর্ট দ্রুত প্রক্রিয়া করা হবে।';
@@ -3548,7 +3554,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get outsideTheBoard => 'বোর্ডের বাহিরে';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'বোর্ডের সবাই বর্গ';
 
   @override
   String get onSlowGames => 'খেলায় ধীর গতি';
@@ -3966,14 +3972,14 @@ class AppLocalizationsBn extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'যদি আপনি ই-মেইলটি না দেখতে পান, অন্যজাগায় থাকতে পারে, যেমন আপনার জুনক, স্প্যাম, সোসিয়াল, অথবা অন্য ফোল্ডার.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'যদি ৫ মিনিটে ইমেইল না পান:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'সকল আবর্জনা, স্প্যাম এবং অন্যান্য ফোল্ডারে খুঁজুন';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'আপনার ইমেইল ঠিকানা $param কিনা যাচাই করুন';
   }
 
   @override
@@ -4022,6 +4028,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get analysisShapesHowTo => 'সিফ্ট+ক্লিক চাপুন অথবা ডান-ক্লিক করুন বোর্ডের উপর বৃত্ত এবং তীর আঁকার জন্য.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'অন্যান্য খেলোয়ারদের আপনাকে বার্তা করতে দিন';
 
   @override
@@ -4050,7 +4059,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক,\nতাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
+    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক, তাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
   }
 
   @override
@@ -4207,6 +4216,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'কম্পিউটারের সাথে অনুশীলন';
 
   @override
@@ -4341,6 +4355,11 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String playX(String param) {
     return 'খেলা $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4629,8 +4648,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get simulDescriptionHelp => 'আপনি অংশগ্রহণকারীদের কিছু বলতে চান?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param আরও উচ্চতর সিনট্যাক্সের জন্য উপলব্ধ.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4751,6 +4770,21 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5482,6 +5516,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyAlphabetical => 'বর্ণানুক্রমিক';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'নতুন অধ্যায় যোগ করুন';
 
   @override
@@ -5579,6 +5616,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get studyCopyChapterPgn => 'Copy PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
 
   @override
   String get studyDownloadGame => 'Download game';
@@ -5704,11 +5744,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'খেলাগুলোর URL, লাইনপ্রতি একটি';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 অথবা $param2 থেকে খেলাসমূহ লোড করুন';
-  }
 
   @override
   String get studyCreateChapter => 'অধ্যায় তৈরি করুন';

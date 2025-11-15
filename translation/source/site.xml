@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Play with a friend</string>
-  <string name="playWithTheMachine">Play with the computer</string>
+  <string name="gameSetup">Game setup</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Challenge a friend</string>
+  <string name="playAgainstComputer">Play against computer</string>
+  <string name="gameMode">Game mode</string>
+  <string name="createLobbyGame">Create lobby game</string>
+  <string name="youPlayAs">You play as</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">To invite someone to play, give this URL</string>
   <string name="gameOver">Game Over</string>
   <string name="waitingForOpponent">Waiting for opponent</string>
@@ -221,8 +225,8 @@
   <string name="time">Time</string>
   <string name="rating">Rating</string>
   <string name="ratingStats">Rating stats</string>
-  <string name="username">User name</string>
-  <string name="usernameOrEmail">User name or email</string>
+  <string name="username">Username</string>
+  <string name="usernameOrEmail">Username or email</string>
   <string name="changeUsername">Change username</string>
   <string name="changeUsernameNotSame">Only the case of the letters can change. For example "johndoe" to "JohnDoe".</string>
   <string name="changeUsernameDescription">Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.</string>
@@ -280,7 +284,6 @@
   <string name="blackTimeOut">Black time out</string>
   <string name="drawOfferSent">Draw offer sent</string>
   <string name="drawOfferAccepted">Draw offer accepted</string>
-  <string name="drawOfferCanceled">Draw offer cancelled</string>
   <string name="whiteOffersDraw">White offers draw</string>
   <string name="blackOffersDraw">Black offers draw</string>
   <string name="whiteDeclinesDraw">White declines draw</string>
@@ -316,7 +319,7 @@
   <string name="loginToChat">Sign in to chat</string>
   <string name="youHaveBeenTimedOut">You have been timed out.</string>
   <string name="spectatorRoom">Spectator room</string>
-  <string name="composeMessage">Compose message</string>
+  <string name="composeMessage">Message</string>
   <string name="subject">Subject</string>
   <string name="send">Send</string>
   <string name="incrementInSeconds">Increment in seconds</string>
@@ -342,7 +345,7 @@
     <item quantity="other">%s playing</item>
   </plurals>
   <string name="exportGames">Export games</string>
-  <string name="ratingRange">Rating range</string>
+  <string name="ratingFilter">Rating filter</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Give %s second</item>
     <item quantity="other">Give %s seconds</item>
@@ -398,6 +401,7 @@
     <item quantity="other">You need to play %s more rated games</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Your %s rating is provisional</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Rating filters are locked because your rating is not stable. Playing rated games will increase stability.</string>
   <string name="yourPerfRatingIsTooHigh">Your %1$s rating (%2$s) is too high</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Your top weekly %1$s rating (%2$s) is too high</string>
   <string name="yourPerfRatingIsTooLow">Your %1$s rating (%2$s) is too low</string>
@@ -427,8 +431,7 @@
   <string name="continueFromHere">Continue from here</string>
   <string name="toStudy">Study</string>
   <string name="importGame">Import game</string>
-  <string name="importGameExplanation">Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.</string>
-  <string name="importGameCaveat">Variations will be erased. To keep them, import the PGN via a study.</string>
+  <string name="importGameExplanation">Paste a game PGN to get a browsable replay of the main line, computer analysis, game chat and public shareable URL.</string>
   <string name="importGameDataPrivacyWarning">This PGN can be accessed by the public. To import a game privately, use a study.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s imported game</item>
@@ -765,7 +768,8 @@
   <string name="crosstable">Crosstable</string>
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Scroll over the board to move in the game.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Scroll over computer variations to preview them.</string>
-  <string name="analysisShapesHowTo">Press shift+click or right-click to draw circles and arrows on the board.</string>
+  <string name="analysisShapesHowTo">Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:</string>
+  <string name="primaryColorArrowsHowTo">Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.</string>
   <string name="letOtherPlayersMessageYou">Let other players message you</string>
   <string name="receiveForumNotifications">Receive notifications when mentioned in the forum</string>
   <string name="shareYourInsightsData">Share your chess insights data</string>
@@ -827,6 +831,7 @@
   <string name="notifications">Notifications</string>
   <string name="notificationsX">Notifications: %1$s</string>
   <string name="perfRatingX">Rating: %s</string>
+  <string name="yourRatingIsX">Your rating is %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s second to play the first move</item>
     <item quantity="other">%s seconds to play the first move</item>
@@ -878,6 +883,7 @@
   <string name="playVariationToCreateConditionalPremoves">Play a variation to create conditional premoves</string>
   <string name="noConditionalPremoves">No conditional premoves</string>
   <string name="playX">Play %s</string>
+  <string name="challengeX">Challenge %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">and save %s premove line</item>
     <item quantity="other">and save %s premove lines</item>
@@ -968,7 +974,7 @@ Leave empty to start games from the normal initial position.</string>
   <string name="simulFeaturedHelp">Show your simul to everyone on %s. Disable for private simuls.</string>
   <string name="simulDescription">Simul description</string>
   <string name="simulDescriptionHelp">Anything you want to tell the participants?</string>
-  <string name="markdownAvailable">%s is available for more advanced syntax.</string>
+  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s is available for formatting.</string>
   <string name="embedsAvailable">Paste a game URL or a study chapter URL to embed it.</string>
   <string name="inYourLocalTimezone">In your own local timezone</string>
   <string name="tournChat">Tournament chat</string>
@@ -1009,4 +1015,9 @@ All operating costs, development, and content are funded solely by user donation
   <string name="enableBlindMode">Enable blind mode</string>
   <string name="disableBlindMode">Disable blind mode</string>
   <string name="copyToClipboard">Copy to clipboard</string>
+  <string name="online" comment="status of a user">online</string>
+  <string name="offline" comment="status of a user">offline</string>
+  <string name="search">Search</string>
+  <string name="clearSearch">Clear search</string>
+  <string name="tags">Tags</string>
 </resources>

@@ -26,14 +26,26 @@ class StudyGamebook extends StatelessWidget {
   }
 }
 
-class _Comment extends ConsumerWidget {
+class _Comment extends ConsumerStatefulWidget {
   const _Comment({required this.id});
-
   final StudyId id;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).requireValue;
+  ConsumerState<_Comment> createState() => _CommentState();
+}
+
+class _CommentState extends ConsumerState<_Comment> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void didUpdateWidget(covariant _Comment oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _scrollController.jumpTo(0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
     final comment =
         state.gamebookComment ??
@@ -47,7 +59,9 @@ class _Comment extends ConsumerWidget {
 
     return Expanded(
       child: Scrollbar(
+        controller: _scrollController,
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Linkify(
@@ -76,8 +90,32 @@ class _Hint extends ConsumerStatefulWidget {
 class _HintState extends ConsumerState<_Hint> {
   bool showHint = false;
 
+  void _hideHint() {
+    setState(() {
+      showHint = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.gamebookState),
+      (prev, next) {
+        if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
+          _hideHint();
+        }
+      },
+    );
+
+    ref.listen(
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.currentChapter.id),
+      (prev, next) {
+        if (prev != next) {
+          _hideHint();
+        }
+      },
+    );
+
     final hint = ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()

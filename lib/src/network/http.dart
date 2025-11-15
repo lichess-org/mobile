@@ -477,9 +477,6 @@ class ServerException extends ClientException {
 void _checkResponseSuccess(Uri url, Response response) {
   if (response.statusCode < 400) return;
   var message = 'Request to $url failed with status ${response.statusCode}';
-  if (response.reasonPhrase != null) {
-    message = '$message: ${response.reasonPhrase}';
-  }
   Map<String, dynamic>? jsonError;
   if (response.body.isNotEmpty) {
     try {
@@ -490,11 +487,11 @@ void _checkResponseSuccess(Uri url, Response response) {
           message = '$message: ${json['error']}';
         }
       }
-    } catch (e) {
-      _logger.warning('Could not decode error response from $url: $e');
+    } catch (_) {
+      message = '$message: ${response.body}';
     }
   }
-  throw ServerException(response.statusCode, '$message.', url, jsonError);
+  throw ServerException(response.statusCode, message, url, jsonError);
 }
 
 /// A JSON decoder that decodes UTF-8 bytes.
@@ -504,12 +501,42 @@ void _checkResponseSuccess(Uri url, Response response) {
 final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 extension ClientExtension on Client {
+  /// Sends an HTTP POST request with the given headers and body to the given URL and read response body.
+  ///
+  /// Returns a Future that completes to the body of the response as a string.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  Future<String> postRead(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) async {
+    final response = await post(url, headers: headers, body: body, encoding: encoding);
+    _checkResponseSuccess(url, response);
+    return response.body;
+  }
+
+  /// Sends an HTTP DELETE request with the given headers and body to the given URL and read response body.
+  ///
+  /// Returns a Future that completes to the body of the response as a string.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  Future<String> deleteRead(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) async {
+    final response = await delete(url, headers: headers, body: body, encoding: encoding);
+    _checkResponseSuccess(url, response);
+    return response.body;
+  }
+
   /// Sends an HTTP GET request with the given headers to the given URL and
   /// returns a Future that completes to the body of the response as a JSON object
   /// mapped to [T].
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if the response body can't be read as a json object.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<T> readJson<T>(
     Uri url, {
     Map<String, String>? headers,
@@ -534,8 +561,8 @@ extension ClientExtension on Client {
   /// returns a Future that completes to the body of the response as a JSON list
   /// of objects mapped to [T].
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if the response body can't be read as a json list.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<IList<T>> readJsonList<T>(
     Uri url, {
     Map<String, String>? headers,
@@ -572,8 +599,8 @@ extension ClientExtension on Client {
   /// returns a Future that completes to the body of the response as a ND-JSON
   /// list of objects mapped to [T].
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if the response body can't be read as a ND-JSON list.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<IList<T>> readNdJsonList<T>(
     Uri url, {
     Map<String, String>? headers,
@@ -588,9 +615,8 @@ extension ClientExtension on Client {
   /// returns a Future that completes to the stream of the response as a ND-JSON
   /// object mapped to T.
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if an object in the response body can't be read
-  /// as ND-JSON.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<Stream<T>> readNdJsonStream<T>(
     Uri url, {
     Map<String, String>? headers,
@@ -621,8 +647,8 @@ extension ClientExtension on Client {
   /// returns a Future that completes to the body of the response as a JSON object
   /// mapped to [T].
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if the response body can't be read as a json object.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<T> postReadJson<T>(
     Uri url, {
     Map<String, String>? headers,
@@ -649,8 +675,8 @@ extension ClientExtension on Client {
   /// returns a Future that completes to the body of the response as a JSON list
   /// of objects mapped to [T].
   ///
-  /// The Future will emit a [ClientException] if the response doesn't have a
-  /// success status code or if the response body can't be read as a json list.
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  /// Throws a [ClientException] if the response JSON body can't be decoded.
   Future<IList<T>> postReadNdJsonList<T>(
     Uri url, {
     Map<String, String>? headers,

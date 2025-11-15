@@ -217,6 +217,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
                                 lastMove: puzzleState.lastMove as NormalMove?,
+                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                               const SizedBox(width: 16.0),
@@ -226,10 +227,23 @@ class _BodyState extends ConsumerState<_Body> {
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Center(
-                                      child: PuzzleFeedbackWidget(
-                                        puzzle: puzzleState.puzzle,
-                                        state: puzzleState,
-                                        onStreak: true,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Expanded(
+                                            child: PuzzleFeedbackWidget(
+                                              puzzle: puzzleState.puzzle,
+                                              state: puzzleState,
+                                              onStreak: true,
+                                            ),
+                                          ),
+                                          Text(
+                                            context.l10n.puzzleRatingX(
+                                              puzzleState.puzzle.puzzle.rating.toString(),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16.0),
+                                        ],
                                       ),
                                     ),
                                     Padding(
@@ -336,6 +350,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
                                 lastMove: puzzleState.lastMove as NormalMove?,
+                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                             ),

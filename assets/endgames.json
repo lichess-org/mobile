@@ -694,4 +694,28 @@
     "eco": "173",
     "fen": "8/8/4r3/3k4/8/8/3K1Q2/8 w - - 0 1",
     "name": "Queen vs Rook"
+}, {
+    "eco": "174",
+    "fen": "8/8/8/8/8/8/2Rk4/1K6 b - - 0 1",
+    "name": "Maximum DTZ KRvK"
+}, {
+    "eco": "175",
+    "fen": "8/8/8/6B1/8/8/4k3/1K5N b - - 0 1",
+    "name": "Maximum DTZ KBNvK"
+}, {
+    "eco": "176",
+    "fen": "K7/N7/k7/8/3p4/8/N7/8 w - - 0 1",
+    "name": "Maximum DTZ KNNvKP"
+}, {
+    "eco": "177",
+    "fen": "6N1/5KR1/2n5/8/8/8/2n5/1k6 w - - 0 1",
+    "name": "Maximum DTZ KRNvKNN"
+}, {
+    "eco": "178",
+    "fen": "QN4n1/6r1/3k4/8/b2K4/8/8/8 b - - 0 1",
+    "name": "Maximum DTZ KQNvKRBN"
+}, {
+    "eco": "179",
+    "fen": "R7/8/8/8/7q/2K1B2p/7P/2Bk4 w - - 0 1",
+    "name": "Maximum DTC KRBBPvKQP"
 }]

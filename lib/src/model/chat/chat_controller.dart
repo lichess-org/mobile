@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
@@ -151,13 +150,9 @@ class ChatController extends _$ChatController {
         'text': message.message,
       },
     };
-    final response = await ref
+    await ref
         .read(lichessClientProvider)
-        .post(uri, headers: {'Accept': 'application/json'}, body: body);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to flag: ${response.statusCode}', uri);
-    }
+        .postRead(uri, headers: {'Accept': 'application/json'}, body: body);
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.

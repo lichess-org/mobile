@@ -104,7 +104,6 @@
     <item quantity="other">%s o\'yinlarni yuklash uchun PGN matnni shu yerga qo\'ying</item>
   </plurals>
   <string name="urlOfTheGame">O\'yin URL i</string>
-  <string name="loadAGameFromXOrY">%1$s yoki %2$s dan o\'yinni yuklash</string>
   <string name="createChapter">Bo\'lim yaratish</string>
   <string name="createStudy">Ta\'lim yaratish</string>
   <string name="editStudy">Ta\'limni tahrirlash</string>
@@ -164,5 +163,5 @@
   <string name="playAgain">Qayta o‘ynash</string>
   <string name="whatWouldYouPlay">Ushbu holatda qanday o‘ynagan bo‘lardingiz?</string>
   <string name="youCompletedThisLesson">Tabriklaymiz! Siz bu darsni tugatdingiz.</string>
-  <string name="perPage" comment="%s is a number.&#10;&#10;Appears on the pages of broadcasts (https://lichess.org/broadcast). Lets the user select how many games to show on each page.">Har bir sahifaga %s</string>
+  <string name="perPage">Har bir sahifaga %s</string>
 </resources>

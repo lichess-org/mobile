@@ -1,11 +1,15 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -18,6 +22,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -27,20 +32,21 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends StatelessWidget {
+class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
@@ -50,8 +56,83 @@ class AnalysisScreen extends StatelessWidget {
   }
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(analysisControllerProvider(options));
+
+    return analysisState.when(
+      data: (state) => _AnalysisScreen(options: options),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
+      error: (error, _) {
+        debugPrint('Error loading analysis: $error');
+        if (error is UnsupportedVariantException) {
+          return _UnsupportedVariantErrorScreen(error: error);
+        }
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.analysis)),
+          body: FullScreenRetryRequest(
+            onRetry: () {
+              ref.invalidate(analysisControllerProvider(options));
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _UnsupportedVariantErrorScreen extends StatelessWidget {
+  const _UnsupportedVariantErrorScreen({required this.error});
+
+  final UnsupportedVariantException error;
+
+  @override
   Widget build(BuildContext context) {
-    return _AnalysisScreen(options: options);
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.analysis)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              context.l10n.mobileSomethingWentWrong,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              context.l10n.mobileUnsupportedVariant(error.variant.name),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                Flexible(
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final gameUrl = 'https://$kLichessHost/${error.gameId.value}';
+                      await launchUrl(Uri.parse(gameUrl), mode: LaunchMode.externalApplication);
+                    },
+                    icon: const Icon(Icons.open_in_browser),
+                    label: const Text('Open game in your browser'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -307,6 +388,7 @@ class _Body extends ConsumerWidget {
         bottomBar: _BottomBar(options: options),
         children: [
           ExplorerView(
+            pov: pov,
             isComputerAnalysisAllowed: analysisState.isComputerAnalysisAllowed,
             position: currentNode.position,
             opening: kOpeningAllowedVariants.contains(analysisState.variant)
@@ -362,8 +444,9 @@ class _PlayerWidget extends StatelessWidget {
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                onTap: () =>
-                    Navigator.of(context).push(UserScreen.buildRoute(context, player.user!)),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(UserOrProfileScreen.buildRoute(context, player.user!)),
               ),
             )
           else
@@ -481,6 +564,10 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final session = ref.read(authSessionProvider);
+    final mySide = session != null
+        ? analysisState.archivedGame?.playerSideOf(session.user.id)
+        : null;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -488,6 +575,33 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (options case ArchivedGame())
+          if (analysisState.isComputerAnalysisAllowed &&
+              engineSupportedVariants.contains(analysisState.variant))
+            if (mySide != null)
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (
+                    id: options.gameId!,
+                    initialSide: analysisState.pov,
+                  )),
+                ),
+              )
+            else ...[
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.white)),
+                ),
+              ),
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.black)),
+                ),
+              ),
+            ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(

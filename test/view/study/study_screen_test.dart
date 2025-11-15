@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
@@ -45,7 +46,6 @@ StudyChapter makeChapter({
 Study makeStudy({
   StudyChapter? chapter,
   IList<StudyChapterMeta>? chapters,
-  IList<StudyMember>? members,
   IList<String?> hints = const IList.empty(),
   IList<String?> deviationComments = const IList.empty(),
 }) {
@@ -60,14 +60,12 @@ Study makeStudy({
     topics: const IList.empty(),
     chapters: chapters ?? IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
     chapter: chapter,
-    members:
-        members ??
-        IList(const [
-          StudyMember(
-            user: LightUser(id: UserId(''), name: ''),
-            role: '',
-          ),
-        ]),
+    members: IMap(const {
+      UserId(''): StudyMember(
+        user: LightUser(id: UserId(''), name: ''),
+        role: '',
+      ),
+    }),
     hints: hints,
     deviationComments: deviationComments,
   );
@@ -370,10 +368,29 @@ void main() {
               orientation: Side.white,
               gamebook: true,
             ),
-            hints: ['Hint 1', null, null, null].lock,
+            chapters: IList(const [
+              StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
+              StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
+            ]),
+            hints: ['Hint 1', null, null, null, 'Hint 2'].lock,
             deviationComments: [null, 'Shown if any move other than d4 is played', null, null].lock,
           ),
-          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3',
+          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
+        ),
+      );
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
+      ).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('2'),
+              orientation: Side.white,
+              gamebook: true,
+            ),
+            hints: ['Hint 1'].lock,
+          ),
+          '1. e4 e5',
         ),
       );
 
@@ -399,6 +416,9 @@ void main() {
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
+      // Hint should still be shown after incorrect move
+      expect(find.text('Hint 1'), findsOneWidget);
+
       await playMove(tester, 'd2', 'd4');
       expect(find.text('Shown if d4 is played'), findsOneWidget);
       await tester.tap(find.byTooltip('Retry'));
@@ -419,7 +439,33 @@ void main() {
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
       expect(find.text("That's not the move!"), findsNothing);
+
+      await playMove(tester, 'g1', 'f3');
+      // Wait move and opponent's response to be played
+      await tester.pump(const Duration(seconds: 1));
+
+      // This move has a hint again
+      expect(find.text('Get a hint'), findsOneWidget);
+      await tester.tap(find.text('Get a hint'));
+      await tester.pump(); // Wait for hint to be shown
+      expect(find.text('Hint 2'), findsOneWidget);
+
+      // Open chapter selection dialog
+      await tester.tap(find.byTooltip('2 Chapters'));
+      // Wait for dialog to open
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('2 Chapter 2', findRichText: true));
+      // Wait for chapter to load
+      await tester.pumpAndSettle();
+
+      // When switching to a new chapter, hint state should be reset as well
+      expect(find.text('Get a hint'), findsOneWidget);
+      await tester.tap(find.text('Get a hint'));
+      await tester.pump(); // Wait for hint to be shown
+      expect(find.text('Hint 1'), findsOneWidget);
     });
+
     testWidgets('Illegal Position in Study Chapter', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
 
@@ -493,5 +539,143 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('2. Illegal Chapter'), findsOneWidget);
     });
+  });
+
+  testWidgets('Displays annotations on the correct square', (WidgetTester tester) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        '''
+[Event "annotation bug test: Chapter 2"]
+[Date "2025.09.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "annotation bug test"]
+[ChapterName "Chapter 2"]
+[ChapterURL "https://lichess.org/study/EQWia70B/M289O12T"]
+[Annotator "https://lichess.org/@/yassine00"]
+[FEN "8/8/2k5/8/8/8/8/1K3R2 b - - 5 3"]
+[SetUp "1"]
+[UTCDate "2025.09.28"]
+[UTCTime "14:16:01"]
+
+3... Kd5 4. Rg1!! Kd4 5. Re1 Kc4 6. Rh1?? *
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(id: testId),
+      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    void expectAnnotations(Iterable<Matcher> annotations) {
+      final board = tester.widget<Chessboard>(find.byType(Chessboard));
+
+      if (annotations.isEmpty) {
+        expect(board.annotations, isNull);
+      } else {
+        expect(board.annotations!.length, annotations.length);
+        expect(board.annotations, allOf(annotations));
+      }
+    }
+
+    expectAnnotations([]);
+
+    // each pumpAndSettle() call waits for move to be played and potential annotation to appear
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle();
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle();
+
+    // 4. Rg1!!
+    expectAnnotations([
+      containsPair(Square.g1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
+    ]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+
+    // Regression test for https://github.com/lichess-org/mobile/issues/2231
+    // 6. Rh1??
+    expectAnnotations([
+      containsPair(Square.h1, predicate<Annotation>((annotation) => annotation.symbol == '??')),
+    ]);
+  });
+
+  testWidgets('Displays correct annotation for castling on correct square', (
+    WidgetTester tester,
+  ) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        '''
+[Event "Test castling annotations"]
+[Date "2025.09.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "Test castling annotations"]
+[FEN "r3kb1r/p2nqppp/5n2/1B2p1B1/4P3/1Q6/PPP2PPP/R3K2R w KQkq - 1 12"]
+
+12. O-O-O!!
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(id: testId),
+      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for O-O-O move to be played
+
+    final board = tester.widget<Chessboard>(find.byType(Chessboard));
+    expect(board.annotations!.length, 1);
+    expect(
+      board.annotations,
+      containsPair(Square.c1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
+    );
   });
 }

@@ -105,6 +105,7 @@ class _Body extends ConsumerWidget {
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,
                                 child: OpeningExplorerView(
+                                  pov: options.orientation,
                                   position: state.currentPosition,
                                   opening: state.currentNode.isRoot
                                       ? LightOpening(eco: '', name: context.l10n.startPosition)
@@ -147,6 +148,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ),
                       OpeningExplorerView(
+                        pov: options.orientation,
                         position: state.currentPosition,
                         opening: state.currentNode.isRoot
                             ? LightOpening(eco: '', name: context.l10n.startPosition)

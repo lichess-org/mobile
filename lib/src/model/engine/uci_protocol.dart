@@ -67,8 +67,10 @@ class UCIProtocol {
     _sendAndLog('isready');
   }
 
+  final spaceRegex = RegExp(r'\s+');
+
   void received(String line) {
-    final parts = line.trim().split(RegExp(r'\s+'));
+    final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
       // unconditionally use this mode.

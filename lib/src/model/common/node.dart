@@ -681,6 +681,20 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
     IList<int>? nags,
   }) = _ViewBranch;
 
+  /// Converts back to a mutable [Branch].
+  Branch get branch => Branch(
+    sanMove: sanMove,
+    position: position,
+    opening: opening,
+    isCollapsed: isCollapsed,
+    isComputerVariation: isComputerVariation,
+    eval: eval,
+    lichessAnalysisComments: lichessAnalysisComments?.unlock,
+    startingComments: startingComments?.unlock,
+    comments: comments?.unlock,
+    nags: nags?.unlock,
+  );
+
   /// The text comments of this branch.
   Iterable<String> get textComments {
     return [
