@@ -22,8 +22,18 @@ abstract class Engine {
   /// The name of the engine.
   String get name;
 
-  /// Start the engine with the given [work].
-  Stream<EvalResult> start(Work work);
+  /// Run the engine with the given [Analysiswork] and return the engine analysis.
+  ///
+  /// It is used to get analysis.
+  Stream<EvalResult> runAnalysis(AnalysisWork work);
+
+  /// Run the engine with the given [MoveWork] and return the engine best move.
+  ///
+  /// It is used to play against the computer.
+  Future<String> getBestMove(MoveWork work);
+
+  /// Send ucinewgame to the engine.
+  void newGame();
 
   /// Stop the engine current computation.
   void stop();
@@ -34,7 +44,7 @@ abstract class Engine {
   /// Whether the engine is disposed.
   ///
   /// This will be `true` once [dispose] is called. Once the engine is disposed, it cannot be
-  /// used anymore, and [start] and [stop] methods will throw a [StateError].
+  /// used anymore, and [runAnalysis], [getBestMove] and [stop] methods will throw a [StateError].
   bool get isDisposed;
 
   /// Dispose the engine. It cannot be used after this method is called.
@@ -92,60 +102,82 @@ class StockfishEngine implements Engine {
   bool get isDisposed => _isDisposed;
 
   @override
-  Stream<EvalResult> start(Work work) {
+  Stream<EvalResult> runAnalysis(AnalysisWork work) {
     if (isDisposed) {
       throw StateError('Engine is disposed');
     }
 
-    _log.info('engine start at ply ${work.position.ply} and path ${work.path}');
+    _log.info('engine run at ply ${work.position.ply} and path ${work.path}');
     _protocol.compute(work);
 
     if (_stockfish == null) {
-      try {
-        final stockfish = LichessBinding.instance.stockfishFactory(
-          flavor,
-          smallNetPath: _smallNetPath,
-          bigNetPath: _bigNetPath,
-        );
-        _stockfish = stockfish;
-
-        _state.value = EngineState.loading;
-        _stdoutSubscription = stockfish.stdout.listen((line) {
-          _protocol.received(line);
-        });
-
-        stockfish.state.addListener(_stockfishStateListener);
-
-        // Ensure the engine is ready before sending commands
-        void onReadyOnce() {
-          if (stockfish.state.value == StockfishState.ready) {
-            _protocol.connected((String cmd) {
-              stockfish.stdin = cmd;
-            });
-            stockfish.state.removeListener(onReadyOnce);
-          }
-        }
-
-        stockfish.state.addListener(onReadyOnce);
-
-        _protocol.isComputing.addListener(() {
-          if (_protocol.isComputing.value) {
-            _state.value = EngineState.computing;
-          } else {
-            _state.value = EngineState.idle;
-          }
-        });
-        _protocol.engineName.then((name) {
-          _name = name;
-        });
-      } catch (e, s) {
-        _stockfish = null;
-        _log.severe('error loading stockfish', e, s);
-        _state.value = EngineState.error;
-      }
+      _tryToStartStockfish();
     }
 
     return _protocol.evalStream.where((e) => e.$1 == work);
+  }
+
+  @override
+  Future<String> getBestMove(MoveWork work) {
+    if (isDisposed) {
+      throw StateError('Engine is disposed');
+    }
+
+    _log.info('engine run at fen ${work.fen}');
+    _protocol.compute(work);
+
+    if (_stockfish == null) {
+      _tryToStartStockfish();
+    }
+
+    return _protocol.bestMove.then((move) {
+      return move;
+    });
+  }
+
+  void _tryToStartStockfish() {
+    try {
+      final stockfish = LichessBinding.instance.stockfishFactory(
+        flavor,
+        smallNetPath: _smallNetPath,
+        bigNetPath: _bigNetPath,
+      );
+      _stockfish = stockfish;
+
+      _state.value = EngineState.loading;
+      _stdoutSubscription = stockfish.stdout.listen((line) {
+        _protocol.received(line);
+      });
+
+      stockfish.state.addListener(_stockfishStateListener);
+
+      // Ensure the engine is ready before sending commands
+      void onReadyOnce() {
+        if (stockfish.state.value == StockfishState.ready) {
+          _protocol.connected((String cmd) {
+            stockfish.stdin = cmd;
+          });
+          stockfish.state.removeListener(onReadyOnce);
+        }
+      }
+
+      stockfish.state.addListener(onReadyOnce);
+
+      _protocol.isComputing.addListener(() {
+        if (_protocol.isComputing.value) {
+          _state.value = EngineState.computing;
+        } else {
+          _state.value = EngineState.idle;
+        }
+      });
+      _protocol.engineName.then((name) {
+        _name = name;
+      });
+    } catch (e, s) {
+      _stockfish = null;
+      _log.severe('error loading stockfish', e, s);
+      _state.value = EngineState.error;
+    }
   }
 
   void _stockfishStateListener() {
@@ -163,6 +195,11 @@ class StockfishEngine implements Engine {
       default:
       // do nothing
     }
+  }
+
+  @override
+  void newGame() {
+    _protocol.newGame();
   }
 
   @override
