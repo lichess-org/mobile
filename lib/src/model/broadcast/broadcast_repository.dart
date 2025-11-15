@@ -148,8 +148,10 @@ BroadcastTournament _makeTournamentFromJson(Map<String, dynamic> json) {
 BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
   final id = pick('id').asBroadcastTournamentIdOrThrow();
   final name = pick('name').asStringOrThrow();
+  final active = pick('active').asBoolOrFalse();
+  final live = pick('live').asBoolOrFalse();
 
-  return (id: id, name: name);
+  return (id: id, name: name, active: active, live: live);
 }
 
 BroadcastRound _roundFromPick(RequiredPick pick) {

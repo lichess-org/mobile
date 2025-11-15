@@ -110,7 +110,12 @@ typedef BroadcastTournamentInformation = ({
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
 
-typedef BroadcastTournamentGroup = ({BroadcastTournamentId id, String name});
+typedef BroadcastTournamentGroup = ({
+  BroadcastTournamentId id,
+  String name,
+  bool active,
+  bool live,
+});
 
 @freezed
 sealed class BroadcastRound with _$BroadcastRound {
