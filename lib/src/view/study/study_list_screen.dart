@@ -140,7 +140,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
       appBar: PlatformAppBar(
         title: Text(
           sessionUser != null
-              ? "${context.l10n.studyMenu} • ${orderLabel}"
+              ? '${context.l10n.studyMenu} • $orderLabel'
               : context.l10n.studyAllStudies,
         ),
         actions: [
