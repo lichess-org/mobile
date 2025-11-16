@@ -22,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ota huomioon, että kaikkia vanhan sovelluksemme tai nettisivumme toimintoja ei tällä hetkellä ole vielä käytettävissä, mutta lisäämme toimintoja koko ajan.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Et seuraa yhtäkään käyttäjää.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Kaveria vastaan offline-tilassa</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Kaveria vastaan offline-tilassa</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Pelaajat, joiden tunnuksesta löytyy \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vasemmalla</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Oikealla</string>
@@ -36,7 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tehtävät</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Poista kirjanmerkki</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Palvelinanalyysi</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Palvelinanalyysi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kellon sijainti</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Esiasetukset</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Vedetyn nappulan kohde</string>
@@ -55,7 +55,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Joko napauta tai raahaa</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Napauta kahta ruutua</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Muotojen piirtely</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Piirrä muotoja kahta sormea käyttäen: muoto piirretään pitämällä yhtä sormea tyhjällä ruudulla ja raahamalla toista sormea.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Piirrä muotoja kahta sormea käyttäen: muoto piirretään pitämällä yhtä sormea tyhjällä ruudulla ja raahamalla toista sormea.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Näytä reunukset</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Kosketuspalaute</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kun käytössä, laite värähtelee hieman kun siirrät tai lyöt nappulan.</string>

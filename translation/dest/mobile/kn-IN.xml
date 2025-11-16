@@ -12,7 +12,6 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ನೇರಪ್ರಸಾರಕರು</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ಈ ಪುಟ ಪ್ರವೇಶಿಸಲು ನೀವು ಲಾಗ್ ಇನ್ ಆಗಿರಬೇಕು.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ಯಾವುದೇ ಫಲಿತಾಂಶಗಳಿಲ್ಲ</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ನೀವು ಯಾವುದೇ ಬಳಕೆದಾರರನ್ನು ಹಿಂಬಾಲುಸುತ್ತಿಲ್ಲ.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ಸರಿ</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ಚೆಸ್ ಮಣೆಯಲ್ಲಿ ಆಡಿ</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ನ್ನು ಹೊಂದಿರುವ ಆಟಗಾರರು</string>
