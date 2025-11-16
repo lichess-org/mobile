@@ -14,7 +14,7 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">Sembunyikan variasi</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Beranda</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Oke</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Di atas papan</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Di atas papan</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kiri</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Kanan</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Teka-teki</string>
