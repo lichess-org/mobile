@@ -86,6 +86,21 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
     }
   }
 
+  String get orderLabel {
+    switch (order) {
+      case StudyListOrder.hot:
+        return context.l10n.studyHot;
+      case StudyListOrder.newest:
+        return context.l10n.studyDateAddedNewest;
+      case StudyListOrder.updated:
+        return context.l10n.studyRecentlyUpdated;
+      case StudyListOrder.popular:
+        return context.l10n.studyMostPopular;
+      default:
+        return context.l10n.studyHot;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final sessionUser = ref.watch(authSessionProvider)?.user;
@@ -123,7 +138,11 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        title: Text(
+          sessionUser != null
+              ? "${context.l10n.studyMenu} • ${orderLabel}"
+              : context.l10n.studyAllStudies,
+        ),
         actions: [
           if (_searchController.value.text.isEmpty)
             ContextMenuIconButton(
