@@ -2104,7 +2104,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get createLobbyGame => 'Oyun lobisi oluştur';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Oynadığın renk';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Oyuna davet etmek için, bu linki gönderin';
@@ -2954,7 +2954,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Derece sabit olmadığı için derece filtreleri kilitli. Dereceli oyunlar oynamak derecenin sabitliğini artırır.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4217,7 +4217,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Derecen $param';
   }
 
   @override
@@ -4784,7 +4784,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get clearSearch => 'Aramayı temizle';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Etiketler';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5618,7 +5618,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyCopyChapterPgn => 'PGN \'yi kopyala';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'PGN kopyala';
 
   @override
   String get studyDownloadGame => 'Oyunu indir';
@@ -6032,7 +6032,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyDoubleDefeat => 'Çift mağlubiyet';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'Siyah kaybetti, ancak beyaz kazanamaz';
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Beyaz kaybeder fakat siyah kazanamaz';

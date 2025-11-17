@@ -921,10 +921,11 @@ packages:
   l10n_esperanto:
     dependency: "direct main"
     description:
-      name: l10n_esperanto
-      sha256: "8c51f136fe86dd8ee65a4da0245a29fe08bbfd69cccbb4c73ddd842060b8cc90"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "24ef38d85f15b05d8032aa7930a6e118df87a5b9"
+      resolved-ref: "24ef38d85f15b05d8032aa7930a6e118df87a5b9"
+      url: "https://github.com/veloce/l10n_esperanto.git"
+    source: git
     version: "2.0.13"
   leak_tracker:
     dependency: transitive
@@ -1567,10 +1568,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "4fd811bd46d2191ff06fed74d7f1ab8be94944ff75dcb5486c052d1769118476"
+      sha256: "6d67e389917a1eedc991738d2eb345fd9cc7ab4d6dcca2dea6c99c885ad90445"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1812,7 +1813,7 @@ packages:
     source: hosted
     version: "1.4.0"
   wakelock_plus_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: wakelock_plus_platform_interface
       sha256: "036deb14cd62f558ca3b73006d52ce049fabcdcb2eddfe0bf0fe4e8a943b5cf2"

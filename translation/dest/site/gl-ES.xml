@@ -101,7 +101,7 @@
     <item quantity="one">Mate en %s media xogada</item>
     <item quantity="other">Mate en %s medias xogadas</item>
   </plurals>
-  <string name="dtzWithRounding">DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura ou movemento de peón</string>
+  <string name="dtzWithRounding">DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura, movemento de peón ou xaque mate</string>
   <string name="noGameFound">Non se atoparon partidas</string>
   <string name="maxDepthReached">Chegouse á máxima profundidade!</string>
   <string name="maybeIncludeMoreGamesFromThePreferencesMenu">E se probas a incluír máis partidas dende o menú de preferencias?</string>
@@ -974,7 +974,7 @@ Deixa en branco para comezar as partidas dende a posición inicial normal.</stri
   <string name="simulFeaturedHelp">Amosar as simultáneas publicamente en %s. Desactivar nas simultáneas privadas.</string>
   <string name="simulDescription">Descrición das simultáneas</string>
   <string name="simulDescriptionHelp">Queres dicirlle algo ós participantes?</string>
-  <string name="markdownIsAvailable" comment="%s is &quot;Markdown&quot;, a proper noun. As such, the word is intentionally kept as a variable.&#10;&#10;Markdown is a markup language - a type of code that lets you format text (e.g. to create bold text).&#10;&#10;The text links to a reference guide for using Markdown to format text.">%s está dispoñible para dar formato.</string>
+  <string name="markdownIsAvailable">%s está dispoñible para dar formato.</string>
   <string name="embedsAvailable">Pega a ligazón dunha partida ou dun capítulo dun estudo para incrustala.</string>
   <string name="inYourLocalTimezone">Na túa zona horaria</string>
   <string name="tournChat">Sala de conversa do torneo</string>

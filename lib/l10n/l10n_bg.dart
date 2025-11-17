@@ -73,7 +73,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Моля забележете, че не всички функции от старото приложение или уеб-сайта са достъпни в момента, но ние постоянно добавяме нови функции.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'ОК';

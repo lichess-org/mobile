@@ -3,18 +3,22 @@ import Flutter
 import flutter_local_notifications
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
 
-    let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
     let BADGE_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/badge",
-                                                    binaryMessenger: controller.binaryMessenger)
+                                                    binaryMessenger: engineBridge.applicationRegistrar.messenger())
 
     let SYSTEM_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/system",
-                                                    binaryMessenger: controller.binaryMessenger)
+                                                    binaryMessenger: engineBridge.applicationRegistrar.messenger())
 
     BADGE_CHANNEL.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
@@ -51,9 +55,6 @@ import flutter_local_notifications
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
     }
-
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   private func getPhysicalMemory() -> Int {

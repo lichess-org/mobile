@@ -2616,7 +2616,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get signupUsernameHint => 'Sørg for at vælge et familievenligt brugernavn. Du kan ikke ændre det senere, og alle konti med upassende brugernavne vil blive lukket!';
 
   @override
-  String get signupEmailHint => 'Vi vil kun bruge det til nulstilling af adgangskode.';
+  String get signupEmailHint => 'Vi vil kun bruge den til nulstilling af adgangskode.';
 
   @override
   String get password => 'Adgangskode';

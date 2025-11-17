@@ -148,10 +148,9 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       if (isGoodMove) {
         state = state.copyWith(feedback: PuzzleFeedback.good);
 
-        final isCheckmate = movesToTest.last.san.endsWith('#');
         final nextUci = state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
-        if (isCheckmate) {
+        if (movesToTest.last.isCheckmate) {
           _completePuzzle();
         }
         // another puzzle move: let's continue
@@ -326,6 +325,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     }
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    state = state.copyWith(engineInThreatMode: !state.engineInThreatMode);
+    requestEval();
+  }
+
   void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
@@ -359,7 +363,10 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       shouldBlinkNextArrow: false,
     );
 
-    if (pathChange) requestEval();
+    if (pathChange) {
+      state = state.copyWith(engineInThreatMode: false);
+      requestEval();
+    }
   }
 
   String makePgn() {
@@ -436,6 +443,7 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required bool shouldBlinkNextArrow,
     required bool isEvaluationEnabled,
     PuzzleContext? nextContext,
+    @Default(false) bool engineInThreatMode,
   }) = _PuzzleState;
 
   @override

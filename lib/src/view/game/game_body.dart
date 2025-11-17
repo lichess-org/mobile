@@ -35,6 +35,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
 
@@ -332,6 +333,9 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
+      if (!state.requireValue.game.playable) {
+        WakelockPlus.disable();
+      }
       if (prev?.valueOrNull?.isZenModeActive == true &&
           state.requireValue.isZenModeActive == false) {
         if (context.mounted) {

@@ -196,6 +196,7 @@ class EvaluationService {
     ClientEval? initialPositionEval,
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
+    bool threatMode = false,
   }) {
     final context = _context;
     final engine = _engine;
@@ -220,6 +221,7 @@ class EvaluationService {
       variant: context.variant,
       threads: options.cores,
       hashSize: maxMemory,
+      threatMode: threatMode,
       searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
       isDeeper: goDeeper,
       multiPv: options.multiPv,
@@ -228,13 +230,17 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    switch (work.evalCache) {
-      // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-      case CloudEval _:
-        return null;
-      case _:
-        break;
+    if (!work.threatMode) {
+      switch (work.evalCache) {
+        // if the search time is greater than the current search time, don't evaluate again
+        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case CloudEval _:
+          // stop the engine if running (can happen if last eval was launched with goDeeper = true)
+          engine.stop();
+          return null;
+        case _:
+          break;
+      }
     }
 
     final evalStream = engine
@@ -401,6 +407,10 @@ Eval? pickBestEval({
   /// The eval from the server analysis
   required ExternalEval? serverEval,
 }) {
+  if (localEval?.threatMode == true) {
+    return localEval;
+  }
+
   return switch (savedEval) {
     CloudEval() => savedEval,
     final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,

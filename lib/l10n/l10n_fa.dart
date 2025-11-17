@@ -2089,34 +2089,34 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'این حساب بسته شده است';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'بَرپایشِ بازی';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'دعوت به بازی';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'بازی با رایانه';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'حالتِ بازی';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'ایجاد بازی در سَرسَرا';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'رنگِ مُهرهٔ شما';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت یک نفر به بازی، این آدرس را به او بدهید';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت کسی به بازی، این وب‌نشانی را دهید';
 
   @override
   String get gameOver => 'پایان بازی';
 
   @override
-  String get waitingForOpponent => 'انتطار برای حریف';
+  String get waitingForOpponent => 'در انتظار حریف';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'یا از حریفتان بخواهید این کد QR را اسکن کندl';
+  String get orLetYourOpponentScanQrCode => 'یا از حریف‌تان بخواهید این کدِ QR را بِپویَد';
 
   @override
   String get waiting => 'در حال انتظار';
@@ -2157,10 +2157,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get black => 'سیاه';
 
   @override
-  String get asWhite => 'به عنوان سفید';
+  String get asWhite => 'با مهرهٔ سفید';
 
   @override
-  String get asBlack => 'به عنوان سیاه';
+  String get asBlack => 'با مهرهٔ سیاه';
 
   @override
   String get randomColor => 'رنگ تصادفی';
@@ -2172,13 +2172,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createTheGame => 'ایجاد بازی';
 
   @override
-  String get whiteIsVictorious => 'سفید برنده شد';
+  String get whiteIsVictorious => 'سفید برنده است';
 
   @override
-  String get blackIsVictorious => 'سیاه برنده شد';
+  String get blackIsVictorious => 'سیاه برنده است';
 
   @override
-  String get youPlayTheWhitePieces => 'شما با مهره سفید بازی میکنید';
+  String get youPlayTheWhitePieces => 'شما با مهره سفید بازی می‌کنید';
 
   @override
   String get youPlayTheBlackPieces => 'شما با مهره سیاه بازی می‌کنید';
@@ -2880,7 +2880,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get exportGames => 'برون‏بُرد بازی‌ها';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'پالاگرِ درجه‌بندی';
 
   @override
   String get thisAccountViolatedTos => 'این حساب قوانین را نقض کرده است';
@@ -2954,7 +2954,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'پالاگرهای درجه‌بندی قفل شده‌اند زیرا درجه‌بندی‌تان پایدار نیست. انجامِ بازی‌های رسمی، پایداری را می‌اَفزایند.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3022,7 +3022,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get location => 'محل';
 
   @override
-  String get filterGames => 'پالابش بازی‌ها';
+  String get filterGames => 'پالاگرِ بازی‌ها';
 
   @override
   String get reset => 'بازنشانی';
@@ -4028,7 +4028,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get analysisShapesHowTo => 'برای رسم دایره و پیکان روی تخته، shift+click یا راست-تِلیک را بفشارید.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl یا shift = قرمز؛ command، alt یا meta = آبی؛ یک کلید از هر کدام = زرد.';
 
   @override
   String get letOtherPlayersMessageYou => 'ارسال پیام توسط بقیه به شما';
@@ -4217,7 +4217,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'درجه‌بندی‌تان $param است';
   }
 
   @override
@@ -4359,7 +4359,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'پیشنهادِ بازی با $param';
   }
 
   @override
@@ -4649,7 +4649,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return 'امکان $param برای قالب‌دِهی وجود دارد.';
   }
 
   @override
@@ -4772,19 +4772,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get copyToClipboard => 'کپی در کلیپ‌بورد';
 
   @override
-  String get online => 'online';
+  String get online => 'بَرخط';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'بُرون‌خط';
 
   @override
-  String get search => 'Search';
+  String get search => 'جستجو';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'پاکیدنِ جستجو';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'برچسب‌ها';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5516,7 +5516,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAlphabetical => 'براساس حروف الفبا';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'ربطمَند';
 
   @override
   String get studyAddNewChapter => 'بخش جدیدی اضافه کن';
@@ -5618,7 +5618,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyCopyChapterPgn => 'رونوشت‌گیری PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'رونوشتِ PGN خام';
 
   @override
   String get studyDownloadGame => 'بارگیری بازی';

@@ -32,7 +32,13 @@ const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kVersionGapRetryDelay = Duration(milliseconds: 200);
 const _kIdleTimeout = Duration(seconds: 2);
-const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
+
+/// The duration to wait in background before disconnecting the socket.
+///
+/// On iOS the connection will be closed by the OS after 30s anyway. On Android, it varies.
+/// This timeout is a fail-safe to avoid keeping the connection open for too long and draining
+/// the battery.
+const _kDisconnectOnBackgroundTimeout = Duration(minutes: 1);
 
 final _logger = Logger('Socket');
 

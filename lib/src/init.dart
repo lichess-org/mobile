@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -10,11 +9,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/model/account/home_preferences.dart';
-import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
@@ -33,53 +28,46 @@ import 'package:pub_semver/pub_semver.dart';
 final _logger = Logger('Init');
 
 /// Run initialization tasks only once on first app launch or after an update.
-Future<void> setupFirstLaunch() async {
+Future<void> initializeApp() async {
   final prefs = LichessBinding.instance.sharedPreferences;
-  final pInfo = await PackageInfo.fromPlatform();
-  final appVersion = Version.parse(pInfo.version);
-  final installedVersion = prefs.getString('installed_version');
 
-  if (prefs.getBool('first_run') ?? true) {
-    // Clear secure storage on first run because it is not deleted on app uninstall
-    await SecureStorage.instance.deleteAll();
+  try {
+    final pInfo = await PackageInfo.fromPlatform();
+    final appVersion = Version.parse(pInfo.version);
+    final installedVersion = prefs.getString('installed_version');
 
-    // Generate a socket random identifier and store it for the app lifetime
-    final sri = genRandomString(12);
-    _logger.info('Generated new SRI: $sri');
-    await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
+    if (prefs.getBool('first_run') ?? true) {
+      // Clear secure storage on first run because it is not deleted on app uninstall
+      await SecureStorage.instance.deleteAll();
 
-    // on android 12+ set board theme to system colors
-    if (getCorePalette() != null) {
-      final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
-      await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+      // Generate a socket random identifier and store it for the app lifetime
+      final sri = genRandomString(12);
+      _logger.info('Generated new SRI: $sri');
+      await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
+
+      // on android 12+ set board theme to system colors
+      if (getCorePalette() != null) {
+        final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
+        await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+      }
+
+      _screenSizeBasedInitialization();
+
+      _logger.info('First run initialization completed.');
     }
 
-    _screenSizeBasedInitialization();
-
+    if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
+      prefs.setString('installed_version', appVersion.canonicalizedVersion);
+    }
+  } catch (e, st) {
+    _logger.severe('Error during app initialization: $e');
+    LichessBinding.instance.firebaseCrashlytics.recordError(
+      e,
+      st,
+      reason: 'Error during app initialization',
+    );
+  } finally {
     await prefs.setBool('first_run', false);
-  }
-
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
-    // migrate home preferences to session preferences
-    final homePrefs = prefs.getString(PrefCategory.home.storageKey);
-    if (homePrefs == null) {
-      final storedSession = await SecureStorage.instance.read(key: kSessionStorageKey);
-      final session = storedSession != null
-          ? AuthSessionState.fromJson(jsonDecode(storedSession) as Map<String, dynamic>)
-          : null;
-      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
-      // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
-      prefs.setString(
-        SessionPreferencesStorage.key(PrefCategory.home.storageKey, session),
-        jsonEncode(empty.toJson()),
-      );
-    } else {
-      prefs.setString(SessionPreferencesStorage.key(PrefCategory.home.storageKey, null), homePrefs);
-    }
-  }
-
-  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
-    prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 }
 
