@@ -28,6 +28,12 @@ const kLichessTablebaseHost = String.fromEnvironment(
   defaultValue: 'tablebase.lichess.ovh',
 );
 
+const kLichessVapidPublicKey = String.fromEnvironment(
+  'LICHESS_VAPID_PUBLIC_KEY',
+  defaultValue:
+      'BGr5CL0QlEYa7qW7HLqe7DFkCeTsYMLsi1Db-5Vwt1QBIs6-WxN8066AjtP8S9u-w-CbleE8xWY-qQaNEMs7sAs',
+);
+
 const kLichessDevUser = String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
