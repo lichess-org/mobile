@@ -20,9 +20,8 @@
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Muesch iglogt si, zum die Site z\'gseh.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nüt g\'funde</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgsch keim Schpiller.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Schpill offline gäge en Mänsch</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Schpill offline gäge en Mänsch</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Schpiller mit \"%s%</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Links</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Rächts</string>
@@ -36,7 +35,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ufgabe</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzlich Gsuechts</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Buechzeiche entferne</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server-Analyse</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server-Analyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Position vode Uhr</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Vorischtellige</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Markierig, zogeni Figur</string>
@@ -55,7 +54,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Atippe oder Ziehe</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tipp uf zwei Fälder</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Form Zeichnig</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Zeig de Rand</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Haptischi Rückmäldig</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wens aktiviert isch, vibriert s Grät churz, wenn du e Figur bewegsch oder schlosch.</string>
