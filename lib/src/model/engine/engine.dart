@@ -58,8 +58,17 @@ class StockfishEngine implements Engine {
         'NNUE paths must be provided for chess flavor',
       );
 
+  /// URL to download the latest big NNUE network.
   static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestBigNNUE}');
+
+  /// SHA256 hash (first 12 digits) of the latest big NNUE network.
+  static final bigNetHash = Stockfish.latestBigNNUE.substring(3, 15);
+
+  /// URL to download the latest small NNUE network.
   static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestSmallNNUE}');
+
+  /// SHA256 hash (first 12 digits) of the latest small NNUE network.
+  static final smallNetHash = Stockfish.latestSmallNNUE.substring(3, 15);
 
   final StockfishFlavor flavor;
   final UCIProtocol _protocol;
