@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -164,7 +165,50 @@ void main() {
     });
   });
 
-  group('Game action negotiation', () {
+  group('Game actions', () {
+    testWidgets('move confirmation', (WidgetTester tester) async {
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(32));
+
+      await playMove(tester, 'g1', 'f3');
+
+      // see confirmation dialog
+      expect(find.text('Confirm move'), findsOneWidget);
+      // move is shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move is not yet played so it doesn't appear in the move list
+      expect(find.text('Nf3'), findsNothing);
+
+      // confirm the move
+      await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+      await tester.pump();
+
+      // move still shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move appears in move list
+      expect(find.text('Nf3'), findsOneWidget);
+    });
+
     testWidgets('takeback', (WidgetTester tester) async {
       await createTestGame(
         tester,
@@ -897,6 +941,7 @@ Future<void> createTestGame(
   Map<String, Object>? defaultPreferences,
   List<Override>? overrides,
   TournamentMeta? tournament,
+  ServerGamePrefs? serverPrefs,
 
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
@@ -933,6 +978,7 @@ Future<void> createTestGame(
       clock: clock,
       correspondenceClock: correspondenceClock,
       tournament: tournament,
+      serverPrefs: serverPrefs,
     ),
   ]);
   await tester.pump();
