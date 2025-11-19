@@ -94,9 +94,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
     switch (widget.source) {
       case LobbySource():
-        await ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
+        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
+        await ref.read(createGameServiceProvider).cancelSeek();
       case UserChallengeSource():
-        await ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
+        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
+        await ref.read(createGameServiceProvider).cancelChallenge();
       case ExistingGameSource():
         break;
     }
@@ -111,7 +113,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const BackButton(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
               _ => const SizedBox.shrink(),
@@ -123,7 +124,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const BackButton(),
             title: _ChallengeGameTitle(
               challenge: (widget.source as UserChallengeSource).challengeRequest,
             ),

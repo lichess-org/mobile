@@ -132,14 +132,12 @@ class GameScreenLoader extends _$GameScreenLoader {
     state = AsyncValue.data(GameCreatedState(id));
   }
 
-  Future<void> cancelSeek() async {
+  void cancelSeek() {
     state = const AsyncValue.data(SeekCancelledState());
-    await ref.read(createGameServiceProvider).cancelSeek();
   }
 
-  Future<void> cancelChallenge() async {
+  void cancelChallenge() {
     state = const AsyncValue.data(ChallengeCancelledState());
-    await ref.read(createGameServiceProvider).cancelChallenge();
   }
 }
 
