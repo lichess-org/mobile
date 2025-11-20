@@ -56,7 +56,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.round.status == RoundStatus.live) {
+      if (state.value?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
           _syncRound();
         });
@@ -65,7 +65,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.round.status == RoundStatus.live) {
+        if (state.value?.round.status == RoundStatus.live) {
           _syncRoundDebouncer(() {
             _syncRound();
           });
@@ -254,7 +254,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void addObservedGame(BroadcastGameId gameId) {
-    if (state.valueOrNull?.games.containsKey(gameId) != true) return;
+    if (state.value?.games.containsKey(gameId) != true) return;
 
     state = AsyncData(
       state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),

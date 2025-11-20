@@ -54,7 +54,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
 
     return ListTileTheme.merge(

@@ -69,7 +69,7 @@ class RetroScreen extends ConsumerWidget {
             actions: [
               if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
                 EngineDepth(
-                  savedEval: asyncState.valueOrNull?.currentNode.eval,
+                  savedEval: asyncState.value?.currentNode.eval,
                   goDeeper: () => ref
                       .read(retroControllerProvider(options).notifier)
                       .requestEval(goDeeper: true),

@@ -118,8 +118,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       appBar: AppBar(
         title: title,
         actions: [
-          if (asyncIsEngineAvailable.valueOrNull == true)
-            EngineDepth(savedEval: asyncEval.valueOrNull),
+          if (asyncIsEngineAvailable.value == true) EngineDepth(savedEval: asyncEval.value),
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _BroadcastGameMenu(
             roundId: widget.roundId,

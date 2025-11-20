@@ -107,7 +107,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           )
                         : null;
 
-                    final crosstableData = crosstable?.valueOrNull;
+                    final crosstableData = crosstable?.value;
                     final matchupData = crosstableData?.matchup;
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),

@@ -270,7 +270,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void onPromotionSelection(Role? role) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     if (role == null) {
@@ -297,7 +297,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void viewSolution() {
-    final currentMistake = state.valueOrNull?.currentMistake;
+    final currentMistake = state.value?.currentMistake;
     if (currentMistake != null) {
       onUserMove(currentMistake.serverMove);
       state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.viewingSolution));
@@ -352,7 +352,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
   }) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     final pathChange = state.currentPath != path;

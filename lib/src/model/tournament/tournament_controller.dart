@@ -105,7 +105,7 @@ class TournamentController extends _$TournamentController {
   }
 
   void jumpToMyPage() {
-    if (state.valueOrNull?.tournament.me != null) {
+    if (state.value?.tournament.me != null) {
       _loadPage(_pageOf(state.requireValue.tournament.me!.rank));
     }
   }
@@ -200,7 +200,7 @@ class TournamentController extends _$TournamentController {
   }
 
   void joinOrPause() {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) {
       return;
     }

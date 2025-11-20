@@ -86,7 +86,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           }
           final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
-          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
           return HapticRefreshIndicator(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight

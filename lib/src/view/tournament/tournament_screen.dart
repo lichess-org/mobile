@@ -82,7 +82,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
   @override
   void didPop() {
     if (mounted) {
-      final joined = ref.read(tournamentControllerProvider(widget.id)).valueOrNull?.hasJoined;
+      final joined = ref.read(tournamentControllerProvider(widget.id)).value?.hasJoined;
       if (joined == true) {
         ref.invalidate(myRecentGamesProvider);
         ref.invalidate(accountProvider);
@@ -94,7 +94,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      tournamentControllerProvider(widget.id).select((value) => value.valueOrNull?.currentGame),
+      tournamentControllerProvider(widget.id).select((value) => value.value?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
           Navigator.of(
@@ -916,7 +916,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
-      tournamentControllerProvider(widget.state.id).select((value) => value.valueOrNull?.joined),
+      tournamentControllerProvider(widget.state.id).select((value) => value.value?.joined),
       (prevJoined, joined) {
         if (prevJoined != joined) {
           setState(() {
@@ -929,7 +929,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     return BottomBar(
       cupertinoTransparent: true,
       children: [
-        if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (widget.state.chatOptions != null && kidModeAsync.value == false)
           ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
 
         if (widget.state.tournament.isFinished != true && session != null)
@@ -1038,7 +1038,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                         user: player.user,
                         rating: player.rating,
                         style: Styles.title,
-                        onTap: tournamentState.valueOrNull?.isSpectator == true
+                        onTap: tournamentState.value?.isSpectator == true
                             ? () => Navigator.of(
                                 context,
                               ).push(UserOrProfileScreen.buildRoute(context, player.user))
@@ -1184,7 +1184,7 @@ class _PairingTile extends ConsumerWidget {
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
       tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-      onTap: tournamentState.valueOrNull?.isSpectator == true
+      onTap: tournamentState.value?.isSpectator == true
           ? () {
               // If game is finished (status neither started nor created), go to analysis board
               if (pairing.status != GameStatus.started && pairing.status != GameStatus.created) {

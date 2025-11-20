@@ -68,9 +68,8 @@ sealed class HttpLogState with _$HttpLogState {
   const factory HttpLogState({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;
 
   bool get initialized => data.isNotEmpty;
-  List<HttpLogEntry> get logs =>
-      data.expand((e) => e.valueOrNull?.items ?? <HttpLogEntry>[]).toList();
-  int? get nextPage => data.lastOrNull?.valueOrNull?.next;
+  List<HttpLogEntry> get logs => data.expand((e) => e.value?.items ?? <HttpLogEntry>[]).toList();
+  int? get nextPage => data.lastOrNull?.value?.next;
   bool get hasMore => initialized && nextPage != null;
   bool get isLoading => data.lastOrNull?.isLoading == true;
   bool get isDeleteButtonVisible => logs.isNotEmpty;

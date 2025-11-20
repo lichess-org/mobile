@@ -374,7 +374,7 @@ class GameController extends _$GameController {
 
   /// Play a sound when the clock is about to run out
   Future<void> onClockEmergency(Side activeSide) async {
-    if (activeSide != state.valueOrNull?.game.youAre) return;
+    if (activeSide != state.value?.game.youAre) return;
     final shouldPlay = await ref.read(clockSoundProvider.future);
     if (shouldPlay) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
@@ -394,7 +394,7 @@ class GameController extends _$GameController {
   }
 
   void berserk() {
-    if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
+    if (state.value?.canBerserk == true && state.value?.hasBerserked == false) {
       _socketClient.send('berserk', null);
     }
   }
@@ -702,8 +702,8 @@ class GameController extends _$GameController {
             playedSide == curState.game.youAre?.opposite &&
             curState.premove != null) {
           scheduleMicrotask(() {
-            final postMovePremove = state.valueOrNull?.premove;
-            final postMovePosition = state.valueOrNull?.game.lastPosition;
+            final postMovePremove = state.value?.premove;
+            final postMovePosition = state.value?.game.lastPosition;
             if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
               userMove(postMovePremove, isPremove: true);
             }
