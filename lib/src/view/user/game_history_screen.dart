@@ -164,11 +164,10 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(
-        userGameHistoryProvider(
-          widget.user?.id,
-          isOnline: widget.isOnline,
+        userGameHistoryProvider((
+          userId: widget.user?.id,
           filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
-        ),
+        )),
       );
 
       if (!state.hasValue) {
@@ -181,11 +180,10 @@ class _BodyState extends ConsumerState<_Body> {
       if (hasMore && !isLoading) {
         ref
             .read(
-              userGameHistoryProvider(
-                widget.user?.id,
-                isOnline: widget.isOnline,
+              userGameHistoryProvider((
+                userId: widget.user?.id,
                 filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
-              ).notifier,
+              )).notifier,
             )
             .getNext();
       }
@@ -195,11 +193,10 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListProvider = userGameHistoryProvider(
-      widget.user?.id,
-      isOnline: widget.isOnline,
+    final gameListProvider = userGameHistoryProvider((
+      userId: widget.user?.id,
       filter: gameFilterState,
-    );
+    ));
     final gameListState = ref.watch(gameListProvider);
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
