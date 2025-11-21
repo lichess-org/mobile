@@ -478,25 +478,25 @@ class AppLocalizationsIt extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Come sono calcolati i punteggi del torneo?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Una vittoria ha un punteggio base di 2 punti, una patta 1 punto e una sconfitta 0 punti.\nSe vinci due partite consecutivamente, ogni partita successiva varrà il doppio dei punti rispetto al punteggio base. Ciò sarà indicato dall\'icona di una fiamma.\nIl raddoppio del punteggio significa che una vittoria varrà 4 punti, una patta 2 punti e una sconfitta 0.\n\nVittorie consecutive continueranno a dare il doppio punteggio.\nNon appena pareggi o perdi, il punteggio smetterà di essere raddoppiato.\n\nPer esempio:\n- Tre vittorie consecutive valgono 8 punti: 2 + 2 + (2 x 2)\n- Due vittorie, una patta e una vittoria valgono 8 punti: 2 + 2 + (2 x 1) + 2\n- Due vittorie, una sconfitta e una patta valgono 5 punti: 2 + 2 + (2 x 0) + 1';
+  String get arenaHowAreScoresCalculatedAnswer => 'Una vittoria ha un punteggio base di 2 punti, una patta 1 punto e una sconfitta 0 punti.\r\nSe vinci due partite consecutivamente, ogni partita successiva varrà il doppio dei punti rispetto al punteggio base. Ciò sarà indicato dall\'icona di una fiamma.\r\nIl raddoppio del punteggio significa che una vittoria varrà 4 punti, una patta 2 punti e una sconfitta 0.\r\n\r\nVittorie consecutive continueranno a dare il doppio punteggio.\r\nNon appena pareggi o perdi, il punteggio smetterà di essere raddoppiato.\r\n\r\nPer esempio:\r\n- Tre vittorie consecutive valgono 8 punti: 2 + 2 + (2 x 2)\r\n- Due vittorie, una patta e una vittoria valgono 8 punti: 2 + 2 + (2 x 1) + 2\r\n- Due vittorie, una sconfitta e una patta valgono 5 punti: 2 + 2 + (2 x 0) + 1';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Quando un giocatore clicca sul pulsante Berserk, all\'inzio di una partita, il tempo a sua disposizione viene dimezzato, ma in caso di vittoria si otterrà un punto del torneo in più.\n\nInoltre, se la cadenza di gioco prevede un incremento, la modalità Berserk lo elimina. (1+2 diventa eccezionalmente 1+0 invece di ½+0).\n\nLa modalità Berserk non è disponibile per le partite senza un tempo iniziale (es. 0+1, 0+2).\n\nUna partita Berserk vinta varrà un punto in più solo se giocherai almeno 7 mosse.';
+  String get arenaBerserkAnswer => 'Quando un giocatore clicca sul pulsante Berserk, all\'inzio di una partita, il tempo a sua disposizione viene dimezzato, ma in caso di vittoria si otterrà un punto del torneo in più.\r\n\r\nInoltre, se la cadenza di gioco prevede un incremento, la modalità Berserk lo elimina. (1+2 diventa eccezionalmente 1+0 invece di ½+0).\r\n\r\nLa modalità Berserk non è disponibile per le partite senza un tempo iniziale (es. 0+1, 0+2).\r\n\r\nUna partita Berserk vinta varrà un punto in più solo se giocherai almeno 7 mosse.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Come viene deciso il vincitore?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Saranno proclamati vincitori i tre giocatori che abbiano il maggior numero di punti allo scadere del tempo previsto per il torneo.\n\nSe due o più giocatori hanno lo stesso numero di punti, lo spareggio avverrà in base alla performance del torneo, valutata dal Tournament Performance Rating, calcolato come [Somma dei punteggi degli avversari + 400×(Vittorie - Sconfitte)] / Partite giocate.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Saranno proclamati vincitori i tre giocatori che abbiano il maggior numero di punti allo scadere del tempo previsto per il torneo.\r\n\r\nSe due o più giocatori hanno lo stesso numero di punti, lo spareggio avverrà in base alla performance del torneo, valutata dal Tournament Performance Rating, calcolato come [Somma dei punteggi degli avversari + 400×(Vittorie - Sconfitte)] / Partite giocate.';
 
   @override
   String get arenaHowDoesPairingWork => 'Come funziona l\'accoppiamento?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'All\'inizio del torneo i giocatori sono accoppiati sulla base del loro punteggio individuale.\nNon appena finisci una partita, ritorna nella lobby del torneo e attendi: verrai nuovamente accoppiato con un altro giocatore con un punteggio simile al tuo. Il tempo di attesa è minimo; tuttavia, potresti non affrontare tutti i giocatori partecipanti al torneo.\nGioca in fretta e ritorna nella lobby per avere la possibilità di giocare più partite e ottenere più punti.';
+  String get arenaHowDoesPairingWorkAnswer => 'All\'inizio del torneo i giocatori sono accoppiati sulla base del loro punteggio individuale.\r\nNon appena finisci una partita, ritorna nella lobby del torneo e attendi: verrai nuovamente accoppiato con un altro giocatore con un punteggio simile al tuo. Il tempo di attesa è minimo; tuttavia, potresti non affrontare tutti i giocatori partecipanti al torneo.\r\nGioca in fretta e ritorna nella lobby per avere la possibilità di giocare più partite e ottenere più punti.';
 
   @override
   String get arenaHowDoesItEnd => 'Come finisce il torneo?';
@@ -605,7 +605,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get arenaTournamentStats => 'Statistiche torneo';
 
   @override
-  String get arenaRankAvgHelp => 'La media del piazzamento è la percentuale del tuo piazzamento. Più è basso, più è meglio.\n\nPer esempio, essere classificato in 3ª posizione in un torneo di 100 giocatori = 3%. Essere classificato in 10ª posizione in un torneo di 1000 = 1%.';
+  String get arenaRankAvgHelp => 'La media del piazzamento è la percentuale del tuo piazzamento. Più è basso, più è meglio.\r\n\r\nPer esempio, essere classificato in 3ª posizione in un torneo di 100 giocatori = 3%. Essere classificato in 10ª posizione in un torneo di 1000 = 1%.';
 
   @override
   String get arenaMedians => 'mediane';
@@ -1593,7 +1593,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Cerca problemi';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nel database dei problemi di Lichess non è presente nessuna delle tue partite, ma Lichess ti vuole bene lo stesso.\nGioca altre partite rapide o classiche per aumentare le possibilità di avere un problema tratto dalle tue partite!';
+  String get puzzleFromMyGamesNone => 'Nel database dei problemi di Lichess non è presente nessuna delle tue partite, ma Lichess ti vuole bene lo stesso.\r\nGioca altre partite rapide o classiche per aumentare le possibilità di avere un problema tratto dalle tue partite!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Allenati, analizza, migliora';
@@ -3064,7 +3064,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get importGame => 'Importa partita';
 
   @override
-  String get importGameExplanation => 'Quando incolli una partita tramite PGN potrai rivederla,\nanalizzarla con il computer, commentarla in chat, e condividerla tramite un indirizzo URL.';
+  String get importGameExplanation => 'Quando incolli una partita tramite PGN potrai rivederla,\r\nanalizzarla con il computer, commentarla in chat, e condividerla tramite un indirizzo URL.';
 
   @override
   String get importGameDataPrivacyWarning => 'Questo PGN è accessibile pubblicamente. Per importare una partita privatamente, utilizza uno studio.';
@@ -4600,7 +4600,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tournDescriptionHelp => 'Qualcosa di speciale che vuoi dire ai partecipanti? Prova a mantenerla breve. I link di markdown sono disponibili: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Le partite sono valutate\ne impattano le valutazioni dei giocatori';
+  String get ratedFormHelp => 'Le partite sono valutate\r\ne impattano le valutazioni dei giocatori';
 
   @override
   String get onlyMembersOfTeam => 'Solo i membri della squadra';
@@ -4619,7 +4619,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Incolla un FEN valido per avviare ogni partita da una data posizione.\nFunziona solo per le partite standard, non con le varianti.\nPuoi usare $param per generare una posizione FEN, poi incollala qui.\nLascia vuoto per avviare le partite dalla posizione iniziale normale.';
+    return 'Incolla un FEN valido per avviare ogni partita da una data posizione.\r\nFunziona solo per le partite standard, non con le varianti.\r\nPuoi usare $param per generare una posizione FEN, poi incollala qui.\r\nLascia vuoto per avviare le partite dalla posizione iniziale normale.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get showMeEverything => 'Mostra tutto';
 
   @override
-  String get lichessPatronInfo => 'Lichess è un software open source completamente gratuito e libero\nTutti i costi operativi, lo sviluppo e i contenuti sono finanziati esclusivamente dalle donazioni degli utenti.';
+  String get lichessPatronInfo => 'Lichess è un software open source completamente gratuito e libero\r\nTutti i costi operativi, lo sviluppo e i contenuti sono finanziati esclusivamente dalle donazioni degli utenti.';
 
   @override
   String get nothingToSeeHere => 'Niente da vedere qui al momento.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Incolla qui i testi PGN, massimo $count partite',
       one: 'Incolla qui il testo PGN, massimo $count partita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battaglia a $count squadre',
+      one: 'Battaglia ad $count squadra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leader per squadra',
+      one: 'Un leader per squadra',
     );
     return '$_temp0';
   }

@@ -478,13 +478,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Nola kalkulatzen dira puntuazioak?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Garaipenak 2 puntu ematen ditu, berdinketak puntu 1 eta porrotak bat ere ez.\nBi partida jarraian irabazten badituzu, suaren ikonoa agertuko da.\nHurrengo partidek puntu-bikoitzen balioa izango dute, bat irabazten ez duzun arte.\nHau da, garaipenak 4 puntu emango dizkizu, berdinketak 2 eta porrotak bat ere ez.\n\nAdibidez, bi partida irabazi eta jarraian bat berdintzeak 6 puntu balioko ditu: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Garaipenak 2 puntu ematen ditu, berdinketak puntu 1 eta porrotak bat ere ez.\r\nBi partida jarraian irabazten badituzu, suaren ikonoa agertuko da.\r\nHurrengo partidek puntu-bikoitzen balioa izango dute, bat irabazten ez duzun arte.\r\nHau da, garaipenak 4 puntu emango dizkizu, berdinketak 2 eta porrotak bat ere ez.\r\n\r\nAdibidez, bi partida irabazi eta jarraian bat berdintzeak 6 puntu balioko ditu: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Jokalari batek partidaren hasieran Berserk botoia sakatzen badu, bere erlojuko denbora erdia galduko du, baina partida irabazten badu puntu gehigarri bat lortuko du.\n\nBerserk erabiltzen baduzu denbora gehigarria ematen duten denbora kontroletan, honek denbora gehigarria ere bertan behera utziko du (1+2 da salbuespen bakarra, 1+0 ematen du).\n\nBerserk ezin da erabili hasierako denbora zero den denbora kontroletan (0+1, 0+2).\n\nBerserk-ek puntu gehigarria emango dizu paridan gutxienez 7 jokaldi egiten badituzu.';
+  String get arenaBerserkAnswer => 'Jokalari batek partidaren hasieran Berserk botoia sakatzen badu, bere erlojuko denbora erdia galduko du, baina partida irabazten badu puntu gehigarri bat lortuko du.\r\n\r\nBerserk erabiltzen baduzu denbora gehigarria ematen duten denbora kontroletan, honek denbora gehigarria ere bertan behera utziko du (1+2 da salbuespen bakarra, 1+0 ematen du).\r\n\r\nBerserk ezin da erabili hasierako denbora zero den denbora kontroletan (0+1, 0+2).\r\n\r\nBerserk-ek puntu gehigarria emango dizu paridan gutxienez 7 jokaldi egiten badituzu.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Nola erabakitzen da garailea?';
@@ -496,7 +496,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Nola funtzionatzen dute parekatzeek?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Txapelketaren hasieran jokalariak beren sailkapenaren arabera parekatuko dira.\nPartida bat bukatu bezain laster, itzuli txapelketaren egongelara: jarraian zure sailkapenaren antzekoa duen beste jokalari baten aurka jokatuko duzu. Horrela ahalik eta denbora gutxien itxarotea lortzen da nahiz eta ez jokatu txapelketako beste jokalari guztiekin.\nJokatu azkar, itzuli egongelara partida gehiago jokatu eta puntu gehiago irabazteko.';
+  String get arenaHowDoesPairingWorkAnswer => 'Txapelketaren hasieran jokalariak beren sailkapenaren arabera parekatuko dira.\r\nPartida bat bukatu bezain laster, itzuli txapelketaren egongelara: jarraian zure sailkapenaren antzekoa duen beste jokalari baten aurka jokatuko duzu. Horrela ahalik eta denbora gutxien itxarotea lortzen da nahiz eta ez jokatu txapelketako beste jokalari guztiekin.\r\nJokatu azkar, itzuli egongelara partida gehiago jokatu eta puntu gehiago irabazteko.';
 
   @override
   String get arenaHowDoesItEnd => 'Nola bukatzen da?';
@@ -605,7 +605,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get arenaTournamentStats => 'Txapelketaren estatistikak';
 
   @override
-  String get arenaRankAvgHelp => 'Sailkapenaren bataz bestekoa zure puntuazioaren ehuneko bat da. Baxuagoa hobe da.\n\nAdibidez, 100 jokalariko txapelketa baten 3. sailkatzea = %3. 1000 jokalariko txapelketa baten 10. sailkatzea = %1.';
+  String get arenaRankAvgHelp => 'Sailkapenaren bataz bestekoa zure puntuazioaren ehuneko bat da. Baxuagoa hobe da.\r\n\r\nAdibidez, 100 jokalariko txapelketa baten 3. sailkatzea = %3. 1000 jokalariko txapelketa baten 10. sailkatzea = %1.';
 
   @override
   String get arenaMedians => 'medianak';
@@ -1593,7 +1593,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Ariketak bilatu';
 
   @override
-  String get puzzleFromMyGamesNone => 'Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.\nJokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izateko!';
+  String get puzzleFromMyGamesNone => 'Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.\r\nJokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izateko!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Entrenatu, aztertu, hobetu';
@@ -4619,7 +4619,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Partida guztiak posizio jakin batekin asteko sartu posizioaren FEN balioa.\nXake-arrunteko partidekin bakarrik balio du, ez aldaerekin.\n$param erabili dezakezu FEN balioa lortzeko, eta ondoren hemen itsatsi.\nUtzi hutsik partidak ohiko posizioarekin hasteko.';
+    return 'Partida guztiak posizio jakin batekin asteko sartu posizioaren FEN balioa.\r\nXake-arrunteko partidekin bakarrik balio du, ez aldaerekin.\r\n$param erabili dezakezu FEN balioa lortzeko, eta ondoren hemen itsatsi.\r\nUtzi hutsik partidak ohiko posizioarekin hasteko.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get showMeEverything => 'Erakutsi guztia';
 
   @override
-  String get lichessPatronInfo => 'Lichess software librea da.\nGarapen eta mantentze-kostu guztiak erabiltzaileen dohaintzekin ordaintzen dira.';
+  String get lichessPatronInfo => 'Lichess software librea da.\r\nGarapen eta mantentze-kostu guztiak erabiltzaileen dohaintzekin ordaintzen dira.';
 
   @override
   String get nothingToSeeHere => 'Hemen ez dago ezer zuretzat.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsEu extends AppLocalizations {
       locale: localeName,
       other: 'Itsatsi hemen zure PGNa, gehienez $count partida',
       one: 'Itsatsi hemen zure PGNa, gehienez partida $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count talderen arteko txapelketa',
+      one: 'Talde ${count}en arteko txapelketa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lider talde bakoitzeko',
+      one: 'Lider bat talde bakoitzeko',
     );
     return '$_temp0';
   }

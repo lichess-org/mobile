@@ -478,13 +478,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hogyan történik a pontszámítás?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Egy győzelem alapból 2 pont, egy döntetlen 1 pont, a vereség pedig nem ér pontot.\nHa egymás után két játszmát nyersz, beindul a pontduplázási sorozatod, amit egy láng ikon jelez.\nA sorozat akkor ér véget, ha egy partit nem nyersz meg.\nVagyis egy győzelem 4 pontot, egy döntetlen 2 pontot, és a vereség továbbra is nulla pontot ér.\n\nPéldául két győzelem után egy döntetlen, az összesen 6 pont: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Egy győzelem alapból 2 pont, egy döntetlen 1 pont, a vereség pedig nem ér pontot.\r\nHa egymás után két játszmát nyersz, beindul a pontduplázási sorozatod, amit egy láng ikon jelez.\r\nA sorozat akkor ér véget, ha egy partit nem nyersz meg.\r\nVagyis egy győzelem 4 pontot, egy döntetlen 2 pontot, és a vereség továbbra is nulla pontot ér.\r\n\r\nPéldául két győzelem után egy döntetlen, az összesen 6 pont: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Aréna Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Amikor valaki rákattint a Berserk gombra a játszma kezdetekor, elveszti gondolkodási ideje felét, de győzelem esetén egy extra pontot kap.\n\nNövekményes gondolkodási időknél a növekmény is eltűnik (az 1+2 kivétel, amiből 1+0 lesz).\n\nNem lehet Berserk-elni, amikor nulla a kezdő idő (0+1, 0+2).\n\nBerserk-nél az extra pont csak legalább 7 lépés megtétele után jár.';
+  String get arenaBerserkAnswer => 'Amikor valaki rákattint a Berserk gombra a játszma kezdetekor, elveszti gondolkodási ideje felét, de győzelem esetén egy extra pontot kap.\r\n\r\nNövekményes gondolkodási időknél a növekmény is eltűnik (az 1+2 kivétel, amiből 1+0 lesz).\r\n\r\nNem lehet Berserk-elni, amikor nulla a kezdő idő (0+1, 0+2).\r\n\r\nBerserk-nél az extra pont csak legalább 7 lépés megtétele után jár.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Ki nyeri a versenyt?';
@@ -496,7 +496,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hogyan történik a párosítás?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'A verseny kezdetekor a játékosokat a pontszámuk alapján párosítjuk.\nAmint befejeztél egy játszmát, és visszatértél a lobbiba: azt az ellenfelet kapod, aki a legközelebb áll a pontszámodhoz. Így a lehető legkevesebbet kell várakoznod, de előfordulhat, hogy nem fogsz mindenkivel játszani.\nJátssz gyorsan, térj vissza a lobbiba további játszmákért, hogy több pontot nyerhess.';
+  String get arenaHowDoesPairingWorkAnswer => 'A verseny kezdetekor a játékosokat a pontszámuk alapján párosítjuk.\r\nAmint befejeztél egy játszmát, és visszatértél a lobbiba: azt az ellenfelet kapod, aki a legközelebb áll a pontszámodhoz. Így a lehető legkevesebbet kell várakoznod, de előfordulhat, hogy nem fogsz mindenkivel játszani.\r\nJátssz gyorsan, térj vissza a lobbiba további játszmákért, hogy több pontot nyerhess.';
 
   @override
   String get arenaHowDoesItEnd => 'Mikor ér véget?';
@@ -605,7 +605,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaTournamentStats => 'Verseny statisztikák';
 
   @override
-  String get arenaRankAvgHelp => 'A helyezés átlag az egy százaléka a helyezésednek. Alacsonyabb jobb.\n\nPéldául ha 3. helyezett lettél egy versenyen 100 játékos közül, az 3%. Ha 10. lettél egy versenyen 1000 játékosból, az 1%.';
+  String get arenaRankAvgHelp => 'A helyezés átlag az egy százaléka a helyezésednek. Alacsonyabb jobb.\r\n\r\nPéldául ha 3. helyezett lettél egy versenyen 100 játékos közül, az 3%. Ha 10. lettél egy versenyen 1000 játékosból, az 1%.';
 
   @override
   String get arenaMedians => 'medián';
@@ -1593,7 +1593,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Feladványok keresése';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nincsenek feladványaid az adatbázisban, de ez semmi rosszat nem jelent.\nJátssz rapid vagy klasszikus partikat, így nagyobb eséllyel szerepelhetnek a te játszmáid feladványai is!';
+  String get puzzleFromMyGamesNone => 'Nincsenek feladványaid az adatbázisban, de ez semmi rosszat nem jelent.\r\nJátssz rapid vagy klasszikus partikat, így nagyobb eséllyel szerepelhetnek a te játszmáid feladványai is!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Gyakorolj, elemezz, fejlődj';
@@ -3984,7 +3984,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Üzenetet küldtünk a(z) $param e-mail-címre.\nJelszavad megváltoztatásához kattints az üzenetben lévő linkre.';
+    return 'Üzenetet küldtünk a(z) $param e-mail-címre.\r\nJelszavad megváltoztatásához kattints az üzenetben lévő linkre.';
   }
 
   @override
@@ -4600,7 +4600,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get tournDescriptionHelp => 'Bármi különleges amit a résztvevőkkel közölnél? Próbáld rövidre fogni. Markdown linkek elérhetőek: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Rangsorolt játszmák amik\nbefolyásolják a játékosok értékszámát';
+  String get ratedFormHelp => 'Rangsorolt játszmák amik\r\nbefolyásolják a játékosok értékszámát';
 
   @override
   String get onlyMembersOfTeam => 'Kizárólag csapattagoknak';
@@ -4619,7 +4619,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Illessz be egy FEN sort, hogy minden játszma adott állásból induljon.\nCsak hagyományos játszmákkal működik, variánsokkal nem.\nHasználhatod a $param a FEN készítésére, azt illeszd be ide.\nHagyd üresen és a játszmák a kezdőállásból indulnak.';
+    return 'Illessz be egy FEN sort, hogy minden játszma adott állásból induljon.\r\nCsak hagyományos játszmákkal működik, variánsokkal nem.\r\nHasználhatod a $param a FEN készítésére, azt illeszd be ide.\r\nHagyd üresen és a játszmák a kezdőállásból indulnak.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get showMeEverything => 'Az összes parancs megjelenítése';
 
   @override
-  String get lichessPatronInfo => 'A Lichess egy jótékonysági szervezet és teljesen ingyenes/szabad nyílt forrású szoftver.\nMinden működési költséget, fejlesztést és tartalmat felhasználói adományokból fedezünk.';
+  String get lichessPatronInfo => 'A Lichess egy jótékonysági szervezet és teljesen ingyenes/szabad nyílt forrású szoftver.\r\nMinden működési költséget, fejlesztést és tartalmat felhasználói adományokból fedezünk.';
 
   @override
   String get nothingToSeeHere => 'Itt nincs semmi látnivaló jelenleg.';
@@ -5936,7 +5936,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Üdvözöl a Lichess Tanulmányok!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'Ez egy megosztott elemző tábla.<br><br>\nHasználd játszmák elemzésére és jegyzetek készítésére,<br>beszélgess állásokról barátaiddal,<br>és természetesen sakkleckékhez is jó!<br><br>Ez egy erőteljes eszköz, szánjunk rá időt, hogy lássuk, hogy működik.';
+  String get studyWelcomeToLichessStudyText => 'Ez egy megosztott elemző tábla.<br><br>\r\nHasználd játszmák elemzésére és jegyzetek készítésére,<br>beszélgess állásokról barátaiddal,<br>és természetesen sakkleckékhez is jó!<br><br>Ez egy erőteljes eszköz, szánjunk rá időt, hogy lássuk, hogy működik.';
 
   @override
   String get studySharedAndSaveTitle => 'Megosztva és elmentve';
@@ -6077,6 +6077,28 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Illeszd be a PGN szövegét (legfeljebb $count játszma)',
       one: 'Illeszd be a PGN szövegét legfeljebb $count játszmáig',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ez $count csapat csatája',
+      one: '$count csapat csatája',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vezető csapatonként',
+      one: 'Egy vezető csapatonként',
     );
     return '$_temp0';
   }

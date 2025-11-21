@@ -36,6 +36,7 @@ const modules = [
   'storm',
   'streamer',
   'study',
+  'team',
   'timeago',
   'tfa',
 ]
@@ -47,7 +48,8 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'tfa': ['twoFactorAuth']
+  'tfa': ['twoFactorAuth'],
+  'team': ['nbLeadersPerTeam','battleOfNbTeams']
 }
 
 // Order of locales with variants matters: the fallback must always be first

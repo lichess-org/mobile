@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -25,6 +27,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -186,6 +189,10 @@ class _Body extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _TournamentInfo(state.tournament),
+                      if (state.tournament.meta.teamBattle != null) ...[
+                        const SizedBox(height: 10),
+                        _TeamInfo(state.tournament.meta.teamBattle!),
+                      ],
                       if (state.tournament.verdicts.list.isNotEmpty) ...[
                         const SizedBox(height: 10),
                         _Verdicts(state.tournament.verdicts),
@@ -206,6 +213,10 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              if (state.tournament.teamStanding != null) ...[
+                _TeamStanding(state),
+                const SizedBox(height: 16),
+              ],
               _Standing(state),
               const SizedBox(height: 16),
               if (state.tournament.isStarted != true && state.tournament.isFinished != true)
@@ -427,6 +438,120 @@ class _TournamentHelp extends StatelessWidget {
   }
 }
 
+class _TeamStanding extends ConsumerWidget {
+  const _TeamStanding(this.state);
+
+  final TournamentState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final teamStanding = state.tournament.teamStanding;
+    if (teamStanding == null) {
+      return const SizedBox.shrink();
+    }
+
+    final teamBattle = state.tournament.meta.teamBattle;
+    if (teamBattle == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Card(
+      clipBehavior: .hardEdge,
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text('Team Standings', style: Styles.sectionTitle),
+          ),
+          ...teamStanding.map(
+            (team) => _TeamStandingTile(
+              team: team,
+              teamInfo: teamBattle.teams[team.id],
+              nbLeaders: teamBattle.nbLeaders,
+              tournamentId: state.id,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TeamStandingTile extends ConsumerWidget {
+  const _TeamStandingTile({
+    required this.team,
+    required this.teamInfo,
+    required this.nbLeaders,
+    required this.tournamentId,
+  });
+
+  final TeamStanding team;
+  final TeamInfo? teamInfo;
+  final int nbLeaders;
+  final TournamentId tournamentId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+      visualDensity: .compact,
+      tileColor: team.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+      leading: Text(team.rank.toString().padLeft(2).padRight(3), textAlign: .center),
+      title: Row(
+        children: [
+          Flexible(
+            child: Text(
+              teamInfo?.name ?? team.id,
+              style: const TextStyle(fontWeight: .bold),
+              overflow: .ellipsis,
+            ),
+          ),
+          if (teamInfo?.flair != null) ...[
+            const SizedBox(width: 8.0),
+            CachedNetworkImage(
+              imageUrl: lichessFlairSrc(teamInfo!.flair!),
+              errorWidget: (_, _, _) => kEmptyWidget,
+              width: 16.0,
+              height: 16.0,
+            ),
+          ],
+        ],
+      ),
+      subtitle: team.players.isNotEmpty
+          ? Text.rich(
+              TextSpan(
+                style: TextStyle(fontSize: 14, color: textShade(context, 0.6)),
+                children: [
+                  WidgetSpan(
+                    alignment: .middle,
+                    child: UserFullNameWidget(
+                      user: team.players.first.user,
+                      style: TextStyle(fontSize: 14, color: textShade(context, 0.6)),
+                      showPatron: false,
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        '  ${team.players.take(nbLeaders).map((p) => p.score.toString()).join(' + ')}',
+                  ),
+                ],
+              ),
+              overflow: .ellipsis,
+              maxLines: 3,
+            )
+          : null,
+      trailing: Text(
+        team.score.toString().padLeft(2),
+        style: const TextStyle(fontWeight: .bold, fontSize: 14),
+      ),
+      onTap: () {
+        _showTeamDetails(context, ref, tournamentId, team.id);
+      },
+    );
+  }
+}
+
 class _Standing extends ConsumerWidget {
   const _Standing(this.state);
 
@@ -596,6 +721,31 @@ class _TournamentInfo extends StatelessWidget {
                 '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
               ),
               const SizedBox(height: 5),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TeamInfo extends StatelessWidget {
+  const _TeamInfo(this.teamBattle);
+
+  final TeamBattleData teamBattle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Icon(Icons.group, size: 30.0),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Text(context.l10n.teamBattleOfNbTeams(teamBattle.teams.length)),
+              Text(context.l10n.teamNbLeadersPerTeam(teamBattle.nbLeaders)),
             ],
           ),
         ),
@@ -940,13 +1090,60 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                   icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
                   showLabel: true,
                   onTap: widget.state.canJoin
-                      ? () {
-                          ref
-                              .read(tournamentControllerProvider(widget.state.id).notifier)
-                              .joinOrPause();
-                          setState(() {
-                            joinOrLeaveInProgress = true;
-                          });
+                      ? () async {
+                          final teamBattle = widget.state.tournament.meta.teamBattle;
+
+                          // If joining and it's a team battle with multiple teams
+                          if (!widget.state.joined &&
+                              teamBattle != null &&
+                              teamBattle.joinWith != null) {
+                            // Check if user has no teams participating
+                            if (teamBattle.joinWith!.isEmpty) {
+                              showSnackBar(
+                                context,
+                                'None of your teams are participating in this tournament',
+                                type: SnackBarType.error,
+                              );
+                              return;
+                            }
+                            if (teamBattle.teams.length < 1) {
+                              // Only one team available, join that one directly
+                              setState(() {
+                                joinOrLeaveInProgress = true;
+                              });
+
+                              ref
+                                  .read(tournamentControllerProvider(widget.state.id).notifier)
+                                  .joinOrPause(teamId: teamBattle.joinWith!.first);
+                              return;
+                            }
+
+                            final selectedTeamId = await _showTeamSelectionDialog(
+                              context,
+                              teamBattle,
+                            );
+
+                            if (selectedTeamId == null) {
+                              return; // User cancelled
+                            }
+
+                            setState(() {
+                              joinOrLeaveInProgress = true;
+                            });
+
+                            ref
+                                .read(tournamentControllerProvider(widget.state.id).notifier)
+                                .joinOrPause(teamId: selectedTeamId);
+                          } else {
+                            // Normal join/pause flow
+                            setState(() {
+                              joinOrLeaveInProgress = true;
+                            });
+
+                            ref
+                                .read(tournamentControllerProvider(widget.state.id).notifier)
+                                .joinOrPause();
+                          }
                         }
                       : null,
                 )
@@ -1021,6 +1218,9 @@ class _TournamentPlayerDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
+    final teamInfo = player.teamId != null
+        ? tournamentState.valueOrNull?.tournament.meta.teamBattle?.teams[player.teamId!]
+        : null;
     return Column(
       children: [
         Padding(
@@ -1052,6 +1252,25 @@ class _TournamentPlayerDetails extends ConsumerWidget {
             ],
           ),
         ),
+        if (teamInfo != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisSize: .min,
+              children: [
+                Text(teamInfo.name, style: const TextStyle(fontWeight: .w500, fontSize: 14)),
+                const SizedBox(width: 8.0),
+                if (teamInfo.flair != null) ...[
+                  CachedNetworkImage(
+                    imageUrl: lichessFlairSrc(teamInfo.flair!),
+                    errorWidget: (_, _, _) => kEmptyWidget,
+                    width: 20.0,
+                    height: 20.0,
+                  ),
+                ],
+              ],
+            ),
+          ),
         Expanded(
           child: ListView(
             controller: scrollController,
@@ -1246,4 +1465,241 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
   }
   final totalRating = player.pairings.fold(0, (sum, pairing) => sum + pairing.opponentRating);
   return (totalRating / player.pairings.length).round();
+}
+
+void _showTeamDetails(
+  BuildContext context,
+  WidgetRef ref,
+  TournamentId tournamentId,
+  String teamId,
+) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      return DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) {
+          return Consumer(
+            builder: (context, ref, child) {
+              final teamAsync = ref.watch(tournamentTeamProvider(tournamentId, teamId));
+
+              return switch (teamAsync) {
+                AsyncData(value: final team) => _TournamentTeamDetails(
+                  team: team,
+                  tournamentId: tournamentId,
+                  scrollController: scrollController,
+                ),
+                AsyncError(error: final error) => Center(
+                  child: Text('Error loading team data: $error'),
+                ),
+                _ => const Center(child: CircularProgressIndicator.adaptive()),
+              };
+            },
+          );
+        },
+      );
+    },
+  );
+}
+
+class _TournamentTeamDetails extends ConsumerWidget {
+  final TournamentTeam team;
+  final TournamentId tournamentId;
+  final ScrollController scrollController;
+
+  const _TournamentTeamDetails({
+    required this.team,
+    required this.tournamentId,
+    required this.scrollController,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
+    final teamInfo = tournamentState.valueOrNull?.tournament.meta.teamBattle?.teams[team.id];
+    final nbLeaders = tournamentState.valueOrNull?.tournament.meta.teamBattle?.nbLeaders;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+          child: Row(
+            mainAxisAlignment: .spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        teamInfo?.name ?? team.id,
+                        style: Styles.title,
+                        overflow: .ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    if (teamInfo?.flair != null) ...[
+                      CachedNetworkImage(
+                        imageUrl: lichessFlairSrc(teamInfo!.flair!),
+                        errorWidget: (_, _, _) => kEmptyWidget,
+                        width: 24.0,
+                        height: 24.0,
+                      ),
+                      const SizedBox(width: 8.0),
+                    ],
+                  ],
+                ),
+              ),
+              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            padding: const EdgeInsets.all(16),
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      _StatRow(label: context.l10n.players, value: '${team.nbPlayers}'),
+
+                      _StatRow(label: context.l10n.averageElo, value: '${team.rating}'),
+                      if (team.performance != null)
+                        _StatRow(
+                          label: context.l10n.arenaAveragePerformance,
+                          value: '${team.performance}',
+                        ),
+                      _StatRow(label: context.l10n.arenaAverageScore, value: '${team.score}'),
+                    ],
+                  ),
+                ),
+              ),
+              if (team.topPlayers.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Text(context.l10n.players, style: Styles.sectionTitle),
+                const SizedBox(height: 8),
+                Card(
+                  clipBehavior: .hardEdge,
+                  child: Column(
+                    children: [
+                      ...team.topPlayers.asMap().entries.map(
+                        (entry) => _TeamPlayerTile(
+                          player: entry.value,
+                          index: entry.key,
+                          tournamentId: tournamentId,
+                          nbLeaders: nbLeaders,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TeamPlayerTile extends ConsumerWidget {
+  final TeamPlayerDetailed player;
+  final int index;
+  final TournamentId tournamentId;
+  final int? nbLeaders;
+
+  const _TeamPlayerTile({
+    required this.player,
+    required this.index,
+    required this.tournamentId,
+    required this.nbLeaders,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+      visualDensity: .compact,
+      tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+      leading: Row(mainAxisSize: .min, children: [Text((index + 1).toString().padLeft(2))]),
+      title: Row(
+        children: [
+          if (nbLeaders != null && index < nbLeaders!)
+            Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: Icon(LichessIcons.crown, size: 16, color: context.lichessColors.brag),
+            ),
+          Flexible(
+            child: UserFullNameWidget(
+              user: player.user,
+              rating: player.rating,
+              shouldShowOnline: false,
+            ),
+          ),
+        ],
+      ),
+      trailing: Row(
+        mainAxisSize: .min,
+        children: [
+          if (player.fire)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag),
+            ),
+          Text(
+            player.score.toString().padLeft(2),
+            style: const TextStyle(fontWeight: .bold, fontSize: 14),
+          ),
+        ],
+      ),
+      onTap: () {
+        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+      },
+    );
+  }
+}
+
+Future<String?> _showTeamSelectionDialog(BuildContext context, TeamBattleData teamBattle) {
+  return showDialog<String>(
+    context: context,
+    builder: (context) {
+      return AlertDialog.adaptive(
+        title: Text(context.l10n.arenaPickYourTeam),
+        content: Column(
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Text(
+                context.l10n.arenaWhichTeamWillYouRepresentInThisBattle,
+                style: TextStyle(fontSize: 14, color: textShade(context, 0.7)),
+              ),
+            ),
+            ...teamBattle.joinWith!.map((teamId) {
+              final teamInfo = teamBattle.teams[teamId];
+              return ListTile(
+                title: Text(teamInfo?.name ?? teamId),
+                onTap: () => Navigator.of(context).pop(teamId),
+              );
+            }),
+          ],
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+        ],
+      );
+    },
+  );
 }

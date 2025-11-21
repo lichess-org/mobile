@@ -478,13 +478,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kiel lichess kalkulas poentarojn?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Venko havas bazan poentaron de 2 poentoj, sorto: 1 punkto, kaj perdo valoras neniujn punktojn.\nSe vi gajnos du ludojn sinsekve vi komencos duoblan punkton, reprezentitan per flamo-ikono.\nLa sekvaj ludoj daŭre valoras duoble punktojn ĝis vi ne gajnos ludon.\nTio estas, venko valoras 4 punktojn, remizo: 2 poentoj, kaj perdo restos valora sen punktoj.\n\nEkzemple, du venkoj sekvataj de remizo valoras 6 poentoj: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Venko havas bazan poentaron de 2 poentoj, sorto: 1 punkto, kaj perdo valoras neniujn punktojn.\r\nSe vi gajnos du ludojn sinsekve vi komencos duoblan punkton, reprezentitan per flamo-ikono.\r\nLa sekvaj ludoj daŭre valoras duoble punktojn ĝis vi ne gajnos ludon.\r\nTio estas, venko valoras 4 punktojn, remizo: 2 poentoj, kaj perdo restos valora sen punktoj.\r\n\r\nEkzemple, du venkoj sekvataj de remizo valoras 6 poentoj: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserko';
 
   @override
-  String get arenaBerserkAnswer => 'Kiam ludanto klakas la butonon Berserk ĉe la komenco de la ludo, ili perdas duonon de sia horloĝo, sed la venko valoras unu ekstran punkton de turniro.\n\nIri Berserk en tempo kontroloj kun pliigo ankaŭ nuligas la kreskon. (1 + 2 estas escepto, ĝi donas 1 + 0)\n\nBerserk ne estas disponebla por ludoj kun nulo komenca tempo (0 + 1, 0 + 2).\n\nBerserk nur donas ekstran punkton se vi ludas almenaŭ 7 movojn en la ludo.';
+  String get arenaBerserkAnswer => 'Kiam ludanto klakas la butonon Berserk ĉe la komenco de la ludo, ili perdas duonon de sia horloĝo, sed la venko valoras unu ekstran punkton de turniro.\r\n\r\nIri Berserk en tempo kontroloj kun pliigo ankaŭ nuligas la kreskon. (1 + 2 estas escepto, ĝi donas 1 + 0)\r\n\r\nBerserk ne estas disponebla por ludoj kun nulo komenca tempo (0 + 1, 0 + 2).\r\n\r\nBerserk nur donas ekstran punkton se vi ludas almenaŭ 7 movojn en la ludo.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kiel decidas la venkanto?';
@@ -496,7 +496,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kiel funkcias la kuniĝo?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Komence de la turniro, ludantoj estas parigitaj laŭ ilia rango.\nTuj kiam vi finos ludon, revenu al la atendejo de la turniro: vi tiam estos parigita kun ludanto, kies rango estas proksima al la via. Ĉi tio certigas minimuman atendon, tamen vi eble ne alfrontos ĉiujn aliajn ludantojn en la turniro.\nLudu rapide kaj revenu al la atendejo por ludi pli da ludoj kaj venki pli da poentoj.';
+  String get arenaHowDoesPairingWorkAnswer => 'Komence de la turniro, ludantoj estas parigitaj laŭ ilia rango.\r\nTuj kiam vi finos ludon, revenu al la atendejo de la turniro: vi tiam estos parigita kun ludanto, kies rango estas proksima al la via. Ĉi tio certigas minimuman atendon, tamen vi eble ne alfrontos ĉiujn aliajn ludantojn en la turniro.\r\nLudu rapide kaj revenu al la atendejo por ludi pli da ludoj kaj venki pli da poentoj.';
 
   @override
   String get arenaHowDoesItEnd => 'Kiel finiĝas?';
@@ -605,7 +605,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaTournamentStats => 'Turniraj statistikoj';
 
   @override
-  String get arenaRankAvgHelp => 'La mezrango estas elcento de via rango. Ju pli malalta des pli bona.\n\nEkzemple, se vi estas rangita 3 en turniro de 100 ludantoj = 3%. Se vi estas rangita 10 en turniro de 1000 ludantoj = 1%.';
+  String get arenaRankAvgHelp => 'La mezrango estas elcento de via rango. Ju pli malalta des pli bona.\r\n\r\nEkzemple, se vi estas rangita 3 en turniro de 100 ludantoj = 3%. Se vi estas rangita 10 en turniro de 1000 ludantoj = 1%.';
 
   @override
   String get arenaMedians => 'medianoj';
@@ -1593,7 +1593,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Serĉi puzlojn';
 
   @override
-  String get puzzleFromMyGamesNone => 'Vi ne havas puzlojn en la datumbazo, sed Lichess ankoraŭ tre amas vin.\n\nLudu rapidaj kaj klasikaj ludoj por pliigi viajn ŝancojn de aldoni puzlon de vi!';
+  String get puzzleFromMyGamesNone => 'Vi ne havas puzlojn en la datumbazo, sed Lichess ankoraŭ tre amas vin.\r\n\r\nLudu rapidaj kaj klasikaj ludoj por pliigi viajn ŝancojn de aldoni puzlon de vi!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trejnu, analizu, pliboniĝu';
@@ -4600,7 +4600,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get tournDescriptionHelp => 'Ĉu io ajn speciala, ke vi volas diri al la partoprenantoj? Provu teni ĝin mallonga. Markdown ligoj estas disponebla: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Ludoj estas rangaj\nkaj influas la rangojn de ludantoj';
+  String get ratedFormHelp => 'Ludoj estas rangaj\r\nkaj influas la rangojn de ludantoj';
 
   @override
   String get onlyMembersOfTeam => 'Nur teamanoj';
@@ -4619,7 +4619,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Alglui validan FEN por komenci ĉiujn ludojn el donita pozicio.\nTio nur funkcias por normaj ludoj, ne kun variantoj.\nVi povas uzi la $param por krei FEN pozicio, tiam alglui ĝin ĉi tie.\nLasi ĝin malplena por komenci ludojn de la norma komenca pozicio.';
+    return 'Alglui validan FEN por komenci ĉiujn ludojn el donita pozicio.\r\nTio nur funkcias por normaj ludoj, ne kun variantoj.\r\nVi povas uzi la $param por krei FEN pozicio, tiam alglui ĝin ĉi tie.\r\nLasi ĝin malplena por komenci ludojn de la norma komenca pozicio.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get showMeEverything => 'Ĉion montru al mi';
 
   @override
-  String get lichessPatronInfo => 'Lichess estas almoza kaj tute libera malfermitkoda programaro.\nĈiu funkciada elspezo, ellaborado, kaj enhavo estas financita sole de uzantajn donacojn.';
+  String get lichessPatronInfo => 'Lichess estas almoza kaj tute libera malfermitkoda programaro.\r\nĈiu funkciada elspezo, ellaborado, kaj enhavo estas financita sole de uzantajn donacojn.';
 
   @override
   String get nothingToSeeHere => 'Nenio videbla ĉi tie nuntempe.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Algluu ĉi tie vian PGN kodon, ĝis maksimume $count ludoj',
       one: 'Algluu ĉi tie vian PGN kodon, maksimume ĝis $count ludo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle de $count teamoj',
+      one: 'Batalo de $count teamoj',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gvidantoj je teamo',
+      one: 'Unu gvidanto je teamo',
     );
     return '$_temp0';
   }

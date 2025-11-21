@@ -478,25 +478,25 @@ class AppLocalizationsMk extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Како се пресметува резултатот?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Победата носи 2 основни поени, ремито носи 1 поен, а загубата носи 0 поени.\nАко победите две партии по ред, ќе почнете да заработувате двојно поени, означено со икона од пламен.\nНаредните игри ќе продолжат да вредат двојно поени сѐ додека не престанете да победувате.\nТака што, победата ќе вреди 4 поени, ремито 2 поени, а загубата сѐ уште ќе носи 0 поени.\n\nНа пример, две победи проследени со реми ќе вредат 6 поени: 2 + 2 + (2 х 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Победата носи 2 основни поени, ремито носи 1 поен, а загубата носи 0 поени.\r\nАко победите две партии по ред, ќе почнете да заработувате двојно поени, означено со икона од пламен.\r\nНаредните игри ќе продолжат да вредат двојно поени сѐ додека не престанете да победувате.\r\nТака што, победата ќе вреди 4 поени, ремито 2 поени, а загубата сѐ уште ќе носи 0 поени.\r\n\r\nНа пример, две победи проследени со реми ќе вредат 6 поени: 2 + 2 + (2 х 1)';
 
   @override
   String get arenaBerserk => 'Берсерк Арена';
 
   @override
-  String get arenaBerserkAnswer => 'Кога играчот притиска на Берсерк копчето на почетокот на партијата, тој губи половина од времето, но победата вреди 1 поен повеќе.\n\nАко се одбере Берсерк се губи и додатното време за потег (1+2 е исклучок, станува 1+0).\n\nБерсерк не може да се одбере во партии со 0 почетно време (0+1, 0+2).\n\nБерсерк доделува 1 додатен поен само ако одиграте бар 7 потези во партијата.';
+  String get arenaBerserkAnswer => 'Кога играчот притиска на Берсерк копчето на почетокот на партијата, тој губи половина од времето, но победата вреди 1 поен повеќе.\r\n\r\nАко се одбере Берсерк се губи и додатното време за потег (1+2 е исклучок, станува 1+0).\r\n\r\nБерсерк не може да се одбере во партии со 0 почетно време (0+1, 0+2).\r\n\r\nБерсерк доделува 1 додатен поен само ако одиграте бар 7 потези во партијата.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Како се определува победникот?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Играчите со најмногу поени по истекот на времето на турнирот ќе бидат прогласени победници.\n\nКога 2 или повеќе играчи го имаат истиот број на поени, победникот се бира според перформансите во турнирот.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Играчите со најмногу поени по истекот на времето на турнирот ќе бидат прогласени победници.\r\n\r\nКога 2 или повеќе играчи го имаат истиот број на поени, победникот се бира според перформансите во турнирот.';
 
   @override
   String get arenaHowDoesPairingWork => 'Како работи спарувањето?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'На почетокот на секој турнир, играчите се спарени на база на нивниот ранг.\nШтом ќе завршите со една партија, вратете се во турнирското лоби: таму пак ќе бидете спарени со играч кој има сличен ранг на вашиот. Така, чекањето се сведува на минимум, но можно е да не играте против секој играч во турнирот.\nИграјте брзо и враќајте се во лобито за да играте повеќе партии и да освоите повеќе поени.';
+  String get arenaHowDoesPairingWorkAnswer => 'На почетокот на секој турнир, играчите се спарени на база на нивниот ранг.\r\nШтом ќе завршите со една партија, вратете се во турнирското лоби: таму пак ќе бидете спарени со играч кој има сличен ранг на вашиот. Така, чекањето се сведува на минимум, но можно е да не играте против секој играч во турнирот.\r\nИграјте брзо и враќајте се во лобито за да играте повеќе партии и да освоите повеќе поени.';
 
   @override
   String get arenaHowDoesItEnd => 'Како завршува турнирот?';
@@ -605,7 +605,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1593,7 +1593,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Пребарувај загатки';
 
   @override
-  String get puzzleFromMyGamesNone => 'Немате загатки во базата на податоци, но Lichess сè уште многу ве сака.\n\nИграјте брзи и класични игри за да ги зголемите шансите ваша загатка да биде додадена!';
+  String get puzzleFromMyGamesNone => 'Немате загатки во базата на податоци, но Lichess сè уште многу ве сака.\r\n\r\nИграјте брзи и класични игри за да ги зголемите шансите ваша загатка да биде додадена!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Вежбај, анализирај, подобри се';
@@ -3064,7 +3064,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get importGame => 'Внеси игра';
 
   @override
-  String get importGameExplanation => 'Залепи PGN од игра за да добиеш реприза, \nкомпјутерска анализа, разговор во играта и URL за споделување.';
+  String get importGameExplanation => 'Залепи PGN од игра за да добиеш реприза, \r\nкомпјутерска анализа, разговор во играта и URL за споделување.';
 
   @override
   String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
@@ -4600,7 +4600,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get tournDescriptionHelp => 'Дали сакате да им кажете нешто на натпреварувачите? Пробајте да бидете кратки. Markdown линкови се достапни: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Игрите се оценуваат\nи влијаат врз рејтингот на играчите';
+  String get ratedFormHelp => 'Игрите се оценуваат\r\nи влијаат врз рејтингот на играчите';
 
   @override
   String get onlyMembersOfTeam => 'Само за членови на тимот';
@@ -4619,7 +4619,7 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Ставете валиден FEN за да ја започнете секоја игра од одредена позиција.\nРаботи само за стандардни игри, не за варијации.\nМожете да го користите $param за да генерирате FEN позиција, а потоа да ја ставите овде.\nОставете празно за да ја почнете играта од нормална почетна позиција.';
+    return 'Ставете валиден FEN за да ја започнете секоја игра од одредена позиција.\r\nРаботи само за стандардни игри, не за варијации.\r\nМожете да го користите $param за да генерирате FEN позиција, а потоа да ја ставите овде.\r\nОставете празно за да ја почнете играта од нормална почетна позиција.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess е добротворна организација и целосно бесплатен/слободен софтвер со отворен код.\nСите оперативни трошоци, развој и содржина се финансираат исклучиво од донации на корисници.';
+  String get lichessPatronInfo => 'Lichess е добротворна организација и целосно бесплатен/слободен софтвер со отворен код.\r\nСите оперативни трошоци, развој и содржина се финансираат исклучиво од донации на корисници.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsMk extends AppLocalizations {
       locale: localeName,
       other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
       one: 'Paste your PGN text here, up to $count game',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

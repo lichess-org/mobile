@@ -199,7 +199,7 @@ class TournamentController extends _$TournamentController {
     }
   }
 
-  void joinOrPause() {
+  void joinOrPause({String? teamId}) {
     final state = this.state.valueOrNull;
     if (state == null) {
       return;
@@ -208,7 +208,7 @@ class TournamentController extends _$TournamentController {
     if (state.joined) {
       ref.read(tournamentRepositoryProvider).withdraw(state.id);
     } else {
-      ref.read(tournamentRepositoryProvider).join(state.id);
+      ref.read(tournamentRepositoryProvider).join(state.id, teamId: teamId);
     }
   }
 }
