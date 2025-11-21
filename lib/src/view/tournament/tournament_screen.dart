@@ -1106,8 +1106,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                               );
                               return;
                             }
-                            if (teamBattle.teams.length < 1) {
-                              // Only one team available, join that one directly
+                            // Only one team available, join that one directly
+                            if (teamBattle.joinWith!.length == 1) {
                               setState(() {
                                 joinOrLeaveInProgress = true;
                               });
