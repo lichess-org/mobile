@@ -73,11 +73,13 @@ void main() {
       when(() => mockSessionStorage.write(any())).thenAnswer((_) => Future.value(null));
 
       final container = await makeContainer(
-        overrides: [
-          appAuthProvider.overrideWithValue(mockFlutterAppAuth),
-          sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider.overrideWith((_) => FakeHttpClientFactory(() => client)),
-        ],
+        overrides: {
+          appAuthProvider: appAuthProvider.overrideWithValue(mockFlutterAppAuth),
+          sessionStorageProvider: sessionStorageProvider.overrideWithValue(mockSessionStorage),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (_) => FakeHttpClientFactory(() => client),
+          ),
+        },
       );
 
       final listener = Listener<AsyncValue<void>>();
@@ -124,11 +126,13 @@ void main() {
       });
 
       final container = await makeContainer(
-        overrides: [
-          appAuthProvider.overrideWithValue(mockFlutterAppAuth),
-          sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider.overrideWith((_) => FakeHttpClientFactory(() => client)),
-        ],
+        overrides: {
+          appAuthProvider: appAuthProvider.overrideWithValue(mockFlutterAppAuth),
+          sessionStorageProvider: sessionStorageProvider.overrideWithValue(mockSessionStorage),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (_) => FakeHttpClientFactory(() => client),
+          ),
+        },
         userSession: testUserSession,
       );
 

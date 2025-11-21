@@ -18,12 +18,12 @@ void main() {
       final db = await openAppDatabase(dbFactory, inMemoryDatabasePath);
 
       final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
             ref.onDispose(db.close);
             return db;
           }),
-        ],
+        },
       );
 
       final storage = await container.read(puzzleStorageProvider.future);

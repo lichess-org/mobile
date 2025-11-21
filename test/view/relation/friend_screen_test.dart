@@ -97,12 +97,14 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const FriendScreen(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-          onlineFriendsProvider.overrideWith(() => _MockOnlineFriends(const IList.empty())),
-        ],
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -127,12 +129,14 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const FriendScreen(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-          onlineFriendsProvider.overrideWith(() => _MockOnlineFriends(const IList.empty())),
-        ],
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -174,18 +178,18 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const FriendScreen(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-          onlineFriendsProvider.overrideWith(
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
             () => _MockOnlineFriends(
               IList(const [
                 (user: LightUser(id: UserId('testuser'), name: 'TestUser'), playing: false),
               ]),
             ),
           ),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -213,12 +217,14 @@ void main() {
         final app = await makeTestProviderScopeApp(
           tester,
           home: const FriendScreen(),
-          overrides: [
-            httpClientFactoryProvider.overrideWith((ref) {
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
               return FakeHttpClientFactory(() => mockClient);
             }),
-            onlineFriendsProvider.overrideWith(() => _MockOnlineFriends(const IList.empty())),
-          ],
+            onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+              () => _MockOnlineFriends(const IList.empty()),
+            ),
+          },
         );
 
         await tester.pumpWidget(app);

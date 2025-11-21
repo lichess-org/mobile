@@ -85,7 +85,11 @@ void main() {
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [notificationDisplayProvider.overrideWithValue(notificationDisplayMock)],
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+          notificationDisplayMock,
+        ),
+      },
     );
 
     final notificationService = container.read(notificationServiceProvider);
@@ -163,7 +167,11 @@ void main() {
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [notificationDisplayProvider.overrideWithValue(notificationDisplayMock)],
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+          notificationDisplayMock,
+        ),
+      },
     );
 
     final notificationService = container.read(notificationServiceProvider);
