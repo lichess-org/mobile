@@ -610,7 +610,7 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _IsDayTimeNotifier extends AutoDisposeNotifier<bool> {
+class _IsDayTimeNotifier extends Notifier<bool> {
   Timer? _timer;
 
   @override

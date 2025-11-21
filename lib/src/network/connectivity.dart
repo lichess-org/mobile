@@ -8,23 +8,24 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'connectivity.g.dart';
 
 final _logger = Logger('Connectivity');
 
 /// A provider that exposes a [Connectivity] instance.
-@Riverpod(keepAlive: true)
-Connectivity connectivityPlugin(Ref _) => Connectivity();
+final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivity());
 
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-@Riverpod(keepAlive: true)
-class ConnectivityChanges extends _$ConnectivityChanges {
+final connectivityChangesProvider =
+    AsyncNotifierProvider<ConnectivityChangesNotifier, ConnectivityStatus>(
+      ConnectivityChangesNotifier.new,
+      name: 'ConnectivityChangesProvider',
+    );
+
+class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 

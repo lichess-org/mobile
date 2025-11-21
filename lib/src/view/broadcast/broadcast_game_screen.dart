@@ -109,9 +109,11 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             ),
             _ => const SizedBox.shrink(),
           };
-    final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
+    final asyncEval = ref.watch(
+      broadcastGameEvalProvider((roundId: widget.roundId, gameId: widget.gameId)),
+    );
     final asyncIsEngineAvailable = ref.watch(
-      isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
+      isBroadcastEngineAvailableProvider((roundId: widget.roundId, gameId: widget.gameId)),
     );
 
     return Scaffold(
@@ -440,7 +442,7 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
+    switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
       case AsyncValue(value: final game?, hasValue: true):
         final broadcastAnalysisState = ref
             .watch(broadcastAnalysisControllerProvider(roundId, gameId))
