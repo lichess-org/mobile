@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 typedef BroadcastRoundGameParam = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
+/// A provider that exposes the [BroadcastGame] for the given [BroadcastRoundGameParam].
 final broadcastRoundGameProvider = FutureProvider.autoDispose
     .family<BroadcastGame, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
       return ref.watch(
@@ -17,6 +18,7 @@ final broadcastRoundGameProvider = FutureProvider.autoDispose
       );
     }, name: 'BroadcastRoundGameProvider');
 
+/// A provider that exposes the current [ClientEval] for the given [BroadcastRoundGameParam].
 final broadcastGameEvalProvider = FutureProvider.autoDispose
     .family<ClientEval?, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
       return ref.watch(
@@ -27,6 +29,7 @@ final broadcastGameEvalProvider = FutureProvider.autoDispose
       );
     }, name: 'BroadcastGameEvalProvider');
 
+/// A provider that indicates whether engine analysis is available for the given
 final isBroadcastEngineAvailableProvider = FutureProvider.autoDispose
     .family<bool, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
       final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);

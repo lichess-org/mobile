@@ -138,22 +138,19 @@ class IsBoardTurnedNotifier extends Notifier<bool> {
   }
 }
 
+/// A provider that indicates whether the game is bookmarked.
 final isGameBookmarkedProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
   Ref ref,
   GameFullId gameId,
-) {
-  return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
-  );
+) async {
+  return (await ref.watch(gameControllerProvider(gameId).future)).game.bookmarked ?? false;
 }, name: 'IsGameBookmarkedProvider');
 
+/// A provider that exposes data needed for sharing the game.
 final gameShareDataProvider = FutureProvider.autoDispose
-    .family<({bool finished, Side? pov}), GameFullId>((Ref ref, GameFullId gameId) {
-      return ref.watch(
-        gameControllerProvider(
-          gameId,
-        ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
-      );
+    .family<({bool finished, Side? pov}), GameFullId>((Ref ref, GameFullId gameId) async {
+      final state = await ref.watch(gameControllerProvider(gameId).future);
+      return (finished: state.game.finished, pov: state.game.youAre);
     }, name: 'GameShareDataProvider');
 
 final isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
@@ -173,27 +170,16 @@ final userGamePrefsProvider = FutureProvider.autoDispose
       ({ServerGamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen}),
       GameFullId
     >((Ref ref, GameFullId gameId) async {
-      final prefs = await ref.watch(
-        gameControllerProvider(gameId).selectAsync((state) => state.game.prefs),
-      );
-      final shouldConfirmMove = await ref.watch(
-        gameControllerProvider(gameId).selectAsync((state) => state.shouldConfirmMove),
-      );
-      final isZenModeEnabled = await ref.watch(
-        gameControllerProvider(gameId).selectAsync((state) => state.isZenModeEnabled),
-      );
-      final canAutoQueen = await ref.watch(
-        gameControllerProvider(gameId).selectAsync((state) => state.canAutoQueen),
-      );
+      final state = await ref.watch(gameControllerProvider(gameId).future);
       return (
-        prefs: prefs,
-        shouldConfirmMove: shouldConfirmMove,
-        isZenModeEnabled: isZenModeEnabled,
-        canAutoQueen: canAutoQueen,
+        prefs: state.game.prefs,
+        shouldConfirmMove: state.shouldConfirmMove,
+        isZenModeEnabled: state.isZenModeEnabled,
+        canAutoQueen: state.canAutoQueen,
       );
     }, name: 'UserGamePrefsProvider');
 
-/// Returns the [PlayableGameMeta].
+/// Returns the [GameMeta].
 ///
 /// This is data that won't change during the game.
 final gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>((
@@ -202,10 +188,3 @@ final gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>
 ) async {
   return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
 }, name: 'GameMetaProvider');
-
-final gameTournamentProvider = FutureProvider.autoDispose.family<TournamentMeta?, GameFullId>((
-  Ref ref,
-  GameFullId gameId,
-) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.tournament));
-}, name: 'GameTournamentProvider');
