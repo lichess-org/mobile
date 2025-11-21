@@ -59,7 +59,7 @@ final userRecentGamesProvider = FutureProvider.autoDispose
       return ref
           .read(gameRepositoryProvider)
           .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
-    });
+    }, name: 'UserRecentGamesProvider');
 
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
 ///
@@ -88,6 +88,7 @@ typedef UserGameHistoryNotifierParams = ({UserId? userId, GameFilterState filter
 final userGameHistoryProvider = AsyncNotifierProvider.autoDispose
     .family<UserGameHistoryNotifier, UserGameHistoryState, UserGameHistoryNotifierParams>(
       UserGameHistoryNotifier.new,
+      name: 'UserGameHistoryProvider',
     );
 
 class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
