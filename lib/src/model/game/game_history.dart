@@ -33,7 +33,7 @@ const _nbPerPage = 20;
 final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGameWithPov>>((
   Ref ref,
 ) async {
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+  final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref
@@ -51,7 +51,7 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
               .toIList(),
         );
   }
-});
+}, name: 'MyRecentGamesProvider');
 
 /// A provider that fetches the recent games from the server for a given user.
 final userRecentGamesProvider = FutureProvider.autoDispose
@@ -71,13 +71,13 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
   LightUser? user,
 ) async {
   final session = ref.watch(authSessionProvider);
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+  final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
   return user != null
-      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
+      ? (await ref.watch(userProvider(id: user.id).future)).count?.all ?? 0
       : session != null && online
-      ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
+      ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
-});
+}, name: 'UserNumberOfGamesProvider');
 
 typedef UserGameHistoryNotifierParams = ({UserId? userId, GameFilterState filter});
 
@@ -120,7 +120,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
 
     final session = ref.watch(authSessionProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
-    final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = params.userId ?? session?.user.id;

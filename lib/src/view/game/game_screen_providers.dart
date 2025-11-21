@@ -145,7 +145,7 @@ final isGameBookmarkedProvider = FutureProvider.autoDispose.family<bool, GameFul
   return ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
   );
-});
+}, name: 'IsGameBookmarkedProvider');
 
 final gameShareDataProvider = FutureProvider.autoDispose
     .family<({bool finished, Side? pov}), GameFullId>((Ref ref, GameFullId gameId) {
@@ -154,7 +154,7 @@ final gameShareDataProvider = FutureProvider.autoDispose
           gameId,
         ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
       );
-    });
+    }, name: 'GameShareDataProvider');
 
 final isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
   Ref ref,
@@ -165,7 +165,7 @@ final isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, G
       gameId,
     ).selectAsync((state) => state.game.meta.speed != Speed.correspondence && state.game.playable),
   );
-});
+}, name: 'IsRealTimePlayableGameProvider');
 
 /// User game preferences, defined server-side.
 final userGamePrefsProvider = FutureProvider.autoDispose
@@ -191,7 +191,7 @@ final userGamePrefsProvider = FutureProvider.autoDispose
         isZenModeEnabled: isZenModeEnabled,
         canAutoQueen: canAutoQueen,
       );
-    });
+    }, name: 'UserGamePrefsProvider');
 
 /// Returns the [PlayableGameMeta].
 ///
@@ -201,11 +201,11 @@ final gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>
   GameFullId gameId,
 ) async {
   return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
-});
+}, name: 'GameMetaProvider');
 
 final gameTournamentProvider = FutureProvider.autoDispose.family<TournamentMeta?, GameFullId>((
   Ref ref,
   GameFullId gameId,
 ) async {
   return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.tournament));
-});
+}, name: 'GameTournamentProvider');

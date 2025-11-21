@@ -43,4 +43,4 @@ final broadcastGameScreenTitleProvider = FutureProvider.autoDispose
       return ref.watch(
         broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
       );
-    });
+    }, name: 'BroadcastGameScreenTitleProvider');
