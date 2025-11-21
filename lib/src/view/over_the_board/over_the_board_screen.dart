@@ -367,6 +367,12 @@ class _BottomBar extends ConsumerWidget {
               );
             },
           ),
+        BottomSheetAction(
+          makeLabel: (context) => const Text('Give 15 seconds.'),
+          onPressed: () {
+            ref.read(overTheBoardClockProvider.notifier).giveTime(const Duration(seconds: 15));
+          },
+        ),
       ],
     );
   }
