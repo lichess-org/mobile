@@ -478,13 +478,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Com són calculats els punts?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Una victòria té una base de 2 punts, un empat d’ 1 punt, i una pèrdua de cap.\nSi guanyes dos jocs consecutius començaràs una série de doble puntuació, representada per una flama.\nEls següents jocs tindran doble puntuació fins que no guanyis un joc.\nAixí doncs una victòria valdrà 4 punts, un empat 2 punts, i res una derrota.\n\nPer exemple, dos victòries seguides d’un empat valdrà 6 punts: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Una victòria té una base de 2 punts, un empat d’ 1 punt, i una pèrdua de cap.\r\nSi guanyes dos jocs consecutius començaràs una série de doble puntuació, representada per una flama.\r\nEls següents jocs tindran doble puntuació fins que no guanyis un joc.\r\nAixí doncs una victòria valdrà 4 punts, un empat 2 punts, i res una derrota.\r\n\r\nPer exemple, dos victòries seguides d’un empat valdrà 6 punts: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Mode Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Quan un jugador clica el botó de berserk al principi d’una partida, perd la meitat del seu temps, però la victòria val un punt adicional.\n\nEn controls de temps que tenen increment, l’opció berserk també canceŀla l’increment (1+2 és una excepció, ja que només es canceŀla l’increment, però no es parteix el temps a la meitat, resultant en 1+0).\n\nEl mode berserk no està disponible en controls de temps amb temps inicial zero com (0+1 o 0+2).\n\nEl mode berserk només proporciona un punt adicional per cada victòria si juegues al menys 7 moviments en la partida.';
+  String get arenaBerserkAnswer => 'Quan un jugador clica el botó de berserk al principi d’una partida, perd la meitat del seu temps, però la victòria val un punt adicional.\r\n\r\nEn controls de temps que tenen increment, l’opció berserk també canceŀla l’increment (1+2 és una excepció, ja que només es canceŀla l’increment, però no es parteix el temps a la meitat, resultant en 1+0).\r\n\r\nEl mode berserk no està disponible en controls de temps amb temps inicial zero com (0+1 o 0+2).\r\n\r\nEl mode berserk només proporciona un punt adicional per cada victòria si juegues al menys 7 moviments en la partida.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Com es decideix el guanyador?';
@@ -496,7 +496,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Com va l\'emparellament?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Al principi del torneig, els jugadors es vinculen segons la seva valoració. Tan bon punt finalitzeu una partida, torneu al vestíbul del torneig: quedareu junts amb un jugador proper al vostre rànquing. D’aquesta manera s’assegura un temps d’espera mínim, però és possible que no s’enfrontin a tots els altres jugadors del torneig.\nJuga ràpid i torna al vestíbul per jugar més partits i guanyar més punts.';
+  String get arenaHowDoesPairingWorkAnswer => 'Al principi del torneig, els jugadors es vinculen segons la seva valoració. Tan bon punt finalitzeu una partida, torneu al vestíbul del torneig: quedareu junts amb un jugador proper al vostre rànquing. D’aquesta manera s’assegura un temps d’espera mínim, però és possible que no s’enfrontin a tots els altres jugadors del torneig.\r\nJuga ràpid i torna al vestíbul per jugar més partits i guanyar més punts.';
 
   @override
   String get arenaHowDoesItEnd => 'Com acaba?';
@@ -605,7 +605,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get arenaTournamentStats => 'Estadístiques del torneig';
 
   @override
-  String get arenaRankAvgHelp => 'El rànquing mitjà és un percentatge del vostre rànquing. Els valors més petits són millors.\n\nPer exemple, estar en el tercer lloc en un torneig de 100 jugadors = 3%. Ser classificat 10 en un torneig de 1000 jugadors = 1%.';
+  String get arenaRankAvgHelp => 'El rànquing mitjà és un percentatge del vostre rànquing. Els valors més petits són millors.\r\n\r\nPer exemple, estar en el tercer lloc en un torneig de 100 jugadors = 3%. Ser classificat 10 en un torneig de 1000 jugadors = 1%.';
 
   @override
   String get arenaMedians => 'mitjanes';
@@ -1593,7 +1593,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Cercar problemes';
 
   @override
-  String get puzzleFromMyGamesNone => 'No hi ha problemes teus a la base de dates, però Lichess t\'estima molt igualment.\nJuga partides ràpides i clàssiques per augmentar les possibilitats que se n\'hi afegeixi algun!';
+  String get puzzleFromMyGamesNone => 'No hi ha problemes teus a la base de dates, però Lichess t\'estima molt igualment.\r\nJuga partides ràpides i clàssiques per augmentar les possibilitats que se n\'hi afegeixi algun!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Entrena, analitza, millora';
@@ -4600,7 +4600,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get tournDescriptionHelp => 'Cap cosa per mencionar als participants? Intenta mantenir-ho curt. Enllaços utilitzant Markdown estan disponibles: [nom](https://url)';
 
   @override
-  String get ratedFormHelp => 'Els jocs són puntuats\ni impacten les puntuacions dels jugadors';
+  String get ratedFormHelp => 'Els jocs són puntuats\r\ni impacten les puntuacions dels jugadors';
 
   @override
   String get onlyMembersOfTeam => 'Només membres de l\'equip';
@@ -4619,7 +4619,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Enganxa un FEN vàlid per començar cada joc d\'una posició donada.\nNomés funciona per jocs estàndard, no per a variants.\nPots utilitzar l\'$param per generar una posició FEN, i després enganxar-ho aquí.\nDeixa-ho en blanc per començar els jocs de la posició inicial.';
+    return 'Enganxa un FEN vàlid per començar cada joc d\'una posició donada.\r\nNomés funciona per jocs estàndard, no per a variants.\r\nPots utilitzar l\'$param per generar una posició FEN, i després enganxar-ho aquí.\r\nDeixa-ho en blanc per començar els jocs de la posició inicial.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get showMeEverything => 'Mostrar tot';
 
   @override
-  String get lichessPatronInfo => 'Lichess és una entitat sense ànim de lucre i un programari totalment lliure i de codi obert.\nLes despeses de funcionament, desenvolupament i continguts es financen exclusivament amb donacions d\'usuaris.';
+  String get lichessPatronInfo => 'Lichess és una entitat sense ànim de lucre i un programari totalment lliure i de codi obert.\r\nLes despeses de funcionament, desenvolupament i continguts es financen exclusivament amb donacions d\'usuaris.';
 
   @override
   String get nothingToSeeHere => 'Res a veure per aquí de moment.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: 'Enganxa el teu PGN aquí, fins a $count partides',
       one: 'Enganxa el teu PGN aquí, fins a $count partida',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equips',
+      one: 'Batalla d\'$count equip',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Líders per equip',
+      one: 'Un líder per equip',
     );
     return '$_temp0';
   }

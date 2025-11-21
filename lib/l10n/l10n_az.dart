@@ -478,25 +478,25 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Xallar necə hesablanır?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Qazanılan bir oyun təməldə 2 xal, bərabərlik 1 xal dəyərindədir. Uduzulan bir oyun isə heçbir xal qazandırmır. Üst- üstə iki oyun qazandığınız təqdirdə alov ikonu ile təmsil olunan ikiqat xal seriyasına girirsiniz.\n\nMəğlub olana vəya bərabərə qalana qədər oynanılan oyunlardan iki qatı xal qazanırsınız. Yəni seriyada ikən bir qalibiyyət 4 xal, bərabərlik 2 xal qazandırarkən uduzulan oyundan heç bir xal qazanılmaz.\n\nMəsələn; üst-üstə qazanılan iki oyun və ardından alınan bir bərabərlik 6 xal dəyərindədir: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Qazanılan bir oyun təməldə 2 xal, bərabərlik 1 xal dəyərindədir. Uduzulan bir oyun isə heçbir xal qazandırmır. Üst- üstə iki oyun qazandığınız təqdirdə alov ikonu ile təmsil olunan ikiqat xal seriyasına girirsiniz.\r\n\r\nMəğlub olana vəya bərabərə qalana qədər oynanılan oyunlardan iki qatı xal qazanırsınız. Yəni seriyada ikən bir qalibiyyət 4 xal, bərabərlik 2 xal qazandırarkən uduzulan oyundan heç bir xal qazanılmaz.\r\n\r\nMəsələn; üst-üstə qazanılan iki oyun və ardından alınan bir bərabərlik 6 xal dəyərindədir: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Çılğın Modu';
 
   @override
-  String get arenaBerserkAnswer => 'Bir oyunçu oyunun əvvəlində Berserk düyməsini basdıqda, vaxtının yarısını itirir, ancaq qələbə bir əlavə turnir xalı qazandırır.\n\nƏlavə vaxt artırmalı oyunlarda Berserk-ə keçmək də vaxt artımını ləğv edir (1 + 2 istisnadır, 1 + 0 olur).\n\nBerserk sıfır başlanğıc vaxtı olan oyunlarda mövcud deyil (0 + 1, 0 + 2).\n\nBerserk yalnız oyunda ən azı 7 gediş etsəniz əlavə bir xal verir.';
+  String get arenaBerserkAnswer => 'Bir oyunçu oyunun əvvəlində Berserk düyməsini basdıqda, vaxtının yarısını itirir, ancaq qələbə bir əlavə turnir xalı qazandırır.\r\n\r\nƏlavə vaxt artırmalı oyunlarda Berserk-ə keçmək də vaxt artımını ləğv edir (1 + 2 istisnadır, 1 + 0 olur).\r\n\r\nBerserk sıfır başlanğıc vaxtı olan oyunlarda mövcud deyil (0 + 1, 0 + 2).\r\n\r\nBerserk yalnız oyunda ən azı 7 gediş etsəniz əlavə bir xal verir.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Qalib necə təyin olunur?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Turnirin təyin olunmuş müddətinin sonunda ən çox xal toplayan oyunçu(lar) qalib(lər) elan olunacaq.\n\nİki və ya daha çox oyunçu eyni xala sahib olduqda, turnir taybrekə qalacaq.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Turnirin təyin olunmuş müddətinin sonunda ən çox xal toplayan oyunçu(lar) qalib(lər) elan olunacaq.\r\n\r\nİki və ya daha çox oyunçu eyni xala sahib olduqda, turnir taybrekə qalacaq.';
 
   @override
   String get arenaHowDoesPairingWork => 'Qoşulma necə işləyir?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnirin əvvəlində oyunçular reytinqlərinə görə qarşılaşırlar.\nBir oyunu bitirən kimi turnir lobbisinə qayıdın: daha sonra reytinqinizə yaxın bir oyunçu ilə qarşılaşacaqsınız. Beləliklə gözləmə müddətini ən aza endirilir, lakin turnirdəki bütün digər oyunçularla qarşılaşa bilməzsiniz.\nDaha çox oyun oynamaq və daha çox xal qazanmaq üçün sürətli oynayın və lobbiyə qayıdın.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnirin əvvəlində oyunçular reytinqlərinə görə qarşılaşırlar.\r\nBir oyunu bitirən kimi turnir lobbisinə qayıdın: daha sonra reytinqinizə yaxın bir oyunçu ilə qarşılaşacaqsınız. Beləliklə gözləmə müddətini ən aza endirilir, lakin turnirdəki bütün digər oyunçularla qarşılaşa bilməzsiniz.\r\nDaha çox oyun oynamaq və daha çox xal qazanmaq üçün sürətli oynayın və lobbiyə qayıdın.';
 
   @override
   String get arenaHowDoesItEnd => 'Necə başa çatır?';
@@ -605,7 +605,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1593,7 +1593,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Tapmaca axtar';
 
   @override
-  String get puzzleFromMyGamesNone => 'Verilənlər bazasında heç bir tapmaca yoxdur, amma Lichess hələ də səni çox sevir.\nBir tapmaca əlavə etmək şansınızı artırmaq üçün sürətli və klassik oyunlar oynayın!';
+  String get puzzleFromMyGamesNone => 'Verilənlər bazasında heç bir tapmaca yoxdur, amma Lichess hələ də səni çox sevir.\r\nBir tapmaca əlavə etmək şansınızı artırmaq üçün sürətli və klassik oyunlar oynayın!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Təlim edin, təhlil edin, təkmilləşdirmə edin';
@@ -4617,7 +4617,7 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
+    return 'Paste a valid FEN to start every game from a given position.\r\nIt only works for standard games, not with variants.\r\nYou can use the $param to generate a FEN position, then paste it here.\r\nLeave empty to start games from the normal initial position.';
   }
 
   @override
@@ -4749,7 +4749,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\r\nAll operating costs, development, and content are funded solely by user donations.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6075,6 +6075,28 @@ class AppLocalizationsAz extends AppLocalizations {
       locale: localeName,
       other: 'PGN mətninizi bura yapışdırın, ən çox $count oyuna qədər',
       one: 'PGN mətninizi bura yapışdırın, ən çox $count oyuna qədər',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

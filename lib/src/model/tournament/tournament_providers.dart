@@ -30,3 +30,8 @@ Future<TournamentPlayer> tournamentPlayer(Ref ref, TournamentId tournamentId, Us
     const Duration(seconds: 10),
   );
 }
+
+@riverpod
+Future<TournamentTeam> tournamentTeam(Ref ref, TournamentId tournamentId, String teamId) {
+  return ref.read(tournamentRepositoryProvider).getTournamentTeam(tournamentId, teamId);
+}

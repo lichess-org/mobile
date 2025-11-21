@@ -514,13 +514,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Jak se počítají turnajové body?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Výhra je v základu hodnocena 2 body, remíza 1 bodem a za prohru nezískáte žádný bod. \nJestliže ale vyhrajete dvě hry v řadě, začne Vám \"dvojitá\" série - poznáte ji podle ikony ohně u Vašeho jména.\nDokud budete vyhrávat, budou následující hry ohodnoceny dvojnásobným počtem bodů.\n\nNapříklad - dvě výhry následované remízou budou ohodnoceny 6 body: 2 + 2 + (2*1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Výhra je v základu hodnocena 2 body, remíza 1 bodem a za prohru nezískáte žádný bod. \r\nJestliže ale vyhrajete dvě hry v řadě, začne Vám \"dvojitá\" série - poznáte ji podle ikony ohně u Vašeho jména.\r\nDokud budete vyhrávat, budou následující hry ohodnoceny dvojnásobným počtem bodů.\r\n\r\nNapříklad - dvě výhry následované remízou budou ohodnoceny 6 body: 2 + 2 + (2*1)';
 
   @override
   String get arenaBerserk => 'Tlačítko Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Pokud hráč stiskne před začátkem partie tlačítko \"Berserk\", ztratí polovinu svého času na hodinách, ale pokud vyhraje, získá za partii o 1 bod navíc.\n\nBerserk v partiích hraných s přídavkem rovněž zruší hráči tento přídavek (např. partie hraná 4+2 se změní na 2+0, výjimkou je časová kontrola 1+2, kterou Berserk změní na 1+0)\n\nTlačítko Berserk není přístupné pro partie s nulovým základním časem (0+1, 0+2).\n\nHráč získá za Berserk bod navíc pouze v případě, že partie měla alespoň 7 tahů.';
+  String get arenaBerserkAnswer => 'Pokud hráč stiskne před začátkem partie tlačítko \"Berserk\", ztratí polovinu svého času na hodinách, ale pokud vyhraje, získá za partii o 1 bod navíc.\r\n\r\nBerserk v partiích hraných s přídavkem rovněž zruší hráči tento přídavek (např. partie hraná 4+2 se změní na 2+0, výjimkou je časová kontrola 1+2, kterou Berserk změní na 1+0)\r\n\r\nTlačítko Berserk není přístupné pro partie s nulovým základním časem (0+1, 0+2).\r\n\r\nHráč získá za Berserk bod navíc pouze v případě, že partie měla alespoň 7 tahů.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kdo se stane vítězem?';
@@ -532,7 +532,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Jak funguje párování?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Na začátku turnaje jsou hráči spárováni podle svých ratingů.\nJakmile skončíte svou partii, vraťte se do turnajové místnosti - budete spárováni s hráčem, který má podobný rating jako Vy. Díky tomu budete na další spárování čekat velmi krátce, ale pravděpodobně nebudete hrát se všemi ostatními hráči v turnaji.\nHrajte rychle a vraťte se vždy co nejdříve do turnajové místnosti - stihnete tak odehrát více her a získat více bodů.';
+  String get arenaHowDoesPairingWorkAnswer => 'Na začátku turnaje jsou hráči spárováni podle svých ratingů.\r\nJakmile skončíte svou partii, vraťte se do turnajové místnosti - budete spárováni s hráčem, který má podobný rating jako Vy. Díky tomu budete na další spárování čekat velmi krátce, ale pravděpodobně nebudete hrát se všemi ostatními hráči v turnaji.\r\nHrajte rychle a vraťte se vždy co nejdříve do turnajové místnosti - stihnete tak odehrát více her a získat více bodů.';
 
   @override
   String get arenaHowDoesItEnd => 'Jak turnaj končí?';
@@ -641,7 +641,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaTournamentStats => 'Turnajové statistiky';
 
   @override
-  String get arenaRankAvgHelp => 'Průměrný rank je procento umístění. Nižší je lepší.\n\nNapříklad, umístíte se 3 v turnaji o 100 hráčích tak rank je 3%. Umístíte se 10 v turnaji o 1000 hráčích task rank je 1%.';
+  String get arenaRankAvgHelp => 'Průměrný rank je procento umístění. Nižší je lepší.\r\n\r\nNapříklad, umístíte se 3 v turnaji o 100 hráčích tak rank je 3%. Umístíte se 10 v turnaji o 1000 hráčích task rank je 1%.';
 
   @override
   String get arenaMedians => 'mediány';
@@ -1637,7 +1637,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Hledat hádanky';
 
   @override
-  String get puzzleFromMyGamesNone => 'V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.\nHrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!';
+  String get puzzleFromMyGamesNone => 'V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.\r\nHrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trénujte, analyzujte, zlepšujte';
@@ -4673,7 +4673,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Vložte platný FEN popis šachovnice, pokud chcete, aby všechny hry začaly z dané pozice.\nFunguje to pouze pro standardní hry, ne pro varianty.\nMůžete použít $param pro vygenerování FEN popisu zadané pozice a potom ho sem vložit.\nNechte toto pole prázdné, pokud chcete začínat z běžného základního postavení.';
+    return 'Vložte platný FEN popis šachovnice, pokud chcete, aby všechny hry začaly z dané pozice.\r\nFunguje to pouze pro standardní hry, ne pro varianty.\r\nMůžete použít $param pro vygenerování FEN popisu zadané pozice a potom ho sem vložit.\r\nNechte toto pole prázdné, pokud chcete začínat z běžného základního postavení.';
   }
 
   @override
@@ -4805,7 +4805,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showMeEverything => 'Ukaž mi všechno';
 
   @override
-  String get lichessPatronInfo => 'Lichess je bezplatný a zcela svobodný/nezávislý softvér s otevřeným zdrojovým kódem.\nVeškeré provozní náklady, vývoj a obsah jsou financovány výhradně z příspěvků uživatelů.';
+  String get lichessPatronInfo => 'Lichess je bezplatný a zcela svobodný/nezávislý softvér s otevřeným zdrojovým kódem.\r\nVeškeré provozní náklady, vývoj a obsah jsou financovány výhradně z příspěvků uživatelů.';
 
   @override
   String get nothingToSeeHere => 'Momentálně zde není nic k vidění.';
@@ -6233,6 +6233,32 @@ class AppLocalizationsCs extends AppLocalizations {
       many: 'Vložte obsah vašeho PGN souboru (až $count her)',
       few: 'Vložte obsah vašeho PGN souboru (až $count hry)',
       one: 'Vložte obsah vašeho PGN souboru (až $count hra)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitva $count týmů',
+      many: 'Bitva $count týmů',
+      few: 'Bitva $count týmů',
+      one: 'Bitva $count týmu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vedoucí na tým',
+      many: '$count vedoucích na tým',
+      few: '$count vedoucí na tým',
+      one: 'Jeden vedoucí na tým',
     );
     return '$_temp0';
   }

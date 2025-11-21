@@ -514,13 +514,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Ako sa počíta skóre turnaja?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Základné hodnotenie je nasledovné: výhra 2 body, remíza 1 bod, prehra 0 bodov.\nAk vyhráte 2 po sebe nasledujúce partie, odštartujete tzv. \"dvojnásobne bodovanú sériu\", symbolizovanú ikonou plameňa.\nNasledujúce partie budú ohodnotené dvojnásobným počtom bodov až dokiaľ neprehráte alebo neremizujete.\nTo znamená, že výhra bude za 4 body a remíza 2 body. Prehra bude stále za 0 bodov.';
+  String get arenaHowAreScoresCalculatedAnswer => 'Základné hodnotenie je nasledovné: výhra 2 body, remíza 1 bod, prehra 0 bodov.\r\nAk vyhráte 2 po sebe nasledujúce partie, odštartujete tzv. \"dvojnásobne bodovanú sériu\", symbolizovanú ikonou plameňa.\r\nNasledujúce partie budú ohodnotené dvojnásobným počtom bodov až dokiaľ neprehráte alebo neremizujete.\r\nTo znamená, že výhra bude za 4 body a remíza 2 body. Prehra bude stále za 0 bodov.';
 
   @override
   String get arenaBerserk => 'Aréna Besnenia';
 
   @override
-  String get arenaBerserkAnswer => 'Keď hráč na začiatku partie klikne na tlačidlo \"Berserk\" (besnenie), stratí polovicu svojho času, jeho výhra však bude ohodnotená 1 bodom naviac.\n\nBesnenie automaticky vynuluje časový prírastok na hodinách. Výnimkou je čas 1+2, ktorý sa zmení na 1+0.\n\nBesnenie nie je umožnené pri hrách s nulovým počiatočným časom (0+1, 0+2).\n\nBesnenie Vám zabezpečí 1 bod naviac iba v prípade odohrania aspoň 7 ťahov v partii.';
+  String get arenaBerserkAnswer => 'Keď hráč na začiatku partie klikne na tlačidlo \"Berserk\" (besnenie), stratí polovicu svojho času, jeho výhra však bude ohodnotená 1 bodom naviac.\r\n\r\nBesnenie automaticky vynuluje časový prírastok na hodinách. Výnimkou je čas 1+2, ktorý sa zmení na 1+0.\r\n\r\nBesnenie nie je umožnené pri hrách s nulovým počiatočným časom (0+1, 0+2).\r\n\r\nBesnenie Vám zabezpečí 1 bod naviac iba v prípade odohrania aspoň 7 ťahov v partii.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Ako sa rozhodne o víťazovi?';
@@ -532,7 +532,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Ako funguje párovanie hráčov?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Na začiatku turnaja sa hráči spárujú na základe ich ratingu.\nAkonáhle ukončíte partiu, vráťte sa do turnajovej miestnosti: budete spárovaný so súperom, ktorý má podobný rating ako Vy. Takýto postup Vám zabezpečí minimum čakacieho času, avšak môže sa stať, že nebudete hrať so všetkými hráčmi v turnaji.\nHrajte rýchlo a vráťte sa vždy čo najrýchlejšie do turnajovej miestnosti aby ste stihli odohrať viac partií a získať tak viac bodov.';
+  String get arenaHowDoesPairingWorkAnswer => 'Na začiatku turnaja sa hráči spárujú na základe ich ratingu.\r\nAkonáhle ukončíte partiu, vráťte sa do turnajovej miestnosti: budete spárovaný so súperom, ktorý má podobný rating ako Vy. Takýto postup Vám zabezpečí minimum čakacieho času, avšak môže sa stať, že nebudete hrať so všetkými hráčmi v turnaji.\r\nHrajte rýchlo a vráťte sa vždy čo najrýchlejšie do turnajovej miestnosti aby ste stihli odohrať viac partií a získať tak viac bodov.';
 
   @override
   String get arenaHowDoesItEnd => 'Ako turnaj končí?';
@@ -641,7 +641,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaTournamentStats => 'Turnajové štatistiky';
 
   @override
-  String get arenaRankAvgHelp => 'Priemerná pozícia je percentuálny podiel vášho hodnotenia. Nižšia hodnota je lepšia.\n\nNapríklad 3. miesto v turnaji so 100 hráčmi = 3 %. Byť na 10. mieste v turnaji s 1000 hráčmi = 1 %.';
+  String get arenaRankAvgHelp => 'Priemerná pozícia je percentuálny podiel vášho hodnotenia. Nižšia hodnota je lepšia.\r\n\r\nNapríklad 3. miesto v turnaji so 100 hráčmi = 3 %. Byť na 10. mieste v turnaji s 1000 hráčmi = 1 %.';
 
   @override
   String get arenaMedians => 'mediány';
@@ -1637,7 +1637,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Hľadať úlohy';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nemáte v databáze žiadne úlohy z vlastných partií, ale Lichess Vás má aj tak veľmi rád.\n\nHrajte rapid a klasické partie, aby ste zvýšili svoje šance na pridanie úlohy z Vašej vlastnej partie!';
+  String get puzzleFromMyGamesNone => 'Nemáte v databáze žiadne úlohy z vlastných partií, ale Lichess Vás má aj tak veľmi rád.\r\n\r\nHrajte rapid a klasické partie, aby ste zvýšili svoje šance na pridanie úlohy z Vašej vlastnej partie!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trénujte, analyzujte, zlepšujte sa';
@@ -4656,7 +4656,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tournDescriptionHelp => 'Je niečo čo by ste chceli povedať účastníkom turnaja? Snažte sa byť stručný! Môžete použiť markdown značky: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partie sú hodnotené\na ovplyvnia rating hráčov';
+  String get ratedFormHelp => 'Partie sú hodnotené\r\na ovplyvnia rating hráčov';
 
   @override
   String get onlyMembersOfTeam => 'Iba členovia tímu';
@@ -4675,7 +4675,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Vložte platný FEN pre začatie každej partie z konkrétnej pozície!\nFunguje len pre štandardné partie, nie pre varianty.\nMôžete použiť $param na vygenerovanie FEN pozície a potom ju sem vložiť.\nNechajte prázdne pre začatie partií zo základnej pozície!';
+    return 'Vložte platný FEN pre začatie každej partie z konkrétnej pozície!\r\nFunguje len pre štandardné partie, nie pre varianty.\r\nMôžete použiť $param na vygenerovanie FEN pozície a potom ju sem vložiť.\r\nNechajte prázdne pre začatie partií zo základnej pozície!';
   }
 
   @override
@@ -6235,6 +6235,32 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Váš PGN text vložte sem, maximálne $count partií',
       few: 'Váš PGN text vložte sem, maximálne $count partie',
       one: 'Váš PGN text vložte sem, maximálne $count partiu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Turnaj $count tímov',
+      many: 'Turnaj $count tímov',
+      few: 'Turnaj $count tímov',
+      one: 'Turnaj $count tímu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lídrov na tím',
+      many: '$count lídrov na tím',
+      few: '$count lídri na tím',
+      one: 'Jeden líder na tím',
     );
     return '$_temp0';
   }

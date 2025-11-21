@@ -42,6 +42,10 @@ typedef TournamentLists = ({
 
 typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration? pauseDelay});
 
+typedef TeamInfo = ({String name, String? flair});
+
+typedef TeamBattleData = ({IMap<String, TeamInfo> teams, int nbLeaders, IList<String>? joinWith});
+
 const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
 
@@ -59,6 +63,7 @@ sealed class TournamentMeta with _$TournamentMeta {
     required Perf perf,
     required TournamentFreq? freq,
     required Variant variant,
+    TeamBattleData? teamBattle,
   }) = _TournamentMeta;
 
   factory TournamentMeta.fromServerJson(Map<String, Object?> json) =>
@@ -76,6 +81,7 @@ TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
     perf: pick('perf').asPerfOrThrow(),
     freq: pick('schedule').letOrNull((p) => p('freq').asTournamentFreqOrThrow()),
     variant: pick('variant').asVariantOrThrow(),
+    teamBattle: pick('teamBattle').asTeamBattleDataOrNull(),
   );
 }
 
@@ -91,7 +97,6 @@ sealed class LightTournament with _$LightTournament {
     required DateTime startsAt,
     required DateTime finishesAt,
     required LightUser? winner,
-    bool? isTeamBattle,
   }) = _LightTournament;
 
   factory LightTournament.fromServerJson(Map<String, Object?> json) =>
@@ -101,8 +106,7 @@ sealed class LightTournament with _$LightTournament {
 
   bool get isSystemTournament => meta.freq != null;
 
-  // TODO: add support for team battle
-  bool get isSupportedInApp => playSupportedVariants.contains(meta.variant) && isTeamBattle != true;
+  bool get isSupportedInApp => playSupportedVariants.contains(meta.variant);
 }
 
 LightTournament _lightTournamentFromPick(RequiredPick pick) {
@@ -114,8 +118,6 @@ LightTournament _lightTournamentFromPick(RequiredPick pick) {
     position: pick('perf', 'position').asIntOrThrow(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     winner: pick('winner').asLightUserOrNull(),
-    // TODO add support for team battle; for now we just test if the field is not empty
-    isTeamBattle: pick('teamBattle').asMapOrNull<String, dynamic>()?.isNotEmpty,
   );
 }
 
@@ -148,6 +150,7 @@ sealed class Tournament with _$Tournament {
     DateTime? startsAt,
     TournamentStats? stats,
     ChatData? chat,
+    IList<TeamStanding>? teamStanding,
   }) = _Tournament;
 
   factory Tournament.fromServerJson(Map<String, Object?> json) {
@@ -190,6 +193,7 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     quote: pick(
       'quote',
     ).letOrNull((p) => (text: p('text').asStringOrThrow(), author: p('author').asStringOrThrow())),
+    teamStanding: pick('teamStanding').asTeamStandingListOrNull(),
   );
 }
 
@@ -214,6 +218,7 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
+    teamStanding: pick('teamStanding').asTeamStandingListOrNull(),
   );
 }
 
@@ -231,6 +236,7 @@ sealed class StandingPlayer with _$StandingPlayer {
     required int rank,
     required StandingSheet sheet,
     required bool withdraw,
+    String? teamId,
   }) = _StandingPlayer;
 }
 
@@ -255,7 +261,27 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
       ).asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
     ),
     withdraw: pick('withdraw').asBoolOrFalse(),
+    teamId: pick('team').asStringOrNull(),
   );
+}
+
+@freezed
+sealed class TeamStanding with _$TeamStanding {
+  const TeamStanding._();
+
+  const factory TeamStanding({
+    required int rank,
+    required String id,
+    required int score,
+    required IList<TeamPlayer> players,
+  }) = _TeamStanding;
+}
+
+@freezed
+sealed class TeamPlayer with _$TeamPlayer {
+  const TeamPlayer._();
+
+  const factory TeamPlayer({required LightUser user, required int score}) = _TeamPlayer;
 }
 
 @freezed
@@ -450,6 +476,38 @@ extension TournamentExtension on Pick {
       return null;
     }
   }
+
+  TeamBattleData? asTeamBattleDataOrNull() {
+    if (value == null) return null;
+    try {
+      final requiredPick = this.required();
+      final teamsMap = requiredPick('teams').asMapOrThrow<String, dynamic>();
+      return (
+        teams: IMap.fromEntries(
+          teamsMap.entries.map((entry) {
+            final teamData = entry.value as List;
+            return MapEntry(entry.key, (
+              name: teamData[0] as String,
+              flair: teamData[1] as String?,
+            ));
+          }),
+        ),
+        nbLeaders: requiredPick('nbLeaders').asIntOrThrow(),
+        joinWith: requiredPick('joinWith').asListOrNull((p) => p.asStringOrThrow())?.toIList(),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  IList<TeamStanding>? asTeamStandingListOrNull() {
+    if (value == null) return null;
+    try {
+      return asListOrThrow((pick) => _teamStandingFromPick(pick.required())).toIList();
+    } catch (_) {
+      return null;
+    }
+  }
 }
 
 typedef PlayerStats = ({int game, int berserk, int win});
@@ -467,9 +525,39 @@ sealed class TournamentPlayer with _$TournamentPlayer {
     required int rank,
     required PlayerStats stats,
     required IList<TournamentPairing> pairings,
+    String? teamId,
   }) = _TournamentPlayer;
   factory TournamentPlayer.fromServerJson(Map<String, Object?> json) =>
       _tournamentPlayerFromPick(pick(json).required());
+}
+
+@freezed
+sealed class TournamentTeam with _$TournamentTeam {
+  const TournamentTeam._();
+
+  factory TournamentTeam({
+    required String id,
+    required int nbPlayers,
+    required int rating,
+    required int? performance,
+    required int score,
+    required IList<TeamPlayerDetailed> topPlayers,
+  }) = _TournamentTeam;
+
+  factory TournamentTeam.fromServerJson(Map<String, Object?> json) =>
+      _tournamentTeamFromPick(pick(json).required());
+}
+
+@freezed
+sealed class TeamPlayerDetailed with _$TeamPlayerDetailed {
+  const TeamPlayerDetailed._();
+
+  const factory TeamPlayerDetailed({
+    required LightUser user,
+    required int rating,
+    required int score,
+    required bool fire,
+  }) = _TeamPlayerDetailed;
 }
 
 @freezed
@@ -509,6 +597,35 @@ TournamentPlayer _tournamentPlayerFromPick(RequiredPick pick) {
     performance: player('performance').asIntOrNull(),
     rank: player('rank').asIntOrThrow(),
     pairings: pick('pairings').asListOrThrow(_pairingFromPick).toIList(),
+    teamId: player('team').asStringOrNull(),
+  );
+}
+
+TournamentTeam _tournamentTeamFromPick(RequiredPick pick) {
+  return TournamentTeam(
+    id: pick('id').asStringOrThrow(),
+    nbPlayers: pick('nbPlayers').asIntOrThrow(),
+    rating: pick('rating').asIntOrThrow(),
+    performance: pick('perf').asIntOrNull(),
+    score: pick('score').asIntOrThrow(),
+    topPlayers: pick(
+      'topPlayers',
+    ).asListOrThrow((p) => _teamPlayerDetailedFromPick(p.required())).toIList(),
+  );
+}
+
+TeamPlayerDetailed _teamPlayerDetailedFromPick(RequiredPick pick) {
+  return TeamPlayerDetailed(
+    user: LightUser(
+      id: UserId.fromUserName(pick('name').asStringOrThrow()),
+      name: pick('name').asStringOrThrow(),
+      title: pick('title').asStringOrNull(),
+      flair: pick('flair').asStringOrNull(),
+      patronColor: pick('patronColor').asIntOrNull(),
+    ),
+    rating: pick('rating').asIntOrThrow(),
+    score: pick('score').asIntOrThrow(),
+    fire: pick('fire').asBoolOrFalse(),
   );
 }
 
@@ -529,4 +646,17 @@ TournamentPairing _pairingFromPick(RequiredPick pick) {
     score: pick('score').asIntOrNull(),
     berserk: pick('berserk').asBoolOrFalse(),
   );
+}
+
+TeamStanding _teamStandingFromPick(RequiredPick pick) {
+  return TeamStanding(
+    rank: pick('rank').asIntOrThrow(),
+    id: pick('id').asStringOrThrow(),
+    score: pick('score').asIntOrThrow(),
+    players: pick('players').asListOrThrow((p) => _teamPlayerFromPick(p.required())).toIList(),
+  );
+}
+
+TeamPlayer _teamPlayerFromPick(RequiredPick pick) {
+  return TeamPlayer(user: pick('user').asLightUserOrThrow(), score: pick('score').asIntOrThrow());
 }

@@ -478,25 +478,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Como é que as pontuações são calculadas?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Uma vitória tem uma pontuação base de 2 pontos, um empate 1 ponto, e uma derrota não vale quaisquer pontos.\nSe ganhares dois jogos seguidos, começarás com uma sequência de duplos pontos, representada por um ícone de chama.\nNos jogos seguintes continuarás a receber o dobro dos pontos até perderes algum jogo.\nIsto é, uma vitória valerá 4 pontos, um empate 2 pontos, e uma derrota não vale pontos.\n\nPor exemplo, duas vitórias seguidas de um empate valem 6 pontos: 2 + 2 + (2 × 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Uma vitória tem uma pontuação base de 2 pontos, um empate 1 ponto, e uma derrota não vale quaisquer pontos.\r\nSe ganhares dois jogos seguidos, começarás com uma sequência de duplos pontos, representada por um ícone de chama.\r\nNos jogos seguintes continuarás a receber o dobro dos pontos até perderes algum jogo.\r\nIsto é, uma vitória valerá 4 pontos, um empate 2 pontos, e uma derrota não vale pontos.\r\n\r\nPor exemplo, duas vitórias seguidas de um empate valem 6 pontos: 2 + 2 + (2 × 1)';
 
   @override
   String get arenaBerserk => 'Arena frenética';
 
   @override
-  String get arenaBerserkAnswer => 'Quando um jogador clica no botão \"frenético\" no inicio de um jogo, este perde metade do tempo de relógio, mas a vitória vale um ponto de torneio extra.\n\nFicar frenético em jogos com incremento de tempo também cancela o incremento, (1+2 é uma exceção, pois fica 1+0).\n\nO modo frenético não está disponível para jogos com tempo inicial de zero, (0+1, 0+2).\n\nO modo frenético apenas dá pontos extra se jogares um mínimo 7 movimentos no jogo.';
+  String get arenaBerserkAnswer => 'Quando um jogador clica no botão \"frenético\" no inicio de um jogo, este perde metade do tempo de relógio, mas a vitória vale um ponto de torneio extra.\r\n\r\nFicar frenético em jogos com incremento de tempo também cancela o incremento, (1+2 é uma exceção, pois fica 1+0).\r\n\r\nO modo frenético não está disponível para jogos com tempo inicial de zero, (0+1, 0+2).\r\n\r\nO modo frenético apenas dá pontos extra se jogares um mínimo 7 movimentos no jogo.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Como é que o vencedor é decidido?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'O jogador(es) com mais pontos no final do tempo do torneio serão anunciados como vencedor(es).\n\nQuando dois ou mais jogadores tiverem o mesmo número de pontos, o desempenho no torneio é o critério de desempate.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'O jogador(es) com mais pontos no final do tempo do torneio serão anunciados como vencedor(es).\r\n\r\nQuando dois ou mais jogadores tiverem o mesmo número de pontos, o desempenho no torneio é o critério de desempate.';
 
   @override
   String get arenaHowDoesPairingWork => 'Como é que funciona o emparelhamento?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'No inicio do torneio, os jogadores são emparelhados com base na sua pontuação. Assim que terminares um jogo, volta ao vestíbulo do torneio: então, serás emparelhado com um jogador com uma classificação próxima à tua. Isto garante o mínimo tempo de espera, contudo poderás não jogar contra todos os jogadores no torneio.\nJoga rápido e volta ao vestíbulo para jogares mais jogos e ganhares mais pontos.';
+  String get arenaHowDoesPairingWorkAnswer => 'No inicio do torneio, os jogadores são emparelhados com base na sua pontuação. Assim que terminares um jogo, volta ao vestíbulo do torneio: então, serás emparelhado com um jogador com uma classificação próxima à tua. Isto garante o mínimo tempo de espera, contudo poderás não jogar contra todos os jogadores no torneio.\r\nJoga rápido e volta ao vestíbulo para jogares mais jogos e ganhares mais pontos.';
 
   @override
   String get arenaHowDoesItEnd => 'Como é que termina?';
@@ -605,7 +605,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get arenaTournamentStats => 'Estatísticas do torneio';
 
   @override
-  String get arenaRankAvgHelp => 'A média da classificação é uma percentagem da tua classificação. Menor é melhor.\n\nPor exemplo, ficar em 3º lugar num torneio de 100 jogadores = 3%. Estar em 10º lugar num torneio de 1000 jogadores = 1%.';
+  String get arenaRankAvgHelp => 'A média da classificação é uma percentagem da tua classificação. Menor é melhor.\r\n\r\nPor exemplo, ficar em 3º lugar num torneio de 100 jogadores = 3%. Estar em 10º lugar num torneio de 1000 jogadores = 1%.';
 
   @override
   String get arenaMedians => 'médias';
@@ -1593,7 +1593,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Pesquisar desafios';
 
   @override
-  String get puzzleFromMyGamesNone => 'Não tens problemas na base de dados, mas Lichess adora-te muito.\n\nJoga partidas semi-rápidas e clássicas para aumentares a probabilidade de teres um problema adicionado!';
+  String get puzzleFromMyGamesNone => 'Não tens problemas na base de dados, mas Lichess adora-te muito.\r\n\r\nJoga partidas semi-rápidas e clássicas para aumentares a probabilidade de teres um problema adicionado!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Treinar, analisar, melhorar';
@@ -3064,7 +3064,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get importGame => 'Importar uma partida';
 
   @override
-  String get importGameExplanation => 'Coloca aqui o PGN de um jogo, para teres acesso a navegar pela repetição,\nanálise de computador, sala de chat do jogo e link de partilha.';
+  String get importGameExplanation => 'Coloca aqui o PGN de um jogo, para teres acesso a navegar pela repetição,\r\nanálise de computador, sala de chat do jogo e link de partilha.';
 
   @override
   String get importGameDataPrivacyWarning => 'Este PGN pode ser acessada pelo público. Para importar um jogo de forma privada, use um estudo.';
@@ -4600,7 +4600,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tournDescriptionHelp => 'Quer dizer alguma coisa em especial aos participantes? Seja breve. Estão disponíveis ligações de Markdown: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Os jogos são classificados\ne afetam as avaliações dos jogadores';
+  String get ratedFormHelp => 'Os jogos são classificados\r\ne afetam as avaliações dos jogadores';
 
   @override
   String get onlyMembersOfTeam => 'Apenas membros da equipa';
@@ -4619,7 +4619,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Cole um FEN válido para iniciar todos os jogos a partir de uma determinada posição.\nSó funciona para os jogos padrão, não com variantes.\nVocê pode usar o $param para gerar uma posição FEN e, em seguida, colá-lo aqui.\nDeixe em branco para iniciar jogos da posição inicial normal.';
+    return 'Cole um FEN válido para iniciar todos os jogos a partir de uma determinada posição.\r\nSó funciona para os jogos padrão, não com variantes.\r\nVocê pode usar o $param para gerar uma posição FEN e, em seguida, colá-lo aqui.\r\nDeixe em branco para iniciar jogos da posição inicial normal.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get showMeEverything => 'Mostra-me tudo';
 
   @override
-  String get lichessPatronInfo => 'Lichess é uma instituição de caridade e software de código aberto totalmente livre.\nTodos os custos operacionais, de desenvolvimento e conteúdo são financiados exclusivamente por doações de usuários.';
+  String get lichessPatronInfo => 'Lichess é uma instituição de caridade e software de código aberto totalmente livre.\r\nTodos os custos operacionais, de desenvolvimento e conteúdo são financiados exclusivamente por doações de usuários.';
 
   @override
   String get nothingToSeeHere => 'Nada para ver aqui no momento.';
@@ -6082,6 +6082,28 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipas',
+      one: 'Batalha de $count equipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipa',
+      one: 'Um líder por equipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'agora mesmo';
 
   @override
@@ -6733,13 +6755,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get arenaHowAreScoresCalculated => 'Como os pontos são calculados?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Uma vitória vale 2 pontos, um empate, 1 ponto, e uma derrota não valerá ponto algum.\nSe você conseguir ganhar 2 jogos em seguida, iniciará uma sequência de pontos em dobro, representada por um ícone de chamas na sua pontuação.\nOs jogos seguintes valerão o dobro de pontos até que você perca uma partida.\nOu seja, uma vitoriá valerá 4 pontos, um empate 2 e uma derrota continuará valendo nenhum ponto.\n\nPor exemplo, 2 vitórias seguidas por um empate valerão 6 pontos: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Uma vitória vale 2 pontos, um empate, 1 ponto, e uma derrota não valerá ponto algum.\r\nSe você conseguir ganhar 2 jogos em seguida, iniciará uma sequência de pontos em dobro, representada por um ícone de chamas na sua pontuação.\r\nOs jogos seguintes valerão o dobro de pontos até que você perca uma partida.\r\nOu seja, uma vitoriá valerá 4 pontos, um empate 2 e uma derrota continuará valendo nenhum ponto.\r\n\r\nPor exemplo, 2 vitórias seguidas por um empate valerão 6 pontos: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Quando o jogador clica no botão Berserk no começo de um jogo, ele tem seu tempo reduzido pela metade. Nesse caso, uma vitória valerá um ponto a mais.\n\nFazendo o Berserk em jogos com controle de tempo com incremento, cancelará o mesmo. (a exceção é 1+2, que ficará 1+0)\n\nBerserk não está disponível em jogos sem tempo inicial (0+1, 0+2).\n\nBerserk só garante um ponto extra se você jogar pelo menos 7 movimentos na partida.';
+  String get arenaBerserkAnswer => 'Quando o jogador clica no botão Berserk no começo de um jogo, ele tem seu tempo reduzido pela metade. Nesse caso, uma vitória valerá um ponto a mais.\r\n\r\nFazendo o Berserk em jogos com controle de tempo com incremento, cancelará o mesmo. (a exceção é 1+2, que ficará 1+0)\r\n\r\nBerserk não está disponível em jogos sem tempo inicial (0+1, 0+2).\r\n\r\nBerserk só garante um ponto extra se você jogar pelo menos 7 movimentos na partida.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Como se decide o vencedor do torneio?';
@@ -6751,7 +6773,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get arenaHowDoesPairingWork => 'Como o emparceiramento funciona?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'No início do torneio, os jogadores serão emparceirados baseando-se nos seus ratings.\nAssim que terminar a sua partida, você voltará a aguardar o emparceiramento com um jogador de rating próximo ao seu. Terminando a sua partida logo, você poderá jogar mais vezes e, acumular mais pontos do que seus adversários.';
+  String get arenaHowDoesPairingWorkAnswer => 'No início do torneio, os jogadores serão emparceirados baseando-se nos seus ratings.\r\nAssim que terminar a sua partida, você voltará a aguardar o emparceiramento com um jogador de rating próximo ao seu. Terminando a sua partida logo, você poderá jogar mais vezes e, acumular mais pontos do que seus adversários.';
 
   @override
   String get arenaHowDoesItEnd => 'Como termina?';
@@ -6860,7 +6882,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get arenaTournamentStats => 'Estatísticas de torneio';
 
   @override
-  String get arenaRankAvgHelp => 'A sua classificação média é uma porcentagem comparada à sua classificação geral. Quanto menor, melhor.\nPor exemplo, estar classificado como 3° de um torneio de 100 jogadores = 3%. Estando classificado como o 10° de um torneio de 1000 jogadores = 1%.';
+  String get arenaRankAvgHelp => 'A sua classificação média é uma porcentagem comparada à sua classificação geral. Quanto menor, melhor.\r\nPor exemplo, estar classificado como 3° de um torneio de 100 jogadores = 3%. Estando classificado como o 10° de um torneio de 1000 jogadores = 1%.';
 
   @override
   String get arenaMedians => 'medianas';
@@ -7848,7 +7870,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleSearchPuzzles => 'Procurar quebra-cabeças';
 
   @override
-  String get puzzleFromMyGamesNone => 'Você não tem nenhum quebra-cabeça no banco de dados, mas o Lichess ainda te ama muito.\nJogue partidas rápidas e clássicas para aumentar suas chances de ter um desafio seu adicionado!';
+  String get puzzleFromMyGamesNone => 'Você não tem nenhum quebra-cabeça no banco de dados, mas o Lichess ainda te ama muito.\r\nJogue partidas rápidas e clássicas para aumentar suas chances de ter um desafio seu adicionado!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Treine, analise, melhore';
@@ -10852,7 +10874,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get tournDescriptionHelp => 'Algo especial que você queira dizer aos participantes? Tente ser breve. Links em Markdown disponíveis: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Os jogos valem classificação\ne afetam o rating dos jogadores';
+  String get ratedFormHelp => 'Os jogos valem classificação\r\ne afetam o rating dos jogadores';
 
   @override
   String get onlyMembersOfTeam => 'Apenas membros da equipe';
@@ -10871,7 +10893,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String positionInputHelp(String param) {
-    return 'Cole um FEN válido para iniciar as partidas a partir de uma posição específica.\nSó funciona com jogos padrão, e não com variantes.\nUse o $param para gerar uma posição FEN, e depois cole-a aqui.\nDeixe em branco para começar as partidas na posição inicial padrão.';
+    return 'Cole um FEN válido para iniciar as partidas a partir de uma posição específica.\r\nSó funciona com jogos padrão, e não com variantes.\r\nUse o $param para gerar uma posição FEN, e depois cole-a aqui.\r\nDeixe em branco para começar as partidas na posição inicial padrão.';
   }
 
   @override
@@ -12329,6 +12351,28 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       locale: localeName,
       other: 'Cole seu texto PGN aqui, até $count jogos',
       one: 'Cole seu texto PGN aqui, até $count jogo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipes',
+      one: 'Batalha de $count equipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipe',
+      one: 'Um líder por equipe',
     );
     return '$_temp0';
   }

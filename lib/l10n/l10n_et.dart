@@ -478,13 +478,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kuidas punkte arvutatakse?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Võidu eest saab esmalt 2 punkti, viigi eest 1 punkti ja kaotuse eest punkte ei saa.\nKui võidate kaks järjestikust mängu, algab topeltpunktide jada, mida tähistab tuleikoon.\nJärgnevate mängude eest saab topeltpunkte seni, kuni võidate.\nSee tähendab, et võidu eest saab 4 punkti, viigi eest 2 ja kaotuse eest punkte ei saa.\n\nNäiteks, kahe võidu ja viigi eest saate 6 punkti: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Võidu eest saab esmalt 2 punkti, viigi eest 1 punkti ja kaotuse eest punkte ei saa.\r\nKui võidate kaks järjestikust mängu, algab topeltpunktide jada, mida tähistab tuleikoon.\r\nJärgnevate mängude eest saab topeltpunkte seni, kuni võidate.\r\nSee tähendab, et võidu eest saab 4 punkti, viigi eest 2 ja kaotuse eest punkte ei saa.\r\n\r\nNäiteks, kahe võidu ja viigi eest saate 6 punkti: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Berserk areen';
 
   @override
-  String get arenaBerserkAnswer => 'Kui mängija vajutab Berserk nuppu enne mängu algust, kaotab ta oma mänguajast poole, kuid saab võidu korral ühe lisa turniiripunkti.\n\nLisaajaga ajakontrollides Berserk režiimi kasutamine tühistab ka lisaaja. (1+2 on erand, see muutub 1+0-ks)\n\nBerserk ei ole saadaval ajakontrollides, kus algusaeg on 0 (0+1, 0+2).\n\nBerserk annab lisapunkti ainult siis, kui teete mängus vähemalt 7 käiku.';
+  String get arenaBerserkAnswer => 'Kui mängija vajutab Berserk nuppu enne mängu algust, kaotab ta oma mänguajast poole, kuid saab võidu korral ühe lisa turniiripunkti.\r\n\r\nLisaajaga ajakontrollides Berserk režiimi kasutamine tühistab ka lisaaja. (1+2 on erand, see muutub 1+0-ks)\r\n\r\nBerserk ei ole saadaval ajakontrollides, kus algusaeg on 0 (0+1, 0+2).\r\n\r\nBerserk annab lisapunkti ainult siis, kui teete mängus vähemalt 7 käiku.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kuidas otsustatakse võitja?';
@@ -496,7 +496,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kuidas toimub paarimine?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turniiri alguses paaritakse mängijad nende reitingu alusel.\nKui mängu lõpetate, minge tagasi turniiri ooteruumi: seejärel paaritakse Teid sarnase reitinguga mängijaga. See tagab võimalikult lühikese ooteaja, kuid Te ei pruugi saada mängida kõigi turniiril osalevate mängijatega.\nMängige kiiresti ning naaske ooteruumi, et mängida rohkem mänge ja võita rohkem punkte.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turniiri alguses paaritakse mängijad nende reitingu alusel.\r\nKui mängu lõpetate, minge tagasi turniiri ooteruumi: seejärel paaritakse Teid sarnase reitinguga mängijaga. See tagab võimalikult lühikese ooteaja, kuid Te ei pruugi saada mängida kõigi turniiril osalevate mängijatega.\r\nMängige kiiresti ning naaske ooteruumi, et mängida rohkem mänge ja võita rohkem punkte.';
 
   @override
   String get arenaHowDoesItEnd => 'Kuidas see lõpeb?';
@@ -605,7 +605,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1593,7 +1593,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Otsi puslesid';
 
   @override
-  String get puzzleFromMyGamesNone => 'Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.\n\nMängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusle sinu mängust!';
+  String get puzzleFromMyGamesNone => 'Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.\r\n\r\nMängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusle sinu mängust!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Treeni, analüüsi, täiusta';
@@ -3064,7 +3064,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get importGame => 'Impordi mäng';
 
   @override
-  String get importGameExplanation => 'Mängu PGN-i kleepimisel saate vaadeldava korduse,\narvutianalüüsi, mängu jututoa ning jagatava URL-i.';
+  String get importGameExplanation => 'Mängu PGN-i kleepimisel saate vaadeldava korduse,\r\narvutianalüüsi, mängu jututoa ning jagatava URL-i.';
 
   @override
   String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
@@ -4600,7 +4600,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get tournDescriptionHelp => 'Kas soovid osalejatele midagi erilist öelda? Püüa hoida see lühike. Markdown lingid on saadaval: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Mängud on reitinguga\nja mõjutavad mängijate reitinguid';
+  String get ratedFormHelp => 'Mängud on reitinguga\r\nja mõjutavad mängijate reitinguid';
 
   @override
   String get onlyMembersOfTeam => 'Ainult võistkonnaliikmed';
@@ -4619,7 +4619,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Sisesta kehtiv FEN, et alustada iga mängu antud positsioonilt.\nSee töötab ainult standardmängude, mitte variantide puhul.\nFEN-i genereerimiseks on kasutada $param, seejärel saab selle siia kleepida.\nJäta tühjaks, et alustada mänge tavalisest algpositsioonist.';
+    return 'Sisesta kehtiv FEN, et alustada iga mängu antud positsioonilt.\r\nSee töötab ainult standardmängude, mitte variantide puhul.\r\nFEN-i genereerimiseks on kasutada $param, seejärel saab selle siia kleepida.\r\nJäta tühjaks, et alustada mänge tavalisest algpositsioonist.';
   }
 
   @override
@@ -4751,7 +4751,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess on heategevuslik ja täiesti tasuta avatud lähtekoodiga tarkvara.\nKõik tegevuskulud, arendus ja sisu rahastatakse ainult kasutajate annetustest.';
+  String get lichessPatronInfo => 'Lichess on heategevuslik ja täiesti tasuta avatud lähtekoodiga tarkvara.\r\nKõik tegevuskulud, arendus ja sisu rahastatakse ainult kasutajate annetustest.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6077,6 +6077,28 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Aseta oma PGN tekst siia, kuni $count mängu',
       one: 'Aseta oma PGN tekst siia, kuni $count mäng',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }
