@@ -318,6 +318,7 @@ enum BoardTheme {
   metal('Metal', 'metal'),
   olive('Olive', 'olive'),
   newspaper('Newspaper', 'newspaper'),
+  purple('Purple', 'purple'),
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
   horsey('Horsey', 'horsey');
@@ -373,6 +374,8 @@ enum BoardTheme {
         return ChessboardColorScheme.olive;
       case BoardTheme.newspaper:
         return ChessboardColorScheme.newspaper;
+      case BoardTheme.purple:
+        return ChessboardColorScheme.purple;
       case BoardTheme.purpleDiag:
         return ChessboardColorScheme.purpleDiag;
       case BoardTheme.pinkPyramid:
