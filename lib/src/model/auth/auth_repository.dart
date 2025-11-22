@@ -7,17 +7,14 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'auth_repository.g.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['web:mobile'];
 
-@Riverpod(keepAlive: true)
-FlutterAppAuth appAuth(Ref ref) {
+/// A provider for [FlutterAppAuth].
+final appAuthProvider = Provider<FlutterAppAuth>((Ref ref) {
   return const FlutterAppAuth();
-}
+}, name: 'AppAuthProvider');
 
 class AuthRepository {
   AuthRepository(LichessClient client, FlutterAppAuth appAuth)

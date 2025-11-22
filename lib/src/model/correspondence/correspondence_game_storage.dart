@@ -7,34 +7,32 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
-part 'correspondence_game_storage.g.dart';
-
-@Riverpod(keepAlive: true)
-Future<CorrespondenceGameStorage> correspondenceGameStorage(Ref ref) async {
-  final db = await ref.watch(databaseProvider.future);
-  return CorrespondenceGameStorage(db, ref);
-}
-
-@riverpod
-Future<IList<(DateTime, OfflineCorrespondenceGame)>> offlineOngoingCorrespondenceGames(
+/// A provider for [CorrespondenceGameStorage].
+final correspondenceGameStorageProvider = FutureProvider<CorrespondenceGameStorage>((
   Ref ref,
 ) async {
-  final session = ref.watch(authSessionProvider);
-  // cannot use ref.watch because it would create a circular dependency
-  // as we invalidate this provider in the storage save and delete methods
-  final storage = await ref.read(correspondenceGameStorageProvider.future);
-  final data = await storage.fetchOngoingGames(session?.user.id);
-  return data.sort((a, b) {
-    final aIsMyTurn = a.$2.isMyTurn;
-    final bIsMyTurn = b.$2.isMyTurn;
-    if (aIsMyTurn && !bIsMyTurn) return -1;
-    if (!aIsMyTurn && bIsMyTurn) return 1;
-    return b.$1.compareTo(a.$1);
-  });
-}
+  final db = await ref.watch(databaseProvider.future);
+  return CorrespondenceGameStorage(db, ref);
+}, name: 'CorrespondenceGameStorageProvider');
+
+/// Fetches all ongoing offline correspondence games, sorted by whose turn it is and last modified time.
+final offlineOngoingCorrespondenceGamesProvider =
+    FutureProvider.autoDispose<IList<(DateTime, OfflineCorrespondenceGame)>>((Ref ref) async {
+      final session = ref.watch(authSessionProvider);
+      // cannot use ref.watch because it would create a circular dependency
+      // as we invalidate this provider in the storage save and delete methods
+      final storage = await ref.read(correspondenceGameStorageProvider.future);
+      final data = await storage.fetchOngoingGames(session?.user.id);
+      return data.sort((a, b) {
+        final aIsMyTurn = a.$2.isMyTurn;
+        final bIsMyTurn = b.$2.isMyTurn;
+        if (aIsMyTurn && !bIsMyTurn) return -1;
+        if (!aIsMyTurn && bIsMyTurn) return 1;
+        return b.$1.compareTo(a.$1);
+      });
+    }, name: 'OfflineOngoingCorrespondenceGamesProvider');
 
 const kCorrespondenceStorageTable = 'correspondence_game';
 

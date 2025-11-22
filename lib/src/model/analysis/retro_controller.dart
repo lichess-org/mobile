@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
@@ -25,10 +26,8 @@ import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'retro_controller.freezed.dart';
-part 'retro_controller.g.dart';
 
 typedef RetroOptions = ({GameId id, Side initialSide});
 
@@ -74,8 +73,18 @@ const double _kCorrectMovePovDiffThreshold = -0.04;
 /// Threshold for considering a move a mistake due to how it affected the evaluation.
 const double _kEvalSwingThreshold = 0.1;
 
-@riverpod
-class RetroController extends _$RetroController with EngineEvaluationMixin {
+/// A provider for [RetroController].
+final retroControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<RetroController, RetroState, RetroOptions>(
+      RetroController.new,
+      name: 'RetroControllerProvider',
+    );
+
+class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMixin {
+  RetroController(this.options);
+
+  final RetroOptions options;
+
   late Root _root;
 
   late ExportedGame _game;
@@ -109,7 +118,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   Node get positionTree => _root;
 
   @override
-  Future<RetroState> build(RetroOptions options) async {
+  Future<RetroState> build() async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
@@ -119,7 +128,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
-    _game = await ref.read(archivedGameProvider(id: options.id).future);
+    _game = await ref.read(archivedGameProvider(options.id).future);
 
     if (engineSupportedVariants.contains(_game.meta.variant) == false) {
       throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');

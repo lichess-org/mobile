@@ -2,21 +2,25 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_bookmarks.freezed.dart';
-part 'game_bookmarks.g.dart';
 
 const _nbPerPage = 20;
 
 /// A provider that paginates the game bookmarks for the current app user.
-@riverpod
-class GameBookmarksPaginator extends _$GameBookmarksPaginator {
+final gameBookmarksPaginatorProvider =
+    AsyncNotifierProvider.autoDispose<GameBookmarksPaginator, GameBookmarksPaginatorState>(
+      GameBookmarksPaginator.new,
+      name: 'GameBookmarksPaginatorProvider',
+    );
+
+class GameBookmarksPaginator extends AsyncNotifier<GameBookmarksPaginatorState> {
   final _list = <LightExportedGameWithPov>[];
 
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);

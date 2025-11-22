@@ -847,9 +847,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           makeLabel: (context) =>
               Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
-            final game = await ref.read(
-              archivedGameProvider(id: puzzleState.puzzle.game.id).future,
-            );
+            final game = await ref.read(archivedGameProvider(puzzleState.puzzle.game.id).future);
             if (context.mounted) {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(

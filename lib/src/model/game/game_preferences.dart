@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_preferences.freezed.dart';
 part 'game_preferences.g.dart';
 
+/// Provider for [GamePreferences].
 final gamePreferencesProvider = NotifierProvider<GamePreferences, GamePrefs>(
   GamePreferences.new,
   name: 'GamePreferencesProvider',

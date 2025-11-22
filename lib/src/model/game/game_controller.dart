@@ -6,6 +6,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -33,13 +34,21 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
-part 'game_controller.g.dart';
 
-@riverpod
-class GameController extends _$GameController {
+/// A provider for [GameController].
+final gameControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<GameController, GameState, GameFullId>(
+      GameController.new,
+      name: 'GameControllerProvider',
+    );
+
+class GameController extends AsyncNotifier<GameState> {
+  GameController(this.gameFullId);
+
+  final GameFullId gameFullId;
+
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -67,7 +76,7 @@ class GameController extends _$GameController {
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<GameState> build(GameFullId gameFullId) {
+  Future<GameState> build() {
     _socketClient = _openSocket();
 
     _onFullReload = () {

@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-part 'database.g.dart';
 
 const kLichessDatabaseName = 'lichess_mobile.db';
 
@@ -21,14 +19,14 @@ const kStorageAnonId = '**anonymous**';
 
 final _logger = Logger('Database');
 
-@Riverpod(keepAlive: true)
-Future<Database> database(Ref ref) async {
+/// A provider for the app [Database].
+final databaseProvider = FutureProvider<Database>((Ref ref) async {
   if (Platform.isLinux) {
     databaseFactory = databaseFactoryFfi;
   }
   final dbPath = await _databasePath;
   return openAppDatabase(databaseFactory, dbPath);
-}
+}, name: 'DatabaseProvider');
 
 /// Returns the database path including filename.
 Future<String> get _databasePath async {
@@ -41,11 +39,10 @@ Future<String> get _databasePath async {
 }
 
 /// Returns the sqlite version as an integer.
-@Riverpod(keepAlive: true)
-Future<int?> sqliteVersion(Ref ref) async {
+final sqliteVersionProvider = FutureProvider<int?>((Ref ref) async {
   final db = await ref.read(databaseProvider.future);
   return _getDatabaseVersion(db);
-}
+}, name: 'SqliteVersionProvider');
 
 Future<int?> _getDatabaseVersion(Database db) async {
   try {
@@ -57,13 +54,13 @@ Future<int?> _getDatabaseVersion(Database db) async {
   }
 }
 
-@Riverpod(keepAlive: true)
-Future<int> getDbSizeInBytes(Ref ref) async {
+/// A provider that returns the size of the database file in bytes.
+final getDbSizeInBytesProvider = FutureProvider<int>((Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   final dbFile = File(dbPath);
 
   return dbFile.length();
-}
+}, name: 'GetDbSizeInBytesProvider');
 
 /// Opens the app database.
 Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {

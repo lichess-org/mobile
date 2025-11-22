@@ -2,15 +2,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'move_feedback.g.dart';
-
-@Riverpod(keepAlive: true)
-MoveFeedbackService moveFeedbackService(Ref ref) {
+/// A provider for [MoveFeedbackService].
+final moveFeedbackServiceProvider = Provider<MoveFeedbackService>((Ref ref) {
   final soundService = ref.watch(soundServiceProvider);
   return MoveFeedbackService(soundService, ref);
-}
+}, name: 'MoveFeedbackServiceProvider');
 
 class MoveFeedbackService {
   MoveFeedbackService(this._soundService, this._ref);

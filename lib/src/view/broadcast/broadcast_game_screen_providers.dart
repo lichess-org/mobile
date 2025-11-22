@@ -22,10 +22,10 @@ final broadcastRoundGameProvider = FutureProvider.autoDispose
 final broadcastGameEvalProvider = FutureProvider.autoDispose
     .family<ClientEval?, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
       return ref.watch(
-        broadcastAnalysisControllerProvider(
-          params.roundId,
-          params.gameId,
-        ).selectAsync((state) => state.currentNode.eval),
+        broadcastAnalysisControllerProvider((
+          roundId: params.roundId,
+          gameId: params.gameId,
+        )).selectAsync((state) => state.currentNode.eval),
       );
     }, name: 'BroadcastGameEvalProvider');
 
@@ -34,10 +34,10 @@ final isBroadcastEngineAvailableProvider = FutureProvider.autoDispose
     .family<bool, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
       final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
       return ref.watch(
-        broadcastAnalysisControllerProvider(
-          params.roundId,
-          params.gameId,
-        ).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
+        broadcastAnalysisControllerProvider((
+          roundId: params.roundId,
+          gameId: params.gameId,
+        )).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
       );
     }, name: 'IsBroadcastEngineAvailableProvider');
 
