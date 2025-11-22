@@ -12,10 +12,9 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
-  const PuzzleSessionWidget({required this.initialPuzzleContext, required this.ctrlProvider});
+  const PuzzleSessionWidget({required this.initialPuzzleContext});
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleControllerProvider ctrlProvider;
 
   @override
   ConsumerState<PuzzleSessionWidget> createState() => PuzzleSessionWidgetState();
@@ -54,7 +53,8 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     final session = ref.watch(
       puzzleSessionProvider(widget.initialPuzzleContext.userId, widget.initialPuzzleContext.angle),
     );
-    final puzzleState = ref.watch(widget.ctrlProvider);
+    final puzzleController = puzzleControllerProvider(widget.initialPuzzleContext);
+    final puzzleState = ref.watch(puzzleController);
     final brightness = Theme.of(context).brightness;
     final currentAttempt = session.attempts.firstWhereOrNull(
       (a) => a.id == puzzleState.puzzle.puzzle.id,
@@ -102,7 +102,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                               puzzle: puzzle,
                             );
 
-                            ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                            ref.read(puzzleController.notifier).onLoadPuzzle(nextContext);
                           } finally {
                             if (mounted) {
                               setState(() {

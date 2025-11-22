@@ -645,7 +645,7 @@ class _PuzzleStatus extends ConsumerWidget {
               ),
             ),
           ),
-        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext, ctrlProvider: ctrlProvider),
+        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext),
       ],
     );
   }
