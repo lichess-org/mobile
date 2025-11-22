@@ -14,18 +14,15 @@ import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'account_service.g.dart';
-
-@Riverpod(keepAlive: true)
-AccountService accountService(Ref ref) {
+/// A provider for [AccountService].
+final accountServiceProvider = Provider<AccountService>((Ref ref) {
   final service = AccountService(ref);
   ref.onDispose(() {
     service.dispose();
   });
   return service;
-}
+}, name: 'AccountServiceProvider');
 
 class AccountService {
   AccountService(this._ref);
@@ -48,7 +45,7 @@ class AccountService {
     final prefs = LichessBinding.instance.sharedPreferences;
 
     _accountProviderSubscription = _ref.listen(accountProvider, (_, account) {
-      final playban = account.valueOrNull?.playban;
+      final playban = account.value?.playban;
       final storedDate = prefs.getString(_storageKey);
       final lastPlaybanNotificationDate = storedDate != null ? DateTime.parse(storedDate) : null;
 

@@ -68,10 +68,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     final cacheOpeningExplorer = cache[cacheKey];
     final openingExplorerAsync = cacheOpeningExplorer != null
         ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
-        : ref.watch(openingExplorerProvider(fen: widget.position.fen));
+        : ref.watch(openingExplorerProvider(widget.position.fen));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(fen: widget.position.fen), (_, curAsync) {
+      ref.listen(openingExplorerProvider(widget.position.fen), (_, curAsync) {
         curAsync.whenData((cur) {
           if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;

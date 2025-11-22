@@ -15,25 +15,22 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'notification_service.g.dart';
 
 final _logger = Logger('NotificationService');
 
 /// A provider instance of the [FlutterLocalNotificationsPlugin].
-@Riverpod(keepAlive: true)
-FlutterLocalNotificationsPlugin notificationDisplay(Ref _) => FlutterLocalNotificationsPlugin();
+final notificationDisplayProvider = Provider<FlutterLocalNotificationsPlugin>(
+  (Ref _) => FlutterLocalNotificationsPlugin(),
+);
 
 /// A provider instance of the [NotificationService].
-@Riverpod(keepAlive: true)
-NotificationService notificationService(Ref ref) {
+final notificationServiceProvider = Provider<NotificationService>((Ref ref) {
   final service = NotificationService(ref);
 
   ref.onDispose(() => service._dispose());
 
   return service;
-}
+});
 
 /// Received FCM message and whether it was from the background.
 typedef ReceivedFcmMessage = ({FcmMessage message, bool fromBackground});

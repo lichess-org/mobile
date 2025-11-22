@@ -26,7 +26,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = broadcastAnalysisControllerProvider(roundId, gameId);
+    final controller = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 

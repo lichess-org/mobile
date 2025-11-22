@@ -7,10 +7,7 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sound_effect/sound_effect.dart';
-
-part 'sound_service.g.dart';
 
 /// Maximum number of concurrent sounds that can be played.
 const _kMaxConcurrentStreams = 2;
@@ -22,12 +19,12 @@ final _logger = Logger('SoundService');
 // Must match name of files in assets/sounds/standard
 enum Sound { move, capture, lowTime, dong, error, confirmation, puzzleStormEnd, clock, berserk }
 
-@Riverpod(keepAlive: true)
-SoundService soundService(Ref ref) {
+/// A provider for [SoundService].
+final soundServiceProvider = Provider<SoundService>((Ref ref) {
   final service = SoundService(ref);
   ref.onDispose(() => service.release());
   return service;
-}
+}, name: 'SoundServiceProvider');
 
 final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 

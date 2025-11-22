@@ -21,7 +21,7 @@ class QuickGameMatrix extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playban = ref.watch(accountProvider).valueOrNull?.playban;
+    final playban = ref.watch(accountProvider).value?.playban;
     final brightness = Theme.of(context).brightness;
     final logoColor = brightness == Brightness.light
         ? const Color(0x0F000000)
@@ -78,7 +78,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [

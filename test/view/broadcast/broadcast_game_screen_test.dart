@@ -51,7 +51,11 @@ void main() {
           roundId: _roundId,
           gameId: _gameId,
         ),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);

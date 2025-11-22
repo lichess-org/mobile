@@ -231,9 +231,7 @@ class _ContactTyping extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTyping = ref.watch(
-      conversationControllerProvider(
-        user.id,
-      ).select((state) => state.valueOrNull?.contactTyping == true),
+      conversationControllerProvider(user.id).select((state) => state.value?.contactTyping == true),
     );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),

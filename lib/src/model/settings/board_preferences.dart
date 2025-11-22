@@ -2,13 +2,13 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
@@ -16,8 +16,12 @@ part 'board_preferences.g.dart';
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
-@Riverpod(keepAlive: true)
-class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardPrefs> {
+final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
+  BoardPreferences.new,
+  name: 'BoardPreferencesProvider',
+);
+
+class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.board;

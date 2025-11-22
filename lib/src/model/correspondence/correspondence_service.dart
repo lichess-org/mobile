@@ -24,16 +24,13 @@ import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyPr
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'correspondence_service.g.dart';
-
-@Riverpod(keepAlive: true)
-CorrespondenceService correspondenceService(Ref ref) {
+/// A provider for [CorrespondenceService].
+final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) {
   final service = CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
   ref.onDispose(() => service.dispose());
   return service;
-}
+}, name: 'CorrespondenceServiceProvider');
 
 /// Service that manages correspondence games.
 class CorrespondenceService {

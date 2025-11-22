@@ -9,14 +9,11 @@ import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'study_repository.g.dart';
-
-@Riverpod(keepAlive: true)
-StudyRepository studyRepository(Ref ref) {
+/// A provider for [StudyRepository].
+final studyRepositoryProvider = Provider<StudyRepository>((Ref ref) {
   return StudyRepository(ref, ref.read(lichessClientProvider));
-}
+}, name: 'StudyRepositoryProvider');
 
 class StudyRepository {
   StudyRepository(this.ref, this.client);

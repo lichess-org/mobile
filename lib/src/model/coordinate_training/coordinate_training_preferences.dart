@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'coordinate_training_preferences.freezed.dart';
 part 'coordinate_training_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class CoordinateTrainingPreferences extends _$CoordinateTrainingPreferences
+final coordinateTrainingPreferencesProvider =
+    NotifierProvider<CoordinateTrainingPreferences, CoordinateTrainingPrefs>(
+      CoordinateTrainingPreferences.new,
+      name: 'CoordinateTrainingPreferencesProvider',
+    );
+
+class CoordinateTrainingPreferences extends Notifier<CoordinateTrainingPrefs>
     with PreferencesStorage<CoordinateTrainingPrefs> {
   @override
   @protected

@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'lobby_numbers.g.dart';
 
 /// The [LobbyNumbers] provider is used to display the number of players and
 /// games on lichess in real time.
-@riverpod
-class LobbyNumbers extends _$LobbyNumbers {
+final lobbyNumbersProvider =
+    NotifierProvider.autoDispose<LobbyNumbers, ({int nbPlayers, int nbGames})?>(
+      LobbyNumbers.new,
+      name: 'LobbyNumbersProvider',
+    );
+
+class LobbyNumbers extends Notifier<({int nbPlayers, int nbGames})?> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   @override

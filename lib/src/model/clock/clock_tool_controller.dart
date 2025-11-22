@@ -1,13 +1,12 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'clock_tool_controller.freezed.dart';
-part 'clock_tool_controller.g.dart';
 
 enum ClockSide {
   top,
@@ -18,8 +17,13 @@ enum ClockSide {
   Side get chessClockSide => this == ClockSide.top ? Side.black : Side.white;
 }
 
-@riverpod
-class ClockToolController extends _$ClockToolController {
+/// A provider for [ClockToolController].
+final clockToolControllerProvider = NotifierProvider.autoDispose<ClockToolController, ClockState>(
+  ClockToolController.new,
+  name: 'ClockToolControllerProvider',
+);
+
+class ClockToolController extends Notifier<ClockState> {
   late ChessClock _clock;
   final Map<ClockSide, bool> _hasPlayedLowTimeSound = {
     ClockSide.top: false,

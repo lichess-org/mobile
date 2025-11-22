@@ -15,19 +15,16 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:quick_actions/quick_actions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'quick_actions.g.dart';
-
-@Riverpod(keepAlive: true)
-QuickActionService quickActionService(Ref ref) {
+/// Provider for the [QuickActionService].
+final quickActionServiceProvider = Provider<QuickActionService>((Ref ref) {
   final service = QuickActionService(ref);
   ref.listen<RecentGameSeekPrefs>(recentGameSeekProvider, (previous, next) {
     if (previous?.seeks == next.seeks) return;
     service.setQuickActions(next.seeks);
   });
   return service;
-}
+});
 
 class QuickActionService {
   QuickActionService(this.ref);

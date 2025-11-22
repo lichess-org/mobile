@@ -27,26 +27,25 @@ void setupLogging() {
   }
 }
 
-class ProviderLogger extends ProviderObserver {
+final class ProviderLogger extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override
-  void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} initialized', value);
+  void didAddProvider(ProviderObserverContext context, Object? value) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
-  void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} disposed');
+  void didDisposeProvider(ProviderObserverContext context) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override
-  void providerDidFail(
-    ProviderBase<Object?> provider,
-    Object error,
-    StackTrace stackTrace,
-    ProviderContainer container,
-  ) {
-    _logger.severe('${provider.name ?? provider.runtimeType} error', error, stackTrace);
+  void providerDidFail(ProviderObserverContext context, Object error, StackTrace stackTrace) {
+    _logger.severe(
+      '${context.provider.name ?? context.provider.runtimeType} error',
+      error,
+      stackTrace,
+    );
   }
 }

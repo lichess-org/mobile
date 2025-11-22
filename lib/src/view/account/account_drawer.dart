@@ -40,7 +40,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
     return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
@@ -101,10 +101,10 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
-    final kidMode = account.valueOrNull?.kid ?? false;
-    final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
+    final kidMode = account.value?.kid ?? false;
+    final LightUser? user = account.value?.lightUser ?? userSession?.user;
 
-    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),

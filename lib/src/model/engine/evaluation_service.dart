@@ -25,11 +25,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'evaluation_service.freezed.dart';
-part 'evaluation_service.g.dart';
 
 final _logger = Logger('EvaluationService');
 
@@ -47,8 +45,8 @@ typedef ShouldEmitEvalFilter = bool Function(Work work);
 
 typedef NNUEFiles = ({File bigNet, File smallNet});
 
-@Riverpod(keepAlive: true)
-EvaluationService evaluationService(Ref ref) {
+/// A provider for [EvaluationService].
+final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
   final service = EvaluationService(ref, maxMemory: maxMemory);
 
@@ -57,7 +55,7 @@ EvaluationService evaluationService(Ref ref) {
   });
 
   return service;
-}
+}, name: 'EvaluationServiceProvider');
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
@@ -387,8 +385,13 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that holds the state of the engine and the current evaluation.
-@riverpod
-class EngineEvaluation extends _$EngineEvaluation {
+final engineEvaluationProvider =
+    NotifierProvider.autoDispose<EngineEvaluation, EngineEvaluationState>(
+      EngineEvaluation.new,
+      name: 'EngineEvaluationProvider',
+    );
+
+class EngineEvaluation extends Notifier<EngineEvaluationState> {
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).state;

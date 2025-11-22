@@ -114,7 +114,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerWithGameResults = ref.watch(broadcastPlayerProvider(tournamentId, playerId));
+    final playerWithGameResults = ref.watch(broadcastPlayerProvider((tournamentId, playerId)));
 
     switch (playerWithGameResults) {
       case AsyncData(value: final playerWithGameResults):

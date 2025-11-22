@@ -1,16 +1,25 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_editor_controller.freezed.dart';
-part 'board_editor_controller.g.dart';
 
-@riverpod
-class BoardEditorController extends _$BoardEditorController {
+/// A provider for [BoardEditorController].
+final boardEditorControllerProvider = NotifierProvider.autoDispose
+    .family<BoardEditorController, BoardEditorState, String?>(
+      BoardEditorController.new,
+      name: 'BoardEditorControllerProvider',
+    );
+
+class BoardEditorController extends Notifier<BoardEditorState> {
+  BoardEditorController(this.initialFen);
+
+  final String? initialFen;
+
   @override
-  BoardEditorState build(String? initialFen) {
+  BoardEditorState build() {
     final setup = Setup.parseFen(initialFen ?? kInitialFEN);
     final position = Chess.fromSetup(setup, ignoreImpossibleCheck: true);
     final pieces = readFen(initialFen ?? kInitialFEN).lock;

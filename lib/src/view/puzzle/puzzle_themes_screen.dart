@@ -12,9 +12,7 @@ import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@riverpod
 final _themesProvider =
     FutureProvider.autoDispose<
       (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)

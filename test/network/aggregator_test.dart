@@ -29,11 +29,11 @@ void main() {
 
   Future<Aggregator> fakeClientAggregator() async {
     final container = await makeContainer(
-      overrides: [
-        httpClientFactoryProvider.overrideWith((ref) {
+      overrides: {
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => FakeClient());
         }),
-      ],
+      },
     );
     return container.read(aggregatorProvider);
   }

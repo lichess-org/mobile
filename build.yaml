@@ -13,11 +13,3 @@ targets:
         options:
           from_json: false
           to_json: false
-      riverpod_generator:
-        generate_for:
-          - lib/src/localizations.dart
-          - lib/src/model/**/*.dart
-          - lib/src/network/*.dart
-          - lib/src/db/*.dart
-          - lib/src/quick_actions.dart
-          - lib/src/**/*_providers.dart

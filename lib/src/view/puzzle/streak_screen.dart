@@ -70,6 +70,7 @@ class _Load extends ConsumerWidget {
             puzzle: value.puzzle,
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
             userId: session?.user.id,
+            isPuzzleStreak: true,
           ),
           streak: value.streak,
         );
@@ -96,10 +97,7 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final ctrlProvider = puzzleControllerProvider(
-      widget.initialPuzzleContext,
-      isPuzzleStreak: true,
-    );
+    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen(puzzleStreakControllerProvider, (previous, next) {
@@ -460,7 +458,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     return BottomBar(

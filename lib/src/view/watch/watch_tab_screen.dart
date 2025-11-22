@@ -77,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? true;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {

@@ -58,8 +58,8 @@ void main() {
         tester,
         child: const Application(),
         userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(
               () => MockClient((request) {
                 if (request.url.path == '/api/challenge') {
@@ -72,7 +72,7 @@ void main() {
               }),
             ),
           ),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -127,9 +127,11 @@ void main() {
         tester,
         child: const Application(),
         userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -151,9 +153,11 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -189,9 +193,11 @@ void main() {
         tester,
         child: const Application(),
         userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -221,9 +227,11 @@ void main() {
         tester,
         child: const Application(),
         userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity

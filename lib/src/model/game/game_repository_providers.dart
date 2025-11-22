@@ -5,13 +5,12 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'game_repository_providers.g.dart';
 
 /// Fetches a game from the server or from the local storage if not available online.
-@riverpod
-Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
+final archivedGameProvider = FutureProvider.autoDispose.family<ExportedGame, GameId>((
+  Ref ref,
+  GameId id,
+) async {
   ExportedGame game;
   try {
     final isLoggedIn = ref.watch(isLoggedInProvider);
@@ -26,9 +25,11 @@ Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
     }
   }
   return game;
-}
+}, name: 'ArchivedGameProvider');
 
-@riverpod
-Future<IList<LightExportedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
-  return ref.read(gameRepositoryProvider).getGamesByIds(ids);
-}
+final gamesByIdProvider = FutureProvider.autoDispose.family<IList<LightExportedGame>, ISet<GameId>>(
+  (Ref ref, ISet<GameId> ids) {
+    return ref.read(gameRepositoryProvider).getGamesByIds(ids);
+  },
+  name: 'GamesByIdProvider',
+);

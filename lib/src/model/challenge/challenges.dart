@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'challenges.g.dart';
+final challengesProvider = AsyncNotifierProvider.autoDispose<Challenges, ChallengesList>(
+  Challenges.new,
+  name: 'ChallengesProvider',
+);
 
-@riverpod
-class Challenges extends _$Challenges {
+class Challenges extends AsyncNotifier<ChallengesList> {
   StreamSubscription<ChallengesList>? _subscription;
 
   @override

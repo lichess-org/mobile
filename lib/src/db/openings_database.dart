@@ -3,10 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-
-part 'openings_database.g.dart';
 
 // The dataset is from https://github.com/lichess-org/chess-openings
 // It can be updated by running the script at scripts/update_openings_db.py
@@ -14,11 +11,11 @@ part 'openings_database.g.dart';
 const _kDatabaseVersion = 3;
 const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 
-@Riverpod(keepAlive: true)
-Future<Database> openingsDatabase(Ref ref) async {
+/// A provider for the openings database.
+final openingsDatabaseProvider = FutureProvider<Database>((Ref ref) async {
   final dbPath = p.join(await getDatabasesPath(), _kDatabaseName);
   return _openDb(dbPath);
-}
+}, name: 'OpeningsDatabaseProvider');
 
 Future<Database> _openDb(String path) async {
   final exists = await databaseExists(path);

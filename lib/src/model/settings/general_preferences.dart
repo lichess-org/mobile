@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
@@ -7,13 +8,17 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
+final generalPreferencesProvider = NotifierProvider<GeneralPreferencesNotifier, GeneralPrefs>(
+  GeneralPreferencesNotifier.new,
+  name: 'GeneralPreferencesProvider',
+);
+
+class GeneralPreferencesNotifier extends Notifier<GeneralPrefs>
+    with PreferencesStorage<GeneralPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.general;

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -13,7 +14,6 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_seek.freezed.dart';
 part 'game_seek.g.dart';
@@ -139,8 +139,13 @@ sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializa
   }
 }
 
-@Riverpod(keepAlive: true)
-class RecentGameSeek extends _$RecentGameSeek with PreferencesStorage<RecentGameSeekPrefs> {
+final recentGameSeekProvider = NotifierProvider<RecentGameSeek, RecentGameSeekPrefs>(
+  RecentGameSeek.new,
+  name: 'RecentGameSeekProvider',
+);
+
+class RecentGameSeek extends Notifier<RecentGameSeekPrefs>
+    with PreferencesStorage<RecentGameSeekPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.gameSeeks;

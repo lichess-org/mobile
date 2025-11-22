@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -10,7 +11,6 @@ import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_streak.freezed.dart';
 part 'puzzle_streak.g.dart';
@@ -37,8 +37,13 @@ sealed class PuzzleStreak with _$PuzzleStreak {
 /// [PuzzleStreak] with its current [Puzzle].
 typedef StreakState = ({PuzzleStreak streak, Puzzle puzzle, Puzzle? nextPuzzle});
 
-@riverpod
-class PuzzleStreakController extends _$PuzzleStreakController {
+final puzzleStreakControllerProvider =
+    AsyncNotifierProvider.autoDispose<PuzzleStreakController, StreakState>(
+      PuzzleStreakController.new,
+      name: 'PuzzleStreakControllerProvider',
+    );
+
+class PuzzleStreakController extends AsyncNotifier<StreakState> {
   @override
   Future<StreakState> build() async {
     final session = ref.watch(authSessionProvider);

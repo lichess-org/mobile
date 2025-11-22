@@ -94,7 +94,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = stormControllerProvider(widget.data.puzzles, widget.data.timestamp);
+    final ctrlProvider = stormControllerProvider((widget.data.puzzles, widget.data.timestamp));
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final stormState = ref.watch(ctrlProvider);
 
@@ -279,7 +279,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
 
                                     _Combo(stormState.combo),
-                                    _BottomBar(ctrlProvider),
+                                    _BottomBar(widget.data),
                                   ],
                                 ),
                               ),
@@ -329,7 +329,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 child: _Combo(stormState.combo),
                               ),
                             ),
-                            _BottomBar(ctrlProvider),
+                            _BottomBar(widget.data),
                           ],
                         );
                       }
@@ -446,7 +446,7 @@ class _TopTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormState = ref.watch(stormControllerProvider(data.puzzles, data.timestamp));
+    final stormState = ref.watch(stormControllerProvider((data.puzzles, data.timestamp)));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -675,12 +675,13 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.ctrl);
+  const _BottomBar(this.data);
 
-  final StormControllerProvider ctrl;
+  final PuzzleStormResponse data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrl = stormControllerProvider((data.puzzles, data.timestamp));
     final stormState = ref.watch(ctrl);
     return BottomBar(
       children: [

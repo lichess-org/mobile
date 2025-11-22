@@ -1,17 +1,22 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_preferences.freezed.dart';
 part 'opening_explorer_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
+final openingExplorerPreferencesProvider =
+    NotifierProvider<OpeningExplorerPreferences, OpeningExplorerPrefs>(
+      OpeningExplorerPreferences.new,
+      name: 'OpeningExplorerPreferencesProvider',
+    );
+
+class OpeningExplorerPreferences extends Notifier<OpeningExplorerPrefs>
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
   @override
   @protected

@@ -7,14 +7,13 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'lobby_repository.g.dart';
-
-@riverpod
-Future<IList<CorrespondenceChallenge>> correspondenceChallenges(Ref ref) {
-  return ref.withClient((client) => LobbyRepository(client).getCorrespondenceChallenges());
-}
+final correspondenceChallengesProvider = FutureProvider.autoDispose<IList<CorrespondenceChallenge>>(
+  (Ref ref) {
+    return ref.withClient((client) => LobbyRepository(client).getCorrespondenceChallenges());
+  },
+  name: 'CorrespondenceChallengesProvider',
+);
 
 class LobbyRepository {
   LobbyRepository(this.client);

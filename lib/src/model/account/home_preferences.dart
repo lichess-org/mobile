@@ -1,15 +1,19 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_preferences.freezed.dart';
 part 'home_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class HomePreferences extends _$HomePreferences with SessionPreferencesStorage<HomePrefs> {
+final homePreferencesProvider = NotifierProvider<HomePreferences, HomePrefs>(
+  HomePreferences.new,
+  name: 'HomePreferencesProvider',
+);
+
+class HomePreferences extends Notifier<HomePrefs> with SessionPreferencesStorage<HomePrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.home;

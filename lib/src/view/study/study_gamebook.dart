@@ -98,17 +98,17 @@ class _HintState extends ConsumerState<_Hint> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(
-      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.gamebookState),
-      (prev, next) {
-        if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
-          _hideHint();
-        }
-      },
-    );
+    ref.listen(studyControllerProvider(widget.id).select((state) => state.value?.gamebookState), (
+      prev,
+      next,
+    ) {
+      if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
+        _hideHint();
+      }
+    });
 
     ref.listen(
-      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.currentChapter.id),
+      studyControllerProvider(widget.id).select((state) => state.value?.currentChapter.id),
       (prev, next) {
         if (prev != next) {
           _hideHint();

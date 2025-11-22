@@ -21,7 +21,11 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
         home: const LeaderboardScreen(),
       );
 

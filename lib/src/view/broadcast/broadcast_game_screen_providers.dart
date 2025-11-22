@@ -5,45 +5,45 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.da
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'broadcast_game_screen_providers.g.dart';
+typedef BroadcastRoundGameParam = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
-@riverpod
-Future<BroadcastGame> broadcastRoundGame(
-  Ref ref,
-  BroadcastRoundId roundId,
-  BroadcastGameId gameId,
-) {
-  return ref.watch(
-    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.games[gameId]!),
-  );
-}
+/// A provider that exposes the [BroadcastGame] for the given [BroadcastRoundGameParam].
+final broadcastRoundGameProvider = FutureProvider.autoDispose
+    .family<BroadcastGame, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
+      return ref.watch(
+        broadcastRoundControllerProvider(
+          params.roundId,
+        ).selectAsync((round) => round.games[params.gameId]!),
+      );
+    }, name: 'BroadcastRoundGameProvider');
 
-@riverpod
-Future<ClientEval?> broadcastGameEval(Ref ref, BroadcastRoundId roundId, BroadcastGameId gameId) {
-  return ref.watch(
-    broadcastAnalysisControllerProvider(
-      roundId,
-      gameId,
-    ).selectAsync((state) => state.currentNode.eval),
-  );
-}
+/// A provider that exposes the current [ClientEval] for the given [BroadcastRoundGameParam].
+final broadcastGameEvalProvider = FutureProvider.autoDispose
+    .family<ClientEval?, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
+      return ref.watch(
+        broadcastAnalysisControllerProvider((
+          roundId: params.roundId,
+          gameId: params.gameId,
+        )).selectAsync((state) => state.currentNode.eval),
+      );
+    }, name: 'BroadcastGameEvalProvider');
 
-@riverpod
-Future<bool> isBroadcastEngineAvailable(Ref ref, BroadcastRoundId roundId, BroadcastGameId gameId) {
-  final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-  return ref.watch(
-    broadcastAnalysisControllerProvider(
-      roundId,
-      gameId,
-    ).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
-  );
-}
+/// A provider that indicates whether engine analysis is available for the given
+final isBroadcastEngineAvailableProvider = FutureProvider.autoDispose
+    .family<bool, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
+      final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
+      return ref.watch(
+        broadcastAnalysisControllerProvider((
+          roundId: params.roundId,
+          gameId: params.gameId,
+        )).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
+      );
+    }, name: 'IsBroadcastEngineAvailableProvider');
 
-@riverpod
-Future<String> broadcastGameScreenTitle(Ref ref, BroadcastRoundId roundId) {
-  return ref.watch(
-    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
-  );
-}
+final broadcastGameScreenTitleProvider = FutureProvider.autoDispose
+    .family<String, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
+      return ref.watch(
+        broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
+      );
+    }, name: 'BroadcastGameScreenTitleProvider');

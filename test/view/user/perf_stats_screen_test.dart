@@ -28,11 +28,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: PerfStatsScreen(user: fakeUser, perf: testPerf),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(client, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -53,11 +53,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: PerfStatsScreen(user: fakeUser, perf: testPerf),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(client, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);

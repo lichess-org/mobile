@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -20,13 +21,20 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_controller.freezed.dart';
-part 'puzzle_controller.g.dart';
 
-@riverpod
-class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
+final puzzleControllerProvider = NotifierProvider.autoDispose
+    .family<PuzzleController, PuzzleState, PuzzleContext>(
+      PuzzleController.new,
+      name: 'PuzzleControllerProvider',
+    );
+
+class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin {
+  PuzzleController(this.initialContext);
+
+  final PuzzleContext initialContext;
+
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   late Branch _gameTree;
@@ -62,7 +70,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 
   @override
-  PuzzleState build(PuzzleContext initialContext, {bool isPuzzleStreak = false}) {
+  PuzzleState build() {
     initEngineEvaluation();
 
     ref.onDispose(() {
@@ -165,7 +173,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       } else {
         state = state.copyWith(feedback: PuzzleFeedback.bad);
         _onFailOrWin(PuzzleResult.lose);
-        if (!isPuzzleStreak) {
+        if (initialContext.isPuzzleStreak != true) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
           _setPath(state.currentPath.penultimate);
         }
@@ -224,7 +232,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   }
 
   void skipMove() {
-    if (isPuzzleStreak && state._nextSolutionMove != null) {
+    if (initialContext.isPuzzleStreak == true && state._nextSolutionMove != null) {
       onUserMove(state._nextSolutionMove!);
     }
   }
@@ -271,7 +279,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
     final soundService = ref.read(soundServiceProvider);
 
-    if (isPuzzleStreak) {
+    if (initialContext.isPuzzleStreak == true) {
       // one fail and streak is over
       if (result == PuzzleResult.lose) {
         soundService.play(Sound.error);
@@ -307,13 +315,23 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       state = state.copyWith(nextContext: next);
 
       ref
-          .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
+          .read(
+            puzzleSessionProvider((
+              userId: initialContext.userId,
+              angle: initialContext.angle,
+            )).notifier,
+          )
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
       final rounds = next?.rounds;
       if (rounds != null) {
         ref
-            .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
+            .read(
+              puzzleSessionProvider((
+                userId: initialContext.userId,
+                angle: initialContext.angle,
+              )).notifier,
+            )
             .setRatingDiffs(rounds);
       }
 

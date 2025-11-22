@@ -12,9 +12,6 @@ import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory, getApplicationSupportDirectory;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'preloaded_data.g.dart';
 
 typedef PreloadedData = ({
   PackageInfo packageInfo,
@@ -26,8 +23,8 @@ typedef PreloadedData = ({
   Directory? appSupportDirectory,
 });
 
-@Riverpod(keepAlive: true)
-Future<PreloadedData> preloadedData(Ref ref) async {
+/// A provider that preloads various data needed throughout the app.
+final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   final sessionStorage = ref.watch(sessionStorageProvider);
 
   final pInfo = await PackageInfo.fromPlatform();
@@ -74,4 +71,4 @@ Future<PreloadedData> preloadedData(Ref ref) async {
     appDocumentsDirectory: appDocumentsDirectory,
     appSupportDirectory: appSupportDirectory,
   );
-}
+}, name: 'PreloadedDataProvider');

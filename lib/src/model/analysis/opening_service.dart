@@ -2,10 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/openings_database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
-
-part 'opening_service.g.dart';
 
 const kOpeningAllowedVariants = ISetConst({
   Variant.standard,
@@ -14,10 +11,10 @@ const kOpeningAllowedVariants = ISetConst({
   Variant.crazyhouse,
 });
 
-@Riverpod(keepAlive: true)
-OpeningService openingService(Ref ref) {
+/// A provider for [OpeningService].
+final openingServiceProvider = Provider<OpeningService>((Ref ref) {
   return OpeningService(ref);
-}
+}, name: 'OpeningServiceProvider');
 
 class OpeningService {
   OpeningService(this._ref);

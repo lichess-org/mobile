@@ -4,16 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'session_storage.g.dart';
 
 const kSessionStorageKey = '$kLichessHost.userSession';
 
-@Riverpod(keepAlive: true)
-SessionStorage sessionStorage(Ref ref) {
+/// A provider for [SessionStorage].
+final sessionStorageProvider = Provider<SessionStorage>((Ref ref) {
   return const SessionStorage();
-}
+}, name: 'SessionStorageProvider');
 
 class SessionStorage {
   const SessionStorage();

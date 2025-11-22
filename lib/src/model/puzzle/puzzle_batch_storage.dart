@@ -9,17 +9,16 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 part 'puzzle_batch_storage.freezed.dart';
 part 'puzzle_batch_storage.g.dart';
 
-@Riverpod(keepAlive: true)
-Future<PuzzleBatchStorage> puzzleBatchStorage(Ref ref) async {
+/// A provider for [PuzzleBatchStorage].
+final puzzleBatchStorageProvider = FutureProvider<PuzzleBatchStorage>((Ref ref) async {
   final database = await ref.watch(databaseProvider.future);
   return PuzzleBatchStorage(database, ref);
-}
+}, name: 'PuzzleBatchStorageProvider');
 
 const _anonUserKey = '**anon**';
 const _tableName = 'puzzle_batchs';

@@ -2,18 +2,20 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'online_friends.g.dart';
 
 typedef OnlineFriend = ({LightUser user, bool playing});
 
-@riverpod
-class OnlineFriends extends _$OnlineFriends {
+final onlineFriendsProvider = AsyncNotifierProvider.autoDispose<OnlineFriends, IList<OnlineFriend>>(
+  OnlineFriends.new,
+  name: 'OnlineFriendsProvider',
+);
+
+class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
 

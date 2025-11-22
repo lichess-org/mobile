@@ -2,18 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_models.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'flair_provider.g.dart';
-
-@Riverpod(keepAlive: true)
-Future<EmojiData> flairList(Ref ref) async {
+/// A provider that fetches the list of available flairs.
+final flairListProvider = FutureProvider<EmojiData>((Ref ref) async {
   final list = await ref
       .read(defaultClientProvider)
       .read(Uri.parse(lichessAssetUrl('flair/list.txt')));
   final data = _makeEmojiData(list);
   return EmojiData.fromJson(data);
-}
+}, name: 'FlairListProvider');
 
 const categories = [
   ['smileys', 'Smileys'],

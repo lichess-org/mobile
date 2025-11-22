@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart' show Brightness;
 import 'package:flutter/widgets.dart' show WidgetsBinding;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'brightness.g.dart';
+final currentBrightnessProvider = NotifierProvider<CurrentBrightness, Brightness>(
+  CurrentBrightness.new,
+  name: 'CurrentBrightnessProvider',
+);
 
-@riverpod
-class CurrentBrightness extends _$CurrentBrightness {
+class CurrentBrightness extends Notifier<Brightness> {
   @override
   Brightness build() {
     final themeMode = ref.watch(generalPreferencesProvider.select((state) => state.themeMode));

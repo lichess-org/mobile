@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -8,15 +9,21 @@ import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'conversation_controller.g.dart';
 part 'conversation_controller.freezed.dart';
 
 const kMessagesPerPage = 100;
 
-@riverpod
-class ConversationController extends _$ConversationController {
+final conversationControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<ConversationController, ConversationState, UserId>(
+      ConversationController.new,
+      name: 'ConversationControllerProvider',
+    );
+
+class ConversationController extends AsyncNotifier<ConversationState> {
+  ConversationController(this.userId);
+  final UserId userId;
+
   late SocketClient _client;
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _setReadTimer;
@@ -27,7 +34,7 @@ class ConversationController extends _$ConversationController {
   LightUser? get _me => ref.read(authSessionProvider)?.user;
 
   @override
-  Future<ConversationState> build(UserId userId) async {
+  Future<ConversationState> build() async {
     _connectSocket();
 
     ref.onDispose(() {

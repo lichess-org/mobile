@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
@@ -24,15 +25,25 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_analysis_controller.freezed.dart';
-part 'broadcast_analysis_controller.g.dart';
 
-@riverpod
-class BroadcastAnalysisController extends _$BroadcastAnalysisController
+typedef BroadcastAnalysisControllerParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
+
+/// A provider for [BroadcastAnalysisController].
+final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<BroadcastAnalysisController, BroadcastAnalysisState, BroadcastAnalysisControllerParams>(
+      BroadcastAnalysisController.new,
+      name: 'BroadcastAnalysisControllerProvider',
+    );
+
+class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  BroadcastAnalysisController(this.params);
+
+  final BroadcastAnalysisControllerParams params;
+
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -75,7 +86,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   Root get positionTree => _root;
 
   @override
-  Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
+  Future<BroadcastAnalysisState> build() async {
     ref.onDispose(() {
       _key = null;
       _subscription?.cancel();
@@ -88,14 +99,14 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     _socketClient = ref
         .watch(socketPoolProvider)
-        .open(BroadcastAnalysisController.broadcastSocketUri(roundId));
+        .open(BroadcastAnalysisController.broadcastSocketUri(params.roundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.isNewOrOngoing == true) {
+      if (state.value?.isNewOrOngoing == true) {
         _syncDebouncer(() {
           _reloadPgn();
         });
@@ -104,7 +115,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.isNewOrOngoing == true) {
+        if (state.value?.isNewOrOngoing == true) {
           _syncDebouncer(() {
             _reloadPgn();
           });
@@ -112,7 +123,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       },
     );
 
-    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+    final pgn = await ref
+        .read(broadcastRepositoryProvider)
+        .getGamePgn(params.roundId, params.gameId);
 
     final game = PgnGame.parsePgn(pgn);
     final pgnHeaders = IMap(game.headers);
@@ -128,7 +141,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     final prefs = ref.read(broadcastPreferencesProvider);
 
     final broadcastState = BroadcastAnalysisState(
-      id: gameId,
+      id: params.gameId,
       currentPath: currentPath,
       broadcastPath: currentPath,
       isOnMainline: _root.isOnMainline(currentPath),
@@ -163,7 +176,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+    final pgn = await ref
+        .read(broadcastRepositoryProvider)
+        .getGamePgn(params.roundId, params.gameId);
 
     // check provider is still mounted
     if (key == _key) {
@@ -235,7 +250,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
-    if (broadcastGameId != gameId) return;
+    if (broadcastGameId != params.gameId) return;
 
     // The path of the last and current move of the broadcasted game
     // Its value is "!" if the path is identical to one of the node that was received
@@ -276,7 +291,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     final broadcastGameId = pick(event.data, 'chapterId').asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
-    if (broadcastGameId != gameId) return;
+    if (broadcastGameId != params.gameId) return;
 
     final pgnHeadersEntries = pick(
       event.data,

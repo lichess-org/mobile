@@ -39,7 +39,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -64,7 +64,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -89,7 +89,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -112,7 +112,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -142,7 +142,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -165,7 +165,7 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 

@@ -72,9 +72,11 @@ void main() {
       () async {
         final container = await makeContainer(
           userSession: fakeSession,
-          overrides: [
-            lichessClientProvider.overrideWith((ref) => LichessClient(registerMockClient, ref)),
-          ],
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(registerMockClient, ref),
+            ),
+          },
         );
 
         final notificationService = container.read(notificationServiceProvider);
@@ -92,9 +94,11 @@ void main() {
     test("don't try to register device when permissions are not granted", () async {
       final container = await makeContainer(
         userSession: fakeSession,
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(registerMockClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(registerMockClient, ref),
+          ),
+        },
       );
 
       final notificationService = container.read(notificationServiceProvider);
@@ -112,9 +116,11 @@ void main() {
 
     test("don't try to register device when user is not logged in", () async {
       final container = await makeContainer(
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(registerMockClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(registerMockClient, ref),
+          ),
+        },
       );
 
       final notificationService = container.read(notificationServiceProvider);
@@ -133,10 +139,14 @@ void main() {
     test('FCM message with associated notification will show it in foreground', () async {
       final container = await makeContainer(
         userSession: fakeSession,
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(registerMockClient, ref)),
-          notificationDisplayProvider.overrideWith((_) => notificationDisplayMock),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(registerMockClient, ref),
+          ),
+          notificationDisplayProvider: notificationDisplayProvider.overrideWith(
+            (_) => notificationDisplayMock,
+          ),
+        },
       );
 
       final notificationService = container.read(notificationServiceProvider);

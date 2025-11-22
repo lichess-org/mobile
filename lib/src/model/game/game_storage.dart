@@ -6,16 +6,13 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
-part 'game_storage.g.dart';
-
-@Riverpod(keepAlive: true)
-Future<GameStorage> gameStorage(Ref ref) async {
+/// A provider for [GameStorage].
+final gameStorageProvider = FutureProvider<GameStorage>((Ref ref) async {
   final db = await ref.watch(databaseProvider.future);
   return GameStorage(db);
-}
+}, name: 'GameStorageProvider');
 
 const kGameStorageTable = 'game';
 

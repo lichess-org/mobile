@@ -131,12 +131,12 @@ void main() {
                 variant: Variant.standard,
               ),
         ),
-        overrides: [
+        overrides: {
           if (mockClient != null)
-            lichessClientProvider.overrideWith((ref) {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
               return LichessClient(mockClient, ref);
             }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -953,11 +953,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1045,11 +1045,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1189,11 +1189,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1258,11 +1258,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);

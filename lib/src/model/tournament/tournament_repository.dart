@@ -8,14 +8,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'tournament_repository.g.dart';
-
-@Riverpod(keepAlive: true)
-TournamentRepository tournamentRepository(Ref ref) {
+/// A provider for [TournamentRepository].
+final tournamentRepositoryProvider = Provider<TournamentRepository>((Ref ref) {
   return TournamentRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider), ref);
-}
+}, name: 'TournamentRepositoryProvider');
 
 class TournamentRepository {
   TournamentRepository(this.client, this.aggregator, Ref ref) : _ref = ref;

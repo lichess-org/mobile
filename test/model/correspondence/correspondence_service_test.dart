@@ -45,10 +45,14 @@ void main() {
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [
-        correspondenceGameStorageProvider.overrideWith((_) => correspondenceGameStorageMock),
-        notificationDisplayProvider.overrideWithValue(notificationDisplayMock),
-      ],
+      overrides: {
+        correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
+          (_) => correspondenceGameStorageMock,
+        ),
+        notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+          notificationDisplayMock,
+        ),
+      },
     );
 
     final notificationService = container.read(notificationServiceProvider);
@@ -99,10 +103,14 @@ void main() {
 
     final container = await makeContainer(
       userSession: fakeSession,
-      overrides: [
-        correspondenceGameStorageProvider.overrideWith((_) => correspondenceGameStorageMock),
-        notificationDisplayProvider.overrideWith((_) => notificationDisplayMock),
-      ],
+      overrides: {
+        correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
+          (_) => correspondenceGameStorageMock,
+        ),
+        notificationDisplayProvider: notificationDisplayProvider.overrideWith(
+          (_) => notificationDisplayMock,
+        ),
+      },
     );
 
     final notificationService = container.read(notificationServiceProvider);

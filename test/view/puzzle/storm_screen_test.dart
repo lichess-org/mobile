@@ -29,10 +29,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
-        overrides: [
-          stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -45,10 +47,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
-        overrides: [
-          stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -61,10 +65,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
-        overrides: [
-          stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -99,10 +105,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
-        overrides: [
-          stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -129,10 +137,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
-        overrides: [
-          stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-        ],
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);

@@ -109,17 +109,18 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             ),
             _ => const SizedBox.shrink(),
           };
-    final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
+    final asyncEval = ref.watch(
+      broadcastGameEvalProvider((roundId: widget.roundId, gameId: widget.gameId)),
+    );
     final asyncIsEngineAvailable = ref.watch(
-      isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
+      isBroadcastEngineAvailableProvider((roundId: widget.roundId, gameId: widget.gameId)),
     );
 
     return Scaffold(
       appBar: AppBar(
         title: title,
         actions: [
-          if (asyncIsEngineAvailable.valueOrNull == true)
-            EngineDepth(savedEval: asyncEval.valueOrNull),
+          if (asyncIsEngineAvailable.value == true) EngineDepth(savedEval: asyncEval.value),
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _BroadcastGameMenu(
             roundId: widget.roundId,
@@ -248,7 +249,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
+    switch (ref.watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))) {
       case AsyncValue(value: final state?, hasValue: true):
         final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
         final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
@@ -313,7 +314,12 @@ class _Body extends ConsumerWidget {
                   savedEval: currentNode.eval,
                   isGameOver: currentNode.position.isGameOver,
                   onTapMove: ref
-                      .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
+                      .read(
+                        broadcastAnalysisControllerProvider((
+                          roundId: roundId,
+                          gameId: gameId,
+                        )).notifier,
+                      )
                       .onUserMove,
                 )
               : null,
@@ -341,7 +347,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
@@ -373,7 +379,7 @@ class _OpeningExplorerTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
 
     return ExplorerView(
@@ -403,8 +409,9 @@ class BroadcastAnalysisBoard extends AnalysisBoard {
 class _BroadcastAnalysisBoardState
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
-  BroadcastAnalysisState get analysisState =>
-      ref.watch(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId)).requireValue;
+  BroadcastAnalysisState get analysisState => ref
+      .watch(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .requireValue;
 
   @override
   BroadcastPrefs get analysisPrefs => ref.watch(broadcastPreferencesProvider);
@@ -415,12 +422,22 @@ class _BroadcastAnalysisBoardState
 
   @override
   void onUserMove(NormalMove move) => ref
-      .read(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId).notifier)
+      .read(
+        broadcastAnalysisControllerProvider((
+          roundId: widget.roundId,
+          gameId: widget.gameId,
+        )).notifier,
+      )
       .onUserMove(move);
 
   @override
   void onPromotionSelection(Role? role) => ref
-      .read(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId).notifier)
+      .read(
+        broadcastAnalysisControllerProvider((
+          roundId: widget.roundId,
+          gameId: widget.gameId,
+        )).notifier,
+      )
       .onPromotionSelection(role);
 }
 
@@ -441,10 +458,10 @@ class _PlayerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
+    switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
       case AsyncValue(value: final game?, hasValue: true):
         final broadcastAnalysisState = ref
-            .watch(broadcastAnalysisControllerProvider(roundId, gameId))
+            .watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))
             .requireValue;
 
         final isCursorOnLiveMove =
@@ -583,7 +600,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
@@ -644,8 +661,10 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref) =>
-      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userNext();
-  void _moveBackward(WidgetRef ref) =>
-      ref.read(broadcastAnalysisControllerProvider(roundId, gameId).notifier).userPrevious();
+  void _moveForward(WidgetRef ref) => ref
+      .read(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)).notifier)
+      .userNext();
+  void _moveBackward(WidgetRef ref) => ref
+      .read(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)).notifier)
+      .userPrevious();
 }

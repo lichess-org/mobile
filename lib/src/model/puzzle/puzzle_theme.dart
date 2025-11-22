@@ -5,10 +5,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_theme.freezed.dart';
-part 'puzzle_theme.g.dart';
 
 @freezed
 sealed class PuzzleThemeData with _$PuzzleThemeData {
@@ -412,8 +410,7 @@ final IMap<String, PuzzleThemeKey> puzzleThemeNameMap = IMap(PuzzleThemeKey.valu
 
 typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 
-@Riverpod(keepAlive: true)
-IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
+final puzzleThemeCategoriesProvider = Provider<IList<PuzzleThemeCategory>>((Ref ref) {
   final l10n = ref.watch(localizationsProvider);
 
   return IList([
@@ -512,7 +509,7 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(Ref ref) {
       [PuzzleThemeKey.master, PuzzleThemeKey.masterVsMaster, PuzzleThemeKey.superGM],
     ),
   ]);
-}
+}, name: 'PuzzleThemeCategoriesProvider');
 
 class PuzzleThemeL10n {
   const PuzzleThemeL10n({required this.name, required this.description});

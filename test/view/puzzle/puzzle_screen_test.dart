@@ -68,10 +68,12 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: puzzle.puzzle.id,
         ),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       when(
@@ -98,10 +100,12 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: puzzle.puzzle.id,
         ),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       when(
@@ -121,10 +125,12 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix)),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       when(
@@ -165,15 +171,15 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: puzzle2.puzzle.id,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-          puzzleBatchStorageProvider.overrideWith((ref) {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
             return mockBatchStorage;
           }),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       Future<void> saveDBReq() => mockBatchStorage.save(
@@ -270,18 +276,18 @@ void main() {
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
             puzzleId: puzzle2.puzzle.id,
           ),
-          overrides: [
-            lichessClientProvider.overrideWith((ref) {
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
               return LichessClient(mockClient, ref);
             }),
-            puzzleBatchStorageProvider.overrideWith((ref) {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
             }),
-            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-            showRatingsPrefProvider.overrideWith((ref) {
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+            showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) {
               return showRatings;
             }),
-          ],
+          },
         );
 
         when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
@@ -368,15 +374,15 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: puzzle2.puzzle.id,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-          puzzleBatchStorageProvider.overrideWith((ref) {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
             return mockBatchStorage;
           }),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       when(
@@ -466,16 +472,20 @@ void main() {
               angle: const PuzzleTheme(PuzzleThemeKey.mix),
               puzzleId: puzzle2.puzzle.id,
             ),
-            overrides: [
-              lichessClientProvider.overrideWith((ref) {
+            overrides: {
+              lichessClientProvider: lichessClientProvider.overrideWith((ref) {
                 return LichessClient(mockClient, ref);
               }),
-              puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-              puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-              puzzlePreferencesProvider.overrideWith(
+              puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+                (ref) => mockBatchStorage,
+              ),
+              puzzleStorageProvider: puzzleStorageProvider.overrideWith(
+                (ref) => mockHistoryStorage,
+              ),
+              puzzlePreferencesProvider: puzzlePreferencesProvider.overrideWith(
                 () => MockPuzzlePreferences(isRatedPreference),
               ),
-            ],
+            },
             userSession: fakeSession,
           );
 
@@ -538,14 +548,18 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: puzzle2.puzzle.id,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-          puzzlePreferencesProvider.overrideWith(() => MockPuzzlePreferences(true)),
-        ],
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          puzzlePreferencesProvider: puzzlePreferencesProvider.overrideWith(
+            () => MockPuzzlePreferences(true),
+          ),
+        },
         userSession: fakeSession,
       );
 
@@ -639,13 +653,15 @@ void main() {
         puzzleId: puzzle2.puzzle.id,
         openCasual: true,
       ),
-      overrides: [
-        lichessClientProvider.overrideWith((ref) {
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(mockClient, ref);
         }),
-        puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-        puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-      ],
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+        puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+      },
       userSession: fakeSession,
     );
 
@@ -738,10 +754,12 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzleId: buggyPuzzle.puzzle.id,
         ),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-        ],
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
       );
 
       when(

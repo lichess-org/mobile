@@ -4,9 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'account_preferences.g.dart';
 
 typedef AccountPrefState = ({
   // game display
@@ -30,28 +27,22 @@ typedef AccountPrefState = ({
 });
 
 /// A provider that tells if the user wants to see ratings in the app.
-@Riverpod(keepAlive: true)
-Future<ShowRatings> showRatingsPref(Ref ref) async {
-  return ref.watch(
-    accountPreferencesProvider.selectAsync((state) => state?.showRatings ?? ShowRatings.yes),
-  );
-}
+final showRatingsPrefProvider = FutureProvider<ShowRatings>((Ref ref) async {
+  final prefs = await ref.watch(accountPreferencesProvider.future);
+  return prefs?.showRatings ?? defaultAccountPreferences.showRatings;
+});
 
-@Riverpod(keepAlive: true)
-Future<bool> clockSound(Ref ref) async {
-  return ref.watch(
-    accountPreferencesProvider.selectAsync((state) => state?.clockSound.value ?? true),
-  );
-}
+/// A provider that tells if the user wants clock sounds.
+final clockSoundProvider = FutureProvider<bool>((Ref ref) async {
+  final prefs = await ref.watch(accountPreferencesProvider.future);
+  return prefs?.clockSound.value ?? defaultAccountPreferences.clockSound.value;
+});
 
-@Riverpod(keepAlive: true)
-Future<PieceNotation> pieceNotation(Ref ref) async {
-  return ref.watch(
-    accountPreferencesProvider.selectAsync(
-      (state) => state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
-    ),
-  );
-}
+/// A provider that gives the user's preferred piece notation.
+final pieceNotationProvider = FutureProvider<PieceNotation>((Ref ref) async {
+  final prefs = await ref.watch(accountPreferencesProvider.future);
+  return prefs?.pieceNotation ?? defaultAccountPreferences.pieceNotation;
+});
 
 final defaultAccountPreferences = (
   zenMode: Zen.no,
@@ -70,12 +61,17 @@ final defaultAccountPreferences = (
   message: Message.always,
 );
 
+/// A provider that gives the account preferences for the current user.
+final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, AccountPrefState?>(
+  AccountPreferences.new,
+  name: 'AccountPreferencesProvider',
+);
+
 /// Get the account preferences for the current user.
 ///
 /// The result is cached for the lifetime of the app, until refreshed.
 /// If the server returns an error, default values are returned.
-@Riverpod(keepAlive: true)
-class AccountPreferences extends _$AccountPreferences {
+class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
   @override
   Future<AccountPrefState?> build() async {
     final session = ref.watch(authSessionProvider);

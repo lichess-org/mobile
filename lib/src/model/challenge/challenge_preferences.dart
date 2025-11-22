@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -6,13 +7,16 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_preferences.freezed.dart';
 part 'challenge_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class ChallengePreferences extends _$ChallengePreferences
+final challengePreferencesProvider = NotifierProvider<ChallengePreferences, ChallengePrefs>(
+  ChallengePreferences.new,
+  name: 'ChallengePreferencesProvider',
+);
+
+class ChallengePreferences extends Notifier<ChallengePrefs>
     with SessionPreferencesStorage<ChallengePrefs> {
   @override
   @protected

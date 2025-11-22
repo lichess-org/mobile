@@ -365,7 +365,7 @@ class _StudyMenu extends ConsumerWidget {
             ),
           ),
         ),
-        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (state.chatOptions != null && kidModeAsync.value == false)
           ContextMenuAction(
             label: context.l10n.chatRoom,
             onPressed: () {

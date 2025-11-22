@@ -17,10 +17,12 @@ final accountProvider = FutureProvider.autoDispose<User?>((Ref ref) {
 }, name: 'AccountProvider');
 
 /// A provider that fetches the current user's kid mode status.
-final kidModeProvider = FutureProvider.autoDispose<bool>((ref) {
-  return ref.watch(accountProvider.selectAsync((user) => user?.kid ?? false));
+final kidModeProvider = FutureProvider.autoDispose<bool>((ref) async {
+  final account = await ref.watch(accountProvider.future);
+  return account?.kid ?? false;
 }, name: 'KidModeProvider');
 
+/// A provider for the [AccountRepository].
 final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   final client = ref.read(lichessClientProvider);
   final aggregator = ref.read(aggregatorProvider);

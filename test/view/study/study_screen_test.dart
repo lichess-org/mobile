@@ -83,7 +83,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
         defaultPreferences: {
           PrefCategory.study.storageKey: jsonEncode(
             StudyPrefs.defaults.copyWith(inlineNotation: true).toJson(),
@@ -133,7 +135,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -204,7 +208,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
         defaultPreferences: {
           PrefCategory.study.storageKey: jsonEncode(
             StudyPrefs.defaults.copyWith(inlineNotation: true).toJson(),
@@ -266,7 +272,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -397,7 +405,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -506,7 +516,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -576,7 +588,9 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const StudyScreen(id: testId),
-      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
     );
     await tester.pumpWidget(app);
     // Wait for study to load
@@ -662,7 +676,9 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const StudyScreen(id: testId),
-      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
     );
     await tester.pumpWidget(app);
     // Wait for study to load

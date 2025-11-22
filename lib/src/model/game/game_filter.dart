@@ -1,18 +1,27 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_filter.freezed.dart';
-part 'game_filter.g.dart';
 
-@riverpod
-class GameFilter extends _$GameFilter {
+/// A provider for [GameFilter].
+final gameFilterProvider = NotifierProvider.autoDispose
+    .family<GameFilter, GameFilterState, GameFilterState?>(
+      GameFilter.new,
+      name: 'GameFilterProvider',
+    );
+
+class GameFilter extends Notifier<GameFilterState> {
+  GameFilter(this.filter);
+
+  final GameFilterState? filter;
+
   @override
-  GameFilterState build({GameFilterState? filter}) {
+  GameFilterState build() {
     return filter ?? const GameFilterState();
   }
 

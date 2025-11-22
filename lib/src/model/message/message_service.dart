@@ -9,16 +9,13 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'message_service.g.dart';
-
-@Riverpod(keepAlive: true)
-MessageService messageService(Ref ref) {
+/// A provider for [MessageService].
+final messageServiceProvider = Provider<MessageService>((Ref ref) {
   final service = MessageService(ref);
   ref.onDispose(service.dispose);
   return service;
-}
+}, name: 'MessageServiceProvider');
 
 class MessageService {
   MessageService(this.ref);

@@ -95,7 +95,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
         final isRealTimePlayingGame =
-            ref.watch(isRealTimePlayableGameProvider(createdGameId)).valueOrNull ?? false;
+            ref.watch(isRealTimePlayableGameProvider(createdGameId)).value ?? false;
 
         final socketUri = GameController.socketUri(createdGameId);
 
@@ -241,7 +241,7 @@ class _GameMenu extends ConsumerWidget {
         ),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
-          bookmarked: isBookmarkedAsync.valueOrNull ?? false,
+          bookmarked: isBookmarkedAsync.value ?? false,
           onToggleBookmark: () =>
               ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
         ),

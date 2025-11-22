@@ -2,32 +2,43 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'puzzle_session.freezed.dart';
 part 'puzzle_session.g.dart';
 
-@riverpod
-class PuzzleSession extends _$PuzzleSession {
+final puzzleSessionProvider =
+    NotifierProvider.family<PuzzleSession, PuzzleSessionData, PuzzleSessionParams>(
+      PuzzleSession.new,
+      name: 'PuzzleSessionProvider',
+    );
+
+typedef PuzzleSessionParams = ({UserId? userId, PuzzleAngle angle});
+
+class PuzzleSession extends Notifier<PuzzleSessionData> {
+  PuzzleSession(this.params);
+
+  final PuzzleSessionParams params;
+
   static const maxAge = Duration(hours: 1);
   static const maxSize = 150;
 
   @override
-  PuzzleSessionData build(UserId? userId, PuzzleAngle angle) {
+  PuzzleSessionData build() {
     final data = _stored;
     if (data != null &&
-        data.angle == angle &&
+        data.angle == params.angle &&
         data.lastUpdatedAt.isAfter(DateTime.now().subtract(maxAge))) {
       return data;
     }
-    return PuzzleSessionData.initial(angle: angle);
+    return PuzzleSessionData.initial(angle: params.angle);
   }
 
   Future<void> addAttempt(PuzzleId id, {required bool win}) async {
@@ -66,14 +77,14 @@ class PuzzleSession extends _$PuzzleSession {
   PuzzleSessionData? get _stored {
     final stored = _store.getString(_storageKey);
     if (stored == null) {
-      return PuzzleSessionData.initial(angle: angle);
+      return PuzzleSessionData.initial(angle: params.angle);
     }
     return PuzzleSessionData.fromJson(jsonDecode(stored) as Map<String, dynamic>);
   }
 
   SharedPreferencesWithCache get _store => LichessBinding.instance.sharedPreferences;
 
-  String get _storageKey => 'puzzle_session.${userId ?? '**anon**'}';
+  String get _storageKey => 'puzzle_session.${params.userId ?? '**anon**'}';
 }
 
 @Freezed(fromJson: true, toJson: true)
