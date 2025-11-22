@@ -372,7 +372,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
 
     final Widget filters = userId != null
         ? ref
-              .watch(userProvider(id: userId))
+              .watch(userProvider(userId))
               .when(
                 data: (user) => perfFilter(availablePerfs(user)),
                 loading: () => const Center(child: CircularProgressIndicator.adaptive()),

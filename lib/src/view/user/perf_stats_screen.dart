@@ -133,8 +133,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final perfStats = ref.watch(userPerfStatsProvider(id: user.id, perf: perf));
-    final ratingHistory = ref.watch(userRatingHistoryProvider(id: user.id));
+    final perfStats = ref.watch(userPerfStatsProvider((user.id, perf)));
+    final ratingHistory = ref.watch(userRatingHistoryProvider(user.id));
     final loggedInUser = ref.watch(authSessionProvider);
     const statGroupSpace = SizedBox(height: 16.0);
     const subStatSpace = SizedBox(height: 10);

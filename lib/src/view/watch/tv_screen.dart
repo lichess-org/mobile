@@ -99,11 +99,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     // If Stockfish is playing, user is null
                     final crosstable = game.white.user != null && game.black.user != null
                         ? ref.watch(
-                            crosstableProvider(
-                              game.white.user!.id,
-                              game.black.user!.id,
+                            crosstableProvider((
+                              userId1: game.white.user!.id,
+                              userId2: game.black.user!.id,
                               matchup: true,
-                            ),
+                            )),
                           )
                         : null;
 

@@ -29,7 +29,7 @@ class UserContextMenu extends ConsumerWidget {
 
     final AsyncValue<User> userAsync = user != null
         ? AsyncData(user!)
-        : ref.watch(userProvider(id: userId!));
+        : ref.watch(userProvider(userId!));
 
     switch (userAsync) {
       case AsyncData(:final value):

@@ -73,7 +73,7 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
   final session = ref.watch(authSessionProvider);
   final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
   return user != null
-      ? (await ref.watch(userProvider(id: user.id).future)).count?.all ?? 0
+      ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
       : session != null && online
       ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);

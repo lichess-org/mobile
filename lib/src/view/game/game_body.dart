@@ -111,11 +111,11 @@ class GameBody extends ConsumerWidget {
         // If playing against Stockfish, user is null
         final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
             ? ref.watch(
-                crosstableProvider(
-                  gameState.game.white.user!.id,
-                  gameState.game.black.user!.id,
+                crosstableProvider((
+                  userId1: gameState.game.white.user!.id,
+                  userId2: gameState.game.black.user!.id,
                   matchup: true,
-                ),
+                )),
               )
             : null;
         final crosstableData = crosstable?.value;
