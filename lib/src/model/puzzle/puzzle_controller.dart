@@ -315,13 +315,23 @@ class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin 
       state = state.copyWith(nextContext: next);
 
       ref
-          .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
+          .read(
+            puzzleSessionProvider((
+              userId: initialContext.userId,
+              angle: initialContext.angle,
+            )).notifier,
+          )
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
       final rounds = next?.rounds;
       if (rounds != null) {
         ref
-            .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
+            .read(
+              puzzleSessionProvider((
+                userId: initialContext.userId,
+                angle: initialContext.angle,
+              )).notifier,
+            )
             .setRatingDiffs(rounds);
       }
 

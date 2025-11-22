@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -25,15 +26,22 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_controller.freezed.dart';
-part 'study_controller.g.dart';
 
-@riverpod
-class StudyController extends _$StudyController
+final studyControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<StudyController, StudyState, StudyId>(
+      StudyController.new,
+      name: 'StudyControllerProvider',
+    );
+
+class StudyController extends AsyncNotifier<StudyState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  StudyController(this.id);
+
+  final StudyId id;
+
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
@@ -69,7 +77,7 @@ class StudyController extends _$StudyController
   StudyState get evaluationState => state.requireValue;
 
   @override
-  Future<StudyState> build(StudyId id) async {
+  Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _sendMoveToSocketTimer?.cancel();

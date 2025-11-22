@@ -51,11 +51,11 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> {
-  TvControllerProvider get _tvGameCtrl => tvControllerProvider(
-    widget.channel,
+  AsyncNotifierProvider<TvController, TvState> get _tvGameCtrl => tvControllerProvider((
+    channel: widget.channel,
     initialGame: widget.initialGame,
     userId: widget.user?.id,
-  );
+  ));
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');

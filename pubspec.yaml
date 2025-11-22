@@ -65,7 +65,6 @@ dependencies:
   pub_semver: ^2.1.4
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  riverpod_annotation: ^3.0.3
   share_plus: ^12.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
@@ -90,7 +89,6 @@ dev_dependencies:
   lint: ^2.0.1
   mocktail: ^1.0.0
   mocktail_image_network: ^1.2.0
-  riverpod_generator: ^3.0.3
   riverpod_lint: ^3.0.3
   stream_channel: ^2.1.2
   wakelock_plus_platform_interface: ^1.3.0

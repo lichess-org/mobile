@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -16,21 +17,32 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'storm_controller.freezed.dart';
-part 'storm_controller.g.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 3);
 
-@riverpod
-class StormController extends _$StormController {
+typedef StormControllerParams = (IList<LitePuzzle> puzzles, DateTime timestamp);
+
+final stormControllerProvider = NotifierProvider.autoDispose
+    .family<StormController, StormState, StormControllerParams>(
+      StormController.new,
+      name: 'StormControllerProvider',
+    );
+
+class StormController extends Notifier<StormState> {
+  StormController(this.params);
+
+  final StormControllerParams params;
+
   Timer? _firstMoveTimer;
 
+  IList<LitePuzzle> get puzzles => params.$1;
+
   @override
-  StormState build(IList<LitePuzzle> puzzles, DateTime timestamp) {
+  StormState build() {
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final clock = StormClock();
 

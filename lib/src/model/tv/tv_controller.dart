@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/foundation.dart' show VoidCallback;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -18,24 +19,36 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tv_controller.freezed.dart';
-part 'tv_controller.g.dart';
 
-@riverpod
-class TvController extends _$TvController {
+typedef TvControllerParams = ({
+  TvChannel? channel,
+  (GameId id, Side orientation)? initialGame,
+  UserId? userId,
+});
+
+final tvControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<TvController, TvState, TvControllerParams>(
+      TvController.new,
+      name: 'TvControllerProvider',
+    );
+
+class TvController extends AsyncNotifier<TvState> {
+  TvController(this.params);
+
+  final TvControllerParams params;
+
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   VoidCallback? _onReload;
 
   @override
-  Future<TvState> build(
-    TvChannel? channel, {
-    (GameId id, Side orientation)? initialGame,
-    UserId? userId,
-  }) {
-    assert(channel != null || userId != null, 'Either a channel or a userId must be provided');
+  Future<TvState> build() {
+    assert(
+      params.channel != null || params.userId != null,
+      'Either a channel or a userId must be provided',
+    );
 
     _onReload = ref.invalidateSelf;
 
@@ -44,7 +57,7 @@ class TvController extends _$TvController {
       _onReload = null;
     });
 
-    return _connectWebsocket(initialGame);
+    return _connectWebsocket(params.initialGame);
   }
 
   SoundService get _soundService => ref.read(soundServiceProvider);
@@ -65,18 +78,18 @@ class TvController extends _$TvController {
     if (game != null) {
       id = game.$1;
       orientation = game.$2;
-    } else if (channel != null) {
+    } else if (params.channel != null) {
       final channels = await ref.read(tvRepositoryProvider).channels();
-      final channelGame = channels[channel!]!;
+      final channelGame = channels[params.channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
-    } else if (userId != null) {
-      final game = await ref.read(userRepositoryProvider).getCurrentGame(userId!);
+    } else if (params.userId != null) {
+      final game = await ref.read(userRepositoryProvider).getCurrentGame(params.userId!);
       id = game.id;
-      orientation = game.playerSideOf(userId!) ?? Side.white;
+      orientation = game.playerSideOf(params.userId!) ?? Side.white;
     } else {
-      id = state.value?.game.id ?? initialGame!.$1;
-      orientation = state.value?.orientation ?? initialGame!.$2;
+      id = state.value?.game.id ?? params.initialGame!.$1;
+      orientation = state.value?.orientation ?? params.initialGame!.$2;
     }
 
     final socketClient = ref
@@ -84,7 +97,7 @@ class TvController extends _$TvController {
         .open(
           Uri(
             path: '/watch/$id/${orientation.name}/v6',
-            queryParameters: userId != null ? {'userTv': userId.toString()} : null,
+            queryParameters: params.userId != null ? {'userTv': params.userId.toString()} : null,
           ),
           forceReconnect: true,
           onEventGapFailure: () {
@@ -245,7 +258,7 @@ class TvController extends _$TvController {
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
         final eventChannel = pick(json, 'channel').asTvChannelOrNull();
-        if (eventChannel != null && eventChannel == channel) {
+        if (eventChannel != null && eventChannel == params.channel) {
           final data = TvSelectEvent.fromJson(json);
           _moveToNextGame((data.id, data.orientation));
         }

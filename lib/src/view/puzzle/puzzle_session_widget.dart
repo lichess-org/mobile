@@ -51,7 +51,10 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(
-      puzzleSessionProvider(widget.initialPuzzleContext.userId, widget.initialPuzzleContext.angle),
+      puzzleSessionProvider((
+        userId: widget.initialPuzzleContext.userId,
+        angle: widget.initialPuzzleContext.angle,
+      )),
     );
     final puzzleController = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(puzzleController);
