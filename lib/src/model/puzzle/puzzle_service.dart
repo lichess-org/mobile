@@ -15,23 +15,21 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_service.freezed.dart';
-part 'puzzle_service.g.dart';
 
 /// Size of puzzle local cache
 const kPuzzleLocalQueueLength = 50;
 
-@Riverpod(keepAlive: true)
-Future<PuzzleService> puzzleService(Ref ref) {
+/// A provider for [PuzzleService].
+final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
   return ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
-}
+}, name: 'PuzzleServiceProvider');
 
-@Riverpod(keepAlive: true)
-PuzzleServiceFactory puzzleServiceFactory(Ref ref) {
+/// A provider for [PuzzleServiceFactory].
+final puzzleServiceFactoryProvider = Provider<PuzzleServiceFactory>((Ref ref) {
   return PuzzleServiceFactory(ref);
-}
+}, name: 'PuzzleServiceFactoryProvider');
 
 class PuzzleServiceFactory {
   PuzzleServiceFactory(this._ref);
