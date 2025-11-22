@@ -10,40 +10,41 @@ typedef BroadcastRoundGameParam = ({BroadcastRoundId roundId, BroadcastGameId ga
 
 /// A provider that exposes the [BroadcastGame] for the given [BroadcastRoundGameParam].
 final broadcastRoundGameProvider = FutureProvider.autoDispose
-    .family<BroadcastGame, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
-      return ref.watch(
-        broadcastRoundControllerProvider(
-          params.roundId,
-        ).selectAsync((round) => round.games[params.gameId]!),
-      );
+    .family<BroadcastGame, BroadcastRoundGameParam>((
+      Ref ref,
+      BroadcastRoundGameParam params,
+    ) async {
+      final round = await ref.watch(broadcastRoundControllerProvider(params.roundId).future);
+      return round.games[params.gameId]!;
     }, name: 'BroadcastRoundGameProvider');
 
 /// A provider that exposes the current [ClientEval] for the given [BroadcastRoundGameParam].
 final broadcastGameEvalProvider = FutureProvider.autoDispose
-    .family<ClientEval?, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
-      return ref.watch(
+    .family<ClientEval?, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) async {
+      final state = await ref.watch(
         broadcastAnalysisControllerProvider((
           roundId: params.roundId,
           gameId: params.gameId,
-        )).selectAsync((state) => state.currentNode.eval),
+        )).future,
       );
+      return state.currentNode.eval;
     }, name: 'BroadcastGameEvalProvider');
 
 /// A provider that indicates whether engine analysis is available for the given
 final isBroadcastEngineAvailableProvider = FutureProvider.autoDispose
-    .family<bool, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) {
+    .family<bool, BroadcastRoundGameParam>((Ref ref, BroadcastRoundGameParam params) async {
       final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-      return ref.watch(
+      final state = await ref.watch(
         broadcastAnalysisControllerProvider((
           roundId: params.roundId,
           gameId: params.gameId,
-        )).selectAsync((round) => round.isEngineAvailable(enginePrefs)),
+        )).future,
       );
+      return state.isEngineAvailable(enginePrefs);
     }, name: 'IsBroadcastEngineAvailableProvider');
 
 final broadcastGameScreenTitleProvider = FutureProvider.autoDispose
-    .family<String, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
-      return ref.watch(
-        broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
-      );
+    .family<String, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
+      final round = await ref.watch(broadcastRoundControllerProvider(roundId).future);
+      return round.round.name;
     }, name: 'BroadcastGameScreenTitleProvider');
