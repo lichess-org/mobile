@@ -986,7 +986,7 @@ void _showPlayerDetails(
         builder: (context, scrollController) {
           return Consumer(
             builder: (context, ref, child) {
-              final playerAsync = ref.watch(tournamentPlayerProvider(tournamentId, userId));
+              final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
 
               return switch (playerAsync) {
                 AsyncData(value: final player) => _TournamentPlayerDetails(
