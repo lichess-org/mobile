@@ -13,8 +13,8 @@ final authControllerProvider = AsyncNotifierProvider.autoDispose<AuthController,
 
 class AuthController extends AsyncNotifier<void> {
   @override
-  AsyncValue<void> build() {
-    return const AsyncValue.data(null);
+  Future<void> build() {
+    return Future.value();
   }
 
   Future<void> signIn() async {

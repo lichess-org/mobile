@@ -95,9 +95,7 @@ void main() {
 
       verifyInOrder([
         // init state
-        () => listener(null, nullData),
-        // state is loading, waiting for signin logic to complete
-        () => listener(nullData, loading),
+        () => listener(null, loading),
         // signin logic completed
         () => listener(loading, nullData),
       ]);
@@ -149,9 +147,7 @@ void main() {
 
       verifyInOrder([
         // init state
-        () => listener(null, nullData),
-        // state is loading, waiting for signin logic to complete
-        () => listener(nullData, loading),
+        () => listener(null, loading),
         // signOut logic completed
         () => listener(loading, nullData),
       ]);
