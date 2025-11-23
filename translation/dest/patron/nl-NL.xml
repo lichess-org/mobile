@@ -14,7 +14,7 @@
   <string name="newPatrons">Nieuwe Patronen</string>
   <string name="freeChess">Gratis schaken voor iedereen, voor altijd!</string>
   <string name="noAdsNoSubs">Geen advertenties, geen abonnementen; maar open-source en passie.</string>
-  <string name="thankYou">Hartelijk dank voor je donatie!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Hartelijk dank voor je donatie!</string>
   <string name="youHaveLifetime">Je hebt een levenslang Patroon-account. Dat is geweldig!</string>
   <string name="patronUntil">Je hebt een Patroon-account tot %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Indien niet vernieuwd, wordt je account omgezet naar een standaardaccount.</string>

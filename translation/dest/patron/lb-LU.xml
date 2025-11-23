@@ -14,7 +14,7 @@
   <string name="newPatrons">Nei Ënnerstëtzer</string>
   <string name="freeChess">Gratis Schach fir jiddereen, fir ëmmer!</string>
   <string name="noAdsNoSubs">Ken Reklammen, keng Abonnementer; mee Open-Source an Passioun.</string>
-  <string name="thankYou">Merci fir deng Spend!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Merci fir deng Spend!</string>
   <string name="youHaveLifetime">Du bass e liewenslaange Lichess-Ënnerstëtzer. Dat ass super!</string>
   <string name="patronUntil">Du hues en Ënnerstëtzer-Konto bis %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Falls net erneiert, gëtt däi Benotzerkonto erëm zu engem reguläre Konto.</string>

@@ -14,7 +14,7 @@
   <string name="newPatrons">Novos Patróns</string>
   <string name="freeChess">Xadrez gratis para todos, para sempre!</string>
   <string name="noAdsNoSubs">Sen anuncios nin subscricións; só código aberto e paixón.</string>
-  <string name="thankYou">Grazas pola túa doazón!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Grazas pola túa doazón!</string>
   <string name="youHaveLifetime">Tes unha conta de Patrón Vitalicia. Iso si que presta!</string>
   <string name="patronUntil">Tes unha conta de Patrón ata o %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Se non se renova, a túa conta reverterase a unha conta normal.</string>
