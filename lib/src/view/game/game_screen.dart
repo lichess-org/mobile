@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -64,6 +65,14 @@ class GameScreen extends ConsumerStatefulWidget {
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
+final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
+  Ref ref,
+  GameFullId gameId,
+) async {
+  final state = await ref.watch(gameControllerProvider(gameId).future);
+  return state.game.meta.speed != Speed.correspondence && state.game.playable;
+}, name: 'IsRealTimePlayableGameProvider');
+
 class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
@@ -95,7 +104,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
         final isRealTimePlayingGame =
-            ref.watch(isRealTimePlayableGameProvider(createdGameId)).value ?? false;
+            ref.watch(_isRealTimePlayableGameProvider(createdGameId)).value ?? false;
 
         final socketUri = GameController.socketUri(createdGameId);
 
@@ -331,6 +340,14 @@ class _TournamentGameTitle extends ConsumerWidget {
   }
 }
 
+final _gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>((
+  Ref ref,
+  GameFullId gameId,
+) async {
+  // Using ref.read as an optimization since we know that game meta never changes during the game.
+  return (await ref.read(gameControllerProvider(gameId).future)).game.meta;
+}, name: 'GameMetaProvider');
+
 class _StandaloneGameTitle extends ConsumerWidget {
   const _StandaloneGameTitle({required this.id, this.lastMoveAt});
 
@@ -342,7 +359,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final metaAsync = ref.watch(gameMetaProvider(id));
+    final metaAsync = ref.watch(_gameMetaProvider(id));
     return metaAsync.when(
       data: (meta) {
         if (meta.tournament?.isOngoing == true) {

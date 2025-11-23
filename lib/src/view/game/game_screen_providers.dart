@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
@@ -153,17 +152,6 @@ final gameShareDataProvider = FutureProvider.autoDispose
       return (finished: state.game.finished, pov: state.game.youAre);
     }, name: 'GameShareDataProvider');
 
-final isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
-  Ref ref,
-  GameFullId gameId,
-) {
-  return ref.watch(
-    gameControllerProvider(
-      gameId,
-    ).selectAsync((state) => state.game.meta.speed != Speed.correspondence && state.game.playable),
-  );
-}, name: 'IsRealTimePlayableGameProvider');
-
 /// User game preferences, defined server-side.
 final userGamePrefsProvider = FutureProvider.autoDispose
     .family<
@@ -178,13 +166,3 @@ final userGamePrefsProvider = FutureProvider.autoDispose
         canAutoQueen: state.canAutoQueen,
       );
     }, name: 'UserGamePrefsProvider');
-
-/// Returns the [GameMeta].
-///
-/// This is data that won't change during the game.
-final gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>((
-  Ref ref,
-  GameFullId gameId,
-) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
-}, name: 'GameMetaProvider');
