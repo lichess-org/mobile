@@ -39,11 +39,11 @@ class StormController extends Notifier<StormState> {
 
   Timer? _firstMoveTimer;
 
-  IList<LitePuzzle> get puzzles => params.$1;
+  IList<LitePuzzle> get _puzzles => params.$1;
 
   @override
   StormState build() {
-    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
+    final pov = Chess.fromSetup(Setup.parseFen(_puzzles.first.fen));
     final clock = StormClock();
 
     ref.onDispose(() {
@@ -55,7 +55,7 @@ class StormController extends Notifier<StormState> {
       firstMovePlayed: false,
       mode: StormMode.initial,
       puzzleIndex: 0,
-      puzzle: puzzles.first,
+      puzzle: _puzzles.first,
       moves: 0,
       errors: 0,
       history: const IList.empty(),
@@ -193,8 +193,8 @@ class StormController extends Notifier<StormState> {
 
     state = state.copyWith(
       puzzleIndex: newPuzzleIndex,
-      puzzle: puzzles[newPuzzleIndex],
-      position: Chess.fromSetup(Setup.parseFen(puzzles[newPuzzleIndex].fen)),
+      puzzle: _puzzles[newPuzzleIndex],
+      position: Chess.fromSetup(Setup.parseFen(_puzzles[newPuzzleIndex].fen)),
       moveIndex: -1,
       numSolved: result ? state.numSolved + 1 : state.numSolved,
       lastSolvedTime: DateTime.now(),
@@ -281,7 +281,7 @@ class StormController extends Notifier<StormState> {
   }
 
   bool _isNextPuzzleAvailable() {
-    return state.puzzleIndex + 1 < puzzles.length;
+    return state.puzzleIndex + 1 < _puzzles.length;
   }
 }
 
