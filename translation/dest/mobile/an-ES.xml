@@ -12,7 +12,6 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmisions en directo</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Has d\'estar connectau/ada pa veyer esta pachina.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sin resultaus</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">No yes seguindo a garra usuario.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Chugar sobre lo escaquero</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Chugadors con \"%s\"</string>
