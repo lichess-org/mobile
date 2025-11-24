@@ -477,7 +477,7 @@ class _TeamStanding extends ConsumerWidget {
             ListTile(
               title: Text(
                 context.l10n.arenaViewAllXTeams(totalTeams),
-                textAlign: TextAlign.center,
+                textAlign: .center,
                 style: TextStyle(color: context.lichessColors.primary),
               ),
               onTap: () {
@@ -1107,7 +1107,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                       ? () async {
                           final teamBattle = widget.state.tournament.meta.teamBattle;
 
-                          // If joining and it's a team battle with multiple teams
+                          // If user is joining a team battle tournament
                           if (!widget.state.joined &&
                               teamBattle != null &&
                               teamBattle.joinWith != null) {
