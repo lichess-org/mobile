@@ -1420,6 +1420,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleMates => 'Մատեր';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Նպատակներ';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Վուկովիչի մատ';

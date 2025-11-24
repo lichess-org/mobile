@@ -1442,6 +1442,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Obiective';
 
   @override
@@ -1749,6 +1752,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final cu nebuni';
 
   @override
@@ -1882,6 +1897,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic';
@@ -4065,7 +4086,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get receiveForumNotifications => 'Primește notificări atunci când ești menționat în forum';
 
   @override
-  String get shareYourInsightsData => 'Partajează statisticile tale în jocuri';
+  String get shareYourInsightsData => 'Distribuie statisticile tale în jocuri';
 
   @override
   String get withNobody => 'Cu nimeni';
@@ -4677,7 +4698,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param este disponibil pentru formatare.';
   }
 
   @override
@@ -5663,7 +5684,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAllSyncMembersRemainOnTheSamePosition => 'Toți membrii sincronizați rămân la aceeași poziție';
 
   @override
-  String get studyShareChanges => 'Împărtășește modificările cu spectatorii și salvează-le pe server';
+  String get studyShareChanges => 'Împarte modificările cu spectatorii și salvează-le pe server';
 
   @override
   String get studyPlaying => 'În desfășurare';
@@ -5678,7 +5699,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyNext => 'Următoarea';
 
   @override
-  String get studyShareAndExport => 'Împărtășește și exportă';
+  String get studyShareAndExport => 'Distribuie și exportă';
 
   @override
   String get studyCloneStudy => 'Clonează';

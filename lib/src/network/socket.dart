@@ -17,11 +17,8 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-part 'socket.g.dart';
 
 const kDefaultSocketRoute = '/socket/v5';
 
@@ -624,8 +621,8 @@ class SocketPool {
   }
 }
 
-@Riverpod(keepAlive: true)
-SocketPool socketPool(Ref ref) {
+/// The global socket pool provider.
+final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
@@ -654,17 +651,26 @@ SocketPool socketPool(Ref ref) {
   });
 
   return pool;
-}
+}, name: 'SocketPoolProvider');
 
 typedef SocketPingState = ({Duration averageLag, int rating});
+
+/// A provider that exposes the average lag and ping rating for a given socket route.
+final socketPingProvider = NotifierProvider.autoDispose
+    .family<SocketPingNotifier, SocketPingState, Uri?>(
+      SocketPingNotifier.new,
+      name: 'SocketPingProvider',
+    );
 
 /// Average lag and ping rating computed from WebSocket ping/pong protocol.
 ///
 /// If [route] is provided, it will return the average lag for that route only, and if any other route
 /// is active, it will return [Duration.zero], meaning the socket is not connected.
 /// If no route is provided, it will return the average lag for the current active route.
-@riverpod
-class SocketPing extends _$SocketPing {
+class SocketPingNotifier extends Notifier<SocketPingState> {
+  SocketPingNotifier(this.route);
+  final Uri? route;
+
   @override
   SocketPingState build({Uri? route}) {
     final pool = ref.watch(socketPoolProvider);
@@ -708,10 +714,10 @@ class SocketPing extends _$SocketPing {
   }
 }
 
-@Riverpod(keepAlive: true)
-WebSocketChannelFactory webSocketChannelFactory(Ref ref) {
+/// A provider for the [WebSocketChannelFactory].
+final webSocketChannelFactoryProvider = Provider<WebSocketChannelFactory>((Ref ref) {
   return const WebSocketChannelFactory();
-}
+});
 
 /// A factory to create a [WebSocketChannel].
 ///

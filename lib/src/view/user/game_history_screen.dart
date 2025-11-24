@@ -62,7 +62,7 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
+    final filtersInUse = ref.watch(gameFilterProvider(gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
     final title = user != null && gameFilter.opponent != null
         ? AppBarTitleText(context.l10n.resVsX(user!.name, gameFilter.opponent!.username))
@@ -90,13 +90,11 @@ class GameHistoryScreen extends ConsumerWidget {
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
-            builder: (_) => _FilterGames(
-              filter: ref.read(gameFilterProvider(filter: gameFilter)),
-              user: user,
-            ),
+            builder: (_) =>
+                _FilterGames(filter: ref.read(gameFilterProvider(gameFilter)), user: user),
           ).then((value) {
             if (value != null) {
-              ref.read(gameFilterProvider(filter: gameFilter).notifier).setFilter(value);
+              ref.read(gameFilterProvider(gameFilter).notifier).setFilter(value);
             }
           }),
     );
@@ -164,11 +162,10 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(
-        userGameHistoryProvider(
-          widget.user?.id,
-          isOnline: widget.isOnline,
-          filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
-        ),
+        userGameHistoryProvider((
+          userId: widget.user?.id,
+          filter: ref.read(gameFilterProvider(widget.gameFilter)),
+        )),
       );
 
       if (!state.hasValue) {
@@ -181,11 +178,10 @@ class _BodyState extends ConsumerState<_Body> {
       if (hasMore && !isLoading) {
         ref
             .read(
-              userGameHistoryProvider(
-                widget.user?.id,
-                isOnline: widget.isOnline,
-                filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
-              ).notifier,
+              userGameHistoryProvider((
+                userId: widget.user?.id,
+                filter: ref.read(gameFilterProvider(widget.gameFilter)),
+              )).notifier,
             )
             .getNext();
       }
@@ -194,12 +190,11 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
-    final gameListProvider = userGameHistoryProvider(
-      widget.user?.id,
-      isOnline: widget.isOnline,
+    final gameFilterState = ref.watch(gameFilterProvider(widget.gameFilter));
+    final gameListProvider = userGameHistoryProvider((
+      userId: widget.user?.id,
       filter: gameFilterState,
-    );
+    ));
     final gameListState = ref.watch(gameListProvider);
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
@@ -375,7 +370,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
 
     final Widget filters = userId != null
         ? ref
-              .watch(userProvider(id: userId))
+              .watch(userProvider(userId))
               .when(
                 data: (user) => perfFilter(availablePerfs(user)),
                 loading: () => const Center(child: CircularProgressIndicator.adaptive()),

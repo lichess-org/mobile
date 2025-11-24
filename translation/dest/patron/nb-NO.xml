@@ -14,7 +14,7 @@
   <string name="newPatrons">Nye patroner</string>
   <string name="freeChess">Gratis sjakk for alle, for alltid!</string>
   <string name="noAdsNoSubs">Ingen annonser, ingen abonnementer; men åpen kildekode og glødende engasjement.</string>
-  <string name="thankYou">Takk for bidraget ditt!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Takk for bidraget ditt!</string>
   <string name="youHaveLifetime">Du har patronkonto på livstid. Det er rett og slett storartet!</string>
   <string name="patronUntil">Du har patronkonto fram til %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Uten fornyelse går kontoen din tilbake til en vanlig konto.</string>

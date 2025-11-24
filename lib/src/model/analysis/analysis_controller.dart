@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
@@ -34,10 +35,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';
-part 'analysis_controller.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
@@ -104,10 +103,20 @@ enum AnalysisGameResult {
   };
 }
 
-@riverpod
-class AnalysisController extends _$AnalysisController
+/// A provider for [AnalysisController].
+final analysisControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<AnalysisController, AnalysisState, AnalysisOptions>(
+      AnalysisController.new,
+      name: 'AnalysisControllerProvider',
+    );
+
+class AnalysisController extends AsyncNotifier<AnalysisState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  AnalysisController(this.options);
+
+  final AnalysisOptions options;
+
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -143,7 +152,7 @@ class AnalysisController extends _$AnalysisController
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<AnalysisState> build(AnalysisOptions options) async {
+  Future<AnalysisState> build() async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
@@ -173,7 +182,7 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.read(archivedGameProvider(gameId).future);
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);

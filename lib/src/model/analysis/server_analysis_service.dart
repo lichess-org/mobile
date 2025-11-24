@@ -15,16 +15,13 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'server_analysis_service.g.dart';
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
-@Riverpod(keepAlive: true)
-ServerAnalysisService serverAnalysisService(Ref ref) {
+/// A provider for [ServerAnalysisService].
+final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) {
   return ServerAnalysisService(ref);
-}
+}, name: 'ServerAnalysisServiceProvider');
 
 class ServerAnalysisService {
   ServerAnalysisService(this.ref);
@@ -177,8 +174,13 @@ class ServerAnalysisService {
   }
 }
 
-@riverpod
-class CurrentAnalysis extends _$CurrentAnalysis {
+/// A provider that exposes the current game being analyzed by the server.
+final currentAnalysisProvider = NotifierProvider.autoDispose<CurrentAnalysis, GameId?>(
+  CurrentAnalysis.new,
+  name: 'CurrentAnalysisProvider',
+);
+
+class CurrentAnalysis extends Notifier<GameId?> {
   @override
   GameId? build() {
     final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;

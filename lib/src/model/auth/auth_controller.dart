@@ -1,17 +1,20 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_controller.g.dart';
+/// A provider for [AuthController].
+final authControllerProvider = AsyncNotifierProvider.autoDispose<AuthController, void>(
+  AuthController.new,
+  name: 'AuthControllerProvider',
+);
 
-@riverpod
-class AuthController extends _$AuthController {
+class AuthController extends AsyncNotifier<void> {
   @override
-  AsyncValue<void> build() {
-    return const AsyncValue.data(null);
+  Future<void> build() {
+    return Future.value();
   }
 
   Future<void> signIn() async {

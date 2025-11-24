@@ -121,12 +121,12 @@ Future<Widget> makeTestApp(
   return await makeTestProviderScopeApp(
     tester,
     home: const RetroScreen(options: (id: testId, initialSide: Side.white)),
-    overrides: [
-      lichessClientProvider.overrideWith((ref) {
+    overrides: {
+      lichessClientProvider: lichessClientProvider.overrideWith((ref) {
         return LichessClient(mockClient, ref);
       }),
-      defaultClientProvider.overrideWithValue(mockClient),
-    ],
+      defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient),
+    },
     defaultPreferences: {},
   );
 }

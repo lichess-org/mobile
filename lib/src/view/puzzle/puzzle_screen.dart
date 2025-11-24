@@ -645,7 +645,7 @@ class _PuzzleStatus extends ConsumerWidget {
               ),
             ),
           ),
-        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext, ctrlProvider: ctrlProvider),
+        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext),
       ],
     );
   }
@@ -847,9 +847,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           makeLabel: (context) =>
               Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
-            final game = await ref.read(
-              archivedGameProvider(id: puzzleState.puzzle.game.id).future,
-            );
+            final game = await ref.read(archivedGameProvider(puzzleState.puzzle.game.id).future);
             if (context.mounted) {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(
@@ -911,7 +909,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [

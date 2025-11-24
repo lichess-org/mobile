@@ -31,7 +31,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Checkout mobile code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         run: flutter pub get

@@ -53,11 +53,11 @@ void main() {
       tester,
       home: const PuzzleHistoryScreen(),
       userSession: fakeSession,
-      overrides: [
-        lichessClientProvider.overrideWith((ref) {
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(4), ref);
         }),
-      ],
+      },
     );
 
     await tester.pumpWidget(app);
@@ -79,11 +79,11 @@ void main() {
       tester,
       home: const PuzzleHistoryScreen(),
       userSession: fakeSession,
-      overrides: [
-        lichessClientProvider.overrideWith((ref) {
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(80), ref);
         }),
-      ],
+      },
     );
 
     await tester.pumpWidget(app);

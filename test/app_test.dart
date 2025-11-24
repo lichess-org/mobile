@@ -58,9 +58,11 @@ void main() {
       tester,
       child: const Application(),
       userSession: fakeSession,
-      overrides: [
-        httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-      ],
+      overrides: {
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+          (ref) => FakeHttpClientFactory(() => mockClient),
+        ),
+      },
     );
 
     await tester.pumpWidget(app);

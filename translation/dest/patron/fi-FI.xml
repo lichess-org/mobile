@@ -14,7 +14,7 @@
   <string name="newPatrons">Uusia tukijoita</string>
   <string name="freeChess">Ilmaista shakkia kaikille, ikuisesti!</string>
   <string name="noAdsNoSubs">Ei mainoksia, ei maksullisia tilauksia; vain avointa lähdekoodia ja intohimoa.</string>
-  <string name="thankYou">Kiitos lahjoituksestasi!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Kiitos lahjoituksestasi!</string>
   <string name="youHaveLifetime">Sinulla on elinikäinen tukijatunnus. Se on aivan mahtavaa!</string>
   <string name="patronUntil">Sinulla on tukijatunnus %s asti.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Jos et uusi sitä, tunnuksesi muuttuu tavalliseksi käyttäjätunnukseksi.</string>

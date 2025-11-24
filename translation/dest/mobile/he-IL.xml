@@ -13,9 +13,8 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">שדרנים בשידור חי</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">יש להתחבר כדי לצפות בדף זה.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">אין תוצאות</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">אינכם עוקבים אחר אף אחד.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">בסדר</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">שח-חי (על גבי לוח!)</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">שח-חי (על גבי לוח!)</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">שחקנים עם ״%s״</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">שמאל</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ימין</string>

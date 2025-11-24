@@ -51,11 +51,11 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> {
-  TvControllerProvider get _tvGameCtrl => tvControllerProvider(
-    widget.channel,
+  AsyncNotifierProvider<TvController, TvState> get _tvGameCtrl => tvControllerProvider((
+    channel: widget.channel,
     initialGame: widget.initialGame,
     userId: widget.user?.id,
-  );
+  ));
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
@@ -99,15 +99,15 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     // If Stockfish is playing, user is null
                     final crosstable = game.white.user != null && game.black.user != null
                         ? ref.watch(
-                            crosstableProvider(
-                              game.white.user!.id,
-                              game.black.user!.id,
+                            crosstableProvider((
+                              userId1: game.white.user!.id,
+                              userId2: game.black.user!.id,
                               matchup: true,
-                            ),
+                            )),
                           )
                         : null;
 
-                    final crosstableData = crosstable?.valueOrNull;
+                    final crosstableData = crosstable?.value;
                     final matchupData = crosstableData?.matchup;
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),

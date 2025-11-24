@@ -73,7 +73,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Imajte na umu da trenutno nisu dostupne sve funkcije iz stare aplikacije ili web stranice, ali stalno dodajemo nove funkcije.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ne pratite nijednog korisnika.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'U redu';
@@ -1442,6 +1442,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleMates => 'Matovi';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Ciljevi';
 
   @override
@@ -1749,6 +1752,18 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matirajte kralja na njegovom početnom redu kad je zarobljen od vlastitih figura.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lovačka završnica';
 
   @override
@@ -1882,6 +1897,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Top se nalazi pored neprijateljskog kralja i podržava ga kraljica koja također blokira kraljeva polja za bijeg. Top i kraljica hvataju neprijateljskog kralja u \"ubistvenoj kutiji\" dimenzija 3 od 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovićev mat';

@@ -6,6 +6,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -33,13 +34,21 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
-part 'game_controller.g.dart';
 
-@riverpod
-class GameController extends _$GameController {
+/// A provider for [GameController].
+final gameControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<GameController, GameState, GameFullId>(
+      GameController.new,
+      name: 'GameControllerProvider',
+    );
+
+class GameController extends AsyncNotifier<GameState> {
+  GameController(this.gameFullId);
+
+  final GameFullId gameFullId;
+
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -67,7 +76,7 @@ class GameController extends _$GameController {
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<GameState> build(GameFullId gameFullId) {
+  Future<GameState> build() {
     _socketClient = _openSocket();
 
     _onFullReload = () {
@@ -374,7 +383,7 @@ class GameController extends _$GameController {
 
   /// Play a sound when the clock is about to run out
   Future<void> onClockEmergency(Side activeSide) async {
-    if (activeSide != state.valueOrNull?.game.youAre) return;
+    if (activeSide != state.value?.game.youAre) return;
     final shouldPlay = await ref.read(clockSoundProvider.future);
     if (shouldPlay) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
@@ -394,7 +403,7 @@ class GameController extends _$GameController {
   }
 
   void berserk() {
-    if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
+    if (state.value?.canBerserk == true && state.value?.hasBerserked == false) {
       _socketClient.send('berserk', null);
     }
   }
@@ -702,8 +711,8 @@ class GameController extends _$GameController {
             playedSide == curState.game.youAre?.opposite &&
             curState.premove != null) {
           scheduleMicrotask(() {
-            final postMovePremove = state.valueOrNull?.premove;
-            final postMovePosition = state.valueOrNull?.game.lastPosition;
+            final postMovePremove = state.value?.premove;
+            final postMovePosition = state.value?.game.lastPosition;
             if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
               userMove(postMovePremove, isPremove: true);
             }

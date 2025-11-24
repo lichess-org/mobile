@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -9,15 +10,22 @@ import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tournament_controller.freezed.dart';
-part 'tournament_controller.g.dart';
 
 final _logger = Logger('TournamentController');
 
-@riverpod
-class TournamentController extends _$TournamentController {
+final tournamentControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<TournamentController, TournamentState, TournamentId>(
+      TournamentController.new,
+      name: 'TournamentControllerProvider',
+    );
+
+class TournamentController extends AsyncNotifier<TournamentState> {
+  TournamentController(this.id);
+
+  final TournamentId id;
+
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   SocketClient? _socketClient;
@@ -34,7 +42,7 @@ class TournamentController extends _$TournamentController {
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   @override
-  Future<TournamentState> build(TournamentId id) async {
+  Future<TournamentState> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _pauseDelayTimer?.cancel();
@@ -105,7 +113,7 @@ class TournamentController extends _$TournamentController {
   }
 
   void jumpToMyPage() {
-    if (state.valueOrNull?.tournament.me != null) {
+    if (state.value?.tournament.me != null) {
       _loadPage(_pageOf(state.requireValue.tournament.me!.rank));
     }
   }
@@ -200,7 +208,7 @@ class TournamentController extends _$TournamentController {
   }
 
   void joinOrPause({String? teamId}) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) {
       return;
     }

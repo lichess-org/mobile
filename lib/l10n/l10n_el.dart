@@ -921,7 +921,7 @@ class AppLocalizationsEl extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count θεατές',
-      one: '$count θεατής',
+      one: '$count θεατής ',
     );
     return '$_temp0';
   }
@@ -1420,6 +1420,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleMates => 'Ματ';
 
   @override
+  String get puzzleMateThemes => 'Θέματα ματ';
+
+  @override
   String get puzzleGoals => 'Στόχοι';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Κάντε ματ στον βασιλιά στην τελευταία γραμμή όταν είναι παγιδευμένος εκεί από τα κομμάτια του.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Ματ-βαλλίστρα';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Ένας αξιωματικός κάνει ματ στον αντίπαλο βασιλιά, ενώ η βασίλισσα εμποδίζει τη διαφυγή του στα γειτονικά τετράγωνα';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Δύο πύργοι συνεργάζονται προκειμένου να κάνουν ματ στον αντίπαλο βασιλιά παγιδεύοντάς τον σε μία περιοχή 2 επί 2 τετραγώνων της σκακιέρας.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Φινάλε αξιωματικών';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ένας πύργος βρίσκεται δίπλα από τον αντίπαλο βασιλιά και υποστηρίζεται από τη βασίλισσα η οποία εμποδίζει τα τετράγωνα διαφυγής του βασιλιά. Ο πύργος και η βασίλισσα εγκλωβίζουν τον αντίπαλο βασιλιά σε ένα 3 επί 3 «κουτί εξόντωσης».';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Τριγωνικό ματ';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Η βασίλισσα και ο πύργος βρίσκονται ένα τετράγωνο μακριά από στον αντίπαλο βασιλιά και είναι στην ίδια γραμμή ή στην ίδια στήλη, ενώ χωρίζονται μεταξύ τους από ένα τετράγωνο, σχηματίζοντας κατά τον τρόπο αυτό ένα τρίγωνο.';
 
   @override
   String get puzzleThemeVukovicMate => 'Ματ του Vukovic';
@@ -2199,7 +2220,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get raceFinished => 'Τέλος αγώνα';
 
   @override
-  String get variantEnding => 'Εκδοχή ολοκληρώθηκε';
+  String get variantEnding => 'Ολοκλήρωση παραλλαγής';
 
   @override
   String get newOpponent => 'Νέος αντίπαλος';

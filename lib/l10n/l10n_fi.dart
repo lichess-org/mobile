@@ -1420,6 +1420,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleMates => 'Matit';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tavoitteet';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matita kuningas takarivillä, kun sen omat nappulat estävät sitä siirtymästä pois.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Torni on vastustajan kuninkaan vieressä, ja sitä suojelee daami, joka myös vie kuninkaalta pakoruudut. Vastustajan kuningas jää kiinni tornin ja daamin muodostamaan 3x3-ruudun \"tapponeliöön\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Kolmiomatti';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Daami ja torni ovat kumpikin ruudun päässä vastustajan kuninkaasta sekä samalla rivillä tai linjalla siten, että niiden väliin jää yksi tyhjä ruutu, ja ne muodostavat yhdessä kuninkaan kanssa kolmion.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovićin matti';

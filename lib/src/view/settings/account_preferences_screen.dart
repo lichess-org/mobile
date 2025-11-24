@@ -43,7 +43,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
   @override
   Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
-    final kidMode = ref.watch(kidModeProvider).valueOrNull ?? false;
+    final kidMode = ref.watch(kidModeProvider).value ?? false;
 
     final content = accountPrefs.when(
       data: (data) {

@@ -1398,6 +1398,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleMates => '체크메이트';
 
   @override
+  String get puzzleMateThemes => '메이트 테마';
+
+  @override
   String get puzzleGoals => '목표';
 
   @override
@@ -1693,6 +1696,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.';
 
   @override
+  String get puzzleThemeBalestraMate => '발레스트라 메이트';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => '퀸이 남은 퇴로를 차단하고, 비숍이 체크메이트를 가합니다.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => '블라인드 스와인 메이트';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => '두 룩이 협력해서 2x2 사각형 영역 안에서 상대 킹을 메이트합니다.';
+
+  @override
   String get puzzleThemeBishopEndgame => '비숍 엔드게임';
 
   @override
@@ -1826,6 +1841,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
+
+  @override
+  String get puzzleThemeTriangleMate => '트라이앵글 메이트';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => '퀸과 룩이 적 킹과 한 칸 떨어진 상태에서, 같은 랭크 혹은 파일에 있으며, 서로 한 칸을 사이에 두어 세 기물이 삼각형을 형성합니다.';
 
   @override
   String get puzzleThemeVukovicMate => '부코비치 메이트';

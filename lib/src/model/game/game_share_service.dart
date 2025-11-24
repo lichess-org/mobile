@@ -9,15 +9,12 @@ import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:share_plus/share_plus.dart';
 
-part 'game_share_service.g.dart';
-
-@Riverpod(keepAlive: true)
-GameShareService gameShareService(Ref ref) {
+/// A provider for [GameShareService].
+final gameShareServiceProvider = Provider<GameShareService>((Ref ref) {
   return GameShareService(ref);
-}
+}, name: 'GameShareServiceProvider');
 
 class GameShareService {
   GameShareService(this._ref);

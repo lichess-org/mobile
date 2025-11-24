@@ -73,7 +73,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi luôn bổ sung thêm các tính năng.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
+  String get mobileNotFollowingAnyUser => 'Bạn không theo dõi bất kỳ người dùng nào.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1398,6 +1398,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleMates => 'Chiếu hết';
 
   @override
+  String get puzzleMateThemes => 'Chủ đề chiếu hết';
+
+  @override
   String get puzzleGoals => 'Mục tiêu';
 
   @override
@@ -1693,6 +1696,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Chiếu hết trên hàng cuối, khi vua bị mắc kẹt bởi chính quân của nó.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Chiếu hết kiểu Nỏ thần';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Một tượng đưa ra nước chiếu hết, trong khi một hậu chặn các ô thoát còn lại';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Chiếu hết kiểu Chú lợn mù';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Hai quân xe cùng nhau chiếu hết vua trong một vùng có kích thước 2 x 2 ô vuông.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Cờ tàn tượng';
 
   @override
@@ -1702,7 +1717,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Chiếu hết kiểu Boden';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết một quân vua bị kẹt bởi đồng đội của nó.';
+  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết quân vua bị kẹt bởi đồng đội của nó.';
 
   @override
   String get puzzleThemeCastling => 'Nhập thành';
@@ -1828,10 +1843,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Một quân xe ở cạnh vua địch và được hỗ trợ bởi quân hậu cũng chặn các ô trốn thoát của vua địch. Xe và hậu bắt vua địch trong ô \"kill box\" chết chóc 3 x 3.';
 
   @override
+  String get puzzleThemeTriangleMate => 'Chiếu hết kiểu tam giác';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Quân hậu và quân xe, cách quân vua của đối phương một ô, nằm trên cùng một hàng, cách nhau một ô, tạo thành một hình tam giác.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Chiếu hết kiểu Vukovic';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'Một quân xe và hiệp sĩ hợp tác với vua. Quân xe giao quân trong khi được hỗ trợ bởi quân thứ ba, và quân mã được sử dụng để chặn các ô thoát hiểm của vua.';
+  String get puzzleThemeVukovicMateDescription => 'Một quân xe và mã hợp tác với vua. Quân xe thực hiện chiếu hết trong khi được hỗ trợ bởi quân thứ ba, và quân mã được sử dụng để chặn các ô thoát hiểm của vua.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Tàn cuộc Mã';

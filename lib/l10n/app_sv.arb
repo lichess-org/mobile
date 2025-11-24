@@ -14,7 +14,6 @@
   "mobileLiveStreamers": "Videokanaler från Lichess",
   "mobileMustBeLoggedIn": "Du måste vara inloggad för att se denna sida.",
   "mobileNoSearchResults": "Inga resultat",
-  "mobileNotFollowingAnyUser": "Du följer inte någon användare.",
   "mobileOkButton": "OK",
   "mobileOverTheBoard": "Spela 2 på samma enhet",
   "mobilePlayersMatchingSearchTerm": "Spelare med \"{param}\"",

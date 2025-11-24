@@ -1420,6 +1420,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Patróns de mate';
+
+  @override
   String get puzzleGoals => 'Obxectivos';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate da bésta';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate do porco cego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dúas torres colaboran para dar mate ó rei nunha área de 2 x 2 casas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfís';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Unha torre canda o rei do adversario, defendida por unha dama que tamén bloquea as casas de escape do rei. A torre e a dama apreixan ao rei nun curruncho de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate do triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Un triángulo fórmase do seguinte xeito: a dama e a torre atópanse na mesma fila ou columna, a unha casa de distancia entre si e do rei do opoñente.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vuković';

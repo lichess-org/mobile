@@ -73,7 +73,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Tamam';
@@ -1420,6 +1420,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleMates => 'Matlar';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Hedefler';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Kendi taşları arkasında sıkışıp kalmış şaha koridorun kapısını göster.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Fil oyunsonu';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Rakip şahının yanında bir kale bulunur ve bir vezir tarafından desteklenir ve bu kale aynı zamanda şahın kaçış karelerini de engeller. Kale ve vezir, düşman şahını 3\'e 3\'lük bir \"kafeste\" sıkıştırır.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matı';
@@ -2092,16 +2113,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gameSetup => 'Oyun ayarları';
 
   @override
-  String get challengeAFriend => 'Bir arkadaşınız oynayın';
+  String get challengeAFriend => 'Arkadaşına Oyun Teklif Et';
 
   @override
-  String get playAgainstComputer => 'Bilgisayara karsı oyna';
+  String get playAgainstComputer => 'Bilgisayara karşı oyna';
 
   @override
   String get gameMode => 'Oyun modü';
 
   @override
-  String get createLobbyGame => 'Oyun lobisi oluştur';
+  String get createLobbyGame => 'Lobi oyunu oluştur';
 
   @override
   String get youPlayAs => 'Oynadığın renk';

@@ -57,7 +57,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
       );
       await tester.pumpWidget(app);
 
@@ -92,7 +92,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
         defaultPreferences: {
           SessionPreferencesStorage.key(PrefCategory.openingExplorer.storageKey, null): jsonEncode(
             OpeningExplorerPrefs.defaults().copyWith(db: OpeningDatabase.lichess).toJson(),
@@ -129,7 +129,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
         userSession: session,
         defaultPreferences: {
           SessionPreferencesStorage.key(

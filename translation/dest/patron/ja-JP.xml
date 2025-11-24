@@ -13,7 +13,7 @@
   <string name="newPatrons">新しいパトロン</string>
   <string name="freeChess">無料のチェスをあらゆる人に、いつまでも！</string>
   <string name="noAdsNoSubs">広告なし、課金なし。オープンソースと情熱あり。</string>
-  <string name="thankYou">ご寄付ありがとう！</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">ご寄付ありがとう！</string>
   <string name="youHaveLifetime">あなたに永久パトロン・アカウントを贈ります。すばらしい！</string>
   <string name="patronUntil">%s までのパトロン・アカウントを贈ります。</string>
   <string name="ifNotRenewedThenAccountWillRevert">更新しないとアカウントが通常のアカウントに戻ります。</string>

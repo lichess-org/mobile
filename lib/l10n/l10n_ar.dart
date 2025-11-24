@@ -73,7 +73,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما';
 
   @override
-  String get mobileNotFollowingAnyUser => 'أنت لا تتابع أي مستخدم.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'موافق';
@@ -1508,6 +1508,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleMates => 'كشّات';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'الغايات';
 
   @override
@@ -1833,6 +1836,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'كش مات في الصف الأخير حيث يكون الملك محاصر بقطعه.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'مرحلة نهاية المباراة بالفيلة';
 
   @override
@@ -1966,6 +1981,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'كش مات فوكوفيتش';

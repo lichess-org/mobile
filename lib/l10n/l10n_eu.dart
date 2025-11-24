@@ -73,7 +73,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Kontuan izan aplikazio zaharraren eta webgune berriaren ezaugarri guztiak ez daudela prest, baina poliki-poliki gehituko ditugu.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Ados';
@@ -1420,6 +1420,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleMates => 'Mateak';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Helburuak';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Bere piezekin trabatuta dagoenean erregeari bere errenkadan matea ematea.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Alfilen bukaera';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Gaztelua aurkariaren erregearen ondoan dago damaren laguntzarekin, honek gainera erregearen ihes-laukiak babesten ditu. Gazteluak eta damak erregea 3x3ko \"hilkutxa\" baten harrapatu dezakete.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovicen matea';

@@ -1420,6 +1420,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleMates => 'Mats';
 
   @override
+  String get puzzleMateThemes => 'Temes de mat';
+
+  @override
   String get puzzleGoals => 'Objectius';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Fes escac i mat al rei a la primera fila, quan està atrapat per les seves pròpies peces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat de la balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat del porc cec';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dues torres treballen en equip per tal de fer mat al rei en una àrea de 2x2 caselles.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final d’alfils';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat del triangle';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dama i la torre, a una distància del rei enemic, estan a la mateixa fila o columna separats per una casella formant un triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat de Vukovic';

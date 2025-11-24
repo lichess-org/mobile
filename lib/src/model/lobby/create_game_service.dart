@@ -14,9 +14,7 @@ import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'create_game_service.g.dart';
 part 'create_game_service.freezed.dart';
 
 /// The user response of a challenge request.
@@ -47,14 +45,13 @@ sealed class ChallengeResponseDeclined
 }
 
 /// A provider for the [CreateGameService].
-@riverpod
-CreateGameService createGameService(Ref ref) {
+final createGameServiceProvider = Provider.autoDispose<CreateGameService>((Ref ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
   ref.onDispose(() {
     service.dispose();
   });
   return service;
-}
+}, name: 'CreateGameServiceProvider');
 
 /// A service to create a new game from the lobby or from a challenge.
 class CreateGameService {

@@ -73,7 +73,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Da notare che non tutte le funzionalità della vecchia app o del sito web sono attualmente disponibili, ma stiamo continuamente aggiungendo funzionalità.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Ok';
@@ -1420,6 +1420,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleMates => 'Matti';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Per obiettivo';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Scacco matto Vukovic';
