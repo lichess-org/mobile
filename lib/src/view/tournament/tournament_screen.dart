@@ -1738,7 +1738,7 @@ class _AllTeamsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allTeams= ref.watch(allTeamStandingsProvider(tournamentId));
+    final allTeams = ref.watch(allTeamStandingsProvider(tournamentId));
     final tournamentFullName =
         ref.watch(tournamentControllerProvider(tournamentId)).value?.tournament.meta.fullName ??
         'Team Standings';

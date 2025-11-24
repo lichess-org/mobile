@@ -36,8 +36,8 @@ void main() {
       // Should not display unsupported variants
       expect(find.text('Hourly Crazyhouse Arena'), findsNothing);
 
-      // Should not display team battle tournaments
-      expect(find.text('Team Battle Arena'), findsNothing);
+      // Should display team battle tournaments
+      expect(find.text('Team Battle Arena'), findsOneWidget);
 
       await tester.tap(find.text('Completed'));
       // Wait for tab switch animation
