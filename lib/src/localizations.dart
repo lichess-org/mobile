@@ -1,14 +1,17 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'localizations.g.dart';
 
 typedef ActiveLocalizations = ({Locale locale, AppLocalizations strings});
 
-@Riverpod(keepAlive: true)
-class Localizations extends _$Localizations {
+/// A provider for [Localizations].
+final localizationsProvider = NotifierProvider<Localizations, ActiveLocalizations>(
+  Localizations.new,
+  name: 'LocalizationsProvider',
+);
+
+class Localizations extends Notifier<ActiveLocalizations> {
   @override
   ActiveLocalizations build() {
     final generalPrefs = ref.watch(generalPreferencesProvider);

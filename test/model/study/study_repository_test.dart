@@ -16,11 +16,11 @@ import '../../test_helpers.dart';
 void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) {
     return makeContainer(
-      overrides: [
-        lichessClientProvider.overrideWith((ref) {
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(mockClient, ref);
         }),
-      ],
+      },
     );
   }
 

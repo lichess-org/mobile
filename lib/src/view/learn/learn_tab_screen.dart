@@ -81,12 +81,11 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
-    final haveIStudies =
-        session != null && (ref.watch(_myStudiesLengthProvider).valueOrNull ?? 0) > 0;
+    final haveIStudies = session != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
-        session != null && (ref.watch(_myFavoriteStudiesLengthProvider).valueOrNull ?? 0) > 0;
+        session != null && (ref.watch(_myFavoriteStudiesLengthProvider).value ?? 0) > 0;
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,

@@ -28,11 +28,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -98,11 +98,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 

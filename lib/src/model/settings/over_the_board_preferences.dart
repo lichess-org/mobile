@@ -1,12 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_preferences.freezed.dart';
 part 'over_the_board_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class OverTheBoardPreferences extends _$OverTheBoardPreferences
+final overTheBoardPreferencesProvider =
+    NotifierProvider<OverTheBoardPreferencesNotifier, OverTheBoardPrefs>(
+      OverTheBoardPreferencesNotifier.new,
+      name: 'OverTheBoardPreferencesProvider',
+    );
+
+class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
     with PreferencesStorage<OverTheBoardPrefs> {
   @override
   @protected

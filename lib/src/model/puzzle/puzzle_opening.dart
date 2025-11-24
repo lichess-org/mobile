@@ -1,9 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'puzzle_opening.g.dart';
 
 typedef PuzzleOpeningFamily = ({
   String key,
@@ -15,8 +12,9 @@ typedef PuzzleOpeningFamily = ({
 typedef PuzzleOpeningData = ({String key, String name, int count});
 
 /// Returns a flattened list of openings with their respective counts.
-@riverpod
-Future<IList<PuzzleOpeningData>> flatOpeningsList(Ref ref) async {
+final flatOpeningsListProvider = FutureProvider.autoDispose<IList<PuzzleOpeningData>>((
+  Ref ref,
+) async {
   final families = await ref.watch(puzzleOpeningsProvider.future);
   return families
       .map(
@@ -27,10 +25,13 @@ Future<IList<PuzzleOpeningData>> flatOpeningsList(Ref ref) async {
       )
       .expand((e) => e)
       .toIList();
-}
+}, name: 'FlatOpeningsListProvider');
 
-@riverpod
-Future<String> puzzleOpeningName(Ref ref, String key) async {
+/// Provides the name of a puzzle opening given its key.
+final puzzleOpeningNameProvider = FutureProvider.autoDispose.family<String, String>((
+  Ref ref,
+  String key,
+) async {
   final openings = await ref.watch(flatOpeningsListProvider.future);
   return openings.firstWhere((element) => element.key == key).name;
-}
+}, name: 'PuzzleOpeningNameProvider');

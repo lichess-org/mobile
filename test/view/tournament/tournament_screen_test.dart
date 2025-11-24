@@ -218,11 +218,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: TournamentId('82QbxlJb')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -254,11 +254,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: TournamentId('82QbxlJb')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -314,11 +314,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: tournamentId),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -388,11 +388,11 @@ void main() {
         tester,
         home: const TournamentScreen(id: tournamentId),
         userSession: session,
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -437,11 +437,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: TournamentId('82QbxlJb')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -480,11 +480,11 @@ void main() {
         tester,
         home: const TournamentScreen(id: tournamentId),
         userSession: session,
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -541,11 +541,11 @@ void main() {
         tester,
         home: const TournamentScreen(id: tournamenId),
         userSession: session,
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -583,11 +583,11 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const TournamentScreen(id: TournamentId('82QbxlJb')),
-      overrides: [
-        lichessClientProvider.overrideWith((ref) {
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(mockClient, ref);
         }),
-      ],
+      },
     );
     await tester.pumpWidget(app);
 

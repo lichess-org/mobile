@@ -1,13 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
+final analysisPreferencesProvider = NotifierProvider<AnalysisPreferences, AnalysisPrefs>(
+  AnalysisPreferences.new,
+  name: 'AnalysisPreferencesProvider',
+);
+
+class AnalysisPreferences extends Notifier<AnalysisPrefs> with PreferencesStorage<AnalysisPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.analysis;

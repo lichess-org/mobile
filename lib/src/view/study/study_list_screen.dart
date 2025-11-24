@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -48,8 +49,9 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   bool requestedNextPage = false;
 
-  StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(category: category, order: order, search: search);
+  AsyncNotifierProvider<StudyListPaginatorNotifier, ({int? nextPage, IList<StudyPageItem> studies})>
+  get paginatorProvider =>
+      studyListPaginatorProvider((category: category, order: order, search: search));
 
   @override
   void initState() {

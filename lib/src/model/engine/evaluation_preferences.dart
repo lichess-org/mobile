@@ -1,10 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'evaluation_preferences.freezed.dart';
 part 'evaluation_preferences.g.dart';
+
+final engineEvaluationPreferencesProvider =
+    NotifierProvider<EngineEvaluationPreferences, EngineEvaluationPrefState>(
+      EngineEvaluationPreferences.new,
+      name: 'EngineEvaluationPreferencesProvider',
+    );
 
 /// Preferences for engine evaluation.
 ///
@@ -12,8 +18,7 @@ part 'evaluation_preferences.g.dart';
 /// - Analysis screen
 /// - Study screen
 /// - Broadcast game screen
-@Riverpod(keepAlive: true)
-class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
+class EngineEvaluationPreferences extends Notifier<EngineEvaluationPrefState>
     with PreferencesStorage<EngineEvaluationPrefState> {
   @override
   @protected

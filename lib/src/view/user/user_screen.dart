@@ -196,7 +196,7 @@ class _UserProfileListView extends ConsumerWidget {
                       GameHistoryScreen.buildRoute(
                         context,
                         user: session.user,
-                        isOnline: connectivity.valueOrNull?.isOnline == true,
+                        isOnline: connectivity.value?.isOnline == true,
                         gameFilter: GameFilterState(opponent: user),
                       ),
                     );
@@ -223,7 +223,7 @@ class _UserProfileListView extends ConsumerWidget {
                   onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
                 ),
 
-              if (user.blocking != true && !user.isBot && kidMode.valueOrNull == false)
+              if (user.blocking != true && !user.isBot && kidMode.value == false)
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
                   title: Text(context.l10n.composeMessage),

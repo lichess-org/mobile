@@ -61,9 +61,9 @@ Future<void> makeEngineTestApp(
             .toJson(),
       ),
     },
-    overrides: [
+    overrides: {
       if (gameId != null)
-        lichessClientProvider.overrideWith((ref) {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           final client = MockClient((request) {
             if (request.url.path == '/game/export/$gameId' && gameResponses.containsKey(gameId)) {
               return mockResponse(gameResponses[gameId]!, 200);
@@ -74,7 +74,7 @@ Future<void> makeEngineTestApp(
           return LichessClient(client, ref);
         })
       else if (broadcastGame != null)
-        lichessClientProvider.overrideWith((ref) {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           final client = MockClient((request) {
             if (request.url.path == '/api/broadcast/-/-/${broadcastGame.$2}') {
               return mockResponse(
@@ -95,7 +95,7 @@ Future<void> makeEngineTestApp(
 
           return LichessClient(client, ref);
         }),
-      webSocketChannelFactoryProvider.overrideWith(
+      webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith(
         (_) => FakeWebSocketChannelFactory(
           (uri) => FakeWebSocketChannel(
             uri,
@@ -122,7 +122,7 @@ Future<void> makeEngineTestApp(
           ),
         ),
       ),
-    ],
+    },
     home: broadcastGame != null
         ? BroadcastGameScreen(
             tournamentId: broadcastGame.$1,

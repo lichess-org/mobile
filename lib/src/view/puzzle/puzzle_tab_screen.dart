@@ -43,7 +43,7 @@ class PuzzleTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedBatches = ref.watch(savedBatchesProvider).valueOrNull;
+    final savedBatches = ref.watch(savedBatchesProvider).value;
 
     if (savedBatches == null) {
       return const Center(child: CircularProgressIndicator.adaptive());
@@ -425,7 +425,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -563,7 +563,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ],
                         PuzzleOpening(key: final openingKey) => [
                           Text(
-                            flatOpenings.valueOrNull
+                            flatOpenings.value
                                     ?.firstWhere(
                                       (o) => o.key == openingKey,
                                       orElse: () => (

@@ -30,9 +30,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'http.g.dart';
 
 final _logger = Logger('HttpClient');
 
@@ -82,8 +79,7 @@ class HttpClientFactory {
 /// The global [HttpClientFactory] provider.
 ///
 /// Http clients created by this factory log all requests and responses to the database.
-@Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(Ref ref) {
+final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
   return HttpClientFactory(
     wrapper: (client) => _RegisterCallbackClient(
       client,
@@ -123,28 +119,26 @@ HttpClientFactory httpClientFactory(Ref ref) {
       },
     ),
   );
-}
+});
 
 /// The default http client.
 ///
 /// This client is used for all requests that don't go to the lichess server, for
 /// example, requests to lichess CDN, or other APIs.
 /// Only one instance of this client is created and kept alive for the whole app.
-@Riverpod(keepAlive: true)
-Client defaultClient(Ref ref) {
+final defaultClientProvider = Provider<Client>((Ref ref) {
   final client = _RegisterCallbackClient(
     ref.read(httpClientFactoryProvider)(),
     onRequest: (request) => _logger.info('${request.method} ${request.url}'),
   );
   ref.onDispose(() => client.close());
   return client;
-}
+});
 
 /// The http client configured to make requests to the lichess API.
 ///
 /// Only one instance of this client is created and kept alive for the whole app.
-@Riverpod(keepAlive: true)
-LichessClient lichessClient(Ref ref) {
+final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
@@ -157,13 +151,12 @@ LichessClient lichessClient(Ref ref) {
   );
   ref.onDispose(() => client.close());
   return client;
-}
+});
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
-@Riverpod(keepAlive: true)
-String userAgent(Ref ref) {
+final userAgentProvider = Provider<String>((Ref ref) {
   final session = ref.watch(authSessionProvider);
 
   return makeUserAgent(
@@ -172,7 +165,7 @@ String userAgent(Ref ref) {
     ref.read(preloadedDataProvider).requireValue.sri,
     session?.user,
   );
-}
+});
 
 /// Creates a user-agent string with the app version, build number, and device info and possibly the user ID if a user is logged in.
 String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, LightUser? user) {
