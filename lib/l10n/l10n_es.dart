@@ -1420,6 +1420,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Temas de mate';
+
+  @override
   String get puzzleGoals => 'Objetivos';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jaque mate en la última fila, cuando el rey se encuentra atrapado por sus propias piezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate de alfil y dama';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'El alfil da jaque mate mientras la dama bloquea las casillas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate del cerdo ciego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dos torres se unen para dar mate al rey en un área de 2 por 2 casillas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfiles';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate del triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dama y la torre, a una casilla de distancia del rey rival, están en la misma fila o columna, separadas por una casilla, formando un triángulo.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vukovic';

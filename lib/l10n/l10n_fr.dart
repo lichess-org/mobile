@@ -73,7 +73,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Prenez note que certaines fonctionnalités de l\'ancienne appli ou du site Web ne sont pas disponibles, mais nous ajoutons constamment des fonctionnalités.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucun utilisateur.';
+  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucune personne.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleMates => 'Mats';
 
   @override
+  String get puzzleMateThemes => 'Thèmes de mat';
+
+  @override
   String get puzzleGoals => 'Objectifs';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matez le Roi sur la dernière rangée, lorsqu\'il est piégé par ses propres pièces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat de l\'arbalète';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Un fou fait échec tandis que la dame contrôle les cases de fuite.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat des deux tours';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Deux tours matent le roi adverse dans un espace de deux cases par deux cases.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale de Fous';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'La tour, protégée par la dame, met le roi adverse en échec et la dame bloque la seule case de fuite du roi (le roi est enfermé dans une boîte de 3 cases par 3 cases formée par la tour et la dame).';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat du triangle';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dame et la tour, à une case de distance du roi adverse, sont sur la même rangée ou colonne et donnent mat en formant un triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat de Vukovic';

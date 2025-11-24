@@ -1464,6 +1464,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleMates => 'Matai';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tikslai';
 
   @override
@@ -1775,6 +1778,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matas karaliui, esančiam namų eilėje, kai jis užblokuotas savo paties figūrų.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Rikių endšpilis';
 
   @override
@@ -1908,6 +1923,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Bokštas yra šalia varžovo karaliaus ir jį palaiko karalienė, kuri tuo pačiu uždaro karaliaus pabėgimo langelius. Bokštas ir karalienė sugauna varžovo karalių 3×3 langelių „mirties dėžutėje“.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matas';

@@ -73,7 +73,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleMates => 'Matts';
 
   @override
+  String get puzzleMateThemes => 'Matt Theme';
+
+  @override
   String get puzzleGoals => 'Ziel';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'De König uf de Grundreihe matt setze, wänn er dur sini eigene Figure blockiert isch.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra Matt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'En Läufer setzt Matt, wobi d\'Königin die mögliche Fluchtfälder blockiert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinde-Schweine-Matt';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türm, uf de sibete - oder zweite - Reihe, setzed de König matt.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Läufer Ändschpil';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Drüeck-Matt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Es Matt vu Turm und Dame, wo zämme mit em gägnerische König es Drüegg bilded.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vuković-Matt';

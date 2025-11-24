@@ -1420,6 +1420,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleMates => 'Matter';
 
   @override
+  String get puzzleMateThemes => 'Mat-temaer';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Sæt kongen skakmat på baglinjen, når den er fanget der af sine egne brikker.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra-mat';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'En biskop sætter mat, mens en dronning blokerer de resterende flugtfelter';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blindt svin-mat';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'To tårne går sammen om at sætte kongen mat i et område på 2 x 2 felter.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Løberslutspil';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden af fjendens konge og støttes af en dronning, som også blokerer kongens flugtfelter. Tårnet og dronningen fanger fjendens konge i en 3 x 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trekantmat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Dronningen og tårnet, der er ét felt fra fjendens konge, befinder sig på samme række eller kolonne, adskilt af ét felt, og danner en trekant.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovics mat';

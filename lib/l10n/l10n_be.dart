@@ -1458,6 +1458,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleMates => 'Маты';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Мэты';
 
   @override
@@ -1769,6 +1772,18 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Пастаўце мат каралю на хатняй гарызанталі, калі ён заблакаваны сваімі фігурамі.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слановы эндшпіль';
 
   @override
@@ -1902,6 +1917,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -2137,22 +2158,22 @@ class AppLocalizationsBe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Параметры гульні';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Запрасіць сябра';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Гуляць з камп\'ютарам';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Рэжым гульні';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Стварыць запыт на гульню';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Вы гуляеце за';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Выкарыстайце гэтую спасылку каб запрасіць кагосьці да гульні';
@@ -2217,7 +2238,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get createAGame => 'Стварыць гульню';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Стварыць гульню';
 
   @override
   String get whiteIsVictorious => 'Белыя перамаглі';
@@ -2357,7 +2378,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get collapseVariations => 'Ачысціць варыянты';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Разгарнуць варыянты';
 
   @override
   String get forceVariation => 'Прасунуць варыянт';
@@ -2366,7 +2387,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get copyVariationPgn => 'Скап\'яваць варыянт у фармаце PGN';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Скапіраваць PGN асноўнай лініі';
 
   @override
   String get move => 'Ход';

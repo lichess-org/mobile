@@ -1401,6 +1401,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleMates => 'Mat';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tujuan';
 
   @override
@@ -1697,6 +1700,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
 
   @override
@@ -1830,6 +1845,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Rokok berada di samping raja musuh dan didukung oleh ratu yang juga menghalangi petak pelarian raja. Benteng dan ratu menangkap raja musuh dalam \"kotak pembunuh\" 3x3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Teman Vukovic';

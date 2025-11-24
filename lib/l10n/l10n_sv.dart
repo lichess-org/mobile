@@ -73,7 +73,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du följer inte någon användare.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleMates => 'Mattar';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Schackmatta kungen på första raden, när den är instängd av sina egna pjäser.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Löparslutspel';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ett torn ligger bredvid motståndarens kung och understöds av en dam som också stänger kungens flyktrutor. Tornet och damen fångar fiendens kung i en 3 gånger 3-kvadrat, \"dödsbox\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matt';

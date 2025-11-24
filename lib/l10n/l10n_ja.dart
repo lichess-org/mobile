@@ -1398,6 +1398,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleMates => 'メイト';
 
   @override
+  String get puzzleMateThemes => 'メイトのテーマ';
+
+  @override
   String get puzzleGoals => '目標';
 
   @override
@@ -1693,6 +1696,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '一番下のランクで、上を自分の駒に塞がれたキングをメイトする。';
 
   @override
+  String get puzzleThemeBalestraMate => 'バレストラ（クロスボウ）のメイト';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'ビショップがチェックし、クイーンが残りの逃げ道をおさえる';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
 
   @override
@@ -1826,6 +1841,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
+
+  @override
+  String get puzzleThemeTriangleMate => '三角のメイト';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => '同じランクかファイル上で空きマスを挟んだクイーンとルーク、そして相手のキングが三角形を作るメイト。';
 
   @override
   String get puzzleThemeVukovicMate => 'ヴコヴィッチのメイト';

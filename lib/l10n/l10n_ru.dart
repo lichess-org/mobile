@@ -1464,6 +1464,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleMates => 'Маты';
 
   @override
+  String get puzzleMateThemes => 'Разновидности матов';
+
+  @override
   String get puzzleGoals => 'Цели';
 
   @override
@@ -1777,6 +1780,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Матование короля на его горизонтали, когда он заблокирован своими же фигурами.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Мат Балестра';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Слон ставит мат, а ферзь перекрывает оставшиеся поля отступления';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слоновый эндшпиль';
 
   @override
@@ -1910,6 +1925,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Треугольный мат';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Ферзь и ладья находятся на соседних полях с вражеским королём, на той же горизонтали или вертикали, образуюя треугольник.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковича';

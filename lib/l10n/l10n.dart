@@ -2540,6 +2540,12 @@ abstract class AppLocalizations {
   /// **'Mates'**
   String get puzzleMates;
 
+  /// No description provided for @puzzleMateThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate themes'**
+  String get puzzleMateThemes;
+
   /// No description provided for @puzzleGoals.
   ///
   /// In en, this message translates to:
@@ -3026,6 +3032,30 @@ abstract class AppLocalizations {
   /// **'Checkmate the king on the home rank, when it is trapped there by its own pieces.'**
   String get puzzleThemeBackRankMateDescription;
 
+  /// No description provided for @puzzleThemeBalestraMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Balestra mate'**
+  String get puzzleThemeBalestraMate;
+
+  /// No description provided for @puzzleThemeBalestraMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A bishop delivers the checkmate, while a queen blocks the remaining escape squares'**
+  String get puzzleThemeBalestraMateDescription;
+
+  /// No description provided for @puzzleThemeBlindSwineMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind Swine mate'**
+  String get puzzleThemeBlindSwineMate;
+
+  /// No description provided for @puzzleThemeBlindSwineMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two rooks team up to mate the king in an area of 2 by 2 squares.'**
+  String get puzzleThemeBlindSwineMateDescription;
+
   /// No description provided for @puzzleThemeBishopEndgame.
   ///
   /// In en, this message translates to:
@@ -3295,6 +3325,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".'**
   String get puzzleThemeKillBoxMateDescription;
+
+  /// No description provided for @puzzleThemeTriangleMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Triangle mate'**
+  String get puzzleThemeTriangleMate;
+
+  /// No description provided for @puzzleThemeTriangleMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.'**
+  String get puzzleThemeTriangleMateDescription;
 
   /// No description provided for @puzzleThemeVukovicMate.
   ///

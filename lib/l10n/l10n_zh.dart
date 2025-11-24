@@ -73,7 +73,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => '请注意，旧版应用或网站的部分功能目前尚未全部开放，但我们正在持续添加新功能。';
 
   @override
-  String get mobileNotFollowingAnyUser => '您尚未关注任何用户';
+  String get mobileNotFollowingAnyUser => '你还没有关注任何玩家';
 
   @override
   String get mobileOkButton => '确定';
@@ -1398,6 +1398,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleMates => '将死';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => '分目标';
 
   @override
@@ -1693,6 +1696,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '在底线将杀被同一方棋子困住的王。';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => '象残局';
 
   @override
@@ -1826,6 +1841,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => '被后保护的车在敌方王侧封锁了所有逃脱格。后与车合作将王封杀在 3x3 的盒中。';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => '武科维奇杀法';
@@ -6234,9 +6255,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileNotAllFeaturesAreAvailable => '請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。';
 
   @override
-  String get mobileNotFollowingAnyUser => '您尚未追蹤任何使用者。';
-
-  @override
   String get mobileOkButton => '確認';
 
   @override
@@ -6308,7 +6326,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileSettingsImmersiveMode => '沉浸模式';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => '對弈時隱藏系統介面。若您會被螢幕邊緣的系統導覽手勢干擾，請使用此功能。';
+  String get mobileSettingsImmersiveModeSubtitle => '對弈時隱藏系統介面。若您會被螢幕邊緣的系統導覽手勢干擾，請使用此功能。將會應用到遊戲和謎題界面中。';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => '吃子';
@@ -11937,6 +11955,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyWelcomeToLichessStudyTitle => '歡迎來到 Lichess 研究區！';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => '黑敗，但白無法取勝';
 
   @override
   String studyNbChapters(int count) {

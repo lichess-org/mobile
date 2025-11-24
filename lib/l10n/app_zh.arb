@@ -19,7 +19,7 @@
   "mobileMustBeLoggedIn": "您需要登录才能查看此页面",
   "mobileNoSearchResults": "无结果",
   "mobileNotAllFeaturesAreAvailable": "请注意，旧版应用或网站的部分功能目前尚未全部开放，但我们正在持续添加新功能。",
-  "mobileNotFollowingAnyUser": "您尚未关注任何用户",
+  "mobileNotFollowingAnyUser": "你还没有关注任何玩家",
   "mobileOkButton": "确定",
   "mobileOverTheBoard": "离线棋盘",
   "mobilePlayersMatchingSearchTerm": "昵称包含 \"{param}\" 的玩家",

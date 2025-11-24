@@ -73,7 +73,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ju nuk po ndiqni asnjë përdorues.';
+  String get mobileNotFollowingAnyUser => 'S’ndiqni ndonjë përdorues.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Tema mati';
+
+  @override
   String get puzzleGoals => 'Objektiva';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jepini mat mbretin në rreshtin e tij, kur ai është bllokuar atje nga gurë të vetët.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Një oficer jep shahmat, teksa një mbretëreshë bllokon kuadratet e ikjes';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat Derri Qorr';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dy torre bëhen tok për t’i dhënë mat mbretit në një zonë prej 2 herë 2 kuadratesh.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Fund loje me oficer';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat trekëndësh';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Mbretëresha dhe torra, një kuadrat larg nga mbreti armik, gjenden në të njëjtin rresht ose shtyllë, një kuadrat larg njëri-tjetrit, duke formuar një trekëndësh.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukoviç';
