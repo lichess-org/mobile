@@ -32,3 +32,9 @@ final tournamentTeamProvider = FutureProvider.autoDispose
         const Duration(seconds: 10),
       );
     }, name: 'TournamentTeamProvider');
+
+final allTeamStandingsProvider = FutureProvider.autoDispose
+    .family<IList<TeamStanding>, TournamentId>((ref, tournamentId) {
+      final repo = ref.watch(tournamentRepositoryProvider);
+      return repo.getAllTeamStandings(tournamentId);
+    }, name: 'AllTeamStandingsProvider');

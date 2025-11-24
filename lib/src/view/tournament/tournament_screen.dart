@@ -454,6 +454,7 @@ class _TeamStanding extends ConsumerWidget {
     if (teamBattle == null) {
       return const SizedBox.shrink();
     }
+    final totalTeams = teamBattle.teams.length;
 
     return Card(
       clipBehavior: .hardEdge,
@@ -472,6 +473,19 @@ class _TeamStanding extends ConsumerWidget {
               tournamentId: state.id,
             ),
           ),
+          if (totalTeams > 10)
+            ListTile(
+              title: Text(
+                context.l10n.arenaViewAllXTeams(totalTeams),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: context.lichessColors.primary),
+              ),
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(_AllTeamsScreen.buildRoute(context, state.id, teamBattle));
+              },
+            ),
         ],
       ),
     );
@@ -1106,8 +1120,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                               );
                               return;
                             }
-                            // Only one team available, join that one directly
-                            if (teamBattle.joinWith!.length == 1) {
+                            // Only one team available or if the user previously joined, join directly
+                            if (teamBattle.joinWith!.length == 1 ||
+                                (widget.state.tournament.me != null)) {
                               setState(() {
                                 joinOrLeaveInProgress = true;
                               });
@@ -1702,4 +1717,50 @@ Future<String?> _showTeamSelectionDialog(BuildContext context, TeamBattleData te
       );
     },
   );
+}
+
+class _AllTeamsScreen extends ConsumerWidget {
+  const _AllTeamsScreen({required this.tournamentId, required this.teamBattle});
+
+  final TournamentId tournamentId;
+  final TeamBattleData teamBattle;
+
+  static Route<void> buildRoute(
+    BuildContext context,
+    TournamentId tournamentId,
+    TeamBattleData teamBattle,
+  ) {
+    return buildScreenRoute(
+      context,
+      screen: _AllTeamsScreen(tournamentId: tournamentId, teamBattle: teamBattle),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final allTeams= ref.watch(allTeamStandingsProvider(tournamentId));
+    final tournamentFullName =
+        ref.watch(tournamentControllerProvider(tournamentId)).value?.tournament.meta.fullName ??
+        'Team Standings';
+
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: AppBarTitleText(tournamentFullName, maxLines: 2)),
+      body: allTeams.when(
+        data: (teams) => ListView.builder(
+          itemCount: teams.length,
+          itemBuilder: (context, index) {
+            final team = teams[index];
+            return _TeamStandingTile(
+              team: team,
+              teamInfo: teamBattle.teams[team.id],
+              nbLeaders: teamBattle.nbLeaders,
+              tournamentId: tournamentId,
+            );
+          },
+        ),
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+        error: (error, _) => Center(child: Text('Error loading teams: $error')),
+      ),
+    );
+  }
 }

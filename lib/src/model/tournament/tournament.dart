@@ -508,6 +508,11 @@ extension TournamentExtension on Pick {
       return null;
     }
   }
+
+  IList<TeamStanding> asTeamStandingListOrThrow() {
+    final requiredPick = this.required();
+    return requiredPick.asListOrThrow((pick) => _teamStandingFromPick(pick.required())).toIList();
+  }
 }
 
 typedef PlayerStats = ({int game, int berserk, int win});

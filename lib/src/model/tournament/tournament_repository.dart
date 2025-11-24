@@ -67,6 +67,14 @@ class TournamentRepository {
     );
   }
 
+  Future<IList<TeamStanding>> getAllTeamStandings(TournamentId id) {
+    return client.readJson(
+      Uri(path: '/api/tournament/$id/teams'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => pick(json, 'teams').asTeamStandingListOrThrow(),
+    );
+  }
+
   Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
     final client = _ref.read(defaultClientProvider);
     return downloadFile(
