@@ -169,41 +169,38 @@ class _EvalGaugeState extends State<_EvalGauge> {
                         value: value,
                         textDirection: textDirection,
                       ),
-                child: widget.displayMode == EngineGaugeDisplayMode.vertical
-                    ? const SizedBox.shrink()
-                    : Stack(
-                        children: [
-                          Align(
-                            alignment: toValue >= 0.5
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                evalDisplay ?? '',
-                                style: TextStyle(
-                                  color: toValue >= 0.5 ? Colors.black : Colors.white,
-                                  fontSize: kEvalGaugeFontSize,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                child: RotatedBox(
+                  quarterTurns: widget.displayMode == EngineGaugeDisplayMode.vertical ? 3 : 0,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: toValue >= 0.5 ? Alignment.centerLeft : Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Text(
+                            evalDisplay ?? '',
+                            style: TextStyle(
+                              color: toValue >= 0.5 ? Colors.black : Colors.white,
+                              fontSize: kEvalGaugeFontSize,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          if (widget.engineLinesState != null)
-                            Align(
-                              alignment: toValue >= 0.5
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: Icon(
-                                widget.engineLinesState == EngineLinesShowState.expanded
-                                    ? Icons.arrow_drop_up
-                                    : Icons.arrow_drop_down,
-                                color: Colors.grey,
-                                size: 24.0,
-                              ),
-                            ),
-                        ],
+                        ),
                       ),
+                      if (widget.engineLinesState != null)
+                        Align(
+                          alignment: toValue >= 0.5 ? Alignment.centerRight : Alignment.centerLeft,
+                          child: Icon(
+                            widget.engineLinesState == EngineLinesShowState.expanded
+                                ? Icons.arrow_drop_up
+                                : Icons.arrow_drop_down,
+                            color: Colors.grey,
+                            size: 24.0,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
