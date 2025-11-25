@@ -15,7 +15,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../binding.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
-import '../auth/fake_session_storage.dart';
+import '../auth/fake_auth_storage.dart';
 
 class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
 
@@ -68,7 +68,7 @@ void main() {
     });
 
     test(
-      'register device when online, token exists and permissions are granted and a session exists',
+      'register device when online, token exists and permissions are granted and a authUser exists',
       () async {
         final container = await makeContainer(
           authUser: fakeAuthUser,

@@ -50,7 +50,7 @@ void main() {
 
   final user = LightUser(id: UserId.fromUserName(name), name: name);
 
-  final session = AuthUser(user: user, token: 'test-token');
+  final authUser = AuthUser(user: user, token: 'test-token');
 
   group('OpeningExplorerScreen', () {
     testWidgets('master opening explorer loads', (WidgetTester tester) async {
@@ -130,11 +130,11 @@ void main() {
         tester,
         home: const OpeningExplorerScreen(options: options),
         overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
-        authUser: session,
+        authUser: authUser,
         defaultPreferences: {
           SessionPreferencesStorage.key(
             PrefCategory.openingExplorer.storageKey,
-            session,
+            authUser,
           ): jsonEncode(
             OpeningExplorerPrefs.defaults(user: user).copyWith(db: OpeningDatabase.player).toJson(),
           ),

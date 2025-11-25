@@ -53,7 +53,7 @@ final offlineClient = MockClient((request) {
 /// It will be wrapped in a [MaterialApp] to simulate a simple app.
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [authUser] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
@@ -126,7 +126,7 @@ Future<Widget> makeOfflineTestProviderScope(
 /// by [surfaceSize] (which default to [kTestSurfaceSize]).
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [authUser] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScope(
   WidgetTester tester, {

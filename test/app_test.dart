@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 
-import 'model/auth/fake_session_storage.dart';
+import 'model/auth/fake_auth_storage.dart';
 import 'network/fake_http_client_factory.dart';
 import 'test_helpers.dart';
 import 'test_provider_scope.dart';
@@ -36,7 +36,7 @@ void main() {
     expect(Theme.of(tester.element(find.byType(MaterialApp))).brightness, Brightness.light);
   }, variant: kPlatformVariant);
 
-  testWidgets('App will delete a stored session on startup if one request return 401', (
+  testWidgets('App will delete a stored authUser on startup if one request return 401', (
     tester,
   ) async {
     int tokenTestRequests = 0;
@@ -85,7 +85,7 @@ void main() {
     // should have made a request to test the token
     expect(tokenTestRequests, 1);
 
-    // session is not active anymore
+    // authUser is not active anymore
     expect(find.text('Sign in'), findsOneWidget);
   }, variant: kPlatformVariant);
 

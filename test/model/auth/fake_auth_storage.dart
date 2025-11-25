@@ -4,26 +4,26 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 class FakeAuthStorage implements AuthStorage {
-  FakeAuthStorage([AuthUser? initial]) : _session = initial;
+  FakeAuthStorage([AuthUser? initial]) : _authUser = initial;
 
-  AuthUser? _session;
+  AuthUser? _authUser;
 
   @override
   Future<AuthUser?> read() async {
     await Future<void>.delayed(const Duration(milliseconds: 2));
-    return _session;
+    return _authUser;
   }
 
   @override
-  Future<void> write(AuthUser session) async {
+  Future<void> write(AuthUser authUser) async {
     await Future<void>.delayed(const Duration(milliseconds: 2));
-    _session = session;
+    _authUser = authUser;
   }
 
   @override
   Future<void> delete() async {
     await Future<void>.delayed(const Duration(milliseconds: 2));
-    _session = null;
+    _authUser = null;
   }
 }
 
