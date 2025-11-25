@@ -79,7 +79,7 @@ class _ChallengeListItem extends ConsumerWidget {
 
   final Challenge challenge;
   final LightUser challengerUser;
-  final AuthSessionState? session;
+  final AuthSession? session;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

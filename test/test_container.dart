@@ -44,7 +44,7 @@ Future<ProviderContainer> lichessClientContainer(MockClient mockClient) {
 /// Returns a [ProviderContainer] with default mocks, ready for testing.
 Future<ProviderContainer> makeContainer({
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSessionState? userSession,
+  AuthSession? userSession,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 

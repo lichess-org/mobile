@@ -15,15 +15,15 @@ final sessionStorageProvider = Provider<SessionStorage>((Ref ref) {
 class SessionStorage {
   const SessionStorage();
 
-  Future<AuthSessionState?> read() async {
+  Future<AuthSession?> read() async {
     final string = await SecureStorage.instance.read(key: kSessionStorageKey);
     if (string != null) {
-      return AuthSessionState.fromJson(jsonDecode(string) as Map<String, dynamic>);
+      return AuthSession.fromJson(jsonDecode(string) as Map<String, dynamic>);
     }
     return null;
   }
 
-  Future<void> write(AuthSessionState session) async {
+  Future<void> write(AuthSession session) async {
     await SecureStorage.instance.write(
       key: kSessionStorageKey,
       value: jsonEncode(session.toJson()),

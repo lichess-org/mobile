@@ -59,7 +59,7 @@ Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSessionState? userSession,
+  AuthSession? userSession,
   Map<String, Object>? defaultPreferences,
 }) {
   return makeTestProviderScope(
@@ -104,7 +104,7 @@ Future<Widget> makeOfflineTestProviderScope(
   WidgetTester tester, {
   required Widget child,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSessionState? userSession,
+  AuthSession? userSession,
   Map<String, Object>? defaultPreferences,
 }) => makeTestProviderScope(
   tester,
@@ -132,7 +132,7 @@ Future<Widget> makeTestProviderScope(
   WidgetTester tester, {
   required Widget child,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSessionState? userSession,
+  AuthSession? userSession,
   Map<String, Object>? defaultPreferences,
   Size surfaceSize = kTestSurfaceSize,
   Key? key,

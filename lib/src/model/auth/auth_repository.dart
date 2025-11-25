@@ -31,7 +31,7 @@ class AuthRepository {
   /// OAuth 2.0. It first calls [FlutterAppAuth.authorizeAndExchangeCode] to
   /// get an access token, and then calls the Lichess API to get the user's
   /// account information.
-  Future<AuthSessionState> signIn() async {
+  Future<AuthSession> signIn() async {
     final authResp = await _appAuth.authorizeAndExchangeCode(
       AuthorizationTokenRequest(
         kLichessClientId,
@@ -58,7 +58,7 @@ class AuthRepository {
       headers: {'Authorization': 'Bearer ${signBearerToken(token)}'},
       mapper: User.fromServerJson,
     );
-    return AuthSessionState(token: token, user: user.lightUser);
+    return AuthSession(token: token, user: user.lightUser);
   }
 
   Future<void> signOut() async {

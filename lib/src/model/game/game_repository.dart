@@ -89,7 +89,7 @@ class GameRepository {
   }
 
   Future<IList<LightExportedGameWithPov>> getBookmarkedGames(
-    AuthSessionState session, {
+    AuthSession session, {
     int max = 20,
     DateTime? until,
   }) {

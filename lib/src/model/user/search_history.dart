@@ -18,8 +18,7 @@ final searchHistoryProvider = NotifierProvider<SearchHistory, SearchHistoryState
 class SearchHistory extends Notifier<SearchHistoryState> {
   static const maxHistory = 10;
 
-  String _storageKey(AuthSessionState? session) =>
-      'search.history.${session?.user.id ?? '**anon**'}';
+  String _storageKey(AuthSession? session) => 'search.history.${session?.user.id ?? '**anon**'}';
 
   SharedPreferencesWithCache get _prefs => LichessBinding.instance.sharedPreferences;
 

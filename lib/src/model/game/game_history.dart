@@ -236,6 +236,6 @@ sealed class UserGameHistoryState with _$UserGameHistoryState {
     required bool hasMore,
     required bool hasError,
     required bool online,
-    AuthSessionState? session,
+    AuthSession? session,
   }) = _UserGameHistoryState;
 }

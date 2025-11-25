@@ -919,7 +919,7 @@ class _StormDashboardButton extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context, AuthSessionState session) => Navigator.of(
+  void _showDashboard(BuildContext context, AuthSession session) => Navigator.of(
     context,
     rootNavigator: true,
   ).push(StormDashboardModal.buildRoute(context, session.user));

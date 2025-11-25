@@ -69,7 +69,7 @@ void main() {
             return FakeHttpClientFactory(() => FakeClient());
           }),
         },
-        userSession: const AuthSessionState(
+        userSession: const AuthSession(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),
@@ -202,7 +202,7 @@ void main() {
             return FakeHttpClientFactory(() => FakeClient());
           }),
         },
-        userSession: const AuthSessionState(
+        userSession: const AuthSession(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),
@@ -247,7 +247,7 @@ void main() {
               });
             }),
           },
-          userSession: const AuthSessionState(
+          userSession: const AuthSession(
             token: 'test-token',
             user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
           ),
@@ -302,7 +302,7 @@ void main() {
             });
           }),
         },
-        userSession: const AuthSessionState(
+        userSession: const AuthSession(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),

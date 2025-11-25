@@ -46,7 +46,7 @@ sealed class GameSeek with _$GameSeek {
   }) = _GameSeek;
 
   /// Construct a fast pairing game seek from a predefined time control.
-  factory GameSeek.fastPairing(TimeIncrement setup, AuthSessionState? session) {
+  factory GameSeek.fastPairing(TimeIncrement setup, AuthSession? session) {
     return GameSeek(
       clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
       rated: session != null,

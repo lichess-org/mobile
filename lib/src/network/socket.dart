@@ -103,7 +103,7 @@ class SocketClient {
 
   final WebSocketChannelFactory channelFactory;
 
-  final AuthSessionState? Function() getSession;
+  final AuthSession? Function() getSession;
 
   final PackageInfo packageInfo;
 

@@ -16,7 +16,7 @@ import 'package:path_provider/path_provider.dart'
 typedef PreloadedData = ({
   PackageInfo packageInfo,
   BaseDeviceInfo deviceInfo,
-  AuthSessionState? userSession,
+  AuthSession? userSession,
   String sri,
   int engineMaxMemoryInMb,
   Directory? appDocumentsDirectory,

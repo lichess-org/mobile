@@ -99,6 +99,5 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
     }
   }
 
-  static String key(String key, AuthSessionState? session) =>
-      '$key.${session?.user.id ?? '**anon**'}';
+  static String key(String key, AuthSession? session) => '$key.${session?.user.id ?? '**anon**'}';
 }

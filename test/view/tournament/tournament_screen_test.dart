@@ -382,7 +382,7 @@ void main() {
       const name = 'tom-anders';
       const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final session = AuthSession(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -474,7 +474,7 @@ void main() {
       const name = 'tom-anders';
       const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final session = AuthSession(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -535,7 +535,7 @@ void main() {
       const name = 'tom-anders';
       const tournamenId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final session = AuthSession(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,

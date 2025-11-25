@@ -28,7 +28,7 @@ void main() {
   final mockSessionStorage = MockSessionStorage();
   final mockFlutterAppAuth = MockFlutterAppAuth();
 
-  const testUserSession = AuthSessionState(
+  const testUserSession = AuthSession(
     token: 'testToken',
     user: LightUser(id: UserId('test'), name: 'test', title: 'GM', patronColor: 1),
   );

@@ -350,7 +350,7 @@ class LichessClient implements Client {
   }
 
   /// Checks if the session token is still valid, and delete session if it's not.
-  Future<void> _checkSessionToken(AuthSessionState session) async {
+  Future<void> _checkSessionToken(AuthSession session) async {
     final defaultClient = _ref.read(defaultClientProvider);
     final data = await defaultClient
         .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)

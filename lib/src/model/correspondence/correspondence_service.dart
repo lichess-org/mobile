@@ -249,7 +249,7 @@ class CorrespondenceService {
     );
   }
 
-  AuthSessionState? get _session => ref.read(authSessionProvider);
+  AuthSession? get _session => ref.read(authSessionProvider);
 
   Future<CorrespondenceGameStorage> get _storage =>
       ref.read(correspondenceGameStorageProvider.future);

@@ -7,9 +7,9 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'auth_session.freezed.dart';
 part 'auth_session.g.dart';
 
-/// A provider for [AuthSession].
-final authSessionProvider = NotifierProvider<AuthSession, AuthSessionState?>(
-  AuthSession.new,
+/// A provider for [AuthSessionNotifier].
+final authSessionProvider = NotifierProvider<AuthSessionNotifier, AuthSession?>(
+  AuthSessionNotifier.new,
   name: 'AuthSessionProvider',
 );
 
@@ -18,13 +18,13 @@ final isLoggedInProvider = Provider.autoDispose<bool>((Ref ref) {
   return ref.watch(authSessionProvider.select((authSession) => authSession != null));
 }, name: 'IsLoggedInProvider');
 
-class AuthSession extends Notifier<AuthSessionState?> {
+class AuthSessionNotifier extends Notifier<AuthSession?> {
   @override
-  AuthSessionState? build() {
+  AuthSession? build() {
     return ref.read(preloadedDataProvider).requireValue.userSession;
   }
 
-  Future<void> update(AuthSessionState session) async {
+  Future<void> update(AuthSession session) async {
     final sessionStorage = ref.read(sessionStorageProvider);
     await sessionStorage.write(session);
     state = session;
@@ -38,9 +38,8 @@ class AuthSession extends Notifier<AuthSessionState?> {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AuthSessionState with _$AuthSessionState {
-  const factory AuthSessionState({required LightUser user, required String token}) =
-      _AuthSessionState;
+sealed class AuthSession with _$AuthSession {
+  const factory AuthSession({required LightUser user, required String token}) = _AuthSession;
 
-  factory AuthSessionState.fromJson(Map<String, dynamic> json) => _$AuthSessionStateFromJson(json);
+  factory AuthSession.fromJson(Map<String, dynamic> json) => _$AuthSessionFromJson(json);
 }
