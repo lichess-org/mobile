@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/localizations.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -340,8 +340,8 @@ class NotificationService {
   /// Unregister the device from push notifications.
   Future<void> unregister() async {
     _logger.info('will unregister');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
+    final authUser = _ref.read(authControllerProvider);
+    if (authUser == null) {
       return;
     }
     try {
@@ -357,8 +357,8 @@ class NotificationService {
       return;
     }
     _logger.info('will register fcmToken: $token');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
+    final authUser = _ref.read(authControllerProvider);
+    if (authUser == null) {
       return;
     }
     try {

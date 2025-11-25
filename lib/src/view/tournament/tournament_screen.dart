@@ -4,12 +4,12 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -133,7 +133,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return FocusDetector(
@@ -214,11 +214,11 @@ class _Body extends ConsumerWidget {
                 _TournamentCompleteWidget(state: state)
               else if (state.tournament.featuredGame != null)
                 _FeaturedGame(state.tournament.featuredGame!),
-              if (session != null && state.joined) const SizedBox(height: 35),
+              if (authUser != null && state.joined) const SizedBox(height: 35),
             ],
           ),
         ),
-        bottomSheet: session != null && state.joined && state.tournament.isFinished != true
+        bottomSheet: authUser != null && state.joined && state.tournament.isFinished != true
             ? Material(
                 child: Container(
                   height: 35,
@@ -232,7 +232,7 @@ class _Body extends ConsumerWidget {
                       child: Text(
                         state.tournament.pairingsClosed
                             ? context.l10n.arenaTournamentPairingsAreNowClosed
-                            : context.l10n.standByX(session.user.name),
+                            : context.l10n.standByX(authUser.user.name),
                         style: const TextStyle(color: Colors.white),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -611,7 +611,7 @@ class _Verdicts extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
+    final isLoggedIn = ref.watch(authControllerProvider)?.user.id != null;
 
     if (verdicts.list.isEmpty) {
       return const SizedBox.shrink();
@@ -756,7 +756,7 @@ class _TournamentCompleteWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
 
     final stats = state.tournament.stats;
     if (stats == null) {
@@ -849,9 +849,9 @@ class _TournamentCompleteWidget extends ConsumerWidget {
                 );
               },
             ),
-            if (session != null)
+            if (authUser != null)
               LoadingButtonBuilder<File>(
-                fetchData: () => _downloadGames(ref, session.user),
+                fetchData: () => _downloadGames(ref, authUser.user),
                 builder: (context, isLoading, fetchData) {
                   return ListTile(
                     leading: const Icon(Icons.download),
@@ -864,7 +864,7 @@ class _TournamentCompleteWidget extends ConsumerWidget {
                           context,
                           ShareParams(
                             fileNameOverrides: [
-                              'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}_${session.user.name}.pgn',
+                              'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}_${authUser.user.name}.pgn',
                             ],
                             files: [XFile(file.path, mimeType: 'text/plain')],
                           ),
@@ -912,7 +912,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
+    final signInState = ref.watch(signInMutation);
     final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
@@ -932,7 +933,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
         if (widget.state.chatOptions != null && kidModeAsync.value == false)
           ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
 
-        if (widget.state.tournament.isFinished != true && session != null)
+        if (widget.state.tournament.isFinished != true && authUser != null)
           joinOrLeaveInProgress
               ? const Center(child: CircularProgressIndicator.adaptive())
               : BottomBarButton(
@@ -955,12 +956,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             label: context.l10n.signIn,
             showLabel: true,
             icon: Icons.login,
-            onTap: () {
-              final authController = ref.watch(authControllerProvider);
-
-              if (!authController.isLoading) {
-                ref.read(authControllerProvider.notifier).signIn();
-              }
+            onTap: switch (signInState) {
+              MutationPending() => null,
+              _ => () {
+                signInMutation.run(ref, (tsx) async {
+                  await tsx.get(authControllerProvider.notifier).signIn();
+                });
+              },
             },
           ),
       ],

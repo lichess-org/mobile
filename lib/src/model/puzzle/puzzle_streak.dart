@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -46,8 +46,8 @@ final puzzleStreakControllerProvider =
 class PuzzleStreakController extends AsyncNotifier<StreakState> {
   @override
   Future<StreakState> build() async {
-    final session = ref.watch(authSessionProvider);
-    final streakStorage = ref.watch(streakStorageProvider(session?.user.id));
+    final authUser = ref.watch(authControllerProvider);
+    final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
     final activeStreak = await streakStorage.loadActiveStreak();
     if (activeStreak != null) {
       final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
@@ -121,7 +121,7 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
 
     ref
-        .read(streakStorageProvider(ref.read(authSessionProvider)?.user.id))
+        .read(streakStorageProvider(ref.read(authControllerProvider)?.user.id))
         .saveActiveStreak(state.requireValue.streak);
   }
 
@@ -134,7 +134,7 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
       nextPuzzle: state.requireValue.nextPuzzle,
     ));
 
-    final userId = ref.read(authSessionProvider)?.user.id;
+    final userId = ref.read(authControllerProvider)?.user.id;
     ref.read(streakStorageProvider(userId)).clearActiveStreak();
 
     if (userId != null) {

@@ -12,7 +12,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../binding.dart';
 import '../../example_data.dart';
 import '../../test_container.dart';
-import '../auth/fake_session_storage.dart';
+import '../auth/fake_auth_storage.dart';
 
 class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
 
@@ -44,7 +44,7 @@ void main() {
     when(() => correspondenceGameStorageMock.save(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
           (_) => correspondenceGameStorageMock,
@@ -102,7 +102,7 @@ void main() {
     when(() => correspondenceGameStorageMock.save(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
           (_) => correspondenceGameStorageMock,

@@ -50,7 +50,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(
+    final authUser = ref.watch(
       puzzleSessionProvider((
         userId: widget.initialPuzzleContext.userId,
         angle: widget.initialPuzzleContext.angle,
@@ -59,7 +59,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     final puzzleController = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(puzzleController);
     final brightness = Theme.of(context).brightness;
-    final currentAttempt = session.attempts.firstWhereOrNull(
+    final currentAttempt = authUser.attempts.firstWhereOrNull(
       (a) => a.id == puzzleState.puzzle.puzzle.id,
     );
 
@@ -85,7 +85,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
             runSpacing: 8,
             verticalDirection: VerticalDirection.up,
             children: [
-              for (final attempt in session.attempts)
+              for (final attempt in authUser.attempts)
                 _SessionItem(
                   isCurrent: attempt.id == puzzleState.puzzle.puzzle.id,
                   isLoading: loadingPuzzleId == attempt.id,

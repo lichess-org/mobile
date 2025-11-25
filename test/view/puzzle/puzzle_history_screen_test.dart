@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 
-import '../../model/auth/fake_session_storage.dart';
+import '../../model/auth/fake_auth_storage.dart';
 import '../../model/puzzle/mock_server_responses.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -52,7 +52,7 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleHistoryScreen(),
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(4), ref);
@@ -78,7 +78,7 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleHistoryScreen(),
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(80), ref);

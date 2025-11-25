@@ -5,7 +5,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -41,7 +41,7 @@ void main() {
       );
     });
 
-    test('sets user agent (no session)', () async {
+    test('sets user agent (no authUser)', () async {
       final container = await makeContainer(
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
@@ -62,14 +62,14 @@ void main() {
       );
     });
 
-    test('sets user agent (with session)', () async {
+    test('sets user agent (with authUser)', () async {
       final container = await makeContainer(
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => FakeClient());
           }),
         },
-        userSession: const AuthSessionState(
+        authUser: const AuthUser(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),
@@ -195,21 +195,21 @@ void main() {
       );
     });
 
-    test('adds a signed bearer token when a session is available the request', () async {
+    test('adds a signed bearer token when a authUser is available the request', () async {
       final container = await makeContainer(
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => FakeClient());
           }),
         },
-        userSession: const AuthSessionState(
+        authUser: const AuthUser(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),
       );
 
-      final session = container.read(authSessionProvider);
-      expect(session, isNotNull);
+      final authUser = container.read(authControllerProvider);
+      expect(authUser, isNotNull);
 
       final client = container.read(lichessClientProvider);
       await client.get(Uri(path: '/test'));
@@ -227,7 +227,7 @@ void main() {
     });
 
     test(
-      'when receiving a 401, will test session token and delete session if not valid anymore',
+      'when receiving a 401, will test authUser token and delete authUser if not valid anymore',
       () async {
         int nbTokenTestRequests = 0;
         final container = await makeContainer(
@@ -247,15 +247,15 @@ void main() {
               });
             }),
           },
-          userSession: const AuthSessionState(
+          authUser: const AuthUser(
             token: 'test-token',
             user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
           ),
         );
 
         fakeAsync((async) {
-          final session = container.read(authSessionProvider);
-          expect(session, isNotNull);
+          final authUser = container.read(authControllerProvider);
+          expect(authUser, isNotNull);
 
           final client = container.read(lichessClientProvider);
           try {
@@ -277,12 +277,12 @@ void main() {
 
           expect(nbTokenTestRequests, 1);
 
-          expect(container.read(authSessionProvider), isNull);
+          expect(container.read(authControllerProvider), isNull);
         });
       },
     );
 
-    test('when receiving a 401, will test session token and keep session if still valid', () async {
+    test('when receiving a 401, will test authUser token and keep authUser if still valid', () async {
       int nbTokenTestRequests = 0;
       final container = await makeContainer(
         overrides: {
@@ -302,15 +302,15 @@ void main() {
             });
           }),
         },
-        userSession: const AuthSessionState(
+        authUser: const AuthUser(
           token: 'test-token',
           user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
         ),
       );
 
       fakeAsync((async) {
-        final session = container.read(authSessionProvider);
-        expect(session, isNotNull);
+        final authUser = container.read(authControllerProvider);
+        expect(authUser, isNotNull);
 
         final client = container.read(lichessClientProvider);
         try {
@@ -332,7 +332,7 @@ void main() {
 
         expect(nbTokenTestRequests, 1);
 
-        expect(container.read(authSessionProvider), equals(session));
+        expect(container.read(authControllerProvider), equals(authUser));
       });
     });
   });

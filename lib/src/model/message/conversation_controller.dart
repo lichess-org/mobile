@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
@@ -31,7 +31,7 @@ class ConversationController extends AsyncNotifier<ConversationState> {
 
   final Throttler _typingThrottler = Throttler(const Duration(seconds: 3));
 
-  LightUser? get _me => ref.read(authSessionProvider)?.user;
+  LightUser? get _me => ref.read(authControllerProvider)?.user;
 
   @override
   Future<ConversationState> build() async {

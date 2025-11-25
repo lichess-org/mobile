@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -382,12 +382,12 @@ void main() {
       const name = 'tom-anders';
       const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final authUser = AuthUser(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: tournamentId),
-        userSession: session,
+        authUser: authUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
@@ -474,12 +474,12 @@ void main() {
       const name = 'tom-anders';
       const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final authUser = AuthUser(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: tournamentId),
-        userSession: session,
+        authUser: authUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
@@ -535,12 +535,12 @@ void main() {
       const name = 'tom-anders';
       const tournamenId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final authUser = AuthUser(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: tournamenId),
-        userSession: session,
+        authUser: authUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
@@ -563,7 +563,12 @@ void main() {
       // wait for socket connection
       await tester.pump(kFakeWebSocketConnectionLag);
       sendServerSocketMessages(GameController.socketUri(gameId), [
-        makeFullEvent(gameId.gameId, '', whiteUserName: session.user.name, blackUserName: 'Steven'),
+        makeFullEvent(
+          gameId.gameId,
+          '',
+          whiteUserName: authUser.user.name,
+          blackUserName: 'Steven',
+        ),
       ]);
       await tester.pump();
       expect(find.text('Steven'), findsOneWidget);

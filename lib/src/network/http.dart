@@ -22,7 +22,7 @@ import 'package:http/http.dart'
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
@@ -157,13 +157,13 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    session?.user,
+    authUser?.user,
   );
 });
 
@@ -308,8 +308,8 @@ class _RegisterCallbackClient extends BaseClient {
 /// * Sets the Authorization header when a token has been stored.
 /// * Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
 /// * Logs all requests and responses with status code >= 400.
-/// * When a response has the 401 status, checks if the session token is still valid,
-/// and deletes the session if it's not.
+/// * When a response has the 401 status, checks if the authUser token is still valid,
+/// and deletes the authUser if it's not.
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
@@ -318,17 +318,17 @@ class LichessClient implements Client {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final session = _ref.read(authSessionProvider);
+    final authUser = _ref.read(authControllerProvider);
 
-    if (session != null && !request.headers.containsKey('Authorization')) {
-      final bearer = signBearerToken(session.token);
+    if (authUser != null && !request.headers.containsKey('Authorization')) {
+      final bearer = signBearerToken(authUser.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
       _ref.read(preloadedDataProvider).requireValue.packageInfo,
       _ref.read(preloadedDataProvider).requireValue.deviceInfo,
       _ref.read(preloadedDataProvider).requireValue.sri,
-      session?.user,
+      authUser?.user,
     );
 
     _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
@@ -338,26 +338,14 @@ class LichessClient implements Client {
 
       _logIfError(response);
 
-      if (response.statusCode == 401 && session != null) {
-        _checkSessionToken(session);
+      if (response.statusCode == 401 && authUser != null) {
+        _ref.read(authControllerProvider.notifier).checkToken();
       }
 
       return response;
     } catch (e, st) {
       _logger.warning('Request to ${request.url} failed: $e', e, st);
       rethrow;
-    }
-  }
-
-  /// Checks if the session token is still valid, and delete session if it's not.
-  Future<void> _checkSessionToken(AuthSessionState session) async {
-    final defaultClient = _ref.read(defaultClientProvider);
-    final data = await defaultClient
-        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
-        .timeout(const Duration(seconds: 5));
-    if (data[session.token] == null) {
-      _logger.fine('Session is not active. Deleting it.');
-      await _ref.read(authSessionProvider.notifier).delete();
     }
   }
 

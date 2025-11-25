@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -19,7 +19,7 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   Ref ref,
   PuzzleAngle angle,
 ) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
@@ -27,7 +27,7 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   // be invalidated multiple times when the user scrolls the list)
   ref.cacheFor(const Duration(minutes: 1));
 
-  return puzzleService.nextPuzzle(userId: session?.user.id, angle: angle);
+  return puzzleService.nextPuzzle(userId: authUser?.user.id, angle: angle);
 }, name: 'NextPuzzleProvider');
 
 /// Fetches a storm of puzzles.
@@ -56,25 +56,25 @@ final dailyPuzzleProvider = FutureProvider.autoDispose<Puzzle>((Ref ref) {
 
 /// Fetches all saved puzzle batches for the current user.
 final savedBatchesProvider = FutureProvider.autoDispose<IList<(PuzzleAngle, int)>>((Ref ref) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchAll(userId: session?.user.id);
+  return storage.fetchAll(userId: authUser?.user.id);
 }, name: 'SavedBatchesProvider');
 
 /// Fetches saved puzzle theme batches for the current user.
 final savedThemeBatchesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey, int>>((
   Ref ref,
 ) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchSavedThemes(userId: session?.user.id);
+  return storage.fetchSavedThemes(userId: authUser?.user.id);
 }, name: 'SavedThemeBatchesProvider');
 
 /// Fetches saved puzzle opening batches for the current user.
 final savedOpeningBatchesProvider = FutureProvider.autoDispose<IMap<String, int>>((Ref ref) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchSavedOpenings(userId: session?.user.id);
+  return storage.fetchSavedOpenings(userId: authUser?.user.id);
 }, name: 'SavedOpeningBatchesProvider');
 
 /// Fetches the puzzle dashboard for the current user for the given number of [days].
@@ -82,8 +82,8 @@ final puzzleDashboardProvider = FutureProvider.autoDispose.family<PuzzleDashboar
   Ref ref,
   int days,
 ) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return null;
   return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleDashboard(days),
     const Duration(hours: 3),
@@ -94,8 +94,8 @@ final puzzleDashboardProvider = FutureProvider.autoDispose.family<PuzzleDashboar
 final puzzleRecentActivityProvider = FutureProvider.autoDispose<IList<PuzzleHistoryEntry>?>((
   Ref ref,
 ) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return null;
   return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleActivity(20),
     const Duration(hours: 3),

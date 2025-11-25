@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
@@ -57,7 +57,7 @@ class _Load extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final streak = ref.watch(puzzleStreakControllerProvider);
 
     switch (streak) {
@@ -69,7 +69,7 @@ class _Load extends ConsumerWidget {
           initialPuzzleContext: PuzzleContext(
             puzzle: value.puzzle,
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            userId: session?.user.id,
+            userId: authUser?.user.id,
             isPuzzleStreak: true,
           ),
           streak: value.streak,
@@ -106,14 +106,14 @@ class _BodyState extends ConsumerState<_Body> {
         final previousPuzzle = previous!.requireValue.puzzle;
 
         if (currentPuzzle.puzzle.id != previousPuzzle.puzzle.id) {
-          final session = ref.read(authSessionProvider);
+          final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
               .onLoadPuzzle(
                 PuzzleContext(
                   puzzle: currentPuzzle,
                   angle: widget.initialPuzzleContext.angle,
-                  userId: session?.user.id,
+                  userId: authUser?.user.id,
                 ),
               );
         }

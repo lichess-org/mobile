@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,7 +17,7 @@ import 'package:path_provider/path_provider.dart'
 typedef PreloadedData = ({
   PackageInfo packageInfo,
   BaseDeviceInfo deviceInfo,
-  AuthSessionState? userSession,
+  AuthUser? authUser,
   String sri,
   int engineMaxMemoryInMb,
   Directory? appDocumentsDirectory,
@@ -25,7 +26,7 @@ typedef PreloadedData = ({
 
 /// A provider that preloads various data needed throughout the app.
 final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
-  final sessionStorage = ref.watch(sessionStorageProvider);
+  final authStorage = ref.watch(authStorageProvider);
 
   final pInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
@@ -47,7 +48,22 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
 
   final sri = storedSri ?? genRandomString(12);
 
-  final userSession = await sessionStorage.read();
+  AuthUser? authUser = await authStorage.read();
+
+  if (authUser != null) {
+    try {
+      final isValid = await ref
+          .read(authRepositoryProvider)
+          .checkToken(authUser)
+          .timeout(const Duration(seconds: 1));
+      if (!isValid) {
+        await ref.read(authStorageProvider).delete();
+        authUser = null;
+      }
+    } catch (_) {
+      // in case of network error, assume the authUser is still valid
+    }
+  }
 
   final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();
@@ -65,7 +81,7 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   return (
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
-    userSession: userSession,
+    authUser: authUser,
     sri: sri,
     engineMaxMemoryInMb: engineMaxMemory,
     appDocumentsDirectory: appDocumentsDirectory,

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
@@ -73,7 +73,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
   @override
   Widget build(BuildContext context) {
     final challengesAsync = ref.watch(correspondenceChallengesProvider);
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
 
     switch (challengesAsync) {
       case AsyncError():
@@ -88,7 +88,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           appBar: AppBar(
             title: Text(context.l10n.correspondence),
             actions: [
-              if (session != null)
+              if (authUser != null)
                 IconButton(
                   icon: const Icon(Icons.add_circle_outlined),
                   onPressed: () {
@@ -113,7 +113,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                   : const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final challenge = supportedChallenges[index];
-                final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
+                final isMySeek = UserId.fromUserName(challenge.username) == authUser?.user.id;
 
                 return CorrespondenceChallengeListItem(
                   challenge: challenge,
@@ -124,7 +124,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                   ),
                   onPressed: isMySeek
                       ? null
-                      : session == null
+                      : authUser == null
                       ? () {
                           showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                         }

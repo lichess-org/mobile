@@ -22,7 +22,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../model/auth/fake_session_storage.dart';
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
@@ -39,7 +39,7 @@ class MockPuzzlePreferences extends PuzzlePreferences with Mock {
   @override
   PuzzlePrefs build() {
     return PuzzlePrefs(
-      id: fakeSession.user.id,
+      id: fakeAuthUser.user.id,
       difficulty: PuzzleDifficulty.normal,
       autoNext: false,
       rated: _rated,
@@ -486,18 +486,18 @@ void main() {
                 () => MockPuzzlePreferences(isRatedPreference),
               ),
             },
-            userSession: fakeSession,
+            authUser: fakeAuthUser,
           );
 
           Future<void> saveDBReq() => mockBatchStorage.save(
-            userId: fakeSession.user.id,
+            userId: fakeAuthUser.user.id,
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
             data: captureAny(named: 'data'),
           );
           when(saveDBReq).thenAnswer((_) async {});
           when(
             () => mockBatchStorage.fetch(
-              userId: fakeSession.user.id,
+              userId: fakeAuthUser.user.id,
               angle: const PuzzleTheme(PuzzleThemeKey.mix),
             ),
           ).thenAnswer((_) async => batch);
@@ -560,18 +560,18 @@ void main() {
             () => MockPuzzlePreferences(true),
           ),
         },
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
       );
 
       Future<void> saveDBReq() => mockBatchStorage.save(
-        userId: fakeSession.user.id,
+        userId: fakeAuthUser.user.id,
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         data: captureAny(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
       when(
         () => mockBatchStorage.fetch(
-          userId: fakeSession.user.id,
+          userId: fakeAuthUser.user.id,
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
         ),
       ).thenAnswer((_) async => batch);
@@ -662,18 +662,18 @@ void main() {
         ),
         puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
       },
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
     );
 
     Future<void> saveDBReq() => mockBatchStorage.save(
-      userId: fakeSession.user.id,
+      userId: fakeAuthUser.user.id,
       angle: const PuzzleTheme(PuzzleThemeKey.mix),
       data: captureAny(named: 'data'),
     );
     when(saveDBReq).thenAnswer((_) async {});
     when(
       () => mockBatchStorage.fetch(
-        userId: fakeSession.user.id,
+        userId: fakeAuthUser.user.id,
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
       ),
     ).thenAnswer((_) async => batch);
