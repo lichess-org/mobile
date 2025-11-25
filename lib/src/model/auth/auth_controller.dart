@@ -34,8 +34,10 @@ class AuthController extends AsyncNotifier<void> {
         ref.read(socketPoolProvider).currentClient.connect(),
       ]);
 
+      if (!ref.mounted) return;
       state = const AsyncValue.data(null);
     } catch (e, st) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(e, st);
     }
   }
