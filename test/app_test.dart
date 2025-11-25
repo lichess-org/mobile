@@ -36,58 +36,60 @@ void main() {
     expect(Theme.of(tester.element(find.byType(MaterialApp))).brightness, Brightness.light);
   }, variant: kPlatformVariant);
 
-  testWidgets('App will delete a stored authUser on startup if one request return 401', (
-    tester,
-  ) async {
-    int tokenTestRequests = 0;
-    final mockClient = MockClient((request) {
-      if (request.url.path == '/api/token/test') {
-        tokenTestRequests++;
-        return mockResponse('''
+  testWidgets(
+    'App will delete a stored authUser on startup if one request return 401',
+    (tester) async {
+      int tokenTestRequests = 0;
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/token/test') {
+          tokenTestRequests++;
+          return mockResponse('''
 {
   "${fakeAuthUser.token}": null
 }
         ''', 200);
-      } else if (request.url.path == '/api/account') {
-        return mockResponse('{"error": "Unauthorized"}', 401);
-      }
-      return mockResponse('', 404);
-    });
+        } else if (request.url.path == '/api/account') {
+          return mockResponse('{"error": "Unauthorized"}', 401);
+        }
+        return mockResponse('', 404);
+      });
 
-    final app = await makeTestProviderScope(
-      tester,
-      child: const Application(),
-      authUser: fakeAuthUser,
-      overrides: {
-        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-          (ref) => FakeHttpClientFactory(() => mockClient),
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(MaterialApp), findsOneWidget);
+      expect(find.byType(HomeTabScreen), findsOneWidget);
+
+      // wait for the startup requests and animations to complete
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+      // should see welcome message
+      expect(
+        find.text(
+          'Lichess is a free (really), libre, no-ads, open source chess server.',
+          findRichText: true,
         ),
-      },
-    );
+        findsOneWidget,
+      );
 
-    await tester.pumpWidget(app);
+      // should have made a request to test the token
+      expect(tokenTestRequests, 1);
 
-    expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.byType(HomeTabScreen), findsOneWidget);
-
-    // wait for the startup requests and animations to complete
-    await tester.pumpAndSettle(const Duration(milliseconds: 100));
-
-    // should see welcome message
-    expect(
-      find.text(
-        'Lichess is a free (really), libre, no-ads, open source chess server.',
-        findRichText: true,
-      ),
-      findsOneWidget,
-    );
-
-    // should have made a request to test the token
-    expect(tokenTestRequests, 1);
-
-    // authUser is not active anymore
-    expect(find.text('Sign in'), findsOneWidget);
-  }, variant: kPlatformVariant);
+      // authUser is not active anymore
+      expect(find.text('Sign in'), findsOneWidget);
+    },
+    variant: kPlatformVariant,
+  );
 
   testWidgets('Bottom navigation', variant: kPlatformVariant, (tester) async {
     final app = await makeTestProviderScope(tester, child: const Application());

@@ -563,7 +563,12 @@ void main() {
       // wait for socket connection
       await tester.pump(kFakeWebSocketConnectionLag);
       sendServerSocketMessages(GameController.socketUri(gameId), [
-        makeFullEvent(gameId.gameId, '', whiteUserName: authUser.user.name, blackUserName: 'Steven'),
+        makeFullEvent(
+          gameId.gameId,
+          '',
+          whiteUserName: authUser.user.name,
+          blackUserName: 'Steven',
+        ),
       ]);
       await tester.pump();
       expect(find.text('Steven'), findsOneWidget);
