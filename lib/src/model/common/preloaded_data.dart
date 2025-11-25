@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -47,7 +48,22 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
 
   final sri = storedSri ?? genRandomString(12);
 
-  final userSession = await sessionStorage.read();
+  AuthSession? userSession = await sessionStorage.read();
+
+  if (userSession != null) {
+    try {
+      final isValid = await ref
+          .read(authRepositoryProvider)
+          .checkToken(userSession)
+          .timeout(const Duration(seconds: 1));
+      if (!isValid) {
+        await ref.read(sessionStorageProvider).delete();
+        userSession = null;
+      }
+    } catch (_) {
+      // in case of network error, assume the session is still valid
+    }
+  }
 
   final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();

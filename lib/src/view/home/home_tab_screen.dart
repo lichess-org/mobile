@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -538,12 +539,17 @@ class _SignInWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authController = ref.watch(authControllerProvider);
+    final signInState = ref.watch(signInMutation);
 
     return FilledButton(
-      onPressed: authController.isLoading
-          ? null
-          : () => ref.read(authControllerProvider.notifier).signIn(),
+      onPressed: switch (signInState) {
+        MutationPending() => null,
+        _ => () {
+          signInMutation.run(ref, (tsx) async {
+            await tsx.get(authControllerProvider.notifier).signIn();
+          });
+        },
+      },
       child: Text(context.l10n.signIn),
     );
   }

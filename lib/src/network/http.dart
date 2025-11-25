@@ -22,6 +22,7 @@ import 'package:http/http.dart'
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -157,7 +158,7 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
+  final session = ref.watch(authControllerProvider);
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
@@ -339,25 +340,13 @@ class LichessClient implements Client {
       _logIfError(response);
 
       if (response.statusCode == 401 && session != null) {
-        _checkSessionToken(session);
+        _ref.read(authControllerProvider.notifier).checkToken();
       }
 
       return response;
     } catch (e, st) {
       _logger.warning('Request to ${request.url} failed: $e', e, st);
       rethrow;
-    }
-  }
-
-  /// Checks if the session token is still valid, and delete session if it's not.
-  Future<void> _checkSessionToken(AuthSession session) async {
-    final defaultClient = _ref.read(defaultClientProvider);
-    final data = await defaultClient
-        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
-        .timeout(const Duration(seconds: 5));
-    if (data[session.token] == null) {
-      _logger.fine('Session is not active. Deleting it.');
-      await _ref.read(authSessionProvider.notifier).delete();
     }
   }
 

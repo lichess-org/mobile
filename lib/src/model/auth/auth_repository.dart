@@ -16,14 +16,19 @@ final appAuthProvider = Provider<FlutterAppAuth>((Ref ref) {
   return const FlutterAppAuth();
 }, name: 'AppAuthProvider');
 
-class AuthRepository {
-  AuthRepository(LichessClient client, FlutterAppAuth appAuth)
-    : _client = client,
-      _appAuth = appAuth;
+final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
+  final appAuth = ref.read(appAuthProvider);
+  return AuthRepository(ref, appAuth);
+}, name: 'AuthRepositoryProvider');
 
-  final LichessClient _client;
+class AuthRepository {
+  AuthRepository(Ref ref, FlutterAppAuth appAuth) : _ref = ref, _appAuth = appAuth;
+
+  final Ref _ref;
   final Logger _log = Logger('AuthRepository');
   final FlutterAppAuth _appAuth;
+
+  LichessClient get _client => _ref.read(lichessClientProvider);
 
   /// Sign in with Lichess.
   ///
@@ -61,7 +66,17 @@ class AuthRepository {
     return AuthSession(token: token, user: user.lightUser);
   }
 
+  /// Sign out the current user by revoking the session token.
   Future<void> signOut() async {
     await _client.deleteRead(Uri(path: '/api/token'));
+  }
+
+  /// Check if the given session token is valid.
+  Future<bool> checkToken(AuthSession session) async {
+    final defaultClient = _ref.read(defaultClientProvider);
+    final data = await defaultClient
+        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
+        .timeout(const Duration(seconds: 5));
+    return data[session.token] != null;
   }
 }

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -913,6 +914,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(authSessionProvider);
+    final signInState = ref.watch(signInMutation);
     final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
@@ -955,12 +957,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             label: context.l10n.signIn,
             showLabel: true,
             icon: Icons.login,
-            onTap: () {
-              final authController = ref.watch(authControllerProvider);
-
-              if (!authController.isLoading) {
-                ref.read(authControllerProvider.notifier).signIn();
-              }
+            onTap: switch (signInState) {
+              MutationPending() => null,
+              _ => () {
+                signInMutation.run(ref, (tsx) async {
+                  await tsx.get(authControllerProvider.notifier).signIn();
+                });
+              },
             },
           ),
       ],

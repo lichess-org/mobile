@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -98,7 +99,8 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final isOnline = ref.watch(
       connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
     );
-    final authController = ref.watch(authControllerProvider);
+    final signInState = ref.watch(signInMutation);
+    final signOutState = ref.watch(signOutMutation);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
     final kidMode = account.value?.kid ?? false;
@@ -195,14 +197,13 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                   ).push(ContactsScreen.buildRoute(context));
                 },
               ),
-            if (authController.isLoading)
-              const ListTile(
+            switch (signOutState) {
+              MutationPending() => const ListTile(
                 leading: Icon(Icons.logout_outlined),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
-              )
-            else
-              ListTile(
+              ),
+              _ => ListTile(
                 leading: const Icon(Icons.logout_outlined),
                 title: Text(context.l10n.logOut),
                 enabled: isOnline,
@@ -210,22 +211,25 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                   _showSignOutConfirmDialog(context, ref);
                 },
               ),
+            },
           ] else ...[
-            if (authController.isLoading)
-              const ListTile(
+            switch (signInState) {
+              MutationPending() => const ListTile(
                 leading: Icon(Icons.login_outlined),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
-              )
-            else
-              ListTile(
+              ),
+              _ => ListTile(
                 leading: const Icon(Icons.login_outlined),
                 title: Text(context.l10n.signIn),
                 enabled: isOnline,
                 onTap: () {
-                  ref.read(authControllerProvider.notifier).signIn();
+                  signInMutation.run(ref, (tsx) async {
+                    await tsx.get(authControllerProvider.notifier).signIn();
+                  });
                 },
               ),
+            },
           ],
           if (Theme.of(context).platform == TargetPlatform.android)
             ListTile(
@@ -269,7 +273,9 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
             onPressed: () async {
-              await ref.read(authControllerProvider.notifier).signOut();
+              await signOutMutation.run(ref, (tsx) async {
+                await tsx.get(authControllerProvider.notifier).signOut();
+              });
             },
           ),
         ],
@@ -293,7 +299,9 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  await ref.read(authControllerProvider.notifier).signOut();
+                  await signOutMutation.run(ref, (tsx) async {
+                    await tsx.get(authControllerProvider.notifier).signOut();
+                  });
                 },
               ),
             ],
