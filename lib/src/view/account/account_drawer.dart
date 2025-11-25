@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -102,9 +101,9 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
     final account = ref.watch(accountProvider);
-    final userSession = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
-    final LightUser? user = account.value?.lightUser ?? userSession?.user;
+    final LightUser? user = account.value?.lightUser ?? authUser?.user;
 
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
 

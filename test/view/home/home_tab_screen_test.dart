@@ -57,7 +57,7 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(
@@ -126,7 +126,7 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(() => mockClient),
@@ -192,7 +192,7 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(() => mockClient),
@@ -226,7 +226,7 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(() => mockClient),
@@ -331,7 +331,7 @@ void main() {
       final app = await makeOfflineTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
       );
       await tester.pumpWidget(app);
 

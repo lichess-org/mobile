@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -36,7 +36,7 @@ class AuthRepository {
   /// OAuth 2.0. It first calls [FlutterAppAuth.authorizeAndExchangeCode] to
   /// get an access token, and then calls the Lichess API to get the user's
   /// account information.
-  Future<AuthSession> signIn() async {
+  Future<AuthUser> signIn() async {
     final authResp = await _appAuth.authorizeAndExchangeCode(
       AuthorizationTokenRequest(
         kLichessClientId,
@@ -63,20 +63,20 @@ class AuthRepository {
       headers: {'Authorization': 'Bearer ${signBearerToken(token)}'},
       mapper: User.fromServerJson,
     );
-    return AuthSession(token: token, user: user.lightUser);
+    return AuthUser(token: token, user: user.lightUser);
   }
 
-  /// Sign out the current user by revoking the session token.
+  /// Sign out the current user by revoking the authUser token.
   Future<void> signOut() async {
     await _client.deleteRead(Uri(path: '/api/token'));
   }
 
-  /// Check if the given session token is valid.
-  Future<bool> checkToken(AuthSession session) async {
+  /// Check if the given authUser token is valid.
+  Future<bool> checkToken(AuthUser authUser) async {
     final defaultClient = _ref.read(defaultClientProvider);
     final data = await defaultClient
-        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
+        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
         .timeout(const Duration(seconds: 5));
-    return data[session.token] != null;
+    return data[authUser.token] != null;
   }
 }

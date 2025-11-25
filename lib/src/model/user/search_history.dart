@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'search_history.g.dart';
@@ -18,14 +18,14 @@ final searchHistoryProvider = NotifierProvider<SearchHistory, SearchHistoryState
 class SearchHistory extends Notifier<SearchHistoryState> {
   static const maxHistory = 10;
 
-  String _storageKey(AuthSession? session) => 'search.history.${session?.user.id ?? '**anon**'}';
+  String _storageKey(AuthUser? authUser) => 'search.history.${authUser?.user.id ?? '**anon**'}';
 
   SharedPreferencesWithCache get _prefs => LichessBinding.instance.sharedPreferences;
 
   @override
   SearchHistoryState build() {
-    final session = ref.watch(authSessionProvider);
-    final stored = _prefs.getString(_storageKey(session));
+    final authUser = ref.watch(authControllerProvider);
+    final stored = _prefs.getString(_storageKey(authUser));
 
     return stored != null
         ? SearchHistoryState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
@@ -42,14 +42,14 @@ class SearchHistory extends Notifier<SearchHistoryState> {
     }
     currentList.insert(0, term);
     final newState = SearchHistoryState(history: currentList.toIList());
-    final session = ref.read(authSessionProvider);
-    await _prefs.setString(_storageKey(session), jsonEncode(newState.toJson()));
+    final authUser = ref.read(authControllerProvider);
+    await _prefs.setString(_storageKey(authUser), jsonEncode(newState.toJson()));
     state = newState;
   }
 
   Future<void> clear() async {
     final newState = state.copyWith(history: IList());
-    final prefKey = _storageKey(ref.read(authSessionProvider));
+    final prefKey = _storageKey(ref.read(authControllerProvider));
     await _prefs.setString(prefKey, jsonEncode(newState.toJson()));
     state = newState;
   }

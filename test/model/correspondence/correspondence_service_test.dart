@@ -44,7 +44,7 @@ void main() {
     when(() => correspondenceGameStorageMock.save(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
           (_) => correspondenceGameStorageMock,
@@ -102,7 +102,7 @@ void main() {
     when(() => correspondenceGameStorageMock.save(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
           (_) => correspondenceGameStorageMock,

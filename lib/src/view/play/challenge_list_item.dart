@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
@@ -39,7 +39,7 @@ class ChallengeListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final me = ref.watch(authSessionProvider)?.user;
+    final me = ref.watch(authControllerProvider)?.user;
     final isMyChallenge = me != null && me.id == challengerUser.id;
 
     final color = isMyChallenge ? context.lichessColors.good.withValues(alpha: 0.2) : null;

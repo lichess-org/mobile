@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -135,7 +135,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(userPerfStatsProvider((user.id, perf)));
     final ratingHistory = ref.watch(userRatingHistoryProvider(user.id));
-    final loggedInUser = ref.watch(authSessionProvider);
+    final loggedInUser = ref.watch(authControllerProvider);
     const statGroupSpace = SizedBox(height: 16.0);
     const subStatSpace = SizedBox(height: 10);
 

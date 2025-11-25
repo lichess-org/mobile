@@ -84,7 +84,7 @@ void main() {
     ).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
           notificationDisplayMock,
@@ -166,7 +166,7 @@ void main() {
     when(() => notificationDisplayMock.cancel(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
           notificationDisplayMock,

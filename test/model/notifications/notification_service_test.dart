@@ -71,7 +71,7 @@ void main() {
       'register device when online, token exists and permissions are granted and a session exists',
       () async {
         final container = await makeContainer(
-          userSession: fakeSession,
+          authUser: fakeAuthUser,
           overrides: {
             lichessClientProvider: lichessClientProvider.overrideWith(
               (ref) => LichessClient(registerMockClient, ref),
@@ -93,7 +93,7 @@ void main() {
 
     test("don't try to register device when permissions are not granted", () async {
       final container = await makeContainer(
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith(
             (ref) => LichessClient(registerMockClient, ref),
@@ -138,7 +138,7 @@ void main() {
   group('FCM Correspondence notifications', () {
     test('FCM message with associated notification will show it in foreground', () async {
       final container = await makeContainer(
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith(
             (ref) => LichessClient(registerMockClient, ref),

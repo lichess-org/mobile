@@ -1,7 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -89,7 +89,7 @@ class GameRepository {
   }
 
   Future<IList<LightExportedGameWithPov>> getBookmarkedGames(
-    AuthSession session, {
+    AuthUser authUser, {
     int max = 20,
     DateTime? until,
   }) {
@@ -115,7 +115,7 @@ class GameRepository {
                 (e) => (
                   game: e,
                   // we know here user is not null for at least one of the players
-                  pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
+                  pov: e.white.user?.id == authUser.user.id ? Side.white : Side.black,
                 ),
               )
               .toIList(),

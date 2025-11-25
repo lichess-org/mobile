@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -53,20 +53,20 @@ final offlineClient = MockClient((request) {
 /// It will be wrapped in a [MaterialApp] to simulate a simple app.
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [userSession] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user session state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSession? userSession,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
 }) {
   return makeTestProviderScope(
     tester,
     child: _FakeApp(home: home),
     overrides: overrides,
-    userSession: userSession,
+    authUser: authUser,
     defaultPreferences: defaultPreferences,
   );
 }
@@ -104,7 +104,7 @@ Future<Widget> makeOfflineTestProviderScope(
   WidgetTester tester, {
   required Widget child,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSession? userSession,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
 }) => makeTestProviderScope(
   tester,
@@ -115,7 +115,7 @@ Future<Widget> makeOfflineTestProviderScope(
     }),
     ...?overrides,
   },
-  userSession: userSession,
+  authUser: authUser,
   defaultPreferences: defaultPreferences,
 );
 
@@ -126,13 +126,13 @@ Future<Widget> makeOfflineTestProviderScope(
 /// by [surfaceSize] (which default to [kTestSurfaceSize]).
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [userSession] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user session state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScope(
   WidgetTester tester, {
   required Widget child,
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSession? userSession,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
   Size surfaceSize = kTestSurfaceSize,
   Key? key,
@@ -161,7 +161,7 @@ Future<Widget> makeTestProviderScope(
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
-    if (userSession != null) kSessionStorageKey: jsonEncode(userSession.toJson()),
+    if (authUser != null) kAuthStorageKey: jsonEncode(authUser.toJson()),
   });
 
   final flutterTestOnError = FlutterError.onError!;
@@ -232,7 +232,7 @@ Future<Widget> makeTestProviderScope(
           'identifierForVendor': 'test',
           'isPhysicalDevice': true,
         }),
-        userSession: userSession,
+        authUser: authUser,
         engineMaxMemoryInMb: 256,
         appDocumentsDirectory: null,
         appSupportDirectory: null,

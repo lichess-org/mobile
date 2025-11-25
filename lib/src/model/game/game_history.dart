@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -34,15 +34,15 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
   Ref ref,
 ) async {
   final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
-  final session = ref.watch(authSessionProvider);
-  if (session != null && online) {
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser != null && online) {
     return ref
         .read(gameRepositoryProvider)
-        .getUserGames(session.user.id, max: kNumberOfRecentGames);
+        .getUserGames(authUser.user.id, max: kNumberOfRecentGames);
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
     return storage
-        .page(userId: session?.user.id, max: kNumberOfRecentGames)
+        .page(userId: authUser?.user.id, max: kNumberOfRecentGames)
         .then(
           (value) => value
               // we can assume that `youAre` is not null either for logged
@@ -70,11 +70,11 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
   Ref ref,
   LightUser? user,
 ) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
   return user != null
       ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
-      : session != null && online
+      : authUser != null && online
       ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }, name: 'UserNumberOfGamesProvider');
@@ -118,12 +118,12 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
       _list.clear();
     });
 
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
     final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
     final storage = await ref.watch(gameStorageProvider.future);
 
-    final id = params.userId ?? session?.user.id;
+    final id = params.userId ?? authUser?.user.id;
     final recentGames = id != null && online
         ? _gameRepository.getUserGames(
             id,
@@ -150,7 +150,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
       hasError: false,
       online: online,
       filter: params.filter,
-      session: session,
+      authUser: authUser,
     );
   }
 
@@ -171,9 +171,9 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
               withBookmarked: true,
               withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             )
-          : currentVal.online && currentVal.session != null
+          : currentVal.online && currentVal.authUser != null
           ? _gameRepository.getUserGames(
-              currentVal.session!.user.id,
+              currentVal.authUser!.user.id,
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
@@ -236,6 +236,6 @@ sealed class UserGameHistoryState with _$UserGameHistoryState {
     required bool hasMore,
     required bool hasError,
     required bool online,
-    AuthSession? session,
+    AuthUser? authUser,
   }) = _UserGameHistoryState;
 }

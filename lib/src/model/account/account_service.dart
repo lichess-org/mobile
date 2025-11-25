@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
@@ -115,8 +115,8 @@ class AccountService {
   }
 
   Future<void> setGameBookmark(GameId id, {required bool bookmark}) async {
-    final session = _ref.read(authSessionProvider);
-    if (session == null) return;
+    final authUser = _ref.read(authControllerProvider);
+    if (authUser == null) return;
 
     await _ref.read(accountRepositoryProvider).bookmark(id, bookmark: bookmark);
 

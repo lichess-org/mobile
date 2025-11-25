@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -46,10 +46,10 @@ sealed class GameSeek with _$GameSeek {
   }) = _GameSeek;
 
   /// Construct a fast pairing game seek from a predefined time control.
-  factory GameSeek.fastPairing(TimeIncrement setup, AuthSession? session) {
+  factory GameSeek.fastPairing(TimeIncrement setup, AuthUser? authUser) {
     return GameSeek(
       clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
-      rated: session != null,
+      rated: authUser != null,
     );
   }
 

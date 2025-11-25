@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider that fetches the current user's account information.
 final accountProvider = FutureProvider.autoDispose<User?>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return null;
   return ref.read(accountRepositoryProvider).getProfile();
 }, name: 'AccountProvider');
 

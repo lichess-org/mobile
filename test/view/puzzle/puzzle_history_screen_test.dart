@@ -52,7 +52,7 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleHistoryScreen(),
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(4), ref);
@@ -78,7 +78,7 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleHistoryScreen(),
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(makeClient(80), ref);

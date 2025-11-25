@@ -45,7 +45,7 @@ void main() {
         tokenTestRequests++;
         return mockResponse('''
 {
-  "${fakeSession.token}": null
+  "${fakeAuthUser.token}": null
 }
         ''', 200);
       } else if (request.url.path == '/api/account') {
@@ -57,7 +57,7 @@ void main() {
     final app = await makeTestProviderScope(
       tester,
       child: const Application(),
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
           (ref) => FakeHttpClientFactory(() => mockClient),

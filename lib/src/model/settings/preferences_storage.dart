@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 
@@ -66,7 +66,7 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
   }
 }
 
-/// A [Notifier] mixin to provide a way to store and retrieve preferences per session.
+/// A [Notifier] mixin to provide a way to store and retrieve preferences per authUser.
 mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
   T fromJson(Map<String, dynamic> json);
   T defaults({LightUser? user});
@@ -74,9 +74,9 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
   PrefCategory get prefCategory;
 
   Future<void> save(T value) async {
-    final session = ref.read(authSessionProvider);
+    final authUser = ref.read(authControllerProvider);
     await LichessBinding.instance.sharedPreferences.setString(
-      key(prefCategory.storageKey, session),
+      key(prefCategory.storageKey, authUser),
       jsonEncode(value.toJson()),
     );
 
@@ -84,20 +84,20 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
   }
 
   T fetch() {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final stored = LichessBinding.instance.sharedPreferences.getString(
-      key(prefCategory.storageKey, session),
+      key(prefCategory.storageKey, authUser),
     );
     if (stored == null) {
-      return defaults(user: session?.user);
+      return defaults(user: authUser?.user);
     }
     try {
       return fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
       _logger.warning('Failed to decode $prefCategory preferences: $e');
-      return defaults(user: session?.user);
+      return defaults(user: authUser?.user);
     }
   }
 
-  static String key(String key, AuthSession? session) => '$key.${session?.user.id ?? '**anon**'}';
+  static String key(String key, AuthUser? authUser) => '$key.${authUser?.user.id ?? '**anon**'}';
 }

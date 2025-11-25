@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -50,7 +50,7 @@ void main() {
 
   final user = LightUser(id: UserId.fromUserName(name), name: name);
 
-  final session = AuthSession(user: user, token: 'test-token');
+  final session = AuthUser(user: user, token: 'test-token');
 
   group('OpeningExplorerScreen', () {
     testWidgets('master opening explorer loads', (WidgetTester tester) async {
@@ -130,7 +130,7 @@ void main() {
         tester,
         home: const OpeningExplorerScreen(options: options),
         overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
-        userSession: session,
+        authUser: session,
         defaultPreferences: {
           SessionPreferencesStorage.key(
             PrefCategory.openingExplorer.storageKey,

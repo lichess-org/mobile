@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -100,7 +100,7 @@ class ChatController extends AsyncNotifier<ChatState> {
 
   StreamSubscription<SocketEvent>? _subscription;
 
-  LightUser? get _me => ref.read(authSessionProvider)?.user;
+  LightUser? get _me => ref.read(authControllerProvider)?.user;
 
   @override
   Future<ChatState> build() async {

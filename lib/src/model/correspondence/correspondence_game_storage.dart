@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,11 +20,11 @@ final correspondenceGameStorageProvider = FutureProvider<CorrespondenceGameStora
 /// Fetches all ongoing offline correspondence games, sorted by whose turn it is and last modified time.
 final offlineOngoingCorrespondenceGamesProvider =
     FutureProvider.autoDispose<IList<(DateTime, OfflineCorrespondenceGame)>>((Ref ref) async {
-      final session = ref.watch(authSessionProvider);
+      final authUser = ref.watch(authControllerProvider);
       // cannot use ref.watch because it would create a circular dependency
       // as we invalidate this provider in the storage save and delete methods
       final storage = await ref.read(correspondenceGameStorageProvider.future);
-      final data = await storage.fetchOngoingGames(session?.user.id);
+      final data = await storage.fetchOngoingGames(authUser?.user.id);
       return data.sort((a, b) {
         final aIsMyTurn = a.$2.isMyTurn;
         final bIsMyTurn = b.$2.isMyTurn;

@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/blog/blog_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
@@ -133,7 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       return false;
     }
 
-    if (ref.read(authSessionProvider) != null) {
+    if (ref.read(authControllerProvider) != null) {
       return false;
     }
 
@@ -211,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return connectivity.when(
       skipLoadingOnReload: true,
       data: (status) {
-        final session = ref.watch(authSessionProvider);
+        final authUser = ref.watch(authControllerProvider);
         final unreadLichessMessage = ref.watch(unreadMessagesProvider).value?.lichess == true;
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
@@ -228,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
         final shouldShowWelcomeScreen =
-            session == null &&
+            authUser == null &&
             recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
         List<Widget> widgets;
@@ -241,12 +240,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               child: LichessMessage(style: TextTheme.of(context).bodyLarge),
             ),
             const SizedBox(height: 8.0),
-            if (session == null) ...[
+            if (authUser == null) ...[
               const Center(child: _SignInWidget()),
               const SizedBox(height: 16.0),
             ],
             if (Theme.of(context).platform != TargetPlatform.iOS &&
-                (session == null || session.user.isPatron != true)) ...[
+                (authUser == null || authUser.user.isPatron != true)) ...[
               Center(
                 child: FilledButton.tonal(
                   onPressed: () {
@@ -316,7 +315,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             if (status.isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
-                shouldShow: session != null,
+                shouldShow: authUser != null,
                 child: const AccountPerfCards(padding: Styles.bodySectionPadding),
               ),
             Row(
@@ -371,7 +370,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ),
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
-              shouldShow: session != null && status.isOnline,
+              shouldShow: authUser != null && status.isOnline,
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
@@ -645,13 +644,13 @@ class _GreetingWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final isDayTime = ref.watch(_isDayTimeProvider);
     final style = TextTheme.of(context).bodyLarge;
 
     const iconSize = 24.0;
 
-    final user = session?.user;
+    final user = authUser?.user;
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,
@@ -960,8 +959,8 @@ class _ChallengeScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser == null) {
       return const SizedBox.shrink();
     }
     final connectivity = ref.watch(connectivityChangesProvider);

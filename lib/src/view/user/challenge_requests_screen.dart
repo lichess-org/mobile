@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -37,7 +37,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final challengesAsync = ref.watch(challengesProvider);
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
 
     switch (challengesAsync) {
       case AsyncError():
@@ -61,7 +61,11 @@ class _Body extends ConsumerWidget {
 
             if (user == null) return null;
 
-            return _ChallengeListItem(challenge: challenge, challengerUser: user, session: session);
+            return _ChallengeListItem(
+              challenge: challenge,
+              challengerUser: user,
+              authUser: authUser,
+            );
           },
         );
       case _:
@@ -74,12 +78,12 @@ class _ChallengeListItem extends ConsumerWidget {
   const _ChallengeListItem({
     required this.challenge,
     required this.challengerUser,
-    required this.session,
+    required this.authUser,
   });
 
   final Challenge challenge;
   final LightUser challengerUser;
-  final AuthSession? session;
+  final AuthUser? authUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -151,14 +155,14 @@ class _ChallengeListItem extends ConsumerWidget {
       challenge: challenge,
       challengerUser: challengerUser,
       onPressed: challenge.direction == ChallengeDirection.inward
-          ? session == null
+          ? authUser == null
                 ? showMissingAccountMessage
                 : showConfirmDialog
           : null,
       onAccept:
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported
           ? null
-          : session == null
+          : authUser == null
           ? showMissingAccountMessage
           : acceptChallenge,
       onCancel: challenge.direction == ChallengeDirection.outward

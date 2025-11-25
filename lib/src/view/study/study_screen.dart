@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -211,7 +211,7 @@ class _StudyMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
     final kidModeAsync = ref.watch(kidModeProvider);
 
@@ -226,7 +226,7 @@ class _StudyMenu extends ConsumerWidget {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        if (session != null)
+        if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
             label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,

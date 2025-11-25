@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 
 typedef AccountPrefState = ({
   // game display
@@ -74,9 +74,9 @@ final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, Acc
 class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
   @override
   Future<AccountPrefState?> build() async {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
 
-    if (session == null) {
+    if (authUser == null) {
       return null;
     }
 

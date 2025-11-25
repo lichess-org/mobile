@@ -8,7 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -151,8 +151,8 @@ class StormController extends Notifier<StormState> {
 
     final stats = _getStats();
 
-    final session = ref.read(authSessionProvider);
-    if (session != null) {
+    final authUser = ref.read(authControllerProvider);
+    if (authUser != null) {
       final res = await ref.withClient(
         (client) => Result.capture(
           PuzzleRepository(client).postStormRun(stats).timeout(const Duration(seconds: 2)),

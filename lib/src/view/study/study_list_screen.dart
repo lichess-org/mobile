@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
@@ -90,7 +90,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sessionUser = ref.watch(authSessionProvider)?.user;
+    final authUser = ref.watch(authControllerProvider)?.user;
 
     ref.listen(paginatorProvider, (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
@@ -125,7 +125,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        title: Text(authUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
           if (_searchController.value.text.isEmpty)
             ContextMenuIconButton(
@@ -164,7 +164,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               ],
             ),
         ],
-        bottom: sessionUser != null
+        bottom: authUser != null
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(50.0),
                 child: SizedBox(
@@ -197,12 +197,12 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                                   ].contains(cat)) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'owner:${sessionUser.id} ',
+                                      text: 'owner:${authUser.id} ',
                                     );
                                   } else if (cat == StudyCategory.member) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'member:${sessionUser.id} ',
+                                      text: 'member:${authUser.id} ',
                                     );
                                   } else {
                                     search = null;
