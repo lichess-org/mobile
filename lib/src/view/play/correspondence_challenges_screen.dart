@@ -45,7 +45,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
 
     _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
-        // redirect after accepting a correpondence challenge
+        // redirect after accepting a correpondence seek
         case 'redirect':
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
@@ -58,7 +58,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
 
         case 'reload_seeks':
           if (mounted) {
-            ref.invalidate(correspondenceChallengesProvider);
+            ref.invalidate(correspondenceSeeksProvider);
           }
       }
     });
@@ -72,18 +72,14 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
 
   @override
   Widget build(BuildContext context) {
-    final challengesAsync = ref.watch(correspondenceChallengesProvider);
+    final challengesAsync = ref.watch(correspondenceSeeksProvider);
     final authUser = ref.watch(authControllerProvider);
 
     switch (challengesAsync) {
       case AsyncError():
-        return const Scaffold(
-          body: Center(child: Text('Could not load correspondence challenges')),
-        );
-      case AsyncData(value: final challenges):
-        final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isPlaySupported)
-            .toList();
+        return const Scaffold(body: Center(child: Text('Could not load correspondence seeks')));
+      case AsyncData(value: final seeks):
+        final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
         return Scaffold(
           appBar: AppBar(
             title: Text(context.l10n.correspondence),
@@ -105,22 +101,22 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           ),
           body: HapticRefreshIndicator(
             key: _refreshKey,
-            onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
+            onRefresh: () => ref.refresh(correspondenceSeeksProvider.future),
             child: ListView.separated(
-              itemCount: supportedChallenges.length,
+              itemCount: supportedSeeks.length,
               separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
                   ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
                   : const SizedBox.shrink(),
               itemBuilder: (context, index) {
-                final challenge = supportedChallenges[index];
-                final isMySeek = UserId.fromUserName(challenge.username) == authUser?.user.id;
+                final seek = supportedSeeks[index];
+                final isMySeek = UserId.fromUserName(seek.username) == authUser?.user.id;
 
                 return CorrespondenceChallengeListItem(
-                  challenge: challenge,
+                  seek: seek,
                   challengerUser: LightUser(
-                    id: UserId.fromUserName(challenge.username),
-                    name: challenge.username,
-                    title: challenge.title,
+                    id: UserId.fromUserName(seek.username),
+                    name: seek.username,
+                    title: seek.title,
                   ),
                   onPressed: isMySeek
                       ? null
@@ -134,13 +130,13 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                             title: Text(context.l10n.accept),
                             isDestructiveAction: true,
                             onConfirm: () {
-                              socketClient.send('joinSeek', challenge.id.toString());
+                              socketClient.send('joinSeek', seek.id.toString());
                             },
                           );
                         },
                   onCancel: isMySeek
                       ? () {
-                          socketClient.send('cancelSeek', challenge.id.toString());
+                          socketClient.send('cancelSeek', seek.id.toString());
                         }
                       : null,
                 );

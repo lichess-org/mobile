@@ -154,7 +154,7 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                               });
                             }
                             if (context.mounted) {
-                              ref.invalidate(correspondenceChallengesProvider);
+                              ref.invalidate(correspondenceSeeksProvider);
                               Navigator.of(
                                 context,
                               ).popUntil((route) => route is! ModalBottomSheetRoute);
