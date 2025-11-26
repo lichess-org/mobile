@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
+import 'package:lichess_mobile/src/model/lobby/correspondence_seek.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -126,13 +126,13 @@ class ChallengeListItem extends ConsumerWidget {
 class CorrespondenceChallengeListItem extends StatelessWidget {
   const CorrespondenceChallengeListItem({
     super.key,
-    required this.challenge,
+    required this.seek,
     required this.challengerUser,
     this.onPressed,
     this.onCancel,
   });
 
-  final CorrespondenceChallenge challenge;
+  final CorrespondenceSeek seek;
   final LightUser challengerUser;
   final VoidCallback? onPressed;
   final VoidCallback? onCancel;
@@ -141,24 +141,24 @@ class CorrespondenceChallengeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChallengeListItem(
       challenge: Challenge(
-        id: ChallengeId(challenge.id.value),
+        id: ChallengeId(seek.id.value),
         status: ChallengeStatus.created,
-        variant: challenge.variant,
+        variant: seek.variant,
         speed: Speed.correspondence,
-        timeControl: challenge.days != null
+        timeControl: seek.days != null
             ? ChallengeTimeControlType.correspondence
             : ChallengeTimeControlType.unlimited,
-        rated: challenge.rated,
-        sideChoice: challenge.side == null
+        rated: seek.rated,
+        sideChoice: seek.side == null
             ? SideChoice.random
-            : challenge.side == Side.white
+            : seek.side == Side.white
             ? SideChoice.white
             : SideChoice.black,
-        days: challenge.days,
+        days: seek.days,
         challenger: (
           user: challengerUser,
-          rating: challenge.rating,
-          provisionalRating: challenge.provisional,
+          rating: seek.rating,
+          provisionalRating: seek.provisional,
           lagRating: null,
         ),
       ),
