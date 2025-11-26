@@ -98,7 +98,6 @@ class CreateGameService {
       await LobbyRepository(lichessClient).createSeek(actualSeek, sri: socketClient.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
-      // if the completer is not yet completed, complete it with an error
       if (!completer.isCompleted) {
         completer.completeError(e);
       }
