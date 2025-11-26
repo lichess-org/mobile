@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -122,6 +123,23 @@ sealed class GameSeek with _$GameSeek {
   factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
 }
 
+/// The response to a game seek request.
+///
+/// It can be either a [GameSeekCreated] or a [GameSeekCancelled].
+sealed class GameSeekResponse {}
+
+/// A game has been created from the seek.
+@freezed
+sealed class GameSeekCreated with _$GameSeekCreated implements GameSeekResponse {
+  const factory GameSeekCreated({required GameFullId fullId}) = _GameSeekCreated;
+}
+
+/// A game seek has been cancelled.
+@freezed
+sealed class GameSeekCancelled with _$GameSeekCancelled implements GameSeekResponse {
+  const factory GameSeekCancelled() = _GameSeekCancelled;
+}
+
 @Freezed(fromJson: true, toJson: true)
 sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializable {
   const RecentGameSeekPrefs._();
@@ -139,6 +157,7 @@ sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializa
   }
 }
 
+/// A provider that manages recent game seeks preferences.
 final recentGameSeekProvider = NotifierProvider<RecentGameSeek, RecentGameSeekPrefs>(
   RecentGameSeek.new,
   name: 'RecentGameSeekProvider',

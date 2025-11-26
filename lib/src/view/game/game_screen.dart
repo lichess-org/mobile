@@ -103,10 +103,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
     switch (widget.source) {
       case LobbySource():
-        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelSeek();
         await ref.read(createGameServiceProvider).cancelSeek();
       case UserChallengeSource():
-        ref.read(gameScreenLoaderProvider(widget.source).notifier).cancelChallenge();
         await ref.read(createGameServiceProvider).cancelChallenge();
       case ExistingGameSource():
         break;

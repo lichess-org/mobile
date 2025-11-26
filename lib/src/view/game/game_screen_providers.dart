@@ -110,7 +110,15 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
     final service = ref.watch(createGameServiceProvider);
 
     return switch (source) {
-      LobbySource(:final seek) => service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      LobbySource(:final seek) =>
+        service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
       UserChallengeSource(:final challengeRequest) =>
         service
             .newRealTimeChallenge(challengeRequest)
@@ -118,6 +126,7 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
               (data) => switch (data) {
                 ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
                 ChallengeResponseDeclined() => ChallengeDeclinedState(data),
+                ChallengeResponseCancelled() => const ChallengeCancelledState(),
               },
             ),
       ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),
@@ -129,21 +138,22 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
     if (source case LobbySource(:final seek)) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
-      state = AsyncValue.data(await service.newLobbyGame(seek).then((id) => GameCreatedState(id)));
+      state = AsyncValue.data(
+        await service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
+      );
     }
   }
 
   /// Load a game from its id.
   void loadGame(GameFullId id) {
     state = AsyncValue.data(GameCreatedState(id));
-  }
-
-  void cancelSeek() {
-    state = const AsyncValue.data(SeekCancelledState());
-  }
-
-  void cancelChallenge() {
-    state = const AsyncValue.data(ChallengeCancelledState());
   }
 }
 
