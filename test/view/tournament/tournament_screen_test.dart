@@ -921,12 +921,12 @@ void main() {
 
       const name = 'testuser';
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final authUser = AuthUser(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: TournamentId('testTeamBattle')),
-        userSession: session,
+        authUser: authUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
@@ -986,12 +986,12 @@ void main() {
 
       const name = 'testuser';
       final user = LightUser(id: UserId.fromUserName(name), name: name);
-      final session = AuthSessionState(user: user, token: 'test-token');
+      final authUser = AuthUser(user: user, token: 'test-token');
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const TournamentScreen(id: TournamentId('testTeamBattle')),
-        userSession: session,
+        authUser: authUser,
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
