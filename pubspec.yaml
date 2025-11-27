@@ -89,7 +89,6 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^1.0.0
-  mocktail_image_network: ^1.2.0
   riverpod_lint: ^3.0.3
   stream_channel: ^2.1.2
   wakelock_plus_platform_interface: ^1.3.0
