@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/network/http.dart';
 
-/// Like [NetworkImage], but uses the provided [Ref] to obtain the globally configured HTTP client.
+/// Like [NetworkImage], but uses the provided [http.Client] to fetch the image.
 class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
   /// Creates an object that fetches the image at the given URL.
   const HttpNetworkImage(this.url, http.Client client, {this.scale = 1.0, this.headers})
@@ -91,7 +91,7 @@ class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
 
 const cacheKey = 'http_network_image_cache_key';
 
-/// Provides a [CacheManager] for caching network images.
+/// Provides a [CacheManager] for caching network images, using the default HTTP client.
 final cachedNetworkImageManagerProvider = Provider<CacheManager>((ref) {
   return CacheManager(
     Config(
