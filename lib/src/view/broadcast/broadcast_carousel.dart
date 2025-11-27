@@ -504,7 +504,7 @@ Future<void> preCacheBroadcastImages(
   required ImageColorWorker worker,
   required http.Client httpClient,
 }) async {
-  for (final broadcast in broadcasts) {
+  for (final broadcast in broadcasts.take(5)) {
     final imageUrl = broadcast.tour.imageUrl;
     if (imageUrl != null) {
       final provider = HttpNetworkImage(imageUrl, httpClient);
