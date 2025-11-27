@@ -53,21 +53,25 @@ class HttpClientFactory {
 
   Client _createClient() {
     const userAgent = 'Lichess Mobile';
-    if (Platform.isAndroid) {
-      final engine = CronetEngine.build(
-        cacheMode: CacheMode.memory,
-        cacheMaxSize: _maxCacheSize,
-        userAgent: userAgent,
-      );
-      return CronetClient.fromCronetEngine(engine);
-    } else if (Platform.isIOS || Platform.isMacOS) {
-      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-        ..httpAdditionalHeaders = {'User-Agent': userAgent};
-      return CupertinoClient.fromSessionConfiguration(config);
-    } else {
+    try {
+      if (Platform.isAndroid) {
+        final engine = CronetEngine.build(
+          cacheMode: CacheMode.memory,
+          cacheMaxSize: _maxCacheSize,
+          userAgent: userAgent,
+          enableHttp2: true,
+        );
+        return CronetClient.fromCronetEngine(engine);
+      } else if (Platform.isIOS || Platform.isMacOS) {
+        final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+          ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+          ..httpAdditionalHeaders = {'User-Agent': userAgent};
+        return CupertinoClient.fromSessionConfiguration(config);
+      }
+    } catch (_) {
       return IOClient(HttpClient()..userAgent = userAgent);
     }
+    return IOClient(HttpClient()..userAgent = userAgent);
   }
 
   Client call() {
@@ -123,7 +127,7 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
 
 /// The external http client.
 ///
-/// This client is used for all requests that don't go to the lichess server, for
+/// This client is used for all requests that don't go to the main lichess server, for
 /// example, requests to lichess CDN, or other APIs.
 /// Only one instance of this client is created and kept alive for the whole app.
 final externalClientProvider = Provider<ExternalClient>((Ref ref) {

@@ -6,13 +6,17 @@ import 'dart:ui' as ui;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -133,7 +137,7 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
   }
 }
 
-class BroadcastCarouselItem extends StatefulWidget {
+class BroadcastCarouselItem extends ConsumerStatefulWidget {
   const BroadcastCarouselItem({
     required this.broadcast,
     required this.flexWeights,
@@ -177,30 +181,30 @@ class BroadcastCarouselItem extends StatefulWidget {
       );
 
   @override
-  State<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
+  ConsumerState<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
 }
 
-class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
+class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
-  ImageProvider get imageProvider =>
-      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
+  ImageProvider get imageProvider => imageUrl != null
+      ? HttpNetworkImage(imageUrl!, ref.read(externalClientProvider))
+      : kDefaultBroadcastImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final cachedColors = _colorsCache[imageProvider];
-    if (_colorsCache.containsKey(imageProvider)) {
-      _cardColors = cachedColors;
+    if (_colorsCache.containsKey(imageUrl)) {
+      _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(NetworkImage(imageUrl!));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(externalClientProvider)));
     }
   }
 
-  Future<void> _getImageColors(NetworkImage provider) async {
+  Future<void> _getImageColors(HttpNetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
@@ -295,7 +299,7 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
 }
 
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
+final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd().add_jm();
 
@@ -487,7 +491,7 @@ Future<_CardColors?> _computeImageColors(
       primaryContainer: Color(primaryContainer),
       onPrimaryContainer: Color(onPrimaryContainer),
     );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
+    _colorsCache[imageUrl] = cardColors;
     return cardColors;
   }
   return null;
@@ -498,11 +502,12 @@ Future<void> preCacheBroadcastImages(
   BuildContext context, {
   required Iterable<Broadcast> broadcasts,
   required ImageColorWorker worker,
+  required http.Client httpClient,
 }) async {
   for (final broadcast in broadcasts) {
     final imageUrl = broadcast.tour.imageUrl;
     if (imageUrl != null) {
-      final provider = NetworkImage(imageUrl);
+      final provider = HttpNetworkImage(imageUrl, httpClient);
       await precacheImage(provider, context);
       final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
