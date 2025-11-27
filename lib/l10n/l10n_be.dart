@@ -512,13 +512,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Якім чынам размяркоўваюцца балы?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Перамога прыносіць 2 балы, нічыя – 1 бал, а параза не прыносіць балаў увогуле. Калі вы выйграеце 2 гульні запар, актывуецца падваенне балаў, што паказваецца значкам полымя. Наступныя гульні будуць прыносіць падвоеныя балы, пакуль вы не прайграеце: такім чынам, перамога прынясе 4 балаў, нічыя - 2 балы, а параза адмяняе падваенне.\r\n\r\nПрыкладам, дзве перамогі і нічыя прынясуць 6 балаў: 2 + 2 + (2 х 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Перамога прыносіць 2 балы, нічыя – 1 бал, а параза не прыносіць балаў увогуле. Калі вы выйграеце 2 гульні запар, актывуецца падваенне балаў, што паказваецца значкам полымя. Наступныя гульні будуць прыносіць падвоеныя балы, пакуль вы не прайграеце: такім чынам, перамога прынясе 4 балаў, нічыя - 2 балы, а параза адмяняе падваенне.\n\nПрыкладам, дзве перамогі і нічыя прынясуць 6 балаў: 2 + 2 + (2 х 1)';
 
   @override
   String get arenaBerserk => 'Лютасць арэны';
 
   @override
-  String get arenaBerserkAnswer => 'Калі гулец націсне на кнопку шалёнасці (Berserk) напачатку гульні, ён губляе палову часу, але перамога прынясе дадатковы турнірны бал.\r\n\r\nШалёнасць у гульнях з даданнем часу, таксама скасоўвае даданне часу. (выключэнне - 1+2, будзе 1+0)\r\n\r\nШалёнасць недаступная для гульняў з нулявым пачатковым часам (0+1, 0+2).\r\n\r\nШалёнасць прыносіць дадатковы бал, калі ў гульні, было зраблена хоця б 7 хадоў.';
+  String get arenaBerserkAnswer => 'Калі гулец націсне на кнопку шалёнасці (Berserk) напачатку гульні, ён губляе палову часу, але перамога прынясе дадатковы турнірны бал.\n\nШалёнасць у гульнях з даданнем часу, таксама скасоўвае даданне часу. (выключэнне - 1+2, будзе 1+0)\n\nШалёнасць недаступная для гульняў з нулявым пачатковым часам (0+1, 0+2).\n\nШалёнасць прыносіць дадатковы бал, калі ў гульні, было зраблена хоця б 7 хадоў.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Як абіраецца пераможац?';
@@ -530,7 +530,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Як працуе лёсаванне?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'У пачатку турніру гульцы размяркоўваюцца паводле іх рэйтынгу.\r\nЯк толькі гульня скончылася, вярніцеся ў лобі турніру: наступная гульня будзе праведзеная з гульцом, найбліжэйшым да вас па рэйтынгу. Гэты механізм гарантуе, што вам не давядзецца доўга чакаць наступнага суперніка, аднак ёсць магчымасць, што вы не згуляеце з кожным удзельнікам турніру.\r\nГуляйце хутка, вяртайцеся ў лобі і гуляйце яшчэ, каб выйграць як мага болей балаў.';
+  String get arenaHowDoesPairingWorkAnswer => 'У пачатку турніру гульцы размяркоўваюцца паводле іх рэйтынгу.\nЯк толькі гульня скончылася, вярніцеся ў лобі турніру: наступная гульня будзе праведзеная з гульцом, найбліжэйшым да вас па рэйтынгу. Гэты механізм гарантуе, што вам не давядзецца доўга чакаць наступнага суперніка, аднак ёсць магчымасць, што вы не згуляеце з кожным удзельнікам турніру.\nГуляйце хутка, вяртайцеся ў лобі і гуляйце яшчэ, каб выйграць як мага болей балаў.';
 
   @override
   String get arenaHowDoesItEnd => 'Калі турнір сканчаецца?';
@@ -639,7 +639,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1634,7 +1634,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Шукаць задачы';
 
   @override
-  String get puzzleFromMyGamesNone => 'Базе дадзеных няма задач з вашых гульня, але Liches усе роўна любіць вас!\r\nПагуляйце ў хуткія або класічныя шахматы каб павялічыць шанец выкарыстання вашых гульняў у задачах.';
+  String get puzzleFromMyGamesNone => 'Базе дадзеных няма задач з вашых гульня, але Liches усе роўна любіць вас!\nПагуляйце ў хуткія або класічныя шахматы каб павялічыць шанец выкарыстання вашых гульняў у задачах.';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Трэніруйцеся, аналізуйце, паляпшайцеся';
@@ -4669,7 +4669,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get tournDescriptionHelp => 'Хочаце сказаць удзельнікам што-небудзь асаблівае? Паспрабуйце зрабіць гэта сцісла. Markdown спасылкі даступныя: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Гульні - рэйтынгавыя\r\nі ўплываюць на рэйтынг гульцоў';
+  String get ratedFormHelp => 'Гульні - рэйтынгавыя\nі ўплываюць на рэйтынг гульцоў';
 
   @override
   String get onlyMembersOfTeam => 'Толькі чальцы каманды';
@@ -4688,7 +4688,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Устаўце дакладны FEN, каб пачынаць кожную гульню з зададзенай пазіцыі.\r\nПрацуе толькі ў стандартных шахматах, не ў варыянтах.\r\nМожаце выкарыстаць $param для генерацыі пазіцыі FEN, а потым уставіць тут.\r\nПакіньце пустым, каб пачынаць гульні са звычайнай пачатковай пазіцыі.';
+    return 'Устаўце дакладны FEN, каб пачынаць кожную гульню з зададзенай пазіцыі.\nПрацуе толькі ў стандартных шахматах, не ў варыянтах.\nМожаце выкарыстаць $param для генерацыі пазіцыі FEN, а потым уставіць тут.\nПакіньце пустым, каб пачынаць гульні са звычайнай пачатковай пазіцыі.';
   }
 
   @override
@@ -4820,7 +4820,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess - гэта дабрачынная і цалкам бясплатная праграма з адкрытым зыходным кодам.\r\nУсе аперацыйныя выдаткі, распрацоўка і шахматны кантэнт фінансуюцца выключна за кошт ахвяраванняў карыстальнікаў.';
+  String get lichessPatronInfo => 'Lichess - гэта дабрачынная і цалкам бясплатная праграма з адкрытым зыходным кодам.\nУсе аперацыйныя выдаткі, распрацоўка і шахматны кантэнт фінансуюцца выключна за кошт ахвяраванняў карыстальнікаў.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

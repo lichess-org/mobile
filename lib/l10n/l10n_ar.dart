@@ -550,19 +550,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'كيف تحتسب النقاط؟';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'الفوز نتيجته الأساسية  2 نقطة، التعادل: 1 نقطة، والخسارة 0 نقطة.\r\nإذا ربحت مباراتين على التوالي سوف تبدأ مرحلة مضاعفة النقاط، ويمثلها رمز الشعلة.\r\nوسوف تستمر المباريات التالية مضاعفة النقاط حتى تفشل في الفوز في مباراة.\r\nبمعنى أن، الفوز سيستحق 4 نقاط، التعادل: 2 نقطة، وستبقى الخسارة تستحق 0 نقطة.\r\nكمثال، انتصاران يليهما تعادل سيساوي 6 نقاط: 2 + 2 + (2 × 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'الفوز نتيجته الأساسية  2 نقطة، التعادل: 1 نقطة، والخسارة 0 نقطة.\nإذا ربحت مباراتين على التوالي سوف تبدأ مرحلة مضاعفة النقاط، ويمثلها رمز الشعلة.\nوسوف تستمر المباريات التالية مضاعفة النقاط حتى تفشل في الفوز في مباراة.\nبمعنى أن، الفوز سيستحق 4 نقاط، التعادل: 2 نقطة، وستبقى الخسارة تستحق 0 نقطة.\nكمثال، انتصاران يليهما تعادل سيساوي 6 نقاط: 2 + 2 + (2 × 1)';
 
   @override
   String get arenaBerserk => 'ساحة المخاطرة';
 
   @override
-  String get arenaBerserkAnswer => 'عندما يضغط اللاعب زر المخاطرة في بداية المباراة سيفقد اللاعب نصف وقته لكنه في حال الفوز يحصل على نقطة إضافية.\r\nالمخاطرة في حالة الوقت المتزايد يلغي الزيادة مع كل نقلة (يستثنى من ذلك نمط ١+٢، سيصبح بعد المخاطرة ١+٠)\r\nالمخاطرة غير متاحة للمباريات بتوقيت صفر (٠+١, ٠+٢).\r\nالمخاطرة تضمن النقطة الإضافية إذا لعبت على الأقل ٧ نقلات.';
+  String get arenaBerserkAnswer => 'عندما يضغط اللاعب زر المخاطرة في بداية المباراة سيفقد اللاعب نصف وقته لكنه في حال الفوز يحصل على نقطة إضافية.\nالمخاطرة في حالة الوقت المتزايد يلغي الزيادة مع كل نقلة (يستثنى من ذلك نمط ١+٢، سيصبح بعد المخاطرة ١+٠)\nالمخاطرة غير متاحة للمباريات بتوقيت صفر (٠+١, ٠+٢).\nالمخاطرة تضمن النقطة الإضافية إذا لعبت على الأقل ٧ نقلات.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'كيف يحدد الفائز؟';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'اللاعب (اللاعبون) ذو النقاط الأعلى في نهاية الوقت المحدد للبطولة يتم إعلانه/م فائز/ين.\r\nعندما يحصل لاعبان أو أكثر على نفس عدد النقاط، يكون معدل الأداء في البطولة هو كسر التعادل.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'اللاعب (اللاعبون) ذو النقاط الأعلى في نهاية الوقت المحدد للبطولة يتم إعلانه/م فائز/ين.\nعندما يحصل لاعبان أو أكثر على نفس عدد النقاط، يكون معدل الأداء في البطولة هو كسر التعادل.';
 
   @override
   String get arenaHowDoesPairingWork => 'كيف يتم تحديد الخصوم؟';
@@ -677,7 +677,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arenaTournamentStats => 'إحصائيات البطولة';
 
   @override
-  String get arenaRankAvgHelp => 'متوسط ​​الرتبة هو نسبة مئوية من رتبتك. الأقل أفضل.\r\n\r\nعلى سبيل المثال، الحصول على المركز 3 في بطولة تضم 100 لاعب = 3%. حصولك على المركز العاشر في بطولة تضم 1000 لاعب = 1%.';
+  String get arenaRankAvgHelp => 'متوسط ​​الرتبة هو نسبة مئوية من رتبتك. الأقل أفضل.\n\nعلى سبيل المثال، الحصول على المركز 3 في بطولة تضم 100 لاعب = 3%. حصولك على المركز العاشر في بطولة تضم 1000 لاعب = 1%.';
 
   @override
   String get arenaMedians => 'متوسط';
@@ -1684,7 +1684,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleSearchPuzzles => 'ابحث عن ألغاز';
 
   @override
-  String get puzzleFromMyGamesNone => 'ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.\r\nإلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!';
+  String get puzzleFromMyGamesNone => 'ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.\nإلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'تـدرب، حـلل، تـطور';
@@ -3578,7 +3578,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get other => 'أخرى';
 
   @override
-  String get reportCheatBoostHelp => 'هذه رسالة عامية وليست مخصصة لبلاغات الغش. وهي تحاول تعليم اللاعب كيفية كتابة بلاغ مفيد لفريق لي-تشيس. و أيضا تطلب إثبات.\r\n\r\nتظهر على صفحة \"بلغ مستخدم\"\r\nhttps://lichess. org/report.';
+  String get reportCheatBoostHelp => 'هذه رسالة عامية وليست مخصصة لبلاغات الغش. وهي تحاول تعليم اللاعب كيفية كتابة بلاغ مفيد لفريق لي-تشيس. و أيضا تطلب إثبات.\n\nتظهر على صفحة \"بلغ مستخدم\"\nhttps://lichess. org/report.';
 
   @override
   String get reportUsernameHelp => 'اشرح ما المسيء في اسم المستخدم هذا. لا تقل فقط \"إنه مسيء/غير مناسب\"، بل أخبرنا كيف توصلت إلى هذا الاستنتاج، خاصة إذا كانت الإهانة غير واضحة، أو ليست باللغة الإنجليزية، أو كانت باللغة العامية، أو كانت إشارة تاريخية/ثقافية.';
@@ -4733,7 +4733,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tournDescriptionHelp => 'هل تريد إخبار أي شيء مميز للمشاركين؟ حاول أن تبقيه قصيرة. روابط Markdown متوفرة: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'المباريات مصنفة\r\nوتأثر على تقييم اللاعبين';
+  String get ratedFormHelp => 'المباريات مصنفة\nوتأثر على تقييم اللاعبين';
 
   @override
   String get onlyMembersOfTeam => 'اعضاء الفريق فقط';
@@ -4752,7 +4752,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'لصق FEN صالح لبدء كل لعبة من موقع معين.\r\nإنه يعمل فقط للألعاب العادية، وليس مع المتغيرات.\r\nيمكنك استخدام $param لإنشاء موضع FEN، ثم لصقه هنا.\r\nاتركه فارغاً لبدء الألعاب من الوضع الأولي العادي.';
+    return 'لصق FEN صالح لبدء كل لعبة من موقع معين.\nإنه يعمل فقط للألعاب العادية، وليس مع المتغيرات.\nيمكنك استخدام $param لإنشاء موضع FEN، ثم لصقه هنا.\nاتركه فارغاً لبدء الألعاب من الوضع الأولي العادي.';
   }
 
   @override
@@ -4884,7 +4884,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showMeEverything => 'اظهر لي كل شيء';
 
   @override
-  String get lichessPatronInfo => 'Lichess هو موقع خيري و مجاني بشكل كامل ومفتوح المصدر.\r\nكافة التكاليف التشغيلية و التطويرية و المحتوى يتم الحصول عليه من قبل تبرعات المستخدمين.';
+  String get lichessPatronInfo => 'Lichess هو موقع خيري و مجاني بشكل كامل ومفتوح المصدر.\nكافة التكاليف التشغيلية و التطويرية و المحتوى يتم الحصول عليه من قبل تبرعات المستخدمين.';
 
   @override
   String get nothingToSeeHere => 'لا يوجد شيء يمكن رؤيته هنا في الوقت الحالي.';

@@ -588,7 +588,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get arenaTournamentStats => 'Statistik turnamen';
 
   @override
-  String get arenaRankAvgHelp => 'Rata-rata peringkat adalah persentase peringkat Anda. Lebih rendah lebih baik.\r\n\r\nMisalnya, menjadi peringkat 3 dalam turnamen yang terdiri dari 100 pemain = 3%. Menjadi peringkat 10 dalam turnamen 1000 pemain = 1%.';
+  String get arenaRankAvgHelp => 'Rata-rata peringkat adalah persentase peringkat Anda. Lebih rendah lebih baik.\n\nMisalnya, menjadi peringkat 3 dalam turnamen yang terdiri dari 100 pemain = 3%. Menjadi peringkat 10 dalam turnamen 1000 pemain = 1%.';
 
   @override
   String get arenaMedians => 'median';
@@ -1577,7 +1577,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Cari teka-teki';
 
   @override
-  String get puzzleFromMyGamesNone => 'Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.\r\nMainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!';
+  String get puzzleFromMyGamesNone => 'Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.\nMainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Latih, analisis, meningkat';
@@ -4597,7 +4597,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get tournDescriptionHelp => 'Adakah sesuatu yang spesial yang Anda ingin katakan kepada peserta? Coba buat pendek saja. Tautan Markdown tersedia: [name] (https://url)';
 
   @override
-  String get ratedFormHelp => 'Permainan dinilai \r\ndan berdampak pada peringkat pemain';
+  String get ratedFormHelp => 'Permainan dinilai \ndan berdampak pada peringkat pemain';
 
   @override
   String get onlyMembersOfTeam => 'Hanya anggota dari tim';
@@ -4616,7 +4616,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Tempelkan sebuah FEN yang valid untuk memulai setiap game dari posisi yang diberikan.\r\nIni hanya berfungsi untuk game standar, bukan yang dengan variasi.\r\nAnda dapat menggunakan $param untuk menghasilkan sebuah posisi FEN, lalu tempel di sini.\r\nKosongkan untuk memulai permainan dari posisi awal yang normal.';
+    return 'Tempelkan sebuah FEN yang valid untuk memulai setiap game dari posisi yang diberikan.\nIni hanya berfungsi untuk game standar, bukan yang dengan variasi.\nAnda dapat menggunakan $param untuk menghasilkan sebuah posisi FEN, lalu tempel di sini.\nKosongkan untuk memulai permainan dari posisi awal yang normal.';
   }
 
   @override
@@ -4748,7 +4748,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get showMeEverything => 'Tunjukkan semuanya';
 
   @override
-  String get lichessPatronInfo => 'Lichess adalah sebuah amal dan semuanya merupakan perangkat lunak sumber terbuka yang gratis/bebas.\r\nSemua biaya operasi, pengembangan, dan konten didanai sepenuhnya oleh donasi pengguna.';
+  String get lichessPatronInfo => 'Lichess adalah sebuah amal dan semuanya merupakan perangkat lunak sumber terbuka yang gratis/bebas.\nSemua biaya operasi, pengembangan, dan konten didanai sepenuhnya oleh donasi pengguna.';
 
   @override
   String get nothingToSeeHere => 'Tidak ada yang bisa dilihat untuk saat ini.';

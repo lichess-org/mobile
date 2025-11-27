@@ -478,13 +478,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arenaHowAreScoresCalculated => '¿Cómo se calculan las puntuaciones?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'De entrada, las victorias valen 2 puntos, las tablas 1 punto y las derrotas 0 puntos.\r\n\r\nSi ganas dos partidas seguidas, comenzarás una racha de puntuación doble, representada por un icono de una llama. A partir de ese momento y mientras sigas ganando, cada partida valdrá el doble; esto es, las victorias 4 puntos y las tablas 2 puntos. Una derrota seguirá valiendo cero puntos.\r\n\r\nPor ejemplo:\r\nTres victorias seguidas valen 8 puntos: 2 + 2 + (2×2)\r\nDos victorias y unas tablas valen 6 puntos: 2 + 2 + (1×2)\r\nDos victorias, una derrota y unas tablas valen 5 puntos: 2 + 2 + 0 + 1';
+  String get arenaHowAreScoresCalculatedAnswer => 'De entrada, las victorias valen 2 puntos, las tablas 1 punto y las derrotas 0 puntos.\n\nSi ganas dos partidas seguidas, comenzarás una racha de puntuación doble, representada por un icono de una llama. A partir de ese momento y mientras sigas ganando, cada partida valdrá el doble; esto es, las victorias 4 puntos y las tablas 2 puntos. Una derrota seguirá valiendo cero puntos.\n\nPor ejemplo:\nTres victorias seguidas valen 8 puntos: 2 + 2 + (2×2)\nDos victorias y unas tablas valen 6 puntos: 2 + 2 + (1×2)\nDos victorias, una derrota y unas tablas valen 5 puntos: 2 + 2 + 0 + 1';
 
   @override
   String get arenaBerserk => 'Modo berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Cuando un jugador pulsa el botón de berserk al principio de una partida, pierde la mitad de su tiempo, pero la victoria vale un punto adicional.\r\n\r\nEn controles de tiempo que tienen incremento, la opción berserk también cancela el incremento (1+2 es una excepción, ya que sólo se cancela el incremento, pero no se parte el tiempo a la mitad, resultando en 1+0).\r\n\r\nEl modo berserk no está disponible en controles de tiempo con tiempo inicial cero como 0+1 o 0+2.\r\n\r\nEl modo berserk sólo proporciona un punto adicional por cada victoria si juegas al menos 7 movimientos en la partida.';
+  String get arenaBerserkAnswer => 'Cuando un jugador pulsa el botón de berserk al principio de una partida, pierde la mitad de su tiempo, pero la victoria vale un punto adicional.\n\nEn controles de tiempo que tienen incremento, la opción berserk también cancela el incremento (1+2 es una excepción, ya que sólo se cancela el incremento, pero no se parte el tiempo a la mitad, resultando en 1+0).\n\nEl modo berserk no está disponible en controles de tiempo con tiempo inicial cero como 0+1 o 0+2.\n\nEl modo berserk sólo proporciona un punto adicional por cada victoria si juegas al menos 7 movimientos en la partida.';
 
   @override
   String get arenaHowIsTheWinnerDecided => '¿Cómo se decide el ganador?';
@@ -496,7 +496,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arenaHowDoesPairingWork => '¿Cómo se realizan los emparejamientos?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Al principio del torneo, los jugadores se emparejan en base a su puntuación. En cuanto terminas una partida, vuelves al recibidor del torneo, y se te emparejará con un jugador con una puntuación similar a la tuya. Esto minimiza el tiempo de espera, si bien es posible que no juegues contra todos los demás jugadores del torneo.\r\nJuega rápido y vuelve al recibidor para jugar más partidas y ganar más puntos.';
+  String get arenaHowDoesPairingWorkAnswer => 'Al principio del torneo, los jugadores se emparejan en base a su puntuación. En cuanto terminas una partida, vuelves al recibidor del torneo, y se te emparejará con un jugador con una puntuación similar a la tuya. Esto minimiza el tiempo de espera, si bien es posible que no juegues contra todos los demás jugadores del torneo.\nJuega rápido y vuelve al recibidor para jugar más partidas y ganar más puntos.';
 
   @override
   String get arenaHowDoesItEnd => '¿Cuándo termina?';
@@ -605,7 +605,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arenaTournamentStats => 'Estadísticas del torneo';
 
   @override
-  String get arenaRankAvgHelp => 'El promedio de clasificación es un porcentaje de tu clasificación. Más bajo es mejor.\r\n\r\nPor ejemplo, ocupar el puesto 3 en un torneo de 100 jugadores = 3%. Estar en el puesto 10 en un torneo de 1000 jugadores = 1%.';
+  String get arenaRankAvgHelp => 'El promedio de clasificación es un porcentaje de tu clasificación. Más bajo es mejor.\n\nPor ejemplo, ocupar el puesto 3 en un torneo de 100 jugadores = 3%. Estar en el puesto 10 en un torneo de 1000 jugadores = 1%.';
 
   @override
   String get arenaMedians => 'medianas';
@@ -1596,7 +1596,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Buscar ejercicios';
 
   @override
-  String get puzzleFromMyGamesNone => 'No tienes ejercicios en la base de datos, pero Lichess aún te quiere un montón.\r\n¡Juega partidas rápidas y clásicas para tener más posibilidades de que se añadan tus ejercicios!';
+  String get puzzleFromMyGamesNone => 'No tienes ejercicios en la base de datos, pero Lichess aún te quiere un montón.\n¡Juega partidas rápidas y clásicas para tener más posibilidades de que se añadan tus ejercicios!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Entrena, analiza, mejora';
@@ -4621,7 +4621,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tournDescriptionHelp => '¿Quieres decirle algo especial a los participantes? Intenta ser breve. Puedes usar enlaces al estilo Markdown: [nombre](https://url)';
 
   @override
-  String get ratedFormHelp => 'Las partidas son por puntos\r\ny afectan a la puntuación de los jugadores';
+  String get ratedFormHelp => 'Las partidas son por puntos\ny afectan a la puntuación de los jugadores';
 
   @override
   String get onlyMembersOfTeam => 'Sólo miembros del equipo';
@@ -4640,7 +4640,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Pega una descripción FEN para empezar todas las partidas con una posición específica.\r\nSólo funciona con partidas estándar, no con las variantes.\r\nPuedes usar el $param para crear una posición FEN y pegarla aquí.\r\nDéjalo vacío para empezar las partidas desde la posición inicial habitual.';
+    return 'Pega una descripción FEN para empezar todas las partidas con una posición específica.\nSólo funciona con partidas estándar, no con las variantes.\nPuedes usar el $param para crear una posición FEN y pegarla aquí.\nDéjalo vacío para empezar las partidas desde la posición inicial habitual.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get showMeEverything => 'Mostrarme todo';
 
   @override
-  String get lichessPatronInfo => 'Lichess es una organización benéfica y un software totalmente libre y de código abierto.\r\nTodos los gastos de funcionamiento, desarrollo y contenidos se financian exclusivamente mediante las donaciones de sus usuarios.';
+  String get lichessPatronInfo => 'Lichess es una organización benéfica y un software totalmente libre y de código abierto.\nTodos los gastos de funcionamiento, desarrollo y contenidos se financian exclusivamente mediante las donaciones de sus usuarios.';
 
   @override
   String get nothingToSeeHere => 'Nada que ver aquí por ahora.';

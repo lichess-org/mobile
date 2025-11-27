@@ -478,13 +478,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Miten pisteenlasku toimii?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Perusperiaate on, että voitosta saa 2 pistettä, tasapelistä yhden ja tappiosta ei saa pisteitä.\r\nJos voitat kaksi peliä peräjälkeen, alat saada tuplapisteitä peleistäsi, mitä kuvastaa liekkisymboli.\r\nSaat tuplapisteitä peleistäsi aina siihen asti, kunnes et voita peliä.\r\nSiis voitosta saat 4 pistettä ja tasapelistä kaksi; tappiosta et saa pisteitä edelleenkään.\r\n\r\nEsimerkiksi kaksi voittoa joiden jälkeen tasapeli tuottaa 6 pistettä: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Perusperiaate on, että voitosta saa 2 pistettä, tasapelistä yhden ja tappiosta ei saa pisteitä.\nJos voitat kaksi peliä peräjälkeen, alat saada tuplapisteitä peleistäsi, mitä kuvastaa liekkisymboli.\nSaat tuplapisteitä peleistäsi aina siihen asti, kunnes et voita peliä.\nSiis voitosta saat 4 pistettä ja tasapelistä kaksi; tappiosta et saa pisteitä edelleenkään.\n\nEsimerkiksi kaksi voittoa joiden jälkeen tasapeli tuottaa 6 pistettä: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Areenaberserkki';
 
   @override
-  String get arenaBerserkAnswer => 'Kun pelaaja klikkaa berserkkinappulaa pelin alkaessa, hän menettää puolet ajastaan pelikellossa, mutta ansaitsee voittaessaan lisäpisteen turnauksen pistetaulukkoon.\r\n\r\nBerserkkitilassa ei saa myöskään lisäaikaa siirroista, vaikka turnauksen kelloasetukset olisivat sellaiset (1+2 on poikkeus, berserkkitilassa käytössä on 1+0)\r\n\r\nBerserkkitila ei ole mahdollinen peleissä joissa on 0 sekuntia aikaa alun pitäen (0+1, 0+2).\r\n\r\nBerserkkitilan lisäpisteen saa vain, jos pelaa vähintään seitsemän siirtoa pelissä.';
+  String get arenaBerserkAnswer => 'Kun pelaaja klikkaa berserkkinappulaa pelin alkaessa, hän menettää puolet ajastaan pelikellossa, mutta ansaitsee voittaessaan lisäpisteen turnauksen pistetaulukkoon.\n\nBerserkkitilassa ei saa myöskään lisäaikaa siirroista, vaikka turnauksen kelloasetukset olisivat sellaiset (1+2 on poikkeus, berserkkitilassa käytössä on 1+0)\n\nBerserkkitila ei ole mahdollinen peleissä joissa on 0 sekuntia aikaa alun pitäen (0+1, 0+2).\n\nBerserkkitilan lisäpisteen saa vain, jos pelaa vähintään seitsemän siirtoa pelissä.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kuinka voittaja määräytyy?';
@@ -496,7 +496,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kuinka peliparit määriytyvät?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnauksen alussa peliparit määriytyvät vahvuuslukujen perusteella.\r\nKun pelisi on ohi, palaa turnausaulaan. Saat seuraavaksi vastustajaksesi pelaajan, jonka sijoitus on lähellä omaasi. Siten odotusaika pysyy mahdollisimman lyhyenä. Et välttämättä kuitenkaan kohtaa turnauksessa kaikkia siihen osallistuvia pelaajia.\r\nPelaa nopeasti ja palaa aulaan, niin voit pelata lisää pelejä ja ansaita lisää pisteitä.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnauksen alussa peliparit määriytyvät vahvuuslukujen perusteella.\nKun pelisi on ohi, palaa turnausaulaan. Saat seuraavaksi vastustajaksesi pelaajan, jonka sijoitus on lähellä omaasi. Siten odotusaika pysyy mahdollisimman lyhyenä. Et välttämättä kuitenkaan kohtaa turnauksessa kaikkia siihen osallistuvia pelaajia.\nPelaa nopeasti ja palaa aulaan, niin voit pelata lisää pelejä ja ansaita lisää pisteitä.';
 
   @override
   String get arenaHowDoesItEnd => 'Kuinka turnaus päättyy?';
@@ -605,7 +605,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaTournamentStats => 'Turnauksen tilastot';
 
   @override
-  String get arenaRankAvgHelp => 'Sijoitusten keskiarvo on sijoituksesi prosenttiarvo. Matalampi luku on parempi.\r\n\r\nEsimerkiksi sijoittuminen 3. sijalle 100 pelaajan turnauksessa = 3%. Sijoittuminen 10. sijalle 1 000 pelaajan turnauksessa = 1%.';
+  String get arenaRankAvgHelp => 'Sijoitusten keskiarvo on sijoituksesi prosenttiarvo. Matalampi luku on parempi.\n\nEsimerkiksi sijoittuminen 3. sijalle 100 pelaajan turnauksessa = 3%. Sijoittuminen 10. sijalle 1 000 pelaajan turnauksessa = 1%.';
 
   @override
   String get arenaMedians => 'mediaaneja';
@@ -1596,7 +1596,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Hae tehtäviä';
 
   @override
-  String get puzzleFromMyGamesNone => 'Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.\r\nKun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!';
+  String get puzzleFromMyGamesNone => 'Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.\nKun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Harjoittele, analysoi, kehity';
@@ -4621,7 +4621,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get tournDescriptionHelp => 'Haluatko kertoa osallistujille jotain erityistä? Kerro se lyhyesti ja ytimekkäästi. Voit käyttää markdown-linkkejä: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Pelit pisteytetään ja niillä on\r\nvaikutus pelaajien vahvuuslukuihin';
+  String get ratedFormHelp => 'Pelit pisteytetään ja niillä on\nvaikutus pelaajien vahvuuslukuihin';
 
   @override
   String get onlyMembersOfTeam => 'Vain joukkueen jäsenet';
@@ -4640,7 +4640,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Liitä tähän FEN-koodi, jos haluat jokaisen pelin alkavan tietystä asemasta.\r\nSe toimii vain tavallisissa peleissä, ei varianteissa.\r\nVoit luoda aseman ${param}lla ja kopioida FEN-koodin sieltä tänne.\r\nJätä kenttä tyhjäksi, jos haluat pelien alkavan normaalista alkuasemasta.';
+    return 'Liitä tähän FEN-koodi, jos haluat jokaisen pelin alkavan tietystä asemasta.\nSe toimii vain tavallisissa peleissä, ei varianteissa.\nVoit luoda aseman ${param}lla ja kopioida FEN-koodin sieltä tänne.\nJätä kenttä tyhjäksi, jos haluat pelien alkavan normaalista alkuasemasta.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showMeEverything => 'Näytä kaikki';
 
   @override
-  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\r\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla.';
+  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla.';
 
   @override
   String get nothingToSeeHere => 'Täällä ei ole tällä hetkellä mitään nähtävää.';

@@ -48,8 +48,8 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'tfa': ['twoFactorAuth'],
-  'team': ['nbLeadersPerTeam','battleOfNbTeams']
+  'team': ['nbLeadersPerTeam','battleOfNbTeams'],
+  'tfa': ['twoFactorAuth']
 }
 
 // Order of locales with variants matters: the fallback must always be first
@@ -187,11 +187,11 @@ async function generateTemplateARB() {
 function loadTranslations(module, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
-      readFileSync(`${sourcePath}/${module}.xml`)
+      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
     )
   else
     return parseStringPromise(
-      readFileSync(`${translationPath}/${module}/${locale}.xml`)
+      readFileSync(`${translationPath}/${module}/${locale}.xml`,'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
     )
 }
 

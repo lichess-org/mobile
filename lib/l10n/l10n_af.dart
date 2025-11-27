@@ -478,25 +478,25 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hoe word die puntetelling uitgewerk?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '\'n Wen het \'n basis puntetelling van 2 punte, gelykop is 1 punt, en \'n verloor beteken niks nie.\r\nAs jy twee wedstryde in \'n ry wen, begin jy \'n dubbelpunt reeks, verteenwoordig deur \'n vlam ikoon.\r\nDie volgende spelle sal voortgaan om dubbelpunte werd te wees totdat jy nie meer wen nie.\r\nDus is \'n wen 4 punte werd, \'n gelykop 2 punte en \'n verloor is steeds waardeloos.\r\n\r\nByvoorbeeld, twee wenne gevolg deur \'n gelykop sal 6 punte werd wees: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => '\'n Wen het \'n basis puntetelling van 2 punte, gelykop is 1 punt, en \'n verloor beteken niks nie.\nAs jy twee wedstryde in \'n ry wen, begin jy \'n dubbelpunt reeks, verteenwoordig deur \'n vlam ikoon.\nDie volgende spelle sal voortgaan om dubbelpunte werd te wees totdat jy nie meer wen nie.\nDus is \'n wen 4 punte werd, \'n gelykop 2 punte en \'n verloor is steeds waardeloos.\n\nByvoorbeeld, twee wenne gevolg deur \'n gelykop sal 6 punte werd wees: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Wanneer \'n speler die Berserk knoppie klik aan die begin van die spel, verloor hulle helfte van hulle kloktyd, maar die wen is een meer toernooipunt werd.\r\n\r\nOm berserk te gaan in tydkontroles met inkrement kanseleer ook die inkrement (1+2 is \'n uitsondering, dit gee 1+0).\r\n\r\nBerserk is net beskikbaar vir wedstryde met \'n nie-nul aanvanklike tyd(Nie 0+1, 0+2).\r\n\r\nBerserk laat net die ekstra punt toe indien meer as sewe skuiwe tydens die spel gespeel is.';
+  String get arenaBerserkAnswer => 'Wanneer \'n speler die Berserk knoppie klik aan die begin van die spel, verloor hulle helfte van hulle kloktyd, maar die wen is een meer toernooipunt werd.\n\nOm berserk te gaan in tydkontroles met inkrement kanseleer ook die inkrement (1+2 is \'n uitsondering, dit gee 1+0).\n\nBerserk is net beskikbaar vir wedstryde met \'n nie-nul aanvanklike tyd(Nie 0+1, 0+2).\n\nBerserk laat net die ekstra punt toe indien meer as sewe skuiwe tydens die spel gespeel is.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hoe word die wenner gekies?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Die speler(s) met die meeste punte aan die einde van die toernooi se tydslimiet sal as die wenner(s) aangewys word.\r\n\r\nAs twee of meer spelers die selfde aantal punte het, sal die prestasie plasing van die toernooi die wenner bepaal.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Die speler(s) met die meeste punte aan die einde van die toernooi se tydslimiet sal as die wenner(s) aangewys word.\n\nAs twee of meer spelers die selfde aantal punte het, sal die prestasie plasing van die toernooi die wenner bepaal.';
 
   @override
   String get arenaHowDoesPairingWork => 'Hoe werk die plasing?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Aan die begin van die toernooi word spelers volgens hulle gradering geplaas.\r\nSodra jy \'n wedstryd voltooi het, keer jy terug na die toernooi ontvangs: Jy sal dan teen ander spelers geplaas word wat naby aan jou gradering is. Dit verseker \'n minimum wagtydperk, alhoewel jy dalk nie teen almal in die toernooi sal speel nie. \r\nSpeel vinnig en keer terug na die ontvangs om meer te speel en meer punte te kry.';
+  String get arenaHowDoesPairingWorkAnswer => 'Aan die begin van die toernooi word spelers volgens hulle gradering geplaas.\nSodra jy \'n wedstryd voltooi het, keer jy terug na die toernooi ontvangs: Jy sal dan teen ander spelers geplaas word wat naby aan jou gradering is. Dit verseker \'n minimum wagtydperk, alhoewel jy dalk nie teen almal in die toernooi sal speel nie. \nSpeel vinnig en keer terug na die ontvangs om meer te speel en meer punte te kry.';
 
   @override
   String get arenaHowDoesItEnd => 'Hoe eindig dit?';
@@ -605,7 +605,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1596,7 +1596,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Soek raaisels';
 
   @override
-  String get puzzleFromMyGamesNone => 'Jy het geen raaisels in die databasis nie, maar Lichess waardeer steeds jou.\r\n\r\nSpeel snel en klassieke spelle om jou kanse te verhoog dat een van jou eie raaisels bygevoeg word!';
+  String get puzzleFromMyGamesNone => 'Jy het geen raaisels in die databasis nie, maar Lichess waardeer steeds jou.\n\nSpeel snel en klassieke spelle om jou kanse te verhoog dat een van jou eie raaisels bygevoeg word!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Oefen, analiseer, verbeter';
@@ -3085,7 +3085,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get importGame => 'Voer spel in';
 
   @override
-  String get importGameExplanation => 'Plak \'n wedstryd PGN om dit deursoekbaar te herspeel,\r\nrekenaar analise, kletskamer en deelbare URL te kry.';
+  String get importGameExplanation => 'Plak \'n wedstryd PGN om dit deursoekbaar te herspeel,\nrekenaar analise, kletskamer en deelbare URL te kry.';
 
   @override
   String get importGameDataPrivacyWarning => 'Hierdie PGN is toeganklik vir die algemene publiek. Gebruik \'n studie om \'n spel privaat in te voer.';
@@ -4621,7 +4621,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get tournDescriptionHelp => 'Enige iets spesiaal wat jy aan die deelnemers wil vertel? Probeer dit kort hou. \"Markdown\" skakels is beskikbaar: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Spelle is gegradeer\r\nen beïnvloed speler graderings';
+  String get ratedFormHelp => 'Spelle is gegradeer\nen beïnvloed speler graderings';
 
   @override
   String get onlyMembersOfTeam => 'Slegs lede van span';
@@ -4640,7 +4640,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Plak \'n geldige FEN om elke spel van \'n sekere posisie te begin.\r\nDit werk slegs met standaard spelle, nie met variante nie.\r\nJy kan die $param gebruik om \'n FEN posisie te genereer, en dit dan hier plak.\r\nLaat dit leeg om elke spel vanaf die normale posisie te begin.';
+    return 'Plak \'n geldige FEN om elke spel van \'n sekere posisie te begin.\nDit werk slegs met standaard spelle, nie met variante nie.\nJy kan die $param gebruik om \'n FEN posisie te genereer, en dit dan hier plak.\nLaat dit leeg om elke spel vanaf die normale posisie te begin.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get showMeEverything => 'Wys vir my alles';
 
   @override
-  String get lichessPatronInfo => 'Lichess is \'n liefdadigheidsorganisasie en heeltemal gratis/libre oopbron sagteware.\r\nAlle bestuurskostes, ontwikkeling en inhoud word heeltemal gefinansier deur lede bydraes.';
+  String get lichessPatronInfo => 'Lichess is \'n liefdadigheidsorganisasie en heeltemal gratis/libre oopbron sagteware.\nAlle bestuurskostes, ontwikkeling en inhoud word heeltemal gefinansier deur lede bydraes.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

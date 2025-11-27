@@ -478,13 +478,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Maçlardan alınan puanlar nasıl hesaplanıyor?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Kazanılan bir oyun temelde 2 puan, beraberlik 1 puan değerindedir. Kaybedilen bir oyun ise hiçbir puan getirmez. Üst üste iki oyun kazandığınız takdirde alev ikonu ile simgelenen çifte puan serisine girersiniz.\r\n\r\nMağlup olana veya berabere kalana kadar yapılan maçlardan iki katı puan kazanırsınız. Yani seride iken bir galibiyet 4 puan, beraberlik 2 puan getirirken kaybedilen oyundan hiçbir puan alınmaz.\r\n\r\nÖrneğin; üst üste kazanılan iki oyun ve ardından alınan bir beraberlik 6 puan değerindedir: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Kazanılan bir oyun temelde 2 puan, beraberlik 1 puan değerindedir. Kaybedilen bir oyun ise hiçbir puan getirmez. Üst üste iki oyun kazandığınız takdirde alev ikonu ile simgelenen çifte puan serisine girersiniz.\n\nMağlup olana veya berabere kalana kadar yapılan maçlardan iki katı puan kazanırsınız. Yani seride iken bir galibiyet 4 puan, beraberlik 2 puan getirirken kaybedilen oyundan hiçbir puan alınmaz.\n\nÖrneğin; üst üste kazanılan iki oyun ve ardından alınan bir beraberlik 6 puan değerindedir: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Divane Modu';
 
   @override
-  String get arenaBerserkAnswer => 'Oyunun başında ekranın sağ altında bulunan \"Berserk\" tuşuna tıklayan oyuncu süresinin yarısından feragat eder ancak maçı kazandığı takdirde fazladan 1 turnuva puanı alır.\r\n\r\nSüre eklemeli oyunlarda Divane açan oyuncuya hamle sonrası süre ilave edilmez. (1+2 bir istisnadır, bu tempoda süre 1+0 olur)\r\n\r\nSıfır dakika ile başlayan oyunlarda Divane seçeneği mevcut değildir. (0+1, 0+2).\r\n\r\nDivane açılan bir oyun en az 7 hamle oynanmadan bitmiş ise ek puan geçerli değildir.';
+  String get arenaBerserkAnswer => 'Oyunun başında ekranın sağ altında bulunan \"Berserk\" tuşuna tıklayan oyuncu süresinin yarısından feragat eder ancak maçı kazandığı takdirde fazladan 1 turnuva puanı alır.\n\nSüre eklemeli oyunlarda Divane açan oyuncuya hamle sonrası süre ilave edilmez. (1+2 bir istisnadır, bu tempoda süre 1+0 olur)\n\nSıfır dakika ile başlayan oyunlarda Divane seçeneği mevcut değildir. (0+1, 0+2).\n\nDivane açılan bir oyun en az 7 hamle oynanmadan bitmiş ise ek puan geçerli değildir.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kazanan nasıl belirleniyor?';
@@ -496,7 +496,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Eşleştirme nasıl yapılıyor?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnuvanın başında eşleştirmeler oyuncuların puanlarına göre yapılır. Oyunu bitirip lobiye döndüğünüz anda ise kendi sıralamanıza yakın bir rakip ile eşleştirilirsiniz. Böylece bekleme süresi en aza indirgenmiş olur fakat turnuvadaki tüm oyuncularla karşılaşamayabilirsiniz.\r\n\r\nDaha fazla oyun oynayıp daha çok puan kazanmak için hızlıca oynayın ve lobiye dönün.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnuvanın başında eşleştirmeler oyuncuların puanlarına göre yapılır. Oyunu bitirip lobiye döndüğünüz anda ise kendi sıralamanıza yakın bir rakip ile eşleştirilirsiniz. Böylece bekleme süresi en aza indirgenmiş olur fakat turnuvadaki tüm oyuncularla karşılaşamayabilirsiniz.\n\nDaha fazla oyun oynayıp daha çok puan kazanmak için hızlıca oynayın ve lobiye dönün.';
 
   @override
   String get arenaHowDoesItEnd => 'Turnuva nasıl sona erer?';
@@ -605,7 +605,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaTournamentStats => 'Turnuva istatistikleri';
 
   @override
-  String get arenaRankAvgHelp => 'Sıralama ortalaması, sıralamanızın yüzdesidir. Daha düşük olması daha iyidir.\r\n\r\nÖrneğin, 100 oyunculu bir turnuvada 3. sırada olmak = %3. 1000 oyunculu bir turnuvada 10. sırada olmak = %1.';
+  String get arenaRankAvgHelp => 'Sıralama ortalaması, sıralamanızın yüzdesidir. Daha düşük olması daha iyidir.\n\nÖrneğin, 100 oyunculu bir turnuvada 3. sırada olmak = %3. 1000 oyunculu bir turnuvada 10. sırada olmak = %1.';
 
   @override
   String get arenaMedians => 'ortancadır';
@@ -4640,7 +4640,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Her oyunda belirli bir pozisyondan başlamak için geçerli FEN yazınız.\r\nSadece standart oyunlarda çalışır, varyantlarda çalışmaz.\r\nFEN pozisyonu oluşturmak için $param kullanıp buraya yazabilirsiniz.\r\nBaşlangıç pozisyonundan oynamak için boş bırakınız.';
+    return 'Her oyunda belirli bir pozisyondan başlamak için geçerli FEN yazınız.\nSadece standart oyunlarda çalışır, varyantlarda çalışmaz.\nFEN pozisyonu oluşturmak için $param kullanıp buraya yazabilirsiniz.\nBaşlangıç pozisyonundan oynamak için boş bırakınız.';
   }
 
   @override

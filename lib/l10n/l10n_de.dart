@@ -478,25 +478,25 @@ class AppLocalizationsDe extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Wie werden die Punkte berechnet?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Grundsätzlich gibt es für einen Sieg 2 Punkte, 1 Punkt für Remis und 0 Punkte für eine Niederlage.\r\nGewinnst du zwei Partien in Folge, beginnst du eine Serie mit verdoppelter Punktzahl (dargestellt durch ein Flammensymbol). Für die nachfolgenden Partien erhältst du solange die doppelte Punktzahl, bis du eine Partie nicht gewinnst.\r\nDas bedeutet, dass du für einen Sieg vier, für ein Remis zwei und für eine Niederlage keine Punkte bekommst.\r\n\r\nBeispiel: Zwei Siege, gefolgt von einem Remis sind 6 Punkte wert: 2 + 2 + (2 * 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Grundsätzlich gibt es für einen Sieg 2 Punkte, 1 Punkt für Remis und 0 Punkte für eine Niederlage.\nGewinnst du zwei Partien in Folge, beginnst du eine Serie mit verdoppelter Punktzahl (dargestellt durch ein Flammensymbol). Für die nachfolgenden Partien erhältst du solange die doppelte Punktzahl, bis du eine Partie nicht gewinnst.\nDas bedeutet, dass du für einen Sieg vier, für ein Remis zwei und für eine Niederlage keine Punkte bekommst.\n\nBeispiel: Zwei Siege, gefolgt von einem Remis sind 6 Punkte wert: 2 + 2 + (2 * 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Wenn ein Spieler den \"Berserk\"-Knopf zu Beginn der Partie drückt, verliert er die Hälfte seiner Zeit auf der Uhr, aber ein Sieg wird mit einem zusätzlichen Turnierpunkt honoriert.\r\n\r\nIn einem Zeitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. (1+2 ist eine Ausnahme, es wird zu 1+0.)\r\n\r\nFür Partien ohne Grundbedenkzeit (0+1, 0+2) ist \"Berserk\" nicht verfügbar.\r\n\r\nDer zusätzliche Punkt für \"Berserk\" wird nur vergeben, wenn du mindestens sieben Züge in der Partie gemacht hast.';
+  String get arenaBerserkAnswer => 'Wenn ein Spieler den \"Berserk\"-Knopf zu Beginn der Partie drückt, verliert er die Hälfte seiner Zeit auf der Uhr, aber ein Sieg wird mit einem zusätzlichen Turnierpunkt honoriert.\n\nIn einem Zeitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. (1+2 ist eine Ausnahme, es wird zu 1+0.)\n\nFür Partien ohne Grundbedenkzeit (0+1, 0+2) ist \"Berserk\" nicht verfügbar.\n\nDer zusätzliche Punkt für \"Berserk\" wird nur vergeben, wenn du mindestens sieben Züge in der Partie gemacht hast.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Wie wird der Gewinner ermittelt?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Der oder die Spieler mit den meisten Punkten am Turnierende werden als Gewinner bekanntgegeben.\r\n\r\nWenn zwei oder mehr Spieler die gleiche Punktzahl besitzen, entscheidet die Turnierleistung als Feinwertung.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Der oder die Spieler mit den meisten Punkten am Turnierende werden als Gewinner bekanntgegeben.\n\nWenn zwei oder mehr Spieler die gleiche Punktzahl besitzen, entscheidet die Turnierleistung als Feinwertung.';
 
   @override
   String get arenaHowDoesPairingWork => 'Wie werden die Turnierpaarungen ermittelt?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Zu Beginn des Turniers werden die Spieler auf Grundlage der Wertungszahl zugeteilt.\r\nSobald du ein Spiel beendet hast, kannst du zur Turnierübersicht zurückkehren. Dir wird dann ein Spieler mit ähnlichem Rang zugeteilt. Dadurch wird eine kurze Wartezeit erreicht, allerdings kann es sein, dass du nicht gegen alle anderen Spieler in diesem Turnier spielen wirst.\r\nSpiele schnell und kehre zur Turnierübersicht zurück, um mehr Spiele zu spielen und eine höhere Punktzahl zu erzielen.';
+  String get arenaHowDoesPairingWorkAnswer => 'Zu Beginn des Turniers werden die Spieler auf Grundlage der Wertungszahl zugeteilt.\nSobald du ein Spiel beendet hast, kannst du zur Turnierübersicht zurückkehren. Dir wird dann ein Spieler mit ähnlichem Rang zugeteilt. Dadurch wird eine kurze Wartezeit erreicht, allerdings kann es sein, dass du nicht gegen alle anderen Spieler in diesem Turnier spielen wirst.\nSpiele schnell und kehre zur Turnierübersicht zurück, um mehr Spiele zu spielen und eine höhere Punktzahl zu erzielen.';
 
   @override
   String get arenaHowDoesItEnd => 'Wann endet das Turnier?';
@@ -605,7 +605,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get arenaTournamentStats => 'Turnierstatistiken';
 
   @override
-  String get arenaRankAvgHelp => 'Der Platzierungs-Durchschnitt ist ein Prozentwert deiner Platzierungen. Niedriger ist besser.\r\n\r\nEin Beispiel: Wenn man in einem Turnier von 100 Spielern Platz 3 erreicht hat = Top 3%. In einem Turnier mit 1000 Spielern den Rang 10 zu erreichen = Top 1%.';
+  String get arenaRankAvgHelp => 'Der Platzierungs-Durchschnitt ist ein Prozentwert deiner Platzierungen. Niedriger ist besser.\n\nEin Beispiel: Wenn man in einem Turnier von 100 Spielern Platz 3 erreicht hat = Top 3%. In einem Turnier mit 1000 Spielern den Rang 10 zu erreichen = Top 1%.';
 
   @override
   String get arenaMedians => 'Medianwerte';
@@ -1596,7 +1596,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Aufgaben suchen';
 
   @override
-  String get puzzleFromMyGamesNone => 'Es befinden sich keine Aufgaben aus deinen Partien in der Datenbank, aber Lichess schätzt dich immer noch sehr.\r\n\r\nSpiele Schnellschach und klassische Partien, um deine Chancen zu erhöhen, dass eine Aufgabe aus deinen Partien hinzugefügt wird!';
+  String get puzzleFromMyGamesNone => 'Es befinden sich keine Aufgaben aus deinen Partien in der Datenbank, aber Lichess schätzt dich immer noch sehr.\n\nSpiele Schnellschach und klassische Partien, um deine Chancen zu erhöhen, dass eine Aufgabe aus deinen Partien hinzugefügt wird!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trainiere, analysiere, verbessere';
@@ -4621,7 +4621,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tournDescriptionHelp => 'Etwas Besonderes, was du den Teilnehmern mitteilen möchtest? Versuche es kurz zu halten. Markdown-Links sind verfügbar: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partien sind gewertet\r\nund beeinflussen die Wertungszahl der Spieler';
+  String get ratedFormHelp => 'Partien sind gewertet\nund beeinflussen die Wertungszahl der Spieler';
 
   @override
   String get onlyMembersOfTeam => 'Nur Teammitglieder';
@@ -4640,7 +4640,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Füge eine gültige FEN ein, um jede Partie aus einer gegebenen Stellung zu beginnen.\r\nDas funktioniert nur für Standardspiele, nicht für Varianten.\r\nDu kannst den $param verwenden, um eine FEN-Stellung zu generieren und diese dann hier einfügen.\r\nLeer lassen, um Partien von der normalen Ausgangsstellung aus zu starten.';
+    return 'Füge eine gültige FEN ein, um jede Partie aus einer gegebenen Stellung zu beginnen.\nDas funktioniert nur für Standardspiele, nicht für Varianten.\nDu kannst den $param verwenden, um eine FEN-Stellung zu generieren und diese dann hier einfügen.\nLeer lassen, um Partien von der normalen Ausgangsstellung aus zu starten.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get showMeEverything => 'Alles zeigen';
 
   @override
-  String get lichessPatronInfo => 'Lichess ist eine Wohltätigkeitsorganisation und eine völlig kostenlose/freie Open-Source-Software.\r\nAlle Betriebskosten, Entwicklung und Inhalte werden ausschließlich durch Benutzerspenden finanziert.';
+  String get lichessPatronInfo => 'Lichess ist eine Wohltätigkeitsorganisation und eine völlig kostenlose/freie Open-Source-Software.\nAlle Betriebskosten, Entwicklung und Inhalte werden ausschließlich durch Benutzerspenden finanziert.';
 
   @override
   String get nothingToSeeHere => 'Im Moment gibt es hier nichts zu sehen.';

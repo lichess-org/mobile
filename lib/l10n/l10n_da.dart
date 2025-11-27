@@ -478,13 +478,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hvordan beregnes scorerne?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'En sejr giver 2 point, en remis 1 point, mens et tab ingen point giver.\r\nHvis du vinder to partier i træk, vil du starte en dobbeltpoint-stime, repræsenteret ved et flamme-ikon.\r\nDe følgende partier vil give dobbelte point, indtil du ikke formår at vinde et parti.\r\nDet vil sige, at en sejr er 4 point værd, en remis 2 point, mens et tab fortsat ingen point giver.\r\n\r\nFor eksempel giver to sejre efterfulgt af en remis 6 point: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'En sejr giver 2 point, en remis 1 point, mens et tab ingen point giver.\nHvis du vinder to partier i træk, vil du starte en dobbeltpoint-stime, repræsenteret ved et flamme-ikon.\nDe følgende partier vil give dobbelte point, indtil du ikke formår at vinde et parti.\nDet vil sige, at en sejr er 4 point værd, en remis 2 point, mens et tab fortsat ingen point giver.\n\nFor eksempel giver to sejre efterfulgt af en remis 6 point: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Bersærk-arena';
 
   @override
-  String get arenaBerserkAnswer => 'Når en spiller klikker på Bersærk-knappen ved starten af et parti, mistes halvdelen af tiden på uret, men en sejr vil være et ekstra turneringspoint værd.\r\n\r\nGår man Bersærk ved tidskontroller med tillægstid annulleres tillægstiden også. (1+2 er en undtagelse, den bliver til 1+0)\r\n\r\nBersærk er ikke tilgængelig for partier ved nultider (0+1, 0+2).\r\n\r\nBersærk giver kun ekstra point, hvis du laver mindst 7 træk i partiet.';
+  String get arenaBerserkAnswer => 'Når en spiller klikker på Bersærk-knappen ved starten af et parti, mistes halvdelen af tiden på uret, men en sejr vil være et ekstra turneringspoint værd.\n\nGår man Bersærk ved tidskontroller med tillægstid annulleres tillægstiden også. (1+2 er en undtagelse, den bliver til 1+0)\n\nBersærk er ikke tilgængelig for partier ved nultider (0+1, 0+2).\n\nBersærk giver kun ekstra point, hvis du laver mindst 7 træk i partiet.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hvordan findes vinderen?';
@@ -496,7 +496,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hvordan foretages pardannelse?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Ved starten på turneringen parres spillere på baggrund af deres rating. Vend tilbage til turneringslobbyen, når du afslutter et parti: så vil du igen blive parret med en spiller tæt på din ranking. Det sikrer minimal ventetid, men du møder måske ikke alle andre deltagere i turneringen.\r\nSpil hurtigt og vend tilbage til lobbyen for at spille flere partier og vinde flere point.';
+  String get arenaHowDoesPairingWorkAnswer => 'Ved starten på turneringen parres spillere på baggrund af deres rating. Vend tilbage til turneringslobbyen, når du afslutter et parti: så vil du igen blive parret med en spiller tæt på din ranking. Det sikrer minimal ventetid, men du møder måske ikke alle andre deltagere i turneringen.\nSpil hurtigt og vend tilbage til lobbyen for at spille flere partier og vinde flere point.';
 
   @override
   String get arenaHowDoesItEnd => 'Hvordan afsluttes det?';
@@ -605,7 +605,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaTournamentStats => 'Turneringsstatistik';
 
   @override
-  String get arenaRankAvgHelp => 'Den gennemsnitlige rangering er en procentdel af din rangering. Lavere er bedre.\r\n\r\nEksempelvis er en rangering som nummer 3 i en turnering med 100 spillere = 3%. At være rangeret som nummer 10 i en turnering med 1000 spillere = 1%.';
+  String get arenaRankAvgHelp => 'Den gennemsnitlige rangering er en procentdel af din rangering. Lavere er bedre.\n\nEksempelvis er en rangering som nummer 3 i en turnering med 100 spillere = 3%. At være rangeret som nummer 10 i en turnering med 1000 spillere = 1%.';
 
   @override
   String get arenaMedians => 'medianer';
@@ -1596,7 +1596,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Søg taktikopgaver';
 
   @override
-  String get puzzleFromMyGamesNone => 'Du har ingen taktikopgaver i databasen, men Lichess elsker dig alligevel.\r\nSpil hurtige (rapid) og klassiske (classical) partier for at forøge chancerne for at en af dine taktikopgave tilføjes!';
+  String get puzzleFromMyGamesNone => 'Du har ingen taktikopgaver i databasen, men Lichess elsker dig alligevel.\nSpil hurtige (rapid) og klassiske (classical) partier for at forøge chancerne for at en af dine taktikopgave tilføjes!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Træn, analysér, forbedr';
@@ -4621,7 +4621,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get tournDescriptionHelp => 'Noget særligt du ønsker at fortælle deltagerne? Prøv at holde det kort. Markdown-links er tilgængelige: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partier er ratede\r\nog påvirker spilleres ratings';
+  String get ratedFormHelp => 'Partier er ratede\nog påvirker spilleres ratings';
 
   @override
   String get onlyMembersOfTeam => 'Kun medlemmer af hold';
@@ -4640,7 +4640,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Indsæt en gyldig FEN for at starte hvert parti fra en given stilling.\r\nDet virker kun for standardspil, ikke med varianter.\r\nDu kan bruge $param til at generere en FEN-stilling og derefter indsætte den her.\r\nLad stå tomt for at starte partier fra den normale udgangsstilling.';
+    return 'Indsæt en gyldig FEN for at starte hvert parti fra en given stilling.\nDet virker kun for standardspil, ikke med varianter.\nDu kan bruge $param til at generere en FEN-stilling og derefter indsætte den her.\nLad stå tomt for at starte partier fra den normale udgangsstilling.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get showMeEverything => 'Vis mig alt';
 
   @override
-  String get lichessPatronInfo => 'Lichess er en velgørenhedsorganisation og helt gratis/libre open source-software.\r\nAlle driftsomkostninger, udvikling og indhold finansieres udelukkende af brugerdonationer.';
+  String get lichessPatronInfo => 'Lichess er en velgørenhedsorganisation og helt gratis/libre open source-software.\nAlle driftsomkostninger, udvikling og indhold finansieres udelukkende af brugerdonationer.';
 
   @override
   String get nothingToSeeHere => 'Intet at se her i øjeblikket.';

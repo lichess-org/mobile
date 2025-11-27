@@ -496,25 +496,25 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Cum e calculat scorul?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\r\nDacă vei câștiga două partide consecutive, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\r\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\r\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\r\n\r\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\nDacă vei câștiga două partide consecutive, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\n\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Când un jucător apasă pe butonul Berserk la începutul meciului, i se va înjumătăți timpul, dar câștigul va valora un punct în plus.\r\n\r\nApăsând pe butonul Berserk, nu vei beneficia de incrementarea timpului. (1+2 este o excepție, va fi 1+0)\r\n\r\nModul Berserk nu este valabil pentru partidele cu timp inițial zero (0+1, 0+2).\r\n\r\nModul Berserk îți va oferi un punct în plus doar dacă vei juca cel puțin 7 mutări în joc.';
+  String get arenaBerserkAnswer => 'Când un jucător apasă pe butonul Berserk la începutul meciului, i se va înjumătăți timpul, dar câștigul va valora un punct în plus.\n\nApăsând pe butonul Berserk, nu vei beneficia de incrementarea timpului. (1+2 este o excepție, va fi 1+0)\n\nModul Berserk nu este valabil pentru partidele cu timp inițial zero (0+1, 0+2).\n\nModul Berserk îți va oferi un punct în plus doar dacă vei juca cel puțin 7 mutări în joc.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Cum este decis câștigătorul?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Jucătorii care au obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu vor fi declarați câștigători.\r\n\r\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza performanței în turneu.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Jucătorii care au obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu vor fi declarați câștigători.\n\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza performanței în turneu.';
 
   @override
   String get arenaHowDoesPairingWork => 'Cum funcționează potrivirea jucătorilor?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'La începutul competiției, jucătorii sunt asociați în funcție de scorul lor.\r\nDe îndată ce termini un meci și te întorci la lobby-ul competiției, vei fi asociat cu un jucător al cărui scor este apropiat de scorul tău. Aceasta asigură un timp de așteptare minim, totuși este posibil să nu joci cu toți jucătorii din competiție.\r\nJoacă rapid și întoarce-te la lobby pentru a juca mai multe partide și pentru a câștiga mai multe puncte.';
+  String get arenaHowDoesPairingWorkAnswer => 'La începutul competiției, jucătorii sunt asociați în funcție de scorul lor.\nDe îndată ce termini un meci și te întorci la lobby-ul competiției, vei fi asociat cu un jucător al cărui scor este apropiat de scorul tău. Aceasta asigură un timp de așteptare minim, totuși este posibil să nu joci cu toți jucătorii din competiție.\nJoacă rapid și întoarce-te la lobby pentru a juca mai multe partide și pentru a câștiga mai multe puncte.';
 
   @override
   String get arenaHowDoesItEnd => 'Cum se termină?';
@@ -623,7 +623,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaTournamentStats => 'Statistici turneu';
 
   @override
-  String get arenaRankAvgHelp => 'Media rangului este un procent din clasamentul tău. Mai mic e mai bine.\r\n\r\nDe exemplu, fiind clasat locul 3 într-un turneu de 100 de jucători = 3%. Find clasat locul 10 într-un turneu de 1000 de jucători = 1%.';
+  String get arenaRankAvgHelp => 'Media rangului este un procent din clasamentul tău. Mai mic e mai bine.\n\nDe exemplu, fiind clasat locul 3 într-un turneu de 100 de jucători = 3%. Find clasat locul 10 într-un turneu de 1000 de jucători = 1%.';
 
   @override
   String get arenaMedians => 'mediane';
@@ -1618,7 +1618,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Caută puzzle-uri';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\r\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
+  String get puzzleFromMyGamesNone => 'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Antreneaza-te, analizează, fii mai bun';
@@ -4649,7 +4649,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get tournDescriptionHelp => 'Vrei să spui participanților ceva special? Încearcă să fii succint. Poți folosi link-uri Markdown: [nume](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partidele sunt evaluate\r\nși vor avea ca rezultat modificarea ratingului';
+  String get ratedFormHelp => 'Partidele sunt evaluate\nși vor avea ca rezultat modificarea ratingului';
 
   @override
   String get onlyMembersOfTeam => 'Numai membrii echipei';
@@ -4668,7 +4668,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Lipiți un FEN valid pentru a începe fiecare joc dintr-o poziție dată.\r\nFuncționează doar pentru jocuri standard, nu si pentru variante.\r\nPuteți utiliza $param pentru a genera o poziție FEN, apoi lipiți-o aici.\r\nLăsați gol pentru a începe jocurile din poziția inițială normală.';
+    return 'Lipiți un FEN valid pentru a începe fiecare joc dintr-o poziție dată.\nFuncționează doar pentru jocuri standard, nu si pentru variante.\nPuteți utiliza $param pentru a genera o poziție FEN, apoi lipiți-o aici.\nLăsați gol pentru a începe jocurile din poziția inițială normală.';
   }
 
   @override
@@ -4800,7 +4800,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get showMeEverything => 'Afișează-mi tot';
 
   @override
-  String get lichessPatronInfo => 'Lichess este o asociație non-profit și un software gratuit și open-source.\r\nToate costurile de operare și de dezvoltare sunt finanțate doar din donațiile utilizatorilor.';
+  String get lichessPatronInfo => 'Lichess este o asociație non-profit și un software gratuit și open-source.\nToate costurile de operare și de dezvoltare sunt finanțate doar din donațiile utilizatorilor.';
 
   @override
   String get nothingToSeeHere => 'Nimic de văzut aici momentan.';

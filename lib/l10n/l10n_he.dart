@@ -520,19 +520,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaBerserk => 'אטרף בטורנירי זירה';
 
   @override
-  String get arenaBerserkAnswer => 'הבוחר באופציית האטרף מאבד מחצית מזמנו, אך ניצחון יזכה אותו בנקודה נוספת, בתנאי שעשה במשחק לפחות 7 מסעים. \r\n\r\nכמו כן שחקן האטרף יאבד את זכותו לתוספת זמן, במצבים בהם היא קיימת. (יוצא דופן הוא המקרה של 1+2 בו אופציית האטרף תהיה 1+0 ללא חציית הזמן הראשוני אך עם איבוד התוספת). \r\n\r\nאופצית האטרף אינה קיימת במשחקים הזמן המקורי הוא 0 (למשל 0+1 או 0+2).';
+  String get arenaBerserkAnswer => 'הבוחר באופציית האטרף מאבד מחצית מזמנו, אך ניצחון יזכה אותו בנקודה נוספת, בתנאי שעשה במשחק לפחות 7 מסעים. \n\nכמו כן שחקן האטרף יאבד את זכותו לתוספת זמן, במצבים בהם היא קיימת. (יוצא דופן הוא המקרה של 1+2 בו אופציית האטרף תהיה 1+0 ללא חציית הזמן הראשוני אך עם איבוד התוספת). \n\nאופצית האטרף אינה קיימת במשחקים הזמן המקורי הוא 0 (למשל 0+1 או 0+2).';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'איך נקבע המנצח?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'השחקן/ית עם מספר הנקודות המרבי בסיום הזמן החוקי של התחרות יוכרזו כמנצחים.\r\n\r\nאם יש כמה שחקנים עם מספר זה, הם ידורגו לפי דירוג הביצוע שלהם בתחרות.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'השחקן/ית עם מספר הנקודות המרבי בסיום הזמן החוקי של התחרות יוכרזו כמנצחים.\n\nאם יש כמה שחקנים עם מספר זה, הם ידורגו לפי דירוג הביצוע שלהם בתחרות.';
 
   @override
   String get arenaHowDoesPairingWork => 'איך מתבצע השיבוץ?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'השיבוץ בתחילת הטורניר נעשה לפי דירוג השחקן. \r\n\r\nבסיום כל משחק, על השחקן לשוב למסך הטורניר ואז ישובץ עם שחקן בעל מיקום דומה. הדבר נעשה כדי למזער את זמן ההמתנה, אך לא מובטח לשחקן שיתמודד עם כל יריביו.\r\n\r\nלפיכך כדי לזכות במלוא הנקודות שחקו מהר ואל תאבדו זמן בין הסבבים.';
+  String get arenaHowDoesPairingWorkAnswer => 'השיבוץ בתחילת הטורניר נעשה לפי דירוג השחקן. \n\nבסיום כל משחק, על השחקן לשוב למסך הטורניר ואז ישובץ עם שחקן בעל מיקום דומה. הדבר נעשה כדי למזער את זמן ההמתנה, אך לא מובטח לשחקן שיתמודד עם כל יריביו.\n\nלפיכך כדי לזכות במלוא הנקודות שחקו מהר ואל תאבדו זמן בין הסבבים.';
 
   @override
   String get arenaHowDoesItEnd => 'איך מסתיימת התחרות?';
@@ -641,7 +641,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaTournamentStats => 'נתוני הטורנירים';
 
   @override
-  String get arenaRankAvgHelp => 'ממוצע הדירוג הוא האחוזון של הדירוגים שלך. ככל שהוא נמוך יותר, כך הוא טוב יותר!\r\n\r\nלדוגמה, מי שזוכה מקום שלישי בטורניר עם 100 משתתפים הוא באחוזון השלישי (3%).\r\n\r\nמי שזוכה במקום העשירי מתוך אלף משתתפים הוא באחוזון העליון (1%).';
+  String get arenaRankAvgHelp => 'ממוצע הדירוג הוא האחוזון של הדירוגים שלך. ככל שהוא נמוך יותר, כך הוא טוב יותר!\n\nלדוגמה, מי שזוכה מקום שלישי בטורניר עם 100 משתתפים הוא באחוזון השלישי (3%).\n\nמי שזוכה במקום העשירי מתוך אלף משתתפים הוא באחוזון העליון (1%).';
 
   @override
   String get arenaMedians => 'חציונים';
@@ -1638,7 +1638,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleSearchPuzzles => 'חיפוש פאזלים';
 
   @override
-  String get puzzleFromMyGamesNone => 'אין פאזלים מהמשחקים שלך במאגר, אך אנחנו עדיין אוהבים אותך!\r\nשחק/י משחקי Rapid ו־Classical כדי להגדיל את הסבירות שיתווסף פאזל משלך!';
+  String get puzzleFromMyGamesNone => 'אין פאזלים מהמשחקים שלך במאגר, אך אנחנו עדיין אוהבים אותך!\nשחק/י משחקי Rapid ו־Classical כדי להגדיל את הסבירות שיתווסף פאזל משלך!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'אימון וניתוח יובילו לשיפור';
@@ -4670,10 +4670,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get tournDescription => 'תיאור הטורניר';
 
   @override
-  String get tournDescriptionHelp => 'יש לך משהו להגיד למשתתפים? עדיף בקיצור. קישורים אינטראקטיביים של Markdown זמינים.\r\n[name](https://url)';
+  String get tournDescriptionHelp => 'יש לך משהו להגיד למשתתפים? עדיף בקיצור. קישורים אינטראקטיביים של Markdown זמינים.\n[name](https://url)';
 
   @override
-  String get ratedFormHelp => 'המשחקים מדורגים \r\nומשפיעים על דירוגם של השחקנים';
+  String get ratedFormHelp => 'המשחקים מדורגים \nומשפיעים על דירוגם של השחקנים';
 
   @override
   String get onlyMembersOfTeam => 'רק חברי הקבוצה';
@@ -4692,7 +4692,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'הדביקו FEN חוקי כדי להתחיל כל משחק מעמדה נתונה.\r\nשדה זה עובד רק עבור משחקים סטנדרטיים, לא עבור וריאנטים.\r\nאת/ה יכול/ה להשתמש ב$param כדי ליצור עמדת FEN, ואז להדביק אותה כאן.\r\nהשאירו את השדה הזה ריק כדי להתחיל משחקים מהעמדה ההתחלתית הרגילה.';
+    return 'הדביקו FEN חוקי כדי להתחיל כל משחק מעמדה נתונה.\nשדה זה עובד רק עבור משחקים סטנדרטיים, לא עבור וריאנטים.\nאת/ה יכול/ה להשתמש ב$param כדי ליצור עמדת FEN, ואז להדביק אותה כאן.\nהשאירו את השדה הזה ריק כדי להתחיל משחקים מהעמדה ההתחלתית הרגילה.';
   }
 
   @override
@@ -4824,7 +4824,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get showMeEverything => 'הראו לי הכל';
 
   @override
-  String get lichessPatronInfo => 'ליצ\'ס הוא ארגון לטובת הכלל ותוכנת קוד פתוח חינמית.\r\nכל עלויות התפעול, הפיתוח והתוכן ממומנות אך ורק על ידי תרומות משתמשים.';
+  String get lichessPatronInfo => 'ליצ\'ס הוא ארגון לטובת הכלל ותוכנת קוד פתוח חינמית.\nכל עלויות התפעול, הפיתוח והתוכן ממומנות אך ורק על ידי תרומות משתמשים.';
 
   @override
   String get nothingToSeeHere => 'אין כלום להצגה כאן, בינתיים.';

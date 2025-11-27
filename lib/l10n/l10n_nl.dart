@@ -478,13 +478,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hoe worden scores berekend?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Een overwinning heeft een basisscore van 2 punten, een remise één punt. Een verlies is geen punten waard.\r\nAls je twee partijen na elkaar wint, start je een \"dubbele-punten-reeks\", voorgesteld door een icoontje van een vlam.\r\nDe volgende partijen zullen steeds het dubbele aantal punten waard zijn, totdat je er niet in slaagt een spel te winnen.\r\nEen overwinning zal dus 4 punten waard zijn, remise 2, en verlies nog steeds 0 punten.\r\n\r\nBijvoorbeeld, twee overwinningen gevolgd door een gelijkspel zullen 6 punten waard zijn: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Een overwinning heeft een basisscore van 2 punten, een remise één punt. Een verlies is geen punten waard.\nAls je twee partijen na elkaar wint, start je een \"dubbele-punten-reeks\", voorgesteld door een icoontje van een vlam.\nDe volgende partijen zullen steeds het dubbele aantal punten waard zijn, totdat je er niet in slaagt een spel te winnen.\nEen overwinning zal dus 4 punten waard zijn, remise 2, en verlies nog steeds 0 punten.\n\nBijvoorbeeld, twee overwinningen gevolgd door een gelijkspel zullen 6 punten waard zijn: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Wanneer een speler op de Berserk-knop klikt aan het begin van het spel, verliest hij/zij de helft van de tijd op de klok, maar de overwinning is één extra toernooipunt waard.\r\n\r\nBerserk gaan in partijen met een klok met extra seconden per zet, zorgt ervoor dat je ook die extra seconden kwijt bent. Bijvoorbeeld 2+1 wordt 1+0. (1+2 is een uitzondering, dat geeft 1+0)\r\n\r\nBerserk is niet beschikbaar voor partijen met nul begintijd (0+1, 0+2).\r\n\r\nBerserk geeft je enkel een extra punt als beide spelers minstens 7 zetten spelen in de partij.';
+  String get arenaBerserkAnswer => 'Wanneer een speler op de Berserk-knop klikt aan het begin van het spel, verliest hij/zij de helft van de tijd op de klok, maar de overwinning is één extra toernooipunt waard.\n\nBerserk gaan in partijen met een klok met extra seconden per zet, zorgt ervoor dat je ook die extra seconden kwijt bent. Bijvoorbeeld 2+1 wordt 1+0. (1+2 is een uitzondering, dat geeft 1+0)\n\nBerserk is niet beschikbaar voor partijen met nul begintijd (0+1, 0+2).\n\nBerserk geeft je enkel een extra punt als beide spelers minstens 7 zetten spelen in de partij.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hoe wordt de winnaar bepaald?';
@@ -496,7 +496,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hoe werkt het paren van spelers?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Aan het begin van het toernooi worden spelers ingedeeld op basis van hun rating.\r\nWanneer je een partij beëindigt, keer terug naar de toernooilobby: je zult dan gekoppeld worden met een speler dicht bij jouw rang in het toernooi. Dit zorgt voor zo min mogelijk wachttijd, maar het is mogelijk dat je niet tegen iedereen in het toernooi speelt.\r\nSpeel snel en ga terug naar de toernooilobby om meer partijen te spelen en meer punten te winnen.';
+  String get arenaHowDoesPairingWorkAnswer => 'Aan het begin van het toernooi worden spelers ingedeeld op basis van hun rating.\nWanneer je een partij beëindigt, keer terug naar de toernooilobby: je zult dan gekoppeld worden met een speler dicht bij jouw rang in het toernooi. Dit zorgt voor zo min mogelijk wachttijd, maar het is mogelijk dat je niet tegen iedereen in het toernooi speelt.\nSpeel snel en ga terug naar de toernooilobby om meer partijen te spelen en meer punten te winnen.';
 
   @override
   String get arenaHowDoesItEnd => 'Hoe eindigt het?';
@@ -605,7 +605,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaTournamentStats => 'Toernooi statistieken';
 
   @override
-  String get arenaRankAvgHelp => 'Het gemiddelde klassering is een percentage van uw klassering. Lager is beter.\r\n\r\nBijvoorbeeld, wanneer je de derde plaats staat in een tornooi van 100 deelnemers = 3%. Tiende plaats zijn in een tornooi van 1000 deelnemers = 1%.';
+  String get arenaRankAvgHelp => 'Het gemiddelde klassering is een percentage van uw klassering. Lager is beter.\n\nBijvoorbeeld, wanneer je de derde plaats staat in een tornooi van 100 deelnemers = 3%. Tiende plaats zijn in een tornooi van 1000 deelnemers = 1%.';
 
   @override
   String get arenaMedians => 'medianen';
@@ -1596,7 +1596,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Puzzels zoeken';
 
   @override
-  String get puzzleFromMyGamesNone => 'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\r\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
+  String get puzzleFromMyGamesNone => 'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyseer, verbeter';
@@ -4621,7 +4621,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tournDescriptionHelp => 'Iets bijzonders dat je de deelnemers wilt vertellen? Probeer het kort te houden. Markdown-links zijn beschikbaar: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partijen worden met rating gespeeld \r\nen hebben effect op de rating van de spelers';
+  String get ratedFormHelp => 'Partijen worden met rating gespeeld \nen hebben effect op de rating van de spelers';
 
   @override
   String get onlyMembersOfTeam => 'Alleen leden van het team';
@@ -4640,7 +4640,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Plak een geldige FEN-code om een partij te beginnen vanaf een bepaalde stelling.\r\nHet werkt alleen voor standaardpartijen, niet met varianten.\r\nU kunt de $param gebruiken om een FEN-code te genereren en deze hier plakken.\r\nLaat leeg om partijen te starten vanaf de normale beginstelling.';
+    return 'Plak een geldige FEN-code om een partij te beginnen vanaf een bepaalde stelling.\nHet werkt alleen voor standaardpartijen, niet met varianten.\nU kunt de $param gebruiken om een FEN-code te genereren en deze hier plakken.\nLaat leeg om partijen te starten vanaf de normale beginstelling.';
   }
 
   @override
@@ -4772,7 +4772,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get showMeEverything => 'Alles tonen';
 
   @override
-  String get lichessPatronInfo => 'Lichess is een organisatie zonder winstoogmerk en is volledig open en gratis (libre).\r\nAlle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door donaties van gebruikers.';
+  String get lichessPatronInfo => 'Lichess is een organisatie zonder winstoogmerk en is volledig open en gratis (libre).\nAlle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door donaties van gebruikers.';
 
   @override
   String get nothingToSeeHere => 'Hier is momenteel niets te zien.';

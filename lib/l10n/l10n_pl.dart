@@ -514,13 +514,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Jak punktowane są poszczególne partie?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Zwycięstwo daje 2 punkty, remis daje 1 punkt, przegrana nie daje punktów. \r\nWygranie dwóch partii z rzędu rozpoczyna oznaczaną ikoną płomienia serię, w której punkty są podwajane. \r\nKolejne partie będą liczone podwójnie do czasu, gdy nie uda ci się wygrać partii.\r\nTym samym wygrana będzie warta 4 punkty, remis – 2 punkty, przegrana nie da punktów. \r\n\r\nPrzykład: dwie wygrane, a po nich remis są warte 6 punktów: 2 + 2 + (2 · 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Zwycięstwo daje 2 punkty, remis daje 1 punkt, przegrana nie daje punktów. \nWygranie dwóch partii z rzędu rozpoczyna oznaczaną ikoną płomienia serię, w której punkty są podwajane. \nKolejne partie będą liczone podwójnie do czasu, gdy nie uda ci się wygrać partii.\nTym samym wygrana będzie warta 4 punkty, remis – 2 punkty, przegrana nie da punktów. \n\nPrzykład: dwie wygrane, a po nich remis są warte 6 punktów: 2 + 2 + (2 · 1)';
 
   @override
   String get arenaBerserk => 'Co to jest berserk?';
 
   @override
-  String get arenaBerserkAnswer => 'Naciśnięcie przycisku Berserk na początku partii powoduje skrócenie o połowę twojego czasu gry, ale zwycięstwo warte jest dodatkowy jeden punkt turniejowy.\r\n\r\nBerserk w partii z przyrostem czasu znosi również sam przyrost (za wyjątkiem tempa 1 + 2, które staje się 1 + 0).\r\n\r\nBerserk nie jest dostępny w partiach bez czasu początkowego (0 + 1, 0 + 2). \r\n\r\nBerserk daje dodatkowy punkt wyłącznie wtedy, gdy wykonasz co najmniej 7 posunięć w partii.';
+  String get arenaBerserkAnswer => 'Naciśnięcie przycisku Berserk na początku partii powoduje skrócenie o połowę twojego czasu gry, ale zwycięstwo warte jest dodatkowy jeden punkt turniejowy.\n\nBerserk w partii z przyrostem czasu znosi również sam przyrost (za wyjątkiem tempa 1 + 2, które staje się 1 + 0).\n\nBerserk nie jest dostępny w partiach bez czasu początkowego (0 + 1, 0 + 2). \n\nBerserk daje dodatkowy punkt wyłącznie wtedy, gdy wykonasz co najmniej 7 posunięć w partii.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Jak wyłaniany jest zwycięzca?';
@@ -532,7 +532,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'W jaki sposób dobierani są przeciwnicy?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Do pierwszej partii gracze dobierani są na podstawie swoich rankingów. \r\nPo zakończeniu każdej partii i powrocie do poczekalni dobierany jest gracz o zbliżonym rankingu. Choć dzięki temu czas oczekiwania jest minimalny, to możesz nie mieć jednak okazji rozegrać partii ze wszystkimi uczestnikami turnieju.\r\nGraj szybko i wracaj do poczekalni, by rozegrać więcej partii i zdobyć więcej punktów.';
+  String get arenaHowDoesPairingWorkAnswer => 'Do pierwszej partii gracze dobierani są na podstawie swoich rankingów. \nPo zakończeniu każdej partii i powrocie do poczekalni dobierany jest gracz o zbliżonym rankingu. Choć dzięki temu czas oczekiwania jest minimalny, to możesz nie mieć jednak okazji rozegrać partii ze wszystkimi uczestnikami turnieju.\nGraj szybko i wracaj do poczekalni, by rozegrać więcej partii i zdobyć więcej punktów.';
 
   @override
   String get arenaHowDoesItEnd => 'Kiedy kończy się turniej?';
@@ -641,7 +641,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaTournamentStats => 'Statystyki turniejowe';
 
   @override
-  String get arenaRankAvgHelp => 'Średnia ranga to procent twojego rankingu. Niższa jest lepsza.\r\n\r\nNa przykład, będąc 3 w rankingu turnieju liczącym 100 graczy = 3%. Będąc 10 w rankingu turnieju liczącym 1000 graczy = 1%.';
+  String get arenaRankAvgHelp => 'Średnia ranga to procent twojego rankingu. Niższa jest lepsza.\n\nNa przykład, będąc 3 w rankingu turnieju liczącym 100 graczy = 3%. Będąc 10 w rankingu turnieju liczącym 1000 graczy = 1%.';
 
   @override
   String get arenaMedians => 'mediany';
@@ -1640,7 +1640,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Szukaj zadań';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nie masz zadań w bazie danych, ale Lichess nadal bardzo Cię kocha.\r\nGraj partie szybkie i klasyczne, aby zwiększyć swoje szanse na dodanie zadania!';
+  String get puzzleFromMyGamesNone => 'Nie masz zadań w bazie danych, ale Lichess nadal bardzo Cię kocha.\nGraj partie szybkie i klasyczne, aby zwiększyć swoje szanse na dodanie zadania!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trenuj, analizuj, doskonal się';
@@ -4677,7 +4677,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get tournDescriptionHelp => 'Czy chcesz powiedzieć coś szczególnego uczestnikom? Pisz krótko i na temat. Istnieje możliwość dodania odnośników: [text](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partie wpływają\r\nna ranking graczy';
+  String get ratedFormHelp => 'Partie wpływają\nna ranking graczy';
 
   @override
   String get onlyMembersOfTeam => 'Tylko członkowie klubu';
@@ -4696,7 +4696,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Wklej poprawny FEN, aby rozpocząć każdą partię z danej pozycji.\r\nDziała tylko dla standardowych gier, nie działa dla wariantów.\r\nMożesz użyć $param , aby wygenerować pozycję FEN, a następnie wkleić ją tutaj.\r\nPozostaw puste, aby rozpoczynać partie z normalnej pozycji początkowej.';
+    return 'Wklej poprawny FEN, aby rozpocząć każdą partię z danej pozycji.\nDziała tylko dla standardowych gier, nie działa dla wariantów.\nMożesz użyć $param , aby wygenerować pozycję FEN, a następnie wkleić ją tutaj.\nPozostaw puste, aby rozpoczynać partie z normalnej pozycji początkowej.';
   }
 
   @override
@@ -4828,7 +4828,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get showMeEverything => 'Pokaż mi wszystko';
 
   @override
-  String get lichessPatronInfo => 'Lichess jest organizacją niedochodową i całkowicie darmowym otwartym oprogramowaniem.\r\nWszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z darowizn użytkowników.';
+  String get lichessPatronInfo => 'Lichess jest organizacją niedochodową i całkowicie darmowym otwartym oprogramowaniem.\nWszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z darowizn użytkowników.';
 
   @override
   String get nothingToSeeHere => 'W tej chwili nie ma nic do zobaczenia.';
