@@ -6024,6 +6024,26 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count팀의 대국',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '팀 당 리더 $count명',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => '방금';
 
   @override

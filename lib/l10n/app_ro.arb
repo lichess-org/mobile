@@ -1716,6 +1716,8 @@
   "studyNbGames": "{count, plural, =1{{count} partidă} few{{count} partide} other{{count} partide}}",
   "studyNbMembers": "{count, plural, =1{{count} membru} few{{count} membri} other{{count} membri}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Lipiți textul PGN aici, până la {count} meci} few{Lipiți textul PGN aici, până la {count} meciuri. Pentru fiecare joc se creează un nou capitol.} other{Lipiți textul PGN aici, până la {count} meciuri. Pentru fiecare joc se creează un nou capitol.}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Bătălia echipelor {count}} few{Bătălia echipelor {count}} other{Bătălia echipelor {count}}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Un lider per echipă} few{{count} lideri per echipă} other{{count} de lideri per echipă}}",
   "timeagoJustNow": "chiar acum",
   "timeagoRightNow": "chiar acum",
   "timeagoCompleted": "completat",

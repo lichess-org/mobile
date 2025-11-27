@@ -10538,6 +10538,18 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
 
+  /// No description provided for @teamBattleOfNbTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}'**
+  String teamBattleOfNbTeams(int count);
+
+  /// No description provided for @teamNbLeadersPerTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One leader per team} other{{count} leaders per team}}'**
+  String teamNbLeadersPerTeam(int count);
+
   /// No description provided for @timeagoJustNow.
   ///
   /// In en, this message translates to:

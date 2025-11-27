@@ -1696,6 +1696,8 @@
   "studyNbGames": "{count, plural, =1{{count} Partija} few{{count} Partije} other{{count} Partija}}",
   "studyNbMembers": "{count, plural, =1{{count} Član} few{{count} Člana} other{{count} Članova}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Ovdje zalijepite svoj PGN tekst, do {count} partije} few{Ovdje zalijepite svoj PGN tekst, do {count} partije} other{Ovdje zalijepite svoj PGN tekst, do {count} partija}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} tima} few{Bitka {count} tima} other{Bitka {count} timova}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Jedan vođa po timu} few{{count} vođe po timu} other{{count} vođa po timu}}",
   "timeagoJustNow": "upravo sada",
   "timeagoRightNow": "upravo sada",
   "timeagoCompleted": "završeno",

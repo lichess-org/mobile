@@ -1716,6 +1716,8 @@
   "studyNbGames": "{count, plural, other{共 {count} 盘棋}}",
   "studyNbMembers": "{count, plural, other{{count} 位成员}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{在此粘贴你的 PGN 文本，最多支持 {count} 个游戏}}",
+  "teamBattleOfNbTeams": "{count, plural, other{{count} 个团队的战斗}}",
+  "teamNbLeadersPerTeam": "{count, plural, other{每个团队 {count} 个队长}}",
   "timeagoJustNow": "刚刚",
   "timeagoRightNow": "刚刚",
   "timeagoCompleted": "已完成",

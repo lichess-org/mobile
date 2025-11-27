@@ -1722,6 +1722,8 @@
   "studyNbGames": "{count, plural, other{{count} 게임}}",
   "studyNbMembers": "{count, plural, other{멤버 {count}명}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{PGN을 여기에 붙여넣으세요. 최대 {count} 게임까지 가능합니다.}}",
+  "teamBattleOfNbTeams": "{count, plural, other{{count}팀의 대국}}",
+  "teamNbLeadersPerTeam": "{count, plural, other{팀 당 리더 {count}명}}",
   "timeagoJustNow": "방금",
   "timeagoRightNow": "지금",
   "timeagoCompleted": "종료됨",

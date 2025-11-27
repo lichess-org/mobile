@@ -6103,6 +6103,28 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Schlacht mit $count Teams',
+      one: 'Schlacht mit $count Team',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Leader pro Team',
+      one: 'Ein Leader pro Team',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'grad jetzt';
 
   @override

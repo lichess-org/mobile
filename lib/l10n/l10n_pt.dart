@@ -6103,6 +6103,28 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipas',
+      one: 'Batalha de $count equipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipa',
+      one: 'Um líder por equipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'agora mesmo';
 
   @override
@@ -12365,6 +12387,28 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       locale: localeName,
       other: 'Cole seu texto PGN aqui, até $count jogos',
       one: 'Cole seu texto PGN aqui, até $count jogo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipes',
+      one: 'Batalha de $count equipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipe',
+      one: 'Um líder por equipe',
     );
     return '$_temp0';
   }

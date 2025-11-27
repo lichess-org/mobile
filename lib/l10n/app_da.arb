@@ -1723,6 +1723,8 @@
   "studyNbGames": "{count, plural, =1{{count} parti} other{{count} partier}}",
   "studyNbMembers": "{count, plural, =1{{count} Medlem} other{{count} Medlemmer}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Indsæt din PGN-tekst her, op til {count} parti} other{Indsæt din PGN-tekst her, op til {count} partier}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Kamp mellem {count} hold} other{Kamp mellem {count} hold}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{En leder pr. hold} other{{count} ledere pr. hold}}",
   "timeagoJustNow": "for lidt siden",
   "timeagoRightNow": "netop nu",
   "timeagoCompleted": "afsluttet",

@@ -1715,6 +1715,8 @@
   "studyNbGames": "{count, plural, =1{Partida {count}} other{{count} partida}}",
   "studyNbMembers": "{count, plural, =1{Kide {count}} other{{count} kide}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Itsatsi hemen zure PGNa, gehienez partida {count}} other{Itsatsi hemen zure PGNa, gehienez {count} partida}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Talde {count}en arteko txapelketa} other{{count} talderen arteko txapelketa}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Lider bat talde bakoitzeko} other{{count} lider talde bakoitzeko}}",
   "timeagoJustNow": "orain",
   "timeagoRightNow": "orain",
   "timeagoCompleted": "amaituta",

@@ -1717,6 +1717,8 @@
   "studyNbGames": "{count, plural, =1{{count} Partija} =2{{count} Partiji} few{{count} Partije} other{{count} Partij}}",
   "studyNbMembers": "{count, plural, =1{{count} Član} =2{{count} Člana} few{{count} Člani} other{{count} Članov}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Prilepite PGN besedilo, z največ {count} partijo} =2{Prilepite PGN besedilo, z največ {count} partijama} few{Prilepite PGN besedilo, z največ {count} partijami} other{Prilepite PGN besedilo, z največ {count} partijami}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} ekipe} =2{Bitka {count} ekip} few{Bitka {count} ekip} other{Bitka {count} ekip}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{En vodja na ekipo} =2{{count} vodji na ekipo} few{{count} vodje na ekipo} other{{count} vodij na ekipo}}",
   "timeagoJustNow": "pravkar",
   "timeagoRightNow": "ta trenutek",
   "timeagoCompleted": "končano",

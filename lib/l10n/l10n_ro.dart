@@ -6182,6 +6182,30 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bătălia echipelor $count',
+      few: 'Bătălia echipelor $count',
+      one: 'Bătălia echipelor $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de lideri per echipă',
+      few: '$count lideri per echipă',
+      one: 'Un lider per echipă',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'chiar acum';
 
   @override

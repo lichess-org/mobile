@@ -1718,6 +1718,8 @@
   "studyNbGames": "{count, plural, other{{count} 局}}",
   "studyNbMembers": "{count, plural, other{{count} メンバー}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{ここに PGN をペースト（{count} 局まで）}}",
+  "teamBattleOfNbTeams": "{count, plural, other{バトル、{count} チーム}}",
+  "teamNbLeadersPerTeam": "{count, plural, other{各チーム {count} 人がリーダー}}",
   "timeagoJustNow": "たった今",
   "timeagoRightNow": "たった今",
   "timeagoCompleted": "完了",

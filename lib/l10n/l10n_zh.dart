@@ -6024,6 +6024,26 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个团队的战斗',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '每个团队 $count 个队长',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => '刚刚';
 
   @override
@@ -11995,6 +12015,26 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       count,
       locale: localeName,
       other: '在此貼上PGN文本，最多可導入$count個棋局',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 隊之間的戰鬥',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '每隊 $count 個隊長',
     );
     return '$_temp0';
   }

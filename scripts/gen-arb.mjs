@@ -36,6 +36,7 @@ const modules = [
   'storm',
   'streamer',
   'study',
+  'team',
   'timeago',
   'tfa',
 ]
@@ -47,6 +48,7 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
+  'team': ['nbLeadersPerTeam','battleOfNbTeams'],
   'tfa': ['twoFactorAuth']
 }
 
@@ -185,11 +187,11 @@ async function generateTemplateARB() {
 function loadTranslations(module, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
-      readFileSync(`${sourcePath}/${module}.xml`)
+      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
     )
   else
     return parseStringPromise(
-      readFileSync(`${translationPath}/${module}/${locale}.xml`)
+      readFileSync(`${translationPath}/${module}/${locale}.xml`,'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
     )
 }
 

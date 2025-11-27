@@ -1723,6 +1723,8 @@
   "studyNbGames": "{count, plural, =1{{count} Partida} other{{count} Partidas}}",
   "studyNbMembers": "{count, plural, =1{{count} Miembro} other{{count} Miembros}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Pega aquí el código PGN, {count} partida como máximo} other{Pega aquí el código PGN, {count} partidas como máximo}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Batalla de {count} equipos} other{Batalla de {count} equipos}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Un líder por equipo} other{{count} líderes por equipo}}",
   "timeagoJustNow": "hace un momento",
   "timeagoRightNow": "ahora mismo",
   "timeagoCompleted": "completado",
