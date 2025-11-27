@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -219,8 +218,8 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Load the overview
-      await mockNetworkImages(() => tester.pump());
+      // Load the round
+      await tester.pump();
 
       final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
       final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +15,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -365,8 +365,8 @@ class StudyFlair extends StatelessWidget {
     final iconIfNoFlair = Icon(LichessIcons.study, size: size);
 
     return (flair != null)
-        ? CachedNetworkImage(
-            imageUrl: lichessFlairSrc(flair!),
+        ? CachedHttpNetworkImage(
+            lichessFlairSrc(flair!),
             errorWidget: (_, _, _) => iconIfNoFlair,
             width: size,
             height: size,

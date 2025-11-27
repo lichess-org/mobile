@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -53,7 +54,10 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
               : CircleAvatar(
                   radius: 16,
                   foregroundImage: value.flair != null
-                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                      ? CachedNetworkImageProvider(
+                          lichessFlairSrc(value.flair!),
+                          cacheManager: ref.read(cachedNetworkImageManagerProvider),
+                        )
                       : null,
                   onForegroundImageError: value.flair != null
                       ? (error, _) {
@@ -122,7 +126,10 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                       : CircleAvatar(
                           radius: 20,
                           foregroundImage: value.flair != null
-                              ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                              ? CachedNetworkImageProvider(
+                                  lichessFlairSrc(value.flair!),
+                                  cacheManager: ref.read(cachedNetworkImageManagerProvider),
+                                )
                               : null,
                           onForegroundImageError: value.flair != null
                               ? (error, _) {
