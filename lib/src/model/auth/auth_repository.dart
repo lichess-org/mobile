@@ -73,7 +73,7 @@ class AuthRepository {
 
   /// Check if the given authUser token is valid.
   Future<bool> checkToken(AuthUser authUser) async {
-    final defaultClient = _ref.read(defaultClientProvider);
+    final defaultClient = _ref.read(externalClientProvider);
     final data = await defaultClient
         .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
         .timeout(const Duration(seconds: 5));

@@ -45,7 +45,7 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 
 /// Creates the appropriate http client for the platform.
 ///
-/// Do not use directly, use [defaultClient] or [lichessClient] instead.
+/// Do not use directly, use [externalClientProvider] or [lichessClientProvider] instead.
 class HttpClientFactory {
   const HttpClientFactory({this.wrapper});
 
@@ -121,16 +121,19 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
   );
 });
 
-/// The default http client.
+/// The external http client.
 ///
 /// This client is used for all requests that don't go to the lichess server, for
 /// example, requests to lichess CDN, or other APIs.
 /// Only one instance of this client is created and kept alive for the whole app.
-final defaultClientProvider = Provider<Client>((Ref ref) {
-  final client = _RegisterCallbackClient(
-    ref.read(httpClientFactoryProvider)(),
-    onRequest: (request) => _logger.info('${request.method} ${request.url}'),
+final externalClientProvider = Provider<ExternalClient>((Ref ref) {
+  final userAgent = makeUserAgent(
+    ref.read(preloadedDataProvider).requireValue.packageInfo,
+    ref.read(preloadedDataProvider).requireValue.deviceInfo,
+    ref.read(preloadedDataProvider).requireValue.sri,
+    null,
   );
+  final client = ExternalClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
 });
@@ -427,6 +430,128 @@ class LichessClient implements Client {
       method,
       lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
     );
+
+    if (headers != null) request.headers.addAll(headers);
+    if (encoding != null) request.encoding = encoding;
+    if (body != null) {
+      if (body is String) {
+        request.body = body;
+      } else if (body is List) {
+        request.bodyBytes = body.cast<int>();
+      } else if (body is Map) {
+        request.bodyFields = body.cast<String, String>();
+      } else {
+        throw ArgumentError('Invalid request body "$body".');
+      }
+    }
+
+    return Response.fromStream(await send(request));
+  }
+}
+
+/// External HTTP client.
+///
+/// * Sets the user-agent header with the app version, build number, and device info.
+/// * Logs all requests and responses with status code >= 400.
+class ExternalClient implements Client {
+  ExternalClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+
+  final Client _inner;
+  final String _userAgent;
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) async {
+    request.headers['User-Agent'] = _userAgent;
+
+    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+
+    try {
+      final response = await _inner.send(request);
+
+      _logIfError(response);
+
+      return response;
+    } catch (e, st) {
+      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      rethrow;
+    }
+  }
+
+  void _logIfError(BaseResponse response) {
+    if (response.request != null && response.statusCode >= 400) {
+      final request = response.request!;
+      final method = request.method;
+      final url = request.url;
+      _logger.warning(
+        '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
+      );
+    }
+  }
+
+  @override
+  void close() {
+    _inner.close();
+  }
+
+  @override
+  Future<Response> head(Uri url, {Map<String, String>? headers}) =>
+      _sendUnstreamed('HEAD', url, headers);
+
+  @override
+  Future<Response> get(Uri url, {Map<String, String>? headers}) =>
+      _sendUnstreamed('GET', url, headers);
+
+  @override
+  Future<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('POST', url, headers, body, encoding);
+
+  @override
+  Future<Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) =>
+      _sendUnstreamed('PUT', url, headers, body, encoding);
+
+  @override
+  Future<Response> patch(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('PATCH', url, headers, body, encoding);
+
+  @override
+  Future<Response> delete(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('DELETE', url, headers, body, encoding);
+
+  @override
+  Future<String> read(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.body;
+  }
+
+  @override
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.bodyBytes;
+  }
+
+  /// Sends a non-streaming [Request] and returns a non-streaming [Response].
+  Future<Response> _sendUnstreamed(
+    String method,
+    Uri url,
+    Map<String, String>? headers, [
+    Object? body,
+    Encoding? encoding,
+  ]) async {
+    final request = Request(method, url);
 
     if (headers != null) request.headers.addAll(headers);
     if (encoding != null) request.encoding = encoding;

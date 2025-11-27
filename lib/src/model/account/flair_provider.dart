@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_models.dart
 /// A provider that fetches the list of available flairs.
 final flairListProvider = FutureProvider<EmojiData>((Ref ref) async {
   final list = await ref
-      .read(defaultClientProvider)
+      .read(externalClientProvider)
       .read(Uri.parse(lichessAssetUrl('flair/list.txt')));
   final data = _makeEmojiData(list);
   return EmojiData.fromJson(data);

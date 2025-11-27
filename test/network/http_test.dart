@@ -235,16 +235,19 @@ void main() {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
               return FakeHttpClientFactory(() => FakeClient());
             }),
-            defaultClientProvider: defaultClientProvider.overrideWith((ref) {
-              return MockClient((request) async {
-                if (request.url.path == '/api/token/test') {
-                  nbTokenTestRequests++;
-                  final token = request.body.split(',')[0];
-                  final response = '{"$token": null}';
-                  return http.Response(response, 200);
-                }
-                return http.Response('', 404);
-              });
+            externalClientProvider: externalClientProvider.overrideWith((ref) {
+              return ExternalClient(
+                MockClient((request) async {
+                  if (request.url.path == '/api/token/test') {
+                    nbTokenTestRequests++;
+                    final token = request.body.split(',')[0];
+                    final response = '{"$token": null}';
+                    return http.Response(response, 200);
+                  }
+                  return http.Response('', 404);
+                }),
+                userAgent: 'Lichess Mobile/0.0.0 as:test-user-id sri:test-sri',
+              );
             }),
           },
           authUser: const AuthUser(
@@ -289,17 +292,20 @@ void main() {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => FakeClient());
           }),
-          defaultClientProvider: defaultClientProvider.overrideWith((ref) {
-            return MockClient((request) async {
-              if (request.url.path == '/api/token/test') {
-                nbTokenTestRequests++;
-                final token = request.body.split(',')[0];
-                final response =
-                    '{"$token": {"userId": "test-user-id","scope": "web:mobile", "expires":1760704968038}}';
-                return http.Response(response, 200);
-              }
-              return http.Response('', 404);
-            });
+          externalClientProvider: externalClientProvider.overrideWith((ref) {
+            return ExternalClient(
+              MockClient((request) async {
+                if (request.url.path == '/api/token/test') {
+                  nbTokenTestRequests++;
+                  final token = request.body.split(',')[0];
+                  final response =
+                      '{"$token": {"userId": "test-user-id","scope": "web:mobile", "expires":1760704968038}}';
+                  return http.Response(response, 200);
+                }
+                return http.Response('', 404);
+              }),
+              userAgent: 'Lichess Mobile/0.0.0 as:test-user-id sri:test-sri',
+            );
           }),
         },
         authUser: const AuthUser(

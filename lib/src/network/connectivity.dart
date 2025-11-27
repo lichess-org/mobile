@@ -31,7 +31,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
   final _connectivityChangesDebouncer = Debouncer(const Duration(seconds: 5));
 
-  Client get _defaultClient => ref.read(defaultClientProvider);
+  Client get _defaultClient => ref.read(externalClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
   @override

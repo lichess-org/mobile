@@ -165,7 +165,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
-    isOnline(ref.read(defaultClientProvider)).then((online) {
+    isOnline(ref.read(externalClientProvider)).then((online) {
       if (!online) {
         socketClient.close();
       }

@@ -32,7 +32,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
     await ref.debounce(const Duration(milliseconds: 300));
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
-    final client = ref.read(defaultClientProvider);
+    final client = ref.read(externalClientProvider);
     switch (prefs.db) {
       case OpeningDatabase.master:
         final openingExplorer = await OpeningExplorerRepository(
@@ -74,7 +74,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
 
 /// A provider for [OpeningExplorerRepository].
 final openingExplorerRepositoryProvider = Provider<OpeningExplorerRepository>((Ref ref) {
-  return OpeningExplorerRepository(ref.read(defaultClientProvider));
+  return OpeningExplorerRepository(ref.read(externalClientProvider));
 }, name: 'OpeningExplorerRepositoryProvider');
 
 class OpeningExplorerRepository {

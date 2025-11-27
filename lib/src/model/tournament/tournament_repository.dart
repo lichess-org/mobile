@@ -60,7 +60,7 @@ class TournamentRepository {
   }
 
   Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
-    final client = _ref.read(defaultClientProvider);
+    final client = _ref.read(externalClientProvider);
     return downloadFile(
       client,
       lichessUri('/api/tournament/$id/games', userId != null ? {'player': userId.value} : null),

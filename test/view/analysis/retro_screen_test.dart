@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -122,10 +123,9 @@ Future<Widget> makeTestApp(
     tester,
     home: const RetroScreen(options: (id: testId, initialSide: Side.white)),
     overrides: {
-      lichessClientProvider: lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
-      defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient),
     },
     defaultPreferences: {},
   );

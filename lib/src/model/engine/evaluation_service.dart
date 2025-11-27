@@ -305,7 +305,7 @@ class EvaluationService {
     await deleteNNUEFiles();
 
     Future<bool> doDownload() {
-      final client = _ref.read(defaultClientProvider);
+      final client = _ref.read(externalClientProvider);
       return downloadFiles(
         client,
         [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
