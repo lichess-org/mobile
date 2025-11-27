@@ -1608,6 +1608,8 @@
   "studyNbGames": "{count, plural, =1{{count} משחק} =2{{count} משחקים} many{{count} משחקים} other{{count} משחקים}}",
   "studyNbMembers": "{count, plural, =1{משתמש אחד} =2{{count} משתמשים} many{{count} משתמשים} other{{count} משתמשים}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{הדבק את טקסט הPGN שלך כאן, עד למשחק {count}} =2{הדבק את טקסט הPGN שלך כאן, עד ל{count} משחקים} many{הדבק את טקסט הPGN שלך כאן, עד ל{count} משחקים} other{הדבק את טקסט הPGN שלך כאן, עד ל{count} משחקים}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{קרב של קבוצה {count}} =2{קרב של {count} קבוצות} many{קרב של {count} קבוצות} other{קרב של {count} קבוצות}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{מנהיג אחד בכל קבוצה} =2{{count} מנהיגים בכל קבוצה} many{{count} מנהיגים בכל קבוצה} other{{count} מנהיגים בכל קבוצה}}",
   "timeagoJustNow": "בדיוק עכשיו",
   "timeagoRightNow": "עכשיו",
   "timeagoCompleted": "הושלם",

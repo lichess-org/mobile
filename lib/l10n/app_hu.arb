@@ -1712,6 +1712,8 @@
   "studyNbGames": "{count, plural, =1{{count} Játszma} other{{count} Játszma}}",
   "studyNbMembers": "{count, plural, =1{{count} Tag} other{{count} Tag}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Illeszd be a PGN szövegét legfeljebb {count} játszmáig} other{Illeszd be a PGN szövegét (legfeljebb {count} játszma)}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{{count} csapat csatája} other{Ez {count} csapat csatája}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Egy vezető csapatonként} other{{count} vezető csapatonként}}",
   "timeagoJustNow": "épp most",
   "timeagoRightNow": "épp most",
   "timeagoCompleted": "befejeződött",

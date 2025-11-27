@@ -1721,6 +1721,8 @@
   "studyNbGames": "{count, plural, =1{{count} Schpiel} other{{count} Schpiel}}",
   "studyNbMembers": "{count, plural, =1{{count} Mitglid} other{{count} Mitglider}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Füeg din PGN Tegscht da i, bis zu {count} Schpiel} other{Füeg din PGN Tegscht da i, bis zu {count} Schpiel}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Schlacht mit {count} Team} other{Schlacht mit {count} Teams}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Ein Leader pro Team} other{{count} Leader pro Team}}",
   "timeagoJustNow": "grad jetzt",
   "timeagoRightNow": "genau jetzt",
   "timeagoCompleted": "beändet",

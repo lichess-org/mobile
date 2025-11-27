@@ -6257,6 +6257,32 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'קרב של $count קבוצות',
+      many: 'קרב של $count קבוצות',
+      two: 'קרב של $count קבוצות',
+      one: 'קרב של קבוצה $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count מנהיגים בכל קבוצה',
+      many: '$count מנהיגים בכל קבוצה',
+      two: '$count מנהיגים בכל קבוצה',
+      one: 'מנהיג אחד בכל קבוצה',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'בדיוק עכשיו';
 
   @override

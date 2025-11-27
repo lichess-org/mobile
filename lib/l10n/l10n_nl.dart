@@ -6103,6 +6103,28 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Wedstrijd met $count teams',
+      one: 'Wedstrijd met $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leiders per team',
+      one: 'Eén leider per team',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'zojuist';
 
   @override

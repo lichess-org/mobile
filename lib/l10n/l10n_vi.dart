@@ -6024,6 +6024,26 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Trận chiến giữa $count đội',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'mỗi đội lấy $count người dẫn đầu',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'vừa mới đây';
 
   @override

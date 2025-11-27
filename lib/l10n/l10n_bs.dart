@@ -6182,6 +6182,30 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitka $count timova',
+      few: 'Bitka $count tima',
+      one: 'Bitka $count tima',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vođa po timu',
+      few: '$count vođe po timu',
+      one: 'Jedan vođa po timu',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get timeagoJustNow => 'upravo sada';
 
   @override

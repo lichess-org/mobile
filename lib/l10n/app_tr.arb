@@ -1705,6 +1705,8 @@
   "studyNbGames": "{count, plural, =1{{count} oyun} other{{count} Oyun}}",
   "studyNbMembers": "{count, plural, =1{{count} Üye} other{{count} Üye}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN metninizi buraya yapıştırın, en fazla {count} oyuna kadar} other{PGN metninizi buraya yapıştırın, en fazla {count} oyuna kadar}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{{count} takımın çarpışması} other{{count} takımın savaşı}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Her takımda bir lider} other{{count} lider takım başına}}",
   "timeagoJustNow": "şu anda",
   "timeagoRightNow": "hemen şimdi",
   "timeagoCompleted": "tamamlanmış",

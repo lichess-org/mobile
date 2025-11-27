@@ -1721,6 +1721,8 @@
   "studyNbGames": "{count, plural, =1{{count} партия} few{{count} партии} many{{count} партий} other{{count} партий}}",
   "studyNbMembers": "{count, plural, =1{{count} участник} few{{count} участника} many{{count} участников} other{{count} участников}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Вставьте текст в формате PGN, не больше {count} игры} few{Вставьте текст в формате PGN, не больше {count} игр} many{Вставьте текст в формате PGN, не больше {count} игр} other{Вставьте текст в формате PGN, не больше {count} игр}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Турнир на {count} команду} few{Турнир на {count} команды} many{Турнир на {count} команд} other{Турнир на {count} команд}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{{count} лидер на клуб} few{{count} лидера на клуб} many{{count} лидеров на клуб} other{{count} лидеров на клуб}}",
   "timeagoJustNow": "только что",
   "timeagoRightNow": "прямо сейчас",
   "timeagoCompleted": "завершено",

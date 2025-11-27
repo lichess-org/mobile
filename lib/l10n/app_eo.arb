@@ -1614,6 +1614,8 @@
   "studyNbGames": "{count, plural, =1{{count} Ludo} other{{count} Ludoj}}",
   "studyNbMembers": "{count, plural, =1{{count} Membro} other{{count} Membroj}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Algluu ĉi tie vian PGN kodon, maksimume ĝis {count} ludo} other{Algluu ĉi tie vian PGN kodon, ĝis maksimume {count} ludoj}}",
+  "teamBattleOfNbTeams": "{count, plural, =1{Batalo de {count} teamoj} other{Battle de {count} teamoj}}",
+  "teamNbLeadersPerTeam": "{count, plural, =1{Unu gvidanto je teamo} other{{count} gvidantoj je teamo}}",
   "timeagoJustNow": "ĵus nun",
   "timeagoRightNow": "ĵuse",
   "timeagoCompleted": "finita",
