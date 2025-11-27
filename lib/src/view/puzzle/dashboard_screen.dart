@@ -40,11 +40,14 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(children: [PuzzleDashboardWidget()]);
+    return ListView(children: const [PuzzleDashboardWidget()]);
   }
 }
 
 class PuzzleDashboardWidget extends ConsumerWidget {
+  final bool showDaysSelector;
+  const PuzzleDashboardWidget({this.showDaysSelector = false});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
@@ -59,10 +62,25 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(context.l10n.puzzlePuzzleDashboard),
-              Text(
-                context.l10n.puzzlePuzzleDashboardDescription,
-                style: Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(context.l10n.puzzlePuzzleDashboard),
+                        Text(
+                          context.l10n.puzzlePuzzleDashboardDescription,
+                          style: Styles.subtitle.copyWith(
+                            color: textShade(context, Styles.subtitleOpacity),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (showDaysSelector) const DaysSelector(),
+                ],
               ),
             ],
           ),
