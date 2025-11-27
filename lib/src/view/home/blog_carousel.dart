@@ -6,12 +6,15 @@ import 'dart:ui' as ui;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show homeTabInteraction;
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -126,7 +129,7 @@ class _BlogCarouselState extends State<BlogCarousel> {
   }
 }
 
-class BlogCarouselItem extends StatefulWidget {
+class BlogCarouselItem extends ConsumerStatefulWidget {
   const BlogCarouselItem({
     required this.carouselWidth,
     required this.post,
@@ -154,29 +157,30 @@ class BlogCarouselItem extends StatefulWidget {
   final List<int> flexWeights;
 
   @override
-  State<BlogCarouselItem> createState() => _BlogCarouselItemState();
+  ConsumerState<BlogCarouselItem> createState() => _BlogCarouselItemState();
 }
 
-class _BlogCarouselItemState extends State<BlogCarouselItem> {
+class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.post.imageUrl?.toString();
 
-  ImageProvider get imageProvider => imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBlogImage;
+  ImageProvider get imageProvider => imageUrl != null
+      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      : kDefaultBlogImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final cachedColors = _colorsCache[imageProvider];
-    if (_colorsCache.containsKey(imageProvider)) {
-      _cardColors = cachedColors;
+    if (_colorsCache.containsKey(imageUrl)) {
+      _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(NetworkImage(imageUrl!));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
     }
   }
 
-  Future<void> _getImageColors(NetworkImage provider) async {
+  Future<void> _getImageColors(HttpNetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
@@ -267,7 +271,7 @@ class _BlogCarouselItemState extends State<BlogCarouselItem> {
 }
 
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
+final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd();
 
@@ -351,7 +355,7 @@ Future<_CardColors?> _computeImageColors(
       primaryContainer: Color(primaryContainer),
       onPrimaryContainer: Color(onPrimaryContainer),
     );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
+    _colorsCache[imageUrl] = cardColors;
     return cardColors;
   }
   return null;
@@ -362,11 +366,12 @@ Future<void> preCacheBlogImages(
   BuildContext context, {
   required Iterable<BlogPost> posts,
   required ImageColorWorker worker,
+  required http.Client externalClient,
 }) async {
   for (final post in posts.take(5)) {
     final imageUrl = post.imageUrl;
     if (imageUrl != null) {
-      final provider = NetworkImage(imageUrl.toString());
+      final provider = HttpNetworkImage(imageUrl.toString(), externalClient);
       await precacheImage(provider, context);
       final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();

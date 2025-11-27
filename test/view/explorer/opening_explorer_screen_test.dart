@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -57,7 +58,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -92,7 +97,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
         defaultPreferences: {
           SessionPreferencesStorage.key(PrefCategory.openingExplorer.storageKey, null): jsonEncode(
             OpeningExplorerPrefs.defaults().copyWith(db: OpeningDatabase.lichess).toJson(),
@@ -129,7 +138,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: {defaultClientProvider: defaultClientProvider.overrideWithValue(mockClient)},
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
         authUser: authUser,
         defaultPreferences: {
           SessionPreferencesStorage.key(

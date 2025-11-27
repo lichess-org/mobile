@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
@@ -150,7 +151,12 @@ class _BodyState extends ConsumerState<_Body> {
       ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
         if (current.hasValue && !_imageAreCached) {
           _imageAreCached = true;
-          await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
+          await preCacheBroadcastImages(
+            context,
+            broadcasts: current.value!.active,
+            worker: worker,
+            httpClient: ref.read(defaultClientProvider),
+          );
         }
       });
     }

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
@@ -163,8 +163,8 @@ class Location extends StatelessWidget {
       children: [
         if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
         if (profile.country != null) ...[
-          CachedNetworkImage(
-            imageUrl: lichessFlagSrc(profile.country!),
+          CachedHttpNetworkImage(
+            lichessFlagSrc(profile.country!),
             errorWidget: (_, _, _) => kEmptyWidget,
           ),
           const SizedBox(width: 5),

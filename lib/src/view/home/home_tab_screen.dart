@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -121,7 +122,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       ref.listenManual(blogCarouselProvider, (_, current) async {
         if (current.hasValue && !_imageAreCached) {
           _imageAreCached = true;
-          await preCacheBlogImages(context, posts: current.value!, worker: worker);
+          await preCacheBlogImages(
+            context,
+            posts: current.value!,
+            worker: worker,
+            externalClient: ref.read(defaultClientProvider),
+          );
         }
       });
     }

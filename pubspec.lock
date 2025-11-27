@@ -599,7 +599,7 @@ packages:
     source: hosted
     version: "11.0.0"
   flutter_cache_manager:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_cache_manager
       sha256: "400b6592f16a4409a7f2bb929a9a7e38c72cceb8ffb99ee57bbf2cb2cecf8386"
@@ -1110,14 +1110,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  mocktail_image_network:
-    dependency: "direct dev"
-    description:
-      name: mocktail_image_network
-      sha256: a1fccbba780343517cfc552e0af2b3834d8bdb8f9f55a746c4d495ed1a8d50d6
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   multistockfish:
     dependency: "direct main"
     description:

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const _kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -130,7 +131,7 @@ class BroadcastListTile extends StatelessWidget {
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
 
     final leading = broadcast.tour.imageUrl != null
-        ? Image.network(
+        ? HttpNetworkImageWidget(
             broadcast.tour.imageUrl!,
             width: thumbnailSize,
             cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
