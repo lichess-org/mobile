@@ -155,7 +155,7 @@ class _BodyState extends ConsumerState<_Body> {
             context,
             broadcasts: current.value!.active,
             worker: worker,
-            httpClient: ref.read(externalClientProvider),
+            httpClient: ref.read(defaultClientProvider),
           );
         }
       });

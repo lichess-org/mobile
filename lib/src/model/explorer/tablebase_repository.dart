@@ -14,7 +14,7 @@ final tablebaseProvider = FutureProvider.autoDispose.family<TablebaseEntry?, Str
 ) async {
   await ref.debounce(const Duration(milliseconds: 300));
 
-  final client = ref.read(externalClientProvider);
+  final client = ref.read(defaultClientProvider);
 
   final tablebaseEntry = await TablebaseRepository(client).getTablebaseEntry(fen);
   return tablebaseEntry;

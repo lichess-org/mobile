@@ -45,7 +45,7 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 
 /// Creates the appropriate http client for the platform.
 ///
-/// Do not use directly, use [externalClientProvider] or [lichessClientProvider] instead.
+/// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
 class HttpClientFactory {
   const HttpClientFactory({this.wrapper});
 
@@ -125,19 +125,21 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
   );
 });
 
-/// The external http client.
+/// The default http client.
 ///
 /// This client is used for all requests that don't go to the main lichess server, for
 /// example, requests to lichess CDN, or other APIs.
+/// This client does not set any Authorization header.
+///
 /// Only one instance of this client is created and kept alive for the whole app.
-final externalClientProvider = Provider<ExternalClient>((Ref ref) {
+final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   final userAgent = makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
     null,
   );
-  final client = ExternalClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
+  final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
 });
@@ -453,12 +455,12 @@ class LichessClient implements Client {
   }
 }
 
-/// External HTTP client.
+/// Default HTTP client.
 ///
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
-class ExternalClient implements Client {
-  ExternalClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+class DefaultClient implements Client {
+  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
 
   final Client _inner;
   final String _userAgent;

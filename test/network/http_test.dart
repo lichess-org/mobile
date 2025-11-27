@@ -235,8 +235,8 @@ void main() {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
               return FakeHttpClientFactory(() => FakeClient());
             }),
-            externalClientProvider: externalClientProvider.overrideWith((ref) {
-              return ExternalClient(
+            defaultClientProvider: defaultClientProvider.overrideWith((ref) {
+              return DefaultClient(
                 MockClient((request) async {
                   if (request.url.path == '/api/token/test') {
                     nbTokenTestRequests++;
@@ -292,8 +292,8 @@ void main() {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => FakeClient());
           }),
-          externalClientProvider: externalClientProvider.overrideWith((ref) {
-            return ExternalClient(
+          defaultClientProvider: defaultClientProvider.overrideWith((ref) {
+            return DefaultClient(
               MockClient((request) async {
                 if (request.url.path == '/api/token/test') {
                   nbTokenTestRequests++;

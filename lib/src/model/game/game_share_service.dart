@@ -52,7 +52,7 @@ class GameShareService {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
     final resp = await _ref
-        .read(externalClientProvider)
+        .read(defaultClientProvider)
         .get(
           Uri.parse(
             '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}${lastMove != null ? '&lastMove=${lastMove.uci}' : ''}&theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
@@ -74,7 +74,7 @@ class GameShareService {
     final pieceTheme = boardPreferences.pieceSet;
     final resp = await Future.wait([
       _ref
-          .read(externalClientProvider)
+          .read(defaultClientProvider)
           .get(
             Uri.parse(
               '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',

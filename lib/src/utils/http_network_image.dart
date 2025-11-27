@@ -96,7 +96,7 @@ final cachedNetworkImageManagerProvider = Provider<CacheManager>((ref) {
   return CacheManager(
     Config(
       cacheKey,
-      fileService: HttpFileService(httpClient: ref.read(externalClientProvider)),
+      fileService: HttpFileService(httpClient: ref.read(defaultClientProvider)),
       stalePeriod: const Duration(days: 7),
 
       maxNrOfCacheObjects: 200,

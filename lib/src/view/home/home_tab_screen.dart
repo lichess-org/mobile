@@ -126,7 +126,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             context,
             posts: current.value!,
             worker: worker,
-            externalClient: ref.read(externalClientProvider),
+            externalClient: ref.read(defaultClientProvider),
           );
         }
       });
