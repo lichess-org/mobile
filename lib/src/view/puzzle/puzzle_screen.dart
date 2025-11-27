@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -223,11 +223,11 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final initialPuzzleContext = PuzzleContext(
       angle: const PuzzleTheme(PuzzleThemeKey.mix),
       puzzle: puzzle,
-      userId: session?.user.id,
+      userId: authUser?.user.id,
     );
     return _PuzzleScaffold(
       angle: angle,
@@ -253,13 +253,13 @@ class _LoadPuzzleFromId extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(puzzleProvider(id));
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     switch (puzzle) {
       case AsyncData(value: final data):
         final initialPuzzleContext = PuzzleContext(
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzle: data,
-          userId: session?.user.id,
+          userId: authUser?.user.id,
           casual: openCasual ? true : null,
         );
         return _PuzzleScaffold(
@@ -903,7 +903,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
@@ -963,7 +963,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
-            if (session != null)
+            if (authUser != null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),
                 // ignore: avoid_bool_literals_in_conditional_expressions

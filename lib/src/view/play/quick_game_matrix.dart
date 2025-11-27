@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -77,7 +77,7 @@ class _SectionChoices extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
@@ -96,7 +96,7 @@ class _SectionChoices extends ConsumerWidget {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
                             context,
-                            source: LobbySource(GameSeek.fastPairing(choice, session)),
+                            source: LobbySource(GameSeek.fastPairing(choice, authUser)),
                           ),
                         );
                       }

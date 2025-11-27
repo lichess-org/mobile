@@ -16,6 +16,8 @@ part 'game_screen_providers.freezed.dart';
 /// It can be:
 /// - [GameCreatedState]: A game has been created or loaded.
 /// - [ChallengeDeclinedState]: A real time challenge has been declined.
+/// - [SeekCancelledState]: A game seek has been cancelled.
+/// - [ChallengeCancelledState]: A real time challenge has been cancelled.
 sealed class GameScreenState {}
 
 /// Game screen state when a game has been created or loaded.
@@ -38,6 +40,22 @@ sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements Gam
 
   const factory ChallengeDeclinedState(ChallengeResponseDeclined response) =
       _ChallengeDeclinedState;
+}
+
+/// A game seek has been cancelled.
+@freezed
+sealed class SeekCancelledState with _$SeekCancelledState implements GameScreenState {
+  const SeekCancelledState._();
+
+  const factory SeekCancelledState() = _SeekCancelledState;
+}
+
+/// A real time challenge has been cancelled.
+@freezed
+sealed class ChallengeCancelledState with _$ChallengeCancelledState implements GameScreenState {
+  const ChallengeCancelledState._();
+
+  const factory ChallengeCancelledState() = _ChallengeCancelledState;
 }
 
 /// The source from which the [GameScreen] was opened.
@@ -92,7 +110,15 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
     final service = ref.watch(createGameServiceProvider);
 
     return switch (source) {
-      LobbySource(:final seek) => service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      LobbySource(:final seek) =>
+        service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
       UserChallengeSource(:final challengeRequest) =>
         service
             .newRealTimeChallenge(challengeRequest)
@@ -100,6 +126,7 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
               (data) => switch (data) {
                 ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
                 ChallengeResponseDeclined() => ChallengeDeclinedState(data),
+                ChallengeResponseCancelled() => const ChallengeCancelledState(),
               },
             ),
       ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),
@@ -111,7 +138,16 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
     if (source case LobbySource(:final seek)) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
-      state = AsyncValue.data(await service.newLobbyGame(seek).then((id) => GameCreatedState(id)));
+      state = AsyncValue.data(
+        await service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
+      );
     }
   }
 

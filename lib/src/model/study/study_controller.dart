@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -140,7 +140,7 @@ class StudyController extends AsyncNotifier<StudyState>
     final variant = study.chapter.setup.variant;
     final orientation = study.chapter.setup.orientation;
 
-    final UserId? me = ref.read(authSessionProvider)?.user.id;
+    final UserId? me = ref.read(authControllerProvider)?.user.id;
 
     // Some studies have illegal starting positions. This is usually the case for introductory chapters.
     // We do not treat this as an error, but display a static board instead.

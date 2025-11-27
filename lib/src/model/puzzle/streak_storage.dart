@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,10 +17,10 @@ final streakStorageProvider = Provider.autoDispose.family<StreakStorage, UserId?
 
 /// Fetches the current streak score from the local storage if available, returns null otherwise.
 final savedStreakScoreProvider = FutureProvider.autoDispose<int?>((Ref ref) async {
-  final session = ref.watch(authSessionProvider);
+  final authUser = ref.watch(authControllerProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage saveActiveStreak and clearActiveStreak methods
-  final streakStorage = ref.read(streakStorageProvider(session?.user.id));
+  final streakStorage = ref.read(streakStorageProvider(authUser?.user.id));
   final streak = await streakStorage.loadActiveStreak();
   return streak?.index;
 });

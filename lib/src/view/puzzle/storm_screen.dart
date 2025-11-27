@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
@@ -908,19 +908,19 @@ class _StatsRow extends StatelessWidget {
 class _StormDashboardButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session != null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser != null) {
       return IconButton(
         tooltip: 'Storm History',
-        onPressed: () => _showDashboard(context, session),
+        onPressed: () => _showDashboard(context, authUser),
         icon: const Icon(Icons.history),
       );
     }
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context, AuthSessionState session) => Navigator.of(
+  void _showDashboard(BuildContext context, AuthUser authUser) => Navigator.of(
     context,
     rootNavigator: true,
-  ).push(StormDashboardModal.buildRoute(context, session.user));
+  ).push(StormDashboardModal.buildRoute(context, authUser.user));
 }

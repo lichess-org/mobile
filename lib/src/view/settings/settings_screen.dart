@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -39,14 +39,14 @@ class SettingsScreen extends ConsumerWidget {
     );
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
-    final userSession = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
-          if (userSession != null)
+          if (authUser != null)
             ListSection(
               hasLeading: true,
               children: [

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -77,12 +78,65 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
+  AppLifecycleListener? _appLifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cancel pending seek or challenges when app goes to background to prevent games being created
+    // while the user is away from the app.
+    _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeekOrChallenge);
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _cancelSeekOrChallenge() async {
+    if (!mounted) return;
+    final loader = ref.read(gameScreenLoaderProvider(widget.source));
+    // Only cancel if we are still seeking or waiting for challenge to be accepted
+    if (loader is! AsyncLoading<GameScreenState>) {
+      return;
+    }
+    switch (widget.source) {
+      case LobbySource():
+        await ref.read(createGameServiceProvider).cancelSeek();
+      case UserChallengeSource():
+        await ref.read(createGameServiceProvider).cancelChallenge();
+      case ExistingGameSource():
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
+      case AsyncData(value: SeekCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: switch (widget.source) {
+              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              _ => const SizedBox.shrink(),
+            },
+          ),
+          body: const LoadGameError('The game search was cancelled.', showBottomBar: false),
+        );
+      case AsyncData(value: ChallengeCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: const LoadGameError('The challenge was cancelled.', showBottomBar: false),
+        );
       case AsyncData(
         value: ChallengeDeclinedState(
           response: ChallengeResponseDeclined(:final challenge, :final declineReason),
@@ -215,7 +269,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               _ => const SizedBox.shrink(),
             },
           ),
-          body: PopScope(canPop: false, child: loadingBoard),
+          body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
         );
     }
   }

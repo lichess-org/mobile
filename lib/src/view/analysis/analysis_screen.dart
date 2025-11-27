@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -565,9 +565,9 @@ class _BottomBar extends ConsumerWidget {
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
     final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final session = ref.read(authSessionProvider);
-    final mySide = session != null
-        ? analysisState.archivedGame?.playerSideOf(session.user.id)
+    final authUser = ref.read(authControllerProvider);
+    final mySide = authUser != null
+        ? analysisState.archivedGame?.playerSideOf(authUser.user.id)
         : null;
 
     return showAdaptiveActionSheet(

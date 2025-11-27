@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -84,7 +84,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     switch (ref.watch(chatControllerProvider(widget.options))) {
       case AsyncData(:final value):
         return Scaffold(
@@ -111,7 +111,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                       final message = value.messages[value.messages.length - index - 1];
                       return (message.username == 'lichess')
                           ? _MessageAction(message: message.message)
-                          : (message.username == session?.user.name)
+                          : (message.username == authUser?.user.name)
                           ? _MessageBubble(options: widget.options, you: true, message: message)
                           : _MessageBubble(
                               options: widget.options,
@@ -267,11 +267,11 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder: (context, value, child) => SemanticIconButton(
-        onPressed: session != null && value.text.isNotEmpty
+        onPressed: authUser != null && value.text.isNotEmpty
             ? () {
                 ref
                     .read(chatControllerProvider(widget.options).notifier)
@@ -284,7 +284,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         semanticsLabel: context.l10n.send,
       ),
     );
-    final placeholder = session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
+    final placeholder = authUser != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
@@ -301,7 +301,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,
-          readOnly: session == null,
+          readOnly: authUser == null,
         ),
       ),
     );

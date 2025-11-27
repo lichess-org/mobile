@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -44,7 +44,7 @@ Future<ProviderContainer> lichessClientContainer(MockClient mockClient) {
 /// Returns a [ProviderContainer] with default mocks, ready for testing.
 Future<ProviderContainer> makeContainer({
   Map<ProviderOrFamily, Override>? overrides,
-  AuthSessionState? userSession,
+  AuthUser? authUser,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 
@@ -92,7 +92,7 @@ Future<ProviderContainer> makeContainer({
           'identifierForVendor': 'test',
           'isPhysicalDevice': true,
         }),
-        userSession: userSession,
+        authUser: authUser,
         engineMaxMemoryInMb: 256,
         appDocumentsDirectory: null,
         appSupportDirectory: null,

@@ -16,7 +16,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../network/socket_test.dart';
 import '../../test_container.dart';
-import '../auth/fake_session_storage.dart';
+import '../auth/fake_auth_storage.dart';
 
 class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
 
@@ -84,7 +84,7 @@ void main() {
     ).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
           notificationDisplayMock,
@@ -166,7 +166,7 @@ void main() {
     when(() => notificationDisplayMock.cancel(any())).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
-      userSession: fakeSession,
+      authUser: fakeAuthUser,
       overrides: {
         notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
           notificationDisplayMock,

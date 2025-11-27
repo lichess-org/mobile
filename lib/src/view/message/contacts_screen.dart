@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -66,7 +66,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   Widget build(BuildContext context) {
     final searchQuery = ref.watch(messageSearchQueryProvider);
     final searchResultsAsync = ref.watch(messageSearchResultsProvider);
-    final me = ref.watch(authSessionProvider)?.user;
+    final me = ref.watch(authControllerProvider)?.user;
 
     return Scaffold(
       appBar: AppBar(

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -365,8 +365,8 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.read(authSessionProvider);
-    final userId = widget.user?.id ?? session?.user.id;
+    final authUser = ref.read(authControllerProvider);
+    final userId = widget.user?.id ?? authUser?.user.id;
 
     final Widget filters = userId != null
         ? ref

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -55,7 +55,7 @@ class ServerAnalysisService {
     _socketClient = SocketClient(
       uri,
       channelFactory: ref.read(webSocketChannelFactoryProvider),
-      getSession: () => ref.read(authSessionProvider),
+      getSession: () => ref.read(authControllerProvider),
       packageInfo: ref.read(preloadedDataProvider).requireValue.packageInfo,
       deviceInfo: ref.read(preloadedDataProvider).requireValue.deviceInfo,
       sri: ref.read(preloadedDataProvider).requireValue.sri,

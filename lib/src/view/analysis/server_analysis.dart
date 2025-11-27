@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -200,7 +200,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               future: pendingRequest,
                               builder: (context, snapshot) {
                                 return FilledButton.tonal(
-                                  onPressed: ref.watch(authSessionProvider) == null
+                                  onPressed: ref.watch(authControllerProvider) == null
                                       ? () {
                                           showSnackBar(
                                             context,
