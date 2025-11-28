@@ -97,6 +97,7 @@ class EngineButton extends ConsumerWidget {
                                     eval?.depth != null
                                         ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
                                         : loadingIndicator,
+                                  EngineState.initial || EngineState.loading => loadingIndicator,
                                   _ => const SizedBox.shrink(),
                                 }
                         : const SizedBox.shrink(),
