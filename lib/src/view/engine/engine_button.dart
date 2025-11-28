@@ -81,7 +81,6 @@ class EngineButton extends ConsumerWidget {
         isLabelVisible: eval is CloudEval,
         child: AnimatedOpacity(
           opacity: switch (engineState) {
-            // EngineState.computing => 1.0,
             EngineState.idle => 0.8,
             _ => 1.0,
           },
@@ -98,13 +97,15 @@ class EngineButton extends ConsumerWidget {
                 height: microChipSize,
                 child: RepaintBoundary(
                   child: Center(
-                    child: switch (engineState) {
-                      EngineState.computing || EngineState.idle =>
-                        eval?.depth != null
-                            ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
-                            : loadingIndicator,
-                      _ => const SizedBox.shrink(),
-                    },
+                    child: eval is CloudEval
+                        ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                        : switch (engineState) {
+                            EngineState.computing || EngineState.idle =>
+                              eval?.depth != null
+                                  ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                                  : loadingIndicator,
+                            _ => const SizedBox.shrink(),
+                          },
                   ),
                 ),
               ),
