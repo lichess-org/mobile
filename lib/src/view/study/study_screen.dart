@@ -429,28 +429,13 @@ class _Body extends ConsumerWidget {
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: engineGaugeParams,
-                      engineLinesState: studyState.isEngineAvailable(enginePrefs)
-                          ? studyPrefs.showEngineLines
-                                ? EngineLinesShowState.expanded
-                                : EngineLinesShowState.collapsed
-                          : null,
-                      onTap: () {
-                        ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                        params: engineGaugeParams,
-                      ),
-                    );
+          ? (context) {
+              return EngineGauge(
+                params: engineGaugeParams,
+                onTap: () {
+                  ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
+                },
+              );
             }
           : null,
       engineLines:

@@ -36,7 +36,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
@@ -384,16 +383,6 @@ class _BodyState extends ConsumerState<_Body> {
       premovable: null,
     );
 
-    final engineGauge = puzzleState.isEngineAvailable(enginePrefs)
-        ? (
-            isLocalEngineAvailable: true,
-            orientation: puzzleState.pov,
-            position: puzzleState.currentPosition,
-            savedEval: puzzleState.node.eval,
-            serverEval: puzzleState.node.serverEval,
-          )
-        : null;
-
     final content = PopScope(
       canPop:
           Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
@@ -441,15 +430,6 @@ class _BodyState extends ConsumerState<_Body> {
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
-                    if (engineGauge != null) ...[
-                      const SizedBox(width: 4.0),
-                      EngineGauge(
-                        params: engineGauge,
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                      ),
-                    ] else ...[
-                      const SizedBox(width: kEvalGaugeSize + 4.0),
-                    ],
                     const SizedBox(width: 16.0),
                     Expanded(
                       child: Column(
@@ -527,18 +507,6 @@ class _BodyState extends ConsumerState<_Body> {
                       ),
                     ),
                   ),
-                  if (engineGauge != null)
-                    Padding(
-                      padding: isTablet
-                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                          : EdgeInsets.zero,
-                      child: EngineGauge(
-                        params: engineGauge,
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                      ),
-                    )
-                  else
-                    const SizedBox(height: kEvalGaugeSize),
                   Padding(
                     padding: isTablet
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)

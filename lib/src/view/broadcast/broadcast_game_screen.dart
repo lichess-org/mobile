@@ -284,28 +284,13 @@ class _Body extends ConsumerWidget {
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
           engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
-              ? (context, orientation) {
-                  return orientation == Orientation.portrait
-                      ? EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.horizontal,
-                          params: engineGaugeParams,
-                          engineLinesState: state.isEngineAvailable(enginePrefs)
-                              ? broadcastPrefs.showEngineLines
-                                    ? EngineLinesShowState.expanded
-                                    : EngineLinesShowState.collapsed
-                              : null,
-                          onTap: () {
-                            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
-                          },
-                        )
-                      : Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                          child: EngineGauge(
-                            displayMode: EngineGaugeDisplayMode.vertical,
-                            params: engineGaugeParams,
-                          ),
-                        );
+              ? (context) {
+                  return EngineGauge(
+                    params: engineGaugeParams,
+                    onTap: () {
+                      ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
+                    },
+                  );
                 }
               : null,
           engineLines:

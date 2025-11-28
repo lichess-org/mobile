@@ -354,28 +354,13 @@ class _Body extends ConsumerWidget {
         boardHeader: boardHeader,
         boardFooter: boardFooter,
         engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-            ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                        params: analysisState.engineGaugeParams(enginePrefs),
-                        engineLinesState: isEngineAvailable && numEvalLines > 0
-                            ? analysisPrefs.showEngineLines
-                                  ? EngineLinesShowState.expanded
-                                  : EngineLinesShowState.collapsed
-                            : null,
-                        onTap: () {
-                          ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                        },
-                      )
-                    : Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                        child: EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.vertical,
-                          params: analysisState.engineGaugeParams(enginePrefs),
-                        ),
-                      );
+            ? (context) {
+                return EngineGauge(
+                  params: analysisState.engineGaugeParams(enginePrefs),
+                  onTap: () {
+                    ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+                  },
+                );
               }
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines

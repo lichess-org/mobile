@@ -124,23 +124,13 @@ class _RetroScreen extends ConsumerWidget {
       pov: state.pov,
       boardBuilder: (context, boardSize, borderRadius) =>
           RetroAnalysisBoard(options, boardSize: boardSize, boardRadius: borderRadius),
-      engineGaugeBuilder: (context, orientation) {
-        return orientation == Orientation.portrait
-            ? EngineGauge(
-                displayMode: EngineGaugeDisplayMode.horizontal,
-                params: state.engineGaugeParams,
-                onTap: () {
-                  ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                },
-              )
-            : Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                child: EngineGauge(
-                  displayMode: EngineGaugeDisplayMode.vertical,
-                  params: state.engineGaugeParams,
-                ),
-              );
+      engineGaugeBuilder: (context) {
+        return EngineGauge(
+          params: state.engineGaugeParams,
+          onTap: () {
+            ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+          },
+        );
       },
       bottomBar: _BottomBar(options),
       children: [
