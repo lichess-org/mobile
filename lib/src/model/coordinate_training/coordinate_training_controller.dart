@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 
 part 'coordinate_training_controller.freezed.dart';
@@ -32,7 +31,7 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
     final sideChoice = ref.watch(
       coordinateTrainingPreferencesProvider.select((value) => value.sideChoice),
     );
-    return CoordinateTrainingState(orientation: _getOrientation(sideChoice));
+    return CoordinateTrainingState(orientation: sideChoice.generateSide);
   }
 
   void startTraining(Duration? timeLimit) {
@@ -60,7 +59,7 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
 
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
-    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
+    final orientation = ref.read(coordinateTrainingPreferencesProvider).sideChoice.generateSide;
     _updateTimer?.cancel();
     state = CoordinateTrainingState(
       lastGuess: state.lastGuess,
@@ -70,19 +69,10 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
   }
 
   void abortTraining() {
-    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
+    final orientation = ref.read(coordinateTrainingPreferencesProvider).sideChoice.generateSide;
     _updateTimer?.cancel();
     state = CoordinateTrainingState(orientation: orientation);
   }
-
-  Side _getOrientation(SideChoice choice) => switch (choice) {
-    SideChoice.white => Side.white,
-    SideChoice.black => Side.black,
-    SideChoice.random => _randomSide(),
-  };
-
-  /// Generate a random side
-  Side _randomSide() => Side.values[Random().nextInt(Side.values.length)];
 
   /// Generate a random square that is not the same as the [previous] square
   Square _randomCoord({Square? previous}) {

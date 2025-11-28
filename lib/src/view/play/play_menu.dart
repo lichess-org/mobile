@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/computer/computer_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
@@ -25,6 +26,15 @@ class PlayMenu extends ConsumerWidget {
         ),
         _Section(
           children: [
+            ListTile(
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context, rootNavigator: true).push(ComputerScreen.buildRoute(context));
+              },
+              leading: const Icon(Icons.memory),
+              title: Text(context.l10n.computer),
+            ),
             ListTile(
               enabled: isOnline,
               onTap: () {
