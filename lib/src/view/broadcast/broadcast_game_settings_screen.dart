@@ -42,13 +42,6 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Smaller board'),
-                value: broadcastPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
                 onTap: () => showModalBottomSheet<void>(

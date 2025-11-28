@@ -55,10 +55,6 @@ class AnalysisPreferences extends Notifier<AnalysisPrefs> with PreferencesStorag
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -73,7 +69,6 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonA
     required bool showAnnotations,
     required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
@@ -84,7 +79,6 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonA
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
   );
 
   factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {

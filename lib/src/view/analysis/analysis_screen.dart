@@ -340,7 +340,6 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
-        smallBoard: analysisPrefs.smallBoard,
         tabController: controller,
         pov: pov,
         boardBuilder: (context, boardSize, borderRadius) =>

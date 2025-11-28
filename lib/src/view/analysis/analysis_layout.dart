@@ -134,7 +134,6 @@ class AnalysisLayout extends StatelessWidget {
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
-    this.smallBoard = false,
     super.key,
   });
 
@@ -173,11 +172,6 @@ class AnalysisLayout extends StatelessWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
-
-  /// If true, the board is displayed in a small size on portrait orientation.
-  ///
-  /// This is `false` by default.
-  final bool smallBoard;
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +325,7 @@ class AnalysisLayout extends StatelessWidget {
                               children: [
                                 boardBuilder(
                                   context,
-                                  boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
+                                  boardSize,
                                   isTablet && boardHeader == null && boardFooter != null
                                       ? tabletBoardRadius
                                       : null,

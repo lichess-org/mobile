@@ -255,7 +255,6 @@ class _Body extends ConsumerWidget {
         final pov = state.pov;
 
         return AnalysisLayout(
-          smallBoard: broadcastPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
           boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(

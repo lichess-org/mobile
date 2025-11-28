@@ -64,7 +64,6 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -75,7 +74,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -112,7 +110,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -389,8 +386,6 @@ class _Body extends ConsumerWidget {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
-          smallBoard: studyPrefs.smallBoard,
-
           pov: Side.white,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
@@ -414,7 +409,6 @@ class _Body extends ConsumerWidget {
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
-      smallBoard: studyPrefs.smallBoard,
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>

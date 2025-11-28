@@ -39,13 +39,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
                   ),
-                  SwitchSettingTile(
-                    // TODO: translate
-                    title: const Text('Smaller board'),
-                    value: prefs.smallBoard,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
-                  ),
                   ListTile(
                     title: Text(context.l10n.openingExplorer),
                     onTap: () => showModalBottomSheet<void>(
