@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -22,22 +23,18 @@ class EngineButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(engineEvaluationPreferencesProvider);
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
         .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    final color = switch (engineState) {
-      EngineState.loading ||
-      EngineState.computing ||
-      EngineState.idle => ColorScheme.of(context).primary,
-      _ => IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!,
-    };
-    final textColor = switch (engineState) {
-      EngineState.loading ||
-      EngineState.computing ||
-      EngineState.idle => ColorScheme.of(context).primary,
-      _ => IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!,
-    };
+    final color = prefs.isEnabled
+        ? ColorScheme.of(context).primary
+        : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
+
+    final textColor = prefs.isEnabled
+        ? ColorScheme.of(context).primary
+        : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
 
     final loadingIndicator = SpinKitFadingFour(color: textColor.withValues(alpha: 0.7), size: 10);
 
@@ -50,12 +47,7 @@ class EngineButton extends ConsumerWidget {
     );
 
     return SemanticIconButton(
-      semanticsLabel: switch (eval) {
-        LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
-        CloudEval(:final depth) =>
-          '${context.l10n.cloudAnalysis}, ${context.l10n.depthX('$depth')}',
-        _ => context.l10n.loadingEngine,
-      },
+      semanticsLabel: context.l10n.toggleLocalEvaluation,
       onPressed: onTap,
       onLongPress: () {
         showPopover(
@@ -76,9 +68,9 @@ class EngineButton extends ConsumerWidget {
         offset: const Offset(4, -7),
         backgroundColor: ColorScheme.of(context).tertiaryContainer,
         textColor: ColorScheme.of(context).onTertiaryContainer,
-        label: eval is CloudEval ? const Text('CLOUD') : null,
+        label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
         textStyle: const TextStyle(fontSize: 8),
-        isLabelVisible: eval is CloudEval,
+        isLabelVisible: prefs.isEnabled && eval is CloudEval,
         child: AnimatedOpacity(
           opacity: switch (engineState) {
             EngineState.idle => 0.8,
@@ -97,15 +89,17 @@ class EngineButton extends ConsumerWidget {
                 height: microChipSize,
                 child: RepaintBoundary(
                   child: Center(
-                    child: eval is CloudEval
-                        ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                        : switch (engineState) {
-                            EngineState.computing || EngineState.idle =>
-                              eval?.depth != null
-                                  ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
-                                  : loadingIndicator,
-                            _ => const SizedBox.shrink(),
-                          },
+                    child: prefs.isEnabled
+                        ? eval is CloudEval
+                              ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                              : switch (engineState) {
+                                  EngineState.computing || EngineState.idle =>
+                                    eval?.depth != null
+                                        ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                                        : loadingIndicator,
+                                  _ => const SizedBox.shrink(),
+                                }
+                        : const SizedBox.shrink(),
                   ),
                 ),
               ),
@@ -254,7 +248,7 @@ class _EnginePopup extends ConsumerWidget {
         evalState;
     final bool canGoDeeper =
         goDeeper != null &&
-        engineState == EngineState.idle &&
+        engineState != EngineState.computing &&
         (work == null || work.isDeeper != true);
 
     final currentEval = switch (engineState) {

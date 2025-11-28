@@ -240,7 +240,7 @@ class EvaluationService {
       switch (work.evalCache) {
         // if the search time is greater than the current search time, don't evaluate again
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-        case CloudEval _:
+        case CloudEval _ when goDeeper == false:
           // stop the engine if running (can happen if last eval was launched with goDeeper = true)
           engine.stop();
           return null;
