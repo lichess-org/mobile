@@ -711,7 +711,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
 
         expect(find.byType(EngineGauge), findsOne);
-        expect(find.widgetWithText(EngineGauge, 'Checkmate'), findsOne);
+        expect(find.widgetWithText(EngineGauge, '#'), findsOne);
       });
     });
 
