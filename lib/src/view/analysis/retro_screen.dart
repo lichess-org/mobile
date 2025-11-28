@@ -125,12 +125,7 @@ class _RetroScreen extends ConsumerWidget {
       boardBuilder: (context, boardSize, borderRadius) =>
           RetroAnalysisBoard(options, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder: (context) {
-        return EngineGauge(
-          params: state.engineGaugeParams,
-          onTap: () {
-            ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-          },
-        );
+        return EngineGauge(params: state.engineGaugeParams);
       },
       bottomBar: _BottomBar(options),
       children: [

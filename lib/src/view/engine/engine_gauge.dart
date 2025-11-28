@@ -162,7 +162,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                     ),
                     if (widget.engineLinesState != null)
                       Align(
-                        alignment: toValue >= 0.5 ? Alignment.centerRight : Alignment.centerLeft,
+                        alignment: Alignment.topCenter,
                         child: Icon(
                           widget.engineLinesState == EngineLinesShowState.expanded
                               ? Icons.arrow_drop_up

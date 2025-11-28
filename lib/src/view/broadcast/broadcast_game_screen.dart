@@ -279,6 +279,11 @@ class _Body extends ConsumerWidget {
               ? (context) {
                   return EngineGauge(
                     params: engineGaugeParams,
+                    engineLinesState: state.isEngineAvailable(enginePrefs)
+                        ? broadcastPrefs.showEngineLines
+                              ? EngineLinesShowState.expanded
+                              : EngineLinesShowState.collapsed
+                        : null,
                     onTap: () {
                       ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
                     },
