@@ -117,12 +117,8 @@ class _EvalGaugeState extends State<_EvalGauge> {
   Widget build(BuildContext context) {
     final evalDisplay = widget.position.outcome != null
         ? widget.position.outcome!.winner == null
-              ? widget.position.isStalemate
-                    ? context.l10n.stalemate
-                    : context.l10n.insufficientMaterial
-              : widget.position.isCheckmate
-              ? context.l10n.checkmate
-              : context.l10n.variantEnding
+              ? ''
+              : '#'
         : widget.eval?.evalString ?? oldEval?.evalString;
 
     return TweenAnimationBuilder<double>(

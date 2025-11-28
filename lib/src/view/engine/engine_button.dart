@@ -29,7 +29,10 @@ class EngineButton extends ConsumerWidget {
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final color = prefs.isEnabled
-        ? ColorScheme.of(context).primary
+        ? switch (engineState) {
+            EngineState.computing => ColorScheme.of(context).primary,
+            _ => ColorScheme.of(context).primary.withValues(alpha: 0.65),
+          }
         : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
 
     final textColor = prefs.isEnabled
@@ -71,41 +74,34 @@ class EngineButton extends ConsumerWidget {
         label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
         textStyle: const TextStyle(fontSize: 8),
         isLabelVisible: prefs.isEnabled && eval is CloudEval,
-        child: AnimatedOpacity(
-          opacity: switch (engineState) {
-            EngineState.idle => 0.8,
-            _ => 1.0,
-          },
-          duration: const Duration(milliseconds: 150),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CustomPaint(
-                size: const Size(microChipSize, microChipSize),
-                painter: MicroChipPainter(color),
-              ),
-              SizedBox(
-                width: microChipSize,
-                height: microChipSize,
-                child: RepaintBoundary(
-                  child: Center(
-                    child: prefs.isEnabled
-                        ? eval is CloudEval
-                              ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                              : switch (engineState) {
-                                  EngineState.computing || EngineState.idle =>
-                                    eval?.depth != null
-                                        ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
-                                        : loadingIndicator,
-                                  EngineState.initial || EngineState.loading => loadingIndicator,
-                                  _ => const SizedBox.shrink(),
-                                }
-                        : const SizedBox.shrink(),
-                  ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            CustomPaint(
+              size: const Size(microChipSize, microChipSize),
+              painter: MicroChipPainter(color),
+            ),
+            SizedBox(
+              width: microChipSize,
+              height: microChipSize,
+              child: RepaintBoundary(
+                child: Center(
+                  child: prefs.isEnabled
+                      ? eval is CloudEval
+                            ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                            : switch (engineState) {
+                                EngineState.computing || EngineState.idle =>
+                                  eval?.depth != null
+                                      ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                                      : loadingIndicator,
+                                EngineState.initial || EngineState.loading => loadingIndicator,
+                                _ => const SizedBox.shrink(),
+                              }
+                      : const SizedBox.shrink(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
