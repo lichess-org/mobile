@@ -674,7 +674,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   Widget build(BuildContext context) {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -717,30 +716,22 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.menu,
           ),
         if (puzzleState.mode == PuzzleMode.view)
-          Builder(
-            builder: (context) {
-              Future<void>? toggleFuture;
-              return FutureBuilder<void>(
-                future: toggleFuture,
-                builder: (context, snapshot) {
-                  return BottomBarButton(
-                    onTap: snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
-                          }
-                        : null,
-                    label: context.l10n.toggleLocalEvaluation,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: puzzleState.isEngineAvailable(enginePrefs),
-                  );
-                },
+          BottomBarButton(
+            onTap: () {
+              Navigator.of(context).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  puzzleState.makeAnalysisOptions(
+                    ref
+                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                        .makePgn,
+                  ),
+                ),
               );
             },
+
+            label: context.l10n.analysis,
+            icon: Icons.biotech,
           ),
         if (puzzleState.mode == PuzzleMode.view)
           RepeatButton(
@@ -798,14 +789,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  orientation: puzzleState.pov,
-                  pgn: ref
-                      .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                      .makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: Variant.standard,
-                  initialMoveCursor: 0,
+                puzzleState.makeAnalysisOptions(
+                  ref.read(puzzleControllerProvider(widget.initialPuzzleContext).notifier).makePgn,
                 ),
               ),
             );

@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -20,7 +21,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 
 part 'puzzle_controller.freezed.dart';
 
@@ -30,7 +30,7 @@ final puzzleControllerProvider = NotifierProvider.autoDispose
       name: 'PuzzleControllerProvider',
     );
 
-class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin {
+class PuzzleController extends Notifier<PuzzleState> {
   PuzzleController(this.initialContext);
 
   final PuzzleContext initialContext;
@@ -41,42 +41,14 @@ class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin 
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
 
-  @override
-  @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  PuzzleState get evaluationState => state;
-
-  @override
-  @protected
-  SocketClient? socketClient;
-
-  @override
-  @protected
-  Branch get positionTree => _gameTree;
-
   Future<PuzzleService> get _service =>
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 
   @override
   PuzzleState build() {
-    initEngineEvaluation();
-
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
       _viewSolutionTimer?.cancel();
-      disposeEngineEvaluation();
     });
 
     // we might not have the user rating yet so let's update it now
@@ -127,15 +99,6 @@ class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin 
       shouldBlinkNextArrow: false,
       isEvaluationEnabled: false,
     );
-  }
-
-  Future<void> toggleEvaluation() async {
-    state = state.copyWith(isEvaluationEnabled: !state.isEvaluationEnabled);
-    if (state.isEvaluationEnabled) {
-      requestEval();
-    } else {
-      await ref.read(evaluationServiceProvider).disposeEngine();
-    }
   }
 
   Future<void> onUserMove(NormalMove move) async {
@@ -343,13 +306,7 @@ class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin 
     }
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    state = state.copyWith(engineInThreatMode: !state.engineInThreatMode);
-    requestEval();
-  }
-
   void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
-    final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
     if (!isNavigating) {
@@ -380,11 +337,6 @@ class PuzzleController extends Notifier<PuzzleState> with EngineEvaluationMixin 
       promotionMove: null,
       shouldBlinkNextArrow: false,
     );
-
-    if (pathChange) {
-      state = state.copyWith(engineInThreatMode: false);
-      requestEval();
-    }
   }
 
   String makePgn() {
@@ -487,5 +439,15 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   NormalMove? get _nextSolutionMove {
     final uci = puzzle.puzzle.solution.getOrNull(currentPath.size - initialPath.size);
     return uci == null ? null : NormalMove.fromUci(uci);
+  }
+
+  AnalysisOptions makeAnalysisOptions(String Function() makePgn) {
+    return AnalysisOptions.standalone(
+      orientation: pov,
+      pgn: makePgn(),
+      isComputerAnalysisAllowed: true,
+      variant: Variant.standard,
+      initialMoveCursor: 0,
+    );
   }
 }
