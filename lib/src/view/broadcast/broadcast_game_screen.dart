@@ -109,18 +109,11 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             ),
             _ => const SizedBox.shrink(),
           };
-    final asyncEval = ref.watch(
-      broadcastGameEvalProvider((roundId: widget.roundId, gameId: widget.gameId)),
-    );
-    final asyncIsEngineAvailable = ref.watch(
-      isBroadcastEngineAvailableProvider((roundId: widget.roundId, gameId: widget.gameId)),
-    );
 
     return Scaffold(
       appBar: AppBar(
         title: title,
         actions: [
-          if (asyncIsEngineAvailable.value == true) EngineDepth(savedEval: asyncEval.value),
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _BroadcastGameMenu(
             roundId: widget.roundId,
@@ -584,7 +577,6 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
@@ -603,8 +595,8 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             return FutureBuilder(
               future: toggleFuture,
               builder: (context, snapshot) {
-                return BottomBarButton(
-                  label: context.l10n.toggleLocalEvaluation,
+                return EngineDepth(
+                  savedEval: broadcastAnalysisState.currentNode.eval,
                   onTap: snapshot.connectionState != ConnectionState.waiting
                       ? () async {
                           toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
@@ -615,8 +607,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                           }
                         }
                       : null,
-                  icon: CupertinoIcons.gauge,
-                  highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
+                  goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
                 );
               },
             );

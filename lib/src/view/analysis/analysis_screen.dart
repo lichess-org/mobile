@@ -176,14 +176,8 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (asyncState.value?.isEngineAvailable(enginePrefs) == true)
-        EngineDepth(
-          savedEval: asyncState.value?.currentNode.eval,
-          goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
-        ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       _AnalysisMenu(options: widget.options, state: asyncState),
     ];
@@ -478,7 +472,6 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
-    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
       children: [
@@ -496,8 +489,8 @@ class _BottomBar extends ConsumerWidget {
               return FutureBuilder(
                 future: toggleFuture,
                 builder: (context, snapshot) {
-                  return BottomBarButton(
-                    label: context.l10n.toggleLocalEvaluation,
+                  return EngineDepth(
+                    savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&
                             snapshot.connectionState != ConnectionState.waiting
@@ -510,8 +503,7 @@ class _BottomBar extends ConsumerWidget {
                             }
                           }
                         : null,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: analysisState.isEngineAvailable(evalPrefs),
+                    goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
                   );
                 },
               );

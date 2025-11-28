@@ -83,7 +83,6 @@ class StudySettingsScreen extends ConsumerWidget {
           ),
           if (isComputerAnalysisAllowed)
             EngineSettingsWidget(
-              onToggleLocalEvaluation: () => ref.read(studyController.notifier).toggleEngine(),
               onSetEngineSearchTime: (value) =>
                   ref.read(studyController.notifier).setEngineSearchTime(value),
               onSetNumEvalLines: (value) =>

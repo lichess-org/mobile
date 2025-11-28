@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -184,17 +183,10 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return Scaffold(
       appBar: AppBar(
         title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
         actions: [
-          if (widget.studyState.isEngineAvailable(enginePrefs))
-            EngineDepth(
-              savedEval: widget.studyState.currentNode.eval,
-              goDeeper: () =>
-                  ref.read(studyControllerProvider(widget.id).notifier).requestEval(goDeeper: true),
-            ),
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
         ],
