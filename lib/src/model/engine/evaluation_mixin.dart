@@ -125,7 +125,7 @@ mixin EngineEvaluationMixin {
     await evaluationPreferencesNotifier.toggle();
 
     if (evaluationState.isEngineAvailable(evaluationPrefs)) {
-      requestEval();
+      requestEval(forceRestart: true);
     } else {
       await _evaluationService?.disposeEngine();
     }
@@ -141,7 +141,7 @@ mixin EngineEvaluationMixin {
 
     _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
-    requestEval();
+    requestEval(forceRestart: true);
   }
 
   @mustCallSuper
@@ -150,7 +150,7 @@ mixin EngineEvaluationMixin {
 
     _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
-    requestEval();
+    requestEval(forceRestart: true);
   }
 
   @mustCallSuper
@@ -159,7 +159,7 @@ mixin EngineEvaluationMixin {
 
     _evaluationService?.options = evaluationPrefs.evaluationOptions;
 
-    requestEval();
+    requestEval(forceRestart: true);
   }
 
   /// Requests an engine evaluation if available.
@@ -176,7 +176,7 @@ mixin EngineEvaluationMixin {
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval({bool goDeeper = false}) {
+  void requestEval({bool goDeeper = false, bool forceRestart = false}) {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
     final delayLocalEngine =
@@ -187,13 +187,13 @@ mixin EngineEvaluationMixin {
       _sendEvalGetEvent();
 
       if (!delayLocalEngine) {
-        _startEngineEval(goDeeper);
+        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
       }
     });
 
     if (delayLocalEngine) {
       _localEngineAfterDelayDebounce(() {
-        _startEngineEval(goDeeper);
+        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
       });
     }
   }
@@ -276,7 +276,7 @@ mixin EngineEvaluationMixin {
     });
   }
 
-  Future<void> _startEngineEval([bool goDeeper = false]) async {
+  Future<void> _startEngineEval({bool goDeeper = false, bool forceRestart = false}) async {
     final curState = evaluationState;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
     await _evaluationService?.ensureEngineInitialized(
@@ -290,6 +290,7 @@ mixin EngineEvaluationMixin {
           initialPositionEval: positionTree.eval,
           shouldEmit: _shouldEmit,
           goDeeper: goDeeper,
+          forceRestart: forceRestart,
           threatMode: curState.engineInThreatMode,
         )
         ?.forEach((event) {

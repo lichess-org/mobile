@@ -200,6 +200,9 @@ class EvaluationService {
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
     bool threatMode = false,
+
+    /// If true, forces the engine to restart the evaluation even if the saved eval has more search time.
+    bool forceRestart = false,
   }) {
     final context = _context;
     final engine = _engine;
@@ -233,7 +236,7 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    if (!work.threatMode) {
+    if (!work.threatMode && !forceRestart) {
       switch (work.evalCache) {
         // if the search time is greater than the current search time, don't evaluate again
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
