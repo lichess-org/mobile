@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -595,7 +595,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             return FutureBuilder(
               future: toggleFuture,
               builder: (context, snapshot) {
-                return EngineDepth(
+                return EngineButton(
                   savedEval: broadcastAnalysisState.currentNode.eval,
                   onTap: snapshot.connectionState != ConnectionState.waiting
                       ? () async {

@@ -10,8 +10,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 
-class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.onTap, this.savedEval, this.goDeeper});
+/// A button to toggle engine evaluation and show engine depth.
+class EngineButton extends ConsumerWidget {
+  const EngineButton({this.onTap, this.savedEval, this.goDeeper});
 
   final ClientEval? savedEval;
 
@@ -44,6 +45,7 @@ class EngineDepth extends ConsumerWidget {
     final iconTextStyle = TextStyle(
       color: textColor,
       fontFeatures: const [FontFeature.tabularFigures()],
+      fontWeight: FontWeight.w600,
       fontSize: 11,
     );
 

@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -61,7 +61,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
               return FutureBuilder(
                 future: toggleFuture,
                 builder: (context, snapshot) {
-                  return EngineDepth(
+                  return EngineButton(
                     savedEval: state.currentNode.eval,
                     onTap: snapshot.connectionState != ConnectionState.waiting
                         ? () async {

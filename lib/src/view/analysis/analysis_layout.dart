@@ -309,27 +309,26 @@ class AnalysisLayout extends StatelessWidget {
                             : const EdgeInsets.symmetric(
                                 horizontal: kAnalysisPortraitBoardSidePadding,
                               ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
+                        child: Column(
                           children: [
-                            Column(
+                            if (boardHeader != null)
+                              // This key is used to preserve the state of the board header when the pov changes
+                              Container(
+                                key: ValueKey(pov.opposite),
+                                decoration: BoxDecoration(
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          bottomLeft: Radius.zero,
+                                          bottomRight: Radius.zero,
+                                        )
+                                      : null,
+                                ),
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
+                                height: kAnalysisBoardHeaderOrFooterHeight,
+                                child: boardHeader,
+                              ),
+                            Row(
                               children: [
-                                if (boardHeader != null)
-                                  // This key is used to preserve the state of the board header when the pov changes
-                                  Container(
-                                    key: ValueKey(pov.opposite),
-                                    decoration: BoxDecoration(
-                                      borderRadius: isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                              bottomLeft: Radius.zero,
-                                              bottomRight: Radius.zero,
-                                            )
-                                          : null,
-                                    ),
-                                    clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                    height: kAnalysisBoardHeaderOrFooterHeight,
-                                    child: boardHeader,
-                                  ),
                                 boardBuilder(
                                   context,
                                   boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
@@ -337,26 +336,26 @@ class AnalysisLayout extends StatelessWidget {
                                       ? tabletBoardRadius
                                       : null,
                                 ),
-                                if (boardFooter != null)
-                                  Container(
-                                    // This key is used to preserve the state of the board footer when the pov changes
-                                    key: ValueKey(pov),
-                                    decoration: BoxDecoration(
-                                      borderRadius: isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                              topLeft: Radius.zero,
-                                              topRight: Radius.zero,
-                                            )
-                                          : null,
-                                    ),
-                                    clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                    height: kAnalysisBoardHeaderOrFooterHeight,
-                                    child: boardFooter,
-                                  ),
+                                if (engineGaugeBuilder != null)
+                                  SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
                               ],
                             ),
-                            if (engineGaugeBuilder != null)
-                              SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
+                            if (boardFooter != null)
+                              Container(
+                                // This key is used to preserve the state of the board footer when the pov changes
+                                key: ValueKey(pov),
+                                decoration: BoxDecoration(
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          topLeft: Radius.zero,
+                                          topRight: Radius.zero,
+                                        )
+                                      : null,
+                                ),
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
+                                height: kAnalysisBoardHeaderOrFooterHeight,
+                                child: boardFooter,
+                              ),
                           ],
                         ),
                       ),

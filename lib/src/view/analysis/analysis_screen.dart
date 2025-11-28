@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -407,7 +407,6 @@ class _PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kAnalysisBoardHeaderOrFooterHeight,
-      color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
@@ -489,7 +488,7 @@ class _BottomBar extends ConsumerWidget {
               return FutureBuilder(
                 future: toggleFuture,
                 builder: (context, snapshot) {
-                  return EngineDepth(
+                  return EngineButton(
                     savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&
