@@ -21,10 +21,14 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
+final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
   ref,
 ) async {
   final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
+  if (following.isEmpty) {
+    return (IList<User>(), IList<UserStatus>());
+  }
+
   final statuses = await ref
       .read(userRepositoryProvider)
       .getUsersStatuses(following.map((user) => user.id).toISet());
@@ -59,7 +63,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
@@ -172,6 +176,9 @@ class _Online extends ConsumerWidget {
 
     switch (onlineFriends) {
       case AsyncData(:final value):
+        if (value.isEmpty) {
+          return Center(child: Text(context.l10n.nbFriendsOnline(0)));
+        }
         return ListView.separated(
           itemCount: value.length,
           separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
@@ -192,7 +199,7 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
@@ -254,7 +261,7 @@ class _Following extends ConsumerWidget {
         );
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(_followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
       case _:
         return const CenterLoadingIndicator();
     }

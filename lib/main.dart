@@ -21,7 +21,7 @@ Future<void> main() async {
 
   await preloadPieceImages();
 
-  await setupFirstLaunch();
+  await initializeApp();
 
   await SoundService.initialize();
 

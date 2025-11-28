@@ -7,7 +7,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:resizeableActivity="false"
         android:enableOnBackInvokedCallback="true"
-        android:allowBackup="false"
         android:fullBackupContent="@xml/backup_rules">
 
         <meta-data

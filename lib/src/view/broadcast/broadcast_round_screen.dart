@@ -492,6 +492,11 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
             key: tournament.id == widget.tournament.data.id ? currentTournamentKey : null,
             selected: tournament.id == widget.tournament.data.id,
             title: Text(tournament.name),
+            trailing: !tournament.active
+                ? Icon(Icons.check, color: context.lichessColors.good)
+                : tournament.live
+                ? Icon(Icons.circle, color: context.lichessColors.error)
+                : null,
             onTap: () {
               widget.setTournamentId(tournament.id);
               Navigator.of(context).pop();

@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileNotFollowingAnyUser.
   ///
   /// In en, this message translates to:
-  /// **'You are not following any user.'**
+  /// **'You are not following any users.'**
   String get mobileNotFollowingAnyUser;
 
   /// No description provided for @mobileOkButton.
@@ -4319,7 +4319,7 @@ abstract class AppLocalizations {
   /// No description provided for @dtzWithRounding.
   ///
   /// In en, this message translates to:
-  /// **'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move'**
+  /// **'DTZ50\'\' with rounding, based on number of half-moves until next capture, pawn move, or checkmate'**
   String get dtzWithRounding;
 
   /// No description provided for @noGameFound.

@@ -764,7 +764,7 @@
   "changeUsernameNotSame": "Kun størrelsen af bogstaverne kan ændres. For eksempel \"bentlarsen\" til \"BentLarsen\".",
   "changeUsernameDescription": "Ændr dit brugernavn. Dette kan kun gøres én gang, og du kan kun ændre størrelsen på bogstaverne i dit brugernavn.",
   "signupUsernameHint": "Sørg for at vælge et familievenligt brugernavn. Du kan ikke ændre det senere, og alle konti med upassende brugernavne vil blive lukket!",
-  "signupEmailHint": "Vi vil kun bruge det til nulstilling af adgangskode.",
+  "signupEmailHint": "Vi vil kun bruge den til nulstilling af adgangskode.",
   "password": "Adgangskode",
   "changePassword": "Skift adgangskode",
   "changeEmail": "Skift e-mail",

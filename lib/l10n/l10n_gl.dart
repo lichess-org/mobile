@@ -2376,7 +2376,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura ou movemento de peón';
+  String get dtzWithRounding => 'DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura, movemento de peón ou xaque mate';
 
   @override
   String get noGameFound => 'Non se atoparon partidas';
