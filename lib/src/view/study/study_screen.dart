@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -65,7 +64,6 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -76,7 +74,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -113,7 +110,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -184,17 +180,10 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return Scaffold(
       appBar: AppBar(
         title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
         actions: [
-          if (widget.studyState.isEngineAvailable(enginePrefs))
-            EngineDepth(
-              savedEval: widget.studyState.currentNode.eval,
-              goDeeper: () =>
-                  ref.read(studyControllerProvider(widget.id).notifier).requestEval(goDeeper: true),
-            ),
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
         ],
@@ -397,8 +386,6 @@ class _Body extends ConsumerWidget {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
-          smallBoard: studyPrefs.smallBoard,
-
           pov: Side.white,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
@@ -422,35 +409,24 @@ class _Body extends ConsumerWidget {
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
-      smallBoard: studyPrefs.smallBoard,
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: engineGaugeParams,
-                      engineLinesState: studyState.isEngineAvailable(enginePrefs)
-                          ? studyPrefs.showEngineLines
-                                ? EngineLinesShowState.expanded
-                                : EngineLinesShowState.collapsed
-                          : null,
-                      onTap: () {
-                        ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                        params: engineGaugeParams,
-                      ),
-                    );
+          ? (context) {
+              return EngineGauge(
+                params: engineGaugeParams,
+                engineLinesState: studyState.isEngineAvailable(enginePrefs)
+                    ? studyPrefs.showEngineLines
+                          ? EngineLinesShowState.expanded
+                          : EngineLinesShowState.collapsed
+                    : null,
+                onTap: () {
+                  ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
+                },
+              );
             }
           : null,
       engineLines:

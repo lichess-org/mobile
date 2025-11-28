@@ -5,29 +5,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 
-class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.savedEval, this.goDeeper});
+/// A button to toggle engine evaluation and show engine depth.
+class EngineButton extends ConsumerWidget {
+  const EngineButton({this.onTap, this.savedEval, this.goDeeper});
 
   final ClientEval? savedEval;
+
+  final VoidCallback? onTap;
+
   final VoidCallback? goDeeper;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(engineEvaluationPreferencesProvider);
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
         .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    final color =
-        engineName ==
-            'Stockfish' // while loading name is 'Stockfish'
-        ? Colors.grey
-        : ColorScheme.of(context).secondary;
-    final textColor = ColorScheme.of(context).onSecondary;
+    final color = prefs.isEnabled
+        ? switch (engineState) {
+            EngineState.computing => ColorScheme.of(context).primary,
+            _ => ColorScheme.of(context).primary.withValues(alpha: 0.65),
+          }
+        : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
+
+    final textColor = prefs.isEnabled
+        ? ColorScheme.of(context).primary
+        : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
 
     final loadingIndicator = SpinKitFadingFour(color: textColor.withValues(alpha: 0.7), size: 10);
 
@@ -35,63 +45,63 @@ class EngineDepth extends ConsumerWidget {
     final iconTextStyle = TextStyle(
       color: textColor,
       fontFeatures: const [FontFeature.tabularFigures()],
+      fontWeight: FontWeight.w600,
       fontSize: 11,
     );
 
     return SemanticIconButton(
-      semanticsLabel: switch (eval) {
-        LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
-        CloudEval(:final depth) =>
-          '${context.l10n.cloudAnalysis}, ${context.l10n.depthX('$depth')}',
-        _ => context.l10n.loadingEngine,
+      semanticsLabel: context.l10n.toggleLocalEvaluation,
+      onPressed: onTap,
+      onLongPress: () {
+        showPopover(
+          context: context,
+          bodyBuilder: (_) {
+            return _EnginePopup(goDeeper: goDeeper);
+          },
+          direction: PopoverDirection.top,
+          width: 250,
+          backgroundColor:
+              DialogTheme.of(context).backgroundColor ??
+              ColorScheme.of(context).surfaceContainerHigh,
+          transitionDuration: Duration.zero,
+          popoverTransitionBuilder: (_, child) => child,
+        );
       },
-      onPressed: eval != null
-          ? () {
-              showPopover(
-                context: context,
-                bodyBuilder: (_) {
-                  return _EnginePopup(eval: eval, goDeeper: goDeeper);
-                },
-                direction: PopoverDirection.top,
-                width: 250,
-                backgroundColor:
-                    DialogTheme.of(context).backgroundColor ??
-                    ColorScheme.of(context).surfaceContainerHigh,
-                transitionDuration: Duration.zero,
-                popoverTransitionBuilder: (_, child) => child,
-              );
-            }
-          : null,
       icon: Badge(
         offset: const Offset(4, -7),
         backgroundColor: ColorScheme.of(context).tertiaryContainer,
         textColor: ColorScheme.of(context).onTertiaryContainer,
-        label: eval is CloudEval ? const Text('CLOUD') : null,
+        label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
         textStyle: const TextStyle(fontSize: 8),
-        isLabelVisible: eval is CloudEval,
-        child: AnimatedOpacity(
-          opacity: engineState == EngineState.computing ? 1.0 : 0.8,
-          duration: const Duration(milliseconds: 150),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CustomPaint(
-                size: const Size(microChipSize, microChipSize),
-                painter: MicroChipPainter(color),
-              ),
-              SizedBox(
-                width: microChipSize,
-                height: microChipSize,
-                child: RepaintBoundary(
-                  child: Center(
-                    child: eval?.depth != null
-                        ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
-                        : loadingIndicator,
-                  ),
+        isLabelVisible: prefs.isEnabled && eval is CloudEval,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            CustomPaint(
+              size: const Size(microChipSize, microChipSize),
+              painter: MicroChipPainter(color),
+            ),
+            SizedBox(
+              width: microChipSize,
+              height: microChipSize,
+              child: RepaintBoundary(
+                child: Center(
+                  child: prefs.isEnabled
+                      ? eval is CloudEval
+                            ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                            : switch (engineState) {
+                                EngineState.computing || EngineState.idle =>
+                                  eval?.depth != null
+                                      ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                                      : loadingIndicator,
+                                EngineState.initial || EngineState.loading => loadingIndicator,
+                                _ => const SizedBox.shrink(),
+                              }
+                      : const SizedBox.shrink(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -108,24 +118,29 @@ class MicroChipPainter extends CustomPainter {
     const pinLength = 3.5;
     const pinRadius = Radius.circular(1);
     const innerRimWidth = 1.0;
-    const outerRimWidth = 2.5;
+    const outerRimWidth = 1.5;
 
     final fillPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
 
-    final strokePaint = Paint()
+    final outerStrokePaint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerRimWidth;
 
-    final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth / 2;
+    final innerStrokePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = innerRimWidth;
+
+    final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth;
 
     final innerSquarePath = Path()
       ..addRRect(
         RRect.fromLTRBR(
-          pinLength + innerRimWidth + outerRimWidth / 2,
-          pinLength + innerRimWidth + outerRimWidth / 2,
+          pinLength + innerRimWidth + outerRimWidth,
+          pinLength + innerRimWidth + outerRimWidth,
           innerSquareSize,
           innerSquareSize,
           const Radius.circular(2),
@@ -209,9 +224,9 @@ class MicroChipPainter extends CustomPainter {
       );
     }
 
-    canvas.drawPath(outerRimPath, strokePaint);
+    canvas.drawPath(outerRimPath, outerStrokePaint);
     canvas.drawPath(pinsPath, fillPaint);
-    canvas.drawPath(innerSquarePath, fillPaint);
+    canvas.drawPath(innerSquarePath, innerStrokePaint);
   }
 
   @override
@@ -219,9 +234,8 @@ class MicroChipPainter extends CustomPainter {
 }
 
 class _EnginePopup extends ConsumerWidget {
-  const _EnginePopup({required this.eval, this.goDeeper});
+  const _EnginePopup({this.goDeeper});
 
-  final ClientEval eval;
   final VoidCallback? goDeeper;
 
   @override
@@ -231,16 +245,19 @@ class _EnginePopup extends ConsumerWidget {
         evalState;
     final bool canGoDeeper =
         goDeeper != null &&
-        engineState == EngineState.idle &&
+        engineState != EngineState.computing &&
         (work == null || work.isDeeper != true);
 
-    final currentEval = engineState == EngineState.computing ? evalStateEval ?? eval : eval;
+    final currentEval = switch (engineState) {
+      EngineState.computing || EngineState.idle => evalStateEval,
+      _ => null,
+    };
 
     if (currentEval is CloudEval) {
       return ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(context.l10n.cloudAnalysis),
-        subtitle: Text(context.l10n.depthX('${eval.depth}')),
+        subtitle: Text(context.l10n.depthX('${currentEval!.depth}')),
         trailing: canGoDeeper
             ? IconButton(
                 icon: const Icon(Icons.add_circle_outlined),
@@ -252,7 +269,6 @@ class _EnginePopup extends ConsumerWidget {
     }
 
     final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
-    final depth = currentEval.depth;
 
     // remove Fairy-Stockfish version from engine name
     final fixedEngineName = engineName.startsWith('Fairy-Stockfish')
@@ -263,7 +279,7 @@ class _EnginePopup extends ConsumerWidget {
       contentPadding: const EdgeInsets.only(left: 16.0),
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
       title: Text(fixedEngineName),
-      subtitle: Text(context.l10n.depthX('$depth$knps')),
+      subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper
           ? IconButton(
               icon: const Icon(Icons.add_circle_outlined),

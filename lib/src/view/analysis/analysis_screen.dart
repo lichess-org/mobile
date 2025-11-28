@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -176,14 +176,8 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (asyncState.value?.isEngineAvailable(enginePrefs) == true)
-        EngineDepth(
-          savedEval: asyncState.value?.currentNode.eval,
-          goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
-        ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       _AnalysisMenu(options: widget.options, state: asyncState),
     ];
@@ -346,7 +340,6 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
-        smallBoard: analysisPrefs.smallBoard,
         tabController: controller,
         pov: pov,
         boardBuilder: (context, boardSize, borderRadius) =>
@@ -354,28 +347,18 @@ class _Body extends ConsumerWidget {
         boardHeader: boardHeader,
         boardFooter: boardFooter,
         engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-            ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                        params: analysisState.engineGaugeParams(enginePrefs),
-                        engineLinesState: isEngineAvailable && numEvalLines > 0
-                            ? analysisPrefs.showEngineLines
-                                  ? EngineLinesShowState.expanded
-                                  : EngineLinesShowState.collapsed
-                            : null,
-                        onTap: () {
-                          ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                        },
-                      )
-                    : Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                        child: EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.vertical,
-                          params: analysisState.engineGaugeParams(enginePrefs),
-                        ),
-                      );
+            ? (context) {
+                return EngineGauge(
+                  params: analysisState.engineGaugeParams(enginePrefs),
+                  engineLinesState: isEngineAvailable && numEvalLines > 0
+                      ? analysisPrefs.showEngineLines
+                            ? EngineLinesShowState.expanded
+                            : EngineLinesShowState.collapsed
+                      : null,
+                  onTap: () {
+                    ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+                  },
+                );
               }
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
@@ -428,7 +411,6 @@ class _PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kAnalysisBoardHeaderOrFooterHeight,
-      color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
@@ -493,7 +475,6 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
-    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
       children: [
@@ -511,8 +492,8 @@ class _BottomBar extends ConsumerWidget {
               return FutureBuilder(
                 future: toggleFuture,
                 builder: (context, snapshot) {
-                  return BottomBarButton(
-                    label: context.l10n.toggleLocalEvaluation,
+                  return EngineButton(
+                    savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&
                             snapshot.connectionState != ConnectionState.waiting
@@ -525,8 +506,7 @@ class _BottomBar extends ConsumerWidget {
                             }
                           }
                         : null,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: analysisState.isEngineAvailable(evalPrefs),
+                    goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
                   );
                 },
               );
