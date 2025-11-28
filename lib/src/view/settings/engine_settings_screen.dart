@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class EngineSettingsScreen extends ConsumerStatefulWidget {
   const EngineSettingsScreen({super.key});
@@ -24,15 +25,21 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
-  bool _hasNNUEFiles = false;
+  /// null = loading, true = has files with checked integrity, false = doesn't have files
+  bool? _hasVerifiedNNUEFiles;
+
   Future<bool>? _downloadNNUEFilesFuture;
 
   late final ValueListenable<double> _downloadProgress;
 
   @override
   void initState() {
-    setState(() {
-      _hasNNUEFiles = ref.read(evaluationServiceProvider).checkNNUEFilesExist();
+    ref.read(evaluationServiceProvider).checkNNUEFiles().then((good) {
+      if (mounted) {
+        setState(() {
+          _hasVerifiedNNUEFiles = good;
+        });
+      }
     });
 
     _downloadProgress = ref.read(evaluationServiceProvider).nnueDownloadProgress;
@@ -52,7 +59,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       final downloaded = await _downloadNNUEFilesFuture!;
       if (mounted && downloaded) {
         setState(() {
-          _hasNNUEFiles = true;
+          _hasVerifiedNNUEFiles = true;
         });
       }
     }
@@ -66,100 +73,106 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       appBar: AppBar(title: const Text('Chess engine')),
       body: ListView(
         children: [
-          ListSection(
-            children: [
-              SettingsListTile(
-                settingsLabel: const Text('Engine'),
-                settingsValue: prefs.enginePref.label,
-                onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: ChessEnginePref.values,
-                    selectedItem: prefs.enginePref,
-                    labelBuilder: (ChessEnginePref t) => Text(t.label),
-                    onSelectedItemChanged: (ChessEnginePref? value) {
-                      ref
-                          .read(engineEvaluationPreferencesProvider.notifier)
-                          .setEvaluationFunction(value ?? ChessEnginePref.sf16);
-                      if (value == ChessEnginePref.sfLatest && !_hasNNUEFiles) {
-                        setState(() {
-                          _downloadNNUEFilesFuture = ref
-                              .read(evaluationServiceProvider)
-                              .downloadNNUEFiles(inBackground: false);
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
-              if (prefs.enginePref == ChessEnginePref.sfLatest && !_hasNNUEFiles)
-                LoadingButtonBuilder(
-                  initialFuture: _downloadNNUEFilesFuture,
-                  fetchData: () =>
-                      ref.read(evaluationServiceProvider).downloadNNUEFiles(inBackground: false),
-                  builder: (context, isLoading, fetchData) {
-                    return ListTile(
-                      trailing: isLoading
-                          ? AnimatedBuilder(
-                              animation: _downloadProgress,
-                              builder: (_, _) {
-                                return CircularProgressIndicator(value: _downloadProgress.value);
-                              },
-                            )
-                          : const Icon(Icons.download),
-                      title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                      subtitle: const Text('79MB'),
-                      enabled: !isLoading,
-                      onTap: () async {
-                        final downloaded = await fetchData();
-                        if (context.mounted && downloaded) {
+          if (_hasVerifiedNNUEFiles == null)
+            Shimmer(
+              child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 2)),
+            )
+          else
+            ListSection(
+              children: [
+                SettingsListTile(
+                  settingsLabel: const Text('Engine'),
+                  settingsValue: prefs.enginePref.label,
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: ChessEnginePref.values,
+                      selectedItem: prefs.enginePref,
+                      labelBuilder: (ChessEnginePref t) => Text(t.label),
+                      onSelectedItemChanged: (ChessEnginePref? value) {
+                        ref
+                            .read(engineEvaluationPreferencesProvider.notifier)
+                            .setEvaluationFunction(value ?? ChessEnginePref.sf16);
+                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == true) {
                           setState(() {
-                            _hasNNUEFiles = true;
+                            _downloadNNUEFilesFuture = ref
+                                .read(evaluationServiceProvider)
+                                .downloadNNUEFiles(inBackground: false);
                           });
                         }
                       },
                     );
                   },
-                )
-              else if (prefs.enginePref == ChessEnginePref.sfLatest && _hasNNUEFiles)
-                ListTile(
-                  trailing: const Icon(Icons.check),
-                  title: const Text('NNUE files downloaded'),
-                  subtitle: const Text('79MB (tap to delete)'),
-                  onTap: () async {
-                    final isOk = await showAdaptiveDialog<bool>(
-                      context: context,
-                      barrierDismissible: true,
-                      builder: (context) {
-                        return AlertDialog.adaptive(
-                          content: const Text('Do you want to delete the NNUE files?'),
-                          actions: [
-                            PlatformDialogAction(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                            ),
-                            PlatformDialogAction(
-                              child: Text(context.l10n.cancel),
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    if (isOk == true) {
-                      await ref.read(evaluationServiceProvider).deleteNNUEFiles();
-                      setState(() {
-                        _hasNNUEFiles = false;
-                      });
-                    }
-                  },
                 ),
-            ],
-          ),
+                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false)
+                  LoadingButtonBuilder(
+                    initialFuture: _downloadNNUEFilesFuture,
+                    fetchData: () =>
+                        ref.read(evaluationServiceProvider).downloadNNUEFiles(inBackground: false),
+                    builder: (context, isLoading, fetchData) {
+                      return ListTile(
+                        trailing: isLoading
+                            ? AnimatedBuilder(
+                                animation: _downloadProgress,
+                                builder: (_, _) {
+                                  return CircularProgressIndicator(value: _downloadProgress.value);
+                                },
+                              )
+                            : const Icon(Icons.download),
+                        title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
+                        subtitle: const Text('79MB'),
+                        enabled: !isLoading,
+                        onTap: () async {
+                          final downloaded = await fetchData();
+                          if (context.mounted && downloaded) {
+                            setState(() {
+                              _hasVerifiedNNUEFiles = true;
+                            });
+                          }
+                        },
+                      );
+                    },
+                  )
+                else if (prefs.enginePref == ChessEnginePref.sfLatest &&
+                    _hasVerifiedNNUEFiles == true)
+                  ListTile(
+                    trailing: const Icon(Icons.check),
+                    title: const Text('NNUE files downloaded'),
+                    subtitle: const Text('79MB (tap to delete)'),
+                    onTap: () async {
+                      final isOk = await showAdaptiveDialog<bool>(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (context) {
+                          return AlertDialog.adaptive(
+                            content: const Text('Do you want to delete the NNUE files?'),
+                            actions: [
+                              PlatformDialogAction(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              PlatformDialogAction(
+                                child: Text(context.l10n.cancel),
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (isOk == true) {
+                        await ref.read(evaluationServiceProvider).deleteNNUEFiles();
+                        setState(() {
+                          _hasVerifiedNNUEFiles = false;
+                        });
+                      }
+                    },
+                  ),
+              ],
+            ),
           EngineSettingsWidget(
             onSetEngineSearchTime: (value) {
               ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);

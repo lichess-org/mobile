@@ -91,7 +91,7 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   bool get imported => source == GameSource.import;
 
   /// Whether it is the current player's turn.
-  bool get isMyTurn => lastPosition.turn == youAre;
+  bool get isMyTurn => sideToMove == youAre;
 
   bool get abortable =>
       playable &&
@@ -117,6 +117,8 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
 
   bool get canClaimWin =>
       opponent?.isGone == true &&
+      playable &&
+      youAre != null &&
       !isMyTurn &&
       resignable &&
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));

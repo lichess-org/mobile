@@ -42,7 +42,13 @@ platform :ios do
       scheme: "Runner",
     )
 
+    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    apple_identifier = ENV['APPLE_IDENTIFIER']
+    ENV["DELIVER_ALTOOL_ADDITIONAL_UPLOAD_PARAMETERS"] = "--apple-id #{apple_identifier} --use-old-altool"
+
     upload_to_testflight(
+      app_identifier: app_identifier,
+      apple_id: apple_identifier,
       api_key: ENV['APP_STORE_KEY_JSON'],
       skip_waiting_for_build_processing: true
     )

@@ -281,7 +281,7 @@ class GameBody extends ConsumerWidget {
               topTable: topPlayer,
               bottomTable:
                   gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                  ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                  ? _ClaimWinCountdown(gameState, countdown: gameState.opponentLeftCountdown!)
                   : bottomPlayer,
               moves: gameState.game.steps
                   .skip(1)
@@ -850,9 +850,10 @@ class _ClaimWinDialog extends ConsumerWidget {
 }
 
 class _ClaimWinCountdown extends StatelessWidget {
-  const _ClaimWinCountdown({required this.countdown});
+  const _ClaimWinCountdown(this.gameState, {required this.countdown});
 
   final (Duration, DateTime) countdown;
+  final GameState gameState;
 
   @override
   Widget build(BuildContext context) {
@@ -864,7 +865,18 @@ class _ClaimWinCountdown extends StatelessWidget {
           clockUpdatedAt: countdown.$2,
           active: true,
           builder: (context, duration) {
-            return Text(context.l10n.opponentLeftCounter(duration.inSeconds));
+            return InkWell(
+              onTap: gameState.game.canClaimWin
+                  ? () {
+                      showAdaptiveDialog<void>(
+                        context: context,
+                        builder: (context) => _ClaimWinDialog(id: gameState.gameFullId),
+                        barrierDismissible: true,
+                      );
+                    }
+                  : null,
+              child: Text(context.l10n.opponentLeftCounter(duration.inSeconds)),
+            );
           },
         ),
       ),

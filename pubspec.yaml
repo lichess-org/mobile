@@ -2,12 +2,12 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.18.1+001801 # See README.md for details about versioning
+version: 0.18.2+001802 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
-  sdk: ^3.9.0
-  flutter: ^3.35.0
+  sdk: ^3.10.0
+  flutter: ^3.38.0
 
 dependencies:
   app_settings: ^6.1.1
@@ -27,9 +27,6 @@ dependencies:
   device_info_plus: ^12.1.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
-  firebase_core: ^4.0.0
-  firebase_crashlytics: ^5.0.0
-  firebase_messaging: ^16.0.0
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
@@ -51,10 +48,7 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.20.2
   json_annotation: ^4.7.0
-  l10n_esperanto:
-    git:
-      url: https://github.com/veloce/l10n_esperanto.git
-      ref: 24ef38d85f15b05d8032aa7930a6e118df87a5b9
+  l10n_esperanto: ^2.0.14
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
@@ -76,6 +70,7 @@ dependencies:
   sqflite: ^2.2.5
   sqflite_common_ffi: ^2.2.3
   stream_transform: ^2.1.0
+  unifiedpush: ^6.0.2
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0
   wakelock_plus: ^1.1.1

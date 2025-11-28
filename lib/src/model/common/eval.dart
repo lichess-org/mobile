@@ -14,14 +14,22 @@ part 'eval.g.dart';
 
 /// Base class for evals.
 sealed class Eval {
+  const Eval();
+
+  /// The centipawn score.
+  int? get cp;
+
+  /// The mate score.
+  int? get mate;
+
   /// The string to display the eval
-  String get evalString;
+  String get evalString => _evalString(cp, mate);
 
   /// The winning chances for the given [Side].
   ///
   /// 1  = infinitely winning
   /// -1 = infinitely losing
-  double winningChances(Side side);
+  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
 
   /// The difference, in winning chances, between two [Eval]s.
   ///
@@ -33,66 +41,76 @@ sealed class Eval {
 
 /// The eval from the client side, either from the cloud or the local engine.
 sealed class ClientEval extends Eval {
+  const ClientEval({
+    required this.position,
+    required this.depth,
+    required this.nodes,
+    required this.pvs,
+  });
+
   /// The position for which the eval was computed.
-  Position get position;
+  final Position position;
 
   /// The depth of the search.
-  int get depth;
+  final int depth;
 
   /// The number of nodes searched.
-  int get nodes;
+  final int nodes;
 
   /// The principal variations.
-  IList<PvData> get pvs;
-
-  /// The centipawn score.
-  int? get cp;
-
-  /// The mate score.
-  int? get mate;
+  final IList<PvData> pvs;
 
   /// The best move.
-  Move? get bestMove;
+  Move? get bestMove {
+    final uci = pvs.firstOrNull?.moves.firstOrNull;
+    if (uci == null) return null;
+    return Move.parse(uci);
+  }
 
   /// The best moves with their winning chances.
-  IList<MoveWithWinningChances> get bestMoves;
+  IList<MoveWithWinningChances> get bestMoves => pvs
+      .where((e) => e.moves.isNotEmpty)
+      .map((e) => e._firstMoveWithWinningChances(position.turn))
+      .nonNulls
+      .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
+      .toIList();
 }
 
 /// The eval coming from other Lichess clients, served from the network.
 @freezed
-sealed class CloudEval with _$CloudEval implements ClientEval {
-  CloudEval._();
+// ignore: freezed_missing_private_empty_constructor
+sealed class CloudEval extends ClientEval with _$CloudEval {
+  const CloudEval._({
+    required super.position,
+    required super.depth,
+    required super.nodes,
+    required super.pvs,
+  });
 
-  factory CloudEval({
+  const factory CloudEval({
+    required Position position,
     required int depth,
     required int nodes,
-    required Position position,
     required IList<PvData> pvs,
   }) = _CloudEval;
-
-  @override
-  String get evalString => _evalString(cp, mate);
-
-  @override
-  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
 
   @override
   int? get cp => pvs[0].cp;
 
   @override
   int? get mate => pvs[0].mate;
-
-  @override
-  Move? get bestMove => _bestMove(pvs);
-
-  @override
-  IList<MoveWithWinningChances> get bestMoves => _bestMoves(pvs, position);
 }
 
 /// The eval from the local engine.
 @freezed
-sealed class LocalEval with _$LocalEval implements ClientEval {
-  const LocalEval._();
+// ignore: freezed_missing_private_empty_constructor
+sealed class LocalEval extends ClientEval with _$LocalEval {
+  const LocalEval._({
+    required super.position,
+    required super.depth,
+    required super.nodes,
+    required super.pvs,
+  });
 
   const factory LocalEval({
     required Position position,
@@ -108,29 +126,13 @@ sealed class LocalEval with _$LocalEval implements ClientEval {
 
   double get knps => nodes / millis;
 
-  @override
-  Move? get bestMove => _bestMove(pvs);
-
-  @override
-  IList<MoveWithWinningChances> get bestMoves => _bestMoves(pvs, position);
-
-  @override
-  String get evalString => _evalString(cp, mate);
-
-  @override
-  double winningChances(Side side) => _toPov(side, _whiteWinningChances);
-
-  double get _whiteWinningChances {
-    return _toWhiteWinningChances(cp, mate);
-  }
-
   bool isBetter(LocalEval other) =>
       depth > other.depth || (depth == other.depth && nodes > other.nodes);
 }
 
 /// The eval from an external engine, typically Lichess server side Stockfish.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExternalEval with _$ExternalEval implements Eval {
+sealed class ExternalEval extends Eval with _$ExternalEval {
   const ExternalEval._();
 
   const factory ExternalEval({
@@ -156,47 +158,6 @@ sealed class ExternalEval with _$ExternalEval implements Eval {
   }
 
   factory ExternalEval.fromJson(Map<String, dynamic> json) => _$ExternalEvalFromJson(json);
-
-  @override
-  String get evalString => _evalString(cp, mate);
-
-  @override
-  double winningChances(Side side) => _toPov(side, _whiteWinningChances);
-
-  double get _whiteWinningChances {
-    if (mate != null) {
-      return mateWinningChances(mate!);
-    } else if (cp != null) {
-      return cpWinningChances(cp!);
-    } else {
-      return 0;
-    }
-  }
-}
-
-double _toWhiteWinningChances(int? cp, int? mate) {
-  if (mate != null) {
-    return mateWinningChances(mate);
-  } else if (cp != null) {
-    return cpWinningChances(cp);
-  } else {
-    return 0;
-  }
-}
-
-Move? _bestMove(IList<PvData> pvs) {
-  final uci = pvs.firstOrNull?.moves.firstOrNull;
-  if (uci == null) return null;
-  return Move.parse(uci);
-}
-
-IList<MoveWithWinningChances> _bestMoves(IList<PvData> pvs, Position position) {
-  return pvs
-      .where((e) => e.moves.isNotEmpty)
-      .map((e) => e._firstMoveWithWinningChances(position.turn))
-      .nonNulls
-      .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
-      .toIList();
 }
 
 @freezed
@@ -326,9 +287,9 @@ double cpToPawns(int cp) => cp / 100;
 
 int cpFromPawns(double pawns) => (pawns * 100).round();
 
-double cpWinningChances(int cp) => _rawWinningChances(math.min(math.max(-1000, cp), 1000));
+double _cpWinningChances(int cp) => _rawWinningChances(math.min(math.max(-1000, cp), 1000));
 
-double mateWinningChances(int mate) {
+double _mateWinningChances(int mate) {
   final cp = (21 - math.min(10, mate.abs())) * 100;
   final signed = cp * (mate > 0 ? 1 : -1);
   return _rawWinningChances(signed);
@@ -336,7 +297,6 @@ double mateWinningChances(int mate) {
 
 double _toPov(Side side, double diff) => side == Side.white ? diff : -diff;
 
-// https://github.com/lichess-org/lila/pull/11148
 double _rawWinningChances(num cp) {
   // https://github.com/lichess-org/lila/pull/11148
   const multiplier = -0.00368208;
@@ -351,5 +311,15 @@ String _evalString(int? cp, int? mate) {
     return '#$mate';
   } else {
     return '-';
+  }
+}
+
+double _toWhiteWinningChances(int? cp, int? mate) {
+  if (mate != null) {
+    return _mateWinningChances(mate);
+  } else if (cp != null) {
+    return _cpWinningChances(cp);
+  } else {
+    return 0;
   }
 }

@@ -108,7 +108,7 @@ class ListSection extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
                           child: Container(
                             width: double.infinity,
-                            height: 50,
+                            height: 25,
                             decoration: const BoxDecoration(
                               color: Colors.black,
                               borderRadius: BorderRadius.all(Radius.circular(10)),

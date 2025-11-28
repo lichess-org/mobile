@@ -161,7 +161,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
         // lichess sends a 400 response if user has not allowed challenges
         final message = e is ServerException && e.statusCode == 400
-            ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
+            ? LoadGameError('Could not create the game: ${e.jsonError?['error']}')
             : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
         return Scaffold(

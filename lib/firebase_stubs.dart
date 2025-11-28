@@ -19,6 +19,26 @@ class Firebase {
   }
 }
 
+class FirebaseOptions {
+  const FirebaseOptions({
+    required this.apiKey,
+    required this.appId,
+    required this.messagingSenderId,
+    required this.projectId,
+    this.storageBucket,
+    this.iosClientId,
+    this.iosBundleId,
+  });
+
+  final String apiKey;
+  final String appId;
+  final String messagingSenderId;
+  final String projectId;
+  final String? storageBucket;
+  final String? iosClientId;
+  final String? iosBundleId;
+}
+
 class DefaultFirebaseOptions {
   static DefaultFirebaseOptions? get currentPlatform => null;
 }

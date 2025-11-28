@@ -170,6 +170,11 @@ class GameController extends _$GameController {
       return;
     }
 
+    if (curState.shouldConfirmMove && isPremove != true) {
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      return;
+    }
+
     final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -178,13 +183,10 @@ class GameController extends _$GameController {
       diff: MaterialDiff.fromBoard(newPos.board),
     );
 
-    final shouldConfirmMove = curState.shouldConfirmMove && isPremove != true;
-
     state = AsyncValue.data(
       curState.copyWith(
         game: curState.game.copyWith(steps: curState.game.steps.add(newStep)),
         stepCursor: curState.stepCursor + 1,
-        moveToConfirm: shouldConfirmMove ? move : null,
         promotionMove: null,
         premove: null,
       ),
@@ -192,15 +194,13 @@ class GameController extends _$GameController {
 
     _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
 
-    if (!shouldConfirmMove) {
-      _sendMoveToSocket(
-        move,
-        isPremove: isPremove ?? false,
-        // same logic as web client
-        // we want to send client lag only at the beginning of the game when the clock is not running yet
-        withLag: curState.game.clock != null && curState.activeClockSide == null,
-      );
-    }
+    _sendMoveToSocket(
+      move,
+      isPremove: isPremove ?? false,
+      // same logic as web client
+      // we want to send client lag only at the beginning of the game when the clock is not running yet
+      withLag: curState.game.clock != null && curState.activeClockSide == null,
+    );
   }
 
   void onPromotionSelection(Role? role) {
@@ -233,14 +233,7 @@ class GameController extends _$GameController {
     if (curState.moveToConfirm == null) {
       return (curState, false);
     }
-    return (
-      curState.copyWith(
-        game: curState.game.copyWith(steps: curState.game.steps.removeLast()),
-        stepCursor: curState.stepCursor - 1,
-        moveToConfirm: null,
-      ),
-      true,
-    );
+    return (curState.copyWith(moveToConfirm: null), true);
   }
 
   /// Called if the player confirms the move when confirm move preference is enabled
@@ -252,7 +245,21 @@ class GameController extends _$GameController {
       return;
     }
 
-    state = AsyncValue.data(curState.copyWith(moveToConfirm: null));
+    final (newPos, newSan) = curState.game.lastPosition.makeSan(moveToConfirm);
+    final sanMove = SanMove(newSan, moveToConfirm);
+    final newStep = GameStep(
+      position: newPos,
+      sanMove: sanMove,
+      diff: MaterialDiff.fromBoard(newPos.board),
+    );
+
+    state = AsyncValue.data(
+      curState.copyWith(
+        game: curState.game.copyWith(steps: curState.game.steps.add(newStep)),
+        stepCursor: curState.stepCursor + 1,
+        moveToConfirm: null,
+      ),
+    );
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,
@@ -1016,7 +1023,13 @@ sealed class GameState with _$GameState {
   }) = _GameState;
 
   /// The [Position] at the current cursor.
-  Position get currentPosition => game.positionAt(stepCursor);
+  Position get currentPosition {
+    if (moveToConfirm != null) {
+      final lastPos = game.lastPosition;
+      return lastPos.playUnchecked(moveToConfirm!);
+    }
+    return game.positionAt(stepCursor);
+  }
 
   /// Whether the zen mode is active
   bool get isZenModeActive => game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;
@@ -1081,7 +1094,7 @@ sealed class GameState with _$GameState {
     if (game.status == GameStatus.started) {
       final pos = game.lastPosition;
       if (pos.fullmoves > 1) {
-        return moveToConfirm != null ? pos.turn.opposite : pos.turn;
+        return pos.turn;
       }
     }
 

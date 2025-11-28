@@ -33,6 +33,7 @@ String makeFullEvent(
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
   TournamentMeta? tournament,
+  ServerGamePrefs? serverPrefs,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
   final clockStr = clock != null
@@ -67,6 +68,19 @@ String makeFullEvent(
       "secondsLeft": ${tournament.clock.timeLeft.inSeconds},
       "berserkable": ${tournament.berserkable},
       ${tournament.ranks != null ? '"ranks": { "white": ${tournament.ranks!.white}, "black": ${tournament.ranks!.black}}' : ''}
+    },
+  '''
+      : '';
+
+  final serverPrefsStr = serverPrefs != null
+      ? '''
+    "prefs": {
+      "showRatings": ${serverPrefs.showRatings},
+      "enablePremove": ${serverPrefs.enablePremove},
+      "autoQueen": ${serverPrefs.autoQueen.value},
+      "confirmResign": ${serverPrefs.confirmResign},
+      "submitMove": ${serverPrefs.submitMove},
+      "zen": ${serverPrefs.zenMode.value}
     },
   '''
       : '';
@@ -118,6 +132,7 @@ String makeFullEvent(
     $correspondenceClockStr
     $youAreStr
     $tournamentStr
+    $serverPrefsStr
     "socket": $socketVersion,
     "expiration": {
       "idleMillis": 245,
