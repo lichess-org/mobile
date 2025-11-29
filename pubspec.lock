@@ -237,10 +237,10 @@ packages:
     dependency: transitive
     description:
       name: code_assets
-      sha256: "83ccdaa064c980b5596c35dd64a8d3ecc68620174ab9b90b6343b753aa721687"
+      sha256: ae0db647e668cbb295a3527f0938e4039e004c80099dce2f964102373f5ce0b5
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "0.19.10"
   code_builder:
     dependency: transitive
     description:
@@ -293,10 +293,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "07bfb4c6158aef72f8004631826abaeecdeaa2b6042f5f8916b8db20e1d01b4a"
+      sha256: "1fff7f26ac0c4cda97fe2a9aa082494baee4775f167c27ba45f6c8e88571e3ab"
       url: "https://pub.dev"
     source: hosted
-    version: "1.6.0"
+    version: "1.7.0"
   cross_file:
     dependency: transitive
     description:
@@ -405,10 +405,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: dd0e8e02186b2196c7848c9d394a5fd6e5b57a43a546082c5820b1ec72317e33
+      sha256: "4df8babf73058181227e18b08e6ea3520cf5fc5d796888d33b7cb0f33f984b7c"
       url: "https://pub.dev"
     source: hosted
-    version: "12.2.0"
+    version: "12.3.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -703,10 +703,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_secure_storage
-      sha256: f7eceb0bc6f4fd0441e29d43cab9ac2a1c5ffd7ea7b64075136b718c46954874
+      sha256: "79d53f3393ac2b73bcba45317b6c1a29002f89c680225cdea0bd6770a1682ce0"
       url: "https://pub.dev"
     source: hosted
-    version: "10.0.0-beta.4"
+    version: "10.0.0-beta.5"
   flutter_secure_storage_darwin:
     dependency: transitive
     description:
@@ -826,10 +826,10 @@ packages:
     dependency: transitive
     description:
       name: hooks
-      sha256: "5d309c86e7ce34cd8e37aa71cb30cb652d3829b900ab145e4d9da564b31d59f7"
+      sha256: "5410b9f4f6c9f01e8ff0eb81c9801ea13a3c3d39f8f0b1613cda08e27eab3c18"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "0.20.5"
   hotreloader:
     dependency: transitive
     description:
@@ -970,10 +970,10 @@ packages:
     dependency: transitive
     description:
       name: jni
-      sha256: d2c361082d554d4593c3012e26f6b188f902acd291330f13d6427641a92b3da1
+      sha256: "8706a77e94c76fe9ec9315e18949cc9479cc03af97085ca9c1077b61323ea12d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.2"
+    version: "0.15.2"
   js:
     dependency: transitive
     description:
@@ -1146,10 +1146,10 @@ packages:
     dependency: transitive
     description:
       name: native_toolchain_c
-      sha256: "89e83885ba09da5fdf2cdacc8002a712ca238c28b7f717910b34bcd27b0d03ac"
+      sha256: f8872ea6c7a50ce08db9ae280ca2b8efdd973157ce462826c82f3c3051d154ce
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.4"
+    version: "0.17.2"
   nm:
     dependency: transitive
     description:
@@ -1170,10 +1170,10 @@ packages:
     dependency: transitive
     description:
       name: objective_c
-      sha256: "1f81ed9e41909d44162d7ec8663b2c647c202317cc0b56d3d56f6a13146a0b64"
+      sha256: c12701c978eacda8d8a9be1469f005e26bf16a903945982b94f77d7a9dbeea45
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.0"
+    version: "9.2.1"
   octo_image:
     dependency: transitive
     description:
@@ -1234,10 +1234,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_foundation
-      sha256: "6192e477f34018ef1ea790c56fffc7302e3bc3efede9e798b934c252c8c105ba"
+      sha256: "6d13aece7b3f5c5a9731eaf553ff9dcbc2eff41087fd2df587fd0fed9a3eb0c4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.5.1"
   path_provider_linux:
     dependency: transitive
     description:
@@ -1599,10 +1599,10 @@ packages:
     dependency: "direct main"
     description:
       name: sqflite_common_ffi
-      sha256: "40d430bac3c84fef92d030d4013e807f70a03e6091da3f604c3ea09521136e8d"
+      sha256: "9faa2fedc5385ef238ce772589f7718c24cdddd27419b609bb9c6f703ea27988"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.3.6"
   sqflite_darwin:
     dependency: transitive
     description:
@@ -1623,10 +1623,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "0e690e9633d530e46f1229efd2f280b97e363f8ed10f581dc1426ea5d39374fc"
+      sha256: "3145bd74dcdb4fd6f5c6dda4d4e4490a8087d7f286a14dee5d37087290f0f8a2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "2.9.4"
   stack_trace:
     dependency: transitive
     description:
