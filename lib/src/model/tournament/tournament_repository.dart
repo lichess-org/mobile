@@ -59,6 +59,22 @@ class TournamentRepository {
     );
   }
 
+  Future<TournamentTeam> getTournamentTeam(TournamentId tournamentId, TeamId teamId) {
+    return client.readJson(
+      Uri(path: '/tournament/$tournamentId/team/$teamId'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => TournamentTeam.fromServerJson(json),
+    );
+  }
+
+  Future<IList<TeamStanding>> getAllTeamStandings(TournamentId id) {
+    return client.readJson(
+      Uri(path: '/api/tournament/$id/teams'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => pick(json, 'teams').asTeamStandingListOrThrow(),
+    );
+  }
+
   Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
     final client = _ref.read(defaultClientProvider);
     return downloadFile(
@@ -90,9 +106,11 @@ class TournamentRepository {
     );
   }
 
-  Future<void> join(TournamentId id) async {
-    final uri = Uri(path: '/api/tournament/$id/join');
-    await client.postRead(uri);
+  Future<void> join(TournamentId id, {TeamId? teamId}) async {
+    await client.postRead(
+      Uri(path: '/api/tournament/$id/join'),
+      body: teamId != null ? {'team': teamId} : null,
+    );
   }
 
   Future<void> withdraw(TournamentId id) async {
