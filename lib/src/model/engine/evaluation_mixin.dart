@@ -56,40 +56,28 @@ abstract class EvaluationMixinState {
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
 ///
-/// The parent must initialize the engine evaluation by calling [initEngineEvaluation] and dispose it
-/// by calling [disposeEngineEvaluation].
-///
 /// The parent must implement the following:
-/// - [evaluationState]
 /// - [socketClient] to provide the [SocketClient] to use for cloud evaluations. If `null`, the
 ///   cloud evaluations will not be requested.
 /// - [positionTree] to provide the tree where the evaluations are stored.
-/// - [evaluationServiceFactory]
-/// - [evaluationPreferencesNotifier]
-/// - [evaluationPrefs]
 ///
 /// The parent can implement:
 /// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation.
-mixin EngineEvaluationMixin {
-  /// Direct access to underlying [EvaluationMixinState].
-  ///
-  /// This is a workaround to use this mixin in both [Notifier] and [AsyncNotifier].
-  /// Parent must ensure that [AsyncNotifier.state] is loaded before using methods that require
-  /// [EvaluationMixinState].
-  EvaluationMixinState get evaluationState;
+mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<AsyncValue<T>, T> {
+  late EvaluationService _evaluationService;
 
-  EngineEvaluationPrefState get evaluationPrefs;
-  EngineEvaluationPreferences get evaluationPreferencesNotifier;
-  EvaluationService evaluationServiceFactory();
   SocketClient? get socketClient;
   Node get positionTree;
+
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  EngineEvaluationPreferences get _evaluationPreferencesNotifier =>
+      ref.read(engineEvaluationPreferencesProvider.notifier);
 
   final _evalRequestDebounce = Debouncer(kRequestEvalDebounceDelay);
   final _localEngineAfterDelayDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
   StreamSubscription<SocketEvent>? _socketSubscription;
-
-  EvaluationService? _evaluationService;
 
   /// Called when a received evaluation is for the current path.
   ///
@@ -98,36 +86,31 @@ mixin EngineEvaluationMixin {
   /// evaluation string is the same.
   void onCurrentPathEvalChanged(bool isSameEvalString) {}
 
-  /// Initializes the engine evaluation.
-  ///
-  /// Will start listening to the [SocketClient] for cloud evaluations.
-  ///
-  /// The local engine is not started here, but only when [requestEval] is called.
-  @nonVirtual
-  void initEngineEvaluation() {
-    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
-    _evaluationService = evaluationServiceFactory();
-  }
+  @override
+  void runBuild() {
+    _evaluationService = ref.read(evaluationServiceProvider);
 
-  /// Disposes all resources related to the engine evaluation.
-  @nonVirtual
-  void disposeEngineEvaluation() {
-    _evalRequestDebounce.cancel();
-    _localEngineAfterDelayDebounce.cancel();
-    _socketSubscription?.cancel();
-    _evaluationService?.disposeEngine();
-    _evaluationService = null;
+    ref.onDispose(() {
+      _evalRequestDebounce.cancel();
+      _localEngineAfterDelayDebounce.cancel();
+      _socketSubscription?.cancel();
+      _evaluationService.disposeEngine();
+    });
+
+    super.runBuild();
+
+    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
   }
 
   /// Toggles the engine evaluation on/off.
   @mustCallSuper
   Future<void> toggleEngine() async {
-    await evaluationPreferencesNotifier.toggle();
+    await _evaluationPreferencesNotifier.toggle();
 
-    if (evaluationState.isEngineAvailable(evaluationPrefs)) {
+    if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval(forceRestart: true);
     } else {
-      await _evaluationService?.disposeEngine();
+      await _evaluationService.disposeEngine();
     }
   }
 
@@ -137,32 +120,34 @@ mixin EngineEvaluationMixin {
     positionTree.updateAll((node) => node.eval = null);
     onCurrentPathEvalChanged(false);
 
-    evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
+    _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    _evaluationService?.options = evaluationPrefs.evaluationOptions;
+    _evaluationService.options = evaluationPrefs.evaluationOptions;
 
     requestEval(forceRestart: true);
   }
 
   @mustCallSuper
   void setEngineCores(int numEngineCores) {
-    evaluationPreferencesNotifier.setEngineCores(numEngineCores);
+    _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    _evaluationService?.options = evaluationPrefs.evaluationOptions;
+    _evaluationService.options = evaluationPrefs.evaluationOptions;
 
     requestEval(forceRestart: true);
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
-    evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
+    _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
 
-    _evaluationService?.options = evaluationPrefs.evaluationOptions;
+    _evaluationService.options = evaluationPrefs.evaluationOptions;
 
     requestEval(forceRestart: true);
   }
 
   /// Requests an engine evaluation if available.
+  ///
+  /// This must be called after the AsyncNotifier's[state] has been initialized.
   ///
   /// This sends an `evalGet` event to the server to get the cloud evaluation and starts the local
   /// engine evaluation.
@@ -177,10 +162,10 @@ mixin EngineEvaluationMixin {
   /// moves.
   @nonVirtual
   void requestEval({bool goDeeper = false, bool forceRestart = false}) {
-    if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+    if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
 
     final delayLocalEngine =
-        evaluationState.alwaysRequestCloudEval &&
+        state.requireValue.alwaysRequestCloudEval &&
         evaluationPrefs.engineSearchTime != kMaxEngineSearchTime;
 
     _evalRequestDebounce(() {
@@ -233,25 +218,28 @@ mixin EngineEvaluationMixin {
       node.eval = eval;
     });
 
-    if (evaluationState.currentPath == path) {
+    if (!ref.mounted) return;
+
+    if (state.requireValue.currentPath == path) {
       onCurrentPathEvalChanged(isSameEvalString);
     }
   }
 
   bool _canCloudEval() {
-    if (evaluationState.currentPosition!.ply >= 15 && !evaluationState.alwaysRequestCloudEval) {
+    if (state.requireValue.currentPosition!.ply >= 15 &&
+        !state.requireValue.alwaysRequestCloudEval) {
       return false;
     }
-    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval) return false;
+    if (positionTree.nodeAt(state.requireValue.currentPath).eval is CloudEval) return false;
 
     // cloud eval does not support threefold repetition
     final Set<String> fens = <String>{};
-    final nodeList = positionTree.branchesOn(evaluationState.currentPath).toList();
+    final nodeList = positionTree.branchesOn(state.requireValue.currentPath).toList();
     for (var i = nodeList.length - 1; i >= 0; i--) {
       final node = nodeList[i];
       final epd = fenToEpd(node.position.fen);
       if (fens.contains(epd)) return false;
-      if (node.sanMove.isIrreversible(evaluationState.evaluationContext.variant)) {
+      if (node.sanMove.isIrreversible(state.requireValue.evaluationContext.variant)) {
         return true;
       }
       fens.add(epd);
@@ -261,30 +249,30 @@ mixin EngineEvaluationMixin {
   }
 
   void _sendEvalGetEvent() {
-    if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+    if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
     if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime) return;
     if (!_canCloudEval()) return;
-    final curPosition = evaluationState.currentPosition;
+    final curPosition = state.requireValue.currentPosition;
     if (curPosition == null) return;
     final numEvalLines = evaluationPrefs.numEvalLines;
 
     socketClient?.send('evalGet', {
       'fen': curPosition.fen,
-      'path': evaluationState.currentPath.value,
+      'path': state.requireValue.currentPath.value,
       'mpv': numEvalLines,
       'up': true,
     });
   }
 
   Future<void> _startEngineEval({bool goDeeper = false, bool forceRestart = false}) async {
-    final curState = evaluationState;
+    final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
-    await _evaluationService?.ensureEngineInitialized(
-      evaluationState.evaluationContext,
+    await _evaluationService.ensureEngineInitialized(
+      state.requireValue.evaluationContext,
       initOptions: evaluationPrefs.evaluationOptions,
     );
     _evaluationService
-        ?.start(
+        .start(
           curState.currentPath,
           positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
           initialPositionEval: positionTree.eval,
@@ -312,7 +300,7 @@ mixin EngineEvaluationMixin {
                 // if the cloud eval is likely better, stop the local engine
                 // nps varies with positional complexity so this is rough, but save planet earth
                 if (likelyNodes < nodeEval.nodes) {
-                  _evaluationService?.stop();
+                  _evaluationService.stop();
                 }
                 return;
               }
@@ -324,11 +312,17 @@ mixin EngineEvaluationMixin {
             isSameEvalString = eval.evalString == nodeEval?.evalString;
             node.eval = eval;
           });
-          if (work.path == evaluationState.currentPath) {
+
+          if (!ref.mounted) return;
+
+          if (work.path == state.requireValue.currentPath) {
             onCurrentPathEvalChanged(isSameEvalString);
           }
         });
   }
 
-  bool _shouldEmit(Work work) => work.path == evaluationState.currentPath;
+  bool _shouldEmit(Work work) {
+    if (!ref.mounted) return false;
+    return work.path == state.requireValue.currentPath;
+  }
 }

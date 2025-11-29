@@ -62,23 +62,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  BroadcastAnalysisState get evaluationState => state.requireValue;
-
-  @override
-  @protected
   SocketClient get socketClient => _socketClient;
 
   @override
@@ -94,7 +77,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
       _syncDebouncer.cancel();
-      disposeEngineEvaluation();
     });
 
     _socketClient = ref
@@ -162,8 +144,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     // We need to define the state value in the build method because `sendEvalGetEvent` and
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
-
-    initEngineEvaluation();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();

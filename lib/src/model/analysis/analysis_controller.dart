@@ -126,23 +126,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  AnalysisState get evaluationState => state.requireValue;
-
-  @override
-  @protected
   late SocketClient socketClient;
 
   @override
@@ -157,7 +140,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -319,11 +301,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
-
-    final isEngineAllowed = isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
-    if (isEngineAllowed) {
-      initEngineEvaluation();
-    }
 
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 

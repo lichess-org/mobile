@@ -60,30 +60,12 @@ class StudyController extends AsyncNotifier<StudyState>
   Root get positionTree => _root;
 
   @override
-  @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  StudyState get evaluationState => state.requireValue;
-
-  @override
   Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
       _sendMoveToSocketTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
-      disposeEngineEvaluation();
     });
 
     final socketPool = ref.watch(socketPoolProvider);
@@ -93,8 +75,6 @@ class StudyController extends AsyncNotifier<StudyState>
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    initEngineEvaluation();
 
     return chapter;
   }

@@ -93,24 +93,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs =>
-      ref.read(engineEvaluationPreferencesProvider).copyWith(isEnabled: true, numEvalLines: 1);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  EvaluationMixinState get evaluationState => state.requireValue;
-
-  @override
-  @protected
   late SocketClient socketClient;
 
   @override
@@ -122,7 +104,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
-      disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -133,8 +114,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     if (engineSupportedVariants.contains(_game.meta.variant) == false) {
       throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
     }
-
-    initEngineEvaluation();
 
     _root = _game.makeTree();
 
