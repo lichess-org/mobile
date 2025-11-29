@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
-class EngineButton extends ConsumerWidget {
+class EngineButton extends ConsumerStatefulWidget {
   const EngineButton({this.onTap, this.savedEval, this.goDeeper});
 
   final ClientEval? savedEval;
@@ -22,18 +22,29 @@ class EngineButton extends ConsumerWidget {
   final VoidCallback? goDeeper;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EngineButton> createState() => _EngineButtonState();
+}
+
+class _EngineButtonState extends ConsumerState<EngineButton> {
+  late Color fromChipColor;
+  Color? toChipColor;
+
+  @override
+  Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
         .watch(engineEvaluationProvider);
-    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
+    final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
-    final color = prefs.isEnabled
+    final newChipColor = prefs.isEnabled
         ? switch (engineState) {
             EngineState.computing => ColorScheme.of(context).primary,
             _ => ColorScheme.of(context).primary.withValues(alpha: 0.65),
           }
         : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
+
+    fromChipColor = toChipColor ?? newChipColor;
+    toChipColor = newChipColor;
 
     final textColor = prefs.isEnabled
         ? ColorScheme.of(context).primary
@@ -51,12 +62,12 @@ class EngineButton extends ConsumerWidget {
 
     return SemanticIconButton(
       semanticsLabel: context.l10n.toggleLocalEvaluation,
-      onPressed: onTap,
+      onPressed: widget.onTap,
       onLongPress: () {
         showPopover(
           context: context,
           bodyBuilder: (_) {
-            return _EnginePopup(goDeeper: goDeeper);
+            return _EnginePopup(goDeeper: widget.goDeeper);
           },
           direction: PopoverDirection.top,
           width: 250,
@@ -77,9 +88,16 @@ class EngineButton extends ConsumerWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            CustomPaint(
-              size: const Size(microChipSize, microChipSize),
-              painter: MicroChipPainter(color),
+            TweenAnimationBuilder<Color?>(
+              curve: Curves.easeInOut,
+              tween: ColorTween(begin: fromChipColor, end: toChipColor),
+              duration: const Duration(milliseconds: 300),
+              builder: (BuildContext context, Color? color, Widget? _) {
+                return CustomPaint(
+                  size: const Size(microChipSize, microChipSize),
+                  painter: MicroChipPainter(color ?? toChipColor!),
+                );
+              },
             ),
             SizedBox(
               width: microChipSize,
