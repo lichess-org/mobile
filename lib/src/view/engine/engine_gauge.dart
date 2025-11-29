@@ -222,7 +222,8 @@ class _EvalGaugeVerticalPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_EvalGaugeVerticalPainter oldPainter) {
-    return oldPainter.backgroundColor != backgroundColor ||
+    return oldPainter.orientation != orientation ||
+        oldPainter.backgroundColor != backgroundColor ||
         oldPainter.valueColor != valueColor ||
         oldPainter.value != value;
   }
