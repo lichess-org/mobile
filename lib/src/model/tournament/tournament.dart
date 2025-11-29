@@ -44,7 +44,7 @@ typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration?
 
 typedef TeamInfo = ({String name, String? flair});
 
-typedef TeamBattleData = ({IMap<String, TeamInfo> teams, int nbLeaders, IList<String>? joinWith});
+typedef TeamBattleData = ({IMap<TeamId, TeamInfo> teams, int nbLeaders, IList<TeamId>? joinWith});
 
 const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
@@ -236,7 +236,7 @@ sealed class StandingPlayer with _$StandingPlayer {
     required int rank,
     required StandingSheet sheet,
     required bool withdraw,
-    String? teamId,
+    TeamId? teamId,
   }) = _StandingPlayer;
 }
 
@@ -261,7 +261,7 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
       ).asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
     ),
     withdraw: pick('withdraw').asBoolOrFalse(),
-    teamId: pick('team').asStringOrNull(),
+    teamId: pick('team').asTeamIdOrNull(),
   );
 }
 
@@ -271,7 +271,7 @@ sealed class TeamStanding with _$TeamStanding {
 
   const factory TeamStanding({
     required int rank,
-    required String id,
+    required TeamId id,
     required int score,
     required IList<TeamPlayer> players,
   }) = _TeamStanding;
@@ -481,7 +481,7 @@ extension TournamentExtension on Pick {
     if (value == null) return null;
     try {
       final requiredPick = this.required();
-      final teamsMap = requiredPick('teams').asMapOrThrow<String, dynamic>();
+      final teamsMap = requiredPick('teams').asMapOrThrow<TeamId, dynamic>();
       return (
         teams: IMap.fromEntries(
           teamsMap.entries.map((entry) {
@@ -493,7 +493,7 @@ extension TournamentExtension on Pick {
           }),
         ),
         nbLeaders: requiredPick('nbLeaders').asIntOrThrow(),
-        joinWith: requiredPick('joinWith').asListOrNull((p) => p.asStringOrThrow())?.toIList(),
+        joinWith: requiredPick('joinWith').asListOrNull((p) => p.asTeamIdOrThrow())?.toIList(),
       );
     } catch (_) {
       return null;
@@ -530,7 +530,7 @@ sealed class TournamentPlayer with _$TournamentPlayer {
     required int rank,
     required PlayerStats stats,
     required IList<TournamentPairing> pairings,
-    String? teamId,
+    TeamId? teamId,
   }) = _TournamentPlayer;
   factory TournamentPlayer.fromServerJson(Map<String, Object?> json) =>
       _tournamentPlayerFromPick(pick(json).required());
@@ -541,7 +541,7 @@ sealed class TournamentTeam with _$TournamentTeam {
   const TournamentTeam._();
 
   factory TournamentTeam({
-    required String id,
+    required TeamId id,
     required int nbPlayers,
     required int rating,
     required int? performance,
@@ -602,13 +602,13 @@ TournamentPlayer _tournamentPlayerFromPick(RequiredPick pick) {
     performance: player('performance').asIntOrNull(),
     rank: player('rank').asIntOrThrow(),
     pairings: pick('pairings').asListOrThrow(_pairingFromPick).toIList(),
-    teamId: player('team').asStringOrNull(),
+    teamId: player('team').asTeamIdOrNull(),
   );
 }
 
 TournamentTeam _tournamentTeamFromPick(RequiredPick pick) {
   return TournamentTeam(
-    id: pick('id').asStringOrThrow(),
+    id: pick('id').asTeamIdOrThrow(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     rating: pick('rating').asIntOrThrow(),
     performance: pick('perf').asIntOrNull(),
@@ -656,7 +656,7 @@ TournamentPairing _pairingFromPick(RequiredPick pick) {
 TeamStanding _teamStandingFromPick(RequiredPick pick) {
   return TeamStanding(
     rank: pick('rank').asIntOrThrow(),
-    id: pick('id').asStringOrThrow(),
+    id: pick('id').asTeamIdOrThrow(),
     score: pick('score').asIntOrThrow(),
     players: pick('players').asListOrThrow((p) => _teamPlayerFromPick(p.required())).toIList(),
   );

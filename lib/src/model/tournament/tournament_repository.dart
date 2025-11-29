@@ -59,7 +59,7 @@ class TournamentRepository {
     );
   }
 
-  Future<TournamentTeam> getTournamentTeam(TournamentId tournamentId, String teamId) {
+  Future<TournamentTeam> getTournamentTeam(TournamentId tournamentId, TeamId teamId) {
     return client.readJson(
       Uri(path: '/tournament/$tournamentId/team/$teamId'),
       headers: {'Accept': 'application/json'},
@@ -106,7 +106,7 @@ class TournamentRepository {
     );
   }
 
-  Future<void> join(TournamentId id, {String? teamId}) async {
+  Future<void> join(TournamentId id, {TeamId? teamId}) async {
     await client.postRead(
       Uri(path: '/api/tournament/$id/join'),
       body: teamId != null ? {'team': teamId} : null,

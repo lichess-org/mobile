@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +41,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
@@ -516,15 +516,15 @@ class _TeamStandingTile extends ConsumerWidget {
         children: [
           Flexible(
             child: Text(
-              teamInfo?.name ?? team.id,
+              teamInfo?.name ?? team.id.value,
               style: const TextStyle(fontWeight: .bold),
               overflow: .ellipsis,
             ),
           ),
           if (teamInfo?.flair != null) ...[
             const SizedBox(width: 8.0),
-            CachedNetworkImage(
-              imageUrl: lichessFlairSrc(teamInfo!.flair!),
+            CachedHttpNetworkImage(
+              lichessFlairSrc(teamInfo!.flair!),
               errorWidget: (_, _, _) => kEmptyWidget,
               width: 16.0,
               height: 16.0,
@@ -1278,8 +1278,8 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                 Text(teamInfo.name, style: const TextStyle(fontWeight: .w500, fontSize: 14)),
                 const SizedBox(width: 8.0),
                 if (teamInfo.flair != null) ...[
-                  CachedNetworkImage(
-                    imageUrl: lichessFlairSrc(teamInfo.flair!),
+                  CachedHttpNetworkImage(
+                    lichessFlairSrc(teamInfo.flair!),
                     errorWidget: (_, _, _) => kEmptyWidget,
                     width: 20.0,
                     height: 20.0,
@@ -1488,7 +1488,7 @@ void _showTeamDetails(
   BuildContext context,
   WidgetRef ref,
   TournamentId tournamentId,
-  String teamId,
+  TeamId teamId,
 ) {
   showModalBottomSheet<void>(
     context: context,
@@ -1553,15 +1553,15 @@ class _TournamentTeamDetails extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        teamInfo?.name ?? team.id,
+                        teamInfo?.name ?? team.id.value,
                         style: Styles.title,
                         overflow: .ellipsis,
                       ),
                     ),
                     const SizedBox(width: 8),
                     if (teamInfo?.flair != null) ...[
-                      CachedNetworkImage(
-                        imageUrl: lichessFlairSrc(teamInfo!.flair!),
+                      CachedHttpNetworkImage(
+                        lichessFlairSrc(teamInfo!.flair!),
                         errorWidget: (_, _, _) => kEmptyWidget,
                         width: 24.0,
                         height: 24.0,
@@ -1683,8 +1683,8 @@ class _TeamPlayerTile extends ConsumerWidget {
   }
 }
 
-Future<String?> _showTeamSelectionDialog(BuildContext context, TeamBattleData teamBattle) {
-  return showDialog<String>(
+Future<TeamId?> _showTeamSelectionDialog(BuildContext context, TeamBattleData teamBattle) {
+  return showDialog<TeamId>(
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
@@ -1703,7 +1703,7 @@ Future<String?> _showTeamSelectionDialog(BuildContext context, TeamBattleData te
             ...teamBattle.joinWith!.map((teamId) {
               final teamInfo = teamBattle.teams[teamId];
               return ListTile(
-                title: Text(teamInfo?.name ?? teamId),
+                title: Text(teamInfo?.name ?? teamId.value),
                 onTap: () => Navigator.of(context).pop(teamId),
               );
             }),

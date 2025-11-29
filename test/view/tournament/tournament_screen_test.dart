@@ -765,7 +765,7 @@ void main() {
               teamStanding: [
                 TeamStanding(
                   rank: 1,
-                  id: 'team-one',
+                  id: const TeamId('team-one'),
                   score: 450,
                   players: IList([
                     TeamPlayer(
@@ -788,7 +788,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 2,
-                  id: 'team-two',
+                  id: const TeamId('team-two'),
                   score: 425,
                   players: IList([
                     TeamPlayer(
@@ -807,7 +807,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 3,
-                  id: 'team-three',
+                  id: const TeamId('team-three'),
                   score: 400,
                   players: IList([
                     TeamPlayer(
@@ -876,7 +876,7 @@ void main() {
               teamStanding: [
                 TeamStanding(
                   rank: 1,
-                  id: 'team-one',
+                  id: const TeamId('team-one'),
                   score: 450,
                   players: IList([
                     TeamPlayer(
@@ -887,7 +887,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 2,
-                  id: 'team-two',
+                  id: const TeamId('team-two'),
                   score: 425,
                   players: IList([
                     TeamPlayer(
@@ -898,7 +898,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 3,
-                  id: 'team-three',
+                  id: const TeamId('team-three'),
                   score: 400,
                   players: IList([
                     TeamPlayer(
@@ -966,7 +966,7 @@ void main() {
               teamStanding: [
                 TeamStanding(
                   rank: 1,
-                  id: 'team-one',
+                  id: const TeamId('team-one'),
                   score: 450,
                   players: IList([
                     TeamPlayer(
@@ -1026,7 +1026,7 @@ void main() {
               teamStanding: [
                 TeamStanding(
                   rank: 1,
-                  id: 'team-one',
+                  id: const TeamId('team-one'),
                   score: 450,
                   players: IList([
                     TeamPlayer(
@@ -1124,7 +1124,7 @@ void main() {
               teamStanding: [
                 TeamStanding(
                   rank: 1,
-                  id: 'team-one',
+                  id: const TeamId('team-one'),
                   score: 450,
                   players: IList([
                     TeamPlayer(
@@ -1135,7 +1135,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 2,
-                  id: 'team-two',
+                  id: const TeamId('team-two'),
                   score: 400,
                   players: IList([
                     TeamPlayer(
@@ -1146,7 +1146,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 3,
-                  id: 'team-three',
+                  id: const TeamId('team-three'),
                   score: 350,
                   players: IList([
                     TeamPlayer(
@@ -1157,7 +1157,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 4,
-                  id: 'team-four',
+                  id: const TeamId('team-four'),
                   score: 300,
                   players: IList([
                     TeamPlayer(
@@ -1168,7 +1168,7 @@ void main() {
                 ),
                 TeamStanding(
                   rank: 5,
-                  id: 'team-five',
+                  id: const TeamId('team-five'),
                   score: 250,
                   players: IList([
                     TeamPlayer(

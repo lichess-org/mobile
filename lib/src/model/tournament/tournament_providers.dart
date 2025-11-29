@@ -26,7 +26,7 @@ final tournamentPlayerProvider = FutureProvider.autoDispose
     }, name: 'TournamentPlayerProvider');
 
 final tournamentTeamProvider = FutureProvider.autoDispose
-    .family<TournamentTeam, (TournamentId, String)>((Ref ref, (TournamentId, String) params) {
+    .family<TournamentTeam, (TournamentId, TeamId)>((Ref ref, (TournamentId, TeamId) params) {
       return ref.withClientCacheFor(
         (client) => ref.read(tournamentRepositoryProvider).getTournamentTeam(params.$1, params.$2),
         const Duration(seconds: 10),

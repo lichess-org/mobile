@@ -207,7 +207,7 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     }
   }
 
-  void joinOrPause({String? teamId}) {
+  void joinOrPause({TeamId? teamId}) {
     final state = this.state.value;
     if (state == null) {
       return;
