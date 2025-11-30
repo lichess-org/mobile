@@ -40,7 +40,7 @@ class StudyListPaginatorNotifier extends AsyncNotifier<StudyList> {
     final nextPage = state.value?.nextPage ?? 1;
 
     final repo = ref.read(studyRepositoryProvider);
-    return search == null
+    return params.search == null
         ? repo.getStudies(category: params.category, order: params.order, page: nextPage)
         : repo.searchStudies(query: params.search!, order: params.order, page: nextPage);
   }
