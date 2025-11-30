@@ -16,8 +16,8 @@
   <string name="backRankMateDescription">킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.</string>
   <string name="balestraMate">발레스트라 메이트</string>
   <string name="balestraMateDescription">퀸이 남은 퇴로를 차단하고, 비숍이 체크메이트를 가합니다.</string>
-  <string name="blindSwineMate" comment="Description (translatable separately):&#10;&#10;Two rooks team up to mate the king in an area of 2 by 2 squares.">블라인드 스와인 메이트</string>
-  <string name="blindSwineMateDescription" comment="Description for the Blind Swine checkmate pattern.">두 룩이 협력해서 2x2 사각형 영역 안에서 상대 킹을 메이트합니다.</string>
+  <string name="blindSwineMate">블라인드 스와인 메이트</string>
+  <string name="blindSwineMateDescription">두 룩이 협력해서 2x2 사각형 영역 안에서 상대 킹을 메이트합니다.</string>
   <string name="bishopEndgame">비숍 엔드게임</string>
   <string name="bishopEndgameDescription">비숍과 폰만 있는 엔드게임</string>
   <string name="bodenMate">보든 메이트</string>
@@ -26,6 +26,8 @@
   <string name="castlingDescription">왕을 안전하게 피신시키고, 룩을 이용해 공격 태세를 갖춥니다.</string>
   <string name="capturingDefender">보호하는 기물을 제거하세요.</string>
   <string name="capturingDefenderDescription">다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 지켜지지 않는 기물을 잡을 수 있게 됩니다.</string>
+  <string name="cornerMate">코너 메이트</string>
+  <string name="cornerMateDescription">킹을 룩이나 퀸으로 구석에 가두고, 나이트로 체크메이트를 가합니다.</string>
   <string name="crushing">박살내기</string>
   <string name="crushingDescription">상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)</string>
   <string name="doubleBishopMate">2비숍 메이트</string>

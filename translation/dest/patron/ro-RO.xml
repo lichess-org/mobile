@@ -15,7 +15,7 @@
   <string name="newPatrons">Patroni noi</string>
   <string name="freeChess">Șah gratuit pentru toată lumea, pentru totdeauna!</string>
   <string name="noAdsNoSubs">Fără reclame, fără abonamente; dar open-source și pasiune.</string>
-  <string name="thankYou">Îți mulțumim pentru donația ta!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Îți mulțumim pentru donația ta!</string>
   <string name="youHaveLifetime">Ai un cont de Patron pe viață. Asta e minunat!</string>
   <string name="patronUntil">Ai un cont de Patron până pe %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Dacă nu se reînnoiește, contul tău va deveni din nou un cont obișnuit.</string>

@@ -14,7 +14,7 @@
   <string name="newPatrons">Nuovi Mecenati</string>
   <string name="freeChess">Scacchi gratis per tutti, per sempre!</string>
   <string name="noAdsNoSubs">Niente pubblicità, nessun abbonamento, ma solo open-source e passione.</string>
-  <string name="thankYou">Grazie per la tua donazione!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Grazie per la tua donazione!</string>
   <string name="youHaveLifetime">Hai un account Patron per tutta la vita. È fantastico!</string>
   <string name="patronUntil">Il tuo account Patron durerà fino al %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Se non lo rinnovi, il tuo account tornerà ad essere un account normale.</string>

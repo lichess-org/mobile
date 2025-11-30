@@ -14,7 +14,7 @@
   <string name="newPatrons">Babesle berriak</string>
   <string name="freeChess">Doako xakea, guztiontzat, betiko!</string>
   <string name="noAdsNoSubs">Ez dago iragarkirik, ez kuotarik baina bai software librea, ordea.</string>
-  <string name="thankYou">Eskerrik asko zure dohaintzagatik!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Eskerrik asko zure dohaintzagatik!</string>
   <string name="youHaveLifetime">Bizi guztirako babesle kontua duzu. Hori ederra da!</string>
   <string name="patronUntil">Babesle kontua duzu egun honetara arte %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Ez baduzu berritzen, zure kontua kontu arrunt bihurtuko da.</string>
