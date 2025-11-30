@@ -436,7 +436,7 @@ void main() {
 
       expect(find.text('View the solution'), findsOneWidget);
       await tester.tap(find.byTooltip('View the solution'));
-      // Wait for correct move and oponent's response to be played
+      // Wait for correct move and opponent's response to be played
       await tester.pump(const Duration(seconds: 1));
 
       expect(find.text('Get a hint'), findsNothing);
