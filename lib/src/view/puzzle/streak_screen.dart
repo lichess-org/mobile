@@ -106,6 +106,7 @@ class _BodyState extends ConsumerState<_Body> {
         final previousPuzzle = previous!.requireValue.puzzle;
 
         if (currentPuzzle.puzzle.id != previousPuzzle.puzzle.id) {
+          _onClearShapes();
           final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
