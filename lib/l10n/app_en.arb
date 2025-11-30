@@ -33,7 +33,7 @@
   "mobileMustBeLoggedIn": "You must be logged in to view this page.",
   "mobileNoSearchResults": "No results",
   "mobileNotAllFeaturesAreAvailable": "Please note that not all features from the old app or the website are currently available, but we are adding features all the time.",
-  "mobileNotFollowingAnyUser": "You are not following any user.",
+  "mobileNotFollowingAnyUser": "You are not following any users.",
   "mobileOkButton": "OK",
   "mobileOverTheBoard": "Over the board",
   "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
@@ -803,6 +803,7 @@
   "puzzleAdvanced": "Advanced",
   "puzzleLengths": "Lengths",
   "puzzleMates": "Mates",
+  "puzzleMateThemes": "Mate themes",
   "puzzleGoals": "Goals",
   "puzzleOrigin": "Origin",
   "puzzleSpecialMoves": "Special moves",
@@ -964,6 +965,10 @@
   "puzzleThemeAttractionDescription": "An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.",
   "puzzleThemeBackRankMate": "Back rank mate",
   "puzzleThemeBackRankMateDescription": "Checkmate the king on the home rank, when it is trapped there by its own pieces.",
+  "puzzleThemeBalestraMate": "Balestra mate",
+  "puzzleThemeBalestraMateDescription": "A bishop delivers the checkmate, while a queen blocks the remaining escape squares",
+  "puzzleThemeBlindSwineMate": "Blind Swine mate",
+  "puzzleThemeBlindSwineMateDescription": "Two rooks team up to mate the king in an area of 2 by 2 squares.",
   "puzzleThemeBishopEndgame": "Bishop endgame",
   "puzzleThemeBishopEndgameDescription": "An endgame with only bishops and pawns.",
   "puzzleThemeBodenMate": "Boden's mate",
@@ -1009,6 +1014,8 @@
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
   "puzzleThemeKillBoxMate": "Kill box mate",
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
+  "puzzleThemeTriangleMate": "Triangle mate",
+  "puzzleThemeTriangleMateDescription": "The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.",
   "puzzleThemeVukovicMate": "Vukovic mate",
   "puzzleThemeVukovicMateDescription": "A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king's escape squares.",
   "puzzleThemeKnightEndgame": "Knight endgame",
@@ -1223,7 +1230,7 @@
       }
     }
   },
-  "dtzWithRounding": "DTZ50'' with rounding, based on number of half-moves until next capture or pawn move",
+  "dtzWithRounding": "DTZ50'' with rounding, based on number of half-moves until next capture, pawn move, or checkmate",
   "noGameFound": "No game found",
   "maxDepthReached": "Max depth reached!",
   "maybeIncludeMoreGamesFromThePreferencesMenu": "Maybe include more games from the preferences menu?",
@@ -2206,7 +2213,8 @@
   "crosstable": "Crosstable",
   "youCanAlsoScrollOverTheBoardToMoveInTheGame": "Scroll over the board to move in the game.",
   "scrollOverComputerVariationsToPreviewThem": "Scroll over computer variations to preview them.",
-  "analysisShapesHowTo": "Press shift+click or right-click to draw circles and arrows on the board.",
+  "analysisShapesHowTo": "Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:",
+  "primaryColorArrowsHowTo": "Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.",
   "letOtherPlayersMessageYou": "Let other players message you",
   "receiveForumNotifications": "Receive notifications when mentioned in the forum",
   "shareYourInsightsData": "Share your chess insights data",
@@ -2630,8 +2638,8 @@
   },
   "simulDescription": "Simul description",
   "simulDescriptionHelp": "Anything you want to tell the participants?",
-  "markdownAvailable": "{param} is available for more advanced syntax.",
-  "@markdownAvailable": {
+  "markdownIsAvailable": "{param} is available for formatting.",
+  "@markdownIsAvailable": {
     "placeholders": {
       "param": {
         "type": "String"
@@ -3176,6 +3184,7 @@
   "studyRecentlyUpdated": "Recently updated",
   "studyMostPopular": "Most popular",
   "studyAlphabetical": "Alphabetical",
+  "studyRelevant": "Relevant",
   "studyAddNewChapter": "Add a new chapter",
   "studyAddMembers": "Add members",
   "studyInviteToTheStudy": "Invite to the study",
@@ -3438,6 +3447,22 @@
   },
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teamBattleOfNbTeams": "{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}",
+  "@teamBattleOfNbTeams": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teamNbLeadersPerTeam": "{count, plural, =1{One leader per team} other{{count} leaders per team}}",
+  "@teamNbLeadersPerTeam": {
     "placeholders": {
       "count": {
         "type": "int"

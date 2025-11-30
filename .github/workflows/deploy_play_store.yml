@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: temurin
@@ -31,7 +31,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Checkout mobile code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         run: flutter pub get

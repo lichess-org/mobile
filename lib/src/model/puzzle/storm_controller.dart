@@ -6,8 +6,9 @@ import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -16,22 +17,33 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'storm_controller.freezed.dart';
-part 'storm_controller.g.dart';
 
 const malus = Duration(seconds: 10);
 const moveDelay = Duration(milliseconds: 200);
 const startTime = Duration(minutes: 3);
 
-@riverpod
-class StormController extends _$StormController {
+typedef StormControllerParams = (IList<LitePuzzle> puzzles, DateTime timestamp);
+
+final stormControllerProvider = NotifierProvider.autoDispose
+    .family<StormController, StormState, StormControllerParams>(
+      StormController.new,
+      name: 'StormControllerProvider',
+    );
+
+class StormController extends Notifier<StormState> {
+  StormController(this.params);
+
+  final StormControllerParams params;
+
   Timer? _firstMoveTimer;
 
+  IList<LitePuzzle> get _puzzles => params.$1;
+
   @override
-  StormState build(IList<LitePuzzle> puzzles, DateTime timestamp) {
-    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
+  StormState build() {
+    final pov = Chess.fromSetup(Setup.parseFen(_puzzles.first.fen));
     final clock = StormClock();
 
     ref.onDispose(() {
@@ -43,7 +55,7 @@ class StormController extends _$StormController {
       firstMovePlayed: false,
       mode: StormMode.initial,
       puzzleIndex: 0,
-      puzzle: puzzles.first,
+      puzzle: _puzzles.first,
       moves: 0,
       errors: 0,
       history: const IList.empty(),
@@ -139,8 +151,8 @@ class StormController extends _$StormController {
 
     final stats = _getStats();
 
-    final session = ref.read(authSessionProvider);
-    if (session != null) {
+    final authUser = ref.read(authControllerProvider);
+    if (authUser != null) {
       final res = await ref.withClient(
         (client) => Result.capture(
           PuzzleRepository(client).postStormRun(stats).timeout(const Duration(seconds: 2)),
@@ -181,8 +193,8 @@ class StormController extends _$StormController {
 
     state = state.copyWith(
       puzzleIndex: newPuzzleIndex,
-      puzzle: puzzles[newPuzzleIndex],
-      position: Chess.fromSetup(Setup.parseFen(puzzles[newPuzzleIndex].fen)),
+      puzzle: _puzzles[newPuzzleIndex],
+      position: Chess.fromSetup(Setup.parseFen(_puzzles[newPuzzleIndex].fen)),
       moveIndex: -1,
       numSolved: result ? state.numSolved + 1 : state.numSolved,
       lastSolvedTime: DateTime.now(),
@@ -269,7 +281,7 @@ class StormController extends _$StormController {
   }
 
   bool _isNextPuzzleAvailable() {
-    return state.puzzleIndex + 1 < puzzles.length;
+    return state.puzzleIndex + 1 < _puzzles.length;
   }
 }
 

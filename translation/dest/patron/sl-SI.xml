@@ -16,7 +16,7 @@
   <string name="newPatrons">Novi pokrovitelji</string>
   <string name="freeChess">Zastonj šah za vse, za vedno!</string>
   <string name="noAdsNoSubs">Brez oglasov, brez naročnin; toda odprtokoden in strasten.</string>
-  <string name="thankYou">Hvala za vašo donacijo!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Hvala za vašo donacijo!</string>
   <string name="youHaveLifetime">Imate vseživljenski pokroviteljski račun. To je super!</string>
   <string name="patronUntil">Imate pokroviteljski račun od %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Če ga ne obnovite, se bo vaš račun vrnil na običajni račun.</string>

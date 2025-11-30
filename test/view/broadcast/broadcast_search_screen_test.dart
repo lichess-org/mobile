@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -31,14 +29,16 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastSearchScreen(),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-          ? find.byType(CupertinoSearchTextField)
-          : find.byType(SearchBar);
+      final textFieldFinder = find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'world championship');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -57,14 +57,16 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastSearchScreen(),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-          ? find.byType(CupertinoSearchTextField)
-          : find.byType(SearchBar);
+      final textFieldFinder = find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'azerty');
       await tester.testTextInput.receiveAction(TextInputAction.done);

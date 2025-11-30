@@ -73,7 +73,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du följer inte någon användare.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleMates => 'Mattar';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Schackmatta kungen på första raden, när den är instängd av sina egna pjäser.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Löparslutspel';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ett torn ligger bredvid motståndarens kung och understöds av en dam som också stänger kungens flyktrutor. Tornet och damen fångar fiendens kung i en 3 gånger 3-kvadrat, \"dödsbox\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matt';
@@ -4028,6 +4049,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get analysisShapesHowTo => 'Håll nere Skift när du klickar eller högerklickar för att rita cirklar och pilar på brädet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Tillåt att andra spelare skickar meddelanden till dig';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsSv extends AppLocalizations {
   String get simulDescriptionHelp => 'Något du vill berätta för deltagarna?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param är tillgängligt för mer avancerad syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetisk';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Lägg till ett nytt kapitel';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Klistra in din PGN-kod här, upp till $count partier',
       one: 'Klistra in din PGN-kod här, upp till $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tävling med $count lag',
+      one: 'Tävling med $count lag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ledare per lag',
+      one: 'En ledare per lag',
     );
     return '$_temp0';
   }

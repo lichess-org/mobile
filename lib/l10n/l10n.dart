@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileNotFollowingAnyUser.
   ///
   /// In en, this message translates to:
-  /// **'You are not following any user.'**
+  /// **'You are not following any users.'**
   String get mobileNotFollowingAnyUser;
 
   /// No description provided for @mobileOkButton.
@@ -2540,6 +2540,12 @@ abstract class AppLocalizations {
   /// **'Mates'**
   String get puzzleMates;
 
+  /// No description provided for @puzzleMateThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate themes'**
+  String get puzzleMateThemes;
+
   /// No description provided for @puzzleGoals.
   ///
   /// In en, this message translates to:
@@ -3026,6 +3032,30 @@ abstract class AppLocalizations {
   /// **'Checkmate the king on the home rank, when it is trapped there by its own pieces.'**
   String get puzzleThemeBackRankMateDescription;
 
+  /// No description provided for @puzzleThemeBalestraMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Balestra mate'**
+  String get puzzleThemeBalestraMate;
+
+  /// No description provided for @puzzleThemeBalestraMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A bishop delivers the checkmate, while a queen blocks the remaining escape squares'**
+  String get puzzleThemeBalestraMateDescription;
+
+  /// No description provided for @puzzleThemeBlindSwineMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind Swine mate'**
+  String get puzzleThemeBlindSwineMate;
+
+  /// No description provided for @puzzleThemeBlindSwineMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two rooks team up to mate the king in an area of 2 by 2 squares.'**
+  String get puzzleThemeBlindSwineMateDescription;
+
   /// No description provided for @puzzleThemeBishopEndgame.
   ///
   /// In en, this message translates to:
@@ -3295,6 +3325,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".'**
   String get puzzleThemeKillBoxMateDescription;
+
+  /// No description provided for @puzzleThemeTriangleMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Triangle mate'**
+  String get puzzleThemeTriangleMate;
+
+  /// No description provided for @puzzleThemeTriangleMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.'**
+  String get puzzleThemeTriangleMateDescription;
 
   /// No description provided for @puzzleThemeVukovicMate.
   ///
@@ -4319,7 +4361,7 @@ abstract class AppLocalizations {
   /// No description provided for @dtzWithRounding.
   ///
   /// In en, this message translates to:
-  /// **'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move'**
+  /// **'DTZ50\'\' with rounding, based on number of half-moves until next capture, pawn move, or checkmate'**
   String get dtzWithRounding;
 
   /// No description provided for @noGameFound.
@@ -7385,8 +7427,14 @@ abstract class AppLocalizations {
   /// No description provided for @analysisShapesHowTo.
   ///
   /// In en, this message translates to:
-  /// **'Press shift+click or right-click to draw circles and arrows on the board.'**
+  /// **'Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:'**
   String get analysisShapesHowTo;
+
+  /// No description provided for @primaryColorArrowsHowTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.'**
+  String get primaryColorArrowsHowTo;
 
   /// No description provided for @letOtherPlayersMessageYou.
   ///
@@ -8498,11 +8546,11 @@ abstract class AppLocalizations {
   /// **'Anything you want to tell the participants?'**
   String get simulDescriptionHelp;
 
-  /// No description provided for @markdownAvailable.
+  /// No description provided for @markdownIsAvailable.
   ///
   /// In en, this message translates to:
-  /// **'{param} is available for more advanced syntax.'**
-  String markdownAvailable(String param);
+  /// **'{param} is available for formatting.'**
+  String markdownIsAvailable(String param);
 
   /// No description provided for @embedsAvailable.
   ///
@@ -9457,6 +9505,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Alphabetical'**
   String get studyAlphabetical;
+
+  /// No description provided for @studyRelevant.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevant'**
+  String get studyRelevant;
 
   /// No description provided for @studyAddNewChapter.
   ///
@@ -10483,6 +10537,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
+
+  /// No description provided for @teamBattleOfNbTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}'**
+  String teamBattleOfNbTeams(int count);
+
+  /// No description provided for @teamNbLeadersPerTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One leader per team} other{{count} leaders per team}}'**
+  String teamNbLeadersPerTeam(int count);
 
   /// No description provided for @timeagoJustNow.
   ///

@@ -64,6 +64,14 @@ class _BodyState extends ConsumerState<_Body> {
   Side orientation = Side.white;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showConfigureGameSheet(context, isDismissible: true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
@@ -235,7 +243,6 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
-
     final clock = ref.watch(overTheBoardClockProvider);
 
     return BottomBar(
@@ -288,6 +295,20 @@ class _BottomBar extends ConsumerWidget {
                 }
               : null,
           icon: CupertinoIcons.chevron_forward,
+        ),
+        BottomBarButton(
+          label: 'Takeback',
+          onTap: gameState.canGoBack
+              ? () {
+                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
+              : null,
+          icon: Icons.undo,
         ),
       ],
     );
@@ -368,9 +389,7 @@ class _Player extends ConsumerWidget {
   const _Player({required this.clockKey, required this.side, required this.upsideDown});
 
   final Side side;
-
   final Key clockKey;
-
   final bool upsideDown;
 
   @override
@@ -395,7 +414,6 @@ class _Player extends ConsumerWidget {
                 timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
                 key: clockKey,
                 active: clock.activeClock == side,
-                // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
                 emergencyThreshold: Duration(
                   seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
                 ),

@@ -73,7 +73,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'कृपया ध्यान दें कि पुराने ऐप या वेबसाइट की सभी सुविधाएं वर्तमान में उपलब्ध नहीं हैं, लेकिन हम लगातार सुविधाएं जोड़ रहे हैं।';
 
   @override
-  String get mobileNotFollowingAnyUser => 'आप किसी यूजर को फॉलो नहीं कर रहे।';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'ठीक है';
@@ -1420,6 +1420,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleMates => 'साथी';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'लक्ष्य';
 
   @override
@@ -1719,6 +1722,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'होम पंक्ति पर राजा को मात दे, जब वह अपने टुकड़ों से वहां फंस गया हो।';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'ऊँट का एंडगेम';
 
   @override
@@ -1852,6 +1867,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -4026,6 +4047,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get analysisShapesHowTo => 'बोर्ड पर मंडलियां और तीरों को आकर्षित करने के लिए shift + click या right-click दबाएं';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'अन्य खिलाड़ियों को आपको संदेश देने दें';
 
   @override
@@ -4643,8 +4667,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get simulDescriptionHelp => 'क्या आप प्रतिभागियों को कुछ बताना चाहते हैं?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param अत्याधुनिक स्वरूपण के लिए उपलब्ध है।';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5535,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyAlphabetical => 'वर्णक्रमानुसार';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'एक नया अध्याय जोड़ें';
 
   @override
@@ -6069,6 +6096,28 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'यहां अपना PGN टेक्स्ट डाले,$count खेल तक',
       one: 'यहां अपना PGN टेक्स्ट डाले,$count खेल तक',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

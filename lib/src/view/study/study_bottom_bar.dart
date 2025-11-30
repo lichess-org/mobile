@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -32,7 +33,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).valueOrNull;
+    final state = ref.watch(studyControllerProvider(id)).value;
     if (state == null) {
       return const BottomBar(children: []);
     }
@@ -53,6 +54,34 @@ class _AnalysisBottomBar extends ConsumerWidget {
           hasNextChapter: state.hasNextChapter,
           blink: !state.isIntroductoryChapter && state.isAtEndOfChapter && state.hasNextChapter,
         ),
+        if (state.isComputerAnalysisAllowed)
+          Builder(
+            builder: (context) {
+              Future<void>? toggleFuture;
+              return FutureBuilder(
+                future: toggleFuture,
+                builder: (context, snapshot) {
+                  return EngineButton(
+                    savedEval: state.currentNode.eval,
+                    onTap: snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            toggleFuture = ref
+                                .read(studyControllerProvider(id).notifier)
+                                .toggleEngine();
+                            try {
+                              await toggleFuture;
+                            } finally {
+                              toggleFuture = null;
+                            }
+                          }
+                        : null,
+                    goDeeper: () =>
+                        ref.read(studyControllerProvider(id).notifier).requestEval(goDeeper: true),
+                  );
+                },
+              );
+            },
+          ),
         RepeatButton(
           onLongPress: onGoBack,
           child: BottomBarButton(

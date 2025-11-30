@@ -769,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">También puedes usar la rueda del ratón para desplazarte por la partida.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Mantén pulsado sobre las variantes del análisis para previsualizarlas.</string>
   <string name="analysisShapesHowTo">Haz clic con el botón derecho o Máyus+clic para dibujar círculos y flechas en el tablero.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl o mayúsculas = rojo; comando, alt, o meta = azul; una tecla de cada = amarillo.</string>
   <string name="letOtherPlayersMessageYou">Permitir que otras personas te envíen mensajes</string>
   <string name="receiveForumNotifications">Recibir notificaciones cuando alguien te mencione en el foro</string>
   <string name="shareYourInsightsData">Comparte tus datos estadísticos</string>
@@ -974,7 +975,7 @@ Déjalo vacío para empezar las partidas desde la posición inicial habitual.</s
   <string name="simulFeaturedHelp">Muestra la simultánea públicamente en %s. Deshabilitado para simultáneas privadas.</string>
   <string name="simulDescription">Descripción de la simultánea</string>
   <string name="simulDescriptionHelp">¿Quieres decirle algo a los participantes?</string>
-  <string name="markdownAvailable">Se puede usar %s para formatear el texto.</string>
+  <string name="markdownIsAvailable">El formato de %s está disponible.</string>
   <string name="embedsAvailable">Pega el enlace de una partida o de un capítulo de estudio para insertarlo.</string>
   <string name="inYourLocalTimezone">En tu zona horaria local</string>
   <string name="tournChat">Chat del torneo</string>

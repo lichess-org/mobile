@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -18,7 +19,7 @@ const kSmallBoardScale = 0.8;
 typedef BoardBuilder =
     Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
 
-typedef EngineGaugeBuilder = Widget Function(BuildContext context, Orientation orientation);
+typedef EngineGaugeBuilder = Widget Function(BuildContext context);
 
 enum AnalysisTab {
   explorer(Icons.explore),
@@ -133,7 +134,6 @@ class AnalysisLayout extends StatelessWidget {
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
-    this.smallBoard = false,
     super.key,
   });
 
@@ -172,11 +172,6 @@ class AnalysisLayout extends StatelessWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
-
-  /// If true, the board is displayed in a small size on portrait orientation.
-  ///
-  /// This is `false` by default.
-  final bool smallBoard;
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +256,11 @@ class AnalysisLayout extends StatelessWidget {
                         ),
                         if (engineGaugeBuilder != null) ...[
                           const SizedBox(width: 4.0),
-                          engineGaugeBuilder!(context, Orientation.landscape),
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                            child: engineGaugeBuilder!(context),
+                          ),
                         ],
                         const SizedBox(width: 16.0),
                         Expanded(
@@ -287,22 +286,23 @@ class AnalysisLayout extends StatelessWidget {
                   final defaultBoardSize = constraints.biggest.shortestSide;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
+                  final evalGaugeSize = engineGaugeBuilder != null ? kEvalGaugeSize : 0.0;
                   final boardSize = isTablet || isSmallScreen
-                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                      : defaultBoardSize;
+                      ? defaultBoardSize - evalGaugeSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize - evalGaugeSize - kAnalysisPortraitBoardSidePadding * 2;
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (engineGaugeBuilder != null)
-                        engineGaugeBuilder!(context, Orientation.portrait),
                       if (engineLines != null) engineLines!,
                       Padding(
                         padding: isTablet
                             ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                            : EdgeInsets.zero,
+                            : const EdgeInsets.symmetric(
+                                horizontal: kAnalysisPortraitBoardSidePadding,
+                              ),
                         child: Column(
                           children: [
                             if (boardHeader != null)
@@ -321,12 +321,18 @@ class AnalysisLayout extends StatelessWidget {
                                 height: kAnalysisBoardHeaderOrFooterHeight,
                                 child: boardHeader,
                               ),
-                            boardBuilder(
-                              context,
-                              boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
-                              isTablet && boardHeader == null && boardFooter != null
-                                  ? tabletBoardRadius
-                                  : null,
+                            Row(
+                              children: [
+                                boardBuilder(
+                                  context,
+                                  boardSize,
+                                  isTablet && boardHeader == null && boardFooter != null
+                                      ? tabletBoardRadius
+                                      : null,
+                                ),
+                                if (engineGaugeBuilder != null)
+                                  SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
+                              ],
                             ),
                             if (boardFooter != null)
                               Container(

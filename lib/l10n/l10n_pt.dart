@@ -73,7 +73,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Por favor, note que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar funcionalidades o tempo todo.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Não segues nenhum utilizador.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleMates => 'Xeque-mates';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Objetivos';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dá mate ao rei na fila inicial, quando está preso pelas suas próprias peças.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de bispos';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Uma torre está ao lado do rei inimigo apoiada por uma dama que também bloqueia as casas de fuga do rei. A torre e a dama apanham o rei inimigo numa “caixa de morte” de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vukovic';
@@ -4028,6 +4049,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get analysisShapesHowTo => 'Pressiona shift+clique ou clica com o botão direito do rato para desenhares círculos e setas no tabuleiro.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl ou shift = vermelho; comand, alt, ou meta = azul; uma tecla de cada = amarelo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permitir que outros jogadores te enviem mensagens';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get simulDescriptionHelp => 'Quer dizer alguma coisa aos participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está disponível para sintaxe mais avançada.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get studyAlphabetical => 'Ordem alfabética';
 
   @override
+  String get studyRelevant => 'Relevante';
+
+  @override
   String get studyAddNewChapter => 'Adicionar um novo capítulo';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: 'Cole seu texto PGN aqui, até $count jogos',
       one: 'Cole seu texto PGN aqui, até $count jogo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipas',
+      one: 'Batalha de $count equipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipa',
+      one: 'Um líder por equipa',
     );
     return '$_temp0';
   }
@@ -7669,6 +7718,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleMates => 'Xeque-mates';
 
   @override
+  String get puzzleMateThemes => 'Temas de mate';
+
+  @override
   String get puzzleGoals => 'Objetivos';
 
   @override
@@ -7968,6 +8020,18 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeBackRankMateDescription => 'Dê o xeque-mate no rei na última fileira, quando ele estiver bloqueado pelas próprias peças.';
+
+  @override
+  String get puzzleThemeBalestraMate => 'Mate da besta';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Um bispo dá o xeque-mate, enquanto uma dama bloqueia as casas de fuga';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate do porco cego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Duas torres se unem para pôr o rei em cheque em um quadrado de 2x2.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Finais de bispo';
@@ -10894,8 +10958,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get simulDescriptionHelp => 'Você gostaria de dizer algo aos participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está disponível para opções de formatação adicionais.';
+  String markdownIsAvailable(String param) {
+    return '$param está disponível para formatação.';
   }
 
   @override
@@ -11368,7 +11432,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       count,
       locale: localeName,
       other: 'Você precisa jogar ainda $count partidas valendo pontos',
-      one: 'Você precisa jogar ainda $count partidas valendo pontos',
+      one: 'Você precisa jogar ainda $count partida valendo pontos',
     );
     return '$_temp0';
   }
@@ -11760,6 +11824,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyAlphabetical => 'Em ordem alfabética';
+
+  @override
+  String get studyRelevant => 'Relevante';
 
   @override
   String get studyAddNewChapter => 'Adicionar um novo capítulo';
@@ -12320,6 +12387,28 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       locale: localeName,
       other: 'Cole seu texto PGN aqui, até $count jogos',
       one: 'Cole seu texto PGN aqui, até $count jogo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalha de $count equipes',
+      one: 'Batalha de $count equipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipe',
+      one: 'Um líder por equipe',
     );
     return '$_temp0';
   }

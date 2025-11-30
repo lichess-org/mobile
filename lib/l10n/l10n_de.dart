@@ -1420,6 +1420,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleMates => 'Matts';
 
   @override
+  String get puzzleMateThemes => 'Matt-Themen';
+
+  @override
   String get puzzleGoals => 'Ziele';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Setze den König auf der Grundreihe matt, wenn er dort durch seine eigenen Figuren blockiert wird.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra-Matt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Ein Läufer setzt Matt während die Dame die verbleibenden Fluchtfelder blockiert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinder-Säue-Matt';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türme arbeiten zusammen, um den König auf einer Fläche von 2x2 Feldern Matt zu setzen.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Läuferendspiel';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Dreiecks-Matt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Die Dame und der Turm bilden auf derselben Reihe oder Linie und im Abstand von einem Feld mit dem gegnerischen König ein Dreieck.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic-Matt';
@@ -4028,6 +4049,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analysisShapesHowTo => 'Drücke Shift+Mausklick oder Rechtsklick, um Kreise und Pfeile auf dem Brett zu zeichnen.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Strg oder Shift = rot; Befehl, Alt oder Meta = Blau; von beiden eine Taste = Gelb.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Erlaube anderen Spielern dich zu kontaktieren';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get simulDescriptionHelp => 'Möchtest du den Teilnehmern etwas mitteilen?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param ist für erweiterte Formatierung verfügbar.';
+  String markdownIsAvailable(String param) {
+    return '$param ist zur Formatierung verfügbar.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studyAlphabetical => 'Alphabetisch';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Neues Kapitel hinzufügen';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: 'Füge dein PGN Text hier ein, bis zu $count Partien',
       one: 'Füge deinen PGN Text hier ein, bis zu $count Partie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kampf von $count Teams',
+      one: 'Kampf von $count Teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Führende pro Team',
+      one: '$count Führende pro Team',
     );
     return '$_temp0';
   }

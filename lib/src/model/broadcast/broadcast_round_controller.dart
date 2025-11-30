@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -15,13 +16,21 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_round_controller.freezed.dart';
-part 'broadcast_round_controller.g.dart';
 
-@riverpod
-class BroadcastRoundController extends _$BroadcastRoundController {
+/// A provider for [BroadcastRoundController].
+final broadcastRoundControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<BroadcastRoundController, BroadcastRoundState, BroadcastRoundId>(
+      BroadcastRoundController.new,
+      name: 'BroadcastRoundControllerProvider',
+    );
+
+class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
+  BroadcastRoundController(this.broadcastRoundId);
+
+  final BroadcastRoundId broadcastRoundId;
+
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -37,7 +46,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   Object? _key = Object();
 
   @override
-  Future<BroadcastRoundState> build(BroadcastRoundId broadcastRoundId) async {
+  Future<BroadcastRoundState> build() async {
     ref.onDispose(() {
       _key = null;
       _subscription?.cancel();
@@ -56,7 +65,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.round.status == RoundStatus.live) {
+      if (state.value?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
           _syncRound();
         });
@@ -65,7 +74,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.round.status == RoundStatus.live) {
+        if (state.value?.round.status == RoundStatus.live) {
           _syncRoundDebouncer(() {
             _syncRound();
           });
@@ -74,8 +83,12 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
-
-    return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
+    return BroadcastRoundState(
+      round: round.round,
+      games: round.games,
+      observedGames: ISet(),
+      isTeamTournament: round.tournament.teamTable == true,
+    );
   }
 
   Future<void> _syncRound() async {
@@ -85,14 +98,19 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
     // check provider is still mounted
     if (key == _key) {
+      final isTeamTournament = round.tournament.teamTable == true;
       state = AsyncData(
         BroadcastRoundState(
           round: round.round,
           games: round.games,
           observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
+          isTeamTournament: isTeamTournament,
         ),
       );
       _sendEvalMultiGet();
+      if (isTeamTournament) {
+        ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId));
+      }
     }
   }
 
@@ -174,12 +192,13 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     _sendEvalMultiGet();
-
-    // Add delay before invalidating team matches to allow server to update scores
-    Future.delayed(
-      const Duration(seconds: 5),
-      () => ref.refresh(broadcastTeamMatchesProvider(broadcastRoundId)),
-    );
+    if (state.requireValue.isTeamTournament) {
+      // Add delay before invalidating team matches to allow server to update scores
+      Future.delayed(
+        const Duration(seconds: 5),
+        () => ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId)),
+      );
+    }
   }
 
   void _handleClockEvent(SocketEvent event) {
@@ -244,7 +263,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void addObservedGame(BroadcastGameId gameId) {
-    if (state.valueOrNull?.games.containsKey(gameId) != true) return;
+    if (state.value?.games.containsKey(gameId) != true) return;
 
     state = AsyncData(
       state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
@@ -287,5 +306,8 @@ sealed class BroadcastRoundState with _$BroadcastRoundState {
     ///
     /// The controller has the responsibility to maintain [observedGames] as a subset of [games].
     required ISet<BroadcastGameId> observedGames,
+
+    /// Whether the tournament is a team event
+    required bool isTeamTournament,
   }) = _BroadcastRoundState;
 }

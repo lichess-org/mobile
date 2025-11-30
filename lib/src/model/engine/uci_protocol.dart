@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -67,8 +68,10 @@ class UCIProtocol {
     _sendAndLog('isready');
   }
 
+  final spaceRegex = RegExp(r'\s+');
+
   void received(String line) {
-    final parts = line.trim().split(RegExp(r'\s+'));
+    final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
       // unconditionally use this mode.
@@ -126,8 +129,8 @@ class UCIProtocol {
 
       if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-      final pivot = _work!.threatMode == true ? 0 : 1;
-      final ev = _work!.ply % 2 == pivot ? -povEv : povEv;
+      final pivot = _work!.threatMode ? Side.black : Side.white;
+      final ev = _work!.position.turn == pivot ? povEv : -povEv;
 
       // For now, ignore most upperbound/lowerbound messages.
       // However non-primary pvs may only have an upperbound.
@@ -137,7 +140,7 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = LocalEval(
-          position: _work!.position,
+          position: _work!.threatMode ? _work!.threatModePosition : _work!.position,
           searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,
           nodes: nodes,
@@ -145,6 +148,7 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
+          threatMode: _work!.threatMode,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(
@@ -188,14 +192,16 @@ class UCIProtocol {
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 
       _sendAndLog(
-        [
-          'position fen',
-          _work!.initialPosition.fen,
-          'moves',
-          ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-          ),
-        ].join(' '),
+        _work!.threatMode
+            ? 'position fen ${_work!.threatModePosition.fen}'
+            : [
+                'position fen',
+                _work!.initialPosition.fen,
+                'moves',
+                ..._work!.steps.map(
+                  (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
+                ),
+              ].join(' '),
       );
       _sendAndLog('go movetime ${_work!.searchTime.inMilliseconds}');
       _isComputing.value = true;

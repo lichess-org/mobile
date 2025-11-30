@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +14,8 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -52,20 +53,20 @@ final offlineClient = MockClient((request) {
 /// It will be wrapped in a [MaterialApp] to simulate a simple app.
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [userSession] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
-  List<Override>? overrides,
-  AuthSessionState? userSession,
+  Map<ProviderOrFamily, Override>? overrides,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
 }) {
   return makeTestProviderScope(
     tester,
     child: _FakeApp(home: home),
     overrides: overrides,
-    userSession: userSession,
+    authUser: authUser,
     defaultPreferences: defaultPreferences,
   );
 }
@@ -102,19 +103,19 @@ class _FakeAppState extends ConsumerState<_FakeApp> {
 Future<Widget> makeOfflineTestProviderScope(
   WidgetTester tester, {
   required Widget child,
-  List<Override>? overrides,
-  AuthSessionState? userSession,
+  Map<ProviderOrFamily, Override>? overrides,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
 }) => makeTestProviderScope(
   tester,
   child: child,
-  overrides: [
-    httpClientFactoryProvider.overrideWith((ref) {
+  overrides: {
+    httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
       return FakeHttpClientFactory(() => offlineClient);
     }),
-    ...overrides ?? [],
-  ],
-  userSession: userSession,
+    ...?overrides,
+  },
+  authUser: authUser,
   defaultPreferences: defaultPreferences,
 );
 
@@ -125,13 +126,13 @@ Future<Widget> makeOfflineTestProviderScope(
 /// by [surfaceSize] (which default to [kTestSurfaceSize]).
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
-/// The [userSession] parameter can be used to set the initial user session state.
+/// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
 Future<Widget> makeTestProviderScope(
   WidgetTester tester, {
   required Widget child,
-  List<Override>? overrides,
-  AuthSessionState? userSession,
+  Map<ProviderOrFamily, Override>? overrides,
+  AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
   Size surfaceSize = kTestSurfaceSize,
   Key? key,
@@ -160,7 +161,7 @@ Future<Widget> makeTestProviderScope(
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
-    if (userSession != null) kSessionStorageKey: jsonEncode(userSession.toJson()),
+    if (authUser != null) kAuthStorageKey: jsonEncode(authUser.toJson()),
   });
 
   final flutterTestOnError = FlutterError.onError!;
@@ -185,73 +186,64 @@ Future<Widget> makeTestProviderScope(
   // TODO consider loading true fonts as well
   FlutterError.onError = ignoreOverflowErrors;
 
+  final Map<ProviderOrFamily, Override> overrideMap = {
+    notificationDisplayProvider: notificationDisplayProvider.overrideWith((ref) {
+      return FakeNotificationDisplay();
+    }),
+    databaseProvider: databaseProvider.overrideWith((ref) async {
+      final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
+      ref.onDispose(testDb.close);
+      return testDb;
+    }),
+    httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+      return FakeHttpClientFactory(() => mockClient);
+    }),
+    aggregatorProvider: aggregatorProvider.overrideWith((ref) {
+      // Use a zero aggregation interval to disable aggregation for tests.
+      return Aggregator(ref.read(lichessClientProvider), aggregationInterval: Duration.zero);
+    }),
+    webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith((ref) {
+      return defaultFakeWebSocketChannelFactory;
+    }),
+    socketPoolProvider: socketPoolProvider.overrideWith((ref) {
+      final pool = SocketPool(ref);
+      ref.onDispose(pool.dispose);
+      return pool;
+    }),
+    connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
+    showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
+    soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
+    openingServiceProvider: openingServiceProvider.overrideWithValue(FakeOpeningService()),
+    preloadedDataProvider: preloadedDataProvider.overrideWith((ref) {
+      return (
+        sri: 'test-sri',
+        packageInfo: PackageInfo(
+          appName: 'lichess_mobile_test',
+          version: '0.0.0',
+          buildNumber: '0',
+          packageName: 'lichess_mobile_test',
+        ),
+        deviceInfo: BaseDeviceInfo({
+          'name': 'test',
+          'model': 'test',
+          'manufacturer': 'test',
+          'systemName': 'test',
+          'systemVersion': 'test',
+          'identifierForVendor': 'test',
+          'isPhysicalDevice': true,
+        }),
+        authUser: authUser,
+        engineMaxMemoryInMb: 256,
+        appDocumentsDirectory: null,
+        appSupportDirectory: null,
+      );
+    }),
+    ...?overrides,
+  };
+
   return ProviderScope(
     key: key,
-    overrides: [
-      // ignore: scoped_providers_should_specify_dependencies
-      notificationDisplayProvider.overrideWith((ref) {
-        return FakeNotificationDisplay();
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      databaseProvider.overrideWith((ref) async {
-        final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
-        ref.onDispose(testDb.close);
-        return testDb;
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      httpClientFactoryProvider.overrideWith((ref) {
-        return FakeHttpClientFactory(() => mockClient);
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      aggregatorProvider.overrideWith((ref) {
-        // Use a zero aggregation interval to disable aggregation for tests.
-        return Aggregator(ref.read(lichessClientProvider), aggregationInterval: Duration.zero);
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      webSocketChannelFactoryProvider.overrideWith((ref) {
-        return defaultFakeWebSocketChannelFactory;
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      socketPoolProvider.overrideWith((ref) {
-        final pool = SocketPool(ref);
-        ref.onDispose(pool.dispose);
-        return pool;
-      }),
-      // ignore: scoped_providers_should_specify_dependencies
-      connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
-      // ignore: scoped_providers_should_specify_dependencies
-      showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
-      // ignore: scoped_providers_should_specify_dependencies
-      soundServiceProvider.overrideWithValue(FakeSoundService()),
-      // ignore: scoped_providers_should_specify_dependencies
-      openingServiceProvider.overrideWithValue(FakeOpeningService()),
-      // ignore: scoped_providers_should_specify_dependencies
-      preloadedDataProvider.overrideWith((ref) {
-        return (
-          sri: 'test-sri',
-          packageInfo: PackageInfo(
-            appName: 'lichess_mobile_test',
-            version: '0.0.0',
-            buildNumber: '0',
-            packageName: 'lichess_mobile_test',
-          ),
-          deviceInfo: BaseDeviceInfo({
-            'name': 'test',
-            'model': 'test',
-            'manufacturer': 'test',
-            'systemName': 'test',
-            'systemVersion': 'test',
-            'identifierForVendor': 'test',
-            'isPhysicalDevice': true,
-          }),
-          userSession: userSession,
-          engineMaxMemoryInMb: 256,
-          appDocumentsDirectory: null,
-          appSupportDirectory: null,
-        );
-      }),
-      ...overrides ?? [],
-    ],
+    overrides: overrideMap.values.toList(),
     child: TestSurface(size: surfaceSize, child: child),
   );
 }

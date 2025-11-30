@@ -1420,6 +1420,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleMates => 'Mats';
 
   @override
+  String get puzzleMateThemes => 'Temes de mat';
+
+  @override
   String get puzzleGoals => 'Objectius';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Fes escac i mat al rei a la primera fila, quan està atrapat per les seves pròpies peces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat de la balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat del porc cec';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dues torres treballen en equip per tal de fer mat al rei en una àrea de 2x2 caselles.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final d’alfils';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat del triangle';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dama i la torre, a una distància del rei enemic, estan a la mateixa fila o columna separats per una casella formant un triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat de Vukovic';
@@ -4028,6 +4049,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get analysisShapesHowTo => 'Pitja la tecla Shift + clic o feu clic dret per dibuixar cercles i fletxes al tauler.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Deixa que altres jugadors t\'envïin missatges';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsCa extends AppLocalizations {
   String get simulDescriptionHelp => 'Cap cosa per mencionar als participants?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param és disponible per a formats més avançats.';
+  String markdownIsAvailable(String param) {
+    return 'Es pot utilitzar $param per descriure el format.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyAlphabetical => 'Alfabètic';
 
   @override
+  String get studyRelevant => 'Rellevant';
+
+  @override
   String get studyAddNewChapter => 'Afegir un nou capítol';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: 'Enganxa el teu PGN aquí, fins a $count partides',
       one: 'Enganxa el teu PGN aquí, fins a $count partida',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equips',
+      one: 'Batalla d\'$count equip',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Líders per equip',
+      one: 'Un líder per equip',
     );
     return '$_temp0';
   }

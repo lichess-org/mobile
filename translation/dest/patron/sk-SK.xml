@@ -16,7 +16,7 @@
   <string name="newPatrons">Noví Patróni</string>
   <string name="freeChess">Šach zdarma pre všetkých, navždy!</string>
   <string name="noAdsNoSubs">Bez reklám, bez predplatného; iba otvorený zdrojový kód a vášeň.</string>
-  <string name="thankYou">Ďakujeme za Váš príspevok!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Ďakujeme za Váš príspevok!</string>
   <string name="youHaveLifetime">Si doživotným Patrónom. To je skvelé!</string>
   <string name="patronUntil">Máš Patrón účet do %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Ak to nebude obnovené, váš účet sa vráti na základnú formu.</string>

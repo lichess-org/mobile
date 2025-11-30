@@ -1420,6 +1420,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Temas de mate';
+
+  @override
   String get puzzleGoals => 'Objetivos';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jaque mate en la última fila, cuando el rey se encuentra atrapado por sus propias piezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate de alfil y dama';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'El alfil da jaque mate mientras la dama bloquea las casillas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate del cerdo ciego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dos torres se unen para dar mate al rey en un área de 2 por 2 casillas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfiles';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate del triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dama y la torre, a una casilla de distancia del rey rival, están en la misma fila o columna, separadas por una casilla, formando un triángulo.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vukovic';
@@ -4028,6 +4049,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analysisShapesHowTo => 'Haz clic con el botón derecho o Máyus+clic para dibujar círculos y flechas en el tablero.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl o mayúsculas = rojo; comando, alt, o meta = azul; una tecla de cada = amarillo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permitir que otras personas te envíen mensajes';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get simulDescriptionHelp => '¿Quieres decirle algo a los participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Se puede usar $param para formatear el texto.';
+  String markdownIsAvailable(String param) {
+    return 'El formato de $param está disponible.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get studyAlphabetical => 'Alfabético';
 
   @override
+  String get studyRelevant => 'Relevante';
+
+  @override
   String get studyAddNewChapter => 'Añadir nuevo capítulo';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other: 'Pega aquí el código PGN, $count partidas como máximo',
       one: 'Pega aquí el código PGN, $count partida como máximo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equipos',
+      one: 'Batalla de $count equipos',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipo',
+      one: 'Un líder por equipo',
     );
     return '$_temp0';
   }

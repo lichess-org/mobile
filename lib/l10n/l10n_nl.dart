@@ -73,7 +73,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Houd er rekening mee dat niet alle functies van de oude app of website beschikbaar zijn, maar we voegen voortdurend functies toe.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'U volgt geen gebruiker.';
+  String get mobileNotFollowingAnyUser => 'Je volgt geen gebruikers.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleMates => 'Schaakmat';
 
   @override
+  String get puzzleMateThemes => 'Matsituaties';
+
+  @override
   String get puzzleGoals => 'Doelen';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Kruisboogmat';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Een loper zet mat waarbij een dame de resterende vluchtvelden blokkeert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lopereindspel';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Driehoeksmat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic-mat';
@@ -4028,6 +4049,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get analysisShapesHowTo => 'Druk op shift+linkermuisknop of rechtermuisknop om cirkels en pijlen op het bord te tekenen.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl of shift = rood; command, alt, of meta-toets = blauw; allen tegelijk = geel.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Andere spelers mogen je berichten zenden';
 
   @override
@@ -4356,7 +4380,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return '$param uitdagen';
   }
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsNl extends AppLocalizations {
   String get simulDescriptionHelp => 'Is er nog iets wat de deelnemers moeten weten?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is beschikbaar voor meer geavanceerde opmaak.';
+  String markdownIsAvailable(String param) {
+    return '$param is beschikbaar voor opmaak.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetisch';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Nieuw hoofdstuk toevoegen';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsNl extends AppLocalizations {
       locale: localeName,
       other: 'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
       one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Wedstrijd met $count teams',
+      one: 'Wedstrijd met $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leiders per team',
+      one: 'Eén leider per team',
     );
     return '$_temp0';
   }

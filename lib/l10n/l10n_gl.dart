@@ -1420,6 +1420,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Patróns de mate';
+
+  @override
   String get puzzleGoals => 'Obxectivos';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate da bésta';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate do porco cego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dúas torres colaboran para dar mate ó rei nunha área de 2 x 2 casas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfís';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Unha torre canda o rei do adversario, defendida por unha dama que tamén bloquea as casas de escape do rei. A torre e a dama apreixan ao rei nun curruncho de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate do triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Un triángulo fórmase do seguinte xeito: a dama e a torre atópanse na mesma fila ou columna, a unha casa de distancia entre si e do rei do opoñente.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vuković';
@@ -2376,7 +2397,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura ou movemento de peón';
+  String get dtzWithRounding => 'DTZ50\'\' con redondeo, baseado no número de medias xogadas ata a próxima captura, movemento de peón ou xaque mate';
 
   @override
   String get noGameFound => 'Non se atoparon partidas';
@@ -4025,7 +4046,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get scrollOverComputerVariationsToPreviewThem => 'Pasa o punteiro sobre as variantes da computadora para visualizalas.';
 
   @override
-  String get analysisShapesHowTo => 'Pulsa Maiúsculas+clic ou preme o botón dereito do rato para debuxar círculos e frechas no taboleiro.';
+  String get analysisShapesHowTo => 'Preme o botón dereito do rato (ou pulsa Maiúsculas+clic) para debuxar círculos e frechas no taboleiro. Para obter outras cores, combina o seguinte co botón dereito do rato:';
+
+  @override
+  String get primaryColorArrowsHowTo => '(Ctrl ou Maiúsculas) = vermello;  (Comando, Alt ou Meta) = azul;  unha tecla de cada grupo = amarelo.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permitir que outros xogadores che envíen mensaxes';
@@ -4645,8 +4669,8 @@ class AppLocalizationsGl extends AppLocalizations {
   String get simulDescriptionHelp => 'Queres dicirlle algo ós participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está dispoñíbel para unha sintaxe máis avanzada.';
+  String markdownIsAvailable(String param) {
+    return '$param está dispoñible para dar formato.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyAlphabetical => 'Alfabeticamente';
 
   @override
+  String get studyRelevant => 'Relevante';
+
+  @override
   String get studyAddNewChapter => 'Engadir un novo capítulo';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: 'Pega aquí o PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata $count capítulos.',
       one: 'Pega o teu texto PGN aquí, ata $count partida',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equipos',
+      one: 'Batalla de $count equipo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipo',
+      one: 'Un líder por equipo',
     );
     return '$_temp0';
   }

@@ -4,10 +4,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -40,7 +41,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
     return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
@@ -53,7 +54,10 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
               : CircleAvatar(
                   radius: 16,
                   foregroundImage: value.flair != null
-                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                      ? CachedNetworkImageProvider(
+                          lichessFlairSrc(value.flair!),
+                          cacheManager: ref.read(cachedNetworkImageManagerProvider),
+                        )
                       : null,
                   onForegroundImageError: value.flair != null
                       ? (error, _) {
@@ -98,13 +102,14 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final isOnline = ref.watch(
       connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
     );
-    final authController = ref.watch(authControllerProvider);
+    final signInState = ref.watch(signInMutation);
+    final signOutState = ref.watch(signOutMutation);
     final account = ref.watch(accountProvider);
-    final userSession = ref.watch(authSessionProvider);
-    final kidMode = account.valueOrNull?.kid ?? false;
-    final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
+    final authUser = ref.watch(authControllerProvider);
+    final kidMode = account.value?.kid ?? false;
+    final LightUser? user = account.value?.lightUser ?? authUser?.user;
 
-    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -121,7 +126,10 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                       : CircleAvatar(
                           radius: 20,
                           foregroundImage: value.flair != null
-                              ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                              ? CachedNetworkImageProvider(
+                                  lichessFlairSrc(value.flair!),
+                                  cacheManager: ref.read(cachedNetworkImageManagerProvider),
+                                )
                               : null,
                           onForegroundImageError: value.flair != null
                               ? (error, _) {
@@ -195,14 +203,13 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                   ).push(ContactsScreen.buildRoute(context));
                 },
               ),
-            if (authController.isLoading)
-              const ListTile(
+            switch (signOutState) {
+              MutationPending() => const ListTile(
                 leading: Icon(Icons.logout_outlined),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
-              )
-            else
-              ListTile(
+              ),
+              _ => ListTile(
                 leading: const Icon(Icons.logout_outlined),
                 title: Text(context.l10n.logOut),
                 enabled: isOnline,
@@ -210,22 +217,25 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                   _showSignOutConfirmDialog(context, ref);
                 },
               ),
+            },
           ] else ...[
-            if (authController.isLoading)
-              const ListTile(
+            switch (signInState) {
+              MutationPending() => const ListTile(
                 leading: Icon(Icons.login_outlined),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
-              )
-            else
-              ListTile(
+              ),
+              _ => ListTile(
                 leading: const Icon(Icons.login_outlined),
                 title: Text(context.l10n.signIn),
                 enabled: isOnline,
                 onTap: () {
-                  ref.read(authControllerProvider.notifier).signIn();
+                  signInMutation.run(ref, (tsx) async {
+                    await tsx.get(authControllerProvider.notifier).signIn();
+                  });
                 },
               ),
+            },
           ],
           if (Theme.of(context).platform == TargetPlatform.android)
             ListTile(
@@ -269,7 +279,9 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
             onPressed: () async {
-              await ref.read(authControllerProvider.notifier).signOut();
+              await signOutMutation.run(ref, (tsx) async {
+                await tsx.get(authControllerProvider.notifier).signOut();
+              });
             },
           ),
         ],
@@ -293,7 +305,9 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  await ref.read(authControllerProvider.notifier).signOut();
+                  await signOutMutation.run(ref, (tsx) async {
+                    await tsx.get(authControllerProvider.notifier).signOut();
+                  });
                 },
               ),
             ],

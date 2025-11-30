@@ -1,14 +1,19 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_preferences.freezed.dart';
 part 'broadcast_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorage<BroadcastPrefs> {
+final broadcastPreferencesProvider = NotifierProvider<BroadcastPreferences, BroadcastPrefs>(
+  BroadcastPreferences.new,
+  name: 'BroadcastPreferencesProvider',
+);
+
+class BroadcastPreferences extends Notifier<BroadcastPrefs>
+    with PreferencesStorage<BroadcastPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.broadcast;
@@ -56,10 +61,6 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -73,7 +74,6 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(
@@ -85,7 +85,6 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
   );
 
   factory BroadcastPrefs.fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);

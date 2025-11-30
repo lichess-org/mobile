@@ -131,12 +131,12 @@ void main() {
                 variant: Variant.standard,
               ),
         ),
-        overrides: [
+        overrides: {
           if (mockClient != null)
-            lichessClientProvider.overrideWith((ref) {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
               return LichessClient(mockClient, ref);
             }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -711,7 +711,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
 
         expect(find.byType(EngineGauge), findsOne);
-        expect(find.widgetWithText(EngineGauge, 'Checkmate'), findsOne);
+        expect(find.widgetWithText(EngineGauge, '#'), findsOne);
       });
     });
 
@@ -953,11 +953,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1045,11 +1045,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1189,11 +1189,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1258,11 +1258,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);

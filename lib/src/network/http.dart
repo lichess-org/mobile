@@ -22,7 +22,7 @@ import 'package:http/http.dart'
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
@@ -30,9 +30,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'http.g.dart';
 
 final _logger = Logger('HttpClient');
 
@@ -48,7 +45,7 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 
 /// Creates the appropriate http client for the platform.
 ///
-/// Do not use directly, use [defaultClient] or [lichessClient] instead.
+/// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
 class HttpClientFactory {
   const HttpClientFactory({this.wrapper});
 
@@ -56,21 +53,25 @@ class HttpClientFactory {
 
   Client _createClient() {
     const userAgent = 'Lichess Mobile';
-    if (Platform.isAndroid) {
-      final engine = CronetEngine.build(
-        cacheMode: CacheMode.memory,
-        cacheMaxSize: _maxCacheSize,
-        userAgent: userAgent,
-      );
-      return CronetClient.fromCronetEngine(engine);
-    } else if (Platform.isIOS || Platform.isMacOS) {
-      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-        ..httpAdditionalHeaders = {'User-Agent': userAgent};
-      return CupertinoClient.fromSessionConfiguration(config);
-    } else {
+    try {
+      if (Platform.isAndroid) {
+        final engine = CronetEngine.build(
+          cacheMode: CacheMode.memory,
+          cacheMaxSize: _maxCacheSize,
+          userAgent: userAgent,
+          enableHttp2: true,
+        );
+        return CronetClient.fromCronetEngine(engine);
+      } else if (Platform.isIOS || Platform.isMacOS) {
+        final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+          ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+          ..httpAdditionalHeaders = {'User-Agent': userAgent};
+        return CupertinoClient.fromSessionConfiguration(config);
+      }
+    } catch (_) {
       return IOClient(HttpClient()..userAgent = userAgent);
     }
+    return IOClient(HttpClient()..userAgent = userAgent);
   }
 
   Client call() {
@@ -82,8 +83,7 @@ class HttpClientFactory {
 /// The global [HttpClientFactory] provider.
 ///
 /// Http clients created by this factory log all requests and responses to the database.
-@Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(Ref ref) {
+final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
   return HttpClientFactory(
     wrapper: (client) => _RegisterCallbackClient(
       client,
@@ -123,28 +123,31 @@ HttpClientFactory httpClientFactory(Ref ref) {
       },
     ),
   );
-}
+});
 
 /// The default http client.
 ///
-/// This client is used for all requests that don't go to the lichess server, for
+/// This client is used for all requests that don't go to the main lichess server, for
 /// example, requests to lichess CDN, or other APIs.
+/// This client does not set any Authorization header.
+///
 /// Only one instance of this client is created and kept alive for the whole app.
-@Riverpod(keepAlive: true)
-Client defaultClient(Ref ref) {
-  final client = _RegisterCallbackClient(
-    ref.read(httpClientFactoryProvider)(),
-    onRequest: (request) => _logger.info('${request.method} ${request.url}'),
+final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
+  final userAgent = makeUserAgent(
+    ref.read(preloadedDataProvider).requireValue.packageInfo,
+    ref.read(preloadedDataProvider).requireValue.deviceInfo,
+    ref.read(preloadedDataProvider).requireValue.sri,
+    null,
   );
+  final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
-}
+});
 
 /// The http client configured to make requests to the lichess API.
 ///
 /// Only one instance of this client is created and kept alive for the whole app.
-@Riverpod(keepAlive: true)
-LichessClient lichessClient(Ref ref) {
+final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
@@ -157,22 +160,21 @@ LichessClient lichessClient(Ref ref) {
   );
   ref.onDispose(() => client.close());
   return client;
-}
+});
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
-@Riverpod(keepAlive: true)
-String userAgent(Ref ref) {
-  final session = ref.watch(authSessionProvider);
+final userAgentProvider = Provider<String>((Ref ref) {
+  final authUser = ref.watch(authControllerProvider);
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    session?.user,
+    authUser?.user,
   );
-}
+});
 
 /// Creates a user-agent string with the app version, build number, and device info and possibly the user ID if a user is logged in.
 String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, LightUser? user) {
@@ -315,8 +317,8 @@ class _RegisterCallbackClient extends BaseClient {
 /// * Sets the Authorization header when a token has been stored.
 /// * Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
 /// * Logs all requests and responses with status code >= 400.
-/// * When a response has the 401 status, checks if the session token is still valid,
-/// and deletes the session if it's not.
+/// * When a response has the 401 status, checks if the authUser token is still valid,
+/// and deletes the authUser if it's not.
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
@@ -325,17 +327,17 @@ class LichessClient implements Client {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
-    final session = _ref.read(authSessionProvider);
+    final authUser = _ref.read(authControllerProvider);
 
-    if (session != null && !request.headers.containsKey('Authorization')) {
-      final bearer = signBearerToken(session.token);
+    if (authUser != null && !request.headers.containsKey('Authorization')) {
+      final bearer = signBearerToken(authUser.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
       _ref.read(preloadedDataProvider).requireValue.packageInfo,
       _ref.read(preloadedDataProvider).requireValue.deviceInfo,
       _ref.read(preloadedDataProvider).requireValue.sri,
-      session?.user,
+      authUser?.user,
     );
 
     _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
@@ -345,26 +347,14 @@ class LichessClient implements Client {
 
       _logIfError(response);
 
-      if (response.statusCode == 401 && session != null) {
-        _checkSessionToken(session);
+      if (response.statusCode == 401 && authUser != null) {
+        _ref.read(authControllerProvider.notifier).checkToken();
       }
 
       return response;
     } catch (e, st) {
       _logger.warning('Request to ${request.url} failed: $e', e, st);
       rethrow;
-    }
-  }
-
-  /// Checks if the session token is still valid, and delete session if it's not.
-  Future<void> _checkSessionToken(AuthSessionState session) async {
-    final defaultClient = _ref.read(defaultClientProvider);
-    final data = await defaultClient
-        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: session.token)
-        .timeout(const Duration(seconds: 5));
-    if (data[session.token] == null) {
-      _logger.fine('Session is not active. Deleting it.');
-      await _ref.read(authSessionProvider.notifier).delete();
     }
   }
 
@@ -446,6 +436,128 @@ class LichessClient implements Client {
       method,
       lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
     );
+
+    if (headers != null) request.headers.addAll(headers);
+    if (encoding != null) request.encoding = encoding;
+    if (body != null) {
+      if (body is String) {
+        request.body = body;
+      } else if (body is List) {
+        request.bodyBytes = body.cast<int>();
+      } else if (body is Map) {
+        request.bodyFields = body.cast<String, String>();
+      } else {
+        throw ArgumentError('Invalid request body "$body".');
+      }
+    }
+
+    return Response.fromStream(await send(request));
+  }
+}
+
+/// Default HTTP client.
+///
+/// * Sets the user-agent header with the app version, build number, and device info.
+/// * Logs all requests and responses with status code >= 400.
+class DefaultClient implements Client {
+  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+
+  final Client _inner;
+  final String _userAgent;
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) async {
+    request.headers['User-Agent'] = _userAgent;
+
+    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+
+    try {
+      final response = await _inner.send(request);
+
+      _logIfError(response);
+
+      return response;
+    } catch (e, st) {
+      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      rethrow;
+    }
+  }
+
+  void _logIfError(BaseResponse response) {
+    if (response.request != null && response.statusCode >= 400) {
+      final request = response.request!;
+      final method = request.method;
+      final url = request.url;
+      _logger.warning(
+        '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
+      );
+    }
+  }
+
+  @override
+  void close() {
+    _inner.close();
+  }
+
+  @override
+  Future<Response> head(Uri url, {Map<String, String>? headers}) =>
+      _sendUnstreamed('HEAD', url, headers);
+
+  @override
+  Future<Response> get(Uri url, {Map<String, String>? headers}) =>
+      _sendUnstreamed('GET', url, headers);
+
+  @override
+  Future<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('POST', url, headers, body, encoding);
+
+  @override
+  Future<Response> put(Uri url, {Map<String, String>? headers, Object? body, Encoding? encoding}) =>
+      _sendUnstreamed('PUT', url, headers, body, encoding);
+
+  @override
+  Future<Response> patch(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('PATCH', url, headers, body, encoding);
+
+  @override
+  Future<Response> delete(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) => _sendUnstreamed('DELETE', url, headers, body, encoding);
+
+  @override
+  Future<String> read(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.body;
+  }
+
+  @override
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.bodyBytes;
+  }
+
+  /// Sends a non-streaming [Request] and returns a non-streaming [Response].
+  Future<Response> _sendUnstreamed(
+    String method,
+    Uri url,
+    Map<String, String>? headers, [
+    Object? body,
+    Encoding? encoding,
+  ]) async {
+    final request = Request(method, url);
 
     if (headers != null) request.headers.addAll(headers);
     if (encoding != null) request.encoding = encoding;

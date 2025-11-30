@@ -1420,6 +1420,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleMates => 'Matit';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tavoitteet';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matita kuningas takarivillä, kun sen omat nappulat estävät sitä siirtymästä pois.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Torni on vastustajan kuninkaan vieressä, ja sitä suojelee daami, joka myös vie kuninkaalta pakoruudut. Vastustajan kuningas jää kiinni tornin ja daamin muodostamaan 3x3-ruudun \"tapponeliöön\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Kolmiomatti';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Daami ja torni ovat kumpikin ruudun päässä vastustajan kuninkaasta sekä samalla rivillä tai linjalla siten, että niiden väliin jää yksi tyhjä ruutu, ja ne muodostavat yhdessä kuninkaan kanssa kolmion.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovićin matti';
@@ -4028,6 +4049,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get analysisShapesHowTo => 'Käytä hiiren kakkospainiketta (tai shiftiä ja ykköspainiketta) piirtääksesi ympyröitä ja nuolia laudalle.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl tai Shift = punainen; Command, Alt tai Meta = sininen; näppäinyhdistelmä (yksi näppäin kustakin ryhmästä edellä) = keltainen.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Anna muiden käyttäjien lähettää sinulle viestejä';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get simulDescriptionHelp => 'Haluatko kertoa osallistujille jotain?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Tekstin yksityiskohtaisempaan muotoiluun voit käyttää $param-kieltä.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyAlphabetical => 'Aakkosjärjestyksessä';
 
   @override
+  String get studyRelevant => 'Relevantti';
+
+  @override
   String get studyAddNewChapter => 'Lisää uusi luku';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: 'Liitä PGN tähän, enintään $count peliä',
       one: 'Liitä PGN tähän, enintään $count peli',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count joukkueen välinen taisto',
+      one: '$count joukkueen välinen taisto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count johtajaa per joukkue',
+      one: 'Yksi johtaja per joukkue',
     );
     return '$_temp0';
   }

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -21,10 +21,14 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
+final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
   ref,
 ) async {
   final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
+  if (following.isEmpty) {
+    return (IList<User>(), IList<UserStatus>());
+  }
+
   final statuses = await ref
       .read(userRepositoryProvider)
       .getUsersStatuses(following.map((user) => user.id).toISet());
@@ -59,7 +63,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
@@ -149,7 +153,7 @@ class _OnlineFriendListTile extends ConsumerWidget {
               icon: const Icon(Icons.live_tv),
             )
           : null,
-      onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
+      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user)),
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
@@ -172,6 +176,9 @@ class _Online extends ConsumerWidget {
 
     switch (onlineFriends) {
       case AsyncData(:final value):
+        if (value.isEmpty) {
+          return Center(child: Text(context.l10n.nbFriendsOnline(0)));
+        }
         return ListView.separated(
           itemCount: value.length,
           separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
@@ -192,7 +199,7 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
@@ -234,8 +241,7 @@ class _Following extends ConsumerWidget {
                         backgroundColor: context.lichessColors.error,
                         foregroundColor: Colors.white,
                         icon: Icons.person_remove,
-                        // TODO translate
-                        label: 'Unfollow',
+                        label: context.l10n.unfollow,
                       ),
                     ],
                   ),
@@ -243,7 +249,9 @@ class _Following extends ConsumerWidget {
                     user,
                     _isOnline(user, value.$2),
                     onTap: () => {
-                      Navigator.of(context).push(UserScreen.buildRoute(context, user.lightUser)),
+                      Navigator.of(
+                        context,
+                      ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
                     },
                   ),
                 );
@@ -253,7 +261,7 @@ class _Following extends ConsumerWidget {
         );
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(_followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
       case _:
         return const CenterLoadingIndicator();
     }

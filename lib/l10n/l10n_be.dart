@@ -15,13 +15,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Усе гульні';
 
   @override
   String get mobileAreYouSure => 'Вы ўпэўнены?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Наладкі дошкі';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
@@ -33,29 +33,29 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Далучыцца да гульні';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добры вечар, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добры вечар';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добры дзень, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добры дзень';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Схаваць варыянт';
 
   @override
   String get mobileHomeTab => 'Галоўная';
@@ -73,7 +73,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Добра';
@@ -207,13 +207,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSharePuzzle => 'Share this puzzle';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Паказаць каментары';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Паказаць вынік';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Паказаць варыянты';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
@@ -1458,6 +1458,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleMates => 'Маты';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Мэты';
 
   @override
@@ -1769,6 +1772,18 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Пастаўце мат каралю на хатняй гарызанталі, калі ён заблакаваны сваімі фігурамі.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слановы эндшпіль';
 
   @override
@@ -1902,6 +1917,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -2137,22 +2158,22 @@ class AppLocalizationsBe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Параметры гульні';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Запрасіць сябра';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Гуляць з камп\'ютарам';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Рэжым гульні';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Стварыць запыт на гульню';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Вы гуляеце за';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Выкарыстайце гэтую спасылку каб запрасіць кагосьці да гульні';
@@ -2217,7 +2238,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get createAGame => 'Стварыць гульню';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Стварыць гульню';
 
   @override
   String get whiteIsVictorious => 'Белыя перамаглі';
@@ -2357,7 +2378,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get collapseVariations => 'Ачысціць варыянты';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Разгарнуць варыянты';
 
   @override
   String get forceVariation => 'Прасунуць варыянт';
@@ -2366,7 +2387,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get copyVariationPgn => 'Скап\'яваць варыянт у фармаце PGN';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Скапіраваць PGN асноўнай лініі';
 
   @override
   String get move => 'Ход';
@@ -4076,6 +4097,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get analysisShapesHowTo => 'Каб маляваць стрэлкі і кружкі на дошцы, карыстайцеся Shift + ЛКМ або ПКМ.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Дазволіць дасылаць вам паведамленні';
 
   @override
@@ -4693,8 +4717,8 @@ class AppLocalizationsBe extends AppLocalizations {
   String get simulDescriptionHelp => 'Жадаеце штосьці сказаць удзельнікам?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Можаце выкарыстаць $param для больш адмысловага сінтаксісу.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5651,6 +5675,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyAlphabetical => 'Па алфавіце';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Дадаць новы раздзел';
 
   @override
@@ -6217,6 +6244,28 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
       few: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульні',
       one: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульню',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

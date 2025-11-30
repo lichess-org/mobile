@@ -1464,6 +1464,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleMates => 'Маты';
 
   @override
+  String get puzzleMateThemes => 'Разновидности матов';
+
+  @override
   String get puzzleGoals => 'Цели';
 
   @override
@@ -1777,6 +1780,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Матование короля на его горизонтали, когда он заблокирован своими же фигурами.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Мат Балестра';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Слон ставит мат, а ферзь перекрывает оставшиеся поля отступления';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слоновый эндшпиль';
 
   @override
@@ -1910,6 +1925,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Треугольный мат';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Ферзь и ладья находятся на соседних полях с вражеским королём, на той же горизонтали или вертикали, образуюя треугольник.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковича';
@@ -4084,6 +4105,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analysisShapesHowTo => 'Чтобы рисовать на доске кружки и стрелки, используйте Shift+левую кнопку мыши или правую кнопку.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl или Shif = красный; Command, Alt, или meta = синий; каждая вышеперечисленная = желтый.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Разрешить присылать вам сообщения';
 
   @override
@@ -4701,8 +4725,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get simulDescriptionHelp => 'Хотите что-нибудь сказать участникам?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param доступен для расширенного форматирования.';
+  String markdownIsAvailable(String param) {
+    return '$param доступен для форматирования.';
   }
 
   @override
@@ -5663,6 +5687,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyAlphabetical => 'По алфавиту';
 
   @override
+  String get studyRelevant => 'Соответствующий';
+
+  @override
   String get studyAddNewChapter => 'Добавить новую главу';
 
   @override
@@ -6229,6 +6256,32 @@ class AppLocalizationsRu extends AppLocalizations {
       many: 'Вставьте текст в формате PGN, не больше $count игр',
       few: 'Вставьте текст в формате PGN, не больше $count игр',
       one: 'Вставьте текст в формате PGN, не больше $count игры',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Турнир на $count команд',
+      many: 'Турнир на $count команд',
+      few: 'Турнир на $count команды',
+      one: 'Турнир на $count команду',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лидеров на клуб',
+      many: '$count лидеров на клуб',
+      few: '$count лидера на клуб',
+      one: '$count лидер на клуб',
     );
     return '$_temp0';
   }

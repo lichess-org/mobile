@@ -36,7 +36,7 @@
   <string name="kingInTheCenter">Βασιλιάς στο κέντρο</string>
   <string name="threeChecks">Τρία σαχ</string>
   <string name="raceFinished">Τέλος αγώνα</string>
-  <string name="variantEnding">Εκδοχή ολοκληρώθηκε</string>
+  <string name="variantEnding">Ολοκλήρωση παραλλαγής</string>
   <string name="newOpponent">Νέος αντίπαλος</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ο αντίπαλος θέλει να παίξει νέο παιχνίδι μαζί σας</string>
   <string name="joinTheGame">Λάβετε μέρος στο παιχνίδι</string>
@@ -769,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Κάντε κύλιση με τη ροδέλα του ποντικιού πάνω στη σκακιέρα για να μετακινηθείτε στην παρτίδα.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Μετακινήστε το ποντίκι σας πάνω στις βαριάντες του υπολογιστή για την προεπισκόπησή τους.</string>
   <string name="analysisShapesHowTo">Πατήστε Shift + κλικ ή δεξί κλικ για να σχεδιάσετε κύκλους και βέλη στην σκακιέρα.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl = κόκκινο, shift = κίτρινο, command ή alt = μπλε.</string>
   <string name="letOtherPlayersMessageYou">Επιτρέψτε άλλους παίκτες να σας στέλνουν μηνύματα</string>
   <string name="receiveForumNotifications">Λήψη ειδοποιήσεων όταν γίνεται αναφορά σας στο φόρουμ</string>
   <string name="shareYourInsightsData">Κοινή χρήση των δεδομένων σας</string>
@@ -973,7 +974,7 @@
   <string name="simulFeaturedHelp">Να εμφανίζεται το σιμουλτανέ σε όλους στο %s. Απενεργοποιήστε αυτήν την επιλογή για ιδιωτικά σιμουλτανέ.</string>
   <string name="simulDescription">Περιγραφή σιμουλτανέ</string>
   <string name="simulDescriptionHelp">Θέλετε να πείτε κάτι στους συμμετέχοντες;</string>
-  <string name="markdownAvailable">Η μορφή %s είναι διαθέσιμη για μια πιο προχωρημένη σύνταξη.</string>
+  <string name="markdownIsAvailable">Μπορείτε να χρησιμοποιήσετε %s για μορφοποίηση.</string>
   <string name="embedsAvailable">Επικολλήστε μια διεύθυνση URL παρτίδας ή ένα κεφάλαιο μελέτης για να το ενσωματώσετε.</string>
   <string name="inYourLocalTimezone">Στη δική σας ζώνη ώρας</string>
   <string name="tournChat">Δωμάτιο συνομιλίας τουρνουά</string>

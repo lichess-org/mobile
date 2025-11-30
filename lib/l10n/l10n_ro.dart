@@ -1442,6 +1442,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Obiective';
 
   @override
@@ -1749,6 +1752,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final cu nebuni';
 
   @override
@@ -1882,6 +1897,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic';
@@ -2117,7 +2138,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get gameSetup => 'Configurare joc';
+  String get gameSetup => 'Configurație joc';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -2129,7 +2150,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get gameMode => 'Mod joc';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Creează un joc nou';
 
   @override
   String get youPlayAs => 'Tu joci ca';
@@ -2164,7 +2185,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get strength => 'Putere';
 
   @override
-  String get toggleTheChat => 'Arată/Ascunde discuția';
+  String get toggleTheChat => 'Comută conversația';
 
   @override
   String get chat => 'Discuție';
@@ -4056,13 +4077,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get analysisShapesHowTo => 'Apasă shift+click sau click-dreapta pentru a desena cercuri și săgeți pe tablă.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl sau shift = roșu; comandă, alt, sau meta = albastru; o cheie pentru fiecare = galben.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permite altor jucători să îți trimită mesaje';
 
   @override
   String get receiveForumNotifications => 'Primește notificări atunci când ești menționat în forum';
 
   @override
-  String get shareYourInsightsData => 'Partajează statisticile tale în jocuri';
+  String get shareYourInsightsData => 'Distribuie statisticile tale în jocuri';
 
   @override
   String get withNobody => 'Cu nimeni';
@@ -4673,8 +4697,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get simulDescriptionHelp => 'Ce vrei să spui participanţilor?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param este disponibil pentru sintaxă mai avansată.';
+  String markdownIsAvailable(String param) {
+    return '$param este disponibil pentru formatare.';
   }
 
   @override
@@ -5588,6 +5612,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetic';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Adaugă un nou capitol';
 
   @override
@@ -5657,7 +5684,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAllSyncMembersRemainOnTheSamePosition => 'Toți membrii sincronizați rămân la aceeași poziție';
 
   @override
-  String get studyShareChanges => 'Împărtășește modificările cu spectatorii și salvează-le pe server';
+  String get studyShareChanges => 'Împarte modificările cu spectatorii și salvează-le pe server';
 
   @override
   String get studyPlaying => 'În desfășurare';
@@ -5672,7 +5699,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyNext => 'Următoarea';
 
   @override
-  String get studyShareAndExport => 'Împărtășește și exportă';
+  String get studyShareAndExport => 'Distribuie și exportă';
 
   @override
   String get studyCloneStudy => 'Clonează';
@@ -6150,6 +6177,30 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
       few: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
       one: 'Lipiți textul PGN aici, până la $count meci',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bătălia echipelor $count',
+      few: 'Bătălia echipelor $count',
+      one: 'Bătălia echipelor $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de lideri per echipă',
+      few: '$count lideri per echipă',
+      one: 'Un lider per echipă',
     );
     return '$_temp0';
   }

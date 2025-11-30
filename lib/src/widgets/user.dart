@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 /// A Wifi icon representing that the user is currently connected (online) or not.
@@ -15,6 +15,7 @@ class ConnectedIcon extends StatelessWidget {
   const ConnectedIcon({
     required this.isConnected,
     this.shouldShowIsOnGameLabels = false,
+    this.size,
     super.key,
   });
 
@@ -22,6 +23,8 @@ class ConnectedIcon extends StatelessWidget {
 
   /// Whether to show "is on game" labels in tooltips.
   final bool shouldShowIsOnGameLabels;
+
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,8 @@ class ConnectedIcon extends StatelessWidget {
       message: label,
       child: Icon(
         isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.4),
-        size: DefaultTextStyle.of(context).style.fontSize,
+        color: isConnected ? null : textShade(context, 0.3),
+        size: size,
       ),
     );
   }
@@ -187,8 +190,8 @@ class UserFullNameWidget extends ConsumerWidget {
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
-          CachedNetworkImage(
-            imageUrl: lichessFlairSrc(user!.flair!),
+          CachedHttpNetworkImage(
+            lichessFlairSrc(user!.flair!),
             errorWidget: (_, _, _) => kEmptyWidget,
             width: contextTextStyle.fontSize ?? 16.0,
             height: contextTextStyle.fontSize ?? 16.0,

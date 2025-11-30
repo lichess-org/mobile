@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -24,16 +24,13 @@ import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyPr
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'correspondence_service.g.dart';
-
-@Riverpod(keepAlive: true)
-CorrespondenceService correspondenceService(Ref ref) {
+/// A provider for [CorrespondenceService].
+final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) {
   final service = CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
   ref.onDispose(() => service.dispose());
   return service;
-}
+}, name: 'CorrespondenceServiceProvider');
 
 /// Service that manages correspondence games.
 class CorrespondenceService {
@@ -93,7 +90,7 @@ class CorrespondenceService {
 
   /// Syncs offline correspondence games with the server.
   Future<void> syncGames() async {
-    if (_session == null) {
+    if (_authUser == null) {
       return;
     }
 
@@ -101,7 +98,7 @@ class CorrespondenceService {
 
     await playRegisteredMoves();
 
-    final storedOngoingGames = await (await _storage).fetchOngoingGames(_session?.user.id);
+    final storedOngoingGames = await (await _storage).fetchOngoingGames(_authUser?.user.id);
 
     try {
       final gameRepository = ref.read(gameRepositoryProvider);
@@ -139,12 +136,12 @@ class CorrespondenceService {
     _log.info('Playing registered correspondence moves...');
 
     final games = await (await _storage)
-        .fetchGamesWithRegisteredMove(_session?.user.id)
+        .fetchGamesWithRegisteredMove(_authUser?.user.id)
         .then((games) => games.map((e) => e.$2).toList());
 
     WebSocket.userAgent = ref.read(userAgentProvider);
-    final Map<String, String> wsHeaders = _session != null
-        ? {'Authorization': 'Bearer ${signBearerToken(_session!.token)}'}
+    final Map<String, String> wsHeaders = _authUser != null
+        ? {'Authorization': 'Bearer ${signBearerToken(_authUser!.token)}'}
         : {};
 
     int movesPlayed = 0;
@@ -252,7 +249,7 @@ class CorrespondenceService {
     );
   }
 
-  AuthSessionState? get _session => ref.read(authSessionProvider);
+  AuthUser? get _authUser => ref.read(authControllerProvider);
 
   Future<CorrespondenceGameStorage> get _storage =>
       ref.read(correspondenceGameStorageProvider.future);

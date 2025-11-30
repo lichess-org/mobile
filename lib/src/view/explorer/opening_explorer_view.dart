@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 /// Network requests are debounced and cached to avoid unnecessary requests.
 class OpeningExplorerView extends ConsumerStatefulWidget {
   const OpeningExplorerView({
+    required this.pov,
     required this.position,
     required this.onMoveSelected,
     this.opening,
@@ -28,6 +29,7 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
     this.shouldDisplayGames = true,
   });
 
+  final Side pov;
   final Position position;
   final Opening? opening;
   final void Function(NormalMove) onMoveSelected;
@@ -66,10 +68,10 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     final cacheOpeningExplorer = cache[cacheKey];
     final openingExplorerAsync = cacheOpeningExplorer != null
         ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
-        : ref.watch(openingExplorerProvider(fen: widget.position.fen));
+        : ref.watch(openingExplorerProvider(widget.position.fen));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(fen: widget.position.fen), (_, curAsync) {
+      ref.listen(openingExplorerProvider(widget.position.fen), (_, curAsync) {
         curAsync.whenData((cur) {
           if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;
@@ -119,6 +121,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
             ),
             ...List.generate(topGames.length, (int index) {
               return OpeningExplorerGameTile(
+                pov: widget.pov,
                 key: Key('top-game-${topGames.get(index).id}'),
                 game: topGames.get(index),
                 color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
@@ -133,6 +136,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
             ),
             ...List.generate(recentGames.length, (int index) {
               return OpeningExplorerGameTile(
+                pov: widget.pov,
                 key: Key('recent-game-${recentGames.get(index).id}'),
                 game: recentGames.get(index),
                 color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,

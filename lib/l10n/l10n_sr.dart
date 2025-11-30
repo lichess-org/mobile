@@ -73,7 +73,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Не пратите ниједног корисника.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'У реду';
@@ -1028,7 +1028,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get contactContact => 'Контакт';
 
   @override
-  String get contactContactLichess => 'Контактирајте Личес';
+  String get contactContactLichess => 'Контактирај Lichess';
 
   @override
   String get coordinatesCoordinates => 'Координате';
@@ -1095,10 +1095,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get patronDonate => 'Донирај';
 
   @override
-  String get patronLichessPatron => 'Личес Патрон';
+  String get patronLichessPatron => 'Lichess Покровитељ';
 
   @override
-  String get patronBecomePatron => 'Постани Личес Патрон';
+  String get patronBecomePatron => 'Постани Lichess Покровитељ';
 
   @override
   String perfStatPerfStats(String param) {
@@ -1437,6 +1437,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleMates => 'Матови';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Циљеви';
 
   @override
@@ -1737,6 +1740,18 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Матирајте краља на његовом почетном реду, када је тамо заробљен својим фигурама.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Ловачка завршница';
 
   @override
@@ -1870,6 +1885,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -4044,6 +4065,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get analysisShapesHowTo => 'Притисни шифт+клик или десни-клик да нацрташ кругове и стрелице на табли.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Допусти другим играчима да ти пошаљу поруку';
 
   @override
@@ -4444,7 +4468,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get searchOrStartNewDiscussion => 'Претражи или започни нови разговор';
 
   @override
-  String get edit => 'Промени';
+  String get edit => 'Уреди';
 
   @override
   String get bullet => 'Муњевити';
@@ -4661,8 +4685,8 @@ class AppLocalizationsSr extends AppLocalizations {
   String get simulDescriptionHelp => 'Желиш ли нешто да саопштиш учесницима?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param је на располагању за напреднију синтаксу.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5571,6 +5595,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyAlphabetical => 'Alphabetical';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Додај ново поглавље';
 
   @override
@@ -6133,6 +6160,28 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до $count поглавља.',
       few: 'Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до $count поглавља.',
       one: 'Налепи свој PGN текст овде, до $count партије',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

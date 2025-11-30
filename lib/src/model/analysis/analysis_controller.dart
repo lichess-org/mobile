@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
@@ -34,10 +35,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';
-part 'analysis_controller.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
@@ -104,33 +103,26 @@ enum AnalysisGameResult {
   };
 }
 
-@riverpod
-class AnalysisController extends _$AnalysisController
+/// A provider for [AnalysisController].
+final analysisControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<AnalysisController, AnalysisState, AnalysisOptions>(
+      AnalysisController.new,
+      name: 'AnalysisControllerProvider',
+    );
+
+class AnalysisController extends AsyncNotifier<AnalysisState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  AnalysisController(this.options);
+
+  final AnalysisOptions options;
+
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   late Root _root;
   late Variant _variant;
-
-  @override
-  @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  AnalysisState get evaluationState => state.requireValue;
 
   @override
   @protected
@@ -143,12 +135,11 @@ class AnalysisController extends _$AnalysisController
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<AnalysisState> build(AnalysisOptions options) async {
+  Future<AnalysisState> build() async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -173,7 +164,7 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.read(archivedGameProvider(gameId).future);
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);
@@ -310,11 +301,6 @@ class AnalysisController extends _$AnalysisController
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
-
-    final isEngineAllowed = isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
-    if (isEngineAllowed) {
-      initEngineEvaluation();
-    }
 
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
@@ -663,6 +649,15 @@ class AnalysisController extends _$AnalysisController
     }
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+      requestEval();
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -744,7 +739,10 @@ class AnalysisController extends _$AnalysisController
       );
     }
 
-    if (pathChange) requestEval();
+    if (pathChange) {
+      state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
+      requestEval();
+    }
   }
 
   Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
@@ -897,6 +895,8 @@ sealed class AnalysisState
     ///
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
+
+    @Default(false) bool engineInThreatMode,
   }) = _AnalysisState;
 
   @override

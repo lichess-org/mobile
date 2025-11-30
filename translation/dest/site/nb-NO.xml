@@ -769,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Du kan også skrolle over brettet for å flytte i partiet.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Hold muspekeren over maskinvarianter for å forhåndsvise dem.</string>
   <string name="analysisShapesHowTo">Trykk shift+klikk eller høyreklikk for å tegne sirkler og piler på brettet.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl = rød, Shift = gul, Command eller Alt = blå.</string>
   <string name="letOtherPlayersMessageYou">La andre spillere kontakte deg.</string>
   <string name="receiveForumNotifications">Bli varslet når nevnt i forumet</string>
   <string name="shareYourInsightsData">Del dataene dine for sjakkinnsikt</string>
@@ -974,7 +975,7 @@ La feltet stå tomt for å begynne partiene fra den normale utgangsstillingen.</
   <string name="simulFeaturedHelp">Vis simultanen din til alle på %s. Skru av for private simultaner.</string>
   <string name="simulDescription">Beskrivelse av simultanen</string>
   <string name="simulDescriptionHelp">Er det noe du vil si til deltakerne?</string>
-  <string name="markdownAvailable">%s er tilgjengelig for utforming.</string>
+  <string name="markdownIsAvailable">%s er tilgjengelig for formatering.</string>
   <string name="embedsAvailable">Lim inn en URL til et parti eller et kapittel i en studie for å bygge det inn.</string>
   <string name="inYourLocalTimezone">I tidssonen din</string>
   <string name="tournChat">Turneringssamtale</string>

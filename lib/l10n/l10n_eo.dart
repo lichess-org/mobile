@@ -40,19 +40,19 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Bonan vesperon, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Bonan vesperon';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Bonan tagon, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Bonan tagon';
 
   @override
   String get mobileHideVariation => 'Kaŝi varion';
@@ -73,7 +73,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Vi ne abonas ĉiun uzanton.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Bone';
@@ -135,10 +135,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Cirklo';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kvadrato';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -165,7 +165,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsPickAnImageHideBoard => 'Hide board';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Montri tabulon';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -721,7 +721,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'Retadreso de PNG';
 
   @override
   String get broadcastSourceUrlHelp => 'URL kiun Lichess kontrolos por akiri PGN ĝisdatigojn. Ĝi devas esti publike alirebla en interreto.';
@@ -783,31 +783,31 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastFidePlayerNotFound => 'FIDE player not found';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'Profilo FIDE';
 
   @override
-  String get broadcastFederation => 'Federation';
+  String get broadcastFederation => 'Federacio';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Ĉi jara aĝo';
 
   @override
   String get broadcastUnrated => 'Sen rango';
 
   @override
-  String get broadcastRecentTournaments => 'Recent tournaments';
+  String get broadcastRecentTournaments => 'Ĵusaj turniroj';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Malfermi en Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Teamoj';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Tabuloj';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Superrigardo';
 
   @override
   String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
@@ -825,7 +825,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Komenciĝo post $param';
   }
 
   @override
@@ -835,7 +835,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastNotYetStarted => 'The broadcast has not yet started.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Oficiala retejo';
 
   @override
   String get broadcastOfficialStandings => 'Official Standings';
@@ -861,7 +861,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Ĉiuj teamoj';
 
   @override
   String get broadcastTournamentFormat => 'Tournament format';
@@ -873,7 +873,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastTopPlayers => 'Top players';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Horzono';
 
   @override
   String get broadcastFideRatingCategory => 'Kategorio de rango de FIDE';
@@ -920,8 +920,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count spektantoj',
+      one: '$count spektanto',
     );
     return '$_temp0';
   }
@@ -1420,6 +1420,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleMates => 'Matoj';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Celoj';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Ŝakmati la reĝo sur la hejmrango, kiam ĝi estas kaptita per ĝiaj propraj ŝakpecoj.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Kuriera finaĵo';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -3165,7 +3186,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get winner => 'Venkinto';
 
   @override
-  String get standings => 'Standings';
+  String get standings => 'Pozicioj';
 
   @override
   String get createANewTournament => 'Krei novan turniron';
@@ -3445,13 +3466,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get other => 'Io alia';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Algluu ligilon al la ludo(j) kaj klarigu, kio malĝustas pri la konduto de tiu ĉi uzanto. Ne simple diru \"ili filudis\", sed klarigu kiel vi atingis tiun konkludon.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Klarigu kio estas ofenda en la nomo de tiu ĉi uzanto. Ne simple diru \"ĝi estas ofenda/maldeca\" sed rakontu al ni kiel vi atingis tiun konkludon, ĉefe se temas kaŝita ofendo, se ĝi ne estas en la angla, se ĝi apartenas al nenorma lingvaĵo aŭ se ĝi referas ion kulturan aŭ historian.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Via raporto estos pritraktita pli rapide se vi ĝin skribas en la angla.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Bonvolu doni almenaŭ unu ligilon al ludo en kiu oni friponis.';
@@ -3754,7 +3775,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get termsOfService => 'Uzkondiĉojn';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Kontrolo de titolo';
 
   @override
   String get sourceCode => 'Fontkodo';
@@ -3972,14 +3993,14 @@ class AppLocalizationsEo extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Se vi ne vidas la retpoŝton , kontrolu aliajn lokojn kie ĝi povas esti, kiel via rubo , spam, socia , aŭ aliaj dosierujoj.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Se vi ne ricevas retpoŝton post 5 minutoj:';
 
   @override
   String get checkAllEmailFolders => 'Kontroli ĉiujn dosierujojn, trudmesaĝojn kaj rubujon';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Konfirmu ke $param estas via retpoŝta adreso';
   }
 
   @override
@@ -4026,6 +4047,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get analysisShapesHowTo => 'Premu shift+click aŭ rekt-klaki por desegni cirklojn kaj sagojn sur la tabulo.';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
   String get letOtherPlayersMessageYou => 'Lasu aliajn ludantojn mesaĝi vin';
@@ -4645,8 +4669,8 @@ class AppLocalizationsEo extends AppLocalizations {
   String get simulDescriptionHelp => 'Ĉu vi volas diri ion al la partoprenantoj?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param estas havebla por pli progresinta sintakso.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4695,7 +4719,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get reopenYourAccount => 'Remalfermi vian konton';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'Se vi fermis vian konton sed poste ŝanĝis de ideo, vi havas la eblon rehavi vian konton.';
 
   @override
   String get emailAssociatedToaccount => 'Retpoŝtadreso, ke asociitas al la konto';
@@ -5513,6 +5537,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyAlphabetical => 'Alfabete';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Aldoni novan ĉapitron';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Algluu ĉi tie vian PGN kodon, ĝis maksimume $count ludoj',
       one: 'Algluu ĉi tie vian PGN kodon, maksimume ĝis $count ludo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle de $count teamoj',
+      one: 'Batalo de $count teamoj',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gvidantoj je teamo',
+      one: 'Unu gvidanto je teamo',
     );
     return '$_temp0';
   }

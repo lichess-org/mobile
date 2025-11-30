@@ -4,9 +4,24 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 
 typedef ImageColors = ({int primaryContainer, int onPrimaryContainer});
+
+/// A provider that supplies an [ImageWorkerFactory] to spawn image color workers.
+final imageWorkerFactoryProvider = Provider<ImageWorkerFactory>((ref) {
+  return const ImageWorkerFactory();
+}, name: 'ImageWorkerFactoryProvider');
+
+/// A factory that spawns [ImageColorWorker] instances.
+class ImageWorkerFactory {
+  const ImageWorkerFactory();
+
+  Future<ImageColorWorker> spawn() {
+    return ImageColorWorker.spawn();
+  }
+}
 
 /// A worker that quantizes an image and returns a minimal color scheme associated
 /// with the image.
@@ -143,7 +158,7 @@ class ImageColorWorker {
 // code below taken from: https://github.com/flutter/flutter/blob/74669e4bf1352a5134ad68398a6bf7fac0a6473b/packages/flutter/lib/src/material/color_scheme.dart
 
 Future<QuantizerResult> extractColorsFromImageProvider(ImageProvider imageProvider) async {
-  final ui.Image scaledImage = await _imageProviderToScaled(imageProvider);
+  final ui.Image scaledImage = await imageProviderToScaled(imageProvider);
   final ByteData? imageBytes = await scaledImage.toByteData();
 
   final QuantizerResult quantizerResult = await QuantizerCelebi().quantize(
@@ -165,8 +180,8 @@ int getArgbFromAbgr(int abgr) {
   return (abgr & exceptRMask & exceptBMask) | (b << 16) | r;
 }
 
-// Scale image size down to reduce computation time of color extraction.
-Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
+/// Scale image size down to reduce computation time of color extraction.
+Future<ui.Image> imageProviderToScaled(ImageProvider imageProvider) async {
   const double maxDimension = 112.0;
   final ImageStream stream = imageProvider.resolve(
     const ImageConfiguration(size: Size(maxDimension, maxDimension)),

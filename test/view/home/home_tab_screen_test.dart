@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 import '../../example_data.dart';
 import '../../mock_server_responses.dart';
-import '../../model/auth/fake_session_storage.dart';
+import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
@@ -57,9 +57,9 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith(
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(
               () => MockClient((request) {
                 if (request.url.path == '/api/challenge') {
@@ -72,7 +72,7 @@ void main() {
               }),
             ),
           ),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -96,7 +96,7 @@ void main() {
       );
     });
 
-    testWidgets('no session, no stored game: shows welcome screen ', (tester) async {
+    testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {
       final app = await makeTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -111,7 +111,7 @@ void main() {
       expect(find.text('About Lichess...'), findsOneWidget);
     });
 
-    testWidgets('session, no played game: do not show welcome screen', (tester) async {
+    testWidgets('authUser, no played game: do not show welcome screen', (tester) async {
       int nbUserGamesRequests = 0;
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/games/user/testuser') {
@@ -126,10 +126,12 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -141,7 +143,7 @@ void main() {
       expect(find.text('About Lichess...'), findsNothing);
     });
 
-    testWidgets('no session, with stored games: shows list of recent games', (tester) async {
+    testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/tournament/featured') {
           return mockResponse('{"featured":[]}', 200);
@@ -151,9 +153,11 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -173,7 +177,7 @@ void main() {
       expect(find.text('Anonymous'), findsNWidgets(3));
     });
 
-    testWidgets('session, with played games: shows recent games', (tester) async {
+    testWidgets('authUser, with played games: shows recent games', (tester) async {
       int nbUserGamesRequests = 0;
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/games/user/testuser') {
@@ -188,10 +192,12 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -220,10 +226,12 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
-        ],
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => mockClient),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -284,7 +292,7 @@ void main() {
       );
     });
 
-    testWidgets('no session, no stored game: shows welcome screen ', (tester) async {
+    testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {
       final app = await makeTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);
       // wait for connectivity
@@ -299,7 +307,7 @@ void main() {
       expect(find.text('About Lichess...'), findsOneWidget);
     });
 
-    testWidgets('no session, with stored games: shows list of recent games', (tester) async {
+    testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
       final app = await makeOfflineTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);
 
@@ -319,11 +327,11 @@ void main() {
       expect(find.text('Anonymous'), findsNWidgets(3));
     });
 
-    testWidgets('session, with stored games: shows list of recent games', (tester) async {
+    testWidgets('authUser, with stored games: shows list of recent games', (tester) async {
       final app = await makeOfflineTestProviderScope(
         tester,
         child: const Application(),
-        userSession: fakeSession,
+        authUser: fakeAuthUser,
       );
       await tester.pumpWidget(app);
 

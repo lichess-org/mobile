@@ -1420,6 +1420,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleMates => 'Mattstillinger';
 
   @override
+  String get puzzleMateThemes => 'Matt-temaer';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Sett kongen sjakk matt på sisteraden, når den er fanget der av egne brikker.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Armbrøstmatt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Løper setter matt, mens dronning blokkerer fluktfeltene';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Løpersluttspill';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden av motstanderens konge og er støttet av en dronning som også blokkerer kongens fluktfelter. Tårnet og dronningen fanger motstanderens konge i en 3x3 «kasse».';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trekantmatt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Dronning og tårn, på tilstøtende felt til motstanderens konge, står på samme rad eller linje med ett felt mellom seg, slik at de tre brikkene danner en trekant.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vuković-matt';
@@ -4028,6 +4049,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get analysisShapesHowTo => 'Trykk shift+klikk eller høyreklikk for å tegne sirkler og piler på brettet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = rød, Shift = gul, Command eller Alt = blå.';
+
+  @override
   String get letOtherPlayersMessageYou => 'La andre spillere kontakte deg.';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsNb extends AppLocalizations {
   String get simulDescriptionHelp => 'Er det noe du vil si til deltakerne?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param er tilgjengelig for utforming.';
+  String markdownIsAvailable(String param) {
+    return '$param er tilgjengelig for formatering.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetisk';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Legg til kapittel';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsNb extends AppLocalizations {
       locale: localeName,
       other: 'Sett inn PGN-teksten din her, maksimum $count partier',
       one: 'Sett inn PGN-teksten din her, maksimum $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kamp mellom $count lag',
+      one: 'Kamp mellom $count lag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ledere per lag',
+      one: 'Én leder per lag',
     );
     return '$_temp0';
   }

@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -28,8 +28,8 @@ final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Re
 });
 
 final _myStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return Future.value(0);
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return Future.value(0);
 
   return ref.withClientCacheFor(
     (client) => StudyRepository(ref, client)
@@ -40,8 +40,8 @@ final _myStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
 });
 
 final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return Future.value(0);
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return Future.value(0);
 
   return ref.withClientCacheFor(
     (client) => StudyRepository(ref, client)
@@ -81,12 +81,11 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final session = ref.watch(authSessionProvider);
-    final haveIStudies =
-        session != null && (ref.watch(_myStudiesLengthProvider).valueOrNull ?? 0) > 0;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final authUser = ref.watch(authControllerProvider);
+    final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
-        session != null && (ref.watch(_myFavoriteStudiesLengthProvider).valueOrNull ?? 0) > 0;
+        authUser != null && (ref.watch(_myFavoriteStudiesLengthProvider).value ?? 0) > 0;
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,

@@ -211,7 +211,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StreakScreen(),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -235,7 +239,11 @@ void main() {
             ),
           ),
         ),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 

@@ -73,7 +73,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Prenez note que certaines fonctionnalités de l\'ancienne appli ou du site Web ne sont pas disponibles, mais nous ajoutons constamment des fonctionnalités.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucun utilisateur.';
+  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucune personne.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleMates => 'Mats';
 
   @override
+  String get puzzleMateThemes => 'Thèmes de mat';
+
+  @override
   String get puzzleGoals => 'Objectifs';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matez le Roi sur la dernière rangée, lorsqu\'il est piégé par ses propres pièces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat de l\'arbalète';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Un fou fait échec tandis que la dame contrôle les cases de fuite.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat des deux tours';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Deux tours matent le roi adverse dans un espace de deux cases par deux cases.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale de Fous';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'La tour, protégée par la dame, met le roi adverse en échec et la dame bloque la seule case de fuite du roi (le roi est enfermé dans une boîte de 3 cases par 3 cases formée par la tour et la dame).';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat du triangle';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dame et la tour, à une case de distance du roi adverse, sont sur la même rangée ou colonne et donnent mat en formant un triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat de Vukovic';
@@ -2098,7 +2119,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get playAgainstComputer => 'Jouer contre l\'ordinateur';
 
   @override
-  String get gameMode => 'Mode de la partie';
+  String get gameMode => 'Mode de jeu';
 
   @override
   String get createLobbyGame => 'Créer une partie dans le salon';
@@ -2318,7 +2339,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get copyVariationPgn => 'Copier le PGN de la variante';
 
   @override
-  String get copyMainLinePgn => 'Copier la ligne principale (PGN)';
+  String get copyMainLinePgn => 'Copier la ligne principale en tant que PGN';
 
   @override
   String get move => 'Coup';
@@ -3512,10 +3533,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get newPasswordStrength => 'Robustesse du mot de passe';
 
   @override
-  String get clockInitialTime => 'Temps initial à la pendule';
+  String get clockInitialTime => 'Temps initial';
 
   @override
-  String get clockIncrement => 'Incrément de la pendule';
+  String get clockIncrement => 'Incrément';
 
   @override
   String get privacy => 'Confidentialité';
@@ -4026,6 +4047,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get analysisShapesHowTo => 'Utilisez maj+clic ou clic-droit pour dessiner des cercles et des flèches sur l\'échiquier.';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl ou Maj = rouge ; Commande, Alt, ou Windows = bleu ; Les deux touches en même temps = jaune.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permettre à d\'autres joueurs de vous envoyer des messages';
@@ -4645,8 +4669,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get simulDescriptionHelp => 'Voulez-vous dire quelque chose aux participants ?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param offre des options de formatage supplémentaires.';
+  String markdownIsAvailable(String param) {
+    return '$param est disponible pour aider au formatage.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get studyAlphabetical => 'Alphabétique';
 
   @override
+  String get studyRelevant => 'Pertinent';
+
+  @override
   String get studyAddNewChapter => 'Ajouter un nouveau chapitre';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsFr extends AppLocalizations {
       locale: localeName,
       other: 'Collez votre texte PGN ici, jusqu\'à $count parties',
       one: 'Collez votre texte PGN ici, jusqu\'à $count partie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bataille entre $count équipes',
+      one: 'Bataille entre $count équipes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders par équipe',
+      one: 'Un leader par équipe',
     );
     return '$_temp0';
   }

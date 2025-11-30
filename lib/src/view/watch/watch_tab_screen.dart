@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
@@ -77,7 +78,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? true;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -142,18 +143,23 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   Future<void> _precacheImages() async {
-    final worker = await ref.read(broadcastImageWorkerFactoryProvider).spawn();
+    final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
       });
+      ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
+        if (current.hasValue && !_imageAreCached) {
+          _imageAreCached = true;
+          await preCacheBroadcastImages(
+            context,
+            broadcasts: current.value!.active,
+            worker: worker,
+            httpClient: ref.read(defaultClientProvider),
+          );
+        }
+      });
     }
-    ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
-      if (current.hasValue && !_imageAreCached) {
-        _imageAreCached = true;
-        await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
-      }
-    });
   }
 
   @override

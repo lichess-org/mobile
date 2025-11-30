@@ -1196,7 +1196,6 @@
   "simulFeaturedHelp": "Visiem rādīt simultānseansu {param}. Atspējojiet šo opciju privātiem simultānseansiem.",
   "simulDescription": "Simultānseansa apraksts",
   "simulDescriptionHelp": "Vai vēlaties ko teikt dalībniekiem?",
-  "markdownAvailable": "Papildu formatējumam pieejams {param}.",
   "embedsAvailable": "Ievietojiet spēles vai izpētes nodaļas URL lai to iegultu.",
   "inYourLocalTimezone": "Jūsu vietējā laika zonā",
   "tournChat": "Turnīra saruna",

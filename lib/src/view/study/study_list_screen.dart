@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -48,8 +49,9 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   bool requestedNextPage = false;
 
-  StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(category: category, order: order, search: search);
+  AsyncNotifierProvider<StudyListPaginatorNotifier, ({int? nextPage, IList<StudyPageItem> studies})>
+  get paginatorProvider =>
+      studyListPaginatorProvider((category: category, order: order, search: search));
 
   @override
   void initState() {
@@ -88,7 +90,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sessionUser = ref.watch(authSessionProvider)?.user;
+    final authUser = ref.watch(authControllerProvider)?.user;
 
     ref.listen(paginatorProvider, (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
@@ -123,7 +125,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        title: Text(authUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
           ContextMenuIconButton(
             consumeOutsideTap: true,
@@ -161,7 +163,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
             ],
           ),
         ],
-        bottom: sessionUser != null
+        bottom: authUser != null
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(50.0),
                 child: SizedBox(
@@ -194,12 +196,12 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                                   ].contains(cat)) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'owner:${sessionUser.id} ',
+                                      text: 'owner:${authUser.id} ',
                                     );
                                   } else if (cat == StudyCategory.member) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'member:${sessionUser.id} ',
+                                      text: 'member:${authUser.id} ',
                                     );
                                   } else {
                                     search = null;
@@ -362,8 +364,8 @@ class StudyFlair extends StatelessWidget {
     final iconIfNoFlair = Icon(LichessIcons.study, size: size);
 
     return (flair != null)
-        ? CachedNetworkImage(
-            imageUrl: lichessFlairSrc(flair!),
+        ? CachedHttpNetworkImage(
+            lichessFlairSrc(flair!),
             errorWidget: (_, _, _) => iconIfNoFlair,
             width: size,
             height: size,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -50,14 +51,18 @@ void main() {
 
   final user = LightUser(id: UserId.fromUserName(name), name: name);
 
-  final session = AuthSessionState(user: user, token: 'test-token');
+  final authUser = AuthUser(user: user, token: 'test-token');
 
   group('OpeningExplorerScreen', () {
     testWidgets('master opening explorer loads', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -92,7 +97,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
         defaultPreferences: {
           SessionPreferencesStorage.key(PrefCategory.openingExplorer.storageKey, null): jsonEncode(
             OpeningExplorerPrefs.defaults().copyWith(db: OpeningDatabase.lichess).toJson(),
@@ -129,12 +138,16 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
-        userSession: session,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+        authUser: authUser,
         defaultPreferences: {
           SessionPreferencesStorage.key(
             PrefCategory.openingExplorer.storageKey,
-            session,
+            authUser,
           ): jsonEncode(
             OpeningExplorerPrefs.defaults(user: user).copyWith(db: OpeningDatabase.player).toJson(),
           ),

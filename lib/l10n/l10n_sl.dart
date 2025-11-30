@@ -73,7 +73,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Upoštevajte, da trenutno niso na voljo vse funkcije iz stare aplikacije ali spletnega mesta, vendar jih ves čas dodajamo.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ne sledite nobenemu uporabniku.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1464,6 +1464,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleMates => 'Mati';
 
   @override
+  String get puzzleMateThemes => 'Matne teme';
+
+  @override
   String get puzzleGoals => 'Cilji';
 
   @override
@@ -1777,6 +1780,18 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matiranje kralja, ko je še na začetni vrsti, ujet s svojimi figurami.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat dan z lovcem';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Lovec da šah-mat, medtem ko dama blokira preostala polja za pobeg';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Končnica lovcev';
 
   @override
@@ -1910,6 +1925,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ob sovražnikovem kralju stoji trdnjava, ki jo podpira dama, ki prav tako blokira kraljeva pobegna polja. Trdnjava in dama ujameta sovražnikovega kralja v \"vabi\" velikosti 3 krat 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trikotni mat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Kraljica in trdnjava, eno polje stran od sovražnega kralja, sta v isti vrsti ali liniji, ločeni z enim poljem in tvorita trikotnik.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mat';
@@ -4084,6 +4105,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisni shift+klik ali desni klik za risanje krožcev in puščic po šahovnici';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Dovoli drugim, da ti pišejo sporočila';
 
   @override
@@ -4701,8 +4725,8 @@ class AppLocalizationsSl extends AppLocalizations {
   String get simulDescriptionHelp => 'Kaj želite povedati udeležencem?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je na voljo za naprednejšo skladnjo.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5663,6 +5687,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyAlphabetical => 'Po abecednem redu';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Dodaj poglavje';
 
   @override
@@ -6167,7 +6194,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyVariantsAreSupportedTitle => 'Študije podpirajo variante';
 
   @override
-  String get studyVariantsAreSupportedText => 'Da, lahko študiraš Crazyhouse<br>in vse različice Lichessa!';
+  String get studyVariantsAreSupportedText => 'Da, lahko študiraš Crazyhouse<br>in vse Lichess različice!';
 
   @override
   String get studyChapterConclusionText => 'Poglavja so shranjena za vedno.<br>Zabavajte se z organiziranjem svoje šahovske vsebine!';
@@ -6229,6 +6256,32 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Prilepite PGN besedilo, z največ $count partijami',
       two: 'Prilepite PGN besedilo, z največ $count partijama',
       one: 'Prilepite PGN besedilo, z največ $count partijo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitka $count ekip',
+      few: 'Bitka $count ekip',
+      two: 'Bitka $count ekip',
+      one: 'Bitka $count ekipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vodij na ekipo',
+      few: '$count vodje na ekipo',
+      two: '$count vodji na ekipo',
+      one: 'En vodja na ekipo',
     );
     return '$_temp0';
   }

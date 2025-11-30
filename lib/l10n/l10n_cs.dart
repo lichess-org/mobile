@@ -186,7 +186,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Odezva při klepnutí';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
@@ -937,11 +937,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastLiveboard => 'Živá deska';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Komunitní vysílání';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Vytvořeno a spravováno $param.';
   }
 
   @override
@@ -1464,6 +1464,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleMates => 'Maty';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Cíle';
 
   @override
@@ -1775,6 +1778,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Mat krále na poslední řadě, kde je uvězněn vlastními figurami.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Střelec dává mat, zatímco královna blokuje zbylé únikové pole';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Střelcové koncovky';
 
   @override
@@ -1908,6 +1923,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Věž je vedle soupeřova krále a je podporován dámou, která též blokuje úniková políčka krále. Věž a dáma tak společně uvězní soupeřova krále ve 3 krát 3 „smrtící zóně“.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovicův mat';
@@ -2149,7 +2170,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get challengeAFriend => 'Vyzvi přítele';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Hrát proti počítači';
 
   @override
   String get gameMode => 'Game mode';
@@ -2158,7 +2179,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Hrajete jako';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pro pozvání někoho ke hře využijte tento odkaz';
@@ -4082,6 +4103,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknutím se shiftem či kliknutím pravým tlačítkem lze kreslit do šachovnice kolečka a šipky.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Povolit zprávy od ostatních hráčů';
 
   @override
@@ -4699,8 +4723,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get simulDescriptionHelp => 'Je tu něco co by jste chtěli sdělit účastníkům?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je k dispozici pro pokročilé formátování.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4829,10 +4853,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get offline => 'offline';
 
   @override
-  String get search => 'Search';
+  String get search => 'Hledat';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Vymazat vyhledávání';
 
   @override
   String get tags => 'Tags';
@@ -5661,6 +5685,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyAlphabetical => 'Abecedně';
 
   @override
+  String get studyRelevant => 'Relevantní';
+
+  @override
   String get studyAddNewChapter => 'Přidat novou kapitolu';
 
   @override
@@ -5760,7 +5787,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopírovat PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Kopírovat čisté PGN';
 
   @override
   String get studyDownloadGame => 'Stáhnout hru';
@@ -6227,6 +6254,32 @@ class AppLocalizationsCs extends AppLocalizations {
       many: 'Vložte obsah vašeho PGN souboru (až $count her)',
       few: 'Vložte obsah vašeho PGN souboru (až $count hry)',
       one: 'Vložte obsah vašeho PGN souboru (až $count hra)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitva $count týmů',
+      many: 'Bitva $count týmů',
+      few: 'Bitva $count týmů',
+      one: 'Bitva $count týmu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vedoucí na tým',
+      many: '$count vedoucích na tým',
+      few: '$count vedoucí na tým',
+      one: 'Jeden vedoucí na tým',
     );
     return '$_temp0';
   }

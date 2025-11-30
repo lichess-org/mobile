@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
@@ -94,7 +94,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = stormControllerProvider(widget.data.puzzles, widget.data.timestamp);
+    final ctrlProvider = stormControllerProvider((widget.data.puzzles, widget.data.timestamp));
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final stormState = ref.watch(ctrlProvider);
 
@@ -279,7 +279,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
 
                                     _Combo(stormState.combo),
-                                    _BottomBar(ctrlProvider),
+                                    _BottomBar(widget.data),
                                   ],
                                 ),
                               ),
@@ -329,7 +329,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 child: _Combo(stormState.combo),
                               ),
                             ),
-                            _BottomBar(ctrlProvider),
+                            _BottomBar(widget.data),
                           ],
                         );
                       }
@@ -446,7 +446,7 @@ class _TopTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormState = ref.watch(stormControllerProvider(data.puzzles, data.timestamp));
+    final stormState = ref.watch(stormControllerProvider((data.puzzles, data.timestamp)));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -675,12 +675,13 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.ctrl);
+  const _BottomBar(this.data);
 
-  final StormControllerProvider ctrl;
+  final PuzzleStormResponse data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrl = stormControllerProvider((data.puzzles, data.timestamp));
     final stormState = ref.watch(ctrl);
     return BottomBar(
       children: [
@@ -907,19 +908,19 @@ class _StatsRow extends StatelessWidget {
 class _StormDashboardButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session != null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser != null) {
       return IconButton(
         tooltip: 'Storm History',
-        onPressed: () => _showDashboard(context, session),
+        onPressed: () => _showDashboard(context, authUser),
         icon: const Icon(Icons.history),
       );
     }
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context, AuthSessionState session) => Navigator.of(
+  void _showDashboard(BuildContext context, AuthUser authUser) => Navigator.of(
     context,
     rootNavigator: true,
-  ).push(StormDashboardModal.buildRoute(context, session.user));
+  ).push(StormDashboardModal.buildRoute(context, authUser.user));
 }

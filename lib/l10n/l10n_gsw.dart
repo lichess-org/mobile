@@ -73,7 +73,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleMates => 'Matts';
 
   @override
+  String get puzzleMateThemes => 'Matt Theme';
+
+  @override
   String get puzzleGoals => 'Ziel';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'De König uf de Grundreihe matt setze, wänn er dur sini eigene Figure blockiert isch.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra Matt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'En Läufer setzt Matt, wobi d\'Königin die mögliche Fluchtfälder blockiert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinde-Schweine-Matt';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türm, uf de sibete - oder zweite - Reihe, setzed de König matt.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Läufer Ändschpil';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Drüeck-Matt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Es Matt vu Turm und Dame, wo zämme mit em gägnerische König es Drüegg bilded.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vuković-Matt';
@@ -2508,7 +2529,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Biträte am $param';
+    return 'Biträte $param';
   }
 
   @override
@@ -4028,6 +4049,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get analysisShapesHowTo => 'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Erlaub andere Schpiller dir Nachrichte z\'schicke';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get simulDescriptionHelp => 'Wottsch de Teilnehmer öppis mitteile?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param isch für erwitereti Syntax verfüegbar.';
+  String markdownIsAvailable(String param) {
+    return '$param isch zur Formatierig verfüegbar.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyAlphabetical => 'alphabetisch';
 
   @override
+  String get studyRelevant => 'Bedütend';
+
+  @override
   String get studyAddNewChapter => 'Neus Kapitel zuefüege';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsGsw extends AppLocalizations {
       locale: localeName,
       other: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
       one: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Schlacht mit $count Teams',
+      one: 'Schlacht mit $count Team',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Leader pro Team',
+      one: 'Ein Leader pro Team',
     );
     return '$_temp0';
   }

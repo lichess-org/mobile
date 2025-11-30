@@ -73,7 +73,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Figyelem, a régi alkalmazásból vagy a weboldalról nem minden funkció érhető el jelenleg, de folyamatosan bővítjük az elérhető funkciókat.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OKÉ';
@@ -1420,6 +1420,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleMates => 'Mattok';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Célok';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Adj mattot az alapsoron ragadt királynak, mikor a saját figurái ejtik csapdába.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Futóvégjáték';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Egy bástya az ellenséges király mellett áll, és egy vezér támogatja, ami blokkolja a király menekülőmezőit is. A bástya és a vezér egy 3×3-as területre, ún. kill boxba zárja az ellenséges királyt.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matt';
@@ -4028,6 +4049,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift-kattintva vagy jobb egérgombbal rajzolhatsz karikákat és nyilakat a táblára';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Mások küldhetnek neked üzenetet';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsHu extends AppLocalizations {
   String get simulDescriptionHelp => 'Van bármi amit elmondanál a résztvevőknek?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is elérhető a haladó szerkesztéshez.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyAlphabetical => 'Betűrendben';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Új fejezet hozzáadása';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Illeszd be a PGN szövegét (legfeljebb $count játszma)',
       one: 'Illeszd be a PGN szövegét legfeljebb $count játszmáig',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ez $count csapat csatája',
+      one: '$count csapat csatája',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vezető csapatonként',
+      one: 'Egy vezető csapatonként',
     );
     return '$_temp0';
   }

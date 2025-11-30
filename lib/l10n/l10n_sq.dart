@@ -73,7 +73,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ju nuk po ndiqni asnjë përdorues.';
+  String get mobileNotFollowingAnyUser => 'S’ndiqni ndonjë përdorues.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -1420,6 +1420,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Tema mati';
+
+  @override
   String get puzzleGoals => 'Objektiva';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jepini mat mbretin në rreshtin e tij, kur ai është bllokuar atje nga gurë të vetët.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Një oficer jep shahmat, teksa një mbretëreshë bllokon kuadratet e ikjes';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat Derri Qorr';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dy torre bëhen tok për t’i dhënë mat mbretit në një zonë prej 2 herë 2 kuadratesh.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Fund loje me oficer';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat trekëndësh';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Mbretëresha dhe torra, një kuadrat larg nga mbreti armik, gjenden në të njëjtin rresht ose shtyllë, një kuadrat larg njëri-tjetrit, duke formuar një trekëndësh.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukoviç';
@@ -4028,6 +4049,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get analysisShapesHowTo => 'Që të vizatoni rrathë dhe shigjeta në fushë, shtypni shift+klikim, ose djathtasklikoni.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = e kuqe, shift = e verdhë, command ose alt = blu.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lejoni lojtarë të tjerë t’ju dërgojnë mesazh';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsSq extends AppLocalizations {
   String get simulDescriptionHelp => 'Ndonjë gjë që doni t’u thoni pjesëmarrësve?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Për sintaksë më të thelluar mund të përdoret $param-i.';
+  String markdownIsAvailable(String param) {
+    return 'Për formatim mund të përdorni $param.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetik';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Shto një kapitull të ri';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojëra',
       one: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojë',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ndeshje e $count ekipeve',
+      one: 'Ndeshje e $count ekipeve',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count drejtues për ekip',
+      one: 'Një drejtues për ekip',
     );
     return '$_temp0';
   }

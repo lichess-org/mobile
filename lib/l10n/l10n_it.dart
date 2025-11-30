@@ -27,7 +27,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
-  String get mobileClearButton => 'Elimina';
+  String get mobileClearButton => 'Pulisci';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
@@ -40,11 +40,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Buona sera, $param';
+    return 'Buonasera, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Buona sera';
+  String get mobileGoodEveningWithoutName => 'Buonasera';
 
   @override
   String mobileGoodDay(String param) {
@@ -73,7 +73,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Da notare che non tutte le funzionalità della vecchia app o del sito web sono attualmente disponibili, ma stiamo continuamente aggiungendo funzionalità.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Ok';
@@ -111,10 +111,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'Perderai la tua serie corrente e il tuo punteggio verrà salvato.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '.';
+  String get mobilePuzzleThemesSubtitle => 'Gioca a puzzle dalle tue aperture preferite, o scegli un tema.';
 
   @override
-  String get mobilePuzzlesTab => 'Tattiche';
+  String get mobilePuzzlesTab => 'Puzzle';
 
   @override
   String get mobileRecentSearches => 'Ricerche recenti';
@@ -135,7 +135,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Obiettivo pezzo trascinato';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circolare';
+  String get mobileSettingsDraggedTargetCircle => 'Cerchio';
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Quadrato';
@@ -147,7 +147,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Modalità immersiva';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alle schermate delle partite e dei puzzle.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pezzi catturati';
@@ -165,7 +165,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageHideBoard => 'Nascondi scacchiera';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Mostra la scacchiera';
+  String get mobileSettingsPickAnImageShowBoard => 'Mostra scacchiera';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Scorri per visualizzare altri sfondi';
@@ -177,10 +177,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocca due caselle';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Disegno della forma';
+  String get mobileSettingsShapeDrawing => 'Disegna la mossa';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Disegna le forme usando due dita: mantenere un dito su un quadrato vuoto e trascinare un altro dito per disegnare una forma.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Disegna le mosse usando due dita: mantenere un dito su un quadrato vuoto e trascinare un altro dito per disegnare una forma.';
 
   @override
   String get mobileSettingsShowBorder => 'Mostra bordo';
@@ -204,13 +204,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSharePositionAsFEN => 'Condividi posizione come FEN';
 
   @override
-  String get mobileSharePuzzle => 'Condividi questa tattica';
+  String get mobileSharePuzzle => 'Condividi questo puzzle';
 
   @override
   String get mobileShowComments => 'Mostra commenti';
 
   @override
-  String get mobileShowResult => 'Mostra il risultato';
+  String get mobileShowResult => 'Mostra risultato';
 
   @override
   String get mobileShowVariations => 'Mostra varianti';
@@ -219,7 +219,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Si è verificato un errore.';
 
   @override
-  String get mobileSystemColors => 'Tema app';
+  String get mobileSystemColors => 'Colori di sistema';
 
   @override
   String get mobileTheme => 'Tema';
@@ -1420,6 +1420,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleMates => 'Matti';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Per obiettivo';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Scacco matto Vukovic';
@@ -2101,7 +2122,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameMode => 'Modalità di gioco';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Crea una partita nella lobby';
 
   @override
   String get youPlayAs => 'Giochi come';
@@ -2116,7 +2137,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get waitingForOpponent => 'In attesa dell\'avversario';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Oppure fai scansionare questo codice QR al tuo avversario';
+  String get orLetYourOpponentScanQrCode => 'O fai scansionare questo codice QR al tuo avversario';
 
   @override
   String get waiting => 'In attesa';
@@ -2169,7 +2190,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createAGame => 'Crea una partita';
 
   @override
-  String get createTheGame => 'Inizia una partita';
+  String get createTheGame => 'Inizia la partita';
 
   @override
   String get whiteIsVictorious => 'Vince il Bianco';
@@ -2306,7 +2327,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteFromHere => 'Elimina da qui';
 
   @override
-  String get collapseVariations => 'Riduci varianti';
+  String get collapseVariations => 'Comprimi varianti';
 
   @override
   String get expandVariations => 'Espandi varianti';
@@ -4028,6 +4049,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analysisShapesHowTo => 'Premere MAIUSC+click o tasto destro del mouse per disegnare cerchi e frecce sulla scacchiera.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl o shift = rosso; comand, alt, o meta = blu; un tasto da ogni combinazione = giallo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lascia che gli altri giocatori ti inviino messaggi';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get simulDescriptionHelp => 'Vuoi dire qualcosa ai partecipanti?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param è disponibile per la sintassi più avanzata.';
+  String markdownIsAvailable(String param) {
+    return '$param è disponibile per la formattazione.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetico';
 
   @override
+  String get studyRelevant => 'Pertinenti';
+
+  @override
   String get studyAddNewChapter => 'Aggiungi un nuovo capitolo';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Incolla qui i testi PGN, massimo $count partite',
       one: 'Incolla qui il testo PGN, massimo $count partita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battaglia a $count squadre',
+      one: 'Battaglia ad $count squadra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leader per squadra',
+      one: 'Un leader per squadra',
     );
     return '$_temp0';
   }

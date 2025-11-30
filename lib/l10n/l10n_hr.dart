@@ -73,7 +73,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ne pratite nijednog korisnika.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'U redu';
@@ -1441,6 +1441,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleMates => 'Matevi';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Ciljevi';
 
   @override
@@ -1747,6 +1750,18 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Top ili dama matiraju kralja koji se nalazi na njegovom prvom redu (odnosno osmom iz perspektive protivnika) te je zagrađen svojim figurama.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lovčeva završnica';
 
   @override
@@ -1880,6 +1895,12 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Top je pored protivničkog kralja i podržan je kraljicom koja također blokira kraljeva polja za bijeg. Top i kraljica zarobljavaju protivničkog kralja u 3 sa 3 matnoj mreži.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mat';
@@ -4054,6 +4075,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisni shift + lijevi klik ili desni klik kako bi crtao/la krugove i strelice na ploči.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Dopusti drugim igračima da ti pošalju poruku';
 
   @override
@@ -4671,8 +4695,8 @@ class AppLocalizationsHr extends AppLocalizations {
   String get simulDescriptionHelp => 'Želite li nešto reći sudionicima?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je dostupan za napredniju sintaksu.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5586,6 +5610,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get studyAlphabetical => 'Abecednim redom';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Dodaj novo poglavlje';
 
   @override
@@ -6148,6 +6175,29 @@ class AppLocalizationsHr extends AppLocalizations {
       other: 'Ovdje zalijepite svoj PGN tekst, do $count igara',
       few: 'Ovdje zalijepite svoj PGN tekst, do $count igri',
       one: 'Ovdje zalijepite svoj PGN tekst, do $count igre',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitka $count ekipa',
+      few: 'BItka $count ekipe',
+      one: 'Bitka $count ekipe',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

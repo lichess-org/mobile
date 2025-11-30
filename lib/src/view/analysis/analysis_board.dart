@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
@@ -75,10 +76,11 @@ abstract class AnalysisBoardState<
       return ISet();
     }
 
-    final eval = pickBestClientEval(
-      localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-      savedEval: analysisState.currentNode.eval,
-    );
+    final localEval = ref.watch(engineEvaluationProvider.select((value) => value.eval));
+
+    final eval = localEval?.threatMode == true
+        ? analysisState.currentNode.eval
+        : pickBestClientEval(localEval: localEval, savedEval: analysisState.currentNode.eval);
 
     if (eval == null) {
       return ISet();
@@ -90,7 +92,28 @@ abstract class AnalysisBoardState<
       return ISet();
     }
 
-    return computeBestMoveShapes(eval.bestMoves, currentPosition.turn, pieceAssets);
+    final bestMoveShapes = computeBestMoveShapes(
+      eval.bestMoves,
+      currentPosition.turn,
+      pieceAssets,
+      // Same colors as in the Web UI with a slightly different opacity
+      // The best move has a different color than the other moves
+      bestMoveColor: const Color(0x66003088),
+      nextBestMovesColor: const Color(0x664A4A4A),
+    );
+
+    if (localEval?.threatMode == true) {
+      final threatMoveShapes = computeBestMoveShapes(
+        localEval!.bestMoves,
+        currentPosition.turn.opposite,
+        pieceAssets,
+        bestMoveColor: LichessColors.red.withValues(alpha: 0.6),
+        nextBestMovesColor: LichessColors.red.withValues(alpha: 0.4),
+      );
+      return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first}.toISet();
+    }
+
+    return bestMoveShapes;
   }
 
   @override
@@ -124,8 +147,7 @@ abstract class AnalysisBoardState<
           : null,
       shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
       annotations: sanMove != null && annotation != null
-          ? (sanMove.san == 'O-O' || sanMove.san == 'O-O-O') &&
-                    altCastles.containsKey(sanMove.move.uci)
+          ? sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
                 ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                 : IMap({sanMove.move.to: annotation})
           : null,

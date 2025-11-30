@@ -13,7 +13,7 @@
   <string name="newPatrons">新赞助者</string>
   <string name="freeChess">永远让每个人免费下棋！</string>
   <string name="noAdsNoSubs">没有广告，无需订阅；保持开源和热情。</string>
-  <string name="thankYou">感谢你的捐赠！</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">感谢你的捐赠！</string>
   <string name="youHaveLifetime">你有了一个终身赞助者账户，太棒了！</string>
   <string name="patronUntil">你的赞助账户持续到 %s。</string>
   <string name="ifNotRenewedThenAccountWillRevert">如果未续订，你的账户会变回普通账户。</string>

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -21,12 +23,13 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'evaluation_service.freezed.dart';
-part 'evaluation_service.g.dart';
+
+final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
@@ -42,8 +45,8 @@ typedef ShouldEmitEvalFilter = bool Function(Work work);
 
 typedef NNUEFiles = ({File bigNet, File smallNet});
 
-@Riverpod(keepAlive: true)
-EvaluationService evaluationService(Ref ref) {
+/// A provider for [EvaluationService].
+final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
   final service = EvaluationService(ref, maxMemory: maxMemory);
 
@@ -52,7 +55,7 @@ EvaluationService evaluationService(Ref ref) {
   });
 
   return service;
-}
+}, name: 'EvaluationServiceProvider');
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
@@ -101,13 +104,13 @@ class EvaluationService {
     return (bigNet: bigNetFile, smallNet: smallNetFile);
   }
 
-  Engine _engineFactory(ChessEnginePref pref) {
+  Future<Engine> _engineFactory(ChessEnginePref pref) async {
     // TODO support variants
     switch (pref) {
       case ChessEnginePref.sfLatest:
         try {
-          if (!checkNNUEFilesExist()) {
-            throw Exception('NNUE files not found.');
+          if (!await checkNNUEFiles()) {
+            throw Exception('NNUE files not found or corrupted.');
           }
           return StockfishEngine(
             StockfishFlavor.latestNoNNUE,
@@ -115,7 +118,7 @@ class EvaluationService {
             smallNetPath: nnueFiles.smallNet.path,
           );
         } catch (e, st) {
-          debugPrint('Failed to load NNUE files: $e\n$st');
+          _logger.warning('Failed to load NNUE files: $e\n$st');
           return StockfishEngine(StockfishFlavor.sf16);
         }
       case ChessEnginePref.sf16:
@@ -134,9 +137,9 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = _engineFactory(options.enginePref);
+    _engine = await _engineFactory(options.enginePref);
     _engine!.state.addListener(() {
-      debugPrint('Engine state: ${_engine?.state.value}');
+      _logger.fine('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
           _engine?.state.value == EngineState.disposed) {
         _state.value = _defaultState;
@@ -196,6 +199,10 @@ class EvaluationService {
     ClientEval? initialPositionEval,
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
+    bool threatMode = false,
+
+    /// If true, forces the engine to restart the evaluation even if the saved eval has more search time.
+    bool forceRestart = false,
   }) {
     final context = _context;
     final engine = _engine;
@@ -220,6 +227,7 @@ class EvaluationService {
       variant: context.variant,
       threads: options.cores,
       hashSize: maxMemory,
+      threatMode: threatMode,
       searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
       isDeeper: goDeeper,
       multiPv: options.multiPv,
@@ -228,13 +236,17 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    switch (work.evalCache) {
-      // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-      case CloudEval _:
-        return null;
-      case _:
-        break;
+    if (!work.threatMode && !forceRestart) {
+      switch (work.evalCache) {
+        // if the search time is greater than the current search time, don't evaluate again
+        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case CloudEval _ when goDeeper == false:
+          // stop the engine if running (can happen if last eval was launched with goDeeper = true)
+          engine.stop();
+          return null;
+        case _:
+          break;
+      }
     }
 
     final evalStream = engine
@@ -260,11 +272,33 @@ class EvaluationService {
     _engine?.stop();
   }
 
-  /// Check if the NNUE files are present in the app support directory.
-  bool checkNNUEFilesExist() {
+  /// Cache the result of the NNUE checksum verification.
+  bool? _nnueSumCheckResult;
+
+  /// Check the presence and integrity of the NNUE files.
+  Future<bool> checkNNUEFiles() async {
     final (:bigNet, :smallNet) = nnueFiles;
 
-    return bigNet.existsSync() && smallNet.existsSync();
+    try {
+      final found = await bigNet.exists() && await smallNet.exists();
+      if (found) {
+        _nnueSumCheckResult ??= await Isolate.run(() {
+          return _checksumMatches(bigNet.path, StockfishEngine.bigNetHash) &&
+              _checksumMatches(smallNet.path, StockfishEngine.smallNetHash);
+        });
+
+        if (_nnueSumCheckResult == true) {
+          return true;
+        } else {
+          _logger.warning('NNUE files are corrupted.');
+        }
+      }
+
+      return false;
+    } catch (e) {
+      _logger.warning('Error checking NNUE files: $e');
+      return false;
+    }
   }
 
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
@@ -317,7 +351,8 @@ class EvaluationService {
           },
         );
         if (isOk == true) {
-          return doDownload();
+          await doDownload();
+          return checkNNUEFiles();
         } else {
           return Future.value(false);
         }
@@ -333,10 +368,12 @@ class EvaluationService {
       throw Exception('App support directory is null.');
     }
 
+    _nnueSumCheckResult = null;
+
     // delete any existing nnue files before downloading
     await for (final entity in appSupportDirectory.list(followLinks: false)) {
       if (entity is File && entity.path.endsWith('.nnue')) {
-        debugPrint('Deleting existing nnue ${entity.path}');
+        _logger.info('Deleting existing nnue ${entity.path}');
         await entity.delete();
       }
     }
@@ -351,8 +388,13 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that holds the state of the engine and the current evaluation.
-@riverpod
-class EngineEvaluation extends _$EngineEvaluation {
+final engineEvaluationProvider =
+    NotifierProvider.autoDispose<EngineEvaluation, EngineEvaluationState>(
+      EngineEvaluation.new,
+      name: 'EngineEvaluationProvider',
+    );
+
+class EngineEvaluation extends Notifier<EngineEvaluationState> {
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).state;
@@ -401,6 +443,10 @@ Eval? pickBestEval({
   /// The eval from the server analysis
   required ExternalEval? serverEval,
 }) {
+  if (localEval?.threatMode == true) {
+    return localEval;
+  }
+
   return switch (savedEval) {
     CloudEval() => savedEval,
     final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
@@ -420,4 +466,10 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
+}
+
+bool _checksumMatches(String filePath, String expectedHash) {
+  final bytes = File(filePath).readAsBytesSync();
+  final hash = sha256.convert(bytes).toString().substring(0, 12);
+  return hash == expectedHash;
 }

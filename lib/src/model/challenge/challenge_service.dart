@@ -20,17 +20,14 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-part 'challenge_service.g.dart';
-
-@Riverpod(keepAlive: true)
-ChallengeService challengeService(Ref ref) {
+/// A provider for [ChallengeService].
+final challengeServiceProvider = Provider<ChallengeService>((Ref ref) {
   final service = ChallengeService(ref);
   ref.onDispose(() => service.dispose());
   return service;
-}
+}, name: 'ChallengeServiceProvider');
 
 /// A service that listens to challenge events and shows notifications.
 class ChallengeService {
@@ -61,11 +58,22 @@ class ChallengeService {
       final (response, notification) = data;
       switch (notification) {
         case ChallengeNotification(:final challenge):
-          _onNotificationResponse(response.actionId, challenge);
+          _onChallengeForegroundNotificationResponse(response.actionId, challenge);
+        case ChallengeCreatedNotification(:final challengeId):
+          _onChallengeBackgroundNotificationResponse(challengeId);
+        case ChallengeAcceptedNotification(:final fullId):
+          _onChallengeAccepted(fullId);
         case _:
           break;
       }
     });
+  }
+
+  /// Accept a challenge and return the created game's full ID.
+  Future<GameFullId?> acceptChallenge(ChallengeId id) async {
+    final challengeRepo = ref.read(challengeRepositoryProvider);
+    await challengeRepo.accept(id);
+    return await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
   }
 
   void _onSocketEvent(ChallengesList current) {
@@ -108,7 +116,10 @@ class ChallengeService {
   }
 
   /// Handle a local notification response when the app is in the foreground.
-  Future<void> _onNotificationResponse(String? actionid, Challenge challenge) async {
+  Future<void> _onChallengeForegroundNotificationResponse(
+    String? actionid,
+    Challenge challenge,
+  ) async {
     final challengeId = challenge.id;
 
     switch (actionid) {
@@ -134,10 +145,27 @@ class ChallengeService {
     }
   }
 
-  Future<GameFullId?> acceptChallenge(ChallengeId id) async {
-    final challengeRepo = ref.read(challengeRepositoryProvider);
-    await challengeRepo.accept(id);
-    return await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
+  /// Handle a local notification response when the app is in the background.
+  Future<void> _onChallengeBackgroundNotificationResponse(ChallengeId id) async {
+    final challenge = await ref.read(challengeRepositoryProvider).show(id);
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (context == null || !context.mounted) return;
+    _showConfirmDialog(context, challenge);
+  }
+
+  Future<void> _onChallengeAccepted(GameFullId fullId) async {
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (context == null || !context.mounted) return;
+
+    final rootNavState = Navigator.of(context, rootNavigator: true);
+    if (rootNavState.canPop()) {
+      rootNavState.popUntil((route) => route.isFirst);
+    }
+
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
   }
 
   Future<void> _acceptChallenge(ChallengeId id) async {
@@ -150,15 +178,7 @@ class ChallengeService {
       return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
     }
 
-    final rootNavState = Navigator.of(context, rootNavigator: true);
-    if (rootNavState.canPop()) {
-      rootNavState.popUntil((route) => route.isFirst);
-    }
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
+    _onChallengeAccepted(fullId);
   }
 
   void _showDeclineDialog(BuildContext context, ChallengeId id) {

@@ -73,7 +73,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Не следите ниту еден корисник.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'ОК';
@@ -1420,6 +1420,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleMates => 'Матови';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Цели';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Bishop endgame';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -4028,6 +4049,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get analysisShapesHowTo => 'Притисни shift+click или десен клик за да нацрташ кругови или стрелки на таблата.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Овозможи пораки од другите играчи';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsMk extends AppLocalizations {
   String get simulDescriptionHelp => 'Дали сакате нешто да им кажете на натпреварувачите?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param е достапен за понапредна синтакса.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get studyAlphabetical => 'Alphabetical';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Add a new chapter';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsMk extends AppLocalizations {
       locale: localeName,
       other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
       one: 'Paste your PGN text here, up to $count game',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

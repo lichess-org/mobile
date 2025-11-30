@@ -73,7 +73,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Լավ';
@@ -1420,6 +1420,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleMates => 'Մատեր';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Նպատակներ';
 
   @override
@@ -1721,6 +1724,18 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
 
   @override
@@ -1854,6 +1869,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Վուկովիչի մատ';
@@ -4028,6 +4049,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get analysisShapesHowTo => 'Խաղատախտակի վրա շրջանակներ և սլաքներ պատկերելու համար օգտագործեք Shift+մկնիկի ձախ կոճակը կամ աջ կոճակը։';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Թույլ տալ այլ խաղացողներին Ձեզ հաղորդագրություններ ուղարկել';
 
   @override
@@ -4645,8 +4669,8 @@ class AppLocalizationsHy extends AppLocalizations {
   String get simulDescriptionHelp => 'Ցանկանո՞ւմ եք որևէ բան պատմել մասնակիցներին։';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param հասանելի է ընդլայնված ֆորմատավորման համար';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5513,6 +5537,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyAlphabetical => 'Այբբենական կարգով';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Ավելացնել նոր գլուխ';
 
   @override
@@ -6071,6 +6098,28 @@ class AppLocalizationsHy extends AppLocalizations {
       locale: localeName,
       other: 'Տեղադրեք տեսքտը PGN ձևաչափով, $count պարտիայից ոչ ավելի',
       one: 'Տեղադրեք տեսքտը PGN ձևաչափով, $count պարտիայից ոչ ավելի',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count թիմով մրցաշար',
+      one: '$count թիմով մրցաշար',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

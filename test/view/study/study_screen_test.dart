@@ -46,7 +46,6 @@ StudyChapter makeChapter({
 Study makeStudy({
   StudyChapter? chapter,
   IList<StudyChapterMeta>? chapters,
-  IList<StudyMember>? members,
   IList<String?> hints = const IList.empty(),
   IList<String?> deviationComments = const IList.empty(),
 }) {
@@ -61,14 +60,12 @@ Study makeStudy({
     topics: const IList.empty(),
     chapters: chapters ?? IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
     chapter: chapter,
-    members:
-        members ??
-        IList(const [
-          StudyMember(
-            user: LightUser(id: UserId(''), name: ''),
-            role: '',
-          ),
-        ]),
+    members: IMap(const {
+      UserId(''): StudyMember(
+        user: LightUser(id: UserId(''), name: ''),
+        role: '',
+      ),
+    }),
     hints: hints,
     deviationComments: deviationComments,
   );
@@ -86,7 +83,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
         defaultPreferences: {
           PrefCategory.study.storageKey: jsonEncode(
             StudyPrefs.defaults.copyWith(inlineNotation: true).toJson(),
@@ -136,7 +135,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -207,7 +208,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
         defaultPreferences: {
           PrefCategory.study.storageKey: jsonEncode(
             StudyPrefs.defaults.copyWith(inlineNotation: true).toJson(),
@@ -269,7 +272,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -371,17 +376,38 @@ void main() {
               orientation: Side.white,
               gamebook: true,
             ),
-            hints: ['Hint 1', null, null, null].lock,
+            chapters: IList(const [
+              StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
+              StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
+            ]),
+            hints: ['Hint 1', null, null, null, 'Hint 2'].lock,
             deviationComments: [null, 'Shown if any move other than d4 is played', null, null].lock,
           ),
-          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3',
+          '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
+        ),
+      );
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
+      ).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('2'),
+              orientation: Side.white,
+              gamebook: true,
+            ),
+            hints: ['Hint 1'].lock,
+          ),
+          '1. e4 e5',
         ),
       );
 
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for study to load
@@ -399,6 +425,9 @@ void main() {
       expect(find.text('Shown if any move other than d4 is played'), findsOneWidget);
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
+
+      // Hint should still be shown after incorrect move
+      expect(find.text('Hint 1'), findsOneWidget);
 
       await playMove(tester, 'd2', 'd4');
       expect(find.text('Shown if d4 is played'), findsOneWidget);
@@ -420,7 +449,33 @@ void main() {
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
       expect(find.text("That's not the move!"), findsNothing);
+
+      await playMove(tester, 'g1', 'f3');
+      // Wait move and opponent's response to be played
+      await tester.pump(const Duration(seconds: 1));
+
+      // This move has a hint again
+      expect(find.text('Get a hint'), findsOneWidget);
+      await tester.tap(find.text('Get a hint'));
+      await tester.pump(); // Wait for hint to be shown
+      expect(find.text('Hint 2'), findsOneWidget);
+
+      // Open chapter selection dialog
+      await tester.tap(find.byTooltip('2 Chapters'));
+      // Wait for dialog to open
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('2 Chapter 2', findRichText: true));
+      // Wait for chapter to load
+      await tester.pumpAndSettle();
+
+      // When switching to a new chapter, hint state should be reset as well
+      expect(find.text('Get a hint'), findsOneWidget);
+      await tester.tap(find.text('Get a hint'));
+      await tester.pump(); // Wait for hint to be shown
+      expect(find.text('Hint 1'), findsOneWidget);
     });
+
     testWidgets('Illegal Position in Study Chapter', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
 
@@ -461,7 +516,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyScreen(id: testId),
-        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -531,7 +588,9 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const StudyScreen(id: testId),
-      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
     );
     await tester.pumpWidget(app);
     // Wait for study to load
@@ -617,7 +676,9 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const StudyScreen(id: testId),
-      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
     );
     await tester.pumpWidget(app);
     // Wait for study to load

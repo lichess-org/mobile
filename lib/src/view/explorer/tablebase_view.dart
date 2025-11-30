@@ -17,7 +17,7 @@ class TablebaseView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tablebaseAsync = ref.watch(tablebaseProvider(fen: position.fen));
+    final tablebaseAsync = ref.watch(tablebaseProvider(position.fen));
 
     switch (tablebaseAsync) {
       case AsyncData(:final value):

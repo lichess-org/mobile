@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">アカウント設定</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">これらの設定は、あなたの Lichess アカウントを使用しているすべての端末で有効になります。</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">すべて</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">本当にいいですか？</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">盤面の設定</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">待ったをキャンセル</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">クリア</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">保存した手を削除</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ゲームに参加</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">フィードバック</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">こんばんは、%s さん</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">こんばんは</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">こんにちは、%s さん</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">こんにちは</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">変化手順を隠す</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ホーム</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ライブ配信者</string>
@@ -15,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">まだ旧版のアプリやウェブサイトの機能がすべて使えるわけではありませんが、今後も機能を追加していく予定です。</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">誰もフォローしていません。</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">オフライン（2人対戦）</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">オフライン（2人対戦）</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">「%s」を含むプレイヤー</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">左</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">右</string>
@@ -28,10 +35,29 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">お気に入りのオープニングやテーマの問題が選べます。</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">問題</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">最近の検索</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">サーバ解析</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">ブックマークから削除</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">サーバ解析</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">時計の位置</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">プリセット</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">丸</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">四角</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">ホーム画面のウィジェット</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">没入モード</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">捕獲された駒</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">画像を選択</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">選んだ背景はダークモードでのみ有効になります。暗い画像を選ぶことをおすすめします。</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">画像をぼかす</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">盤面を隠す</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">盤面を表示する</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">スワイプして他の背景を表示</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">タップとドラッグの両方</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">2つのマスをタップ</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">図形の描画</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">2本の指を使って図形を描くことができます。まず、片方の指で何も無いマスに触れ続けます。その状態で、もう一方の指で盤面をドラッグすると図形を描けます。</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">盤面のフチの表示</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">触覚フィードバック</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">有効にすると、着手・捕獲したときに端末が少し震えます。</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">設定</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN を共有</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ゲーム URLを共有</string>
@@ -47,4 +73,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s はこのバージョンでは対応していません.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">対戦相手の参加を待っています…</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">見る</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess アプリにようこそ！</string>
 </resources>

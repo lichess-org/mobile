@@ -4,9 +4,11 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -14,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -25,6 +28,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -49,7 +53,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(testGameFullId)),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -100,7 +108,11 @@ void main() {
             GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
           ),
         ),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -161,7 +173,50 @@ void main() {
     });
   });
 
-  group('Game action negotiation', () {
+  group('Game actions', () {
+    testWidgets('move confirmation', (WidgetTester tester) async {
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(32));
+
+      await playMove(tester, 'g1', 'f3');
+
+      // see confirmation dialog
+      expect(find.text('Confirm move'), findsOneWidget);
+      // move is shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move is not yet played so it doesn't appear in the move list
+      expect(find.text('Nf3'), findsNothing);
+
+      // confirm the move
+      await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+      await tester.pump();
+
+      // move still shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move appears in move list
+      expect(find.text('Nf3'), findsOneWidget);
+    });
+
     testWidgets('takeback', (WidgetTester tester) async {
       await createTestGame(
         tester,
@@ -338,7 +393,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
@@ -360,7 +419,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
@@ -574,7 +637,9 @@ void main() {
           black: Duration(minutes: 3),
           emerg: Duration(seconds: 30),
         ),
-        overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+        overrides: {
+          soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+        },
       );
       expect(
         tester.widget<Clock>(findClockWithTime(Side.white, '0:40')).emergencyThreshold,
@@ -694,7 +759,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(gameFullId)),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(mockClient, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(mockClient, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pump(const Duration(milliseconds: 10));
@@ -759,7 +828,9 @@ void main() {
         await createTestGame(
           tester,
           pgn: 'e4 e5',
-          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+          overrides: {
+            soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+          },
         );
         sendServerSocketMessages(testGameSocketUri, [
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
@@ -779,7 +850,9 @@ void main() {
           tester,
           pgn: 'e4 e5',
           defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
-          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+          overrides: {
+            soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+          },
         );
         sendServerSocketMessages(testGameSocketUri, [
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
@@ -788,6 +861,51 @@ void main() {
         verifyNever(() => mockSoundService.play(Sound.confirmation));
       });
     });
+  });
+
+  group('Wakelock', () {
+    for (final gameStatus in GameStatus.values) {
+      final gameIsFinished = gameStatus != GameStatus.started && gameStatus != GameStatus.created;
+      testWidgets(
+        '${gameIsFinished ? 'disables' : 'does not disable'} when game status is ${gameStatus.name}',
+        (tester) async {
+          final List<ToggleMessage> messages = <ToggleMessage>[];
+          const pigeonCodec = _PigeonCodec();
+
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+            'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+            (ByteData? data) async {
+              final decodedMessages = (pigeonCodec.decodeMessage(data) as List)
+                  .cast<ToggleMessage>();
+              messages.add(decodedMessages.single);
+              return data;
+            },
+          );
+
+          addTearDown(() {
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+              'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+              null,
+            );
+          });
+
+          await createTestGame(
+            tester,
+            pgn: 'e4 e5',
+            defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
+          );
+
+          sendServerSocketMessages(testGameSocketUri, [
+            '{"t":"endData","d":{"status":"${gameStatus.name}","winner":"white","clock":{"wc":17800,"bc":0}}}',
+          ]);
+
+          await tester.pump();
+
+          await tester.pump(const Duration(seconds: 500));
+          expect(messages.last.enable, gameIsFinished ? isFalse : isTrue);
+        },
+      );
+    }
   });
 }
 
@@ -847,8 +965,9 @@ Future<void> createTestGame(
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
   Map<String, Object>? defaultPreferences,
-  List<Override>? overrides,
+  Map<ProviderOrFamily, Override>? overrides,
   TournamentMeta? tournament,
+  ServerGamePrefs? serverPrefs,
 
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
@@ -859,15 +978,17 @@ Future<void> createTestGame(
     tester,
     home: const GameScreen(source: ExistingGameSource(gameFullId)),
     defaultPreferences: defaultPreferences,
-    overrides: [
-      lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+    overrides: {
+      lichessClientProvider: lichessClientProvider.overrideWith(
+        (ref) => LichessClient(client, ref),
+      ),
       if (socketFactory != null)
-        webSocketChannelFactoryProvider.overrideWith((ref) {
+        webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith((ref) {
           ref.onDispose(socketFactory.dispose);
           return socketFactory;
         }),
       ...?overrides,
-    ],
+    },
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
@@ -885,6 +1006,7 @@ Future<void> createTestGame(
       clock: clock,
       correspondenceClock: correspondenceClock,
       tournament: tournament,
+      serverPrefs: serverPrefs,
     ),
   ]);
   await tester.pump();
@@ -893,7 +1015,7 @@ Future<void> createTestGame(
 Future<void> loadFinishedTestGame(
   WidgetTester tester, {
   String serverFullEvent = _finishedGameFullEvent,
-  List<Override>? overrides,
+  Map<ProviderOrFamily, Override>? overrides,
 }) async {
   final json = jsonDecode(serverFullEvent) as Map<String, dynamic>;
   final gameId = GameFullEvent.fromJson(json['d'] as Map<String, dynamic>).game.id;
@@ -901,10 +1023,12 @@ Future<void> loadFinishedTestGame(
   final app = await makeTestProviderScopeApp(
     tester,
     home: GameScreen(source: ExistingGameSource(gameFullId)),
-    overrides: [
-      lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+    overrides: {
+      lichessClientProvider: lichessClientProvider.overrideWith(
+        (ref) => LichessClient(client, ref),
+      ),
       ...?overrides,
-    ],
+    },
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
@@ -918,3 +1042,36 @@ Future<void> loadFinishedTestGame(
 const _finishedGameFullEvent = '''
 {"t":"full","d":{"game":{"id":"CCW6EEru","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"6kr/p1p2rpp/4Q3/2b1p3/8/2P5/P2N1PPP/R3R1K1 b - - 0 22","turns":43,"source":"lobby","status":{"id":31,"name":"resign"},"createdAt":1706185945680,"winner":"white","pgn":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6"},"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9},"socket":0,"clock":{"running":false,"initial":120,"increment":1,"white":31.2,"black":27.42,"emerg":15,"moretime":15},"takebackable":true,"youAre":"white","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}}
 ''';
+
+/// Necessary to mock wakelock_plus method calls
+/// See: https://github.com/fluttercommunity/wakelock_plus/blob/0c74e5bbc6aefac57b6c96bb7ef987705ed559ec/wakelock_plus_platform_interface/lib/messages.g.dart#L127-L156
+class _PigeonCodec extends StandardMessageCodec {
+  const _PigeonCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is int) {
+      buffer.putUint8(4);
+      buffer.putInt64(value);
+    } else if (value is ToggleMessage) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else if (value is IsEnabledMessage) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 129:
+        return ToggleMessage.decode(readValue(buffer)!);
+      case 130:
+        return IsEnabledMessage.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}

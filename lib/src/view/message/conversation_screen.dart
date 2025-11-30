@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 sealed class DisplayItem {}
@@ -84,7 +84,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           showPatron: true,
           shouldShowOnline: true,
           onTap: () {
-            Navigator.push(context, UserScreen.buildRoute(context, widget.user));
+            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
           },
         ),
       ),
@@ -231,9 +231,7 @@ class _ContactTyping extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTyping = ref.watch(
-      conversationControllerProvider(
-        user.id,
-      ).select((state) => state.valueOrNull?.contactTyping == true),
+      conversationControllerProvider(user.id).select((state) => state.value?.contactTyping == true),
     );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),

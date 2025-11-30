@@ -1,17 +1,22 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -97,7 +102,8 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
         final elementWidth = widgetWidth * flexWeights[0] / flexWeights.reduce((a, b) => a + b);
         final pictureHeight = elementWidth / 2;
         final elementHeightFactor = flexWeights.length == 2 ? 0.75 : 0.6;
-        final elementHeight = pictureHeight + (pictureHeight * elementHeightFactor);
+        final infoHeight = math.max(120, pictureHeight * elementHeightFactor);
+        final elementHeight = pictureHeight + infoHeight;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(
@@ -131,7 +137,7 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
   }
 }
 
-class BroadcastCarouselItem extends StatefulWidget {
+class BroadcastCarouselItem extends ConsumerStatefulWidget {
   const BroadcastCarouselItem({
     required this.broadcast,
     required this.flexWeights,
@@ -175,30 +181,30 @@ class BroadcastCarouselItem extends StatefulWidget {
       );
 
   @override
-  State<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
+  ConsumerState<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
 }
 
-class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
+class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
-  ImageProvider get imageProvider =>
-      imageUrl != null ? NetworkImage(imageUrl!) : kDefaultBroadcastImage;
+  ImageProvider get imageProvider => imageUrl != null
+      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      : kDefaultBroadcastImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final cachedColors = _colorsCache[imageProvider];
-    if (_colorsCache.containsKey(imageProvider)) {
-      _cardColors = cachedColors;
+    if (_colorsCache.containsKey(imageUrl)) {
+      _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(NetworkImage(imageUrl!));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
     }
   }
 
-  Future<void> _getImageColors(NetworkImage provider) async {
+  Future<void> _getImageColors(HttpNetworkImage provider) async {
     if (!mounted) return;
 
     if (Scrollable.recommendDeferredLoadingForContext(context)) {
@@ -207,7 +213,7 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
       });
     } else if (widget.worker.closed == false) {
       await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
       final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
       if (response != null) {
@@ -293,7 +299,7 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
 }
 
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
-final Map<ImageProvider, _CardColors?> _colorsCache = {};
+final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd().add_jm();
 
@@ -485,7 +491,7 @@ Future<_CardColors?> _computeImageColors(
       primaryContainer: Color(primaryContainer),
       onPrimaryContainer: Color(onPrimaryContainer),
     );
-    _colorsCache[NetworkImage(imageUrl)] = cardColors;
+    _colorsCache[imageUrl] = cardColors;
     return cardColors;
   }
   return null;
@@ -496,71 +502,16 @@ Future<void> preCacheBroadcastImages(
   BuildContext context, {
   required Iterable<Broadcast> broadcasts,
   required ImageColorWorker worker,
+  required http.Client httpClient,
 }) async {
-  for (final broadcast in broadcasts) {
+  for (final broadcast in broadcasts.take(5)) {
     final imageUrl = broadcast.tour.imageUrl;
     if (imageUrl != null) {
-      final provider = NetworkImage(imageUrl);
+      final provider = HttpNetworkImage(imageUrl, httpClient);
       await precacheImage(provider, context);
-      final ui.Image scaledImage = await _imageProviderToScaled(provider);
+      final ui.Image scaledImage = await imageProviderToScaled(provider);
       final imageBytes = await scaledImage.toByteData();
       await _computeImageColors(worker, imageUrl, imageBytes!);
     }
   }
-}
-
-// Scale image size down to reduce computation time of color extraction.
-Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
-  const double maxDimension = 112.0;
-  final ImageStream stream = imageProvider.resolve(
-    const ImageConfiguration(size: Size(maxDimension, maxDimension)),
-  );
-  final Completer<ui.Image> imageCompleter = Completer<ui.Image>();
-  late ImageStreamListener listener;
-  late ui.Image scaledImage;
-  Timer? loadFailureTimeout;
-
-  listener = ImageStreamListener(
-    (ImageInfo info, bool sync) async {
-      loadFailureTimeout?.cancel();
-      stream.removeListener(listener);
-      final ui.Image image = info.image;
-      final int width = image.width;
-      final int height = image.height;
-      double paintWidth = width.toDouble();
-      double paintHeight = height.toDouble();
-      assert(width > 0 && height > 0);
-
-      final bool rescale = width > maxDimension || height > maxDimension;
-      if (rescale) {
-        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
-      }
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder);
-      paintImage(
-        canvas: canvas,
-        rect: Rect.fromLTRB(0, 0, paintWidth, paintHeight),
-        image: image,
-        filterQuality: FilterQuality.none,
-      );
-
-      final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
-    },
-    onError: (Object exception, StackTrace? stackTrace) {
-      stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
-    },
-  );
-
-  loadFailureTimeout = Timer(const Duration(seconds: 5), () {
-    stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
-  });
-
-  stream.addListener(listener);
-  await imageCompleter.future;
-  return scaledImage;
 }

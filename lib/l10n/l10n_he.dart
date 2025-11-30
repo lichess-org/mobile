@@ -73,7 +73,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'אינכם עוקבים אחר אף אחד.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'בסדר';
@@ -1462,6 +1462,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleMates => 'מט';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'יעדים';
 
   @override
@@ -1773,6 +1776,18 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'בצעו מט למלך בשורת הפתיחה שלו, בה הוא כלוא על ידי כלים מכוחותיו.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'סיום רצים';
 
   @override
@@ -1906,6 +1921,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'הצריח ממוקם ליד המלך של היריב והוא נתמך על ידי מלכה, שמצדה חוסמת את נתיב הבריחה של המלך. הצריח והמלכה לוכדים את המלך ב״קופסת חנק״ בגודל 3X3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
@@ -4080,6 +4101,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get analysisShapesHowTo => 'הקש \"Shift\" + מקש עכבר שמאלי או ימני כדי לצייר חצים ועיגולים על הלוח.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'אפשר/י לשחקנים אחרים לשלוח לך הודעות';
 
   @override
@@ -4697,8 +4721,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get simulDescriptionHelp => 'משהו שאת/ה רוצה להגיד למשתתפים?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param זמין לתחביר מתקדם יותר.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5659,6 +5683,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyAlphabetical => 'בסדר האלפבית';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'הוסיפו פרק חדש';
 
   @override
@@ -6225,6 +6252,32 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'הדבק את טקסט הPGN שלך כאן, עד ל$count משחקים',
       two: 'הדבק את טקסט הPGN שלך כאן, עד ל$count משחקים',
       one: 'הדבק את טקסט הPGN שלך כאן, עד למשחק $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'קרב של $count קבוצות',
+      many: 'קרב של $count קבוצות',
+      two: 'קרב של $count קבוצות',
+      one: 'קרב של קבוצה $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count מנהיגים בכל קבוצה',
+      many: '$count מנהיגים בכל קבוצה',
+      two: '$count מנהיגים בכל קבוצה',
+      one: 'מנהיג אחד בכל קבוצה',
     );
     return '$_temp0';
   }

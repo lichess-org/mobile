@@ -7,71 +7,53 @@ import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'user_repository_providers.g.dart';
 
 const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
-@riverpod
-Future<User> user(Ref ref, {required UserId id}) {
+final userProvider = FutureProvider.autoDispose.family<User, UserId>((Ref ref, UserId id) {
   return ref.read(userRepositoryProvider).getUser(id, withCanChallenge: true);
-}
+}, name: 'UserProvider');
 
-@riverpod
-Future<(User, UserStatus)> userAndStatus(Ref ref, {required UserId id}) {
-  final repo = ref.read(userRepositoryProvider);
-  return Future.wait([
-    repo.getUser(id, withCanChallenge: true),
-    repo.getUsersStatuses({id}.lock),
-  ], eagerError: true).then((value) => (value[0] as User, (value[1] as IList<UserStatus>).first));
-}
+final userPerfStatsProvider = FutureProvider.autoDispose.family<UserPerfStats, (UserId, Perf)>((
+  Ref ref,
+  (UserId, Perf) params,
+) {
+  return ref.read(userRepositoryProvider).getPerfStats(params.$1, params.$2);
+}, name: 'UserPerfStatsProvider');
 
-@riverpod
-Future<UserPerfStats> userPerfStats(Ref ref, {required UserId id, required Perf perf}) {
-  return ref.read(userRepositoryProvider).getPerfStats(id, perf);
-}
-
-@riverpod
-Future<IList<UserStatus>> userStatuses(Ref ref, {required ISet<UserId> ids}) {
-  return ref.read(userRepositoryProvider).getUsersStatuses(ids);
-}
-
-@riverpod
-Future<IList<Streamer>> liveStreamers(Ref ref) {
+final liveStreamersProvider = FutureProvider.autoDispose<IList<Streamer>>((Ref ref) {
   return ref.withAggregatorCacheFor(
     (client, aggregator) => UserRepository(client, aggregator).getLiveStreamers(),
     const Duration(minutes: 1),
   );
-}
+}, name: 'LiveStreamersProvider');
 
-@riverpod
-Future<Top1Leaderboard> top1(Ref ref) {
+final top1Provider = FutureProvider.autoDispose<Top1Leaderboard>((Ref ref) {
   return ref.withAggregatorCacheFor(
     (client, aggregator) => UserRepository(client, aggregator).getTop1(),
     const Duration(hours: 12),
   );
-}
+}, name: 'Top1Provider');
 
-@riverpod
-Future<Leaderboard> leaderboard(Ref ref) {
+final leaderboardProvider = FutureProvider.autoDispose<Leaderboard>((Ref ref) {
   return ref.withAggregatorCacheFor(
     (client, aggregator) => UserRepository(client, aggregator).getLeaderboard(),
     const Duration(hours: 2),
   );
-}
+}, name: 'LeaderboardProvider');
 
-@riverpod
-Future<IList<User>> onlineBots(Ref ref) {
+final onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((Ref ref) {
   return ref.withAggregatorCacheFor(
     (client, aggregator) =>
         UserRepository(client, aggregator).getOnlineBots().then((bots) => bots.toIList()),
     const Duration(hours: 5),
   );
-}
+}, name: 'OnlineBotsProvider');
 
-@riverpod
-Future<IList<LightUser>> autoCompleteUser(Ref ref, String term) async {
+final autoCompleteUserProvider = FutureProvider.autoDispose.family<IList<LightUser>, String>((
+  Ref ref,
+  String term,
+) async {
   // debounce calls as user might be typing
   var didDispose = false;
   ref.onDispose(() => didDispose = true);
@@ -81,17 +63,23 @@ Future<IList<LightUser>> autoCompleteUser(Ref ref, String term) async {
   }
 
   return ref.read(userRepositoryProvider).autocompleteUser(term);
-}
+}, name: 'AutoCompleteUserProvider');
 
-@riverpod
-Future<IList<UserRatingHistoryPerf>> userRatingHistory(Ref ref, {required UserId id}) {
-  return ref.withAggregatorCacheFor(
-    (client, aggregator) => UserRepository(client, aggregator).getRatingHistory(id),
-    const Duration(minutes: 1),
-  );
-}
+final userRatingHistoryProvider = FutureProvider.autoDispose
+    .family<IList<UserRatingHistoryPerf>, UserId>((Ref ref, UserId id) {
+      return ref.withAggregatorCacheFor(
+        (client, aggregator) => UserRepository(client, aggregator).getRatingHistory(id),
+        const Duration(minutes: 1),
+      );
+    }, name: 'UserRatingHistoryProvider');
 
-@riverpod
-Future<Crosstable> crosstable(Ref ref, UserId userId1, UserId userId2, {bool matchup = true}) {
-  return ref.read(userRepositoryProvider).getCrosstable(userId1, userId2, matchup: matchup);
-}
+typedef CrosstableProviderParams = ({UserId userId1, UserId userId2, bool matchup});
+
+final crosstableProvider = FutureProvider.autoDispose.family<Crosstable, CrosstableProviderParams>((
+  Ref ref,
+  CrosstableProviderParams params,
+) {
+  return ref
+      .read(userRepositoryProvider)
+      .getCrosstable(params.userId1, params.userId2, matchup: params.matchup);
+}, name: 'CrosstableProvider');

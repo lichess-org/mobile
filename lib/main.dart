@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ Future<void> main() async {
 
   await preloadPieceImages();
 
-  await setupFirstLaunch();
+  await initializeApp();
 
   await SoundService.initialize();
 
@@ -37,5 +38,16 @@ Future<void> main() async {
     await androidDisplayInitialization(widgetsBinding);
   }
 
-  runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
+  runApp(
+    ProviderScope(
+      observers: [ProviderLogger()],
+      retry: (retryCount, error) {
+        if (error is ServerException && error.statusCode != 503) return null;
+        if (retryCount > 5) return null;
+
+        return Duration(milliseconds: 500 * (1 << retryCount));
+      },
+      child: const AppInitializationScreen(),
+    ),
+  );
 }

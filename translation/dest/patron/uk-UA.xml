@@ -16,7 +16,7 @@
   <string name="newPatrons">Нові Покровителі</string>
   <string name="freeChess">Безкоштовні шахи для всіх, назавжди!</string>
   <string name="noAdsNoSubs">Без реклами та підписок, але з відкритим вихідним кодом і відданістю.</string>
-  <string name="thankYou">Дякуємо за ваш внесок!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Дякуємо за ваш внесок!</string>
   <string name="youHaveLifetime">У вас довічний обліковий запис \"Покровителя\". Це доволі круто!</string>
   <string name="patronUntil">Ваш обліковий запис Покровителя діє до %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Якщо не буде продовжений, ваш обліковий запис перетвориться на звичайний обліковий запис.</string>

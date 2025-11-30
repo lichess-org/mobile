@@ -769,6 +769,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Voit kelata siirtoja myös hiiren vieritysrullalla.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Esikatsele tietokoneen muunnelmia viemällä hiiren osoitin niiden päälle.</string>
   <string name="analysisShapesHowTo">Käytä hiiren kakkospainiketta (tai shiftiä ja ykköspainiketta) piirtääksesi ympyröitä ja nuolia laudalle.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl tai Shift = punainen; Command, Alt tai Meta = sininen; näppäinyhdistelmä (yksi näppäin kustakin ryhmästä edellä) = keltainen.</string>
   <string name="letOtherPlayersMessageYou">Anna muiden käyttäjien lähettää sinulle viestejä</string>
   <string name="receiveForumNotifications">Lähetä ilmoitus, kun minut mainitaan foorumissa</string>
   <string name="shareYourInsightsData">Jaa Insights-tietosi</string>
@@ -974,7 +975,6 @@ Jätä kenttä tyhjäksi, jos haluat pelien alkavan normaalista alkuasemasta.</s
   <string name="simulFeaturedHelp">Näytä simultaanisi kaikille %slla. Poista valinta pitääksesi simultaanin yksityisenä.</string>
   <string name="simulDescription">Simultaanin kuvaus</string>
   <string name="simulDescriptionHelp">Haluatko kertoa osallistujille jotain?</string>
-  <string name="markdownAvailable">Tekstin yksityiskohtaisempaan muotoiluun voit käyttää %s-kieltä.</string>
   <string name="embedsAvailable">Voit upottaa pelin tai tutkielman kappaleen liittämällä sen URL-osoitteen.</string>
   <string name="inYourLocalTimezone">Omalla aikavyöhykkeelläsi</string>
   <string name="tournChat">Turnauksen keskusteluhuone</string>

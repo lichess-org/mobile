@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,10 +17,10 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A widget to display player information above/below the chess board.
@@ -106,7 +105,11 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[
-                ConnectedIcon(isConnected: player.onGame == true, shouldShowIsOnGameLabels: true),
+                ConnectedIcon(
+                  isConnected: player.onGame == true,
+                  shouldShowIsOnGameLabels: true,
+                  size: DefaultTextStyle.of(context).style.fontSize,
+                ),
               ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[
@@ -135,8 +138,8 @@ class GamePlayer extends StatelessWidget {
               ),
               if (player.user?.flair != null) ...[
                 const SizedBox(width: 5),
-                CachedNetworkImage(
-                  imageUrl: lichessFlairSrc(player.user!.flair!),
+                CachedHttpNetworkImage(
+                  lichessFlairSrc(player.user!.flair!),
                   errorWidget: (_, _, _) => kEmptyWidget,
                   width: 16,
                   height: 16,
@@ -217,11 +220,9 @@ class GamePlayer extends StatelessWidget {
                                   if (mePlaying) {
                                     ref.invalidate(accountProvider);
                                   }
-                                  Navigator.of(context).push(
-                                    mePlaying
-                                        ? ProfileScreen.buildRoute(context)
-                                        : UserScreen.buildRoute(context, player.user!),
-                                  );
+                                  Navigator.of(
+                                    context,
+                                  ).push(UserOrProfileScreen.buildRoute(context, player.user!));
                                 }
                               : null,
                           child: playerWidget,

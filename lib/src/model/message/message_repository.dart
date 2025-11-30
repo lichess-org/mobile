@@ -1,10 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 /// A provider that gets the conversation data for the current user.
 final contactsProvider = FutureProvider.autoDispose<Contacts>((ref) {
@@ -18,8 +17,8 @@ final messageRepositoryProvider = Provider<MessageRepository>((ref) {
 
 /// A provider that gets the unread messages count for the current user.
 final unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) {
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) {
     return Future.value((unread: 0, lichess: false));
   }
   final aggregator = ref.watch(aggregatorProvider);

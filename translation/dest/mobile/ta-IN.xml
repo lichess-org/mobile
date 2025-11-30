@@ -20,7 +20,6 @@
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">இந்தப் பக்கத்தைப் பார்க்க நீங்கள் உள்நுழைந்திருக்க வேண்டும்.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">முடிவுகள் இல்லை</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">பழைய செயலி அல்லது வலைத்தளத்தில் உள்ள அனைத்து அம்சங்களும் தற்போது கிடைக்கவில்லை என்பதை நினைவில் கொள்ளவும், ஆனால் நாங்கள் எப்போதும் அம்சங்களைச் சேர்த்து வருகிறோம்.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">நீங்கள் எந்த பயனரையும் பின்தொடரவில்லை.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">சரி</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">பலகையின் மீது</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" கொண்ட வீரர்கள்</string>
@@ -36,7 +35,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">புதிர்கள்</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">சமீபத்திய தேடல்கள்</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">புக்மார்க்கை அகற்று</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">சேவையக பகுப்பாய்வு</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">சேவையக பகுப்பாய்வு</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">கடிகார நிலை</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">முன்னமைவுகள்</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">வட்டம்</string>

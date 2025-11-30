@@ -3,15 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'game_screen_providers.g.dart';
 part 'game_screen_providers.freezed.dart';
 
 /// The state of the [GameScreen].
@@ -19,6 +16,8 @@ part 'game_screen_providers.freezed.dart';
 /// It can be:
 /// - [GameCreatedState]: A game has been created or loaded.
 /// - [ChallengeDeclinedState]: A real time challenge has been declined.
+/// - [SeekCancelledState]: A game seek has been cancelled.
+/// - [ChallengeCancelledState]: A real time challenge has been cancelled.
 sealed class GameScreenState {}
 
 /// Game screen state when a game has been created or loaded.
@@ -41,6 +40,22 @@ sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements Gam
 
   const factory ChallengeDeclinedState(ChallengeResponseDeclined response) =
       _ChallengeDeclinedState;
+}
+
+/// A game seek has been cancelled.
+@freezed
+sealed class SeekCancelledState with _$SeekCancelledState implements GameScreenState {
+  const SeekCancelledState._();
+
+  const factory SeekCancelledState() = _SeekCancelledState;
+}
+
+/// A real time challenge has been cancelled.
+@freezed
+sealed class ChallengeCancelledState with _$ChallengeCancelledState implements GameScreenState {
+  const ChallengeCancelledState._();
+
+  const factory ChallengeCancelledState() = _ChallengeCancelledState;
 }
 
 /// The source from which the [GameScreen] was opened.
@@ -79,14 +94,31 @@ sealed class UserChallengeSource with _$UserChallengeSource implements GameScree
 }
 
 /// A provider that loads or creates a game for the [GameScreen].
-@riverpod
-class GameScreenLoader extends _$GameScreenLoader {
+final gameScreenLoaderProvider = AsyncNotifierProvider.autoDispose
+    .family<GameScreenLoaderNotifier, GameScreenState, GameScreenSource>(
+      GameScreenLoaderNotifier.new,
+      name: 'GameScreenLoaderProvider',
+    );
+
+class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
+  GameScreenLoaderNotifier(this.source);
+
+  final GameScreenSource source;
+
   @override
-  Future<GameScreenState> build(GameScreenSource source) {
+  Future<GameScreenState> build() {
     final service = ref.watch(createGameServiceProvider);
 
     return switch (source) {
-      LobbySource(:final seek) => service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      LobbySource(:final seek) =>
+        service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
       UserChallengeSource(:final challengeRequest) =>
         service
             .newRealTimeChallenge(challengeRequest)
@@ -94,6 +126,7 @@ class GameScreenLoader extends _$GameScreenLoader {
               (data) => switch (data) {
                 ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
                 ChallengeResponseDeclined() => ChallengeDeclinedState(data),
+                ChallengeResponseCancelled() => const ChallengeCancelledState(),
               },
             ),
       ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),
@@ -105,7 +138,16 @@ class GameScreenLoader extends _$GameScreenLoader {
     if (source case LobbySource(:final seek)) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
-      state = AsyncValue.data(await service.newLobbyGame(seek).then((id) => GameCreatedState(id)));
+      state = AsyncValue.data(
+        await service
+            .newLobbyGame(seek)
+            .then(
+              (data) => switch (data) {
+                GameSeekCreated(:final fullId) => GameCreatedState(fullId),
+                GameSeekCancelled() => const SeekCancelledState(),
+              },
+            ),
+      );
     }
   }
 
@@ -115,8 +157,12 @@ class GameScreenLoader extends _$GameScreenLoader {
   }
 }
 
-@riverpod
-class IsBoardTurned extends _$IsBoardTurned {
+final isBoardTurnedProvider = NotifierProvider.autoDispose<IsBoardTurnedNotifier, bool>(
+  IsBoardTurnedNotifier.new,
+  name: 'IsBoardTurnedProvider',
+);
+
+class IsBoardTurnedNotifier extends Notifier<bool> {
   @override
   bool build() {
     return false;
@@ -127,64 +173,32 @@ class IsBoardTurned extends _$IsBoardTurned {
   }
 }
 
-@riverpod
-Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
-  return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
-  );
-}
+/// A provider that indicates whether the game is bookmarked.
+final isGameBookmarkedProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
+  Ref ref,
+  GameFullId gameId,
+) async {
+  return (await ref.watch(gameControllerProvider(gameId).future)).game.bookmarked ?? false;
+}, name: 'IsGameBookmarkedProvider');
 
-@riverpod
-Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
-  return ref.watch(
-    gameControllerProvider(
-      gameId,
-    ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
-  );
-}
-
-@riverpod
-Future<bool> isRealTimePlayableGame(Ref ref, GameFullId gameId) {
-  return ref.watch(
-    gameControllerProvider(
-      gameId,
-    ).selectAsync((state) => state.game.meta.speed != Speed.correspondence && state.game.playable),
-  );
-}
+/// A provider that exposes data needed for sharing the game.
+final gameShareDataProvider = FutureProvider.autoDispose
+    .family<({bool finished, Side? pov}), GameFullId>((Ref ref, GameFullId gameId) async {
+      final state = await ref.watch(gameControllerProvider(gameId).future);
+      return (finished: state.game.finished, pov: state.game.youAre);
+    }, name: 'GameShareDataProvider');
 
 /// User game preferences, defined server-side.
-@riverpod
-Future<({ServerGamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen})>
-userGamePrefs(Ref ref, GameFullId gameId) async {
-  final prefs = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.prefs),
-  );
-  final shouldConfirmMove = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.shouldConfirmMove),
-  );
-  final isZenModeEnabled = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.isZenModeEnabled),
-  );
-  final canAutoQueen = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.canAutoQueen),
-  );
-  return (
-    prefs: prefs,
-    shouldConfirmMove: shouldConfirmMove,
-    isZenModeEnabled: isZenModeEnabled,
-    canAutoQueen: canAutoQueen,
-  );
-}
-
-/// Returns the [PlayableGameMeta].
-///
-/// This is data that won't change during the game.
-@riverpod
-Future<GameMeta> gameMeta(Ref ref, GameFullId gameId) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
-}
-
-@riverpod
-Future<TournamentMeta?> gameTournament(Ref ref, GameFullId gameId) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.tournament));
-}
+final userGamePrefsProvider = FutureProvider.autoDispose
+    .family<
+      ({ServerGamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen}),
+      GameFullId
+    >((Ref ref, GameFullId gameId) async {
+      final state = await ref.watch(gameControllerProvider(gameId).future);
+      return (
+        prefs: state.game.prefs,
+        shouldConfirmMove: state.shouldConfirmMove,
+        isZenModeEnabled: state.isZenModeEnabled,
+        canAutoQueen: state.canAutoQueen,
+      );
+    }, name: 'UserGamePrefsProvider');

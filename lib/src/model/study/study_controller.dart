@@ -4,8 +4,10 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -24,18 +26,26 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_controller.freezed.dart';
-part 'study_controller.g.dart';
 
-@riverpod
-class StudyController extends _$StudyController
+final studyControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<StudyController, StudyState, StudyId>(
+      StudyController.new,
+      name: 'StudyControllerProvider',
+    );
+
+class StudyController extends AsyncNotifier<StudyState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  StudyController(this.id);
+
+  final StudyId id;
+
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
+  Timer? _sendMoveToSocketTimer;
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
@@ -50,29 +60,12 @@ class StudyController extends _$StudyController
   Root get positionTree => _root;
 
   @override
-  @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  StudyState get evaluationState => state.requireValue;
-
-  @override
-  Future<StudyState> build(StudyId id) async {
+  Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
+      _sendMoveToSocketTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
-      disposeEngineEvaluation();
     });
 
     final socketPool = ref.watch(socketPoolProvider);
@@ -82,8 +75,6 @@ class StudyController extends _$StudyController
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    initEngineEvaluation();
 
     return chapter;
   }
@@ -129,12 +120,15 @@ class StudyController extends _$StudyController
     final variant = study.chapter.setup.variant;
     final orientation = study.chapter.setup.orientation;
 
+    final UserId? me = ref.read(authControllerProvider)?.user.id;
+
     // Some studies have illegal starting positions. This is usually the case for introductory chapters.
     // We do not treat this as an error, but display a static board instead.
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
       final illegalPositionState = StudyState(
+        myId: me,
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
@@ -161,6 +155,7 @@ class StudyController extends _$StudyController
     Move? lastMove;
 
     final studyState = StudyState(
+      myId: me,
       variant: variant,
       study: study,
       currentPath: currentPath,
@@ -215,6 +210,9 @@ class StudyController extends _$StudyController
             study: state.requireValue.study.copyWith(liked: meLiked, likes: likes),
           ),
         );
+      case 'node':
+        // let's just ack the node for now
+        _sendMoveToSocketTimer?.cancel();
     }
   }
 
@@ -242,6 +240,8 @@ class StudyController extends _$StudyController
       return;
     }
 
+    _sendMoveToSocket(move);
+
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
@@ -263,7 +263,7 @@ class StudyController extends _$StudyController
   }
 
   void onPromotionSelection(Role? role) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     if (role == null) {
@@ -288,7 +288,7 @@ class StudyController extends _$StudyController
   }
 
   void userNext() {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state!.currentNode.children.isEmpty) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
@@ -320,7 +320,7 @@ class StudyController extends _$StudyController
   }
 
   void toggleBoard() {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state != null) {
       this.state = AsyncValue.data(state.copyWith(pov: state.pov.opposite));
     }
@@ -370,7 +370,7 @@ class StudyController extends _$StudyController
 
   @override
   void promoteVariation(UciPath path, bool toMainline) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
     _root.promoteAt(path, toMainline: toMainline);
     this.state = AsyncValue.data(
@@ -383,7 +383,41 @@ class StudyController extends _$StudyController
     if (!state.hasValue) return;
 
     _root.deleteAt(path);
+    _recordChange('deleteNode', {'path': path.value, 'jumpTo': path.penultimate.value});
     _setPath(path.penultimate, shouldRecomputeRootView: true);
+  }
+
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+      requestEval();
+    }
+  }
+
+  void _sendMoveToSocket(NormalMove move) {
+    if (state.requireValue.isWriteable == false) return;
+
+    _sendMoveToSocketTimer?.cancel();
+    _recordChange('anaMove', {
+      'orig': move.from.name,
+      'dest': move.to.name,
+      'fen': state.requireValue.currentPosition!.fen,
+      'path': state.requireValue.currentPath.value,
+    });
+
+    _sendMoveToSocketTimer = Timer(const Duration(seconds: 3), () {
+      // resend the move in case it was lost
+      _sendMoveToSocket(move);
+    });
+  }
+
+  void _recordChange(String socketEvent, Map<String, dynamic> data) {
+    if (!state.hasValue) return;
+    if (state.requireValue.isWriteable == false) return;
+
+    _socketClient.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
   }
 
   void _setPath(
@@ -394,7 +428,7 @@ class StudyController extends _$StudyController
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
   }) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     final pathChange = state.currentPath != path;
@@ -457,6 +491,7 @@ class StudyController extends _$StudyController
     }
 
     if (pathChange) {
+      this.state = AsyncData(this.state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
   }
@@ -469,6 +504,8 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
   const StudyState._();
 
   const factory StudyState({
+    UserId? myId,
+    bool? isAdmin,
     required Study study,
     required String pgn,
 
@@ -511,7 +548,21 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
+
+    @Default(false) bool engineInThreatMode,
   }) = _StudyState;
+
+  /// Whether the current user is the owner of the study.
+  bool get amIOwner => myId == study.ownerId || (isAdmin == true && canIContribute);
+
+  /// The current user's member information, if available.
+  StudyMember? get myMember => myId != null ? study.members[myId!] : null;
+
+  /// Whether the current user can contribute to the study.
+  bool get canIContribute => myMember?.role == 'w';
+
+  /// Whether the study is writeable by the current user
+  bool get isWriteable => canIContribute && !gamebookActive;
 
   @override
   bool get alwaysRequestCloudEval => false;

@@ -8,32 +8,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/localizations.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'notification_service.g.dart';
 
 final _logger = Logger('NotificationService');
 
 /// A provider instance of the [FlutterLocalNotificationsPlugin].
-@Riverpod(keepAlive: true)
-FlutterLocalNotificationsPlugin notificationDisplay(Ref _) => FlutterLocalNotificationsPlugin();
+final notificationDisplayProvider = Provider<FlutterLocalNotificationsPlugin>(
+  (Ref _) => FlutterLocalNotificationsPlugin(),
+);
 
 /// A provider instance of the [NotificationService].
-@Riverpod(keepAlive: true)
-NotificationService notificationService(Ref ref) {
+final notificationServiceProvider = Provider<NotificationService>((Ref ref) {
   final service = NotificationService(ref);
 
   ref.onDispose(() => service._dispose());
 
   return service;
-}
+});
 
 /// Received FCM message and whether it was from the background.
 typedef ReceivedFcmMessage = ({FcmMessage message, bool fromBackground});
@@ -205,6 +202,28 @@ class NotificationService {
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
     switch (parsedMessage) {
+      case final ChallengeCreateFcmMessage challengeCreateMessage:
+        final notification = ChallengeCreatedNotification.fromFcmMessage(challengeCreateMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final ChallengeAcceptFcmMessage challengeAcceptMessage:
+        final notification = ChallengeAcceptedNotification.fromFcmMessage(challengeAcceptMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       case final CorresGameUpdateFcmMessage corresMessage:
         final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
         _responseStreamController.add((
@@ -274,6 +293,17 @@ class NotificationService {
           await show(NewMessageNotification(userId, notification.title!, notification.body!));
         }
 
+      case ChallengeCreateFcmMessage():
+        // nothing to do here in foreground as it should be handled by the socket
+        break;
+
+      case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
+        if (fromBackground == false && notification != null) {
+          await show(
+            ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
@@ -310,8 +340,8 @@ class NotificationService {
   /// Unregister the device from push notifications.
   Future<void> unregister() async {
     _logger.info('will unregister');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
+    final authUser = _ref.read(authControllerProvider);
+    if (authUser == null) {
       return;
     }
     try {
@@ -327,8 +357,8 @@ class NotificationService {
       return;
     }
     _logger.info('will register fcmToken: $token');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
+    final authUser = _ref.read(authControllerProvider);
+    if (authUser == null) {
       return;
     }
     try {

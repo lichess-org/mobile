@@ -22,14 +22,14 @@ PODS:
   - Firebase/Messaging (12.4.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 12.4.0)
-  - firebase_core (4.2.0):
+  - firebase_core (4.2.1):
     - Firebase/CoreOnly (= 12.4.0)
     - Flutter
-  - firebase_crashlytics (5.0.3):
+  - firebase_crashlytics (5.0.5):
     - Firebase/Crashlytics (= 12.4.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (16.0.3):
+  - firebase_messaging (16.0.4):
     - Firebase/Messaging (= 12.4.0)
     - firebase_core
     - Flutter
@@ -129,9 +129,6 @@ PODS:
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
@@ -142,7 +139,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sound_effect (0.1.1):
+  - sound_effect (0.1.2):
     - Flutter
   - sqflite_darwin (0.0.4):
     - Flutter
@@ -171,7 +168,6 @@ DEPENDENCIES:
   - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -235,8 +231,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/objective_c/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   quick_actions_ios:
     :path: ".symlinks/plugins/quick_actions_ios/ios"
   share_plus:
@@ -259,9 +253,9 @@ SPEC CHECKSUMS:
   cupertino_http: 94ac07f5ff090b8effa6c5e2c47871d48ab7c86c
   device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Firebase: f07b15ae5a6ec0f93713e30b923d9970d144af3e
-  firebase_core: 744984dbbed8b3036abf34f0b98d80f130a7e464
-  firebase_crashlytics: f3a9a4338ab99b67042f64e9e22e1bf349cb44ed
-  firebase_messaging: 82c70650c426a0a14873e1acdb9ec2b443c4e8b4
+  firebase_core: f1aafb21c14f497e5498f7ffc4dc63cbb52b2594
+  firebase_crashlytics: c039028126cb45e32f4c217aa392408b0963d081
+  firebase_messaging: c17a29984eafce4b2997fe078bb0a9e0b06f5dde
   FirebaseCore: bb595f3114953664e3c1dc032f008a244147cfd3
   FirebaseCoreExtension: 7e1f7118ee970e001a8013719fb90950ee5e0018
   FirebaseCoreInternal: d7f5a043c2cd01a08103ab586587c1468047bca6
@@ -277,22 +271,21 @@ SPEC CHECKSUMS:
   flutter_secure_storage_darwin: ce237a8775b39723566dc72571190a3769d70468
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
-  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   multistockfish_chess: 0a64d9d493ba6acfe04ac505c75e8ac093cdb67b
   multistockfish_sf16: dfd62eb23f5caaad596fa61e88624ead35f0a5e8
   multistockfish_variant: fba6f8034da46db2a1745a0fab420000c3db5cd9
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  quick_actions_ios: 4b07fb49d8d8f3518d7565fbb7a91014067a7d82
+  quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  sound_effect: d9c2291bda247120d8d1b50c2f7f5c6dc5a6bacd
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
+  sound_effect: fa0600cdb9ebdc8ca14671fdc20418d7c223e92b
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
 
 PODFILE CHECKSUM: 5d2ab20fea2b68bc8d26fad47359f4c9158ad6f4

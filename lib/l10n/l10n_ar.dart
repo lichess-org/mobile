@@ -70,10 +70,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNoSearchResults => 'لا توجد نتائج';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما';
 
   @override
-  String get mobileNotFollowingAnyUser => 'أنت لا تتابع أي مستخدم.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'موافق';
@@ -123,7 +123,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRemoveBookmark => 'إزالة الإشارة المرجعية';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'تحليل الخادم';
 
   @override
   String get mobileSettingsClockPosition => 'موضع الساعة';
@@ -1508,6 +1508,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleMates => 'كشّات';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'الغايات';
 
   @override
@@ -1833,6 +1836,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'كش مات في الصف الأخير حيث يكون الملك محاصر بقطعه.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'مرحلة نهاية المباراة بالفيلة';
 
   @override
@@ -1966,6 +1981,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'كش مات فوكوفيتش';
@@ -2201,22 +2222,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'ترتيب اللعبة';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'تحدي صديق';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'لعب ضد الحاسوب';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'نمط اللعب';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'إنشاء ساحة لعب';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'لعب ك';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'لدعوة شخص ما للعب، أرسل له هذا الرابط';
@@ -2225,7 +2246,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gameOver => 'انتهت المباراة';
 
   @override
-  String get waitingForOpponent => 'في إنتظار الخصم';
+  String get waitingForOpponent => 'في انتظار المنافس';
 
   @override
   String get orLetYourOpponentScanQrCode => 'أو أجعل خصمك يمسح رمز QR هذا';
@@ -2992,7 +3013,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportGames => 'تصدير المباريات';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'تصفية التصنيف ';
 
   @override
   String get thisAccountViolatedTos => 'هذا الحساب انتهك شروط خدمة lichess';
@@ -3066,7 +3087,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'تصفية اللعب مغلق حاليا لأن تصنيفك غير مستقر، لعب مباريات مصنفة سوف يزيد من ثبات تصنيفك';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4140,6 +4161,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get analysisShapesHowTo => 'استخدم ز الفأرة الأيمن لرسم دوائر وأسهم على الرقعة';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'السماح للاعبين بمراسلتك';
 
   @override
@@ -4757,8 +4781,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get simulDescriptionHelp => 'أي شيء تريد أن تخبره للمشاركين؟';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param متاح لتركيبات الأكثر تطوراً.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4878,22 +4902,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get disableBlindMode => 'تعطيل الوضع الأعمى';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'نسخ للحافظة';
 
   @override
-  String get online => 'online';
+  String get online => 'متصل';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'غير متصل ';
 
   @override
-  String get search => 'Search';
+  String get search => 'بحث';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'مسح البحث';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'تصنيفات';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5813,6 +5837,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyAlphabetical => 'أبجدي';
 
   @override
+  String get studyRelevant => 'ذات صلة';
+
+  @override
   String get studyAddNewChapter => 'أضف فصلاً جديدا';
 
   @override
@@ -6387,6 +6414,36 @@ class AppLocalizationsAr extends AppLocalizations {
       two: 'ألصق نص PGN هنا، حتى $count مباراة',
       one: 'الصق نص الPGN هنا، حتى $count لعبة واحدة',
       zero: 'ألصق نص PGN هنا، حتى $count مباراة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'معركة $count فريقا',
+      many: 'معركة $count فريقا',
+      few: 'معركة $count أفرقة',
+      two: 'معركة فريقين',
+      one: 'معركة فريق واحد',
+      zero: 'معركة $count فريق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count قائد للفريق الواحد',
+      many: '$count قائد للفريق الواحد',
+      few: '$count قادة للفريق الواحد',
+      two: 'قائدين للفريق',
+      one: 'قائد واحد لكل فريق',
+      zero: '$count قائدا لكل فريق',
     );
     return '$_temp0';
   }

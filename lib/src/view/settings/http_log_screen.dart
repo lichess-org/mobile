@@ -58,7 +58,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
       appBar: AppBar(
         title: const Text('HTTP logs'),
         actions: [
-          if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
+          if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
               // TODO localize
               tooltip: 'Clear all logs',
@@ -77,7 +77,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
       body: _HttpLogList(
         scrollController: _scrollController,
         refreshIndicatorKey: _refreshIndicatorKey,
-        logs: asyncState.valueOrNull?.logs.toList() ?? [],
+        logs: asyncState.value?.logs.toList() ?? [],
         onRefresh: _onRefresh,
       ),
     );
@@ -141,6 +141,10 @@ class HttpLogTile extends StatelessWidget {
 
   final HttpLogEntry httpLog;
 
+  String get endpoint => httpLog.requestUrl.host == kLichessHost
+      ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
+      : httpLog.requestUrl.toString();
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -175,9 +179,7 @@ class HttpLogTile extends StatelessWidget {
             : const Icon(Icons.error_outline, color: Colors.grey),
       ),
       title: Text(
-        httpLog.requestUrl.host == kLichessHost
-            ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
-            : httpLog.requestUrl.toString(),
+        '${httpLog.requestMethod} $endpoint',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

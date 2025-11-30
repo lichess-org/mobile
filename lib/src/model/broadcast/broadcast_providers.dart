@@ -3,14 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'broadcast_providers.g.dart';
 
 /// A provider that fetches a paginated list of broadcasts.
-@riverpod
-class BroadcastsPaginator extends _$BroadcastsPaginator {
+final broadcastsPaginatorProvider =
+    AsyncNotifierProvider.autoDispose<BroadcastsPaginator, BroadcastList>(
+      BroadcastsPaginator.new,
+      name: 'BroadcastsPaginatorProvider',
+    );
+
+class BroadcastsPaginator extends AsyncNotifier<BroadcastList> {
   @override
   Future<BroadcastList> build() {
     return ref.read(broadcastRepositoryProvider).getBroadcasts();
@@ -36,10 +37,19 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
 }
 
 /// A provider that fetches a paginated list of broadcasts matching the [searchTerm].
-@riverpod
-class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
+final broadcastsSearchPaginatorProvider = AsyncNotifierProvider.autoDispose
+    .family<BroadcastsSearchPaginator, BroadcastSearchList, String>(
+      BroadcastsSearchPaginator.new,
+      name: 'BroadcastsSearchPaginatorProvider',
+    );
+
+class BroadcastsSearchPaginator extends AsyncNotifier<BroadcastSearchList> {
+  BroadcastsSearchPaginator(this.searchTerm);
+
+  final String searchTerm;
+
   @override
-  Future<BroadcastSearchList> build(String searchTerm) {
+  Future<BroadcastSearchList> build() {
     return ref.read(broadcastRepositoryProvider).searchBroadcasts(searchTerm: searchTerm);
   }
 
@@ -61,50 +71,36 @@ class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
   }
 }
 
-@riverpod
-Future<BroadcastTournament> broadcastTournament(
-  Ref ref,
-  BroadcastTournamentId broadcastTournamentId,
-) {
-  return ref.read(broadcastRepositoryProvider).getTournament(broadcastTournamentId);
-}
+final broadcastTournamentProvider = FutureProvider.autoDispose
+    .family<BroadcastTournament, BroadcastTournamentId>((
+      Ref ref,
+      BroadcastTournamentId broadcastTournamentId,
+    ) {
+      return ref.read(broadcastRepositoryProvider).getTournament(broadcastTournamentId);
+    }, name: 'BroadcastTournamentProvider');
 
-@riverpod
-Future<BroadcastRoundResponse> broadcastRound(Ref ref, BroadcastRoundId roundId) {
-  return ref.read(broadcastRepositoryProvider).getRound(roundId);
-}
+final broadcastRoundProvider = FutureProvider.autoDispose
+    .family<BroadcastRoundResponse, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
+      return ref.read(broadcastRepositoryProvider).getRound(roundId);
+    }, name: 'BroadcastRoundProvider');
 
-@riverpod
-Future<IList<BroadcastPlayerWithOverallResult>> broadcastPlayers(
-  Ref ref,
-  BroadcastTournamentId tournamentId,
-) {
-  return ref.read(broadcastRepositoryProvider).getPlayers(tournamentId);
-}
+final broadcastPlayersProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastPlayerWithOverallResult>, BroadcastTournamentId>((
+      Ref ref,
+      BroadcastTournamentId tournamentId,
+    ) {
+      return ref.read(broadcastRepositoryProvider).getPlayers(tournamentId);
+    }, name: 'BroadcastPlayersProvider');
 
-@riverpod
-Future<BroadcastPlayerWithGameResults> broadcastPlayer(
-  Ref ref,
-  BroadcastTournamentId broadcastTournamentId,
-  String playerId,
-) {
-  return ref.read(broadcastRepositoryProvider).getPlayerResults(broadcastTournamentId, playerId);
-}
+final broadcastPlayerProvider = FutureProvider.autoDispose
+    .family<BroadcastPlayerWithGameResults, (BroadcastTournamentId, String)>((
+      Ref ref,
+      (BroadcastTournamentId, String) params,
+    ) {
+      return ref.read(broadcastRepositoryProvider).getPlayerResults(params.$1, params.$2);
+    }, name: 'BroadcastPlayerProvider');
 
-@riverpod
-Future<IList<BroadcastTeamMatch>> broadcastTeamMatches(Ref ref, BroadcastRoundId roundId) {
-  return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
-}
-
-@Riverpod(keepAlive: true)
-BroadcastImageWorkerFactory broadcastImageWorkerFactory(Ref ref) {
-  return const BroadcastImageWorkerFactory();
-}
-
-class BroadcastImageWorkerFactory {
-  const BroadcastImageWorkerFactory();
-
-  Future<ImageColorWorker> spawn() {
-    return ImageColorWorker.spawn();
-  }
-}
+final broadcastTeamMatchesProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastTeamMatch>, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
+      return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
+    }, name: 'BroadcastTeamMatchesProvider');

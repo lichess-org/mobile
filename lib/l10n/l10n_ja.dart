@@ -9,10 +9,10 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'アカウント設定';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'これらの設定は、あなたの Lichess アカウントを使用しているすべての端末で有効になります。';
 
   @override
   String get mobileAllGames => 'すべて';
@@ -21,7 +21,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => '盤面の設定';
 
   @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
@@ -40,19 +40,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'こんばんは、$param さん';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'こんばんは';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'こんにちは、$param さん';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'こんにちは';
 
   @override
   String get mobileHideVariation => '変化手順を隠す';
@@ -120,7 +120,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRecentSearches => '最近の検索';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'ブックマークから削除';
 
   @override
   String get mobileServerAnalysis => 'サーバ解析';
@@ -129,19 +129,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsClockPosition => '時計の位置';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'プリセット';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => '丸';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => '四角';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'ホーム画面のウィジェット';
 
   @override
   String get mobileSettingsImmersiveMode => '没入モード';
@@ -150,46 +150,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => '捕獲された駒';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => '画像を選択';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => '選んだ背景はダークモードでのみ有効になります。暗い画像を選ぶことをおすすめします。';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => '画像をぼかす';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => '盤面を隠す';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => '盤面を表示する';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'スワイプして他の背景を表示';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'タップとドラッグの両方';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => '2つのマスをタップ';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => '図形の描画';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => '2本の指を使って図形を描くことができます。まず、片方の指で何も無いマスに触れ続けます。その状態で、もう一方の指で盤面をドラッグすると図形を描けます。';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => '盤面のフチの表示';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => '触覚フィードバック';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => '有効にすると、着手・捕獲したときに端末が少し震えます。';
 
   @override
   String get mobileSettingsTab => '設定';
@@ -239,7 +239,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileWatchTab => '見る';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Lichess アプリにようこそ！';
 
   @override
   String get activityActivity => '活動';
@@ -1398,6 +1398,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleMates => 'メイト';
 
   @override
+  String get puzzleMateThemes => 'メイトのテーマ';
+
+  @override
   String get puzzleGoals => '目標';
 
   @override
@@ -1693,6 +1696,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '一番下のランクで、上を自分の駒に塞がれたキングをメイトする。';
 
   @override
+  String get puzzleThemeBalestraMate => 'バレストラ（クロスボウ）のメイト';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'ビショップがチェックし、クイーンが残りの逃げ道をおさえる';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
 
   @override
@@ -1826,6 +1841,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
+
+  @override
+  String get puzzleThemeTriangleMate => '三角のメイト';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => '同じランクかファイル上で空きマスを挟んだクイーンとルーク、そして相手のキングが三角形を作るメイト。';
 
   @override
   String get puzzleThemeVukovicMate => 'ヴコヴィッチのメイト';
@@ -4000,6 +4021,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift + クリックや右クリックで盤上に丸や矢印が描けます。';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => '他のプレイヤーからのメッセージを受け付ける';
 
   @override
@@ -4617,8 +4641,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get simulDescriptionHelp => '参加者に伝えたいことがあればどうぞ';
 
   @override
-  String markdownAvailable(String param) {
-    return '高度な修飾方法として $param も使えます。';
+  String markdownIsAvailable(String param) {
+    return 'フォーマット方法として $param が使えます。';
   }
 
   @override
@@ -5438,6 +5462,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyAlphabetical => 'アルファベット順';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => '新たな章を追加';
 
   @override
@@ -5992,6 +6019,26 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'ここに PGN をペースト（$count 局まで）',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'バトル、$count チーム',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '各チーム $count 人がリーダー',
     );
     return '$_temp0';
   }

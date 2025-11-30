@@ -73,7 +73,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Oke';
@@ -1401,6 +1401,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleMates => 'Mat';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tujuan';
 
   @override
@@ -1697,6 +1700,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
 
   @override
@@ -1830,6 +1845,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Rokok berada di samping raja musuh dan didukung oleh ratu yang juga menghalangi petak pelarian raja. Benteng dan ratu menangkap raja musuh dalam \"kotak pembunuh\" 3x3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Teman Vukovic';
@@ -4004,6 +4025,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get analysisShapesHowTo => 'Tekan shift+klik atau klik-kanan untuk menggambar lingkaran dan panah di papan.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Memperbolehkan pemain lain mengirim pesan untuk Anda';
 
   @override
@@ -4621,8 +4645,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get simulDescriptionHelp => 'Adakah sesuatu yang ingin Anda sampaikan pada peserta?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param tersedia untuk sintaks lebih lanjut.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5442,6 +5466,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyAlphabetical => 'Menurut abjad';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Tambahkan bab baru';
 
   @override
@@ -5996,6 +6023,28 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Tempelkan PGN kamu disini, lebih dari $count permainan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

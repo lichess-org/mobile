@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -297,8 +297,8 @@ class _BottomBar extends ConsumerWidget {
                 // TODO: l10n
                 makeLabel: (context) => const Text('Challenge from position'),
                 onPressed: () {
-                  final session = ref.read(authSessionProvider);
-                  if (session == null) {
+                  final authUser = ref.read(authControllerProvider);
+                  if (authUser == null) {
                     showSnackBar(
                       context,
                       context.l10n.challengeRegisterToSendChallenges,
@@ -310,7 +310,7 @@ class _BottomBar extends ConsumerWidget {
                     SearchScreen.buildRoute(
                       context,
                       onUserTap: (user) {
-                        if (user.id == session.user.id) {
+                        if (user.id == authUser.user.id) {
                           showSnackBar(
                             context,
                             'You cannot challenge yourself',

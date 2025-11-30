@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -64,16 +66,77 @@ class GameScreen extends ConsumerStatefulWidget {
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
+final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
+  Ref ref,
+  GameFullId gameId,
+) async {
+  final state = await ref.watch(gameControllerProvider(gameId).future);
+  return state.game.meta.speed != Speed.correspondence && state.game.playable;
+}, name: 'IsRealTimePlayableGameProvider');
+
 class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
+  AppLifecycleListener? _appLifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cancel pending seek or challenges when app goes to background to prevent games being created
+    // while the user is away from the app.
+    _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeekOrChallenge);
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _cancelSeekOrChallenge() async {
+    if (!mounted) return;
+    final loader = ref.read(gameScreenLoaderProvider(widget.source));
+    // Only cancel if we are still seeking or waiting for challenge to be accepted
+    if (loader is! AsyncLoading<GameScreenState>) {
+      return;
+    }
+    switch (widget.source) {
+      case LobbySource():
+        await ref.read(createGameServiceProvider).cancelSeek();
+      case UserChallengeSource():
+        await ref.read(createGameServiceProvider).cancelChallenge();
+      case ExistingGameSource():
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
+      case AsyncData(value: SeekCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: switch (widget.source) {
+              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              _ => const SizedBox.shrink(),
+            },
+          ),
+          body: const LoadGameError('The game search was cancelled.', showBottomBar: false),
+        );
+      case AsyncData(value: ChallengeCancelledState()):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: const LoadGameError('The challenge was cancelled.', showBottomBar: false),
+        );
       case AsyncData(
         value: ChallengeDeclinedState(
           response: ChallengeResponseDeclined(:final challenge, :final declineReason),
@@ -95,7 +158,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
         final isRealTimePlayingGame =
-            ref.watch(isRealTimePlayableGameProvider(createdGameId)).valueOrNull ?? false;
+            ref.watch(_isRealTimePlayableGameProvider(createdGameId)).value ?? false;
 
         final socketUri = GameController.socketUri(createdGameId);
 
@@ -161,7 +224,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
         // lichess sends a 400 response if user has not allowed challenges
         final message = e is ServerException && e.statusCode == 400
-            ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
+            ? LoadGameError('Could not create the game: ${e.jsonError?['error']}')
             : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
         return Scaffold(
@@ -206,7 +269,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               _ => const SizedBox.shrink(),
             },
           ),
-          body: PopScope(canPop: false, child: loadingBoard),
+          body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
         );
     }
   }
@@ -241,7 +304,7 @@ class _GameMenu extends ConsumerWidget {
         ),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
-          bookmarked: isBookmarkedAsync.valueOrNull ?? false,
+          bookmarked: isBookmarkedAsync.value ?? false,
           onToggleBookmark: () =>
               ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
         ),
@@ -331,6 +394,14 @@ class _TournamentGameTitle extends ConsumerWidget {
   }
 }
 
+final _gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId>((
+  Ref ref,
+  GameFullId gameId,
+) async {
+  // Using ref.read as an optimization since we know that game meta never changes during the game.
+  return (await ref.read(gameControllerProvider(gameId).future)).game.meta;
+}, name: 'GameMetaProvider');
+
 class _StandaloneGameTitle extends ConsumerWidget {
   const _StandaloneGameTitle({required this.id, this.lastMoveAt});
 
@@ -342,7 +413,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final metaAsync = ref.watch(gameMetaProvider(id));
+    final metaAsync = ref.watch(_gameMetaProvider(id));
     return metaAsync.when(
       data: (meta) {
         if (meta.tournament?.isOngoing == true) {

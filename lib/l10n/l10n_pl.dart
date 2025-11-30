@@ -1464,6 +1464,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleMates => 'Maty';
 
   @override
+  String get puzzleMateThemes => 'Motywy matowe';
+
+  @override
   String get puzzleGoals => 'Cele';
 
   @override
@@ -1777,6 +1780,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Zamatuj króla uwięzionego w ostatnim rzędzie przez własne bierki.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman znajduje się jedno pole z tyłu i z boku matowanego króla i blokuje mu drogę ucieczki';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Końcówka gońcowa';
 
   @override
@@ -1910,6 +1925,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Wieża stoi obok wrogiego króla i broniona jest przez hetmana, który równocześnie blokuje wszystkie pola ucieczki tego króla. Wieża i hetman łapią króla przeciwnika w klatce 3 na 3 (tzw. \"kill box\").';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic\'a';
@@ -2282,7 +2303,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get forceDraw => 'Ogłoś remis';
 
   @override
-  String get talkInChat => 'Zachowuj się miło na czacie!';
+  String get talkInChat => 'Bądź miły na czacie!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Pierwsza osoba, która przejdzie pod ten adres, dołączy do twojej partii.';
@@ -4084,6 +4105,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknij podczas trzymania Shift lub przytrzymaj prawy przycisk myszy aby rysować okręgi i strzałki na szachownicy.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Zezwól na wiadomości od innych graczy';
 
   @override
@@ -4701,8 +4725,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String get simulDescriptionHelp => 'Wiadomość do przekazania uczestnikom';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param jest dostępny dla bardziej zaawansowanej składni.';
+  String markdownIsAvailable(String param) {
+    return '$param jest dostępny do formatowania.';
   }
 
   @override
@@ -5663,6 +5687,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetycznie';
 
   @override
+  String get studyRelevant => 'Powiązane';
+
+  @override
   String get studyAddNewChapter => 'Dodaj nowy rozdział';
 
   @override
@@ -5762,7 +5789,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopiuj PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Skopiuj PGN';
 
   @override
   String get studyDownloadGame => 'Pobierz partię';
@@ -6229,6 +6256,32 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Wklej tutaj swój PGN, max $count partii',
       few: 'Wklej tutaj swój PGN, max $count partie',
       one: 'Wklej tutaj swój PGN, max $count partię',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitwa $count drużyn',
+      many: 'Bitwa $count drużyn',
+      few: 'Bitwa $count drużyn',
+      one: 'Bitwa $count drużyny',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count liderów na drużynę',
+      many: '$count liderów na drużynę',
+      few: '$count liderów na drużynę',
+      one: 'Lider na drużynę',
     );
     return '$_temp0';
   }

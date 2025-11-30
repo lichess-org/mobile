@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -21,7 +21,7 @@ class QuickGameMatrix extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playban = ref.watch(accountProvider).valueOrNull?.playban;
+    final playban = ref.watch(accountProvider).value?.playban;
     final brightness = Theme.of(context).brightness;
     final logoColor = brightness == Brightness.light
         ? const Color(0x0F000000)
@@ -77,8 +77,8 @@ class _SectionChoices extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final authUser = ref.watch(authControllerProvider);
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -96,7 +96,7 @@ class _SectionChoices extends ConsumerWidget {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
                             context,
-                            source: LobbySource(GameSeek.fastPairing(choice, session)),
+                            source: LobbySource(GameSeek.fastPairing(choice, authUser)),
                           ),
                         );
                       }

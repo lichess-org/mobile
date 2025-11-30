@@ -14,7 +14,7 @@
   <string name="newPatrons">New Patrons</string>
   <string name="freeChess">Free chess for everyone, forever!</string>
   <string name="noAdsNoSubs">No ads, no subscriptions; but open-source and passion.</string>
-  <string name="thankYou">Thank you for your donation!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Thank you for your donation!</string>
   <string name="youHaveLifetime">You have a Lifetime Patron account. That's pretty awesome!</string>
   <string name="patronUntil">You have a Patron account until %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">If not renewed, your account will then revert to a regular account.</string>

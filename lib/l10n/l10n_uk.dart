@@ -73,7 +73,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Зверніть увагу, що не всі функції зі старого додатку або сайту наразі доступні, але ми додаємо функції постійно.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ви ні на кого не підписані.';
+  String get mobileNotFollowingAnyUser => 'Ви не слідкуєте за користувачами.';
 
   @override
   String get mobileOkButton => 'Гаразд';
@@ -1464,6 +1464,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleMates => 'Мати';
 
   @override
+  String get puzzleMateThemes => 'Теми матів';
+
+  @override
   String get puzzleGoals => 'Цілі';
 
   @override
@@ -1777,6 +1780,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Мат королю в домашньому ряду, коли він у пастці між власними фігурами.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Арбалетний мат';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Слон ставить мат королю, а ферзь блокує решта полів для відступу';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Мат сліпої свині';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Дві тури об\'єднуються, аби поставити мат королю на полі 2 на 2.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слоновий ендшпіль';
 
   @override
@@ -1910,6 +1925,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Трикутний мат';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковіча';
@@ -2157,7 +2178,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get gameMode => 'Режим гри';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Створити запит на гру';
 
   @override
   String get youPlayAs => 'Ви граєте за';
@@ -4084,6 +4105,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get analysisShapesHowTo => 'Натисніть shift+ЛКМ або ПКМ, щоби намалювати кола та стрілки на шахівниці.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = червоний, Shift = жовтий, command або alt = синій.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Дозволити іншим гравцям надсилати Вам повідомлення';
 
   @override
@@ -4701,8 +4725,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get simulDescriptionHelp => 'Чи хочете ви щось повідомити учасникам?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param доступний для більш детального форматування.';
+  String markdownIsAvailable(String param) {
+    return '$param доступний для форматування.';
   }
 
   @override
@@ -5663,6 +5687,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyAlphabetical => 'За алфавітом';
 
   @override
+  String get studyRelevant => 'Релевантні';
+
+  @override
   String get studyAddNewChapter => 'Додати новий розділ';
 
   @override
@@ -6229,6 +6256,32 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Вставте ваш PGN текст тут, до $count ігор',
       few: 'Вставте ваш PGN текст тут, до $count ігор',
       one: 'Вставте ваш PGN текст тут, до $count гри',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Битва $count команд',
+      many: 'Битва $count команд',
+      few: 'Битва $count команд',
+      one: 'Битва $count команд',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лідерів на команду',
+      many: '$count лідерів на команду',
+      few: '$count лідери на команду',
+      one: 'Один лідер на команду',
     );
     return '$_temp0';
   }
