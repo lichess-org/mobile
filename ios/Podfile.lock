@@ -125,10 +125,11 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - objective_c (0.0.1):
-    - Flutter
   - package_info_plus (0.4.5):
     - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
@@ -166,8 +167,8 @@ DEPENDENCIES:
   - multistockfish_chess (from `.symlinks/plugins/multistockfish_chess/ios`)
   - multistockfish_sf16 (from `.symlinks/plugins/multistockfish_sf16/ios`)
   - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
-  - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -227,10 +228,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/multistockfish_sf16/ios"
   multistockfish_variant:
     :path: ".symlinks/plugins/multistockfish_variant/ios"
-  objective_c:
-    :path: ".symlinks/plugins/objective_c/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   quick_actions_ios:
     :path: ".symlinks/plugins/quick_actions_ios/ios"
   share_plus:
@@ -276,8 +277,8 @@ SPEC CHECKSUMS:
   multistockfish_sf16: dfd62eb23f5caaad596fa61e88624ead35f0a5e8
   multistockfish_variant: fba6f8034da46db2a1745a0fab420000c3db5cd9
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
