@@ -14,7 +14,7 @@
   <string name="newPatrons">Nya beskyddare (Patrons)</string>
   <string name="freeChess">Gratis schack för alla, för evigt!</string>
   <string name="noAdsNoSubs">Inga annonser, inga prenumerationer; men öppen källkod och passion.</string>
-  <string name="thankYou">Tack för din gåva!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Tack för din gåva!</string>
   <string name="youHaveLifetime">Du har ett livstids Patron-konto. Det är ganska häftigt!</string>
   <string name="patronUntil">Du har ett Patron-konto till %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Om donationen inte förnyas kommer ditt konto sedan återgå till ett vanligt konto.</string>
