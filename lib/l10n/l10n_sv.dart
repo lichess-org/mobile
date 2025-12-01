@@ -905,6 +905,14 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Rond $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en pjäs som försvarar en annan pjäs, så att du kan ta den nu oförsvarade pjäsen i nästa drag.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Krossande';
 
   @override
   String get puzzleThemeCrushingDescription => 'Upptäck motståndares blunder för att få en förkrossande fördel. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Matt med två löpare';

@@ -905,6 +905,14 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Ronda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Deixant el nom per defecte el traduirà automàticament a tots els altres llenguatges.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Menjar una peça que és vital per defensar una altra, fent que es pugui menjar la peça que ara ja no està defensada.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat de la cantonada';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confina el rei a una cantonada utilitzant una torre o una dama i donar li mat amb un cavall.';
+
+  @override
   String get puzzleThemeCrushing => 'Fort avantatge';
 
   @override
   String get puzzleThemeCrushingDescription => 'Veure l\'error de l\'adversari per a obtenir un gran avantatge (aval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Escac a la descoberta';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mou una peça per revelar un escac d\'una peça atacant amagada que normalment porta a un avantatge decisiu.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dels dos alfils';

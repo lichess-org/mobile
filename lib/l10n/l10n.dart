@@ -1610,6 +1610,18 @@ abstract class AppLocalizations {
   /// **'Created and managed by {param}.'**
   String broadcastCreatedAndManagedBy(String param);
 
+  /// No description provided for @broadcastRoundX.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {param}'**
+  String broadcastRoundX(String param);
+
+  /// No description provided for @broadcastDefaultRoundNameHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeping the default name will automatically translate it to all other languages.'**
+  String get broadcastDefaultRoundNameHelp;
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:
@@ -3104,6 +3116,18 @@ abstract class AppLocalizations {
   /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
   String get puzzleThemeCapturingDefenderDescription;
 
+  /// No description provided for @puzzleThemeCornerMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Corner mate'**
+  String get puzzleThemeCornerMate;
+
+  /// No description provided for @puzzleThemeCornerMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.'**
+  String get puzzleThemeCornerMateDescription;
+
   /// No description provided for @puzzleThemeCrushing.
   ///
   /// In en, this message translates to:
@@ -3115,6 +3139,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)'**
   String get puzzleThemeCrushingDescription;
+
+  /// No description provided for @puzzleThemeDiscoveredCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovered check'**
+  String get puzzleThemeDiscoveredCheck;
+
+  /// No description provided for @puzzleThemeDiscoveredCheckDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.'**
+  String get puzzleThemeDiscoveredCheckDescription;
 
   /// No description provided for @puzzleThemeDoubleBishopMate.
   ///
@@ -4367,7 +4403,7 @@ abstract class AppLocalizations {
   /// No description provided for @noGameFound.
   ///
   /// In en, this message translates to:
-  /// **'No game found'**
+  /// **'No games found'**
   String get noGameFound;
 
   /// No description provided for @maxDepthReached.

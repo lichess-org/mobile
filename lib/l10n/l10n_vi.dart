@@ -885,6 +885,14 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Vòng $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Giữ nguyên tên mặc định sẽ tự động dịch sang mọi ngôn ngữ khác.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1732,10 +1740,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Loại bỏ một quân cực kỳ quan trọng đối với việc bảo vệ một quân cờ khác, khiến cho quân cờ hiện không được bảo vệ có thể bị ăn vào một nước sau đó.';
 
   @override
+  String get puzzleThemeCornerMate => 'Góc chiếu hết chết chóc';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Kìm hãm vua ở góc bằng cách sử dụng một xe hoặc hậu và một mã để chiếu hết.';
+
+  @override
   String get puzzleThemeCrushing => 'Áp đảo';
 
   @override
   String get puzzleThemeCrushingDescription => 'Phát hiện sai lầm nghiêm trọng của đối phương để giành được lợi thế áp đảo. (đánh giá ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Đòn chiếu mở';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Đi một quân để lộ ra quân cờ tấn công đang ẩn núp, điều này thường dẫn đến lợi thế quyết định.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Chiếu hết bằng cặp Tượng';

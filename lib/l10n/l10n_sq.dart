@@ -905,6 +905,14 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Raundi $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Mbajtja e emrit parazgjedhje do ta përkthejë automatikisht në krejt gjuhët e tjera.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Heqja e një pjese që është kritike për mbrojtjen e një pjese tjetër, çka tani lejon që pjesa e pambrojtur të merret me një lëvizje vijuese.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat qosheje';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Mbërthejeni mbretin në qoshe, duke përdorur një torre, ose një mbretëreshë dhe një kalë, për të dhënë shah-mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Shkatërrim';
 
   @override
   String get puzzleThemeCrushingDescription => 'Shfrytëzoni gafën e kundërshtarit për të përfituar një avantazh shkatërrues. (vlera ≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat me dy oficerë';

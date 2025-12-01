@@ -73,7 +73,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Kontuan izan aplikazio zaharraren eta webgune berriaren ezaugarri guztiak ez daudela prest, baina poliki-poliki gehituko ditugu.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
 
   @override
   String get mobileOkButton => 'Ados';
@@ -905,6 +905,14 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return '$param. txanda';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Defektuzko izena uzten baduzu, hizkuntza guztietan ondo itzuliko da.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1420,7 +1428,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleMates => 'Mateak';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Mateen gaiak';
 
   @override
   String get puzzleGoals => 'Helburuak';
@@ -1724,16 +1732,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Bere piezekin trabatuta dagoenean erregeari bere errenkadan matea ematea.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Balestra matea';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'Damak ihes egiteko laukiak babesten dituenean alfilak mate ematen du';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Txerri itxuaren matea';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Bi gazteluk elkarrekin egiten dute lana 2x2 laukiko azalearen erregeari mate emateko.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Alfilen bukaera';
@@ -1760,10 +1768,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
 
   @override
+  String get puzzleThemeCornerMate => 'Bazterreko matea';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Baztertu erregea gaztelua edo dama eta zaldia erabiliz matea emateako.';
+
+  @override
   String get puzzleThemeCrushing => 'Zapalketa';
 
   @override
   String get puzzleThemeCrushingDescription => 'Akatsa aurkitu eta guztizko abantaila lortu. (ebaluazioa ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Bi alfilen matea';
@@ -1871,10 +1891,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Gaztelua aurkariaren erregearen ondoan dago damaren laguntzarekin, honek gainera erregearen ihes-laukiak babesten ditu. Gazteluak eta damak erregea 3x3ko \"hilkutxa\" baten harrapatu dezakete.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeTriangleMate => 'Hirukiaren matea';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'Dama eta gaztelua erregearengandik lauki batera daudela, errenkada edo zutabe berean, biak lauki batez banatuta, hiruki bat osatuz.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovicen matea';

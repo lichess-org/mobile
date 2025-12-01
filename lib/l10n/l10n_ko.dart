@@ -885,6 +885,14 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return '$param라운드';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => '기본 이름을 유지하면 자동으로 다른 모든 언어로 번역됩니다.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1732,10 +1740,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 지켜지지 않는 기물을 잡을 수 있게 됩니다.';
 
   @override
+  String get puzzleThemeCornerMate => '코너 메이트';
+
+  @override
+  String get puzzleThemeCornerMateDescription => '킹을 룩이나 퀸으로 구석에 가두고, 나이트로 체크메이트를 가합니다.';
+
+  @override
   String get puzzleThemeCrushing => '박살내기';
 
   @override
   String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => '2비숍 메이트';

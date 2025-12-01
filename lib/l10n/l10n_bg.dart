@@ -21,16 +21,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileAreYouSure => 'Сигурни ли сте?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Настройки на дъската';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Отмени предложението за връщане на хода';
 
   @override
   String get mobileClearButton => 'Изчисти';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Изтрий запазения ход';
 
   @override
   String get mobileCustomGameJoinAGame => 'Join a game';
@@ -120,7 +120,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileRecentSearches => 'Последни търсения';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Премахни отметка';
 
   @override
   String get mobileServerAnalysis => 'Server analysis';
@@ -129,7 +129,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Позиция на часовника';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Настройки';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
@@ -150,16 +150,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Скрий интерфейса по време на игрите. Използвайте това, ако системната навигация по краищата на екрана Ви пречи. В сила е по време на игри и задачи.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Взети фигури';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Избери изображение';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Замъгли изображението';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Скрий дъската';
@@ -183,7 +183,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Покажи рамката';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -695,7 +695,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastTheNewRoundHelp => 'The new round will have the same members and contributors as the previous one.';
 
   @override
-  String get broadcastAddRound => 'Добави рунд';
+  String get broadcastAddRound => 'Добави кръг';
 
   @override
   String get broadcastOngoing => 'Текущи';
@@ -704,7 +704,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastUpcoming => 'Предстоящи';
 
   @override
-  String get broadcastRoundName => 'Име на рунда';
+  String get broadcastRoundName => 'Име на кръга';
 
   @override
   String get broadcastTournamentName => 'Име на турнира';
@@ -741,19 +741,19 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastCurrentGameUrl => 'URL на настоящата партия';
 
   @override
-  String get broadcastDownloadAllRounds => 'Изтегли всички рундове';
+  String get broadcastDownloadAllRounds => 'Изтегли всички кръгове';
 
   @override
-  String get broadcastResetRound => 'Нулирай този рунд';
+  String get broadcastResetRound => 'Нулирай този кръг';
 
   @override
-  String get broadcastDeleteRound => 'Изтрий този рунд';
+  String get broadcastDeleteRound => 'Изтрий този кръг';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Окончателно изтрийте този рунд и всичките му игри.';
+  String get broadcastDefinitivelyDeleteRound => 'Окончателно изтрийте този кръг и всичките му игри.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'Изтрийте този рунд и всичките му игри. Източникът трябва да е активен за да можете да ги възстановите.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Изтрийте този кръг и всичките му игри. Източникът трябва да е активен за да можете да ги възстановите.';
 
   @override
   String get broadcastEditRoundStudy => 'Edit round study';
@@ -762,7 +762,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastDeleteTournament => 'Изтрий този турнир';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Окончателно изтрий целия турнир, всичките му рундове и игри.';
+  String get broadcastDefinitivelyDeleteTournament => 'Окончателно изтрий целия турнир, всичките му кръгове и игри.';
 
   @override
   String get broadcastShowScores => 'Show players scores based on game results';
@@ -903,6 +903,14 @@ class AppLocalizationsBg extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Създадено и управлявано от $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Кръг $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1760,10 +1768,22 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Премахване на главната защита на фигура, което позволява на вече незащитената фигура да бъде взета на следващия ход.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Погром';
 
   @override
   String get puzzleThemeCrushingDescription => 'Използвайте грешката на противника за да получите смазващо преимущество. (≥ 600сп)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Мат с два офицера';

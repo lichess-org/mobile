@@ -945,6 +945,14 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return '$param. kolo';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Zachovanie predvoleného názvu spôsobí jeho automatický preklad do všetkých ostatných jazykov.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1816,10 +1824,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Rohový mat';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Zatlačte kráľa do rohu pomocou veže a jazdca alebo dámy a jazdca, aby ste dosiahli mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Rozdrvenie';
 
   @override
   String get puzzleThemeCrushingDescription => 'Odhaľte súperovu hrubú chybu a získajte drvivú výhodu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Odkrytý šach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Pohnite figúrkou, aby ste odkryli šach od skrytej útočiacej figúry. Často to vedie k rozhodujúcej výhode.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dvojicou strelcov';

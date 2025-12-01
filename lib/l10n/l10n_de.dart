@@ -905,6 +905,14 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Runde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Wenn der Standardname beibehalten wird, wird er automatisch in alle anderen Sprachen übersetzt.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ein Verteidiger einer Figur (oder eines Feldes) wird geschlagen, wodurch das eigentliche Ziel die Deckung verliert.';
 
   @override
+  String get puzzleThemeCornerMate => 'Eck-Matt';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Sperrt den König in einer Ecke des Bretts ein, um dann mit Turm oder Dame und einem Springer Matt zu setzen.';
+
+  @override
   String get puzzleThemeCrushing => 'Vernichtend';
 
   @override
   String get puzzleThemeCrushingDescription => 'Finde den gegnerischen Patzer, um einen vernichtenden Vorteil zu erhalten. (Bewertung ≥ 600 Hundertstel-Bauern)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Abzugsschach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Bewege eine Figur, um mit einer anderen versteckten Figur ein Schach zu gebe, was oft zu entscheidendem Vorteil führt.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Läuferpaarmatt';

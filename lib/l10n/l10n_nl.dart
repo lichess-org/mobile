@@ -905,6 +905,14 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Ronde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Laat de standaardnaam intact voor automatische vertaling naar alle andere talen.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1730,10 +1738,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Een loper zet mat waarbij een dame de resterende vluchtvelden blokkeert';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Blind zwijn-mat';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Twee torens werken samen om de koning mat te zetten in een 2x2-vierkant.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Lopereindspel';
@@ -1760,10 +1768,22 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat in een hoek';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Dring de koning met behulp van een toren of dame en een paard een hoek in om hem schaakmat te zetten.';
+
+  @override
   String get puzzleThemeCrushing => 'Verpletteren';
 
   @override
   String get puzzleThemeCrushingDescription => 'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Aftrekschaak';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Een stuk verplaatsen om schaak te geven met een verborgen aanvalsstuk, wat vaak leidt tot beslissend voordeel.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat met twee lopers';
@@ -1874,7 +1894,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeTriangleMate => 'Driehoeksmat';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'De toren en koningin, een vakje verwijderd van de vijandelijke koning, staan op dezelfde rij of kolom, gescheiden door een vakje, en vormen samen een driehoek.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic-mat';

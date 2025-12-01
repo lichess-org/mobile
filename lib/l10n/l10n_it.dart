@@ -73,7 +73,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Da notare che non tutte le funzionalità della vecchia app o del sito web sono attualmente disponibili, ma stiamo continuamente aggiungendo funzionalità.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
 
   @override
   String get mobileOkButton => 'Ok';
@@ -905,6 +905,14 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Turno $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Mantenendo il nome predefinito, questo verrà automaticamente tradotto in tutte le altre lingue.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1109,7 +1117,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Un valore inferiore indica che il punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
+    return 'Valori bassi indicano che un punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
   }
 
   @override
@@ -1420,7 +1428,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleMates => 'Matti';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Matti tematici';
 
   @override
   String get puzzleGoals => 'Per obiettivo';
@@ -1724,16 +1732,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Matto della balestra';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'L\'alfiere dà scacco matto, mentre la regina blocca le caselle di fuga rimanenti';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Matto del maiale cieco';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Due torri collaborano per dare scacco al re in un\'area di 2 caselle per 2.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
@@ -1760,10 +1768,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
 
   @override
+  String get puzzleThemeCornerMate => 'Matto nell\'angolo';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Restringi il re nell\'angolo usando una torre o una regina, e usa un cavallo per dare scacco matto.';
+
+  @override
   String get puzzleThemeCrushing => 'Posizione schiacciante';
 
   @override
   String get puzzleThemeCrushingDescription => 'Trova l\'errore grave del tuo avversario per ottenere un vantaggio schiacciante. (valutazione ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Scacco di scoperta';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Sposta un pezzo per rivelare uno scacco di un pezzo nascosto, che spesso porta a un vantaggio decisivo.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Matto dei due alfieri';
@@ -1871,10 +1891,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeTriangleMate => 'Matto triangolare';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'La regina e la torre, a una casella di distanza dal re avversario, sono sulla stessa riga o colonna, separati da una casella, formando un triangolo.';
 
   @override
   String get puzzleThemeVukovicMate => 'Scacco matto Vukovic';

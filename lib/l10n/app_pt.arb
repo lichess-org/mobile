@@ -234,6 +234,8 @@
   "broadcastLiveboard": "Tabuleiro em direto",
   "broadcastCommunityBroadcast": "Transmissão comunitária",
   "broadcastCreatedAndManagedBy": "Criado e administrado por {param}.",
+  "broadcastRoundX": "Ronda {param}",
+  "broadcastDefaultRoundNameHelp": "Manter o nome padrão irá traduzi-lo automaticamente para todas as outras línguas.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmissão} other{{count} transmissões}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espetador} other{{count} espetadores}}",
   "challengeChallengesX": "Desafios: {param1}",

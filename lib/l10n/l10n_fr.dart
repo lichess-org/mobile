@@ -905,6 +905,14 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Ronde : $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Si le nom par défaut est conservé, il sera automatiquement traduit dans les autres langues.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Retire une pièce essentielle à la défense d\'une autre pièce, permettant à la pièce non protégée d\'être capturée au coup suivant.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat en coin';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Le roi adverse est confiné dans un coin de l\'échiquier par une tour ou la dame, puis un cavalier le met mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Écrasant';
 
   @override
   String get puzzleThemeCrushingDescription => 'Repérez la gaffe de l\'adversaire pour obtenir un avantage écrasant. (évaluation > 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Échec à la découverte';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'En se déplaçant, une pièce permet à une autre pièce de mettre le roi adverse en échec et d\'obtenir souvent un avantage décisif.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat des deux Fous';

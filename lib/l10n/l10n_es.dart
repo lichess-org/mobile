@@ -905,6 +905,14 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Ronda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Si mantiene el nombre predeterminado se traducirá automáticamente al resto de idiomas.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar una pieza fundamental para la defensa de otra, permitiendo capturar la pieza, ahora indefensa, en el futuro.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mate de la esquina';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Encierra al rey en una esquina usando una torre o dama y un caballo para dar mate.';
+
+  @override
   String get puzzleThemeCrushing => 'Aplastante';
 
   @override
   String get puzzleThemeCrushingDescription => 'Detecta el error del oponente para obtener una ventaja ganadora. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Jaque a la descubierta';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mueve una pieza para dar jaque con otra que se encuentra detrás, lo que a menudo conduce a una ventaja decisiva.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate de los dos alfiles';

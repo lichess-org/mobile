@@ -503,6 +503,15 @@
       }
     }
   },
+  "broadcastRoundX": "Round {param}",
+  "@broadcastRoundX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastDefaultRoundNameHelp": "Keeping the default name will automatically translate it to all other languages.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -977,8 +986,12 @@
   "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
   "puzzleThemeCapturingDefender": "Capture the defender",
   "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
+  "puzzleThemeCornerMate": "Corner mate",
+  "puzzleThemeCornerMateDescription": "Confine the king to the corner using a rook or queen and a knight to engage the checkmate.",
   "puzzleThemeCrushing": "Crushing",
   "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
+  "puzzleThemeDiscoveredCheck": "Discovered check",
+  "puzzleThemeDiscoveredCheckDescription": "Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.",
   "puzzleThemeDoubleBishopMate": "Double bishop mate",
   "puzzleThemeDoubleBishopMateDescription": "Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.",
   "puzzleThemeDovetailMate": "Dovetail mate",
@@ -1231,7 +1244,7 @@
     }
   },
   "dtzWithRounding": "DTZ50'' with rounding, based on number of half-moves until next capture, pawn move, or checkmate",
-  "noGameFound": "No game found",
+  "noGameFound": "No games found",
   "maxDepthReached": "Max depth reached!",
   "maybeIncludeMoreGamesFromThePreferencesMenu": "Maybe include more games from the preferences menu?",
   "openings": "Openings",

@@ -475,10 +475,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaSomeRated => 'Ορισμένα από τα τουρνουά είναι βαθμολογημένα και θα επηρεάσουν την βαθμολογία σας.';
 
   @override
-  String get arenaHowAreScoresCalculated => 'Πως υπολογίζονται οι βαθμολογίες;';
+  String get arenaHowAreScoresCalculated => 'Πώς υπολογίζονται οι βαθμοί κάθε παίκτη;';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Η νίκη αξίζει 2 πόντους, η ισοπαλία 1 πόντο, και η ήττα κανένα.\nΑν νικήσετε δύο παρτίδες συνεχόμενα αποδίδονται διπλάσιοι πόντοι,\nπου αντιπροσωπεύονται από ένα εικονίδιο φλόγας.\nΟι επόμενες παρτίδες θα αξίζουν διπλάσιους πόντους μέχρι να χάσετε μία. Επομένως, η νίκη θα βαθμολογείται με 4 πόντους, η ισοπαλία 2 πόντους, και η ήττα 0.\nΓια παράδειγμα, δύο νίκες και μία ισοπαλία αξίζουν 6 πόντους: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Η νίκη αξίζει 2 βαθμούς, η ισοπαλία 1 βαθμό, και η ήττα κανέναν.\nΑν κερδίσετε δύο παρτίδες συνεχόμενα, αποκτάτε ένα σερί νικών, το οποίο αντιπροσωπεύεται από ένα εικονίδιο φλόγας.\nΚάθε επόμενη παρτίδα που κερδίζετε, τότε, θα σας δίνει διπλάσιους βαθμούς, μέχρις ότου χάσετε μία.\nΜε άλλα λόγια, για όσο διάστημα διατηρείτε το σερί νικών σας, η νίκη θα αξίζει 4 βαθμούς, η ισοπαλία 2 βαθμούς και η ήττα κανέναν.\n\nΈτσι, για παράδειγμα, δύο νίκες η οποίες ακολουθούνται από μια ισοπαλία αξίζουν 6 βαθμούς: 2 + 2 + (2 · 1)';
 
   @override
   String get arenaBerserk => 'Αρένα Berserk';
@@ -487,19 +487,19 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaBerserkAnswer => 'Όταν ένας παίκτης πατήσει το πλήκτρο Berserk στην αρχή της παρτίδας, χάνει τον μισό χρόνο στο ρολόι του — σε περίπτωση, όμως, που τελικά κερδίσει, η νίκη του αξίζει έναν επιπλέον βαθμό.\n\nΣε περίπτωση παρτίδας με προσαύξηση, το Berserk ακυρώνει επιπλέον την προσαύξηση (με εξαίρεση τον χρόνο 1+2, ο οποίος γίνεται 1+0).\n\nTo Berserk δεν ισχύει για παρτίδες με μηδενικό αρχικό χρόνο (0+1, 0+2).\n\nΤο Berserk δίνει στον νικητή τον επιπλέον βαθμό υπό την προϋπόθεση πως κατά τη διάρκεια της παρτίδας παίχτηκαν τουλάχιστον 7 κινήσεις.';
 
   @override
-  String get arenaHowIsTheWinnerDecided => 'Πως αναδεικνύεται ο νικητής;';
+  String get arenaHowIsTheWinnerDecided => 'Πώς αναδεικνύεται ο νικητής;';
 
   @override
   String get arenaHowIsTheWinnerDecidedAnswer => 'Ο παίκτης (ή οι παίκτες) με τους περισσότερους βαθμούς μετά τη λήξη του προκαθορισμένου χρόνου του τουρνουά αναδεικνύεται νικητής.\n\nΓια την άρση ισοβαθμίας, χρησιμοποιείται ως μοναδικό κριτήριο η απόδοση στο τουρνουά.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Πως λειτουργεί η αντιστοίχιση;';
+  String get arenaHowDoesPairingWork => 'Πώς πραγματοποιούνται οι κληρώσεις;';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Στην αρχή του τουρνουά, οι παίκτες κληρώνονται με βάση τη βαθμολογία τους.\nΜόλις τελειώσετε την παρτίδα σας, επιστρέψτε στον χώρο αναμονής του τουρνουά — εκεί, θα κληρωθείτε με κάποιον παίκτη ο οποίος έχει παρόμοια κατάταξη με εσάς. Με αυτόν τον τρόπο, ο χρόνος αναμονής γίνεται ο ελάχιστος δυνατός, αλλά πάντως ενδέχεται να μην αντιμετωπίσετε όλους τους παίκτες που συμμετέχουν στο τουρνουά πριν τη λήξη του.\nΣας προτείνουμε να ολοκληρώνετε γρήγορα τις παρτίδες σας και να επιστρέφετε αμέσως στον χώρο αναμονής ώστε να παίζετε όσο το δυνατόν περισσότερες παρτίδες και να κερδίζετε όσο το δυνατόν περισσότερους βαθμούς.';
 
   @override
-  String get arenaHowDoesItEnd => 'Πως τελειώνει;';
+  String get arenaHowDoesItEnd => 'Πώς ολοκληρώνονται;';
 
   @override
   String get arenaHowDoesItEndAnswer => 'Το τουρνουά έχει ρολόι αντίστροφης μέτρησης. Όταν αυτό φτάσει στο μηδέν, η βαθμολογίες των παικτών κλειδώνουν, και αναδεικνύεται ο νικητής. Οι παρτίδες σε εξέλιξη πρέπει να ολοκληρωθούν, ωστόσο το αποτέλεσμα τους δεν μετράει για το πρωτάθλημα.';
@@ -905,6 +905,14 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Γύρος $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Διατηρώντας το προεπιλεγμένο όνομα θα μεταφραστεί αυτόματα σε όλες τις άλλες γλώσσες.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1201,7 +1209,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesNotifications => 'Ειδοποιήσεις';
 
   @override
-  String get preferencesPieceAnimation => 'Κίνηση πιονιών';
+  String get preferencesPieceAnimation => 'Κίνηση κομματιών';
 
   @override
   String get preferencesMaterialDifference => 'Διαφορά υλικού';
@@ -1222,7 +1230,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesPgnPieceNotation => 'Εμφάνιση κινήσεων';
 
   @override
-  String get preferencesChessPieceSymbol => 'Σύμβολο πιονιού στο σκάκι';
+  String get preferencesChessPieceSymbol => 'Σύμβολο κομματιού';
 
   @override
   String get preferencesPgnLetter => 'Γράμμα (K, Q, R, B, N)';
@@ -1243,7 +1251,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesDisplayBoardResizeHandle => 'Εμφάνιση χειριστηρίου αλλαγής μεγέθους σκακιέρας';
 
   @override
-  String get preferencesOnlyOnInitialPosition => 'Μόνο στην αρχική διάταξη';
+  String get preferencesOnlyOnInitialPosition => 'Μόνο στην αρχική θέση';
 
   @override
   String get preferencesInGameOnly => 'Μόνο κατά τη διάρκεια της παρτίδας';
@@ -1279,7 +1287,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesClickTwoSquares => 'Κάνοντας κλικ στα δύο τετράγωνα';
 
   @override
-  String get preferencesDragPiece => 'Σέρνοντας ένα πιόνι';
+  String get preferencesDragPiece => 'Σέρνοντας το κομμάτι';
 
   @override
   String get preferencesBothClicksAndDrag => 'Και τα δύο';
@@ -1300,7 +1308,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesExplainPromoteToQueenAutomatically => 'Κρατήστε πατημένο το πλήκτρο <ctrl> ενώ κάνετε την προαγωγή για να απενεργοποιήσετε προσωρινά την αυτόματη προαγωγή';
 
   @override
-  String get preferencesWhenPremoving => 'Κατά προεπιλογή κίνησης';
+  String get preferencesWhenPremoving => 'Μόνο στις προκινήσεις';
 
   @override
   String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Διεκδικήστε ισοπαλία αυτόματα σε τριπλή επανάληψη';
@@ -1760,10 +1768,22 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
 
   @override
+  String get puzzleThemeCornerMate => 'Ματ στη γωνία';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Ο πύργος ή η βασίλισσα περιορίζουν τον αντίπαλο βασιλιά στη γωνία, με τον ίππο να δίνει ματ.';
+
+  @override
   String get puzzleThemeCrushing => 'Σαρωτική επίθεση';
 
   @override
   String get puzzleThemeCrushingDescription => 'Εντοπίστε το σοβαρό λάθος του αντιπάλου και αποκτήστε καθοριστικό πλεονέκτημα. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Σαχ με αποκάλυψη';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Μετακινήστε ένα κομμάτι ώστε ένα άλλο κομμάτι να αποκαλυφθεί και να δώσει σαχ, αποκτώντας παράλληλα ένα αποφασιστικό πλεονέκτημα.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Ματ με δύο αξιωματικούς';
@@ -2808,10 +2828,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get finished => 'Ολοκληρωμένα';
 
   @override
-  String get abortGame => 'Εγκαταλείψτε το παιχνίδι';
+  String get abortGame => 'Ματαίωση παρτίδας';
 
   @override
-  String get gameAborted => 'Παιχνίδι εγκατελήφθη';
+  String get gameAborted => 'Η παρτίδα ματαιώθηκε';
 
   @override
   String get standard => 'Κανονικό';
@@ -2994,12 +3014,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String ratedMoreThanInPerf(String param1, String param2) {
-    return 'Βαθμολογημένο ≥ $param1 στο $param2';
+    return 'Βαθμολογία ≥ $param1 στο $param2';
   }
 
   @override
   String ratedLessThanInPerf(String param1, String param2) {
-    return 'Βαθμολογημένο ≤ $param1 στο $param2';
+    return 'Βαθμολογία ≤ $param1 στο $param2';
   }
 
   @override
@@ -3509,7 +3529,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get invalidUsernameOrPassword => 'Άκυρο όνομα χρήστη ή κωδικός';
 
   @override
-  String get incorrectPassword => 'Εσφαλμένος κωδικός';
+  String get incorrectPassword => 'Εσφαλμένος κωδικός πρόσβασης';
 
   @override
   String get invalidAuthenticationCode => 'Μη έγκυρος κωδικός επαλήθευσης';
@@ -3518,13 +3538,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get emailMeALink => 'Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου';
 
   @override
-  String get currentPassword => 'Κωδικός σε ισχύ';
+  String get currentPassword => 'Τρέχων κωδικός πρόσβασης';
 
   @override
-  String get newPassword => 'Νέος κωδικός';
+  String get newPassword => 'Νέος κωδικός πρόσβασης';
 
   @override
-  String get newPasswordAgain => 'Νέος κωδικός (επαλήθευση)';
+  String get newPasswordAgain => 'Νέος κωδικός πρόσβασης (επαλήθευση)';
 
   @override
   String get newPasswordsDontMatch => 'Οι νέοι κωδικοί πρόσβασης δεν ταιριάζουν';

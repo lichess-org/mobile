@@ -925,6 +925,14 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Runda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Păstrarea numelui implicit îl va traduce automat în toate celelalte limbi.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1442,7 +1450,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Teme de mat';
 
   @override
   String get puzzleGoals => 'Obiective';
@@ -1752,16 +1760,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'Un nebun dă matul, în timp ce regina blochează pătratele rămase pentru scăpare';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Mat Blind Swine';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Două ture se alătură pentru a da mat regelui pe o arie de 2x2 pătrate.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Final cu nebuni';
@@ -1788,10 +1796,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat în colț';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Restrânge regele spre colț folosind o tură sau regină și un nebun pentru a duce la mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Zdrobitor';
 
   @override
   String get puzzleThemeCrushingDescription => 'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Șah prin descoperire';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mută o piesă pentru a descoperi un șah de la o piesă de atac ascunsă, ceea ce duce adesea la un avantaj decisiv.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat-ul cu doi nebuni';
@@ -1899,10 +1919,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeTriangleMate => 'Mat în triunghi';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'Regina și tura, la un pătrat de regele inamic, sunt pe același linie sau coloană, separate de un singur pătrat, formând un triunghi.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic';
@@ -3838,7 +3858,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get noSimulExplanation => 'Acest simultan nu există.';
 
   @override
-  String get returnToSimulHomepage => 'Înapoi la pagina simultanului';
+  String get returnToSimulHomepage => 'Înapoi la pagina pentru simultane';
 
   @override
   String get aboutSimul => 'Simultanele înseamnă un singur jucător în fața mai multor jucători în același timp.';

@@ -905,6 +905,14 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1730,10 +1738,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Sokeiden sikojen matti';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Kaksi tornia matittavat kuninkaan 2x2 ruudun suuruiselle alueelle.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
@@ -1760,10 +1768,22 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Kulmamatti';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Kahlitse kuningas laudan nurkkaan tornilla tai daamilla ja tee sitten matti ratsulla.';
+
+  @override
   String get puzzleThemeCrushing => 'Murskaava etu';
 
   @override
   String get puzzleThemeCrushingDescription => 'Löydä vastustajan vakava virhe ja hanki murskaava etu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Kahden lähetin matti';

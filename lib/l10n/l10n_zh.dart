@@ -885,6 +885,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return '第$param轮';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => '保留默认名称会将其自动翻译为其他语言。';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1732,10 +1740,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '消除保护另一个棋子的重要棋子，以在后续着法中吃掉已消除保护的棋子。';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => '压倒性优势';
 
   @override
   String get puzzleThemeCrushingDescription => '抓住对手的失误以获得压倒性的优势 (评估 ≥ 600 厘兵)。';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => '双象杀王';

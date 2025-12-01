@@ -945,6 +945,14 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1816,10 +1824,22 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstranitev figure, ki je ključna za obrambo druge figure, kar omogoča, da se nezaščitena figura zajame z naslednjo potezo.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat v kotu';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Kralja omejite v kot z uporabo trdnjave ali dame in skakača, da se spopadete z matom.';
+
+  @override
   String get puzzleThemeCrushing => 'Odločilna prednost';
 
   @override
   String get puzzleThemeCrushingDescription => 'Spoznanje nasprotnikove napake, za odločilno prednost. (ocena ≥ 600sk)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Odkrit šah';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Premakni figuro, da razkriješ šah skrite napadalne figure, kar pogosto vodi do odločilne prednosti.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat z lovcema';

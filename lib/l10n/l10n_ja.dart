@@ -885,6 +885,14 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'ラウンド $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'デフォルトの名前のままにしておくと、他の言語に自動で翻訳されます。';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1702,10 +1710,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'ビショップがチェックし、クイーンが残りの逃げ道をおさえる';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'ブラインド・スワイン・メイト';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => '2 つのルークが協力して 2 マス四方の空間でキングをメイトする。';
 
   @override
   String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
@@ -1732,10 +1740,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
 
   @override
+  String get puzzleThemeCornerMate => 'コーナー・メイト';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'ルークかクイーンでキングを隅に追い詰め、ナイトでメイトする形。';
+
+  @override
   String get puzzleThemeCrushing => '圧倒';
 
   @override
   String get puzzleThemeCrushingDescription => '相手の悪手をとがめて圧倒的な優位を築きます。（評価値は 600cp 以上）';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'ダブル・ビショップのメイト';

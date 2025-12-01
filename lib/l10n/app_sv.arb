@@ -206,6 +206,7 @@
   "broadcastBackToLiveMove": "Tillbaka till nuvarande drag",
   "broadcastSinceHideResults": "Eftersom du valde att dölja resultatet är alla förhandsgransknings-bräden tomma, för att undvika spoilers.",
   "broadcastLiveboard": "Nuvarande position",
+  "broadcastRoundX": "Rond {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} sändning} other{{count} sändningar}}",
   "broadcastNbViewers": "{count, plural, =1{{count} tittare} other{{count} tittare}}",
   "challengeChallengesX": "Utmaningar: {param1}",

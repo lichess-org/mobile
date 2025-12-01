@@ -905,6 +905,14 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Rolda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Débese deixar o nome por defecto para traducilo automaticamente ó resto de linguas.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1724,7 +1732,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Mate da bésta';
+  String get puzzleThemeBalestraMate => 'Mate da besta';
 
   @override
   String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
@@ -1760,10 +1768,22 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar unha peza fundamental para a defensa doutra, permitindo capturar a peza, agora indefensa, no seguinte movemento.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mate do curruncho';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confina o rei nun recuncho usando unha torre ou unha dama e un cabalo para facer xaque mate.';
+
+  @override
   String get puzzleThemeCrushing => 'Vantaxe decisiva';
 
   @override
   String get puzzleThemeCrushingDescription => 'Detecta a metida de zoca do opoñente para obter unha vantaxe decisiva. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Xaque descuberto';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Aparta unha peza para desbloquear o xaque doutra peza atacante. A miúdo produce unha vantaxe decisiva.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate de dous alfís';
@@ -1817,7 +1837,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeDoubleCheck => 'Xaque dobre';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => 'Xaque con dúas pezas á vez, como resultado dun ataque descuberto onde tanto a peza en movemento como a desvelada atacan ao rei do opoñente.';
+  String get puzzleThemeDoubleCheckDescription => 'Xaque con dúas pezas á vez, como resultado dun ataque descuberto onde tanto a peza que se move como a descuberta atacan ao rei do opoñente.';
 
   @override
   String get puzzleThemeEndgame => 'Final';

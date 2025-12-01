@@ -905,6 +905,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
 
   @override
+  String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'De König wird mit Turm - oder Dame - und Springer, imeme Egge, Matt gsetzt.';
+
+  @override
   String get puzzleThemeCrushing => 'Vernichtend';
 
   @override
   String get puzzleThemeCrushingDescription => 'Find de gägnerisch Patzer und chumm zume vernichtende Vorteil. (Bewertig ≥ 600 Hundertschtel-Pure)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Abzugs-Schach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Beweg e Figur und deck so es verdeckts Schach uf, was oft zume entscheidende Vorteil füert.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Läuferpaar Matt';

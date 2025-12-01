@@ -905,6 +905,14 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Ronda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Manter o nome padrão irá traduzi-lo automaticamente para todas as outras línguas.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Remove uma peça que seja crítica para a defesa de outra peça, permitindo que esta seja capturada na próxima jogada.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Esmagar';
 
   @override
   String get puzzleThemeCrushingDescription => 'Descobre um erro grave do oponente e obtém uma vantagem esmagadora. (avaliação ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate com dois bispos';
@@ -7203,6 +7223,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Rodada $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Manter o título padrão permitirá traduzi-lo automaticamente para todas as línguas.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -8058,10 +8086,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeCapturingDefenderDescription => 'Remover uma peça que seja importante na defesa de outra, permitindo que agora a peça indefesa seja capturada na jogada seguinte.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mate de canto';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine o rei no canto usando uma torre ou dama e um cavalo para executar o xeque-mate.';
+
+  @override
   String get puzzleThemeCrushing => 'Punindo';
 
   @override
   String get puzzleThemeCrushingDescription => 'Perceba a capivarada do oponente para obter uma vantagem decisiva. (vantagem ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Xeque Descoberto';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Movimente uma peça para revelar um xeque de uma peça atacante escondida, que costuma levar a uma vantagem decisiva.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate de dois bispos';
@@ -8167,6 +8207,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Uma torre fica perto do rei inimigo e é defendida por uma dama que também bloqueia as casas de fuga. A torre e a dama capturam o rei inimigo em uma \"caixa mortal\" de 3 por 3.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate do triângulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'A dama e a torre, há uma casa de distância do rei inimigo, estão na mesma fila ou coluna, separadas por uma casa, formando um triângulo.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vukovic';
@@ -10339,6 +10385,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get analysisShapesHowTo => 'Pressione Shift+Clique ou clique com o botão direito do mouse para desenhar círculos e setas no tabuleiro.';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl ou shift = vermelho; comando, alt, ou meta = azul; uma tecla de cada = amarelo.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permitir que outros jogadores lhe enviem mensagem';

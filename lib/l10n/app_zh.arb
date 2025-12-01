@@ -235,6 +235,8 @@
   "broadcastLiveboard": "实时棋局",
   "broadcastCommunityBroadcast": "社区转播",
   "broadcastCreatedAndManagedBy": "由 {param} 创建和管理。",
+  "broadcastRoundX": "第{param}轮",
+  "broadcastDefaultRoundNameHelp": "保留默认名称会将其自动翻译为其他语言。",
   "broadcastNbBroadcasts": "{count, plural, other{{count} 场转播}}",
   "broadcastNbViewers": "{count, plural, other{{count} 名观众}}",
   "challengeChallengesX": "挑战：{param1}",

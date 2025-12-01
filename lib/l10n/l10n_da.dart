@@ -905,6 +905,14 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Runde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Beholdes standardnavnet, oversættes det automatisk til alle andre sprog.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1760,10 +1768,22 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Tag en brik som er kritisk i forsvaret af en anden brik, så det er muligt at tage den uforsvarede brik på et efterfølgende træk.';
 
   @override
+  String get puzzleThemeCornerMate => 'Hjørnemat';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og en springer til at udføre skakmat.';
+
+  @override
   String get puzzleThemeCrushing => 'Knusende';
 
   @override
   String get puzzleThemeCrushingDescription => 'Spot modstanderens brøler for at opnå en knusende fordel. (eval ≥ 600cb)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Afdækkertræk';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Flyt en brik for at afsløre en skak fra en skjult angribende brik, hvilket ofte fører til en afgørende fordel.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Dobbelt løbermat';

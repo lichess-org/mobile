@@ -520,7 +520,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String arenaDrawStreakStandard(String param) {
-    return 'ریسهٔ مساوی: وقتی بازیکنی در یک راوان، مساوی‌های پیاپی داشته باشد، فقط یکمین مساوی یا مساوی با بیش از $param حرکت در بازی‌های استاندارد، منجر به امتیاز می‌شود. «ریسهٔ مساوی» تنها با بُرد می‌شکند، نه باخت یا مساوی.';
+    return 'ریسهٔ مساوی: وقتی بازیکنی در یک راوان، مساوی‌های پیاپی داشته باشد، فقط یکمین مساوی یا مساوی با بیش از $param حرکت در بازی‌های اِستانده، منجر به امتیاز می‌شود. «ریسهٔ مساوی» تنها با بُرد می‌شکند، نه باخت یا مساوی.';
   }
 
   @override
@@ -905,6 +905,14 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'دورِ $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'حفظِ نامِ پیش‌فرض، خودکار آن را به همهٔ زبان‌های دیگر می‌تَرجُمد.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1216,7 +1224,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesBoardCoordinates => 'مختصات صفحه(A-H، 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => 'فهرست حرکت هنگام بازی کردن';
+  String get preferencesMoveListWhilePlaying => 'فهرست‌حرکت هنگام بازی کردن';
 
   @override
   String get preferencesPgnPieceNotation => 'نشانه‌گذاری حرکات';
@@ -1730,10 +1738,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'فیل مات را می‌انجامد و وزیر خانه‌های فرارِ باقی‌مانده را می‌بندد';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'ماتِ دورُخ‌کُنج';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'دو رخ با برای ماتِ شاه در ناحیه‌ای ۲ در ۲، همکاری می‌کنند.';
 
   @override
   String get puzzleThemeBishopEndgame => 'آخربازی فیل';
@@ -1742,7 +1750,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeBishopEndgameDescription => 'آخربازی، تنها با فیل‌ها و پیاده‌ها.';
 
   @override
-  String get puzzleThemeBodenMate => 'مات بودِن یا دوشمشیر';
+  String get puzzleThemeBodenMate => 'مات دوشمشیر';
 
   @override
   String get puzzleThemeBodenMateDescription => 'دو فیل، شاهی را که با مهره‌های خودی مسدود شده است، با حملهٔ ضربدری مات می‌کنند.';
@@ -1760,10 +1768,22 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'گرفتن یک مهره که برای دفاع از یک مهره دیگر حیاتی است، اجازه می دهد مهره ای که اکنون بدون دفاع است در حرکت بعدی گرفته شود.';
 
   @override
+  String get puzzleThemeCornerMate => 'ماتِ کُنج';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'شاه را به کنج محدود کنید و با استفاده از یک رخ یا وزیر و یک اسب، او را مات کنید.';
+
+  @override
   String get puzzleThemeCrushing => 'تخریب';
 
   @override
   String get puzzleThemeCrushingDescription => 'تشخیص اشتباه فاحش حریف، برای رسیدن به برتری‌ای کوبنده. (ارزیابی ≥ ۶۰۰ص‌پ)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'کیشِ برخاست';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'حرکتِ یک مهره، کیشِ مهاجمِ پنهانی را فاش می‌کند که اغلب به مزیتی قاطع مُنجَر می‌شود.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'ماتِ دوفیل';
@@ -1871,10 +1891,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeTriangleMate => 'ماتِ مثلث';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'وزیر و رخ، در خانهٔ اُریبِ شاه حریف، روی عرض یا ستونِ یکسان و با یک خانه فاصله از یکدیگر، مثلثی تشکیل می‌دهند.';
 
   @override
   String get puzzleThemeVukovicMate => 'مات ووکویچ';
@@ -2619,13 +2639,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get ratingStats => 'آماره‌های درجه‌بندی';
 
   @override
-  String get username => 'نام کاربر';
+  String get username => 'نام کاربری';
 
   @override
-  String get usernameOrEmail => 'نام کاربر یا رایانامه';
+  String get usernameOrEmail => 'نام کاربری یا رایانامه';
 
   @override
-  String get changeUsername => 'تغییر نام کاربر';
+  String get changeUsername => 'تغییر نام کاربری';
 
   @override
   String get changeUsernameNotSame => 'تنها اندازه حروف میتوانند تغییر کنند. برای مثال \"johndoe\" به \"JohnDoe\".';
@@ -2664,7 +2684,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get error_namePassword => 'خواهشانه از نام کاربری‌تان برای گذرواژه‌تان استفاده نکنید.';
 
   @override
-  String get blankedPassword => 'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهراییده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب لیچس‌تان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
+  String get blankedPassword => 'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهریده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب Lichessتان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
 
   @override
   String get youAreLeavingLichess => 'در حال ترک lichess هستید';
@@ -2814,7 +2834,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get gameAborted => 'بازی لغو شد';
 
   @override
-  String get standard => 'استاندارد';
+  String get standard => 'معیار';
 
   @override
   String get customPosition => 'وضعیت به‌دلخواه';
@@ -4640,7 +4660,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'برای آغاز هر بازی از یک وضعیت مشخص، یک FEN معتبر جای‌گذارید.\nتنها برای شطرنج معیار کار می‌کند، نه با وَرتاها.\nمی‌توانید از $param برای آزانیدن وضعیت FEN بهرایید، سپس آن را اینجا جای‌گذارید.\nبرای آغاز بازی از وضعیت نخستین معمولی، خالی بگذارید.';
+    return 'برای آغاز هر بازی از یک وضعیت مشخص، یک FEN معتبر جای‌گذارید.\nتنها برای شطرنج معیار کار می‌کند، نه با وَرتاها.\nمی‌توانید از $param برای آزانیدن وضعیت FEN بَهرید، سپس آن را اینجا جای‌گذارید.\nبرای آغاز بازی از وضعیت نخستین معمولی، خالی بگذارید.';
   }
 
   @override
@@ -5989,14 +6009,14 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'روی دکمهٔ $param کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. نظرات به اشتراک گذاشته و ذخیره می‌شوند.';
+    return 'روی دکمهٔ $param بتِلیکید، یا روی فهرستِ حرکاتِ سمت راست، راست-تِلیکید.<br>دیدگاه‌ها ذخیره و همرسانیده می‌شوند.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'یادداشت‌گذاری روی یک وضعیت';
 
   @override
-  String get studyAnnotatePositionText => 'روی دکمهٔ !؟ کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. علائم یادداشت‌گذاری به اشتراک گذاشته و ذخیره می‌شوند.';
+  String get studyAnnotatePositionText => 'روی دکمهٔ !؟ بتِلیکید، یا روی فهرستِ حرکاتِ سمت راست، راست-تِلیکید.<br>علائمِ حرکت‌نویسی ذخیره و همرسانیده می‌شوند.';
 
   @override
   String get studyConclusionTitle => 'ممنون از وقتی که گذاشتید';

@@ -945,6 +945,14 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String broadcastRoundX(String param) {
+    return 'Раунд $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Усталене ім\'я автоматично перекладатиметься іншими мовами.';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1816,10 +1824,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Захоплення фігури, що захищає іншу фігуру, дозволяє захопити незахищену фігуру наступним ходом.';
 
   @override
+  String get puzzleThemeCornerMate => 'Кутовий мат';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Тура й ферзь заганяють короля в кут, а кінь ставить мат.';
+
+  @override
   String get puzzleThemeCrushing => 'Руйнування';
 
   @override
   String get puzzleThemeCrushingDescription => 'Знайдіть грубу помилку суперника, щоб отримати нищівну перевагу. (eval ≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Відкритий шах';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Переміщення однієї фігури відкриває іншу, яка ставить шах королю. Часто призводить до вирішальної переваги.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Мат двома слонами';
@@ -1930,7 +1950,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeTriangleMate => 'Трикутний мат';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'Ферзь і тура на відстані одного поля від ворожого короля перебувають на одній горизонталі чи вертикалі та формують трикутник.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковіча';
