@@ -207,7 +207,7 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     }
   }
 
-  void joinOrPause() {
+  void joinOrPause({TeamId? teamId}) {
     final state = this.state.value;
     if (state == null) {
       return;
@@ -216,7 +216,7 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     if (state.joined) {
       ref.read(tournamentRepositoryProvider).withdraw(state.id);
     } else {
-      ref.read(tournamentRepositoryProvider).join(state.id);
+      ref.read(tournamentRepositoryProvider).join(state.id, teamId: teamId);
     }
   }
 }
