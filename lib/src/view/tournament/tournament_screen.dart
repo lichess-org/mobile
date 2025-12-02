@@ -1337,6 +1337,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                 Text(context.l10n.games, style: Styles.sectionTitle),
                 const SizedBox(height: 8),
                 Card(
+                  clipBehavior: Clip.hardEdge,
                   child: Column(
                     children: [
                       ...player.pairings.asMap().entries.map(
