@@ -583,9 +583,12 @@ sealed class BroadcastAnalysisState
   @override
   Variant get variant => Variant.standard;
 
+  /// Whether the server analysis is available.
+  bool get hasServerAnalysis => root.mainline.any((node) => node.serverEval != null);
+
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs) || (isServerAnalysisEnabled && currentNode.serverEval != null);
+      isEngineAvailable(prefs) || (isServerAnalysisEnabled && hasServerAnalysis);
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => prefs.isEnabled;
