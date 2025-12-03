@@ -6,9 +6,18 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
-const double kEvalGaugeSize = 24.0;
-const double kEvalGaugeFontSize = 11.0;
+const double _kEvalGaugeSize = 24.0;
+const double _kEvalGaugeFontSize = 11.0;
+
+double getEvalGaugeWidth(BuildContext context) {
+  return isTabletOrLarger(context) ? _kEvalGaugeSize : _kEvalGaugeSize - 6.0;
+}
+
+double getEvalGaugeFontSize(BuildContext context) {
+  return isTabletOrLarger(context) ? _kEvalGaugeFontSize : _kEvalGaugeFontSize - 2.0;
+}
 
 typedef EngineGaugeParams = ({
   bool isLocalEngineAvailable,
@@ -109,11 +118,13 @@ class _EvalGaugeState extends State<_EvalGauge> {
 
     final evalStyle = TextStyle(
       color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
-      fontSize: 11.0,
+      fontSize: getEvalGaugeFontSize(context),
       letterSpacing: -0.8,
       fontWeight: FontWeight.bold,
       fontFeatures: const [FontFeature.tabularFigures()],
     );
+
+    final width = getEvalGaugeWidth(context);
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: fromValue, end: toValue),
@@ -125,11 +136,8 @@ class _EvalGaugeState extends State<_EvalGauge> {
           value: evalDisplay ?? context.l10n.loadingEngine,
           child: RepaintBoundary(
             child: Container(
-              constraints: const BoxConstraints(
-                minWidth: kEvalGaugeSize,
-                minHeight: double.infinity,
-              ),
-              width: kEvalGaugeSize,
+              constraints: BoxConstraints(minWidth: width, minHeight: double.infinity),
+              width: width,
               child: CustomPaint(
                 painter: _EvalGaugeVerticalPainter(
                   orientation: widget.orientation,
@@ -147,7 +155,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                             ? Alignment.topCenter
                             : Alignment.bottomCenter,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 3.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 3.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [

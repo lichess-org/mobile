@@ -283,10 +283,11 @@ class AnalysisLayout extends StatelessWidget {
                     ),
                   );
                 } else {
+                  final evalGaugeWidth = getEvalGaugeWidth(context);
                   final defaultBoardSize = constraints.biggest.shortestSide;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                  final evalGaugeSize = engineGaugeBuilder != null ? kEvalGaugeSize : 0.0;
+                  final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
                   final boardSize = isTablet || isSmallScreen
                       ? defaultBoardSize - evalGaugeSize - kTabletBoardTableSidePadding * 2
                       : defaultBoardSize - evalGaugeSize - kAnalysisPortraitBoardSidePadding * 2;
