@@ -150,10 +150,17 @@ class _BroadcastGameMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showEngineLines = ref.watch(
+      broadcastPreferencesProvider.select((prefs) => prefs.showEngineLines),
+    );
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
         ContextMenuAction(
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
@@ -163,9 +170,12 @@ class _BroadcastGameMenu extends ConsumerWidget {
             );
           },
         ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ContextMenuAction(
+          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
+          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
+          onPressed: () {
+            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
+          },
         ),
         if (tournamentSlug != null && roundSlug != null)
           ContextMenuAction(
@@ -277,17 +287,7 @@ class _Body extends ConsumerWidget {
           ),
           engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
               ? (context) {
-                  return EngineGauge(
-                    params: engineGaugeParams,
-                    engineLinesState: state.isEngineAvailable(enginePrefs)
-                        ? broadcastPrefs.showEngineLines
-                              ? EngineLinesShowState.expanded
-                              : EngineLinesShowState.collapsed
-                        : null,
-                    onTap: () {
-                      ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
-                    },
-                  );
+                  return EngineGauge(params: engineGaugeParams);
                 }
               : null,
           engineLines:

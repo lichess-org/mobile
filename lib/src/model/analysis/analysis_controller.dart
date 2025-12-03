@@ -919,7 +919,7 @@ sealed class AnalysisState
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
       isEngineAvailable(prefs) ||
-      (isComputerAnalysisAllowed && isServerAnalysisEnabled && currentNode.serverEval != null);
+      (isComputerAnalysisAllowed && isServerAnalysisEnabled && hasServerAnalysis);
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>

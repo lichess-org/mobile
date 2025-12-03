@@ -203,6 +203,9 @@ class _StudyMenu extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
     final kidModeAsync = ref.watch(kidModeProvider);
+    final showEngineLines = ref.watch(
+      studyPreferencesProvider.select((prefs) => prefs.showEngineLines),
+    );
 
     return ContextMenuIconButton(
       semanticsLabel: 'Study menu',
@@ -223,6 +226,13 @@ class _StudyMenu extends ConsumerWidget {
               ref.read(studyControllerProvider(id).notifier).toggleLike();
             },
           ),
+        ContextMenuAction(
+          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
+          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
+          onPressed: () {
+            ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
+          },
+        ),
         ContextMenuAction(
           icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           label: context.l10n.studyShareAndExport,
@@ -416,17 +426,7 @@ class _Body extends ConsumerWidget {
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
-              return EngineGauge(
-                params: engineGaugeParams,
-                engineLinesState: studyState.isEngineAvailable(enginePrefs)
-                    ? studyPrefs.showEngineLines
-                          ? EngineLinesShowState.expanded
-                          : EngineLinesShowState.collapsed
-                    : null,
-                onTap: () {
-                  ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
-                },
-              );
+              return EngineGauge(params: engineGaugeParams);
             }
           : null,
       engineLines:

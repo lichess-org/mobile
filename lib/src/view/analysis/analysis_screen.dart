@@ -218,10 +218,17 @@ class _AnalysisMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showEngineLines = ref.watch(
+      analysisPreferencesProvider.select((prefs) => prefs.showEngineLines),
+    );
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
         ContextMenuAction(
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
@@ -229,9 +236,12 @@ class _AnalysisMenu extends ConsumerWidget {
             context,
           ).push(AnalysisSettingsScreen.buildRoute(context, options: options)),
         ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ContextMenuAction(
+          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
+          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
+          onPressed: () {
+            ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+          },
         ),
         ...(switch (state) {
           AsyncData(:final value) =>
@@ -346,19 +356,9 @@ class _Body extends ConsumerWidget {
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
         boardHeader: boardHeader,
         boardFooter: boardFooter,
-        engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
+        engineGaugeBuilder: showEvaluationGauge && analysisState.hasAvailableEval(enginePrefs)
             ? (context) {
-                return EngineGauge(
-                  params: analysisState.engineGaugeParams(enginePrefs),
-                  engineLinesState: isEngineAvailable && numEvalLines > 0
-                      ? analysisPrefs.showEngineLines
-                            ? EngineLinesShowState.expanded
-                            : EngineLinesShowState.collapsed
-                      : null,
-                  onTap: () {
-                    ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                  },
-                );
+                return EngineGauge(params: analysisState.engineGaugeParams(enginePrefs));
               }
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines

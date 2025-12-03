@@ -10,12 +10,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 const double kEvalGaugeSize = 24.0;
 const double kEvalGaugeFontSize = 11.0;
 
-enum EngineLinesShowState { expanded, collapsed }
-
 typedef EngineGaugeParams = ({
   bool isLocalEngineAvailable,
 
-  /// Only used for vertical display mode.
+  /// Orientation of the board.
   Side orientation,
 
   /// Position to evaluate.
@@ -29,13 +27,9 @@ typedef EngineGaugeParams = ({
 });
 
 class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.params, this.engineLinesState, this.onTap, super.key});
-
-  final EngineLinesShowState? engineLinesState;
+  const EngineGauge({required this.params, super.key});
 
   final EngineGaugeParams params;
-
-  final VoidCallback? onTap;
 
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
@@ -57,27 +51,19 @@ class EngineGauge extends ConsumerWidget {
       serverEval: params.serverEval,
     );
 
-    return GestureDetector(
-      onTap: onTap,
-      child: _EvalGauge(
-        position: params.position,
-        orientation: params.orientation,
-        engineLinesState: engineLinesState,
-        eval: eval,
-      ),
+    return Opacity(
+      // if the local engine is not available and there is no server eval, show the gauge as disabled
+      // this is typically a case where user is on a node not on main line and the game has the server
+      // analysis
+      opacity: !params.isLocalEngineAvailable && params.serverEval == null ? 0.5 : 1.0,
+      child: _EvalGauge(position: params.position, orientation: params.orientation, eval: eval),
     );
   }
 }
 
 class _EvalGauge extends StatefulWidget {
-  const _EvalGauge({
-    required this.position,
-    required this.orientation,
-    this.engineLinesState,
-    this.eval,
-  });
+  const _EvalGauge({required this.position, required this.orientation, this.eval});
 
-  final EngineLinesShowState? engineLinesState;
   final Position position;
   final Eval? eval;
   final Side orientation;
@@ -121,6 +107,14 @@ class _EvalGaugeState extends State<_EvalGauge> {
               : '#'
         : widget.eval?.evalString ?? oldEval?.evalString;
 
+    final evalStyle = TextStyle(
+      color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
+      fontSize: 11.0,
+      letterSpacing: -0.8,
+      fontWeight: FontWeight.bold,
+      fontFeatures: const [FontFeature.tabularFigures()],
+    );
+
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: fromValue, end: toValue),
       duration: const Duration(milliseconds: 800),
@@ -143,36 +137,35 @@ class _EvalGaugeState extends State<_EvalGauge> {
                   valueColor: EngineGauge.valueColor(context),
                   value: value,
                 ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Text(
-                          evalDisplay ?? '',
-                          style: TextStyle(
-                            color: toValue >= 0.5 ? Colors.black : Colors.white,
-                            fontSize: 9.0,
-                            letterSpacing: -0.8,
-                            fontWeight: FontWeight.bold,
-                            fontFeatures: const [FontFeature.tabularFigures()],
+                child: toValue != 0.5
+                    ? Align(
+                        alignment: toValue >= 0.5
+                            ? widget.orientation == Side.white
+                                  ? Alignment.bottomCenter
+                                  : Alignment.topCenter
+                            : widget.orientation == Side.white
+                            ? Alignment.topCenter
+                            : Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 3.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Text(
+                              //   evalDisplay?.startsWith(RegExp('[-+]')) == true
+                              //       ? evalDisplay!.substring(0, 1)
+                              //       : '',
+                              //   style: evalStyle,
+                              // ),
+                              Text(
+                                evalDisplay?.replaceFirst(RegExp('[-+]'), '') ?? '',
+                                style: evalStyle,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ),
-                    if (widget.engineLinesState != null)
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Icon(
-                          widget.engineLinesState == EngineLinesShowState.expanded
-                              ? Icons.arrow_drop_up
-                              : Icons.arrow_drop_down,
-                          color: Colors.grey,
-                          size: 24.0,
-                        ),
-                      ),
-                  ],
-                ),
+                      )
+                    : null,
               ),
             ),
           ),
