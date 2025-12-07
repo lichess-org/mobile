@@ -401,7 +401,7 @@
     <item quantity="other">Je moet %s partijen meer met rating spelen</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Je %s rating is een voorlopige</string>
-  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Raitingfilters zijn vergrendeld omdat je rating niet stabiel is. Het spelen van partijen met rating zal de stabiliteit vergroten.</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control for filtering by rating is disabled">Raitingfilters zijn vergrendeld omdat je rating niet stabiel is. Het spelen van partijen met rating zal de stabiliteit vergroten.</string>
   <string name="yourPerfRatingIsTooHigh">Je rating %1$s (%2$s) is te hoog</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Je beste hoogste rating deze week %1$s (%2$s) is te hoog</string>
   <string name="yourPerfRatingIsTooLow">Je rating %1$s (%2$s) is te laag</string>
@@ -566,7 +566,7 @@
   <string name="views">Weergaven</string>
   <string name="replies">Reacties</string>
   <string name="replyToThisTopic">Reageer op dit onderwerp</string>
-  <string name="reply">Reageer</string>
+  <string name="reply" comment="Appears on buttons in the forum. Clicking the button will post a reply to a topic.">Reageer</string>
   <string name="message">Bericht</string>
   <string name="createTheTopic">Maak een nieuw onderwerp</string>
   <string name="reportAUser">Gebruiker melden</string>

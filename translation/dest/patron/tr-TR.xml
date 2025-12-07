@@ -15,7 +15,7 @@
   <string name="freeChess">Herkes için ücretsiz satranç,
 sonsuza kadar!</string>
   <string name="noAdsNoSubs">Ne reklam var ne abonelik; kodumuz açık kaynaklı, tutkumuz epik.</string>
-  <string name="thankYou">Yardımınız için teşekkür ederiz!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Yardımınız için teşekkür ederiz!</string>
   <string name="youHaveLifetime">Artık Ömür Boyu Destekçi hesabınız var. Bu müthiş bir şey!</string>
   <string name="patronUntil">Destekçi hesabınızın süresi %s tarihinde sona erecek.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Bağışınızı yenilemediğiniz takdirde hesabınız normal hesaba çevrilecektir.</string>

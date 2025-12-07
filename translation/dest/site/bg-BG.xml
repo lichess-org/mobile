@@ -553,7 +553,7 @@
   <string name="views">Преглеждания</string>
   <string name="replies">Отговори</string>
   <string name="replyToThisTopic">Отговори по този въпрос</string>
-  <string name="reply">Отговор</string>
+  <string name="reply" comment="Appears on buttons in the forum. Clicking the button will post a reply to a topic.">Отговор</string>
   <string name="message">Съобщение</string>
   <string name="createTheTopic">Създай тема</string>
   <string name="reportAUser">Докладвай потребител</string>
