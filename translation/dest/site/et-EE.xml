@@ -514,7 +514,7 @@ arvutianalüüsi, mängu jututoa ning jagatava URL-i.</string>
   <string name="views">Vaatamisi</string>
   <string name="replies">Vastused</string>
   <string name="replyToThisTopic">Vasta sellele teemale</string>
-  <string name="reply">Vasta</string>
+  <string name="reply" comment="Appears on buttons in the forum. Clicking the button will post a reply to a topic.">Vasta</string>
   <string name="message">Sõnum</string>
   <string name="createTheTopic">Loo teema</string>
   <string name="reportAUser">Teata kasutajast</string>

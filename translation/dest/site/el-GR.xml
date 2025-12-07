@@ -245,7 +245,7 @@
   <string name="neverTypeYourPassword">Ποτέ μην πληκτρολογήσετε τον κωδικό σας από το Lichess σε άλλον ιστότοπο!</string>
   <string name="proceedToX">Μεταβείτε στον τομέα %s</string>
   <string name="passwordSuggestion">Μην ορίσετε κωδικό πρόσβασης που σας πρότεινε κάποιος άλλος — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.</string>
-  <string name="emailSuggestion">Μη χρησιμοποιήσετε email που στάλθηκε από κάποιον άλλο — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.</string>
+  <string name="emailSuggestion">Μη χρησιμοποιήσετε διεύθυνση email που σας πρότεινε άλλο άτομο — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.</string>
   <string name="emailConfirmHelp">Βοήθεια για την επιβεβαίωση της διεύθυνσης email</string>
   <string name="emailConfirmNotReceived">Δε λάβατε το email επιβεβαίωσης μετά την εγγραφή;</string>
   <string name="whatSignupUsername">Τι όνομα χρήστη χρησιμοποιήσατε για να εγγραφείτε;</string>
@@ -401,7 +401,7 @@
     <item quantity="other">Πρέπει να παίξετε %s βαθμολογημένα παιχνίδια</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Η %s βαθμολογία σας είναι προσωρινή</string>
-  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Τα φίλτρα βαθμολογιών είναι κλειδωμένα επειδή η βαθμολογία σας δεν είναι σταθερή ακόμα. Δοκιμάστε να παίξετε μερικές βαθμολογημένες παρτίδες για να τη σταθεροποιήσετε.</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control for filtering by rating is disabled">Τα φίλτρα βαθμολογιών είναι κλειδωμένα επειδή η βαθμολογία σας δεν είναι σταθερή ακόμα. Δοκιμάστε να παίξετε μερικές βαθμολογημένες παρτίδες για να τη σταθεροποιήσετε.</string>
   <string name="yourPerfRatingIsTooHigh">Η %1$s βαθμολογία σας (%2$s) είναι πολύ υψηλή</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Η κορυφαία εβδομαδιαία %1$s βαθμολογία σας (%2$s) είναι πολύ υψηλή</string>
   <string name="yourPerfRatingIsTooLow">Η %1$s βαθμολογία σας (%2$s) είναι πολύ χαμηλή</string>
@@ -566,7 +566,7 @@
   <string name="views">Εμφανίσεις</string>
   <string name="replies">Απαντήσεις</string>
   <string name="replyToThisTopic">Απαντήστε σε αυτό το θέμα</string>
-  <string name="reply">Απάντηση</string>
+  <string name="reply" comment="Appears on buttons in the forum. Clicking the button will post a reply to a topic.">Απάντηση</string>
   <string name="message">Μήνυμα</string>
   <string name="createTheTopic">Δημιουργήστε θέμα</string>
   <string name="reportAUser">Αναφορά χρήστη</string>

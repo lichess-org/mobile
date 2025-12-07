@@ -401,7 +401,7 @@
     <item quantity="other">Necesitas xogar %s partidas puntuadas máis</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">A túa puntuación en %s é provisional</string>
-  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Os filtros de puntuación están bloqueados dado que a túa puntuación non é estable. Tes que xogar partidas puntuadas para incrementar a súa estabilidade.</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control for filtering by rating is disabled">Os filtros de puntuación están bloqueados dado que a túa puntuación non é estable. Tes que xogar partidas puntuadas para incrementar a súa estabilidade.</string>
   <string name="yourPerfRatingIsTooHigh">A túa puntuación %1$s (%2$s) é demasiado alta</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">A túa puntuación máxima semanal %1$s (%2$s) é demasiado alta</string>
   <string name="yourPerfRatingIsTooLow">A túa puntuación %1$s (%2$s) é demasiado baixa</string>
@@ -566,7 +566,7 @@
   <string name="views">Visitas</string>
   <string name="replies">Respostas</string>
   <string name="replyToThisTopic">Responder a este tema</string>
-  <string name="reply">Responder</string>
+  <string name="reply" comment="Appears on buttons in the forum. Clicking the button will post a reply to a topic.">Responder</string>
   <string name="message">Mensaxe</string>
   <string name="createTheTopic">Crear o tema</string>
   <string name="reportAUser">Denunciar a un usuario</string>

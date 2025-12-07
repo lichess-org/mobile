@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hiUser" comment="%s is the title+username e.g. 'GM ABC' or simply ABC if there is no title">Salut, %s</string>
+	<string name="awaitQuestion" comment="Displayed while waiting for results">Cu ce te-ai ocupat anul acesta?</string>
+	<string name="noGamesText">Nu ai jucat niciun joc în acest an.</string>
+	<string name="noGamesCta">Vrei să joci acum?</string>
+	<string name="gamesYouWon" comment="%s is the number of games won">Și ai câștigat %s!</string>
+	<string name="malwareWarningCta" comment="Part of a longer sentence &quot;But other websites do, so please be careful.&quot;&#10;&#10;Appears in the context of noting that Lichess served zero ads.&#10;The text links to https://lichess.org/ads">ai grijă</string>
+	<string name="shareableSpentPlaying" comment="Subtitle to the translated time they have spent playing&#10;&#10;Will be rendered like:&#10;&quot;1 day, 2 hours&#10;spent playing&quot;">petrecut jucând</string>
+	<string name="shareableMostPlayedOpponent" comment="Subtitle to the username of the opponent you have played the most games against&#10;&#10; Will be rendered like:&#10;&quot;GM Magnus&#10;most played opponent&quot;&#10;&#10;(where GM Magnus is the title+username of the player)">oponentul cel mai frecvent</string>
+	<string name="recapReady" comment="%s is the year of the recap">Recapitularea ta pentru %s este gata!</string>
+</resources>
