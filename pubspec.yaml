@@ -67,7 +67,7 @@ dependencies:
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
   share_plus: ^12.0.0
-  shared_preferences: ^2.1.0
+  shared_preferences: ^2.5.4
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
