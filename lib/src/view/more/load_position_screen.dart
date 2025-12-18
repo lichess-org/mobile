@@ -1,4 +1,5 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -69,7 +70,21 @@ class _BodyState extends State<_Body> {
                   hintText:
                       '${context.l10n.pasteTheFenStringHere}\n\u2014\n${context.l10n.pasteThePgnStringHere}',
                   hintMaxLines: 3,
-                  suffixIcon: const Icon(Icons.paste),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.upload_file),
+                        onPressed: _pickPgnFile,
+                        tooltip: 'Upload PGN file',
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.paste),
+                        onPressed: _getClipboardData,
+                        tooltip: 'Paste from clipboard',
+                      ),
+                    ],
+                  ),
                 ),
                 controller: _controller,
                 readOnly: true,
@@ -112,6 +127,44 @@ class _BodyState extends State<_Body> {
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
     if (data != null) {
       _controller.text = data.text!;
+    }
+  }
+
+  Future<void> _pickPgnFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pgn'],
+        withData: true,
+      );
+
+      if (result != null && result.files.single.bytes != null) {
+        final content = String.fromCharCodes(result.files.single.bytes!);
+        
+        // Validate that it's actually a PGN file
+        try {
+          PgnGame.parsePgn(content);
+          _controller.text = content;
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Invalid PGN file: ${e.toString()}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading file: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
