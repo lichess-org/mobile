@@ -140,7 +140,7 @@ class _BodyState extends State<_Body> {
 
       if (result != null && result.files.single.bytes != null) {
         final content = String.fromCharCodes(result.files.single.bytes!);
-        
+
         // Validate that it's actually a PGN file
         try {
           PgnGame.parsePgn(content);
