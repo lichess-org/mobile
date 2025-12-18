@@ -1,10 +1,12 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/custom_pgn_analysis.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -610,8 +612,74 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.studyShareAndExport),
             onPressed: () => _showShareMenu(context, ref),
           ),
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Load custom PGN files'),
+            onPressed: () => _loadCustomPgnFiles(context, ref),
+          ),
+        if (analysisState.isComputerAnalysisAllowed &&
+            ref.read(customPgnAnalysisProvider).parsedGames.isNotEmpty)
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Clear PGN files'),
+            onPressed: () {
+              ref.read(customPgnAnalysisProvider.notifier).clear();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('PGN files cleared'), duration: Duration(seconds: 2)),
+              );
+            },
+          ),
       ],
     );
+  }
+
+  Future<void> _loadCustomPgnFiles(BuildContext context, WidgetRef ref) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pgn'],
+        allowMultiple: true,
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty && context.mounted) {
+        final fileNames = <String>[];
+        final pgnContents = <String>[];
+
+        for (final file in result.files) {
+          if (file.bytes != null) {
+            fileNames.add(file.name);
+            pgnContents.add(String.fromCharCodes(file.bytes!));
+          }
+        }
+
+        if (fileNames.isNotEmpty) {
+          await ref.read(customPgnAnalysisProvider.notifier).loadPgnFiles(fileNames, pgnContents);
+
+          if (context.mounted) {
+            final state = ref.read(customPgnAnalysisProvider);
+            final loadedCount = state.parsedGames.length;
+            final failedCount = state.failedFiles.length;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  loadedCount > 0
+                      ? 'Loaded $loadedCount PGN file(s)${failedCount > 0 ? '. Failed: $failedCount' : '. Arrows will show suggested moves.'}'
+                      : 'All files failed to load',
+                ),
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error loading files: $e')));
+      }
+    }
   }
 
   Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
