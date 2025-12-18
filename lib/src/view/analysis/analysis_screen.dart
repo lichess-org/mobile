@@ -632,6 +632,7 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
+  // DOES NOT SUPPORT MULTIPLE GAMES IN THE SAME .pgn FILE
   Future<void> _loadCustomPgnFiles(BuildContext context, WidgetRef ref) async {
     try {
       final result = await FilePicker.platform.pickFiles(
