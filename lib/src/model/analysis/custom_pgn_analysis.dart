@@ -157,7 +157,4 @@ class CustomPgnAnalysisNotifier extends Notifier<CustomPgnAnalysisState> {
   void clear() {
     state = const CustomPgnAnalysisState();
   }
-
-  /// Check if engine should be disabled
-  bool get shouldDisableEngine => state.isEngineDisabled;
 }
