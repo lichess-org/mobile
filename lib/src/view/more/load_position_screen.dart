@@ -140,7 +140,7 @@ class _BodyState extends State<_Body> {
 
       if (result != null && result.files.single.bytes != null) {
         final content = String.fromCharCodes(result.files.single.bytes!);
-
+        
         // Validate that it's actually a PGN file
         try {
           PgnGame.parsePgn(content);
@@ -149,7 +149,7 @@ class _BodyState extends State<_Body> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Invalid PGN file: ${e.toString()}'),
+                content: Text('Invalid PGN file: $e'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -160,7 +160,7 @@ class _BodyState extends State<_Body> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading file: ${e.toString()}'),
+            content: Text('Error loading file: $e'),
             backgroundColor: Colors.red,
           ),
         );
