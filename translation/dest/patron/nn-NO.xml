@@ -14,7 +14,7 @@
   <string name="newPatrons">Nye bidragsytarar</string>
   <string name="freeChess">Gratis sjakk for alle, for alltid!</string>
   <string name="noAdsNoSubs">Ingen annonsar, ingen abonnement; men open-kjeldekode og glødande engasjement.</string>
-  <string name="thankYou">Takk for bidraget ditt!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Takk for bidraget ditt!</string>
   <string name="youHaveLifetime">Du har ein bidragsytar-konto på livstid. Det er rett og slett storarta!</string>
   <string name="patronUntil">Du har ein bidragsytar-konto fram til %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">On kontoen ikkje vert fornya får den status som vanleg konto igjen.</string>

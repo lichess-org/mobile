@@ -120,4 +120,9 @@ Se luo vaakasuoran erotinviivan.</string>
   <string name="moveToAnotherClass">Siirrä toiselle luokalle</string>
   <string name="allowMessagingBetweenStudents">Salli oppilaiden väliset viestit</string>
   <string name="allowMessagingBetweenStudentsDesc">Tämä koskee vain käyttäjätunnuksia, jotka olet luonut oppilaillesi.</string>
+  <string name="quickLoginCode">Nopean kirjautumisen koodi</string>
+  <string name="quickLoginCodes">Nopean kirjautumisen koodit</string>
+  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">Näitä koodeja käyttämällä voit kirjata oppilaasi sisään Lichessiin täältä: %s</string>
+  <string name="quickLoginCodesDesc2">Kun koodit vanhentuvat, oppilaasi pysyvät sisäänkirjautuneina siihen asti, kunnes he kirjautuvat itse ulos.</string>
+  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Vanhentuu %s</string>
 </resources>
