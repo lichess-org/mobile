@@ -104,7 +104,7 @@ class _BodyState extends ConsumerState<_Body> {
     // an explicit check when restarting, or else the puzzle will be in a bugged state
     ref.listen(puzzleStreakControllerProvider, (previous, next) {
       if (previous?.hasValue == true && next.hasValue) {
-        if (next.requireValue.streak.finished == false && 
+        if (next.requireValue.streak.finished == false &&
             previous!.requireValue.streak.finished == true) {
           _onClearShapes();
           final authUser = ref.read(authControllerProvider);
