@@ -153,7 +153,7 @@ class SettingsScreen extends ConsumerWidget {
                           ref.read(generalPreferencesProvider.notifier).setLocale(locale),
                     );
                   } else {
-                    AppSettings.openAppSettings();
+                    AppSettings.openAppSettings(type: AppSettingsType.appLocale);
                   }
                 },
               ),
