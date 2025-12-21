@@ -100,6 +100,8 @@ class _BodyState extends ConsumerState<_Body> {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
+    // fix for #1951 : when failing the first puzzle, need to do
+    // an explicit check when restarting, or else the puzzle will be in a bugged state
     ref.listen(puzzleStreakControllerProvider, (previous, next) {
       if (previous?.hasValue == true && next.hasValue) {
         if (next.requireValue.streak.finished == false && 
