@@ -8,7 +8,7 @@
   <string name="newPatrons">Yeni Dəstəkçilər</string>
   <string name="freeChess">Hər kəs üçün ödənişsiz şahmat, sonsuzadək!</string>
   <string name="noAdsNoSubs">Reklamsız, abunəlik olmadan; ancaq açıq mənbə və coşğu ilə.</string>
-  <string name="thankYou">İanəniz üçün təşəkkürlər!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">İanəniz üçün təşəkkürlər!</string>
   <string name="youHaveLifetime">Ömürlük Dəstəkçi hesabınız var. Bu möhtəşəmdir!</string>
   <string name="patronUntil">Dəstəkçi hesabınızın müddəti %s tarixində başa çatır.</string>
   <string name="weAreNonProfit">Hər kəsin pulsuz, dünya səviyyəli bir şahmat platformasına çıxışı olması lazım olduğuna inandığımız üçün mənfəət güdməyən bir təşkilatıq.</string>
