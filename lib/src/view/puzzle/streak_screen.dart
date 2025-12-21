@@ -102,17 +102,15 @@ class _BodyState extends ConsumerState<_Body> {
 
     ref.listen(puzzleStreakControllerProvider, (previous, next) {
       if (previous?.hasValue == true && next.hasValue) {
-        final currentPuzzle = next.requireValue.puzzle;
-        final previousPuzzle = previous!.requireValue.puzzle;
-
-        if (currentPuzzle.puzzle.id != previousPuzzle.puzzle.id) {
+        if (next.requireValue.streak.finished == false && 
+            previous!.requireValue.streak.finished == true) {
           _onClearShapes();
           final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
               .onLoadPuzzle(
                 PuzzleContext(
-                  puzzle: currentPuzzle,
+                  puzzle: next.requireValue.puzzle,
                   angle: widget.initialPuzzleContext.angle,
                   userId: authUser?.user.id,
                 ),
