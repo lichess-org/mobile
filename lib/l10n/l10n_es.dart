@@ -789,7 +789,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastFederation => 'Federación';
 
   @override
-  String get broadcastAgeThisYear => 'Edad';
+  String get broadcastAge => 'Edad';
 
   @override
   String get broadcastUnrated => 'Sin puntuación';
@@ -1891,6 +1891,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mate de Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'La torre da jaque mate, al tiempo que el alfil ayuda a confinar al rey enemigo.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mate de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Utiliza el alfil para dar jaque al rey, mientras que tu torre ayuda a mantenerlo confinado.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mate del triángulo';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Una táctica durante la primera fase de la partida.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mate de la Ópera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Da jaque al rey con una torre defendida por un alfil.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peones';
@@ -3938,6 +3956,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get togglePositionAnnotations => 'Activa o desactiva anotaciones de posición';
 
   @override
+  String get toggleObservationAnnotations => 'Alternar las anotaciones de observación';
+
+  @override
   String get variationArrowsInfo => 'Las flechas de variantes te permiten navegar sin usar la lista de movimientos.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get edit => 'Editar';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other: '$count siguiendo',
       one: '$count siguiendo',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menos de $count minutos',
-      one: 'Menos de $count minuto',
     );
     return '$_temp0';
   }

@@ -789,7 +789,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastFederation => 'Federatie';
 
   @override
-  String get broadcastAgeThisYear => 'Leeftijd dit jaar';
+  String get broadcastAge => 'Leeftijd';
 
   @override
   String get broadcastUnrated => 'Zonder rating';
@@ -1519,7 +1519,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get puzzleHidden => 'verborgen';
+  String get puzzleHidden => 'Verborgen';
 
   @override
   String puzzleFromGameLink(String param) {
@@ -1891,6 +1891,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mat';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'De toren geeft mat, terwijl de loper helpt met opsluiten.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mat';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Gebruik de loper om de koning te mat te zetten, terwijl je toren helpt om hem te de pas af te snijden.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Driehoeksmat';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Tactiek in de eerste fase van de partij.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Operamat';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Zet de koning mat met een toren en gebruik een loper om de toren te verdedigen.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pionneneindspel';
@@ -3926,16 +3944,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get keyNextBranch => 'Volgende vertakking';
 
   @override
-  String get toggleVariationArrows => 'Schakel variatiepijlen in/uit';
+  String get toggleVariationArrows => 'Variatiepijlen in/uitschakelen';
 
   @override
   String get cyclePreviousOrNextVariation => 'Bekijk vorige/volgende variant';
 
   @override
-  String get toggleGlyphAnnotations => 'Zet glyph-aantekeningen aan of uit';
+  String get toggleGlyphAnnotations => 'Zetaantekeningen in-/uitschakelen';
 
   @override
-  String get togglePositionAnnotations => 'Zet stellingsaantekeningen aan of uit';
+  String get togglePositionAnnotations => 'Stellingsaantekeningen in-/uitschakelen';
+
+  @override
+  String get toggleObservationAnnotations => 'Observatie-aantekeningen in-/uitschakelen';
 
   @override
   String get variationArrowsInfo => 'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
@@ -4473,6 +4494,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get edit => 'Wijzigen';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5213,17 +5237,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Minder dan $count minuten',
-      one: 'Minder dan $count minuut',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5644,7 +5657,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyNext => 'Volgende';
 
   @override
-  String get studyShareAndExport => 'Deel & exporteer';
+  String get studyShareAndExport => 'Delen & exporteren';
 
   @override
   String get studyCloneStudy => 'Kopiëren';

@@ -829,7 +829,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastFederation => 'Federácia';
 
   @override
-  String get broadcastAgeThisYear => 'Vek tento rok';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Bez hodnotenia';
@@ -1947,6 +1947,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Veža je vedľa súperovho kráľa a podporuje ju dáma, ktorá zároveň blokuje kráľove únikové polia. Veža a dáma chytia súperovho kráľa do pasce na 3 x 3 „poli smrti“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Trojuholníkový mat';
 
   @override
@@ -2035,6 +2047,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika počas prvého úseku hry.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pešiaková koncovka';
@@ -3994,6 +4012,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get togglePositionAnnotations => 'Prepnúť poznámky k pozíciám';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Šípky variantov umožňujú navigáciu bez použitia záznamu ťahov.';
 
   @override
@@ -4529,6 +4550,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get edit => 'Upraviť';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5334,19 +5358,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sledovaných',
       few: '$count sledovaní',
       one: '$count sledovaný',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menej ako $count minút',
-      many: 'Menej ako $count minút',
-      few: 'Menej ako $count minúty',
-      one: 'Menej ako $count minúta',
     );
     return '$_temp0';
   }

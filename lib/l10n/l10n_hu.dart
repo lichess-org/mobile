@@ -789,7 +789,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastFederation => 'Ország';
 
   @override
-  String get broadcastAgeThisYear => 'Idén betöltött életkor';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nem értékelt';
@@ -1891,6 +1891,18 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Egy bástya az ellenséges király mellett áll, és egy vezér támogatja, ami blokkolja a király menekülőmezőit is. A bástya és a vezér egy 3×3-as területre, ún. kill boxba zárja az ellenséges királyt.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktikák a játszma kezdeti fázisában.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Gyalogvégjáték';
@@ -3938,6 +3956,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get togglePositionAnnotations => 'Helyzetelemzések ki-be';
 
   @override
+  String get toggleObservationAnnotations => 'Helyzetelemzések ki-be';
+
+  @override
   String get variationArrowsInfo => 'A változatnyilakkal a lépéslista használata nélkül is navigálhatsz.';
 
   @override
@@ -4069,7 +4090,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift-kattintva vagy jobb egérgombbal rajzolhatsz karikákat és nyilakat a táblára';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl vagy shift = piros; command, alt, vagy meta = kék; egy billentyű mindegyikből = sárga.';
 
   @override
   String get letOtherPlayersMessageYou => 'Mások küldhetnek neked üzenetet';
@@ -4475,6 +4496,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get edit => 'Szerkeszt';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4690,7 +4714,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param elérhető a formázáshoz.';
   }
 
   @override
@@ -5208,17 +5232,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count követve',
       one: '$count követve',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Kevesebb mint $count perc',
-      one: 'Kevesebb mint $count perc',
     );
     return '$_temp0';
   }

@@ -789,7 +789,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -1889,6 +1889,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1977,6 +1989,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pawn endgame';
@@ -2655,7 +2673,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupUsernameHint => 'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
 
   @override
-  String get signupEmailHint => 'We will only use it for password reset.';
+  String get signupEmailHint => 'We will only use it for password reset and account activation.';
 
   @override
   String get password => 'Password';
@@ -3936,6 +3954,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4471,6 +4492,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit => 'Edit';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5206,17 +5230,6 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other: '$count following',
       one: '$count following',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Less than $count minutes',
-      one: 'Less than $count minute',
     );
     return '$_temp0';
   }
@@ -7103,9 +7116,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get broadcastFederation => 'Federation';
-
-  @override
-  String get broadcastAgeThisYear => 'Age this year';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -11518,17 +11528,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       locale: localeName,
       other: '$count following',
       one: '$count following',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Less than $count minutes',
-      one: 'Less than $count minute',
     );
     return '$_temp0';
   }

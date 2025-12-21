@@ -789,7 +789,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastFederation => 'Forbund';
 
   @override
-  String get broadcastAgeThisYear => 'Alder i år';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Uratet';
@@ -906,11 +906,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Runde $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Å beholde standardnavnet vil automatisk oversette det til alle andre språk.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1738,10 +1738,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Løper setter matt, mens dronning blokkerer fluktfeltene';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Grisematt';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'To tårn samarbeider om å matte kongen i et kvadratisk område på 4 felt.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Løpersluttspill';
@@ -1768,10 +1768,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
 
   @override
-  String get puzzleThemeCornerMate => 'Corner mate';
+  String get puzzleThemeCornerMate => 'Hjørnematt';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+  String get puzzleThemeCornerMateDescription => 'Press kongen inn i hjørnet ved hjelp av tårn eller dronning, og la springer sette matt.';
 
   @override
   String get puzzleThemeCrushing => 'Knusende';
@@ -1780,10 +1780,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Oppdag motstanderens bukk og oppnå en knusende fordel. (eval ≥ 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Avdekkersjakk';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Flytt en brikke for å avsløre sjakk fra en skjult angriper, noe som ofte gir en avgjørende fordel.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Dobbeltløpermatt';
@@ -1891,6 +1891,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden av motstanderens konge og er støttet av en dronning som også blokkerer kongens fluktfelter. Tårnet og dronningen fanger motstanderens konge i en 3x3 «kasse».';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Trekantmatt';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'En taktikk i den første fasen av partiet.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondesluttspill';
@@ -3938,6 +3956,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get togglePositionAnnotations => 'Skru kommentarer for stillinger av eller på';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variantpiler lar deg navigere uten å bruke notasjonslisten.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get edit => 'Rediger';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsNb extends AppLocalizations {
       locale: localeName,
       other: 'følger $count',
       one: '$count følger',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mindre enn $count minutter',
-      one: 'Mindre enn $count minutter',
     );
     return '$_temp0';
   }

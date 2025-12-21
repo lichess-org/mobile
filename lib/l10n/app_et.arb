@@ -1154,7 +1154,6 @@
   "nbFriendsOnline": "{count, plural, =1{{count} sõber on kohal} other{{count} sõpra on kohal}}",
   "nbFollowers": "{count, plural, =1{{count} jälgija} other{{count} jälgijat}}",
   "nbFollowing": "{count, plural, =1{{count} jälgimine} other{{count} jälgimist}}",
-  "lessThanNbMinutes": "{count, plural, =1{Alla {count} minuti} other{Alla {count} minuti}}",
   "nbGamesInPlay": "{count, plural, =1{{count} mäng pooleli} other{{count} mängu pooleli}}",
   "maximumNbCharacters": "{count, plural, =1{Maksimum: {count} märk.} other{Maksimum: {count} märki.}}",
   "blocks": "{count, plural, =1{{count} blokeeritud kasutaja} other{{count} blokeeritud kasutajat}}",

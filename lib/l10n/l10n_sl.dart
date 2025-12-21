@@ -829,7 +829,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastFederation => 'Država';
 
   @override
-  String get broadcastAgeThisYear => 'Starost letos';
+  String get broadcastAge => 'Starost';
 
   @override
   String get broadcastUnrated => 'Nima ratinga';
@@ -1947,6 +1947,18 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ob sovražnikovem kralju stoji trdnjava, ki jo podpira dama, ki prav tako blokira kraljeva pobegna polja. Trdnjava in dama ujameta sovražnikovega kralja v \"vabi\" velikosti 3 krat 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburyjev mat';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Top daje mat, lovec pa pomaga omejiti mat.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphyjev mat';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'S lovcem šahiraj kralja, medtem ko ti trdnjava pomaga omejiti napad.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Trikotni mat';
 
   @override
@@ -2035,6 +2047,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika v prvi fazi partije.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Operin mat';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Kralja šahiraj z trdnjavo in uporabi lovca za obrambo trdnjave.';
 
   @override
   String get puzzleThemePawnEndgame => 'Končnica s kmeti';
@@ -3994,6 +4012,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get togglePositionAnnotations => 'Preklop opomb o položaju';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Puščice variant vam omogočajo, da krmarite brez uporabe seznama potez';
 
   @override
@@ -4529,6 +4550,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get edit => 'Uredi';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Hitri šah';
@@ -5334,19 +5358,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count sledijo',
       two: '$count sledita',
       one: '$count sledi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Manj kot $count minut',
-      few: 'Manj kot $count minute',
-      two: 'Manj kot $count minuti',
-      one: 'Manj kot $count minuta',
     );
     return '$_temp0';
   }

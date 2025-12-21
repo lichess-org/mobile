@@ -829,7 +829,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastFederation => 'Федерація';
 
   @override
-  String get broadcastAgeThisYear => 'Вік цього року';
+  String get broadcastAge => 'Вік';
 
   @override
   String get broadcastUnrated => 'Без рейтингу';
@@ -1947,6 +1947,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Мат Пілсбері';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Тура ставить мат королю, поки слон закриває поля для втечі.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Мат Мерфі';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Трикутний мат';
 
   @override
@@ -2035,6 +2047,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактика на першому етапі гри.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Оперний мат';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Тура ставить шах королю, а слон захищає туру.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пішаковий ендшпіль';
@@ -3994,6 +4012,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get togglePositionAnnotations => 'Перемкнути анотації позицій';
 
   @override
+  String get toggleObservationAnnotations => 'Перемкнути анотації спостереження';
+
+  @override
   String get variationArrowsInfo => 'Стрілки варіантів дозволяють переміщуватись без використання списку ходів.';
 
   @override
@@ -4529,6 +4550,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get edit => 'Змінити';
+
+  @override
+  String get ultraBullet => 'Ультракуля';
 
   @override
   String get bullet => 'Куля';
@@ -5334,19 +5358,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count спостерігають',
       few: '$count спостерігають',
       one: '$count спостерігає',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Менше $count хвилин',
-      many: 'Менше $count хвилин',
-      few: 'Менше $count хвилин',
-      one: 'Менше $count хвилини',
     );
     return '$_temp0';
   }

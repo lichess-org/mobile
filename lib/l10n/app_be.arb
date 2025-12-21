@@ -1250,7 +1250,6 @@
   "nbFriendsOnline": "{count, plural, =1{{count} сябар у сетцы} few{{count} сябра ў сетцы} many{{count} сяброў у сетцы} other{{count} сяброў у сетцы}}",
   "nbFollowers": "{count, plural, =1{{count} падпісчык} few{{count} падпісчыкі} many{{count} падпісчыкаў} other{{count} падпісчыкаў}}",
   "nbFollowing": "{count, plural, =1{падпісаны на {count} гульца} few{падпісаны на {count} гульцоў} many{падпісаны на {count} гульцоў} other{падпісаны на {count} гульцоў}}",
-  "lessThanNbMinutes": "{count, plural, =1{Менш за {count} хвіліну} few{Менш за {count} хвіліны} many{Менш за {count} хвілін} other{Менш за {count} хвілін}}",
   "nbGamesInPlay": "{count, plural, =1{{count} бягучая гульня} few{{count} бягучыя гульні} many{{count} бягучых гульняў} other{{count} бягучых гульняў}}",
   "maximumNbCharacters": "{count, plural, =1{Максімум: {count} сімвал.} few{Максімум: {count} сімвалы.} many{Максімум: {count} сімвалаў.} other{Максімум: {count} сімвалаў.}}",
   "blocks": "{count, plural, =1{{count} заблакіраваны гулец} few{{count} заблакіраваных гульцы} many{{count} заблакіраваных гульцоў} other{{count} заблакіраваных гульцоў}}",

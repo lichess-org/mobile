@@ -204,7 +204,7 @@ class _OverallStatPlayer extends StatelessWidget {
                   SizedBox(
                     width: statWidth,
                     child: _StatCard(
-                      context.l10n.broadcastAgeThisYear,
+                      context.l10n.broadcastAge,
                       value: (DateTime.now().year - birthYear).toString(),
                     ),
                   ),

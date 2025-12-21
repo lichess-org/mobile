@@ -64,7 +64,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileLiveStreamers => 'লাইভ স্ট্রীমার';
 
   @override
-  String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে হলে লগইন করুন।';
+  String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে লগইন করুন।';
 
   @override
   String get mobileNoSearchResults => 'No results';
@@ -789,7 +789,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -1891,6 +1891,18 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'খেলার শুরুর পর্যায়ের কৌশল।';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'সৈন্যের সমাপনী খেলা';
@@ -3938,6 +3956,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'ভ্যারিয়েসন অ্যারোঁগুলি আপনাকে চাল তালিকা ব্যবহার না করেই নেভিগেট করতে দেয়.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get edit => 'এডিট বা সম্পাদন করুন';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'বুলেট';
@@ -5208,17 +5232,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count অনুসরণ করছেন',
       one: '$count অনুসরণ করছেন',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count মিনিটের কম সময়ে',
-      one: '$count মিনিটের কম সময়ে',
     );
     return '$_temp0';
   }

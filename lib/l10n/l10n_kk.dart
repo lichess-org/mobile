@@ -789,7 +789,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -1891,6 +1891,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Ойынның алғашқы кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Сарбаздар ойынсоңы';
@@ -3938,6 +3956,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get togglePositionAnnotations => 'Орналасым ескертпелерін көрсету';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Жүріс тізімін қолданбай-ақ аралаудың бір амалы - тармақ нұсқағыштар.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get edit => 'Өзгерту';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Буллит';
@@ -5208,17 +5232,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойыншыға серік',
       one: '$count ойыншыға серік',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count минутқа дейін',
-      one: '$count минутқа дейін',
     );
     return '$_temp0';
   }

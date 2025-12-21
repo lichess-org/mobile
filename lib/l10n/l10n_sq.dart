@@ -789,7 +789,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastFederation => 'Federim';
 
   @override
-  String get broadcastAgeThisYear => 'Moshë këtë vit';
+  String get broadcastAge => 'Moshë';
 
   @override
   String get broadcastUnrated => 'Pa pikë';
@@ -1891,6 +1891,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mati i Pilsbërit';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Torreja jep shahmat, teksa oficeri ndihmon të kufizohet ai.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mati i Morfit';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Përdorni oficerin për t’i dhënë shah mbretit, teksa torreja juaj ndihmon të kufohet ai.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mat trekëndësh';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Një taktikë gjatë fazës së parë të lojës.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mat Opera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Jepini shah mbretit me një torre dhe përdorni një oficer që të mbroni torren.';
 
   @override
   String get puzzleThemePawnEndgame => 'Fund loje me ushtar';
@@ -3938,6 +3956,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Shigjetat e varianteve ju lejojnë të lëvizni pa përdorur listën e lëvizjeve.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get edit => 'Përpunojeni';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count që ndiqen',
       one: '$count që ndiqet',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Më pak se $count minuta',
-      one: 'Më pak se $count minutë',
     );
     return '$_temp0';
   }

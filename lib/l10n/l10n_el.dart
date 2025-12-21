@@ -502,7 +502,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaHowDoesItEnd => 'Πώς ολοκληρώνονται;';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'Το τουρνουά έχει ρολόι αντίστροφης μέτρησης. Όταν αυτό φτάσει στο μηδέν, η βαθμολογίες των παικτών κλειδώνουν, και αναδεικνύεται ο νικητής. Οι παρτίδες σε εξέλιξη πρέπει να ολοκληρωθούν, ωστόσο το αποτέλεσμα τους δεν μετράει για το πρωτάθλημα.';
+  String get arenaHowDoesItEndAnswer => 'Κάθε τουρνουά αρένας διαρκεί συγκεκριμένο χρόνο. Μόλις παρέλθει η προκαθορισμένη διάρκεια από την έναρξη του τουρνουά, οι βαθμοί όλων των παικτών «κλειδώνουν» και αμέσως ανακηρύσσεται ο νικητής. Τα παιχνίδια που βρίσκονται σε εξέλιξη πρέπει μεν να ολοκληρωθούν, εντούτοις δεν επηρεάζουν με κανέναν τρόπο την τελική κατάταξη των παικτών.';
 
   @override
   String get arenaOtherRules => 'Άλλοι σημαντικοί κανόνες';
@@ -789,7 +789,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastFederation => 'Ομοσπονδία';
 
   @override
-  String get broadcastAgeThisYear => 'Ηλικία';
+  String get broadcastAge => 'Ηλικία';
 
   @override
   String get broadcastUnrated => 'Μη βαθμολογημένο';
@@ -1891,6 +1891,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ένας πύργος βρίσκεται δίπλα από τον αντίπαλο βασιλιά και υποστηρίζεται από τη βασίλισσα η οποία εμποδίζει τα τετράγωνα διαφυγής του βασιλιά. Ο πύργος και η βασίλισσα εγκλωβίζουν τον αντίπαλο βασιλιά σε ένα 3 επί 3 «κουτί εξόντωσης».';
 
   @override
+  String get puzzleThemePillsburysMate => 'Ματ του Πίλσμπερι';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Ο πύργος κάνει ματ στον αντίπαλο βασιλιά, τον οποίο ένας αξιωματικός έχει περιορίσει.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Ματ του Μόρφυ';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Ένας αξιωματικός κάνει σαχ στον αντίπαλο βασιλιά, περιορίζοντάς τον με τη βοήθεια ενός πύργου.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Τριγωνικό ματ';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Τακτικά κατά την πρώτη φάση της παρτίδας.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Ματ της όπερας';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Ένας πύργος που προστατεύεται από έναν αξιωματικό κάνει ματ στον αντίπαλο βασιλιά.';
 
   @override
   String get puzzleThemePawnEndgame => 'Φινάλε πιονιών';
@@ -2350,7 +2368,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get collapseVariations => 'Σύμπτυξη βαριάντων';
 
   @override
-  String get expandVariations => 'Ανάπτυξη βαριάντων';
+  String get expandVariations => 'Επέκταση βαριάντων';
 
   @override
   String get forceVariation => 'Θέσε σε βαριάντα';
@@ -2701,7 +2719,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get passwordSuggestion => 'Μην ορίσετε κωδικό πρόσβασης που σας πρότεινε κάποιος άλλος — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.';
 
   @override
-  String get emailSuggestion => 'Μη χρησιμοποιήσετε email που στάλθηκε από κάποιον άλλο — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.';
+  String get emailSuggestion => 'Μη χρησιμοποιήσετε διεύθυνση email που σας πρότεινε άλλο άτομο — ενδεχομένως να χρησιμοποιηθεί για κακόβουλη πρόσβαση στον λογαριασμό σας.';
 
   @override
   String get emailConfirmHelp => 'Βοήθεια για την επιβεβαίωση της διεύθυνσης email';
@@ -3151,12 +3169,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String followX(String param) {
-    return 'Ακολουθήστε τον χρήστη $param';
+    return 'Ακολουθήστε $param';
   }
 
   @override
   String unfollowX(String param) {
-    return 'Κατάργηση ακολούθησης του χρήστη $param';
+    return 'Να μην ακολουθείτε $param';
   }
 
   @override
@@ -3486,7 +3504,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get other => 'Άλλη';
 
   @override
-  String get reportCheatBoostHelp => 'Επικολλήστε τους συνδέσμους με τις παρτίδες και εξηγήστε μας γιατί θεωρείτε ότι η συμπεριφορά του χρήστη είναι παράξενη σε αυτά. Μη λέτε απλώς ότι «κλέβει» (\"they cheat\"), αλλά πείτε μας πώς καταλήξατε σε αυτό το συμπέρασμα.';
+  String get reportCheatBoostHelp => 'Επικολλήστε τους συνδέσμους με τις παρτίδες και εξηγήστε μας γιατί θεωρείτε ότι η συμπεριφορά του χρήστη είναι παράξενη σε αυτά. Μη λέτε απλώς ότι «κλέβει» (\"Αυτοί έκλεβαν\"), αλλά πείτε μας πώς καταλήξατε σε αυτό το συμπέρασμα.';
 
   @override
   String get reportUsernameHelp => 'Εξηγήστε μας γιατί είναι προσβλητικό το όνομα αυτού του χρήστη. Μη λέτε απλώς ότι \"είναι προσβλητικό/ακατάλληλο\" (\"it\'s offensive/inappropriate\"), αλλά πείτε μας πώς καταλήξατε σε αυτό το συμπέρασμα, ειδικά αν πρόκειται για προσβολή η οποία δεν είναι ιδιαίτερα εμφανής: για παράδειγμα αν δεν είναι στα αγγλικά, είναι σε κάποια αργκό ή κάνει κάποια προσβλητική ιστορική/πολιτιστική αναφορά.';
@@ -3936,6 +3954,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get togglePositionAnnotations => 'Εμφάνιση/απόκρυψη σχολίων με σύμβολα';
+
+  @override
+  String get toggleObservationAnnotations => 'Εμφάνιση/απόκρυψη σχολίων με σύμβολα';
 
   @override
   String get variationArrowsInfo => 'Τα βέλη για βαριάντες σας επιτρέπουν να περιηγηθείτε χωρίς να χρησιμοποιήσετε τη λίστα κινήσεων.';
@@ -4473,6 +4494,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get edit => 'Επεξεργασία';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ακολουθούνται',
       one: '$count ακολουθείται',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Λιγότερο από $count λεπτά',
-      one: 'Λιγότερο από $count λεπτό',
     );
     return '$_temp0';
   }

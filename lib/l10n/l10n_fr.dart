@@ -789,7 +789,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastFederation => 'Fédération';
 
   @override
-  String get broadcastAgeThisYear => 'Âge cette année';
+  String get broadcastAge => 'Âge';
 
   @override
   String get broadcastUnrated => 'Non classé';
@@ -1350,7 +1350,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Restreindre les flèches aux coups valides';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Dire \"Bonne partie, bien jouée\" en cas de défaite ou de nulle';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Dire \"Bonne partie, bien joué\" en cas de défaite ou de nulle';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Vos préférences ont été sauvegardées.';
@@ -1891,6 +1891,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'La tour, protégée par la dame, met le roi adverse en échec et la dame bloque la seule case de fuite du roi (le roi est enfermé dans une boîte de 3 cases par 3 cases formée par la tour et la dame).';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mat de Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'La tour met le roi adverse mat avec l\'aide du fou.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mat de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Le fou met le roi adverse échec et mat avec l\'aide de la tour.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mat du triangle';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Une tactique durant la première phase de la partie.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mat de l\'opéra';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Protégée par le fou, la tour met le roi adverse échec et mat.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finale de pions';
@@ -3938,6 +3956,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get togglePositionAnnotations => 'Activer/désactiver les annotations de positions';
 
   @override
+  String get toggleObservationAnnotations => 'Activer/désactiver les annotations d\'observation';
+
+  @override
   String get variationArrowsInfo => 'Les flèches de variantes vous permettent de naviguer sans utiliser la liste des coups.';
 
   @override
@@ -4475,6 +4496,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get edit => 'Éditer';
 
   @override
+  String get ultraBullet => 'Ultrabullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4626,10 +4650,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get download => 'Télécharger';
 
   @override
-  String get coachManager => 'Config. param. coach';
+  String get coachManager => 'Votre profil de coach';
 
   @override
-  String get streamerManager => 'Config. param. streamer';
+  String get streamerManager => 'Votre profil de streamer';
 
   @override
   String get cancelTournament => 'Annuler le tournoi';
@@ -5208,17 +5232,6 @@ class AppLocalizationsFr extends AppLocalizations {
       locale: localeName,
       other: '$count suivis',
       one: '$count suivi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Moins de $count minutes',
-      one: 'Moins de $count minute',
     );
     return '$_temp0';
   }

@@ -1394,11 +1394,11 @@ abstract class AppLocalizations {
   /// **'Federation'**
   String get broadcastFederation;
 
-  /// No description provided for @broadcastAgeThisYear.
+  /// No description provided for @broadcastAge.
   ///
   /// In en, this message translates to:
-  /// **'Age this year'**
-  String get broadcastAgeThisYear;
+  /// **'Age'**
+  String get broadcastAge;
 
   /// No description provided for @broadcastUnrated.
   ///
@@ -3362,6 +3362,30 @@ abstract class AppLocalizations {
   /// **'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".'**
   String get puzzleThemeKillBoxMateDescription;
 
+  /// No description provided for @puzzleThemePillsburysMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillsbury\'s mate'**
+  String get puzzleThemePillsburysMate;
+
+  /// No description provided for @puzzleThemePillsburysMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The rook delivers checkmate, while the bishop helps to confine it.'**
+  String get puzzleThemePillsburysMateDescription;
+
+  /// No description provided for @puzzleThemeMorphysMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Morphy\'s mate'**
+  String get puzzleThemeMorphysMate;
+
+  /// No description provided for @puzzleThemeMorphysMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the bishop to check the king, while your rook helps to confine it.'**
+  String get puzzleThemeMorphysMateDescription;
+
   /// No description provided for @puzzleThemeTriangleMate.
   ///
   /// In en, this message translates to:
@@ -3541,6 +3565,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A tactic during the first phase of the game.'**
   String get puzzleThemeOpeningDescription;
+
+  /// No description provided for @puzzleThemeOperaMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Opera mate'**
+  String get puzzleThemeOperaMate;
+
+  /// No description provided for @puzzleThemeOperaMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the king with a rook and use a bishop to defend the rook.'**
+  String get puzzleThemeOperaMateDescription;
 
   /// No description provided for @puzzleThemePawnEndgame.
   ///
@@ -4865,7 +4901,7 @@ abstract class AppLocalizations {
   /// No description provided for @signupEmailHint.
   ///
   /// In en, this message translates to:
-  /// **'We will only use it for password reset.'**
+  /// **'We will only use it for password reset and account activation.'**
   String get signupEmailHint;
 
   /// No description provided for @password.
@@ -7244,6 +7280,12 @@ abstract class AppLocalizations {
   /// **'Toggle position annotations'**
   String get togglePositionAnnotations;
 
+  /// No description provided for @toggleObservationAnnotations.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle observation annotations'**
+  String get toggleObservationAnnotations;
+
   /// No description provided for @variationArrowsInfo.
   ///
   /// In en, this message translates to:
@@ -8222,6 +8264,12 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get edit;
 
+  /// No description provided for @ultraBullet.
+  ///
+  /// In en, this message translates to:
+  /// **'UltraBullet'**
+  String get ultraBullet;
+
   /// No description provided for @bullet.
   ///
   /// In en, this message translates to:
@@ -9061,12 +9109,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} following} other{{count} following}}'**
   String nbFollowing(int count);
-
-  /// No description provided for @lessThanNbMinutes.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}'**
-  String lessThanNbMinutes(int count);
 
   /// No description provided for @nbGamesInPlay.
   ///
