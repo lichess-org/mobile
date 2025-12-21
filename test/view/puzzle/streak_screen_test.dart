@@ -343,7 +343,7 @@ void main() {
       await tester.tap(button);
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
-      //now, the text should say 'Your Turn'.
+      //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
     });
   });
