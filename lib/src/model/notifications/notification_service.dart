@@ -98,18 +98,6 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
-    // listen for connectivity changes to register device once the app is online
-    _connectivitySubscription = _ref.listen(connectivityChangesProvider, (prev, current) async {
-      if (current.value?.isOnline == true && !_registeredDevice) {
-        try {
-          await registerDevice();
-          _registeredDevice = true;
-        } catch (e, st) {
-          _logger.severe('Could not setup push notifications; $e\n$st');
-        }
-      }
-    });
-
     // Listen for incoming messages while the app is in the foreground.
     LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
       _processFcmMessage(message, fromBackground: false);
@@ -137,6 +125,20 @@ class NotificationService {
       String token,
     ) {
       _registerToken(token);
+    });
+
+    // listen for connectivity changes to register device once the app is online
+    // This needs to be done *after* via have gotten permission, otherwise on iOS
+    // getAPNSToken() might still return null.
+    _connectivitySubscription = _ref.listen(connectivityChangesProvider, (prev, current) async {
+      if (current.value?.isOnline == true && !_registeredDevice) {
+        try {
+          await registerDevice();
+          _registeredDevice = true;
+        } catch (e, st) {
+          _logger.severe('Could not setup push notifications; $e\n$st');
+        }
+      }
     });
 
     // Get any messages which caused the application to open from
