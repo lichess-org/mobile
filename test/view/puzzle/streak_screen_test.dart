@@ -312,5 +312,39 @@ void main() {
 
       expect(find.textContaining(RegExp('0\$')), findsOneWidget);
     });
+
+    testWidgets('failing first puzzle allows restart correctly', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      //play one correct move
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //play a wrong move now
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //game over correctly appears
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      final button = find.byKey(const Key('puzzle-new-streak-button'));
+      await tester.tap(button);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //now, the text should say 'Your Turn'.
+      expect(find.text('Your turn'), findsOneWidget);
+    });
   });
 }
