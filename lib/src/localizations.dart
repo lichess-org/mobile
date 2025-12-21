@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 
 typedef ActiveLocalizations = ({Locale locale, AppLocalizations strings});
@@ -34,8 +35,8 @@ class Localizations extends Notifier<ActiveLocalizations> {
     if (prefs.locale != null) {
       return (locale: prefs.locale!, strings: lookupAppLocalizations(prefs.locale!));
     }
-    final locale = WidgetsBinding.instance.platformDispatcher.locale;
-    return (locale: locale, strings: lookupAppLocalizations(locale));
+    final systemLocale = getSystemLocale(WidgetsBinding.instance);
+    return (locale: systemLocale, strings: lookupAppLocalizations(systemLocale));
   }
 }
 
