@@ -537,7 +537,6 @@ class _BottomBar extends ConsumerWidget {
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
             icon: CupertinoIcons.play_arrow_solid,
-            key: const Key('puzzle-new-streak-button'), //added for quick access in unit test
           ),
       ],
     );

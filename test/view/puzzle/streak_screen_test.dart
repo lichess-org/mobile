@@ -339,7 +339,7 @@ void main() {
       //game over correctly appears
       expect(find.text('GAME OVER'), findsOneWidget);
 
-      final button = find.byKey(const Key('puzzle-new-streak-button'));
+      final button = find.byTooltip('New streak');
       await tester.tap(button);
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
