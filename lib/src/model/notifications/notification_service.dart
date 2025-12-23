@@ -133,8 +133,8 @@ class NotificationService {
     _connectivitySubscription = _ref.listen(connectivityChangesProvider, (prev, current) async {
       if (current.value?.isOnline == true && !_registeredDevice) {
         try {
-          await registerDevice();
-          _registeredDevice = true;
+          final success = await registerDevice();
+          if (success) _registeredDevice = true;
         } catch (e, st) {
           _logger.severe('Could not setup push notifications; $e\n$st');
         }
@@ -328,18 +328,23 @@ class NotificationService {
   }
 
   /// Register the device for push notifications.
-  Future<void> registerDevice() async {
+  ///
+  /// Returns true if the device was successfully registered, false otherwise.
+  Future<bool> registerDevice() async {
+    // For apple platforms, make sure the APNS token is available before making any FCM plugin API calls
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
       if (apnsToken == null) {
         _logger.warning('APNS token is null');
-        return;
+        return false;
       }
     }
     final token = await LichessBinding.instance.firebaseMessaging.getToken();
-    if (token != null) {
-      await _registerToken(token);
+    if (token == null) {
+      _logger.warning('FCM token is null');
+      return false;
     }
+    return await _registerToken(token);
   }
 
   /// Unregister the device from push notifications.
@@ -356,20 +361,22 @@ class NotificationService {
     }
   }
 
-  Future<void> _registerToken(String token) async {
+  Future<bool> _registerToken(String token) async {
     final settings = await LichessBinding.instance.firebaseMessaging.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      return;
+      return false;
     }
     _logger.info('will register fcmToken: $token');
     final session = _ref.read(authSessionProvider);
     if (session == null) {
-      return;
+      return false;
     }
     try {
       await _ref.withClient((client) => client.post(Uri(path: '/mobile/register/firebase/$token')));
+      return true;
     } catch (e, st) {
       _logger.severe('could not register device; $e', e, st);
+      return false;
     }
   }
 
