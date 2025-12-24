@@ -28,7 +28,7 @@ body:
     attributes:
       label: App version
       description: Specify the application version (e.g. 0.7.8). If your version is 8.0.0 it means you are using
-      the old application. You should download the new one here https://lichess.org/mobile
+      the old application. You should [download the new one](https://lichess.org/mobile).
     validations:
       required: true
   - type: input
