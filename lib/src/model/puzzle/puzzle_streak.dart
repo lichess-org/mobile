@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -50,12 +49,17 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
     final activeStreak = await streakStorage.loadActiveStreak();
     if (activeStreak != null) {
-      final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
-      final nextPuzzle = activeStreak.nextId != null
-          ? await ref.read(puzzleProvider(activeStreak.nextId!).future)
-          : null;
+      final [puzzle, nextPuzzle] = await Future.wait([
+        ref.withClient(
+          (client) => PuzzleRepository(client).fetch(activeStreak.streak[activeStreak.index]),
+        ),
+        if (activeStreak.nextId != null)
+          ref.withClient((client) => PuzzleRepository(client).fetch(activeStreak.nextId!))
+        else
+          Future.value(null),
+      ]);
 
-      return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
+      return (streak: activeStreak, puzzle: puzzle!, nextPuzzle: nextPuzzle);
     }
 
     final newStreak = await ref.withClient((client) => PuzzleRepository(client).streak());
@@ -112,7 +116,6 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
             }),
           )
           .catchError((_) {
-            // ignore: avoid_manual_providers_as_generated_provider_dependency
             final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
             if (currentContext != null && currentContext.mounted) {
               showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
