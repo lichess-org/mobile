@@ -71,7 +71,7 @@ sealed class GameSeek with _$GameSeek {
   factory GameSeek.correspondence(GameSetupPrefs setup, User? account) {
     return GameSeek(
       days: setup.customDaysPerTurn,
-      rated: account != null && setup.customRated,
+      rated: account != null && setup.customVariant == Variant.standard && setup.customRated,
       variant: setup.customVariant,
       ratingRange: account != null ? setup.correspondenceRatingRange(account) : null,
     );
