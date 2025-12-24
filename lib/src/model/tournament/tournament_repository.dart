@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for [TournamentRepository].
 final tournamentRepositoryProvider = Provider<TournamentRepository>((Ref ref) {
-  return TournamentRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider), ref);
+  return TournamentRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider), ref);
 }, name: 'TournamentRepositoryProvider');
 
 class TournamentRepository {

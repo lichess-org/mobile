@@ -200,7 +200,7 @@ Future<Widget> makeTestProviderScope(
     }),
     aggregatorProvider: aggregatorProvider.overrideWith((ref) {
       // Use a zero aggregation interval to disable aggregation for tests.
-      return Aggregator(ref.read(lichessClientProvider), aggregationInterval: Duration.zero);
+      return Aggregator(ref.watch(lichessClientProvider), aggregationInterval: Duration.zero);
     }),
     webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith((ref) {
       return defaultFakeWebSocketChannelFactory;

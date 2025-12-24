@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 part 'storm_controller.freezed.dart';
@@ -153,10 +152,8 @@ class StormController extends Notifier<StormState> {
 
     final authUser = ref.read(authControllerProvider);
     if (authUser != null) {
-      final res = await ref.withClient(
-        (client) => Result.capture(
-          PuzzleRepository(client).postStormRun(stats).timeout(const Duration(seconds: 2)),
-        ),
+      final res = await Result.capture(
+        ref.read(puzzleRepositoryProvider).postStormRun(stats).timeout(const Duration(seconds: 2)),
       );
 
       final newState = state.copyWith(stats: stats, mode: StormMode.ended);

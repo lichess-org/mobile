@@ -24,8 +24,8 @@ final kidModeProvider = FutureProvider.autoDispose<bool>((ref) async {
 
 /// A provider for the [AccountRepository].
 final accountRepositoryProvider = Provider<AccountRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
 

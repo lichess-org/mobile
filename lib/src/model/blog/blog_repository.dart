@@ -9,8 +9,8 @@ final blogCarouselProvider = FutureProvider.autoDispose<IList<BlogPost>>((ref) {
 }, name: 'BlogCarouselProvider');
 
 final blogRepositoryProvider = Provider<BlogRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
   return BlogRepository(client, aggregator);
 }, name: 'BlogRepositoryProvider');
 

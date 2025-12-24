@@ -60,11 +60,11 @@ class PuzzleController extends Notifier<PuzzleState> {
     return _loadNewContext(initialContext);
   }
 
-  PuzzleRepository _repository(LichessClient client) => PuzzleRepository(client);
+  PuzzleRepository get _repository => ref.read(puzzleRepositoryProvider);
 
   Future<void> _updateUserRating() async {
     try {
-      final data = await ref.withClient((client) => _repository(client).selectBatch(nb: 0));
+      final data = await _repository.selectBatch(nb: 0);
       final glicko = data.glicko;
       if (glicko != null) {
         state = state.copyWith(glicko: glicko);

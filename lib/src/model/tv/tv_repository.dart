@@ -13,8 +13,8 @@ typedef TvChannels = IMap<TvChannel, TvGame>;
 
 /// A provider for the [TvRepository].
 final tvRepositoryProvider = Provider<TvRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
   return TvRepository(client, aggregator);
 }, name: 'TvRepositoryProvider');
 

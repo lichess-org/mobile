@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for [ChallengeRepository].
 final challengeRepositoryProvider = Provider<ChallengeRepository>((Ref ref) {
-  return ChallengeRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
+  return ChallengeRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
 }, name: 'ChallengeRepositoryProvider');
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
