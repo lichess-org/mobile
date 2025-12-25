@@ -80,6 +80,7 @@ sealed class BroadcastTournament with _$BroadcastTournament {
     required IList<BroadcastRound> rounds,
     required BroadcastRoundId defaultRoundId,
     required IList<BroadcastTournamentGroup>? group,
+    BroadcastPhotos? photos,
   }) = _BroadcastTournament;
 }
 
@@ -130,12 +131,17 @@ sealed class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
+typedef BroadcastPhoto = ({String smallUrl, String mediumUrl, String credit});
+
+typedef BroadcastPhotos = IMap<FideId, BroadcastPhoto>;
+
 typedef BroadcastRoundResponse = ({
   String? groupName,
   IList<BroadcastTournamentGroup>? group,
   BroadcastTournamentData tournament,
   BroadcastRound round,
   BroadcastRoundGames games,
+  BroadcastPhotos? photos,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
