@@ -13,6 +13,7 @@ class ProgressionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: .min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (progress != 0) ...[
@@ -26,6 +27,7 @@ class ProgressionWidget extends StatelessWidget {
             style: TextStyle(
               color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
               fontSize: fontSize,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
         ] else

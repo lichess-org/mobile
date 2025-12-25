@@ -142,6 +142,7 @@ BroadcastTournament _makeTournamentFromJson(Map<String, dynamic> json) {
     rounds: pick(json, 'rounds').asListOrThrow(_roundFromPick).toIList(),
     defaultRoundId: pick(json, 'defaultRoundId').asBroadcastRoundIdOrThrow(),
     group: pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList(),
+    photos: _photosFromJson(json),
   );
 }
 
@@ -174,6 +175,19 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
   );
 }
 
+BroadcastPhotos? _photosFromJson(Map<String, dynamic> json) {
+  final rawPhotos = pick(json, 'photos').asMapOrNull<String, Map<String, dynamic>>();
+  return rawPhotos
+      ?.map(
+        (key, value) => MapEntry<FideId, BroadcastPhoto>(FideId(int.parse(key)), (
+          smallUrl: value['small']!,
+          mediumUrl: value['medium']!,
+          // credit: value['credit']!,
+        )),
+      )
+      .lock;
+}
+
 BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
   final groupName = pick(json, 'group', 'name').asStringOrNull();
   final group = pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList();
@@ -187,6 +201,7 @@ BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
     tournament: _tournamentDataFromPick(tournament),
     round: _roundFromPick(round),
     games: _gamesFromPick(games),
+    photos: _photosFromJson(json),
   );
 }
 
@@ -264,8 +279,18 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
     player: player,
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
+    rank: pick('rank').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     performance: pick('performance').asIntOrNull(),
+    tieBreaks: pick('tiebreaks').asListOrNull(_tieBreakDetailFromPick)?.toIList(),
+  );
+}
+
+BroadcastTieBreakDetail _tieBreakDetailFromPick(RequiredPick pick) {
+  return (
+    extendedCode: pick('extendedCode').asStringOrThrow(),
+    description: pick('description').asStringOrThrow(),
+    points: pick('points').asDoubleOrThrow(),
   );
 }
 
