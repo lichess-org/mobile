@@ -182,7 +182,7 @@ BroadcastPhotos? _photosFromJson(Map<String, dynamic> json) {
         (key, value) => MapEntry<FideId, BroadcastPhoto>(FideId(int.parse(key)), (
           smallUrl: value['small']!,
           mediumUrl: value['medium']!,
-          credit: value['credit']!,
+          // credit: value['credit']!,
         )),
       )
       .lock;

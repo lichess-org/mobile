@@ -131,7 +131,7 @@ sealed class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastPhoto = ({String smallUrl, String mediumUrl, String credit});
+typedef BroadcastPhoto = ({String smallUrl, String mediumUrl});
 
 typedef BroadcastPhotos = IMap<FideId, BroadcastPhoto>;
 
