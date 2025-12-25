@@ -139,6 +139,17 @@ class _Body extends ConsumerWidget {
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
+        final gamesSectionHeader = ColoredBox(
+          color: ColorScheme.of(context).surfaceDim,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              context.l10n.broadcastGamesThisTournament,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        );
+
         return ListView.builder(
           itemCount: games.length + 1,
           itemBuilder: (context, index) {
@@ -147,16 +158,18 @@ class _Body extends ConsumerWidget {
                 playerWithGameResults: playerWithGameResults,
                 tournament: tournament,
               );
-            } else if (tieBreaks != null && index == 1) {
-              return _TieBreaksSection(tieBreaks, playerWithOverallResult);
-            } else if (tieBreaks == null && index == 1 || index == 2) {
-              return ColoredBox(
-                color: ColorScheme.of(context).surfaceDim,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(context.l10n.broadcastGamesThisTournament),
-                ),
-              );
+            }
+            if (tieBreaks != null) {
+              if (index == 1) {
+                return _TieBreaksSection(tieBreaks, playerWithOverallResult);
+              }
+              if (index == 2) {
+                return gamesSectionHeader;
+              }
+            } else {
+              if (index == 1) {
+                return gamesSectionHeader;
+              }
             }
 
             final playerGameResult = playerWithGameResults.games[index - 1];
@@ -306,27 +319,36 @@ class _TieBreaksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: .min,
-      crossAxisAlignment: .start,
-      children: [
-        ColoredBox(
-          color: ColorScheme.of(context).surfaceDim,
-          child: const Padding(padding: EdgeInsets.all(8.0), child: Text('Tie-breaking')),
-        ),
-        ...tieBreaks.map(
-          (tieBreak) => ListTile(
-            dense: true,
-            title: Text(tieBreak.description),
-            trailing: Text(
-              tieBreak.points.toStringAsFixed(
-                (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
-              ),
-              style: Theme.of(context).textTheme.bodyMedium,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Container(
+            width: double.infinity,
+            color: ColorScheme.of(context).surfaceDim,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Tie-breaking', style: Theme.of(context).textTheme.bodyLarge),
             ),
           ),
-        ),
-      ],
+          ...tieBreaks
+              .where((t) => t.extendedCode != 'TPR')
+              .map(
+                (tieBreak) => ListTile(
+                  dense: true,
+                  title: Text(tieBreak.description),
+                  trailing: Text(
+                    tieBreak.points.toStringAsFixed(
+                      (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
+                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+        ],
+      ),
     );
   }
 }
