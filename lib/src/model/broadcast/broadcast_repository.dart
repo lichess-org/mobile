@@ -279,8 +279,18 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
     player: player,
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
+    rank: pick('rank').asIntOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     performance: pick('performance').asIntOrNull(),
+    tieBreaks: pick('tiebreaks').asListOrNull(_tieBreakDetailFromPick)?.toIList(),
+  );
+}
+
+BroadcastTieBreakDetail _tieBreakDetailFromPick(RequiredPick pick) {
+  return (
+    extendedCode: pick('extendedCode').asStringOrThrow(),
+    description: pick('description').asStringOrThrow(),
+    points: pick('points').asDoubleOrThrow(),
   );
 }
 

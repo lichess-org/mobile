@@ -198,10 +198,14 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
     required BroadcastPlayer player,
     required int played,
     required double? score,
+    required int? rank,
     required int? ratingDiff,
     required int? performance,
+    required IList<BroadcastTieBreakDetail>? tieBreaks,
   }) = _BroadcastPlayerWithOverallResult;
 }
+
+typedef BroadcastTieBreakDetail = ({String extendedCode, String description, double points});
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -131,7 +132,9 @@ class _Body extends ConsumerWidget {
     switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
       case AsyncData(value: final data):
         final (playerWithGameResults, tournament) = data;
-        final games = playerWithGameResults.games;
+        final BroadcastPlayerWithGameResults(:playerWithOverallResult, :games) =
+            playerWithGameResults;
+        final BroadcastPlayerWithOverallResult(:tieBreaks) = playerWithOverallResult;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
@@ -144,7 +147,9 @@ class _Body extends ConsumerWidget {
                 playerWithGameResults: playerWithGameResults,
                 tournament: tournament,
               );
-            } else if (index == 1) {
+            } else if (tieBreaks != null && index == 1) {
+              return _TieBreaksSection(tieBreaks, playerWithOverallResult);
+            } else if (tieBreaks == null && index == 1 || index == 2) {
               return ColoredBox(
                 color: ColorScheme.of(context).surfaceDim,
                 child: Padding(
@@ -289,6 +294,39 @@ class _OverallStatPlayer extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _TieBreaksSection extends StatelessWidget {
+  const _TieBreaksSection(this.tieBreaks, this.player);
+
+  final BroadcastPlayerWithOverallResult player;
+  final IList<BroadcastTieBreakDetail> tieBreaks;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: .min,
+      crossAxisAlignment: .start,
+      children: [
+        ColoredBox(
+          color: ColorScheme.of(context).surfaceDim,
+          child: const Padding(padding: EdgeInsets.all(8.0), child: Text('Tie-breaking')),
+        ),
+        ...tieBreaks.map(
+          (tieBreak) => ListTile(
+            dense: true,
+            title: Text(tieBreak.description),
+            trailing: Text(
+              tieBreak.points.toStringAsFixed(
+                (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
+              ),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
