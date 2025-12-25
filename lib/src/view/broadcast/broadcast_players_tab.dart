@@ -148,7 +148,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
+    const double eloWidth = 60;
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
     final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
 
@@ -187,6 +187,15 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                         sortIcon: (currentSort == _SortingTypes.player) ? sortIcon : null,
                       ),
                     ),
+                    if (withRating)
+                      SizedBox(
+                        width: eloWidth,
+                        child: _TableTitleCell(
+                          title: const Text('Elo', style: _kHeaderTextStyle),
+                          onTap: () => toggleSort(_SortingTypes.elo),
+                          sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                        ),
+                      ),
                     SizedBox(
                       width: scoreWidth,
                       child: _TableTitleCell(
@@ -208,8 +217,6 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
             playerWithOverallResult: players[index - 1],
             tournament: widget.tournament,
             index: index,
-            eloWidth: eloWidth,
-            scoreWidth: scoreWidth,
           );
         }
       },
@@ -255,15 +262,11 @@ class BroadcastPlayerRow extends StatelessWidget {
     required this.playerWithOverallResult,
     required this.tournament,
     required this.index,
-    required this.eloWidth,
-    required this.scoreWidth,
   });
 
   final BroadcastPlayerWithOverallResult playerWithOverallResult;
   final BroadcastTournament tournament;
   final int index;
-  final double eloWidth;
-  final double scoreWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -315,28 +318,50 @@ class BroadcastPlayerRow extends StatelessWidget {
               ],
             )
           : null,
-      trailing: SizedBox(
-        width: eloWidth,
-        child: Column(
-          mainAxisSize: .min,
-          crossAxisAlignment: .end,
-          children: [
-            if (rating != null)
-              Row(
+      trailing: rating != null || score != null
+          ? SizedBox(
+              width: 65,
+              child: Column(
                 mainAxisSize: .min,
+                crossAxisAlignment: .stretch,
                 children: [
-                  Text(rating.toString()),
-                  const SizedBox(width: 5),
-                  if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
+                  if (score != null)
+                    Text(
+                      '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    )
+                  else
+                    Text(
+                      played.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  if (rating != null)
+                    Row(
+                      mainAxisSize: .min,
+                      children: [
+                        Text(
+                          rating.toString(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
+                      ],
+                    ),
                 ],
               ),
-            if (score != null)
-              Text('${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played')
-            else
-              Text(played.toString()),
-          ],
-        ),
-      ),
+            )
+          : null,
     );
   }
 }
