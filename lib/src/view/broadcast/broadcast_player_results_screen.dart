@@ -150,9 +150,17 @@ class _Body extends ConsumerWidget {
           ),
         );
 
+        final itemCount =
+            games.length +
+            1 + // overall stats
+            (tieBreaks != null ? 1 : 0) + // tie-breaks
+            1; // games header
+
         return ListView.builder(
-          itemCount: games.length + 1,
+          itemCount: itemCount,
           itemBuilder: (context, index) {
+            final gamesStartIndex = itemCount - games.length;
+
             if (index == 0) {
               return _OverallStatPlayer(
                 playerWithGameResults: playerWithGameResults,
@@ -172,10 +180,8 @@ class _Body extends ConsumerWidget {
               }
             }
 
-            final playerGameResult = playerWithGameResults.games[index - 1];
-
             return _GameResultListTile(
-              playerGameResult: playerGameResult,
+              playerGameResult: games[index - gamesStartIndex],
               tournament: tournament,
               index: index,
               indexWidth: indexWidth,
@@ -231,7 +237,10 @@ class _OverallStatPlayer extends StatelessWidget {
                       Flexible(
                         child: Text(
                           federationIdToName[federation]!,
-                          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold, height: 1.2),
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
