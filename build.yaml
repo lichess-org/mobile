@@ -8,6 +8,7 @@ targets:
       freezed:
         generate_for:
           - lib/src/model/**/*.dart
+          - lib/src/log.dart
           - lib/src/**/*_models.dart
           - lib/src/**/*_providers.dart
         options:
