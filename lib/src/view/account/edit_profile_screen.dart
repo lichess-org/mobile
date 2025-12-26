@@ -283,7 +283,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: field.value != null
-                            ? CachedHttpNetworkImage(lichessFlairSrc(field.value!))
+                            ? HttpNetworkImageWidget(lichessFlairSrc(field.value!))
                             : Text(context.l10n.setFlair),
                       ),
                     ),

@@ -4,10 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/network/http.dart';
 
 /// Like [NetworkImage], but uses the provided [http.Client] to fetch the image.
 class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
@@ -88,18 +85,3 @@ class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
   String toString() =>
       '${objectRuntimeType(this, 'HttpNetworkImage')}("$url", scale: ${scale.toStringAsFixed(1)})';
 }
-
-const cacheKey = 'http_network_image_cache_key';
-
-/// Provides a [CacheManager] for caching network images, using the default HTTP client.
-final cachedNetworkImageManagerProvider = Provider<CacheManager>((ref) {
-  return CacheManager(
-    Config(
-      cacheKey,
-      fileService: HttpFileService(httpClient: ref.read(defaultClientProvider)),
-      stalePeriod: const Duration(days: 7),
-
-      maxNrOfCacheObjects: 200,
-    ),
-  );
-});

@@ -1,7 +1,6 @@
 import 'dart:math' show min;
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
@@ -42,6 +41,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final client = ref.read(defaultClientProvider);
     return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
@@ -54,10 +54,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
               : CircleAvatar(
                   radius: 16,
                   foregroundImage: value.flair != null
-                      ? CachedNetworkImageProvider(
-                          lichessFlairSrc(value.flair!),
-                          cacheManager: ref.read(cachedNetworkImageManagerProvider),
-                        )
+                      ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                       : null,
                   onForegroundImageError: value.flair != null
                       ? (error, _) {
@@ -99,6 +96,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final client = ref.read(defaultClientProvider);
     final isOnline = ref.watch(
       connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
     );
@@ -126,10 +124,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                       : CircleAvatar(
                           radius: 20,
                           foregroundImage: value.flair != null
-                              ? CachedNetworkImageProvider(
-                                  lichessFlairSrc(value.flair!),
-                                  cacheManager: ref.read(cachedNetworkImageManagerProvider),
-                                )
+                              ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                               : null,
                           onForegroundImageError: value.flair != null
                               ? (error, _) {

@@ -13,7 +13,6 @@ dependencies:
   app_settings: ^7.0.0
   async: ^2.10.0
   auto_size_text: ^3.0.0
-  cached_network_image: ^3.2.2
   chessground: ^7.3.0
   clock: ^1.1.1
   collection: ^1.17.0
@@ -34,7 +33,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_appauth: ^11.0.0
-  flutter_cache_manager: ^3.4.1
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0

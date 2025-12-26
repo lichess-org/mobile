@@ -523,9 +523,9 @@ class _TeamStandingTile extends ConsumerWidget {
           ),
           if (teamInfo?.flair != null) ...[
             const SizedBox(width: 8.0),
-            CachedHttpNetworkImage(
+            HttpNetworkImageWidget(
               lichessFlairSrc(teamInfo!.flair!),
-              errorWidget: (_, _, _) => kEmptyWidget,
+              errorBuilder: (_, _, _) => kEmptyWidget,
               width: 16.0,
               height: 16.0,
             ),
@@ -1278,9 +1278,9 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                 Text(teamInfo.name, style: const TextStyle(fontWeight: .w500, fontSize: 14)),
                 const SizedBox(width: 8.0),
                 if (teamInfo.flair != null) ...[
-                  CachedHttpNetworkImage(
+                  HttpNetworkImageWidget(
                     lichessFlairSrc(teamInfo.flair!),
-                    errorWidget: (_, _, _) => kEmptyWidget,
+                    errorBuilder: (_, _, _) => kEmptyWidget,
                     width: 20.0,
                     height: 20.0,
                   ),
@@ -1561,9 +1561,9 @@ class _TournamentTeamDetails extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     if (teamInfo?.flair != null) ...[
-                      CachedHttpNetworkImage(
+                      HttpNetworkImageWidget(
                         lichessFlairSrc(teamInfo!.flair!),
-                        errorWidget: (_, _, _) => kEmptyWidget,
+                        errorBuilder: (_, _, _) => kEmptyWidget,
                         width: 24.0,
                         height: 24.0,
                       ),

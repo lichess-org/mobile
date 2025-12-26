@@ -163,9 +163,9 @@ class Location extends StatelessWidget {
       children: [
         if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
         if (profile.country != null) ...[
-          CachedHttpNetworkImage(
+          HttpNetworkImageWidget(
             lichessFlagSrc(profile.country!),
-            errorWidget: (_, _, _) => kEmptyWidget,
+            errorBuilder: (_, _, _) => kEmptyWidget,
           ),
           const SizedBox(width: 5),
         ],
