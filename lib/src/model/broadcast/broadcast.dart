@@ -182,6 +182,8 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
   }) = _BroadcastPlayer;
 
   String? get id => (fideId != null) ? fideId.toString() : name;
+
+  bool get isBot => title == 'BOT';
 }
 
 @freezed

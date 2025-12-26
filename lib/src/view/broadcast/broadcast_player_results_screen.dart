@@ -398,6 +398,8 @@ class _GameResultListTile extends StatelessWidget {
       },
       leading: pic != null
           ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
+          : opponent.isBot
+          ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
           : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
       title: Row(
         mainAxisSize: .min,
