@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
+import 'package:lichess_mobile/src/view/settings/app_log_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
@@ -171,6 +172,16 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.bug_report),
+                title: const Text('App Logs'),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(AppLogSettingsScreen.buildRoute(context));
+                },
               ),
             ],
           ),
