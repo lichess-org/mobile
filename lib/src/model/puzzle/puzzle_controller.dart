@@ -11,9 +11,6 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
@@ -97,7 +94,6 @@ class PuzzleController extends Notifier<PuzzleState> {
       resultSent: false,
       isChangingDifficulty: false,
       shouldBlinkNextArrow: false,
-      isEvaluationEnabled: false,
     );
   }
 
@@ -216,8 +212,6 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   void onLoadPuzzle(PuzzleContext nextContext) {
-    ref.read(evaluationServiceProvider).disposeEngine();
-
     state = _loadNewContext(nextContext);
   }
 
@@ -389,7 +383,7 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
+sealed class PuzzleState with _$PuzzleState {
   const PuzzleState._();
 
   const factory PuzzleState({
@@ -411,23 +405,9 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required bool resultSent,
     required bool isChangingDifficulty,
     required bool shouldBlinkNextArrow,
-    required bool isEvaluationEnabled,
     PuzzleContext? nextContext,
-    @Default(false) bool engineInThreatMode,
   }) = _PuzzleState;
 
-  @override
-  bool get alwaysRequestCloudEval => false;
-
-  @override
-  bool isEngineAvailable(EngineEvaluationPrefState _) =>
-      mode == PuzzleMode.view && isEvaluationEnabled;
-
-  @override
-  EvaluationContext get evaluationContext =>
-      EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
-
-  @override
   Position get currentPosition => node.position;
 
   String get fen => node.position.fen;

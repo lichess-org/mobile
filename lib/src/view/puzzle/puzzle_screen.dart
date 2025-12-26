@@ -11,8 +11,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -334,9 +332,6 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
-    final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
     // Clear user shapes when puzzle or position changes.
     ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
@@ -354,11 +349,7 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final generatedShapes = puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-        ? ISet([
-            Arrow(color: const Color(0x66003088), orig: evalBestMove.from, dest: evalBestMove.to),
-          ])
-        : puzzleState.hintSquare != null
+    final generatedShapes = puzzleState.hintSquare != null
         ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
         : null;
     final shapes = userShapes.union(generatedShapes ?? ISet());
