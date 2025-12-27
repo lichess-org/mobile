@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -138,7 +139,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(
+        title: AppBarTitleText(
           sessionUser != null
               ? '${context.l10n.studyMenu} • $orderLabel'
               : context.l10n.studyAllStudies,
