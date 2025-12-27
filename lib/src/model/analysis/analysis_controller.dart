@@ -110,6 +110,12 @@ final analysisControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'AnalysisControllerProvider',
     );
 
+Root? _savedStandaloneRoot;
+
+void clearSavedStandaloneAnalysis() {
+  _savedStandaloneRoot = null;
+}
+
 class AnalysisController extends AsyncNotifier<AnalysisState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
@@ -183,6 +189,13 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           serverAnalysis = null;
           division = null;
           activeCorrespondenceGame = null;
+
+          // We want to keep the standalone analysis session alive even if the user navigates away
+          ref.onCancel(() {
+            if (_root.mainline.isNotEmpty) {
+              _savedStandaloneRoot = _root;
+            }
+          });
         }
       case ActiveCorrespondenceGame(:final gameFullId):
         {
@@ -229,21 +242,24 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
-    _root = Root.fromPgnGame(
-      game,
-      isLichessAnalysis: options.isLichessGameAnalysis,
-      onVisitNode: (root, branch, isMainline) {
-        if (isMainline &&
-            options.initialMoveCursor != null &&
-            branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
-          path = path + branch.id;
-          lastMove = branch.sanMove.move;
-        }
-        if (isMainline && opening == null && branch.position.ply <= 10) {
-          openingFutures.add(_fetchOpening(branch.position.fen, path));
-        }
-      },
-    );
+    _root = switch (options) {
+      Standalone() when _savedStandaloneRoot != null => _savedStandaloneRoot!,
+      _ => Root.fromPgnGame(
+        game,
+        isLichessAnalysis: options.isLichessGameAnalysis,
+        onVisitNode: (root, branch, isMainline) {
+          if (isMainline &&
+              options.initialMoveCursor != null &&
+              branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
+            path = path + branch.id;
+            lastMove = branch.sanMove.move;
+          }
+          if (isMainline && opening == null && branch.position.ply <= 10) {
+            openingFutures.add(_fetchOpening(branch.position.fen, path));
+          }
+        },
+      ),
+    };
 
     // wait for the opening to be fetched to recompute the branch opening
     Future.wait(openingFutures)
@@ -343,6 +359,11 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         });
 
     return analysisState;
+  }
+
+  void clearSavedStandaloneAnalysis() {
+    _savedStandaloneRoot = null;
+    ref.invalidateSelf();
   }
 
   Future<void> onFocusRegained() async {
