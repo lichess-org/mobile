@@ -433,10 +433,27 @@ class _GameResultListTile extends StatelessWidget {
           mainAxisSize: .min,
           crossAxisAlignment: .end,
           children: [
+            Row(
+              mainAxisSize: .min,
+              children: [
+                Text(
+                  switch (points) {
+                    BroadcastPoints.one => '1',
+                    BroadcastPoints.half => '½',
+                    BroadcastPoints.zero => '0',
+                    _ => '*',
+                  },
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 3),
+                if (showRatingDiff && playerGameResult.ratingDiff != null)
+                  ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 13),
+              ],
+            ),
             if (opponent.rating != null)
               Text(opponent.rating.toString(), style: Theme.of(context).textTheme.bodyMedium),
-            if (showRatingDiff && playerGameResult.ratingDiff != null)
-              ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 13),
           ],
         ),
       ),
