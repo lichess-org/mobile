@@ -35,6 +35,10 @@ void main() {
   // ignore: avoid_dynamic_calls
   final sanMoves = jsonDecode(gameResponse)['moves'] as String;
 
+  tearDown(() {
+    clearSavedStandaloneAnalysis();
+  });
+
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
       final app = await makeTestProviderScopeApp(
