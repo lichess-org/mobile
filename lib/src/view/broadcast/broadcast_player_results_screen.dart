@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -12,10 +12,15 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_player_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+
+final broadcastTournamentIdProvider = FutureProvider.autoDispose
+    .family<BroadcastTournamentId, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
+      return (await ref.watch(broadcastRoundProvider(roundId).future)).tournament.id;
+    }, name: 'BroadcastTournamentIdProvider');
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
@@ -104,7 +109,17 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   }
 }
 
-const _kTableRowPadding = EdgeInsets.symmetric(vertical: 12.0);
+final _playerAndTournamentProvider = FutureProvider.autoDispose
+    .family<
+      (BroadcastPlayerWithGameResults player, BroadcastTournament tournament),
+      (BroadcastTournamentId, String)
+    >((ref, args) async {
+      final (tournamentId, playerId) = args;
+      final player = await ref.watch(broadcastPlayerProvider(args).future);
+      final tournament = await ref.watch(broadcastTournamentProvider(tournamentId).future);
+
+      return (player, tournament);
+    });
 
 class _Body extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
@@ -114,27 +129,60 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerWithGameResults = ref.watch(broadcastPlayerProvider(tournamentId, playerId));
-
-    switch (playerWithGameResults) {
-      case AsyncData(value: final playerWithGameResults):
-        final games = playerWithGameResults.games;
+    switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
+      case AsyncData(value: final data):
+        final (playerWithGameResults, tournament) = data;
+        final BroadcastPlayerWithGameResults(:playerWithOverallResult, :games) =
+            playerWithGameResults;
+        final BroadcastPlayerWithOverallResult(:tieBreaks) = playerWithOverallResult;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
+        final gamesSectionHeader = ColoredBox(
+          color: ColorScheme.of(context).surfaceDim,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              context.l10n.broadcastGamesThisTournament,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        );
+
+        final itemCount =
+            games.length +
+            1 + // overall stats
+            (tieBreaks != null ? 1 : 0) + // tie-breaks
+            1; // games header
+
         return ListView.builder(
-          itemCount: games.length + 1,
+          itemCount: itemCount,
           itemBuilder: (context, index) {
+            final gamesStartIndex = itemCount - games.length;
+
             if (index == 0) {
-              return _OverallStatPlayer(playerWithGameResults: playerWithGameResults);
+              return _OverallStatPlayer(
+                playerWithGameResults: playerWithGameResults,
+                tournament: tournament,
+              );
+            }
+            if (tieBreaks != null) {
+              if (index == 1) {
+                return _TieBreaksSection(tieBreaks, playerWithOverallResult);
+              }
+              if (index == 2) {
+                return gamesSectionHeader;
+              }
+            } else {
+              if (index == 1) {
+                return gamesSectionHeader;
+              }
             }
 
-            final playerGameResult = playerWithGameResults.games[index - 1];
-
-            return _GameResultRow(
-              playerGameResult: playerGameResult,
-              tournamentId: tournamentId,
+            return _GameResultListTile(
+              playerGameResult: games[index - gamesStartIndex],
+              tournament: tournament,
               index: index,
               indexWidth: indexWidth,
               showRatingDiff: showRatingDiff,
@@ -150,9 +198,10 @@ class _Body extends ConsumerWidget {
 }
 
 class _OverallStatPlayer extends StatelessWidget {
-  const _OverallStatPlayer({required this.playerWithGameResults});
+  const _OverallStatPlayer({required this.playerWithGameResults, required this.tournament});
 
   final BroadcastPlayerWithGameResults playerWithGameResults;
+  final BroadcastTournament tournament;
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +213,8 @@ class _OverallStatPlayer extends StatelessWidget {
         playerWithOverallResult;
     final BroadcastPlayer(:federation, :fideId) = player;
 
+    final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
+
     final statWidth =
         (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
@@ -173,6 +224,45 @@ class _OverallStatPlayer extends StatelessWidget {
       child: Column(
         spacing: cardSpacing,
         children: [
+          if (pic != null) HttpNetworkImageWidget(pic.mediumUrl),
+          if (federation != null)
+            Row(
+              children: [
+                SizedBox(width: 150, child: Text(context.l10n.broadcastFederation)),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                      const SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          federationIdToName[federation]!,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold, height: 1.2),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          if (birthYear != null)
+            Row(
+              children: [
+                SizedBox(width: 150, child: Text(context.l10n.broadcastAge)),
+                Expanded(
+                  child: Text(
+                    (DateTime.now().year - birthYear).toString(),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
           if (standard != null || rapid != null || blitz != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -192,47 +282,6 @@ class _OverallStatPlayer extends StatelessWidget {
                   SizedBox(
                     width: statWidth,
                     child: _StatCard(context.l10n.blitz, value: blitz.toString()),
-                  ),
-              ],
-            ),
-          if (birthYear != null || federation != null || fideId != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: cardSpacing,
-              children: [
-                if (birthYear != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(
-                      context.l10n.broadcastAgeThisYear,
-                      value: (DateTime.now().year - birthYear).toString(),
-                    ),
-                  ),
-                if (federation != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(
-                      context.l10n.broadcastFederation,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/fide-fed/$federation.png', height: 12),
-                          const SizedBox(width: 5),
-                          Flexible(
-                            child: Text(
-                              federationIdToName[federation]!,
-                              style: const TextStyle(fontSize: 18.0),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                if (fideId != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard('FIDE ID', value: fideId.toString()),
                   ),
               ],
             ),
@@ -271,17 +320,59 @@ class _OverallStatPlayer extends StatelessWidget {
   }
 }
 
-class _GameResultRow extends StatelessWidget {
-  const _GameResultRow({
+class _TieBreaksSection extends StatelessWidget {
+  const _TieBreaksSection(this.tieBreaks, this.player);
+
+  final BroadcastPlayerWithOverallResult player;
+  final IList<BroadcastTieBreakDetail> tieBreaks;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Container(
+            width: double.infinity,
+            color: ColorScheme.of(context).surfaceDim,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Tie-breaking', style: Theme.of(context).textTheme.bodyLarge),
+            ),
+          ),
+          ...tieBreaks
+              .where((t) => t.extendedCode != 'TPR')
+              .map(
+                (tieBreak) => ListTile(
+                  dense: true,
+                  title: Text(tieBreak.description),
+                  trailing: Text(
+                    tieBreak.points.toStringAsFixed(
+                      (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
+                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GameResultListTile extends StatelessWidget {
+  const _GameResultListTile({
     required this.playerGameResult,
-    required this.tournamentId,
+    required this.tournament,
     required this.index,
     required this.indexWidth,
     required this.showRatingDiff,
   });
 
   final BroadcastPlayerGameResult playerGameResult;
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournament tournament;
   final int index;
   final double indexWidth;
   final bool showRatingDiff;
@@ -290,95 +381,63 @@ class _GameResultRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
         playerGameResult;
-    final opponentRating = opponent.rating;
+    final BroadcastPlayer(:federation, :title, :name, :rating) = opponent;
+    final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
 
-    return GestureDetector(
+    return ListTile(
+      tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
       onTap: () {
         Navigator.of(context).push(
           BroadcastGameScreen.buildRoute(
             context,
-            tournamentId: tournamentId,
+            tournamentId: tournament.data.id,
             roundId: roundId,
             gameId: gameId,
           ),
         );
       },
-      child: ColoredBox(
-        color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-        child: Padding(
-          padding: _kTableRowPadding,
-          child: Row(
-            children: [
-              SizedBox(
-                width: indexWidth,
-                child: Center(
-                  child: Text(
-                    index.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+      leading: pic != null
+          ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
+          : opponent.isBot
+          ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
+          : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      title: Row(
+        mainAxisSize: .min,
+        children: [
+          if (title != null) ...[
+            Text(
+              title,
+              style: TextStyle(
+                color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
+                fontWeight: FontWeight.bold,
               ),
-              Expanded(flex: 5, child: BroadcastPlayerWidget(player: opponent, showRating: false)),
-              Expanded(
-                flex: 3,
-                child: (opponentRating != null)
-                    ? Center(child: Text(opponentRating.toString()))
-                    : const SizedBox.shrink(),
-              ),
-              SizedBox(
-                width: 30,
-                child: Center(
-                  child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      border:
-                          (Theme.of(context).brightness == Brightness.light &&
-                                  color == Side.white ||
-                              Theme.of(context).brightness == Brightness.dark &&
-                                  color == Side.black)
-                          ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
-                          : null,
-                      shape: BoxShape.circle,
-                      color: switch (color) {
-                        Side.white => Colors.white.withValues(alpha: 0.9),
-                        Side.black => Colors.black.withValues(alpha: 0.9),
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 30,
-                child: Center(
-                  child: Text(
-                    switch (points) {
-                      BroadcastPoints.one => '1',
-                      BroadcastPoints.half => '½',
-                      BroadcastPoints.zero => '0',
-                      _ => '*',
-                    },
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: switch (points) {
-                        BroadcastPoints.one => context.lichessColors.good,
-                        BroadcastPoints.zero => context.lichessColors.error,
-                        _ => null,
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              if (showRatingDiff)
-                SizedBox(
-                  width: 38,
-                  child: (playerGameResult.ratingDiff != null)
-                      ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
-                      : null,
-                ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 5),
+          ],
+          Flexible(child: Text(name ?? '', overflow: TextOverflow.ellipsis)),
+        ],
+      ),
+      subtitle: federation != null
+          ? Row(
+              mainAxisSize: .min,
+              children: [
+                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                const SizedBox(width: 5),
+                Text('${federationIdToName[federation]}'),
+              ],
+            )
+          : null,
+      trailing: SizedBox(
+        width: 40,
+        child: Column(
+          mainAxisSize: .min,
+          crossAxisAlignment: .end,
+          children: [
+            if (opponent.rating != null)
+              Text(opponent.rating.toString(), style: Theme.of(context).textTheme.bodyMedium),
+            if (showRatingDiff && playerGameResult.ratingDiff != null)
+              ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 13),
+          ],
         ),
       ),
     );

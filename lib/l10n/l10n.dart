@@ -139,6 +139,7 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
     Locale('af'),
     Locale('ar'),
     Locale('az'),
@@ -151,7 +152,6 @@ abstract class AppLocalizations {
     Locale('da'),
     Locale('de'),
     Locale('el'),
-    Locale('en'),
     Locale('en', 'US'),
     Locale('eo'),
     Locale('es'),
@@ -1394,11 +1394,11 @@ abstract class AppLocalizations {
   /// **'Federation'**
   String get broadcastFederation;
 
-  /// No description provided for @broadcastAgeThisYear.
+  /// No description provided for @broadcastAge.
   ///
   /// In en, this message translates to:
-  /// **'Age this year'**
-  String get broadcastAgeThisYear;
+  /// **'Age'**
+  String get broadcastAge;
 
   /// No description provided for @broadcastUnrated.
   ///
@@ -1609,6 +1609,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Created and managed by {param}.'**
   String broadcastCreatedAndManagedBy(String param);
+
+  /// No description provided for @broadcastRoundX.
+  ///
+  /// In en, this message translates to:
+  /// **'Round {param}'**
+  String broadcastRoundX(String param);
+
+  /// No description provided for @broadcastDefaultRoundNameHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeping the default name will automatically translate it to all other languages.'**
+  String get broadcastDefaultRoundNameHelp;
 
   /// No description provided for @broadcastNbBroadcasts.
   ///
@@ -2540,6 +2552,12 @@ abstract class AppLocalizations {
   /// **'Mates'**
   String get puzzleMates;
 
+  /// No description provided for @puzzleMateThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate themes'**
+  String get puzzleMateThemes;
+
   /// No description provided for @puzzleGoals.
   ///
   /// In en, this message translates to:
@@ -3026,6 +3044,30 @@ abstract class AppLocalizations {
   /// **'Checkmate the king on the home rank, when it is trapped there by its own pieces.'**
   String get puzzleThemeBackRankMateDescription;
 
+  /// No description provided for @puzzleThemeBalestraMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Balestra mate'**
+  String get puzzleThemeBalestraMate;
+
+  /// No description provided for @puzzleThemeBalestraMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A bishop delivers the checkmate, while a queen blocks the remaining escape squares'**
+  String get puzzleThemeBalestraMateDescription;
+
+  /// No description provided for @puzzleThemeBlindSwineMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Blind Swine mate'**
+  String get puzzleThemeBlindSwineMate;
+
+  /// No description provided for @puzzleThemeBlindSwineMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two rooks team up to mate the king in an area of 2 by 2 squares.'**
+  String get puzzleThemeBlindSwineMateDescription;
+
   /// No description provided for @puzzleThemeBishopEndgame.
   ///
   /// In en, this message translates to:
@@ -3074,6 +3116,18 @@ abstract class AppLocalizations {
   /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
   String get puzzleThemeCapturingDefenderDescription;
 
+  /// No description provided for @puzzleThemeCornerMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Corner mate'**
+  String get puzzleThemeCornerMate;
+
+  /// No description provided for @puzzleThemeCornerMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.'**
+  String get puzzleThemeCornerMateDescription;
+
   /// No description provided for @puzzleThemeCrushing.
   ///
   /// In en, this message translates to:
@@ -3085,6 +3139,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)'**
   String get puzzleThemeCrushingDescription;
+
+  /// No description provided for @puzzleThemeDiscoveredCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovered check'**
+  String get puzzleThemeDiscoveredCheck;
+
+  /// No description provided for @puzzleThemeDiscoveredCheckDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.'**
+  String get puzzleThemeDiscoveredCheckDescription;
 
   /// No description provided for @puzzleThemeDoubleBishopMate.
   ///
@@ -3296,6 +3362,42 @@ abstract class AppLocalizations {
   /// **'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".'**
   String get puzzleThemeKillBoxMateDescription;
 
+  /// No description provided for @puzzleThemePillsburysMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillsbury\'s mate'**
+  String get puzzleThemePillsburysMate;
+
+  /// No description provided for @puzzleThemePillsburysMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The rook delivers checkmate, while the bishop helps to confine it.'**
+  String get puzzleThemePillsburysMateDescription;
+
+  /// No description provided for @puzzleThemeMorphysMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Morphy\'s mate'**
+  String get puzzleThemeMorphysMate;
+
+  /// No description provided for @puzzleThemeMorphysMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the bishop to check the king, while your rook helps to confine it.'**
+  String get puzzleThemeMorphysMateDescription;
+
+  /// No description provided for @puzzleThemeTriangleMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Triangle mate'**
+  String get puzzleThemeTriangleMate;
+
+  /// No description provided for @puzzleThemeTriangleMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.'**
+  String get puzzleThemeTriangleMateDescription;
+
   /// No description provided for @puzzleThemeVukovicMate.
   ///
   /// In en, this message translates to:
@@ -3463,6 +3565,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A tactic during the first phase of the game.'**
   String get puzzleThemeOpeningDescription;
+
+  /// No description provided for @puzzleThemeOperaMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Opera mate'**
+  String get puzzleThemeOperaMate;
+
+  /// No description provided for @puzzleThemeOperaMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the king with a rook and use a bishop to defend the rook.'**
+  String get puzzleThemeOperaMateDescription;
 
   /// No description provided for @puzzleThemePawnEndgame.
   ///
@@ -4325,7 +4439,7 @@ abstract class AppLocalizations {
   /// No description provided for @noGameFound.
   ///
   /// In en, this message translates to:
-  /// **'No game found'**
+  /// **'No games found'**
   String get noGameFound;
 
   /// No description provided for @maxDepthReached.
@@ -4787,7 +4901,7 @@ abstract class AppLocalizations {
   /// No description provided for @signupEmailHint.
   ///
   /// In en, this message translates to:
-  /// **'We will only use it for password reset.'**
+  /// **'We will only use it for password reset and account activation.'**
   String get signupEmailHint;
 
   /// No description provided for @password.
@@ -7166,6 +7280,12 @@ abstract class AppLocalizations {
   /// **'Toggle position annotations'**
   String get togglePositionAnnotations;
 
+  /// No description provided for @toggleObservationAnnotations.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle observation annotations'**
+  String get toggleObservationAnnotations;
+
   /// No description provided for @variationArrowsInfo.
   ///
   /// In en, this message translates to:
@@ -8144,6 +8264,12 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get edit;
 
+  /// No description provided for @ultraBullet.
+  ///
+  /// In en, this message translates to:
+  /// **'UltraBullet'**
+  String get ultraBullet;
+
   /// No description provided for @bullet.
   ///
   /// In en, this message translates to:
@@ -8983,12 +9109,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} following} other{{count} following}}'**
   String nbFollowing(int count);
-
-  /// No description provided for @lessThanNbMinutes.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}'**
-  String lessThanNbMinutes(int count);
 
   /// No description provided for @nbGamesInPlay.
   ///
@@ -10495,6 +10615,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
+
+  /// No description provided for @teamBattleOfNbTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}'**
+  String teamBattleOfNbTeams(int count);
+
+  /// No description provided for @teamNbLeadersPerTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One leader per team} other{{count} leaders per team}}'**
+  String teamNbLeadersPerTeam(int count);
 
   /// No description provided for @timeagoJustNow.
   ///

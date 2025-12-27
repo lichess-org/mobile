@@ -14,7 +14,7 @@
   <string name="newPatrons">Nuevos patrones</string>
   <string name="freeChess">¡Ajedrez gratis para todos, para siempre!</string>
   <string name="noAdsNoSubs">Sin anuncios, sin suscripciones, sólo código abierto y pasión.</string>
-  <string name="thankYou">¡Gracias por tu donación!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">¡Gracias por tu donación!</string>
   <string name="youHaveLifetime">Tienes una cuenta de patrón de por vida. ¡Qué impresionante!</string>
   <string name="patronUntil">Tienes una cuenta de patrón hasta el %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Si no se renueva, tu cuenta se revertirá a una cuenta normal.</string>

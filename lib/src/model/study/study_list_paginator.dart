@@ -1,22 +1,26 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'study_list_paginator.g.dart';
 
 typedef StudyList = ({IList<StudyPageItem> studies, int? nextPage});
+typedef StudyListNotifierParams = ({StudyCategory category, StudyListOrder order, String? search});
 
-/// Gets a list of studies from the paginated API.
-@riverpod
-class StudyListPaginator extends _$StudyListPaginator {
+/// A provider that gets a list of studies from the paginated API.
+final studyListPaginatorProvider = AsyncNotifierProvider.autoDispose
+    .family<StudyListPaginatorNotifier, StudyList, StudyListNotifierParams>(
+      StudyListPaginatorNotifier.new,
+      name: 'StudyListPaginatorProvider',
+    );
+
+class StudyListPaginatorNotifier extends AsyncNotifier<StudyList> {
+  StudyListPaginatorNotifier(this.params);
+
+  final StudyListNotifierParams params;
+
   @override
-  Future<StudyList> build({
-    required StudyCategory category,
-    required StudyListOrder order,
-    String? search,
-  }) {
+  Future<StudyList> build() {
     return _nextPage();
   }
 
@@ -36,8 +40,8 @@ class StudyListPaginator extends _$StudyListPaginator {
     final nextPage = state.value?.nextPage ?? 1;
 
     final repo = ref.read(studyRepositoryProvider);
-    return search == null
-        ? repo.getStudies(category: category, order: order, page: nextPage)
-        : repo.searchStudies(query: search!, page: nextPage);
+    return params.search == null
+        ? repo.getStudies(category: params.category, order: params.order, page: nextPage)
+        : repo.searchStudies(query: params.search!, order: params.order, page: nextPage);
   }
 }

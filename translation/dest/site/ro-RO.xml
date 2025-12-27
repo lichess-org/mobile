@@ -509,11 +509,6 @@
   <string name="player">Jucător</string>
   <string name="list">Listă</string>
   <string name="graph">Grafic</string>
-  <plurals name="lessThanNbMinutes">
-    <item quantity="one">Mai puțin de un minut</item>
-    <item quantity="few">Mai puțin de %s minute</item>
-    <item quantity="other">Mai puțin de %s de minute</item>
-  </plurals>
   <string name="required">Obligatoriu.</string>
   <string name="openTournaments">Turnee deschise</string>
   <string name="duration">Durată</string>
@@ -732,7 +727,7 @@
   <string name="signUpToHostOrJoinASimul">Înregistrează-te pentru a găzdui sau pentru participarea la un simultan</string>
   <string name="noSimulFound">Simultanul nu a fost găsit</string>
   <string name="noSimulExplanation">Acest simultan nu există.</string>
-  <string name="returnToSimulHomepage">Înapoi la pagina simultanului</string>
+  <string name="returnToSimulHomepage">Înapoi la pagina pentru simultane</string>
   <string name="aboutSimul">Simultanele înseamnă un singur jucător în fața mai multor jucători în același timp.</string>
   <string name="aboutSimulImage">Din 50 de oponenți, Fischer a câștigat 47 de partide, a făcut remiză în 2 partide și a pierdut 1 partida.</string>
   <string name="aboutSimulRealLife">Conceptul provine din evenimentele din lumea reală. În viața reală, jucătorul care acordă un simultan se deplasează de la o tablă la alta pentru a juca la fiecare câte o singură mutare.</string>
@@ -813,7 +808,7 @@
   <string name="primaryColorArrowsHowTo">Ctrl sau shift = roșu; comandă, alt, sau meta = albastru; o cheie pentru fiecare = galben.</string>
   <string name="letOtherPlayersMessageYou">Permite altor jucători să îți trimită mesaje</string>
   <string name="receiveForumNotifications">Primește notificări atunci când ești menționat în forum</string>
-  <string name="shareYourInsightsData">Partajează statisticile tale în jocuri</string>
+  <string name="shareYourInsightsData">Distribuie statisticile tale în jocuri</string>
   <string name="withNobody">Cu nimeni</string>
   <string name="withFriends">Cu prietenii</string>
   <string name="withEverybody">Cu toată lumea</string>
@@ -956,6 +951,7 @@
   <string name="agreementPolicy">Sunt de acord cu respectarea tuturor politicilor Lichess.</string>
   <string name="searchOrStartNewDiscussion">Caută sau începe o nouă conversație</string>
   <string name="edit">Modifică</string>
+  <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>
   <string name="bullet" comment="Probably best left untranslated. Leave it as 'Bullet' unless your language has a better word for it.">Bullet</string>
   <string name="blitz" comment="Probably best left untranslated. Leave it as 'Blitz' unless your language has a better word for it.">Blitz</string>
   <string name="rapid">Rapid</string>
@@ -1020,6 +1016,7 @@ Lăsați gol pentru a începe jocurile din poziția inițială normală.</string
   <string name="simulFeaturedHelp">Arătați-vă simul-ul tuturor de pe %s. Dezactivați pentru simul-uri private.</string>
   <string name="simulDescription">Descriere Simul</string>
   <string name="simulDescriptionHelp">Ce vrei să spui participanţilor?</string>
+  <string name="markdownIsAvailable">%s este disponibil pentru formatare.</string>
   <string name="embedsAvailable">Lipește un URL al jocului sau un URL de capitol de studiu pentru a-l încorpora.</string>
   <string name="inYourLocalTimezone">În fusul orar local</string>
   <string name="tournChat">Conversație</string>

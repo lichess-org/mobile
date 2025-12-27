@@ -14,7 +14,7 @@
   <string name="newPatrons">Νέοι Υποστηρικτές</string>
   <string name="freeChess">Δωρεάν σκάκι για όλους, για πάντα!</string>
   <string name="noAdsNoSubs">Χωρίς διαφημίσεις, χωρίς συνδρομές, αλλά με ανοιχτό κώδικα και πάθος.</string>
-  <string name="thankYou">Σας ευχαριστούμε για τη δωρεά!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Σας ευχαριστούμε για τη δωρεά!</string>
   <string name="youHaveLifetime">Φανταστικά! Έχετε λογαριασμό Lifetime Patron.</string>
   <string name="patronUntil">Έχετε έναν λογαριασμό Υποστηρικτή μέχρι τις %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Σε περίπτωση που επιλέξετε να μη δωρίσετε εκ νέου στο lichess, ο λογαριασμός σας θα γίνει «κανονικός».</string>

@@ -52,7 +52,11 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
-      overrides: [puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage)],
+      overrides: {
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+      },
     );
 
     await tester.pumpWidget(app);
@@ -80,13 +84,15 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
-      overrides: [
-        puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-        httpClientFactoryProvider.overrideWith((ref) {
+      overrides: {
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => mockClient);
         }),
-        savedStreakScoreProvider.overrideWith((ref) => 123),
-      ],
+        savedStreakScoreProvider: savedStreakScoreProvider.overrideWith((ref) => 123),
+      },
     );
 
     await tester.pumpWidget(app);
@@ -108,12 +114,14 @@ void main() {
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
-      overrides: [
-        puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-        httpClientFactoryProvider.overrideWith((ref) {
+      overrides: {
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => mockClient);
         }),
-      ],
+      },
     );
 
     await tester.pumpWidget(app);
@@ -140,12 +148,14 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const PuzzleTabScreen(),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -195,12 +205,14 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const PuzzleTabScreen(),
-        overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -237,15 +249,15 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const PuzzleTabScreen(),
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-          databaseProvider.overrideWith((ref) {
+          databaseProvider: databaseProvider.overrideWith((ref) {
             ref.onDispose(testDb.close);
             return testDb;
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);

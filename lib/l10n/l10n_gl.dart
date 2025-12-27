@@ -789,7 +789,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastFederation => 'Federación';
 
   @override
-  String get broadcastAgeThisYear => 'Idade actual';
+  String get broadcastAge => 'Idade';
 
   @override
   String get broadcastUnrated => 'Sen puntuar';
@@ -903,6 +903,14 @@ class AppLocalizationsGl extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Creada e xestionada por $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Rolda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Débese deixar o nome por defecto para traducilo automaticamente ó resto de linguas.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Patróns de mate';
+
+  @override
   String get puzzleGoals => 'Obxectivos';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate da besta';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate do porco cego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dúas torres colaboran para dar mate ó rei nunha área de 2 x 2 casas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfís';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar unha peza fundamental para a defensa doutra, permitindo capturar a peza, agora indefensa, no seguinte movemento.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mate do curruncho';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confina o rei nun recuncho usando unha torre ou unha dama e un cabalo para facer xaque mate.';
+
+  @override
   String get puzzleThemeCrushing => 'Vantaxe decisiva';
 
   @override
   String get puzzleThemeCrushingDescription => 'Detecta a metida de zoca do opoñente para obter unha vantaxe decisiva. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Xaque descuberto';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Aparta unha peza para desbloquear o xaque doutra peza atacante. A miúdo produce unha vantaxe decisiva.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate de dous alfís';
@@ -1802,7 +1837,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeDoubleCheck => 'Xaque dobre';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => 'Xaque con dúas pezas á vez, como resultado dun ataque descuberto onde tanto a peza en movemento como a desvelada atacan ao rei do opoñente.';
+  String get puzzleThemeDoubleCheckDescription => 'Xaque con dúas pezas á vez, como resultado dun ataque descuberto onde tanto a peza que se move como a descuberta atacan ao rei do opoñente.';
 
   @override
   String get puzzleThemeEndgame => 'Final';
@@ -1854,6 +1889,24 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Unha torre canda o rei do adversario, defendida por unha dama que tamén bloquea as casas de escape do rei. A torre e a dama apreixan ao rei nun curruncho de 3 por 3.';
+
+  @override
+  String get puzzleThemePillsburysMate => 'Mate de Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'A torre dá xaque mate mentres o alfil confina ó rei rival.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mate de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Usa o bispo para dar xaque mentres a torre axuda a confinar ó rei.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate do triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Un triángulo fórmase do seguinte xeito: a dama e a torre atópanse na mesma fila ou columna, a unha casa de distancia entre si e do rei do opoñente.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mate de Vuković';
@@ -1938,6 +1991,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Táctica durante a primeira fase do xogo.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mate da Ópera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Dá xaque ó rei cunha torre defendida por un alfil.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peóns';
@@ -2616,7 +2675,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get signupUsernameHint => 'Asegúrate de escoller un nome de usuario axeitado pra todas as idades. Non poderás cambialo máis tarde e calquera conta con nome de usuario inadecuado será pechada!';
 
   @override
-  String get signupEmailHint => 'Só se usará para restablecer o contrasinal.';
+  String get signupEmailHint => 'Usarémolo só pra o restablecemento do contrasinal e a activación da conta.';
 
   @override
   String get password => 'Contrasinal';
@@ -3897,6 +3956,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get togglePositionAnnotations => 'Activar/desactivar as anotacións';
 
   @override
+  String get toggleObservationAnnotations => 'Activar/desactivar as anotacións';
+
+  @override
   String get variationArrowsInfo => 'As frechas das variantes permítenche navegar sen usar a lista de movementos.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get edit => 'Editar';
+
+  @override
+  String get ultraBullet => 'UltraBala';
 
   @override
   String get bullet => 'Bala';
@@ -5167,17 +5232,6 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: 'Seguindo a $count xogadores',
       one: 'Seguindo a $count xogador',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menos de $count minutos',
-      one: 'Menos de $count minuto',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: 'Pega aquí o PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata $count capítulos.',
       one: 'Pega o teu texto PGN aquí, ata $count partida',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equipos',
+      one: 'Batalla de $count equipo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipo',
+      one: 'Un líder por equipo',
     );
     return '$_temp0';
   }

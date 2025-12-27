@@ -26,7 +26,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = broadcastAnalysisControllerProvider(roundId, gameId);
+    final controller = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
@@ -41,13 +41,6 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 value: broadcastPrefs.inlineNotation,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
-              ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Smaller board'),
-                value: broadcastPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),

@@ -73,7 +73,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ju nuk po ndiqni asnjë përdorues.';
+  String get mobileNotFollowingAnyUser => 'S’ndiqni ndonjë përdorues.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastFederation => 'Federim';
 
   @override
-  String get broadcastAgeThisYear => 'Moshë këtë vit';
+  String get broadcastAge => 'Moshë';
 
   @override
   String get broadcastUnrated => 'Pa pikë';
@@ -903,6 +903,14 @@ class AppLocalizationsSq extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Krijuar dhe administruar nga $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Raundi $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Mbajtja e emrit parazgjedhje do ta përkthejë automatikisht në krejt gjuhët e tjera.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Tema mati';
+
+  @override
   String get puzzleGoals => 'Objektiva';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jepini mat mbretin në rreshtin e tij, kur ai është bllokuar atje nga gurë të vetët.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Një oficer jep shahmat, teksa një mbretëreshë bllokon kuadratet e ikjes';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat Derri Qorr';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dy torre bëhen tok për t’i dhënë mat mbretit në një zonë prej 2 herë 2 kuadratesh.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Fund loje me oficer';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Heqja e një pjese që është kritike për mbrojtjen e një pjese tjetër, çka tani lejon që pjesa e pambrojtur të merret me një lëvizje vijuese.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat qosheje';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Mbërthejeni mbretin në qoshe, duke përdorur një torre, ose një mbretëreshë dhe një kalë, për të dhënë shah-mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Shkatërrim';
 
   @override
   String get puzzleThemeCrushingDescription => 'Shfrytëzoni gafën e kundërshtarit për të përfituar një avantazh shkatërrues. (vlera ≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat me dy oficerë';
@@ -1856,6 +1891,24 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mati i Pilsbërit';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Torreja jep shahmat, teksa oficeri ndihmon të kufizohet ai.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mati i Morfit';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Përdorni oficerin për t’i dhënë shah mbretit, teksa torreja juaj ndihmon të kufohet ai.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat trekëndësh';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Mbretëresha dhe torra, një kuadrat larg nga mbreti armik, gjenden në të njëjtin rresht ose shtyllë, një kuadrat larg njëri-tjetrit, duke formuar një trekëndësh.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Mat Vukoviç';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Një taktikë gjatë fazës së parë të lojës.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mat Opera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Jepini shah mbretit me një torre dhe përdorni një oficer që të mbroni torren.';
 
   @override
   String get puzzleThemePawnEndgame => 'Fund loje me ushtar';
@@ -3897,6 +3956,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Shigjetat e varianteve ju lejojnë të lëvizni pa përdorur listën e lëvizjeve.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get edit => 'Përpunojeni';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count që ndiqen',
       one: '$count që ndiqet',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Më pak se $count minuta',
-      one: 'Më pak se $count minutë',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojëra',
       one: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojë',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ndeshje e $count ekipeve',
+      one: 'Ndeshje e $count ekipeve',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count drejtues për ekip',
+      one: 'Një drejtues për ekip',
     );
     return '$_temp0';
   }

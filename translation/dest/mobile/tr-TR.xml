@@ -12,8 +12,8 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Geri bildirimde bulun</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi günler, %s</string>
-  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi günler</string>
+  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">İyi günler, %s</string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">İyi günler</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Varyasyonu gizle</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ana sayfa</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Canlı yayıncılar</string>
@@ -22,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Hiçbir kullanıcıyı takip etmiyorsunuz.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Tamam</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Tahta üzerinde çevrimdışı oyna</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Tahta üzerinde çevrimdışı oyna</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ile başlayan oyuncularla</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Sol</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Sağ</string>
@@ -36,7 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Bulmacalar</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Son aramalar</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Yer işaretini kaldır</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Sunucu analizi</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Sunucu analizi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Saat pozisyonu</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Hazırlar</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Sürüklenen taşın hedefi</string>
@@ -55,7 +55,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Dokun veya sürükle</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">İki kareye dokun</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Şekil çizimi</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">İki parmak kullanarak şekiller çizin: şekil çizmek için bir parmağı boş bir karede tutun ve başka bir parmağı sürükleyin.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">İki parmak kullanarak şekiller çizin: şekil çizmek için bir parmağı boş bir karede tutun ve başka bir parmağı sürükleyin.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Kenarları göster</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Dokunuş geribildirimi</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.</string>

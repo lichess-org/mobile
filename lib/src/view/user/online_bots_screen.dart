@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -147,8 +147,8 @@ class _Body extends ConsumerWidget {
 }
 
 void _challengeBot(User bot, {required BuildContext context, required WidgetRef ref}) {
-  final session = ref.read(authSessionProvider);
-  if (session == null) {
+  final authUser = ref.read(authControllerProvider);
+  if (authUser == null) {
     showSnackBar(context, context.l10n.challengeRegisterToSendChallenges, type: SnackBarType.error);
     return;
   }

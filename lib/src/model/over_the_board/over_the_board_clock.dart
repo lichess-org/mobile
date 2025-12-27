@@ -2,15 +2,19 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_clock.freezed.dart';
-part 'over_the_board_clock.g.dart';
 
-@riverpod
-class OverTheBoardClock extends _$OverTheBoardClock {
+final overTheBoardClockProvider =
+    NotifierProvider.autoDispose<OverTheBoardClock, OverTheBoardClockState>(
+      OverTheBoardClock.new,
+      name: 'OverTheBoardClockProvider',
+    );
+
+class OverTheBoardClock extends Notifier<OverTheBoardClockState> {
   final Stopwatch _stopwatch = Stopwatch();
 
   Timer? _updateTimer;

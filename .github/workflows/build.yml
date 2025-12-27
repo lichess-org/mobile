@@ -24,7 +24,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Checkout mobile code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         run: flutter pub get
@@ -33,17 +33,3 @@ jobs:
         run: dart run build_runner build
 
       - run: flutter build ${{ matrix.target }}
-
-      - name: Upload Android AAB
-        if: contains(matrix.target, 'appbundle')
-        uses: actions/upload-artifact@v5
-        with:
-          name: app-debug.aab
-          path: build/app/outputs/bundle/debug/app-debug.aab
-
-      - name: Upload iOS App
-        if: contains(matrix.target, 'ios')
-        uses: actions/upload-artifact@v5
-        with:
-          name: Runner.app
-          path: build/ios/iphoneos/Runner.app

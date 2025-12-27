@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
-// to see http requests and websocket connections in terminal
-const _loggersToShowInTerminal = {'HttpClient', 'Socket'};
+const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService'};
 
 /// Setup logging
 void setupLogging() {
@@ -21,37 +20,32 @@ void setupLogging() {
         stackTrace: record.stackTrace,
       );
 
-      if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.INFO) {
-        debugPrint('[${record.loggerName}] ${record.message}');
-      }
-
-      if (!_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.WARNING) {
+      if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
         debugPrint('[${record.loggerName}] ${record.message}');
       }
     });
   }
 }
 
-class ProviderLogger extends ProviderObserver {
+final class ProviderLogger extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override
-  void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} initialized', value);
+  void didAddProvider(ProviderObserverContext context, Object? value) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
-  void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} disposed');
+  void didDisposeProvider(ProviderObserverContext context) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override
-  void providerDidFail(
-    ProviderBase<Object?> provider,
-    Object error,
-    StackTrace stackTrace,
-    ProviderContainer container,
-  ) {
-    _logger.severe('${provider.name ?? provider.runtimeType} error', error, stackTrace);
+  void providerDidFail(ProviderObserverContext context, Object error, StackTrace stackTrace) {
+    _logger.severe(
+      '${context.provider.name ?? context.provider.runtimeType} error',
+      error,
+      stackTrace,
+    );
   }
 }

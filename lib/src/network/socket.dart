@@ -10,18 +10,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-part 'socket.g.dart';
 
 const kDefaultSocketRoute = '/socket/v5';
 
@@ -106,7 +103,7 @@ class SocketClient {
 
   final WebSocketChannelFactory channelFactory;
 
-  final AuthSessionState? Function() getSession;
+  final AuthUser? Function() getSession;
 
   final PackageInfo packageInfo;
 
@@ -214,12 +211,12 @@ class SocketClient {
     _ackResendTimer?.cancel();
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
-    final session = getSession();
+    final authUser = getSession();
     final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
-    final Map<String, String> headers = session != null
-        ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'}
+    final Map<String, String> headers = authUser != null
+        ? {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'}
         : {};
-    WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
+    WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, authUser?.user);
 
     _logger.info('Creating WebSocket connection to $route');
 
@@ -511,7 +508,7 @@ class SocketPool {
       _currentRoute,
       sri: _ref.read(preloadedDataProvider).requireValue.sri,
       channelFactory: _ref.read(webSocketChannelFactoryProvider),
-      getSession: () => _ref.read(authSessionProvider),
+      getSession: () => _ref.read(authControllerProvider),
       packageInfo: _ref.read(preloadedDataProvider).requireValue.packageInfo,
       deviceInfo: _ref.read(preloadedDataProvider).requireValue.deviceInfo,
       pingDelay: const Duration(seconds: 25),
@@ -566,7 +563,7 @@ class SocketPool {
         route,
         version: version,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
-        getSession: () => _ref.read(authSessionProvider),
+        getSession: () => _ref.read(authControllerProvider),
         packageInfo: _ref.read(preloadedDataProvider).requireValue.packageInfo,
         deviceInfo: _ref.read(preloadedDataProvider).requireValue.deviceInfo,
         sri: _ref.read(preloadedDataProvider).requireValue.sri,
@@ -624,8 +621,8 @@ class SocketPool {
   }
 }
 
-@Riverpod(keepAlive: true)
-SocketPool socketPool(Ref ref) {
+/// The global socket pool provider.
+final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
@@ -654,17 +651,26 @@ SocketPool socketPool(Ref ref) {
   });
 
   return pool;
-}
+}, name: 'SocketPoolProvider');
 
 typedef SocketPingState = ({Duration averageLag, int rating});
+
+/// A provider that exposes the average lag and ping rating for a given socket route.
+final socketPingProvider = NotifierProvider.autoDispose
+    .family<SocketPingNotifier, SocketPingState, Uri?>(
+      SocketPingNotifier.new,
+      name: 'SocketPingProvider',
+    );
 
 /// Average lag and ping rating computed from WebSocket ping/pong protocol.
 ///
 /// If [route] is provided, it will return the average lag for that route only, and if any other route
 /// is active, it will return [Duration.zero], meaning the socket is not connected.
 /// If no route is provided, it will return the average lag for the current active route.
-@riverpod
-class SocketPing extends _$SocketPing {
+class SocketPingNotifier extends Notifier<SocketPingState> {
+  SocketPingNotifier(this.route);
+  final Uri? route;
+
   @override
   SocketPingState build({Uri? route}) {
     final pool = ref.watch(socketPoolProvider);
@@ -708,10 +714,10 @@ class SocketPing extends _$SocketPing {
   }
 }
 
-@Riverpod(keepAlive: true)
-WebSocketChannelFactory webSocketChannelFactory(Ref ref) {
+/// A provider for the [WebSocketChannelFactory].
+final webSocketChannelFactoryProvider = Provider<WebSocketChannelFactory>((Ref ref) {
   return const WebSocketChannelFactory();
-}
+});
 
 /// A factory to create a [WebSocketChannel].
 ///

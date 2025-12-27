@@ -47,7 +47,6 @@
   <string name="fidePlayerNotFound">FIDE-spelare hittades inte</string>
   <string name="fideProfile">FIDE-profil</string>
   <string name="federation">Förbund</string>
-  <string name="ageThisYear">Ålder i år</string>
   <string name="unrated">Ej rankat</string>
   <string name="recentTournaments">Senaste turneringar</string>
   <string name="openLichess">Öppna i Lichess</string>
@@ -81,4 +80,5 @@
   <string name="backToLiveMove">Tillbaka till nuvarande drag</string>
   <string name="sinceHideResults">Eftersom du valde att dölja resultatet är alla förhandsgransknings-bräden tomma, för att undvika spoilers.</string>
   <string name="liveboard">Nuvarande position</string>
+  <string name="roundX">Rond %s</string>
 </resources>

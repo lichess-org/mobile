@@ -5,9 +5,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -52,7 +53,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(testGameFullId)),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -103,7 +108,11 @@ void main() {
             GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
           ),
         ),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -164,7 +173,50 @@ void main() {
     });
   });
 
-  group('Game action negotiation', () {
+  group('Game actions', () {
+    testWidgets('move confirmation', (WidgetTester tester) async {
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(32));
+
+      await playMove(tester, 'g1', 'f3');
+
+      // see confirmation dialog
+      expect(find.text('Confirm move'), findsOneWidget);
+      // move is shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move is not yet played so it doesn't appear in the move list
+      expect(find.text('Nf3'), findsNothing);
+
+      // confirm the move
+      await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+      await tester.pump();
+
+      // move still shown on board
+      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      // move appears in move list
+      expect(find.text('Nf3'), findsOneWidget);
+    });
+
     testWidgets('takeback', (WidgetTester tester) async {
       await createTestGame(
         tester,
@@ -341,7 +393,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
@@ -363,7 +419,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
@@ -577,7 +637,9 @@ void main() {
           black: Duration(minutes: 3),
           emerg: Duration(seconds: 30),
         ),
-        overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+        overrides: {
+          soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+        },
       );
       expect(
         tester.widget<Clock>(findClockWithTime(Side.white, '0:40')).emergencyThreshold,
@@ -697,7 +759,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(source: ExistingGameSource(gameFullId)),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(mockClient, ref))],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(mockClient, ref),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pump(const Duration(milliseconds: 10));
@@ -762,7 +828,9 @@ void main() {
         await createTestGame(
           tester,
           pgn: 'e4 e5',
-          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+          overrides: {
+            soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+          },
         );
         sendServerSocketMessages(testGameSocketUri, [
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
@@ -782,7 +850,9 @@ void main() {
           tester,
           pgn: 'e4 e5',
           defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
-          overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
+          overrides: {
+            soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+          },
         );
         sendServerSocketMessages(testGameSocketUri, [
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
@@ -895,8 +965,9 @@ Future<void> createTestGame(
   ),
   FullEventTestCorrespondenceClock? correspondenceClock,
   Map<String, Object>? defaultPreferences,
-  List<Override>? overrides,
+  Map<ProviderOrFamily, Override>? overrides,
   TournamentMeta? tournament,
+  ServerGamePrefs? serverPrefs,
 
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
@@ -907,15 +978,17 @@ Future<void> createTestGame(
     tester,
     home: const GameScreen(source: ExistingGameSource(gameFullId)),
     defaultPreferences: defaultPreferences,
-    overrides: [
-      lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+    overrides: {
+      lichessClientProvider: lichessClientProvider.overrideWith(
+        (ref) => LichessClient(client, ref),
+      ),
       if (socketFactory != null)
-        webSocketChannelFactoryProvider.overrideWith((ref) {
+        webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith((ref) {
           ref.onDispose(socketFactory.dispose);
           return socketFactory;
         }),
       ...?overrides,
-    ],
+    },
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
@@ -933,6 +1006,7 @@ Future<void> createTestGame(
       clock: clock,
       correspondenceClock: correspondenceClock,
       tournament: tournament,
+      serverPrefs: serverPrefs,
     ),
   ]);
   await tester.pump();
@@ -941,7 +1015,7 @@ Future<void> createTestGame(
 Future<void> loadFinishedTestGame(
   WidgetTester tester, {
   String serverFullEvent = _finishedGameFullEvent,
-  List<Override>? overrides,
+  Map<ProviderOrFamily, Override>? overrides,
 }) async {
   final json = jsonDecode(serverFullEvent) as Map<String, dynamic>;
   final gameId = GameFullEvent.fromJson(json['d'] as Map<String, dynamic>).game.id;
@@ -949,10 +1023,12 @@ Future<void> loadFinishedTestGame(
   final app = await makeTestProviderScopeApp(
     tester,
     home: GameScreen(source: ExistingGameSource(gameFullId)),
-    overrides: [
-      lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+    overrides: {
+      lichessClientProvider: lichessClientProvider.overrideWith(
+        (ref) => LichessClient(client, ref),
+      ),
       ...?overrides,
-    ],
+    },
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));

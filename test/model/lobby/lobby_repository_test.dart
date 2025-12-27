@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
+import 'package:lichess_mobile/src/model/lobby/correspondence_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -17,15 +17,15 @@ void main() {
     return mockResponse('', 404);
   });
 
-  group('LobbyRepository.getCorrespondenceChallenges', () {
+  group('LobbyRepository.getCorrespondenceSeeks', () {
     test('read json', () async {
       final container = await lichessClientContainer(mockClient);
       final client = container.read(lichessClientProvider);
       final repo = LobbyRepository(client);
 
-      final data = await repo.getCorrespondenceChallenges();
+      final data = await repo.getCorrespondenceSeeks();
 
-      expect(data, isA<IList<CorrespondenceChallenge>>());
+      expect(data, isA<IList<CorrespondenceSeek>>());
       expect(data.length, 2);
       expect(data[0].id, const GameId('OIBZi6bn'));
     });

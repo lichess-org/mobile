@@ -34,7 +34,7 @@ typedef CachedAggregatorRequest = ({Uri targetGroupUri, Future<Map<String, dynam
 
 /// A provider for the [Aggregator] service.
 final aggregatorProvider = Provider<Aggregator>((ref) {
-  return Aggregator(ref.read(lichessClientProvider));
+  return Aggregator(ref.watch(lichessClientProvider));
 }, name: 'AggregatorProvider');
 
 /// Aggregator is used to group multiple requests to the same endpoint.

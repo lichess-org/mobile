@@ -10,6 +10,9 @@ import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
+const kEngineLineHeight = 24.0;
+const kEngineLineFontSize = 11.0;
+
 class EngineLines extends ConsumerStatefulWidget {
   const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
 
@@ -82,7 +85,7 @@ class Engineline extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (pvData.moves.isEmpty) {
-      return const SizedBox(height: kEvalGaugeSize, child: SizedBox.shrink());
+      return const SizedBox(height: kEngineLineHeight, child: SizedBox.shrink());
     }
 
     final pieceNotation = ref
@@ -107,7 +110,7 @@ class Engineline extends ConsumerWidget {
     return InkWell(
       onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
       child: SizedBox(
-        height: kEvalGaugeSize,
+        height: kEngineLineHeight,
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Row(
@@ -127,7 +130,7 @@ class Engineline extends ConsumerWidget {
                   evalString,
                   style: TextStyle(
                     color: pvData.winningSide == Side.black ? Colors.white : Colors.black,
-                    fontSize: kEvalGaugeFontSize,
+                    fontSize: kEngineLineFontSize,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

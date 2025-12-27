@@ -63,6 +63,7 @@ const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
+const kAnalysisPortraitBoardSidePadding = 8.0;
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
 

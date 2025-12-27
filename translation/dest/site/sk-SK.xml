@@ -544,12 +544,6 @@
   <string name="player">Hráč</string>
   <string name="list">Zoznam</string>
   <string name="graph">Graf</string>
-  <plurals name="lessThanNbMinutes">
-    <item quantity="one">Menej ako %s minúta</item>
-    <item quantity="few">Menej ako %s minúty</item>
-    <item quantity="many">Menej ako %s minút</item>
-    <item quantity="other">Menej ako %s minút</item>
-  </plurals>
   <string name="required">Vyžaduje sa.</string>
   <string name="openTournaments">Otvorené turnaje</string>
   <string name="duration">Dĺžka</string>
@@ -869,7 +863,7 @@
   <string name="revokeAllSessions">zrušiť všetky pripojenia</string>
   <string name="playChessEverywhere">Hrajte šachy kdekoľvek</string>
   <string name="everybodyGetsAllFeaturesForFree">Každý dostane všetky možnosti zadarmo</string>
-  <string name="viewTheSolution">Pozrite riešenie</string>
+  <string name="viewTheSolution">Zobraziť riešenie</string>
   <string name="noChallenges">Žiadne výzvy.</string>
   <plurals name="availableInNbLanguages">
     <item quantity="one">Dostupné v %s jazyku!</item>
@@ -882,7 +876,7 @@
   <string name="xLikesY">%1$s lajkol %2$s</string>
   <string name="quickPairing">Rýchle nájdenie súpera</string>
   <string name="lobby">Výzvy hráčov</string>
-  <string name="anonymous">Anonymný</string>
+  <string name="anonymous">Anonym</string>
   <string name="yourScore">Vaše skóre: %s</string>
   <string name="language">Jazyk</string>
   <string name="allLanguages">Všetky jazyky</string>

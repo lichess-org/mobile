@@ -829,7 +829,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastFederation => 'Federacja';
 
   @override
-  String get broadcastAgeThisYear => 'Wiek w tym roku';
+  String get broadcastAge => 'Wiek';
 
   @override
   String get broadcastUnrated => 'Bez rankingu';
@@ -943,6 +943,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Stworzone i zarządzane przez $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Runda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Zachowanie domyślnej nazwy rundy automatycznie przetłumaczy ją na wszystkie inne języki.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1464,6 +1472,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleMates => 'Maty';
 
   @override
+  String get puzzleMateThemes => 'Motywy matowe';
+
+  @override
   String get puzzleGoals => 'Cele';
 
   @override
@@ -1777,6 +1788,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Zamatuj króla uwięzionego w ostatnim rzędzie przez własne bierki.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman znajduje się jedno pole z tyłu i z boku matowanego króla i blokuje mu drogę ucieczki';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Końcówka gońcowa';
 
   @override
@@ -1801,10 +1824,22 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Decydująca przewaga';
 
   @override
   String get puzzleThemeCrushingDescription => 'Znajdź błąd przeciwnika i zdobądź decydującą przewagę (ocena pozycji: powyżej 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dwoma gońcami';
@@ -1912,6 +1947,24 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Wieża stoi obok wrogiego króla i broniona jest przez hetmana, który równocześnie blokuje wszystkie pola ucieczki tego króla. Wieża i hetman łapią króla przeciwnika w klatce 3 na 3 (tzw. \"kill box\").';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic\'a';
 
   @override
@@ -1994,6 +2047,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktyka w pierwszej fazie gry.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Końcówka pionkowa';
@@ -3953,6 +4012,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get togglePositionAnnotations => 'Przełącz adnotacje pozycji';
 
   @override
+  String get toggleObservationAnnotations => 'Przełącz adnotacje obserwacji';
+
+  @override
   String get variationArrowsInfo => 'Strzałki wariantów pozwalają nawigować bez użycia listy posunięć.';
 
   @override
@@ -4084,7 +4146,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknij podczas trzymania Shift lub przytrzymaj prawy przycisk myszy aby rysować okręgi i strzałki na szachownicy.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl lub shift = kolor czerwony; command, alt lub meta = kolor niebieski; Ctrl lub shift + command, alt lub meta = kolor żółty.';
 
   @override
   String get letOtherPlayersMessageYou => 'Zezwól na wiadomości od innych graczy';
@@ -4488,6 +4550,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get edit => 'Edytuj';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5293,19 +5358,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count obserwowanych',
       few: '$count obserwowanych',
       one: '$count obserwowany',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Poniżej $count minut',
-      many: 'Poniżej $count minut',
-      few: 'Poniżej $count minut',
-      one: 'Poniżej $count minuty',
     );
     return '$_temp0';
   }
@@ -6235,6 +6287,32 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Wklej tutaj swój PGN, max $count partii',
       few: 'Wklej tutaj swój PGN, max $count partie',
       one: 'Wklej tutaj swój PGN, max $count partię',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitwa $count drużyn',
+      many: 'Bitwa $count drużyn',
+      few: 'Bitwa $count drużyn',
+      one: 'Bitwa $count drużyny',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count liderów na drużynę',
+      many: '$count liderów na drużynę',
+      few: '$count liderów na drużynę',
+      one: 'Lider na drużynę',
     );
     return '$_temp0';
   }

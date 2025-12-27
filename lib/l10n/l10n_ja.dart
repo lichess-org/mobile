@@ -769,7 +769,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastFederation => '所属協会';
 
   @override
-  String get broadcastAgeThisYear => '今年時点の年齢';
+  String get broadcastAge => '年齢';
 
   @override
   String get broadcastUnrated => 'レーティングなし';
@@ -883,6 +883,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return '作成・管理者は $param です。';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'ラウンド $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'デフォルトの名前のままにしておくと、他の言語に自動で翻訳されます。';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1398,6 +1406,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleMates => 'メイト';
 
   @override
+  String get puzzleMateThemes => 'メイトのテーマ';
+
+  @override
   String get puzzleGoals => '目標';
 
   @override
@@ -1693,6 +1704,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '一番下のランクで、上を自分の駒に塞がれたキングをメイトする。';
 
   @override
+  String get puzzleThemeBalestraMate => 'バレストラ（クロスボウ）のメイト';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'ビショップがチェックし、クイーンが残りの逃げ道をおさえる';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'ブラインド・スワイン・メイト';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => '2 つのルークが協力して 2 マス四方の空間でキングをメイトする。';
+
+  @override
   String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
 
   @override
@@ -1717,10 +1740,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
 
   @override
+  String get puzzleThemeCornerMate => 'コーナー・メイト';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'ルークかクイーンでキングを隅に追い詰め、ナイトでメイトする形。';
+
+  @override
   String get puzzleThemeCrushing => '圧倒';
 
   @override
   String get puzzleThemeCrushingDescription => '相手の悪手をとがめて圧倒的な優位を築きます。（評価値は 600cp 以上）';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'ディスカバード・チェック';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => '駒を動かして、その陰にいた別の駒でチェックをかける。決定的な優位につながることが多い。';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'ダブル・ビショップのメイト';
@@ -1828,6 +1863,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
 
   @override
+  String get puzzleThemePillsburysMate => 'ピルズベリーのメイト';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'ルークがチェックをかけ、ビショップがルークを守っているメイト。';
+
+  @override
+  String get puzzleThemeMorphysMate => 'モーフィのメイト';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。';
+
+  @override
+  String get puzzleThemeTriangleMate => '三角のメイト';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => '同じランクかファイル上で空きマスを挟んだクイーンとルーク、そして相手のキングが三角形を作るメイト。';
+
+  @override
   String get puzzleThemeVukovicMate => 'ヴコヴィッチのメイト';
 
   @override
@@ -1910,6 +1963,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'ゲームの序盤でのタクティクス。';
+
+  @override
+  String get puzzleThemeOperaMate => 'オペラのメイト';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'ルークがチェックをかけ、ビショップがルークを守っているメイト。';
 
   @override
   String get puzzleThemePawnEndgame => 'ポーン・エンドゲーム';
@@ -3869,6 +3928,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get togglePositionAnnotations => 'わからん';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => '変化手順の矢印があれば棋譜記録を使わずにナビゲーションできます。';
 
   @override
@@ -4404,6 +4466,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get edit => '編集';
+
+  @override
+  String get ultraBullet => 'ウルトラブレット';
 
   @override
   String get bullet => 'ブレット';
@@ -5104,16 +5169,6 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count 人をフォロー',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 分未満',
     );
     return '$_temp0';
   }
@@ -5998,6 +6053,26 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'ここに PGN をペースト（$count 局まで）',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'バトル、$count チーム',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '各チーム $count 人がリーダー',
     );
     return '$_temp0';
   }

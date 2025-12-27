@@ -770,7 +770,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -884,6 +884,14 @@ class AppLocalizationsId extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1401,6 +1409,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleMates => 'Mat';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tujuan';
 
   @override
@@ -1697,6 +1708,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
 
   @override
@@ -1721,10 +1744,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Memakan bidak yang sangat penting untuk menjaga bidak lain, memungkinkan bagian yang sekarang tidak terlindungi untuk ditangkap pada langkah berikut.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Hancurkan';
 
   @override
   String get puzzleThemeCrushingDescription => 'Temukan kesalahan lawan untuk mendapat keuntungan yang besar. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Skakmat gajah ganda';
@@ -1832,6 +1867,24 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Rokok berada di samping raja musuh dan didukung oleh ratu yang juga menghalangi petak pelarian raja. Benteng dan ratu menangkap raja musuh dalam \"kotak pembunuh\" 3x3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Teman Vukovic';
 
   @override
@@ -1914,6 +1967,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktik selama fase pertama permainan.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Babak akhir pion';
@@ -3873,6 +3932,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4408,6 +4470,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get edit => 'Ubah';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Peluru';
@@ -5108,16 +5173,6 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count mengikuti',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Kurang dari $count menit',
     );
     return '$_temp0';
   }
@@ -6002,6 +6057,28 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Tempelkan PGN kamu disini, lebih dari $count permainan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

@@ -12,7 +12,6 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">തൽസമയ പ്രവാഹക്കാർ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ഈ താളിനു് കാണുകാൻ താങ്ങൾ പ്രവേശപെട്ടിരിക്കണം.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ഫലങ്ങളൊന്നുമില്ല</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">താങ്ങൾ ഒരു ഉപയോക്താവിനും പിന്തുടരുന്നില്ല.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ശരി</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ബോർഡിൽ കളിക്കുക</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">%s ഒപ്പമുള്ള കളിക്കാർ</string>

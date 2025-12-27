@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
@@ -48,8 +48,8 @@ class UserScreen extends ConsumerStatefulWidget {
   }
 
   static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
-    final session = ref.read(authSessionProvider);
-    if (session == null) {
+    final authUser = ref.read(authControllerProvider);
+    if (authUser == null) {
       showSnackBar(
         context,
         context.l10n.challengeRegisterToSendChallenges,
@@ -155,7 +155,7 @@ class _UserProfileListView extends ConsumerWidget {
 
     final connectivity = ref.watch(connectivityChangesProvider);
     final nbOfGames = user.count?.all ?? 0;
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final kidMode = ref.watch(kidModeProvider);
 
     if (user.disabled == true) {
@@ -178,10 +178,10 @@ class _UserProfileListView extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
-            if (session != null && crosstable != null && (crosstable.nbGames) > 0) ...[
+            if (authUser != null && crosstable != null && (crosstable.nbGames) > 0) ...[
               () {
                 final crosstableData = crosstable;
-                final currentUserScore = crosstableData.users[session.user.id] ?? 0;
+                final currentUserScore = crosstableData.users[authUser.user.id] ?? 0;
                 final otherUserScore = crosstableData.users[user.id] ?? 0;
 
                 return ListTile(
@@ -195,8 +195,8 @@ class _UserProfileListView extends ConsumerWidget {
                     Navigator.of(context).push(
                       GameHistoryScreen.buildRoute(
                         context,
-                        user: session.user,
-                        isOnline: connectivity.valueOrNull?.isOnline == true,
+                        user: authUser.user,
+                        isOnline: connectivity.value?.isOnline == true,
                         gameFilter: GameFilterState(opponent: user),
                       ),
                     );
@@ -215,7 +215,7 @@ class _UserProfileListView extends ConsumerWidget {
                 ).push(TvScreen.buildRoute(context, user: user.lightUser));
               },
             ),
-            if (session != null) ...[
+            if (authUser != null) ...[
               if (user.canChallenge == true)
                 ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
@@ -223,7 +223,7 @@ class _UserProfileListView extends ConsumerWidget {
                   onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
                 ),
 
-              if (user.blocking != true && !user.isBot && kidMode.valueOrNull == false)
+              if (user.blocking != true && !user.isBot && kidMode.value == false)
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
                   title: Text(context.l10n.composeMessage),
@@ -270,7 +270,9 @@ class _UserProfileListView extends ConsumerWidget {
                 leading: const Icon(Icons.report_problem_outlined),
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {
-                  launchUrl(lichessUri('/report', {'username': user.id, 'login': session.user.id}));
+                  launchUrl(
+                    lichessUri('/report', {'username': user.id, 'login': authUser.user.id}),
+                  );
                 },
               ),
             ],

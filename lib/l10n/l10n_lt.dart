@@ -829,7 +829,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastFederation => 'Federacija';
 
   @override
-  String get broadcastAgeThisYear => 'Amžius šiemet';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nereitinguota(s)';
@@ -943,6 +943,14 @@ class AppLocalizationsLt extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Sukūrė ir valdo $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1464,6 +1472,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleMates => 'Matai';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Tikslai';
 
   @override
@@ -1775,6 +1786,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matas karaliui, esančiam namų eilėje, kai jis užblokuotas savo paties figūrų.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Rikių endšpilis';
 
   @override
@@ -1799,10 +1822,22 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Pašalinkite figūrą, kuri yra kritiškai svarbi kitos figūros gynybai, paruošdami naujai neapsaugotą figūrą kirtimui kitu ėjimu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Suspaudimas';
 
   @override
   String get puzzleThemeCrushingDescription => 'Pastebėkite priešininko klaidą ir įgaukite ryškią persvarą. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Dvigubų rikių matas';
@@ -1910,6 +1945,24 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Bokštas yra šalia varžovo karaliaus ir jį palaiko karalienė, kuri tuo pačiu uždaro karaliaus pabėgimo langelius. Bokštas ir karalienė sugauna varžovo karalių 3×3 langelių „mirties dėžutėje“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic matas';
 
   @override
@@ -1992,6 +2045,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika, kuri galioja pirmoje žaidimo fazėje.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pėstininkų endšpilis';
@@ -3951,6 +4010,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get togglePositionAnnotations => 'Įjungti pozicijos komentarus';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variacijų rodyklės leidžia jums naviguoti nenaudojant ėjimų sarašo.';
 
   @override
@@ -4486,6 +4548,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get edit => 'Keisti';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Kulka';
@@ -5291,19 +5356,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekamų',
       few: '$count sekami',
       one: '$count sekamas',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mažiau nei $count minučių',
-      many: 'Mažiau nei $count minučių',
-      few: 'Mažiau nei $count minutės',
-      one: 'Mažiau nei $count minutė',
     );
     return '$_temp0';
   }
@@ -6233,6 +6285,32 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimo',
       few: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimų',
       one: 'Įklijuokite savo PGN tekstą čia, iki $count žaidimo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count komandų mūšis',
+      many: '$count komandų mūšis',
+      few: '$count komandų mūšis',
+      one: '$count komandų mūšis',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lyderių komandoje',
+      many: '$count lyderių komandoje',
+      few: '$count lyderiai komandoje',
+      one: 'Vienas lyderis komandoje',
     );
     return '$_temp0';
   }

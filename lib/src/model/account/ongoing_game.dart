@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -18,8 +18,8 @@ part 'ongoing_game.freezed.dart';
 class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
   @override
   Future<IList<OngoingGame>> build() {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) return Future.value(IList());
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser == null) return Future.value(IList());
 
     return ref.withAggregatorCacheFor(
       (client, aggregator) => AccountRepository(client, aggregator).getOngoingGames(nb: 50),

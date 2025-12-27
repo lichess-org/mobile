@@ -111,14 +111,14 @@ class GameBody extends ConsumerWidget {
         // If playing against Stockfish, user is null
         final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
             ? ref.watch(
-                crosstableProvider(
-                  gameState.game.white.user!.id,
-                  gameState.game.black.user!.id,
+                crosstableProvider((
+                  userId1: gameState.game.white.user!.id,
+                  userId2: gameState.game.black.user!.id,
                   matchup: true,
-                ),
+                )),
               )
             : null;
-        final crosstableData = crosstable?.valueOrNull;
+        final crosstableData = crosstable?.value;
         final matchupData = crosstableData?.matchup;
 
         final black = GamePlayer(
@@ -281,7 +281,7 @@ class GameBody extends ConsumerWidget {
               topTable: topPlayer,
               bottomTable:
                   gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                  ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                  ? _ClaimWinCountdown(gameState, countdown: gameState.opponentLeftCountdown!)
                   : bottomPlayer,
               moves: gameState.game.steps
                   .skip(1)
@@ -336,8 +336,7 @@ class GameBody extends ConsumerWidget {
       if (!state.requireValue.game.playable) {
         WakelockPlus.disable();
       }
-      if (prev?.valueOrNull?.isZenModeActive == true &&
-          state.requireValue.isZenModeActive == false) {
+      if (prev?.value?.isZenModeActive == true && state.requireValue.isZenModeActive == false) {
         if (context.mounted) {
           // when Zen mode is disabled, reload chat data
           ref
@@ -364,7 +363,7 @@ class GameBody extends ConsumerWidget {
       }
 
       // true when the game was loaded, playable, and just finished
-      if (prev?.valueOrNull?.game.playable == true && state.requireValue.game.playable == false) {
+      if (prev?.value?.game.playable == true && state.requireValue.game.playable == false) {
         clearAndroidBoardGesturesExclusion();
       }
       // true when the game was not loaded: handles rematches
@@ -424,7 +423,7 @@ class _GameBottomBar extends ConsumerWidget {
         final canShowChat =
             gamePrefs.enableChat == true &&
             gameState.chatOptions != null &&
-            kidModeAsync.valueOrNull == false;
+            kidModeAsync.value == false;
         final numPremoveLines = gameState.game.correspondenceForecast?.length;
 
         return BottomBar(
@@ -850,9 +849,10 @@ class _ClaimWinDialog extends ConsumerWidget {
 }
 
 class _ClaimWinCountdown extends StatelessWidget {
-  const _ClaimWinCountdown({required this.countdown});
+  const _ClaimWinCountdown(this.gameState, {required this.countdown});
 
   final (Duration, DateTime) countdown;
+  final GameState gameState;
 
   @override
   Widget build(BuildContext context) {
@@ -864,7 +864,18 @@ class _ClaimWinCountdown extends StatelessWidget {
           clockUpdatedAt: countdown.$2,
           active: true,
           builder: (context, duration) {
-            return Text(context.l10n.opponentLeftCounter(duration.inSeconds));
+            return InkWell(
+              onTap: gameState.game.canClaimWin
+                  ? () {
+                      showAdaptiveDialog<void>(
+                        context: context,
+                        builder: (context) => _ClaimWinDialog(id: gameState.gameFullId),
+                        barrierDismissible: true,
+                      );
+                    }
+                  : null,
+              child: Text(context.l10n.opponentLeftCounter(duration.inSeconds)),
+            );
           },
         ),
       ),

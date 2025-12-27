@@ -73,7 +73,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Upozorňujeme, že v súčasnosti nie sú k dispozícii všetky funkcie zo starej aplikácie alebo webstránky. Funkcie však neustále pridávame.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Nesledujete žiadneho používateľa.';
+  String get mobileNotFollowingAnyUser => 'Nesledujete žiadnych užívateľov.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -829,7 +829,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastFederation => 'Federácia';
 
   @override
-  String get broadcastAgeThisYear => 'Vek tento rok';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Bez hodnotenia';
@@ -943,6 +943,14 @@ class AppLocalizationsSk extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Vytvoril a spravuje $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return '$param. kolo';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Zachovanie predvoleného názvu spôsobí jeho automatický preklad do všetkých ostatných jazykov.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1443,7 +1451,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzlePuzzles => 'Šachové úlohy';
 
   @override
-  String get puzzlePuzzleThemes => 'Kategórie úloh';
+  String get puzzlePuzzleThemes => 'Okruhy úloh';
 
   @override
   String get puzzleRecommended => 'Odporúčané';
@@ -1462,6 +1470,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Mat';
+
+  @override
+  String get puzzleMateThemes => 'Matové okruhy';
 
   @override
   String get puzzleGoals => 'Cieľ';
@@ -1560,7 +1571,7 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get puzzleContinueTraining => 'Trénujte ďalej';
+  String get puzzleContinueTraining => 'Pokračovať v tréningu';
 
   @override
   String get puzzleDifficultyLevel => 'Obtiažnosť';
@@ -1584,7 +1595,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleExample => 'Príklad';
 
   @override
-  String get puzzleAddAnotherTheme => 'Pridať ďalšiu kategóriu';
+  String get puzzleAddAnotherTheme => 'Pridať ďalší okruh';
 
   @override
   String get puzzleNextPuzzle => 'Ďalšia úloha';
@@ -1654,7 +1665,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleImprovementAreasDescription => 'Precvičujte tieto úlohy aby ste napredovali čo najrýchlejšie!';
 
   @override
-  String get puzzleStrengthDescription => 'Tieto témy Vám idú najlepšie';
+  String get puzzleStrengthDescription => 'Tieto okruhy Vám idú najlepšie';
 
   @override
   String puzzlePlayedXTimes(int count) {
@@ -1777,6 +1788,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Zmatujte kráľa na poslednej rade, keď je tam uväznený svojimi vlastnými figúrami.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra (kuša)';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Strelec dáva mat, zatiaľ čo dáma blokuje zostávajúce únikové polia';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat slepého prasaťa';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Kráľa matujú dve veže na území o veľkosti 2 x 2 políčok.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Strelcová koncovka';
 
   @override
@@ -1801,10 +1824,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Rohový mat';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Zatlačte kráľa do rohu pomocou veže a jazdca alebo dámy a jazdca, aby ste dosiahli mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Rozdrvenie';
 
   @override
   String get puzzleThemeCrushingDescription => 'Odhaľte súperovu hrubú chybu a získajte drvivú výhodu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Odkrytý šach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Pohnite figúrkou, aby ste odkryli šach od skrytej útočiacej figúry. Často to vedie k rozhodujúcej výhode.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dvojicou strelcov';
@@ -1912,6 +1947,24 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Veža je vedľa súperovho kráľa a podporuje ju dáma, ktorá zároveň blokuje kráľove únikové polia. Veža a dáma chytia súperovho kráľa do pasce na 3 x 3 „poli smrti“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trojuholníkový mat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Dáma a veža, vzdialené jedno políčko od súperovho kráľa, sú na rovnakom rade alebo stĺpci, oddelené jedným políčkom, a tvoria trojuholník.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovičov mat';
 
   @override
@@ -1994,6 +2047,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika počas prvého úseku hry.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pešiaková koncovka';
@@ -2107,7 +2166,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeMix => 'Zdravá zmes';
 
   @override
-  String get puzzleThemeMixDescription => 'Od všetkého trochu. Neviete, čo môžete očakávať, a tak ste neustále pripravení na všetko! Presne ako v skutočných partiách.';
+  String get puzzleThemeMixDescription => 'Z každého rožku trošku. Neviete, čo môžete očakávať, a tak ste neustále pripravení na všetko! Presne ako v skutočných partiách.';
 
   @override
   String get puzzleThemePlayerGames => 'Vaše partie';
@@ -3953,6 +4012,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get togglePositionAnnotations => 'Prepnúť poznámky k pozíciám';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Šípky variantov umožňujú navigáciu bez použitia záznamu ťahov.';
 
   @override
@@ -4143,7 +4205,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get everybodyGetsAllFeaturesForFree => 'Každý dostane všetky možnosti zadarmo';
 
   @override
-  String get viewTheSolution => 'Pozrite riešenie';
+  String get viewTheSolution => 'Zobraziť riešenie';
 
   @override
   String get noChallenges => 'Žiadne výzvy.';
@@ -4170,7 +4232,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get lobby => 'Výzvy hráčov';
 
   @override
-  String get anonymous => 'Anonymný';
+  String get anonymous => 'Anonym';
 
   @override
   String yourScore(String param) {
@@ -4488,6 +4550,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get edit => 'Upraviť';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5293,19 +5358,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sledovaných',
       few: '$count sledovaní',
       one: '$count sledovaný',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menej ako $count minút',
-      many: 'Menej ako $count minút',
-      few: 'Menej ako $count minúty',
-      one: 'Menej ako $count minúta',
     );
     return '$_temp0';
   }
@@ -6235,6 +6287,32 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Váš PGN text vložte sem, maximálne $count partií',
       few: 'Váš PGN text vložte sem, maximálne $count partie',
       one: 'Váš PGN text vložte sem, maximálne $count partiu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Turnaj $count tímov',
+      many: 'Turnaj $count tímov',
+      few: 'Turnaj $count tímov',
+      one: 'Turnaj $count tímu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lídrov na tím',
+      many: '$count lídrov na tím',
+      few: '$count lídri na tím',
+      one: 'Jeden líder na tím',
     );
     return '$_temp0';
   }

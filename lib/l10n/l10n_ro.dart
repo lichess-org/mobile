@@ -809,7 +809,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastFederation => 'Federație';
 
   @override
-  String get broadcastAgeThisYear => 'Vârsta în acest an';
+  String get broadcastAge => 'Vârstă';
 
   @override
   String get broadcastUnrated => 'Fără rating';
@@ -923,6 +923,14 @@ class AppLocalizationsRo extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Creat și gestionat de $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Runda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Păstrarea numelui implicit îl va traduce automat în toate celelalte limbi.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1442,6 +1450,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleMates => 'Mate';
 
   @override
+  String get puzzleMateThemes => 'Teme de mat';
+
+  @override
   String get puzzleGoals => 'Obiective';
 
   @override
@@ -1749,6 +1760,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat Balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Un nebun dă matul, în timp ce regina blochează pătratele rămase pentru scăpare';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat Blind Swine';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Două ture se alătură pentru a da mat regelui pe o arie de 2x2 pătrate.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final cu nebuni';
 
   @override
@@ -1773,10 +1796,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat în colț';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Restrânge regele spre colț folosind o tură sau regină și un nebun pentru a duce la mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Zdrobitor';
 
   @override
   String get puzzleThemeCrushingDescription => 'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Șah prin descoperire';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mută o piesă pentru a descoperi un șah de la o piesă de atac ascunsă, ceea ce duce adesea la un avantaj decisiv.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat-ul cu doi nebuni';
@@ -1884,6 +1919,24 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat în triunghi';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Regina și tura, la un pătrat de regele inamic, sunt pe același linie sau coloană, separate de un singur pătrat, formând un triunghi.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic';
 
   @override
@@ -1966,6 +2019,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'O tactică în prima etapă a jocului.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final cu pioni';
@@ -3817,7 +3876,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get noSimulExplanation => 'Acest simultan nu există.';
 
   @override
-  String get returnToSimulHomepage => 'Înapoi la pagina simultanului';
+  String get returnToSimulHomepage => 'Înapoi la pagina pentru simultane';
 
   @override
   String get aboutSimul => 'Simultanele înseamnă un singur jucător în fața mai multor jucători în același timp.';
@@ -3923,6 +3982,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get togglePositionAnnotations => 'Activează/Dezactivează adnotările pozițiilor';
+
+  @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
 
   @override
   String get variationArrowsInfo => 'Săgețile de variație vă permit să navigați fără a utiliza lista mutărilor.';
@@ -4065,7 +4127,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get receiveForumNotifications => 'Primește notificări atunci când ești menționat în forum';
 
   @override
-  String get shareYourInsightsData => 'Partajează statisticile tale în jocuri';
+  String get shareYourInsightsData => 'Distribuie statisticile tale în jocuri';
 
   @override
   String get withNobody => 'Cu nimeni';
@@ -4462,6 +4524,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get edit => 'Modifică';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4677,7 +4742,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param este disponibil pentru formatare.';
   }
 
   @override
@@ -5235,18 +5300,6 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mai puțin de $count de minute',
-      few: 'Mai puțin de $count minute',
-      one: 'Mai puțin de un minut',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5663,7 +5716,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAllSyncMembersRemainOnTheSamePosition => 'Toți membrii sincronizați rămân la aceeași poziție';
 
   @override
-  String get studyShareChanges => 'Împărtășește modificările cu spectatorii și salvează-le pe server';
+  String get studyShareChanges => 'Împarte modificările cu spectatorii și salvează-le pe server';
 
   @override
   String get studyPlaying => 'În desfășurare';
@@ -5678,7 +5731,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyNext => 'Următoarea';
 
   @override
-  String get studyShareAndExport => 'Împărtășește și exportă';
+  String get studyShareAndExport => 'Distribuie și exportă';
 
   @override
   String get studyCloneStudy => 'Clonează';
@@ -6156,6 +6209,30 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
       few: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
       one: 'Lipiți textul PGN aici, până la $count meci',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bătălia echipelor $count',
+      few: 'Bătălia echipelor $count',
+      one: 'Bătălia echipelor $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de lideri per echipă',
+      few: '$count lideri per echipă',
+      one: 'Un lider per echipă',
     );
     return '$_temp0';
   }

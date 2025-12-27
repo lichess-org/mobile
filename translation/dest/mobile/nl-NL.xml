@@ -12,17 +12,17 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goedenavond, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goedenavond</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goedendag, %s</string>
-  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goedendag</string>
+  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Goedendag, %s</string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Goedendag</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Verberg varianten</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startscherm</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Je moet ingelogd zijn om deze pagina te bekijken.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Geen resultaten</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Houd er rekening mee dat niet alle functies van de oude app of website beschikbaar zijn, maar we voegen voortdurend functies toe.</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">U volgt geen gebruiker.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Je volgt geen gebruikers.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Op virtueel bord</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Op virtueel bord</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spelers met \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Links</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Rechts</string>
@@ -36,7 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzels</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recente zoekopdrachten</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Bladwijzer verwijderen</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server analyse</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Positie klok</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Voorinstellingen</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Versleept stuk bestemming</string>
@@ -55,7 +55,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tikken of slepen</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tik twee vakjes</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Vormen tekenen</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Rand tonen</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Trillen bij aanraking</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.</string>

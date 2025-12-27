@@ -9,7 +9,7 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Kontaj Preferoj';
 
   @override
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
@@ -73,7 +73,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Vi ne abonas ĉiun uzanton.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Bone';
@@ -348,8 +348,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Completed $count $param2 correspondence games',
-      one: 'Completed $count $param2 correspondence game',
+      other: 'Finiĝis $count $param2 korespondaj ludoj',
+      one: 'Finiĝis $count $param2 koresponda ludo',
     );
     return '$_temp0';
   }
@@ -640,10 +640,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Necesigi oficialan titolon por aliĝi al la turniro';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'La turniraj parigoj nun fermiĝis.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserka procento';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -771,16 +771,16 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastReplacePlayerTags => 'Nedeviga: anstataŭigi nomojn de ludantoj, rangojn kaj titolojn';
 
   @override
-  String get broadcastFideFederations => 'FIDE federations';
+  String get broadcastFideFederations => 'FIDE federacioj';
 
   @override
   String get broadcastTop10Rating => 'La 10 plej bonaj';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'FIDE ludanto';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+  String get broadcastFidePlayerNotFound => 'FIDE ludanto ne trovita';
 
   @override
   String get broadcastFideProfile => 'Profilo FIDE';
@@ -789,7 +789,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastFederation => 'Federacio';
 
   @override
-  String get broadcastAgeThisYear => 'Ĉi jara aĝo';
+  String get broadcastAge => 'Aĝo';
 
   @override
   String get broadcastUnrated => 'Sen rango';
@@ -855,7 +855,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastRatingDiff => 'Ranga malsamo';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Ludoj en ĉi tiun turniron';
 
   @override
   String get broadcastScore => 'Score';
@@ -903,6 +903,14 @@ class AppLocalizationsEo extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleMates => 'Matoj';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Celoj';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Ŝakmati la reĝo sur la hejmrango, kiam ĝi estas kaptita per ĝiaj propraj ŝakpecoj.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mato';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Kuriero liveras la ŝakmaton, dum damo blokas la ceterajn eskapajn ĉelojn';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinda-porka mato';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Kuriera finaĵo';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Forprenu ŝakpecon, kiu estas grava por defendo de alia ŝakpeco, ebligante la kapto de la nun nedefendata ŝakpeco dum sekva movo.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Aplomba';
 
   @override
   String get puzzleThemeCrushingDescription => 'Trovu la kontraŭulan eraregon por akiri disbatantan avantaĝon. (takso ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Duokuriera ŝakmato';
@@ -1757,7 +1792,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => 'Du kontraŭaj kurieroj sur apudaj diagonaloj liveras maton al reĝo ĉirkaŭbarita per amikaj ŝakpecoj.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Mato de Cozio';
+  String get puzzleThemeDovetailMate => 'Kolombo-vosta mato';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'Damo liveras maton al apuda reĝo, kies du eskapajn ĉelojn blokas amikaj ŝakpecoj.';
@@ -1856,6 +1891,24 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangula mato';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktiko dum la unua fazo de la ludo.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Peona finaĵo';
@@ -3897,6 +3956,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get togglePositionAnnotations => 'Baskuligi poziciajn prinotaĵojn';
 
   @override
+  String get toggleObservationAnnotations => 'Baskuligi observojn prinotaĵojn';
+
+  @override
   String get variationArrowsInfo => 'Variaĵaj sagoj lasi vin navigi neutile la movlisto.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get edit => 'Redakti';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5172,17 +5237,6 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Malpli ol $count minutoj',
-      one: 'Malpli ol $count minuto',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5516,7 +5570,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyAlphabetical => 'Alfabete';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'Rilata';
 
   @override
   String get studyAddNewChapter => 'Aldoni novan ĉapitron';
@@ -5945,7 +5999,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Studaj membroj';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
@@ -5958,7 +6012,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Studaj ĉapitroj';
 
   @override
   String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
@@ -6077,6 +6131,28 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Algluu ĉi tie vian PGN kodon, ĝis maksimume $count ludoj',
       one: 'Algluu ĉi tie vian PGN kodon, maksimume ĝis $count ludo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle de $count teamoj',
+      one: 'Batalo de $count teamoj',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gvidantoj je teamo',
+      one: 'Unu gvidanto je teamo',
     );
     return '$_temp0';
   }

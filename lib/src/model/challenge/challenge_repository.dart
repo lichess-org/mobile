@@ -7,14 +7,11 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'challenge_repository.g.dart';
-
-@Riverpod(keepAlive: true)
-ChallengeRepository challengeRepository(Ref ref) {
-  return ChallengeRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
-}
+/// A provider for [ChallengeRepository].
+final challengeRepositoryProvider = Provider<ChallengeRepository>((Ref ref) {
+  return ChallengeRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
+}, name: 'ChallengeRepositoryProvider');
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
 

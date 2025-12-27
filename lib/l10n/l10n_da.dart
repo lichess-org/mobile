@@ -789,7 +789,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastFederation => 'Føderation';
 
   @override
-  String get broadcastAgeThisYear => 'Alder i år';
+  String get broadcastAge => 'Alder';
 
   @override
   String get broadcastUnrated => 'Uden rating';
@@ -903,6 +903,14 @@ class AppLocalizationsDa extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Oprettet og administreret af $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Runde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Beholdes standardnavnet, oversættes det automatisk til alle andre sprog.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleMates => 'Matter';
 
   @override
+  String get puzzleMateThemes => 'Mat-temaer';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Sæt kongen skakmat på baglinjen, når den er fanget der af sine egne brikker.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra-mat';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'En biskop sætter mat, mens en dronning blokerer de resterende flugtfelter';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blindt svin-mat';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'To tårne går sammen om at sætte kongen mat i et område på 2 x 2 felter.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Løberslutspil';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Tag en brik som er kritisk i forsvaret af en anden brik, så det er muligt at tage den uforsvarede brik på et efterfølgende træk.';
 
   @override
+  String get puzzleThemeCornerMate => 'Hjørnemat';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og en springer til at udføre skakmat.';
+
+  @override
   String get puzzleThemeCrushing => 'Knusende';
 
   @override
   String get puzzleThemeCrushingDescription => 'Spot modstanderens brøler for at opnå en knusende fordel. (eval ≥ 600cb)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Afdækkertræk';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Flyt en brik for at afsløre en skak fra en skjult angribende brik, hvilket ofte fører til en afgørende fordel.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Dobbelt løbermat';
@@ -1856,6 +1891,24 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden af fjendens konge og støttes af en dronning, som også blokerer kongens flugtfelter. Tårnet og dronningen fanger fjendens konge i en 3 x 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mat';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Tårnet sætter skakmat, mens løberen hjælper med at spærre af.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mat';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trekantmat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Dronningen og tårnet, der er ét felt fra fjendens konge, befinder sig på samme række eller kolonne, adskilt af ét felt, og danner en trekant.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovics mat';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'En taktik i den første fase af spillet.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera-mat';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Sæt kongen skak med eT tårn og brug en løber til at forsvare tårnet.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondeslutspil';
@@ -3897,6 +3956,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get togglePositionAnnotations => 'Slå positionsannotationer til/fra';
 
   @override
+  String get toggleObservationAnnotations => 'Slå observationsannotationer til/fra';
+
+  @override
   String get variationArrowsInfo => 'Variantpile lader dig navigere uden at bruge træklisten.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get edit => 'Rediger';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other: '$count følger',
       one: '$count følger',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mindre end $count minutter',
-      one: 'Mindre end $count minut',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other: 'Indsæt din PGN-tekst her, op til $count partier',
       one: 'Indsæt din PGN-tekst her, op til $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kamp mellem $count hold',
+      one: 'Kamp mellem $count hold',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ledere pr. hold',
+      one: 'En leder pr. hold',
     );
     return '$_temp0';
   }

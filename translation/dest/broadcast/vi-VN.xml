@@ -45,7 +45,7 @@
   <string name="fidePlayerNotFound">Không tìm thấy kỳ thủ FIDE</string>
   <string name="fideProfile">Hồ sơ FIDE</string>
   <string name="federation">Liên đoàn</string>
-  <string name="ageThisYear">Tuổi năm nay</string>
+  <string name="age" comment="Label for the age of a player. Appears on FIDE profiles of players.">Tuổi</string>
   <string name="unrated">Chưa xếp hạng</string>
   <string name="recentTournaments">Các giải đấu tham gia gần đây</string>
   <string name="openLichess">Mở trên Lichess</string>
@@ -81,4 +81,6 @@
   <string name="liveboard">Bàn cờ trực tiếp</string>
   <string name="communityBroadcast">Phát sóng cộng đồng</string>
   <string name="createdAndManagedBy">Được tạo và quản lý bởi %s.</string>
+  <string name="roundX">Vòng %s</string>
+  <string name="defaultRoundNameHelp">Giữ nguyên tên mặc định sẽ tự động dịch sang mọi ngôn ngữ khác.</string>
 </resources>

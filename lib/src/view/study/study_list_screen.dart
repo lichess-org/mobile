@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -49,8 +50,9 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   bool requestedNextPage = false;
 
-  StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(category: category, order: order, search: search);
+  AsyncNotifierProvider<StudyListPaginatorNotifier, ({int? nextPage, IList<StudyPageItem> studies})>
+  get paginatorProvider =>
+      studyListPaginatorProvider((category: category, order: order, search: search));
 
   @override
   void initState() {
@@ -104,7 +106,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sessionUser = ref.watch(authSessionProvider)?.user;
+    final authUser = ref.watch(authControllerProvider)?.user;
 
     ref.listen(paginatorProvider, (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
@@ -140,49 +142,48 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: AppBarTitleText(
-          sessionUser != null
+          authUser != null
               ? '${context.l10n.studyMenu} • $orderLabel'
               : context.l10n.studyAllStudies,
         ),
         actions: [
-          if (_searchController.value.text.isEmpty)
-            ContextMenuIconButton(
-              consumeOutsideTap: true,
-              icon: const Icon(Icons.sort_outlined),
-              semanticsLabel: 'Sort studies',
-              actions: [
-                ContextMenuAction(
-                  icon: order == StudyListOrder.hot ? Icons.check : null,
-                  label: context.l10n.studyHot,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.hot;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.newest ? Icons.check : null,
-                  label: context.l10n.studyDateAddedNewest,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.newest;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.updated ? Icons.check : null,
-                  label: context.l10n.studyRecentlyUpdated,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.updated;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.popular ? Icons.check : null,
-                  label: context.l10n.studyMostPopular,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.popular;
-                  }),
-                ),
-              ],
-            ),
+          ContextMenuIconButton(
+            consumeOutsideTap: true,
+            icon: const Icon(Icons.sort_outlined),
+            semanticsLabel: 'Sort studies',
+            actions: [
+              ContextMenuAction(
+                icon: order == StudyListOrder.hot ? Icons.check : null,
+                label: context.l10n.studyHot,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.hot;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.newest ? Icons.check : null,
+                label: context.l10n.studyDateAddedNewest,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.newest;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.updated ? Icons.check : null,
+                label: context.l10n.studyRecentlyUpdated,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.updated;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.popular ? Icons.check : null,
+                label: context.l10n.studyMostPopular,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.popular;
+                }),
+              ),
+            ],
+          ),
         ],
-        bottom: sessionUser != null
+        bottom: authUser != null
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(50.0),
                 child: SizedBox(
@@ -215,12 +216,12 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                                   ].contains(cat)) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'owner:${sessionUser.id} ',
+                                      text: 'owner:${authUser.id} ',
                                     );
                                   } else if (cat == StudyCategory.member) {
                                     search = null;
                                     _searchController.value = TextEditingValue(
-                                      text: 'member:${sessionUser.id} ',
+                                      text: 'member:${authUser.id} ',
                                     );
                                   } else {
                                     search = null;
@@ -383,9 +384,9 @@ class StudyFlair extends StatelessWidget {
     final iconIfNoFlair = Icon(LichessIcons.study, size: size);
 
     return (flair != null)
-        ? CachedNetworkImage(
-            imageUrl: lichessFlairSrc(flair!),
-            errorWidget: (_, _, _) => iconIfNoFlair,
+        ? HttpNetworkImageWidget(
+            lichessFlairSrc(flair!),
+            errorBuilder: (_, _, _) => iconIfNoFlair,
             width: size,
             height: size,
           )

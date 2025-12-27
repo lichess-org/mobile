@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -18,10 +18,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_history.freezed.dart';
-part 'game_history.g.dart';
 
 const kNumberOfRecentGames = 10;
 
@@ -32,18 +30,19 @@ const _nbPerPage = 20;
 /// If the user is logged in, the recent games are fetched from the server.
 /// If the user is not logged in, or there is no connectivity, the recent games
 /// stored locally are fetched instead.
-@riverpod
-Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
-  final session = ref.watch(authSessionProvider);
-  if (session != null && online) {
+final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGameWithPov>>((
+  Ref ref,
+) async {
+  final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser != null && online) {
     return ref
         .read(gameRepositoryProvider)
-        .getUserGames(session.user.id, max: kNumberOfRecentGames);
+        .getUserGames(authUser.user.id, max: kNumberOfRecentGames);
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
     return storage
-        .page(userId: session?.user.id, max: kNumberOfRecentGames)
+        .page(userId: authUser?.user.id, max: kNumberOfRecentGames)
         .then(
           (value) => value
               // we can assume that `youAre` is not null either for logged
@@ -52,38 +51,51 @@ Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
               .toIList(),
         );
   }
-}
+}, name: 'MyRecentGamesProvider');
 
 /// A provider that fetches the recent games from the server for a given user.
-@riverpod
-Future<IList<LightExportedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  return ref
-      .read(gameRepositoryProvider)
-      .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
-}
+final userRecentGamesProvider = FutureProvider.autoDispose
+    .family<IList<LightExportedGameWithPov>, UserId>((Ref ref, UserId userId) {
+      return ref
+          .read(gameRepositoryProvider)
+          .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
+    }, name: 'UserRecentGamesProvider');
 
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
 ///
 /// If the user is logged in, the number of games is fetched from the server.
 /// If the user is not logged in, or there is no connectivity, the number of games
 /// stored locally are fetched instead.
-@riverpod
-Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
-  final session = ref.watch(authSessionProvider);
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUser?>((
+  Ref ref,
+  LightUser? user,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
   return user != null
-      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
-      : session != null && online
-      ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
+      ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
+      : authUser != null && online
+      ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
-}
+}, name: 'UserNumberOfGamesProvider');
+
+typedef UserGameHistoryNotifierParams = ({UserId? userId, GameFilterState filter});
 
 /// A provider that paginates the game history for a given user, or the current app user if no user is provided.
 ///
 /// The game history is fetched from the server if the user is logged in and app is online.
 /// Otherwise, the game history is fetched from the local storage.
-@riverpod
-class UserGameHistory extends _$UserGameHistory {
+final userGameHistoryProvider = AsyncNotifierProvider.autoDispose
+    .family<UserGameHistoryNotifier, UserGameHistoryState, UserGameHistoryNotifierParams>(
+      UserGameHistoryNotifier.new,
+      name: 'UserGameHistoryProvider',
+    );
+
+class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
+  UserGameHistoryNotifier(this.params);
+
+  final UserGameHistoryNotifierParams params;
+
   final _list = <LightExportedGameWithPov>[];
 
   StreamSubscription<(GameId, bool)>? _bookmarkChangesSubscription;
@@ -91,18 +103,7 @@ class UserGameHistory extends _$UserGameHistory {
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<UserGameHistoryState> build(
-    UserId? userId, {
-
-    /// Whether the history is requested in an online context. Applicable only
-    /// when [userId] is null.
-    ///
-    /// If this is true, the provider will attempt to fetch the games from the
-    /// server. If this is false, the provider will fetch the games from the
-    /// local storage.
-    required bool isOnline,
-    GameFilterState filter = const GameFilterState(),
-  }) async {
+  Future<UserGameHistoryState> build() async {
     _bookmarkChangesSubscription?.cancel();
     _bookmarkChangesSubscription = ref.read(accountServiceProvider).bookmarkChanges.listen((data) {
       final (id, bookmarked) = data;
@@ -117,21 +118,21 @@ class UserGameHistory extends _$UserGameHistory {
       _list.clear();
     });
 
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
-    final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final online = (await ref.watch(connectivityChangesProvider.future)).isOnline;
     final storage = await ref.watch(gameStorageProvider.future);
 
-    final id = userId ?? session?.user.id;
+    final id = params.userId ?? authUser?.user.id;
     final recentGames = id != null && online
         ? _gameRepository.getUserGames(
             id,
-            filter: filter,
+            filter: params.filter,
             withBookmarked: true,
             withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
           )
         : storage
-              .page(userId: id, filter: filter)
+              .page(userId: id, filter: params.filter)
               .then(
                 (value) => value
                     // we can assume that `youAre` is not null either for logged
@@ -147,9 +148,9 @@ class UserGameHistory extends _$UserGameHistory {
       isLoading: false,
       hasMore: true,
       hasError: false,
-      online: isOnline,
-      filter: filter,
-      session: session,
+      online: online,
+      filter: params.filter,
+      authUser: authUser,
     );
   }
 
@@ -161,18 +162,18 @@ class UserGameHistory extends _$UserGameHistory {
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
     try {
-      final value = await (userId != null
+      final value = await (params.userId != null
           ? _gameRepository.getUserGames(
-              userId!,
+              params.userId!,
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
               withBookmarked: true,
               withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             )
-          : currentVal.online && currentVal.session != null
+          : currentVal.online && currentVal.authUser != null
           ? _gameRepository.getUserGames(
-              currentVal.session!.user.id,
+              currentVal.authUser!.user.id,
               max: _nbPerPage,
               until: _list.last.game.createdAt,
               filter: currentVal.filter,
@@ -235,6 +236,6 @@ sealed class UserGameHistoryState with _$UserGameHistoryState {
     required bool hasMore,
     required bool hasError,
     required bool online,
-    AuthSessionState? session,
+    AuthUser? authUser,
   }) = _UserGameHistoryState;
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A widget to display player information above/below the chess board.
@@ -138,9 +138,9 @@ class GamePlayer extends StatelessWidget {
               ),
               if (player.user?.flair != null) ...[
                 const SizedBox(width: 5),
-                CachedNetworkImage(
-                  imageUrl: lichessFlairSrc(player.user!.flair!),
-                  errorWidget: (_, _, _) => kEmptyWidget,
+                HttpNetworkImageWidget(
+                  lichessFlairSrc(player.user!.flair!),
+                  errorBuilder: (_, _, _) => kEmptyWidget,
                   width: 16,
                   height: 16,
                 ),

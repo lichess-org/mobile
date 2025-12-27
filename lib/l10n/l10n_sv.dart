@@ -73,7 +73,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du följer inte någon användare.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastFederation => 'Förbund';
 
   @override
-  String get broadcastAgeThisYear => 'Ålder i år';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Ej rankat';
@@ -903,6 +903,14 @@ class AppLocalizationsSv extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Rond $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleMates => 'Mattar';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Mål';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Schackmatta kungen på första raden, när den är instängd av sina egna pjäser.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Löparslutspel';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en pjäs som försvarar en annan pjäs, så att du kan ta den nu oförsvarade pjäsen i nästa drag.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Krossande';
 
   @override
   String get puzzleThemeCrushingDescription => 'Upptäck motståndares blunder för att få en förkrossande fördel. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Matt med två löpare';
@@ -1856,6 +1891,24 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ett torn ligger bredvid motståndarens kung och understöds av en dam som också stänger kungens flyktrutor. Tornet och damen fångar fiendens kung i en 3 gånger 3-kvadrat, \"dödsbox\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic matt';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'En taktik under spelets första fas.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondeslutspel';
@@ -3897,6 +3956,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get togglePositionAnnotations => 'Växla positionsanteckningar';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variationspilar låter dig navigera utan att använda draglistan.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get edit => 'Redigera';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'följer $count',
       one: 'följer $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mindre än $count minuter',
-      one: 'Mindre än $count minut',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Klistra in din PGN-kod här, upp till $count partier',
       one: 'Klistra in din PGN-kod här, upp till $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tävling med $count lag',
+      one: 'Tävling med $count lag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ledare per lag',
+      one: 'En ledare per lag',
     );
     return '$_temp0';
   }

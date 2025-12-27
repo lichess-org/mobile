@@ -789,7 +789,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -903,6 +903,14 @@ class AppLocalizationsHy extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleMates => 'Մատեր';
 
   @override
+  String get puzzleMateThemes => 'Mate themes';
+
+  @override
   String get puzzleGoals => 'Նպատակներ';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Ջախջախում';
 
   @override
   String get puzzleThemeCrushingDescription => 'Օգտագործեք մրցակցի վրիպումը՝ ջախջախիչ առավելություն (600 և ավելի սանտիզինվոր) ստանալու համար';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Մատ երկու փղով';
@@ -1856,6 +1891,24 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Վուկովիչի մատ';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Մարտավարություն խաղի առաջին փուլում։';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Զինվորային վերջնախաղ';
@@ -3897,6 +3956,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get edit => 'Խմբագրել';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsHy extends AppLocalizations {
       locale: localeName,
       other: '$count հետևում են',
       one: '$count հետևում են',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'ավելի քիչ քան $count րոպե',
-      one: 'ավելի քիչ քան $count րոպե',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsHy extends AppLocalizations {
       locale: localeName,
       other: 'Տեղադրեք տեսքտը PGN ձևաչափով, $count պարտիայից ոչ ավելի',
       one: 'Տեղադրեք տեսքտը PGN ձևաչափով, $count պարտիայից ոչ ավելի',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count թիմով մրցաշար',
+      one: '$count թիմով մրցաշար',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

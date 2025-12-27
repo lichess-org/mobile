@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -15,16 +15,13 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'server_analysis_service.g.dart';
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
-@Riverpod(keepAlive: true)
-ServerAnalysisService serverAnalysisService(Ref ref) {
+/// A provider for [ServerAnalysisService].
+final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) {
   return ServerAnalysisService(ref);
-}
+}, name: 'ServerAnalysisServiceProvider');
 
 class ServerAnalysisService {
   ServerAnalysisService(this.ref);
@@ -58,7 +55,7 @@ class ServerAnalysisService {
     _socketClient = SocketClient(
       uri,
       channelFactory: ref.read(webSocketChannelFactoryProvider),
-      getSession: () => ref.read(authSessionProvider),
+      getSession: () => ref.read(authControllerProvider),
       packageInfo: ref.read(preloadedDataProvider).requireValue.packageInfo,
       deviceInfo: ref.read(preloadedDataProvider).requireValue.deviceInfo,
       sri: ref.read(preloadedDataProvider).requireValue.sri,
@@ -177,8 +174,13 @@ class ServerAnalysisService {
   }
 }
 
-@riverpod
-class CurrentAnalysis extends _$CurrentAnalysis {
+/// A provider that exposes the current game being analyzed by the server.
+final currentAnalysisProvider = NotifierProvider.autoDispose<CurrentAnalysis, GameId?>(
+  CurrentAnalysis.new,
+  name: 'CurrentAnalysisProvider',
+);
+
+class CurrentAnalysis extends Notifier<GameId?> {
   @override
   GameId? build() {
     final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;

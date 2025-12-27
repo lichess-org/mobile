@@ -1289,7 +1289,6 @@
   "nbFriendsOnline": "{count, plural, other{{count} teman online}}",
   "nbFollowers": "{count, plural, other{{count} pengikut}}",
   "nbFollowing": "{count, plural, other{{count} mengikuti}}",
-  "lessThanNbMinutes": "{count, plural, other{Kurang dari {count} menit}}",
   "nbGamesInPlay": "{count, plural, other{{count} pertandingan sedang berlangsung}}",
   "maximumNbCharacters": "{count, plural, other{Maksimal: {count} karakter}}",
   "blocks": "{count, plural, other{{count} diblokir}}",

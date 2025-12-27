@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -65,7 +64,6 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -76,7 +74,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -113,7 +110,6 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -184,17 +180,10 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return Scaffold(
       appBar: AppBar(
         title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
         actions: [
-          if (widget.studyState.isEngineAvailable(enginePrefs))
-            EngineDepth(
-              savedEval: widget.studyState.currentNode.eval,
-              goDeeper: () =>
-                  ref.read(studyControllerProvider(widget.id).notifier).requestEval(goDeeper: true),
-            ),
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
         ],
@@ -211,9 +200,12 @@ class _StudyMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
     final kidModeAsync = ref.watch(kidModeProvider);
+    final showEngineLines = ref.watch(
+      studyPreferencesProvider.select((prefs) => prefs.showEngineLines),
+    );
 
     return ContextMenuIconButton(
       semanticsLabel: 'Study menu',
@@ -226,7 +218,7 @@ class _StudyMenu extends ConsumerWidget {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
-        if (session != null)
+        if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
             label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
@@ -234,6 +226,13 @@ class _StudyMenu extends ConsumerWidget {
               ref.read(studyControllerProvider(id).notifier).toggleLike();
             },
           ),
+        ContextMenuAction(
+          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
+          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
+          onPressed: () {
+            ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
+          },
+        ),
         ContextMenuAction(
           icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           label: context.l10n.studyShareAndExport,
@@ -365,7 +364,7 @@ class _StudyMenu extends ConsumerWidget {
             ),
           ),
         ),
-        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (state.chatOptions != null && kidModeAsync.value == false)
           ContextMenuAction(
             label: context.l10n.chatRoom,
             onPressed: () {
@@ -397,8 +396,6 @@ class _Body extends ConsumerWidget {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
-          smallBoard: studyPrefs.smallBoard,
-
           pov: Side.white,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
@@ -422,35 +419,14 @@ class _Body extends ConsumerWidget {
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
-      smallBoard: studyPrefs.smallBoard,
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: engineGaugeParams,
-                      engineLinesState: studyState.isEngineAvailable(enginePrefs)
-                          ? studyPrefs.showEngineLines
-                                ? EngineLinesShowState.expanded
-                                : EngineLinesShowState.collapsed
-                          : null,
-                      onTap: () {
-                        ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                        params: engineGaugeParams,
-                      ),
-                    );
+          ? (context) {
+              return EngineGauge(params: engineGaugeParams);
             }
           : null,
       engineLines:

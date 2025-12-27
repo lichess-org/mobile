@@ -1,12 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_history_preferences.freezed.dart';
 part 'game_history_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class GameHistoryPreferences extends _$GameHistoryPreferences
+final gameHistoryPreferencesProvider =
+    NotifierProvider<GameHistoryPreferencesNotifier, GameHistoryPrefs>(
+      GameHistoryPreferencesNotifier.new,
+      name: 'GameHistoryPreferencesProvider',
+    );
+
+class GameHistoryPreferencesNotifier extends Notifier<GameHistoryPrefs>
     with PreferencesStorage<GameHistoryPrefs> {
   @override
   @protected

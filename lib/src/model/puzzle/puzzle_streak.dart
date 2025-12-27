@@ -1,16 +1,14 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_streak.freezed.dart';
 part 'puzzle_streak.g.dart';
@@ -37,26 +35,33 @@ sealed class PuzzleStreak with _$PuzzleStreak {
 /// [PuzzleStreak] with its current [Puzzle].
 typedef StreakState = ({PuzzleStreak streak, Puzzle puzzle, Puzzle? nextPuzzle});
 
-@riverpod
-class PuzzleStreakController extends _$PuzzleStreakController {
+final puzzleStreakControllerProvider =
+    AsyncNotifierProvider.autoDispose<PuzzleStreakController, StreakState>(
+      PuzzleStreakController.new,
+      name: 'PuzzleStreakControllerProvider',
+    );
+
+class PuzzleStreakController extends AsyncNotifier<StreakState> {
   @override
   Future<StreakState> build() async {
-    final session = ref.watch(authSessionProvider);
-    final streakStorage = ref.watch(streakStorageProvider(session?.user.id));
+    final authUser = ref.watch(authControllerProvider);
+    final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
     final activeStreak = await streakStorage.loadActiveStreak();
+    final repository = ref.read(puzzleRepositoryProvider);
     if (activeStreak != null) {
-      final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
-      final nextPuzzle = activeStreak.nextId != null
-          ? await ref.read(puzzleProvider(activeStreak.nextId!).future)
-          : null;
+      final [puzzle, nextPuzzle] = await Future.wait([
+        repository.fetch(activeStreak.streak[activeStreak.index]),
+        if (activeStreak.nextId != null)
+          repository.fetch(activeStreak.nextId!)
+        else
+          Future.value(null),
+      ]);
 
-      return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
+      return (streak: activeStreak, puzzle: puzzle!, nextPuzzle: nextPuzzle);
     }
 
-    final newStreak = await ref.withClient((client) => PuzzleRepository(client).streak());
-    final nextPuzzle = await ref.withClient(
-      (client) => PuzzleRepository(client).fetch(newStreak.streak[1]),
-    );
+    final newStreak = await repository.streak();
+    final nextPuzzle = await repository.fetch(newStreak.streak[1]);
 
     return (
       streak: PuzzleStreak(
@@ -97,17 +102,16 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     final nextId = state.requireValue.streak.nextId;
     if (nextId != null) {
       ref
-          .withClient(
-            (client) => PuzzleRepository(client).fetch(nextId).then((puzzle) {
-              state = AsyncData((
-                streak: state.requireValue.streak,
-                puzzle: state.requireValue.puzzle,
-                nextPuzzle: puzzle,
-              ));
-            }),
-          )
+          .read(puzzleRepositoryProvider)
+          .fetch(nextId)
+          .then((puzzle) {
+            state = AsyncData((
+              streak: state.requireValue.streak,
+              puzzle: state.requireValue.puzzle,
+              nextPuzzle: puzzle,
+            ));
+          })
           .catchError((_) {
-            // ignore: avoid_manual_providers_as_generated_provider_dependency
             final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
             if (currentContext != null && currentContext.mounted) {
               showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
@@ -116,7 +120,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     }
 
     ref
-        .read(streakStorageProvider(ref.read(authSessionProvider)?.user.id))
+        .read(streakStorageProvider(ref.read(authControllerProvider)?.user.id))
         .saveActiveStreak(state.requireValue.streak);
   }
 
@@ -129,13 +133,13 @@ class PuzzleStreakController extends _$PuzzleStreakController {
       nextPuzzle: state.requireValue.nextPuzzle,
     ));
 
-    final userId = ref.read(authSessionProvider)?.user.id;
+    final userId = ref.read(authControllerProvider)?.user.id;
     ref.read(streakStorageProvider(userId)).clearActiveStreak();
 
     if (userId != null) {
       final streak = state.requireValue.streak.index;
       if (streak > 0) {
-        await ref.withClient((client) => PuzzleRepository(client).postStreakRun(streak));
+        await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
       }
     }
   }

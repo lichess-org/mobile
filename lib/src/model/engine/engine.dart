@@ -58,8 +58,17 @@ class StockfishEngine implements Engine {
         'NNUE paths must be provided for chess flavor',
       );
 
+  /// URL to download the latest big NNUE network.
   static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestBigNNUE}');
+
+  /// SHA256 hash (first 12 digits) of the latest big NNUE network.
+  static final bigNetHash = Stockfish.latestBigNNUE.substring(3, 15);
+
+  /// URL to download the latest small NNUE network.
   static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestSmallNNUE}');
+
+  /// SHA256 hash (first 12 digits) of the latest small NNUE network.
+  static final smallNetHash = Stockfish.latestSmallNNUE.substring(3, 15);
 
   final StockfishFlavor flavor;
   final UCIProtocol _protocol;
@@ -183,9 +192,29 @@ class StockfishEngine implements Engine {
     _stdoutSubscription?.cancel();
     _protocol.dispose();
     if (_stockfish != null) {
-      _stockfish!.dispose();
+      switch (_stockfish!.state.value) {
+        case StockfishState.disposed:
+        case StockfishState.error:
+          if (_exitCompleter.isCompleted == false) {
+            _exitCompleter.complete();
+          }
+        case StockfishState.ready:
+          _stockfish!.dispose();
+        case StockfishState.initial:
+        case StockfishState.starting:
+          // wait to be ready, then dispose
+          void onReadyOnce() {
+            if (_stockfish!.state.value == StockfishState.ready) {
+              _stockfish!.dispose();
+              _stockfish!.state.removeListener(onReadyOnce);
+            }
+          }
+          _stockfish!.state.addListener(onReadyOnce);
+      }
     } else {
-      _exitCompleter.complete();
+      if (_exitCompleter.isCompleted == false) {
+        _exitCompleter.complete();
+      }
     }
     return exited;
   }

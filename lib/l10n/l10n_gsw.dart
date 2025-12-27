@@ -789,7 +789,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastFederation => 'Verband';
 
   @override
-  String get broadcastAgeThisYear => 'Alter i dem Jahr';
+  String get broadcastAge => 'Alter';
 
   @override
   String get broadcastUnrated => 'Ungwertet';
@@ -903,6 +903,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Kreiert und betreut vu $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Rundi $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Wänn du de Standardname b\'haltsch, wird er automatisch i alli andere Schprache übersetzt.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleMates => 'Matts';
 
   @override
+  String get puzzleMateThemes => 'Matt Theme';
+
+  @override
   String get puzzleGoals => 'Ziel';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'De König uf de Grundreihe matt setze, wänn er dur sini eigene Figure blockiert isch.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra Matt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'En Läufer setzt Matt, wobi d\'Königin die mögliche Fluchtfälder blockiert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinde-Schweine-Matt';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türm, uf de sibete - oder zweite - Reihe, setzed de König matt.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Läufer Ändschpil';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
 
   @override
+  String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'De König wird mit Turm - oder Dame - und Springer, imeme Egge, Matt gsetzt.';
+
+  @override
   String get puzzleThemeCrushing => 'Vernichtend';
 
   @override
   String get puzzleThemeCrushingDescription => 'Find de gägnerisch Patzer und chumm zume vernichtende Vorteil. (Bewertig ≥ 600 Hundertschtel-Pure)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Abzugs-Schach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Beweg e Figur und deck so es verdeckts Schach uf, was oft zume entscheidende Vorteil füert.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Läuferpaar Matt';
@@ -1856,6 +1891,24 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Drüeck-Matt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Es Matt vu Turm und Dame, wo zämme mit em gägnerische König es Drüegg bilded.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vuković-Matt';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'E Taktik für die erscht Fase vum Schpiel.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pure Ändschpiel';
@@ -3897,6 +3956,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get togglePositionAnnotations => 'Positionsamerkige umschalte';
 
   @override
+  String get toggleObservationAnnotations => 'Beobachtigs-Bemerkige umschalte';
+
+  @override
   String get variationArrowsInfo => 'Mit de Variationspfil chasch ohni d\'Zugslischte navigiere.';
 
   @override
@@ -4028,7 +4090,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get analysisShapesHowTo => 'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl oder shift = rot; command, alt, oder meta = blau; je eini devo = gähl.';
 
   @override
   String get letOtherPlayersMessageYou => 'Erlaub andere Schpiller dir Nachrichte z\'schicke';
@@ -4432,6 +4494,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get edit => 'Bearbeite';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsGsw extends AppLocalizations {
       locale: localeName,
       other: '$count folgänd',
       one: '$count folgänd',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Weniger als $count Minute',
-      one: 'Weniger als $count Minute',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsGsw extends AppLocalizations {
       locale: localeName,
       other: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
       one: 'Füeg din PGN Tegscht da i, bis zu $count Schpiel',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Schlacht mit $count Teams',
+      one: 'Schlacht mit $count Team',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Leader pro Team',
+      one: 'Ein Leader pro Team',
     );
     return '$_temp0';
   }

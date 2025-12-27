@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -10,7 +11,6 @@ import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/blog/blog_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -121,7 +122,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       ref.listenManual(blogCarouselProvider, (_, current) async {
         if (current.hasValue && !_imageAreCached) {
           _imageAreCached = true;
-          await preCacheBlogImages(context, posts: current.value!, worker: worker);
+          await preCacheBlogImages(
+            context,
+            posts: current.value!,
+            worker: worker,
+            externalClient: ref.read(defaultClientProvider),
+          );
         }
       });
     }
@@ -132,7 +138,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       return false;
     }
 
-    if (ref.read(authSessionProvider) != null) {
+    if (ref.read(authControllerProvider) != null) {
       return false;
     }
 
@@ -210,12 +216,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return connectivity.when(
       skipLoadingOnReload: true,
       data: (status) {
-        final session = ref.watch(authSessionProvider);
-        final unreadLichessMessage = ref.watch(unreadMessagesProvider).valueOrNull?.lichess == true;
+        final authUser = ref.watch(authControllerProvider);
+        final unreadLichessMessage = ref.watch(unreadMessagesProvider).value?.lichess == true;
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final recentGames = ref.watch(myRecentGamesProvider);
-        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
         final isTablet = isTabletOrLarger(context);
         final featuredTournaments = status.isOnline
             ? ref.watch(featuredTournamentsProvider)
@@ -227,7 +233,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
         final shouldShowWelcomeScreen =
-            session == null &&
+            authUser == null &&
             recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
         List<Widget> widgets;
@@ -240,12 +246,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               child: LichessMessage(style: TextTheme.of(context).bodyLarge),
             ),
             const SizedBox(height: 8.0),
-            if (session == null) ...[
+            if (authUser == null) ...[
               const Center(child: _SignInWidget()),
               const SizedBox(height: 16.0),
             ],
             if (Theme.of(context).platform != TargetPlatform.iOS &&
-                (session == null || session.user.isPatron != true)) ...[
+                (authUser == null || authUser.user.isPatron != true)) ...[
               Center(
                 child: FilledButton.tonal(
                   onPressed: () {
@@ -315,7 +321,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             if (status.isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
-                shouldShow: session != null,
+                shouldShow: authUser != null,
                 child: const AccountPerfCards(padding: Styles.bodySectionPadding),
               ),
             Row(
@@ -370,7 +376,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ),
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
-              shouldShow: session != null && status.isOnline,
+              shouldShow: authUser != null && status.isOnline,
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
@@ -538,12 +544,17 @@ class _SignInWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authController = ref.watch(authControllerProvider);
+    final signInState = ref.watch(signInMutation);
 
     return FilledButton(
-      onPressed: authController.isLoading
-          ? null
-          : () => ref.read(authControllerProvider.notifier).signIn(),
+      onPressed: switch (signInState) {
+        MutationPending() => null,
+        _ => () {
+          signInMutation.run(ref, (tsx) async {
+            await tsx.get(authControllerProvider.notifier).signIn();
+          });
+        },
+      },
       child: Text(context.l10n.signIn),
     );
   }
@@ -610,7 +621,7 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _IsDayTimeNotifier extends AutoDisposeNotifier<bool> {
+class _IsDayTimeNotifier extends Notifier<bool> {
   Timer? _timer;
 
   @override
@@ -639,13 +650,13 @@ class _GreetingWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final isDayTime = ref.watch(_isDayTimeProvider);
     final style = TextTheme.of(context).bodyLarge;
 
     const iconSize = 24.0;
 
-    final user = session?.user;
+    final user = authUser?.user;
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,
@@ -954,15 +965,15 @@ class _ChallengeScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser == null) {
       return const SizedBox.shrink();
     }
     final connectivity = ref.watch(connectivityChangesProvider);
     final challenges = ref.watch(challengesProvider);
 
-    final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
-    final outwardCount = challenges.valueOrNull?.outward.length ?? 0;
+    final inwardCount = challenges.value?.inward.length ?? 0;
+    final outwardCount = challenges.value?.outward.length ?? 0;
 
     if (inwardCount == 0 && outwardCount == 0) {
       return const SizedBox.shrink();

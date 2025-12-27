@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -16,11 +16,9 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 part 'chat_controller.freezed.dart';
-part 'chat_controller.g.dart';
 
 const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
@@ -79,21 +77,33 @@ abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
 }
 
 /// A provider that gets the chat unread messages
-@riverpod
-Future<int> chatUnread(Ref ref, ChatOptions options) async {
-  return ref.watch(chatControllerProvider(options).selectAsync((s) => s.unreadMessages));
-}
+final chatUnreadProvider = FutureProvider.autoDispose.family<int, ChatOptions>((
+  Ref ref,
+  ChatOptions options,
+) async {
+  return (await ref.watch(chatControllerProvider(options).future)).unreadMessages;
+}, name: 'ChatUnreadProvider');
 
 const IList<ChatMessage> _kEmptyMessages = IListConst([]);
 
-@riverpod
-class ChatController extends _$ChatController {
+/// A provider for [ChatController].
+final chatControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<ChatController, ChatState, ChatOptions>(
+      ChatController.new,
+      name: 'ChatControllerProvider',
+    );
+
+class ChatController extends AsyncNotifier<ChatState> {
+  ChatController(this.options);
+
+  final ChatOptions options;
+
   StreamSubscription<SocketEvent>? _subscription;
 
-  LightUser? get _me => ref.read(authSessionProvider)?.user;
+  LightUser? get _me => ref.read(authControllerProvider)?.user;
 
   @override
-  Future<ChatState> build(ChatOptions options) async {
+  Future<ChatState> build() async {
     _subscription?.cancel();
     _subscription = socketGlobalStream.listen(_handleSocketEvent);
 
@@ -101,16 +111,16 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final initialMessages = await switch (options) {
-      GameChatOptions(:final id) => ref.watch(
-        gameControllerProvider(id).selectAsync((s) => s.game.chat?.lines),
-      ),
-      TournamentChatOptions(:final id) => ref.watch(
-        tournamentControllerProvider(id).selectAsync((s) => s.tournament.chat?.lines),
-      ),
-      StudyChatOptions(:final id) => ref.watch(
-        studyControllerProvider(id).selectAsync((s) => s.study.chat?.lines),
-      ),
+    final initialMessages = switch (options) {
+      GameChatOptions(:final id) => (await ref.watch(
+        gameControllerProvider(id).future,
+      )).game.chat?.lines,
+      TournamentChatOptions(:final id) => (await ref.watch(
+        tournamentControllerProvider(id).future,
+      )).tournament.chat?.lines,
+      StudyChatOptions(:final id) => (await ref.watch(
+        studyControllerProvider(id).future,
+      )).study.chat?.lines,
     };
 
     final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);

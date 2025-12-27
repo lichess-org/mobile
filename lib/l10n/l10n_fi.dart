@@ -789,7 +789,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastFederation => 'Kansallinen liitto';
 
   @override
-  String get broadcastAgeThisYear => 'Ikä tänä vuonna';
+  String get broadcastAge => 'Ikä';
 
   @override
   String get broadcastUnrated => 'Pisteyttämätön';
@@ -903,6 +903,14 @@ class AppLocalizationsFi extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Lähetyksen on luonut ja sitä hallinnoi $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Kierros $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Jos säilytät oletusnimen, se käännetään automaattisesti kaikille muille kielille.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleMates => 'Matit';
 
   @override
+  String get puzzleMateThemes => 'Mattikuviot';
+
+  @override
   String get puzzleGoals => 'Tavoitteet';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matita kuningas takarivillä, kun sen omat nappulat estävät sitä siirtymästä pois.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Varsijousimatti';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Lähetti tekee matin daamin viedessä kuninkaalta muut pakoruudut';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Sokeiden sikojen matti';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Kaksi tornia matittavat kuninkaan 2x2 ruudun suuruiselle alueelle.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Kulmamatti';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Kahlitse kuningas laudan nurkkaan tornilla tai daamilla ja tee sitten matti ratsulla.';
+
+  @override
   String get puzzleThemeCrushing => 'Murskaava etu';
 
   @override
   String get puzzleThemeCrushingDescription => 'Löydä vastustajan vakava virhe ja hanki murskaava etu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Paljastusshakki';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Paljasta yhtä nappulaa siirtämällä toisen hyökkäävän nappulasi shakkaus, millä usein saavuttaa ratkaisevan edun.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Kahden lähetin matti';
@@ -1856,6 +1891,24 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Torni on vastustajan kuninkaan vieressä, ja sitä suojelee daami, joka myös vie kuninkaalta pakoruudut. Vastustajan kuningas jää kiinni tornin ja daamin muodostamaan 3x3-ruudun \"tapponeliöön\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburyn matti';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Kolmiomatti';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Daami ja torni ovat kumpikin ruudun päässä vastustajan kuninkaasta sekä samalla rivillä tai linjalla siten, että niiden väliin jää yksi tyhjä ruutu, ja ne muodostavat yhdessä kuninkaan kanssa kolmion.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovićin matti';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktiikka pelin ensimmäisessä vaiheessa.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Sotilasloppupeli';
@@ -2385,7 +2444,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get maxDepthReached => 'Maksimisyvyys saavutettu!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Voisit sisällyttää lisää pelejä asetusvalikosta?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Ehkä voisit tuoda tähän asetusvalikon kautta lisää pelejä näkyville?';
 
   @override
   String get openings => 'Avaukset';
@@ -2521,7 +2580,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get signIn => 'Kirjaudu sisään';
 
   @override
-  String get rememberMe => 'Muista minut';
+  String get rememberMe => 'Pysy sisäänkirjautuneena';
 
   @override
   String get youNeedAnAccountToDoThat => 'Tämä toiminto vaatii käyttäjätunnuksen';
@@ -3780,7 +3839,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get hostANewSimul => 'Pidä uusi simultaani';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Kirjaudu niin voit antaa simultaanin tai liittyä sellaiseen';
+  String get signUpToHostOrJoinASimul => 'Kirjaudu sisään, jotta voit pitää simultaanin tai liittyä simultaaniin';
 
   @override
   String get noSimulFound => 'Simultaania ei löydy';
@@ -3895,6 +3954,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get togglePositionAnnotations => 'Aseman kommentit päälle/pois';
+
+  @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
 
   @override
   String get variationArrowsInfo => 'Muunnelmanuolia napsauttamalla voit edetä muunnelmissa siirtolistaa käyttämättä.';
@@ -4434,6 +4496,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get edit => 'Muokkaa';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4649,7 +4714,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return 'Muotoiluun voi käyttää $param-kieltä.';
   }
 
   @override
@@ -5167,17 +5232,6 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: '$count seurattua',
       one: '$count seurattua',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Alle $count minuuttia',
-      one: 'Alle $count minuutti',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: 'Liitä PGN tähän, enintään $count peliä',
       one: 'Liitä PGN tähän, enintään $count peli',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count joukkueen välinen taisto',
+      one: '$count joukkueen välinen taisto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count johtajaa per joukkue',
+      one: 'Yksi johtaja per joukkue',
     );
     return '$_temp0';
   }

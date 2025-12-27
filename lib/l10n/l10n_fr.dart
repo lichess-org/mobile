@@ -73,7 +73,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Prenez note que certaines fonctionnalités de l\'ancienne appli ou du site Web ne sont pas disponibles, mais nous ajoutons constamment des fonctionnalités.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucun utilisateur.';
+  String get mobileNotFollowingAnyUser => 'Vous ne suivez aucune personne.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastFederation => 'Fédération';
 
   @override
-  String get broadcastAgeThisYear => 'Âge cette année';
+  String get broadcastAge => 'Âge';
 
   @override
   String get broadcastUnrated => 'Non classé';
@@ -903,6 +903,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Créée et gérée par $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Ronde : $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Si le nom par défaut est conservé, il sera automatiquement traduit dans les autres langues.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1342,7 +1350,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Restreindre les flèches aux coups valides';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Dire \"Bonne partie, bien jouée\" en cas de défaite ou de nulle';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Dire \"Bonne partie, bien joué\" en cas de défaite ou de nulle';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Vos préférences ont été sauvegardées.';
@@ -1418,6 +1426,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Mats';
+
+  @override
+  String get puzzleMateThemes => 'Thèmes de mat';
 
   @override
   String get puzzleGoals => 'Objectifs';
@@ -1721,6 +1732,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matez le Roi sur la dernière rangée, lorsqu\'il est piégé par ses propres pièces.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mat de l\'arbalète';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Un fou fait échec tandis que la dame contrôle les cases de fuite.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mat des deux tours';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Deux tours matent le roi adverse dans un espace de deux cases par deux cases.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale de Fous';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Retire une pièce essentielle à la défense d\'une autre pièce, permettant à la pièce non protégée d\'être capturée au coup suivant.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat en coin';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Le roi adverse est confiné dans un coin de l\'échiquier par une tour ou la dame, puis un cavalier le met mat.';
+
+  @override
   String get puzzleThemeCrushing => 'Écrasant';
 
   @override
   String get puzzleThemeCrushingDescription => 'Repérez la gaffe de l\'adversaire pour obtenir un avantage écrasant. (évaluation > 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Échec à la découverte';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'En se déplaçant, une pièce permet à une autre pièce de mettre le roi adverse en échec et d\'obtenir souvent un avantage décisif.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat des deux Fous';
@@ -1856,6 +1891,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'La tour, protégée par la dame, met le roi adverse en échec et la dame bloque la seule case de fuite du roi (le roi est enfermé dans une boîte de 3 cases par 3 cases formée par la tour et la dame).';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mat de Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'La tour met le roi adverse mat avec l\'aide du fou.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mat de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Le fou met le roi adverse échec et mat avec l\'aide de la tour.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat du triangle';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dame et la tour, à une case de distance du roi adverse, sont sur la même rangée ou colonne et donnent mat en formant un triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Mat de Vukovic';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Une tactique durant la première phase de la partie.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mat de l\'opéra';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Protégée par le fou, la tour met le roi adverse échec et mat.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finale de pions';
@@ -3897,6 +3956,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get togglePositionAnnotations => 'Activer/désactiver les annotations de positions';
 
   @override
+  String get toggleObservationAnnotations => 'Activer/désactiver les annotations d\'observation';
+
+  @override
   String get variationArrowsInfo => 'Les flèches de variantes vous permettent de naviguer sans utiliser la liste des coups.';
 
   @override
@@ -4434,6 +4496,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get edit => 'Éditer';
 
   @override
+  String get ultraBullet => 'Ultrabullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4585,10 +4650,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get download => 'Télécharger';
 
   @override
-  String get coachManager => 'Config. param. coach';
+  String get coachManager => 'Votre profil de coach';
 
   @override
-  String get streamerManager => 'Config. param. streamer';
+  String get streamerManager => 'Votre profil de streamer';
 
   @override
   String get cancelTournament => 'Annuler le tournoi';
@@ -5167,17 +5232,6 @@ class AppLocalizationsFr extends AppLocalizations {
       locale: localeName,
       other: '$count suivis',
       one: '$count suivi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Moins de $count minutes',
-      one: 'Moins de $count minute',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsFr extends AppLocalizations {
       locale: localeName,
       other: 'Collez votre texte PGN ici, jusqu\'à $count parties',
       one: 'Collez votre texte PGN ici, jusqu\'à $count partie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bataille entre $count équipes',
+      one: 'Bataille entre $count équipes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders par équipe',
+      one: 'Un leader par équipe',
     );
     return '$_temp0';
   }

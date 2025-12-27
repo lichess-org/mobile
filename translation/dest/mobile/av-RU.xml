@@ -19,7 +19,6 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стримерал эфиралда</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Гьаб гьумер бихьизе, мун жаниве лъугьун вукӀине ккола.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Щибниги батичӀо</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Мун цониги халтизабулесда нахъвилълъун гьечӀо.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ЛъикӀ</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Хъорщода нахъа</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">«%s» гъорлъ бугел хӀалел</string>

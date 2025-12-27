@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -25,11 +25,11 @@ class UserContextMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
 
     final AsyncValue<User> userAsync = user != null
         ? AsyncData(user!)
-        : ref.watch(userProvider(id: userId!));
+        : ref.watch(userProvider(userId!));
 
     switch (userAsync) {
       case AsyncData(:final value):
@@ -78,7 +78,7 @@ class UserContextMenu extends ConsumerWidget {
                   },
                   child: Text(context.l10n.watchGames),
                 ),
-                if (session != null && value.canChallenge == true)
+                if (authUser != null && value.canChallenge == true)
                   BottomSheetContextMenuAction(
                     onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
                     icon: LichessIcons.crossed_swords,

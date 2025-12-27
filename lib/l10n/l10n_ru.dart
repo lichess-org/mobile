@@ -67,7 +67,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Вы должны войти для просмотра этой страницы.';
 
   @override
-  String get mobileNoSearchResults => 'Ничего не найденo';
+  String get mobileNoSearchResults => 'Нет результатов';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => 'Пожалуйста, обратите внимание, что не все функции старого приложения или веб-сайта в настоящее время доступны, но мы постоянно добавляем новые функции.';
@@ -79,7 +79,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOkButton => 'ОК';
 
   @override
-  String get mobileOverTheBoard => 'Вдвоём за доской';
+  String get mobileOverTheBoard => 'Офлайн игра';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -96,19 +96,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'Увеличивать перетаскиваемую фигуру';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Хотите закончить эту попытку?';
+  String get mobilePuzzleStormConfirmEndRun => 'Вы хотите завершить эту попытку?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Ничего не найдено, измените фильтры, пожалуйста';
+  String get mobilePuzzleStormFilterNothingToShow => 'Нечего показывать, пожалуйста, измените фильтры';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Ничего нет. Сыграйте несколько попыток.';
+  String get mobilePuzzleStormNothingToShow => 'Нечего показать. Сыграйте несколько раз.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Решите как можно больше задач за 3 минуты.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Вы потеряете свою текущую серию, и результаты будут сохранены.';
+  String get mobilePuzzleStreakAbortWarning => 'Вы потеряете свою текущую серию, и счет будет сохранен.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Решайте задачи по вашим любимым дебютам или выберите тему.';
@@ -117,13 +117,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePuzzlesTab => 'Задачи';
 
   @override
-  String get mobileRecentSearches => 'Последние запросы';
+  String get mobileRecentSearches => 'Предыдущие запросы';
 
   @override
   String get mobileRemoveBookmark => 'Удалить из избранного';
 
   @override
-  String get mobileServerAnalysis => 'Анализ на сервере';
+  String get mobileServerAnalysis => 'Анализ сервера';
 
   @override
   String get mobileSettingsClockPosition => 'Расположение часов';
@@ -135,16 +135,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Цель передвинутой фигуры';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Круг';
+  String get mobileSettingsDraggedTargetCircle => 'Круглая';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
+  String get mobileSettingsDraggedTargetSquare => 'Квадратная';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Виджеты на главном экране';
+  String get mobileSettingsHomeWidgets => 'Виджеты главного экрана';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Полноэкранный режим';
+  String get mobileSettingsImmersiveMode => 'Режим погружения';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Скрывать интерфейс во время игры. Воспользуйтесь, если вам мешает навигация по краям экрана. Применяется в режиме партий и задач.';
@@ -153,13 +153,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Взятые фигуры';
 
   @override
-  String get mobileSettingsPickAnImage => 'Выбрать изображение';
+  String get mobileSettingsPickAnImage => 'Выберите изображение';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Пользовательский фон работает только в тёмном режиме. Рекомендуется использовать изображение с тёмными оттенками.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Размыть изображение';
+  String get mobileSettingsPickAnImageBlur => 'Размытие изображения';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Скрыть доску';
@@ -171,25 +171,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Проведите для отображения других фонов';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Коснитесь или перетащите';
+  String get mobileSettingsPieceShiftMethodEither => 'Нажатие или перетаскивание';
 
   @override
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Нажатием на две клетки';
 
   @override
-  String get mobileSettingsShapeDrawing => 'отрисовка фигуры';
+  String get mobileSettingsShapeDrawing => 'Рисование фигуры';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Нарисуйте фигуру пальцами: держите один палец на пустом квадрате и двигайте другой палец, чтобы рисовать.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Нарисуйте фигуру пальцами: держите один палец на пустой клетке и двигайте другой палец, чтобы рисовать.';
 
   @override
-  String get mobileSettingsShowBorder => 'Показать рамку';
+  String get mobileSettingsShowBorder => 'Показывать рамку';
 
   @override
   String get mobileSettingsTouchFeedback => 'Реакция на касание';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'Когда включено, устройство будет вибрировать в некоторое время при перемещении или захвате фигуры.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Когда включено, устройство будет вибрировать некоторое время при перемещении или захвате фигуры.';
 
   @override
   String get mobileSettingsTab => 'Настройки';
@@ -201,7 +201,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileShareGameURL => 'Поделиться ссылкой на игру';
 
   @override
-  String get mobileSharePositionAsFEN => 'Поделиться FEN';
+  String get mobileSharePositionAsFEN => 'Поделиться позициями в формате FEN';
 
   @override
   String get mobileSharePuzzle => 'Поделиться задачей';
@@ -219,13 +219,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Что-то пошло не так.';
 
   @override
-  String get mobileSystemColors => 'Цвет интерфейса';
+  String get mobileSystemColors => 'Системные цвета';
 
   @override
   String get mobileTheme => 'Оформление';
 
   @override
-  String get mobileToolsTab => 'Анализ';
+  String get mobileToolsTab => 'Средства';
 
   @override
   String mobileUnsupportedVariant(String param) {
@@ -829,7 +829,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastFederation => 'Федерация';
 
   @override
-  String get broadcastAgeThisYear => 'Возраст в этом году';
+  String get broadcastAge => 'Возраст';
 
   @override
   String get broadcastUnrated => 'Без рейтинга';
@@ -943,6 +943,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Создано и управляется $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Раунд $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Сохранение названия по умолчанию автоматически переведёт его на все другие языки.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1464,6 +1472,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleMates => 'Маты';
 
   @override
+  String get puzzleMateThemes => 'Разновидности матов';
+
+  @override
   String get puzzleGoals => 'Цели';
 
   @override
@@ -1777,6 +1788,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Матование короля на его горизонтали, когда он заблокирован своими же фигурами.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Мат Балестра';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Слон ставит мат, а ферзь перекрывает оставшиеся поля отступления';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Мат двумя ладьями по предпоследней горизонтали';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Две ладьи объединяются, чтобы поставить мат королю на поле размером 2 на 2 клетки.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слоновый эндшпиль';
 
   @override
@@ -1801,10 +1824,22 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Взятие или размен фигуры, защищающей другую фигуру, с последующим взятием фигуры, оставшейся без защиты.';
 
   @override
+  String get puzzleThemeCornerMate => 'Угловой мат';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Загоните короля в угол ладьёй или ферзём, и поставьте там мат конём.';
+
+  @override
   String get puzzleThemeCrushing => 'Разгром';
 
   @override
   String get puzzleThemeCrushingDescription => 'Используйте зевок противника для получения сокрушительного преимущества. (600 и более сантипешек)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Вскрытый шах';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Переместите фигуру и поставьте шах скрытой до этого атакующей фигурой, чтобы получить решающее преимущество.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Мат двумя слонами';
@@ -1870,7 +1905,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика с применением правила «взятие на проходе», где своя пешка может взять пешку противника, сходившую на две клетки из своего начального положения, и при этом пропущенное поле было под боем своей пешки.';
 
   @override
-  String get puzzleThemeExposedKing => 'Голый король';
+  String get puzzleThemeExposedKing => 'Открытый король';
 
   @override
   String get puzzleThemeExposedKingDescription => 'Незащищённый или слабо защищённый король часто становится жертвой матовой атаки.';
@@ -1910,6 +1945,24 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
+
+  @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Треугольный мат';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Ферзь и ладья находятся на соседних полях с вражеским королём, на той же горизонтали или вертикали, образуюя треугольник.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковича';
@@ -1994,6 +2047,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактика в первой стадии игры.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пешечный эндшпиль';
@@ -2130,7 +2189,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsCloseAccount => 'Удалить учётную запись';
 
   @override
-  String get settingsManagedAccountCannotBeClosed => 'Ваш аккаунт находится под управлением и не может быть закрыт.';
+  String get settingsManagedAccountCannotBeClosed => 'В вашем аккаунте происходят изменения, и он не может быть удалён.';
 
   @override
   String get settingsCantOpenSimilarAccount => 'Вы не сможете создать новый аккаунт с таким же именем, даже если регистр символов отличается.';
@@ -3953,6 +4012,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get togglePositionAnnotations => 'Переключить аннотацию позиций';
 
   @override
+  String get toggleObservationAnnotations => 'Переключить аннотации наблюдения';
+
+  @override
   String get variationArrowsInfo => 'Стрелки вариантов позволяют вам перемещаться без использования списка ходов.';
 
   @override
@@ -4488,6 +4550,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get edit => 'Изменить';
+
+  @override
+  String get ultraBullet => 'Ультра-пуля';
 
   @override
   String get bullet => 'Пуля';
@@ -5293,19 +5358,6 @@ class AppLocalizationsRu extends AppLocalizations {
       many: 'подписан на $count игроков',
       few: 'подписаны $count',
       one: 'подписан на $count игрока',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Менее $count минут',
-      many: 'Менее $count минут',
-      few: 'Менее $count минут',
-      one: 'Менее $count минуты',
     );
     return '$_temp0';
   }
@@ -6149,7 +6201,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyCustomPositionTitle => 'Пользовательская расстановка';
 
   @override
-  String get studyCustomPositionText => 'Расставьте фигуры по своему усмотрению.<br>Подходит для исследования эндшпилей.';
+  String get studyCustomPositionText => 'Расставьте фигуры по своему усмотрению. <br>Подходит для исследования эндшпилей.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Загрузите существующую партию Lichess';
@@ -6235,6 +6287,32 @@ class AppLocalizationsRu extends AppLocalizations {
       many: 'Вставьте текст в формате PGN, не больше $count игр',
       few: 'Вставьте текст в формате PGN, не больше $count игр',
       one: 'Вставьте текст в формате PGN, не больше $count игры',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Турнир на $count команд',
+      many: 'Турнир на $count команд',
+      few: 'Турнир на $count команды',
+      one: 'Турнир на $count команду',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лидеров на клуб',
+      many: '$count лидеров на клуб',
+      few: '$count лидера на клуб',
+      one: '$count лидер на клуб',
     );
     return '$_temp0';
   }

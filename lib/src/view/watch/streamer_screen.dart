@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -68,7 +69,7 @@ class StreamerListTile extends StatelessWidget {
     }
 
     final leading = streamer.image != null
-        ? Image.network(
+        ? HttpNetworkImageWidget(
             streamer.image!,
             width: thumbnailSize,
             height: thumbnailSize,

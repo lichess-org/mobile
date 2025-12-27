@@ -789,7 +789,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastFederation => 'Federación';
 
   @override
-  String get broadcastAgeThisYear => 'Edad';
+  String get broadcastAge => 'Edad';
 
   @override
   String get broadcastUnrated => 'Sin puntuación';
@@ -903,6 +903,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Creada y administrada por $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Ronda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Si mantiene el nombre predeterminado se traducirá automáticamente al resto de idiomas.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1420,6 +1428,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleMates => 'Mates';
 
   @override
+  String get puzzleMateThemes => 'Temas de mate';
+
+  @override
   String get puzzleGoals => 'Objetivos';
 
   @override
@@ -1721,6 +1732,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Jaque mate en la última fila, cuando el rey se encuentra atrapado por sus propias piezas.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Mate de alfil y dama';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'El alfil da jaque mate mientras la dama bloquea las casillas de escape';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Mate del cerdo ciego';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dos torres se unen para dar mate al rey en un área de 2 por 2 casillas.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Final de alfiles';
 
   @override
@@ -1745,10 +1768,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar una pieza fundamental para la defensa de otra, permitiendo capturar la pieza, ahora indefensa, en el futuro.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mate de la esquina';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Encierra al rey en una esquina usando una torre o dama y un caballo para dar mate.';
+
+  @override
   String get puzzleThemeCrushing => 'Aplastante';
 
   @override
   String get puzzleThemeCrushingDescription => 'Detecta el error del oponente para obtener una ventaja ganadora. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Jaque a la descubierta';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mueve una pieza para dar jaque con otra que se encuentra detrás, lo que a menudo conduce a una ventaja decisiva.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mate de los dos alfiles';
@@ -1856,6 +1891,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mate de Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'La torre da jaque mate, al tiempo que el alfil ayuda a confinar al rey enemigo.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mate de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Utiliza el alfil para dar jaque al rey, mientras que tu torre ayuda a mantenerlo confinado.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mate del triángulo';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La dama y la torre, a una casilla de distancia del rey rival, están en la misma fila o columna, separadas por una casilla, formando un triángulo.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Mate de Vukovic';
 
   @override
@@ -1938,6 +1991,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Una táctica durante la primera fase de la partida.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mate de la Ópera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Da jaque al rey con una torre defendida por un alfil.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peones';
@@ -3897,6 +3956,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get togglePositionAnnotations => 'Activa o desactiva anotaciones de posición';
 
   @override
+  String get toggleObservationAnnotations => 'Alternar las anotaciones de observación';
+
+  @override
   String get variationArrowsInfo => 'Las flechas de variantes te permiten navegar sin usar la lista de movimientos.';
 
   @override
@@ -4432,6 +4494,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get edit => 'Editar';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5167,17 +5232,6 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other: '$count siguiendo',
       one: '$count siguiendo',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menos de $count minutos',
-      one: 'Menos de $count minuto',
     );
     return '$_temp0';
   }
@@ -6077,6 +6131,28 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other: 'Pega aquí el código PGN, $count partidas como máximo',
       one: 'Pega aquí el código PGN, $count partida como máximo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Batalla de $count equipos',
+      one: 'Batalla de $count equipos',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count líderes por equipo',
+      one: 'Un líder por equipo',
     );
     return '$_temp0';
   }

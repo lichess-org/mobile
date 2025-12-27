@@ -9,6 +9,152 @@ import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+void main() {
+  group('StreakScreen', () {
+    testWidgets('meets accessibility guidelines', (tester) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      handle.dispose();
+    }, variant: kPlatformVariant);
+
+    testWidgets('Score is saved when exiting screen', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Start Streak'));
+
+      // wait for puzzle to load from api and opponent move to be played
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+
+      // Wait for next puzzle to load and score to be updated
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+
+      // Exit screen -> score should be saved
+      await tester.pageBack();
+      await tester.pump();
+      await tester.tap(find.text('Yes'));
+      await tester.pumpAndSettle();
+
+      // Enter streak screen again -> previous score should be loaded
+      await tester.tap(find.text('Start Streak'));
+      // Wait for puzzle to load from api and opponent move to be played
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+
+      await playMove(tester, 'e6', 'c8', orientation: Side.white);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      await playMove(tester, 'f7', 'e8', orientation: Side.white);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      await playMove(tester, 'c8', 'e8', orientation: Side.white);
+
+      // Wait for next puzzle to load and score to be updated
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.textContaining(RegExp('2\$')), findsOneWidget);
+
+      // Play a wrong move
+      await playMove(tester, 'd8', 'd7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      // Exit screen and enter screen again
+      // -> local score should be cleared, so score should be 0 again
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+    });
+
+    testWidgets('failing first puzzle allows restart correctly', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      //play one correct move
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //play a wrong move now
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      // Wait for opponent move to be played
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //game over correctly appears
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      final button = find.byTooltip('New streak');
+      await tester.tap(button);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      //now, the text should say 'Your turn'.
+      expect(find.text('Your turn'), findsOneWidget);
+    });
+  });
+}
+
 final client = MockClient((request) {
   if (request.url.path == '/api/streak') {
     return mockResponse('''
@@ -202,107 +348,3 @@ final client = MockClient((request) {
   }
   return mockResponse('', 404);
 });
-
-void main() {
-  group('StreakScreen', () {
-    testWidgets('meets accessibility guidelines', (tester) async {
-      final SemanticsHandle handle = tester.ensureSemantics();
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const StreakScreen(),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
-      );
-
-      await tester.pumpWidget(app);
-
-      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-      handle.dispose();
-    }, variant: kPlatformVariant);
-
-    testWidgets('Score is saved when exiting screen', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Builder(
-          builder: (context) => Scaffold(
-            appBar: AppBar(title: const Text('Test Streak Screen')),
-            body: FilledButton(
-              child: const Text('Start Streak'),
-              onPressed: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
-            ),
-          ),
-        ),
-        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
-      );
-      await tester.pumpWidget(app);
-
-      await tester.tap(find.text('Start Streak'));
-
-      // wait for puzzle to load from api and opponent move to be played
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
-      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
-
-      await playMove(tester, 'e5', 'e1', orientation: Side.black);
-      // Wait for opponent move to be played
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
-
-      await playMove(tester, 'f6', 'f4', orientation: Side.black);
-      // Wait for opponent move to be played
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
-
-      await playMove(tester, 'f4', 'f2', orientation: Side.black);
-
-      // Wait for next puzzle to load and score to be updated
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
-
-      // Exit screen -> score should be saved
-      await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
-      await tester.pumpAndSettle();
-
-      // Enter streak screen again -> previous score should be loaded
-      await tester.tap(find.text('Start Streak'));
-      // Wait for puzzle to load from api and opponent move to be played
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
-      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
-
-      await playMove(tester, 'e6', 'c8', orientation: Side.white);
-      // Wait for opponent move to be played
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
-
-      await playMove(tester, 'f7', 'e8', orientation: Side.white);
-      // Wait for opponent move to be played
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
-
-      await playMove(tester, 'c8', 'e8', orientation: Side.white);
-
-      // Wait for next puzzle to load and score to be updated
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
-      expect(find.textContaining(RegExp('2\$')), findsOneWidget);
-
-      // Play a wrong move
-      await playMove(tester, 'd8', 'd7', orientation: Side.black);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-      expect(find.text('GAME OVER'), findsOneWidget);
-
-      // Exit screen and enter screen again
-      // -> local score should be cleared, so score should be 0 again
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Start Streak'));
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-
-      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
-    });
-  });
-}

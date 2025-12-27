@@ -46,7 +46,7 @@
   <string name="fidePlayerNotFound">S’u gjet lojtar FIDE</string>
   <string name="fideProfile">Profil FIDE</string>
   <string name="federation">Federim</string>
-  <string name="ageThisYear">Moshë këtë vit</string>
+  <string name="age" comment="Label for the age of a player. Appears on FIDE profiles of players.">Moshë</string>
   <string name="unrated">Pa pikë</string>
   <string name="recentTournaments">Turne së fundi</string>
   <string name="openLichess">Hape në Lichess</string>
@@ -79,4 +79,6 @@
   <string name="sinceHideResults">Meqë zgjodhët të fshihen përfundimet, krejt tabelat e paraparjeve janë të zbrazëta, për të shmangur tregime.</string>
   <string name="communityBroadcast">Transmetim nga bashkësia</string>
   <string name="createdAndManagedBy">Krijuar dhe administruar nga %s.</string>
+  <string name="roundX">Raundi %s</string>
+  <string name="defaultRoundNameHelp">Mbajtja e emrit parazgjedhje do ta përkthejë automatikisht në krejt gjuhët e tjera.</string>
 </resources>

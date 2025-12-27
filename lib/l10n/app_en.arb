@@ -439,7 +439,7 @@
   "broadcastFidePlayerNotFound": "FIDE player not found",
   "broadcastFideProfile": "FIDE profile",
   "broadcastFederation": "Federation",
-  "broadcastAgeThisYear": "Age this year",
+  "broadcastAge": "Age",
   "broadcastUnrated": "Unrated",
   "broadcastRecentTournaments": "Recent tournaments",
   "broadcastOpenLichess": "Open in Lichess",
@@ -503,6 +503,15 @@
       }
     }
   },
+  "broadcastRoundX": "Round {param}",
+  "@broadcastRoundX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastDefaultRoundNameHelp": "Keeping the default name will automatically translate it to all other languages.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -803,6 +812,7 @@
   "puzzleAdvanced": "Advanced",
   "puzzleLengths": "Lengths",
   "puzzleMates": "Mates",
+  "puzzleMateThemes": "Mate themes",
   "puzzleGoals": "Goals",
   "puzzleOrigin": "Origin",
   "puzzleSpecialMoves": "Special moves",
@@ -964,6 +974,10 @@
   "puzzleThemeAttractionDescription": "An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.",
   "puzzleThemeBackRankMate": "Back rank mate",
   "puzzleThemeBackRankMateDescription": "Checkmate the king on the home rank, when it is trapped there by its own pieces.",
+  "puzzleThemeBalestraMate": "Balestra mate",
+  "puzzleThemeBalestraMateDescription": "A bishop delivers the checkmate, while a queen blocks the remaining escape squares",
+  "puzzleThemeBlindSwineMate": "Blind Swine mate",
+  "puzzleThemeBlindSwineMateDescription": "Two rooks team up to mate the king in an area of 2 by 2 squares.",
   "puzzleThemeBishopEndgame": "Bishop endgame",
   "puzzleThemeBishopEndgameDescription": "An endgame with only bishops and pawns.",
   "puzzleThemeBodenMate": "Boden's mate",
@@ -972,8 +986,12 @@
   "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
   "puzzleThemeCapturingDefender": "Capture the defender",
   "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
+  "puzzleThemeCornerMate": "Corner mate",
+  "puzzleThemeCornerMateDescription": "Confine the king to the corner using a rook or queen and a knight to engage the checkmate.",
   "puzzleThemeCrushing": "Crushing",
   "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
+  "puzzleThemeDiscoveredCheck": "Discovered check",
+  "puzzleThemeDiscoveredCheckDescription": "Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.",
   "puzzleThemeDoubleBishopMate": "Double bishop mate",
   "puzzleThemeDoubleBishopMateDescription": "Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.",
   "puzzleThemeDovetailMate": "Dovetail mate",
@@ -1009,6 +1027,12 @@
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
   "puzzleThemeKillBoxMate": "Kill box mate",
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
+  "puzzleThemePillsburysMate": "Pillsbury's mate",
+  "puzzleThemePillsburysMateDescription": "The rook delivers checkmate, while the bishop helps to confine it.",
+  "puzzleThemeMorphysMate": "Morphy's mate",
+  "puzzleThemeMorphysMateDescription": "Use the bishop to check the king, while your rook helps to confine it.",
+  "puzzleThemeTriangleMate": "Triangle mate",
+  "puzzleThemeTriangleMateDescription": "The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.",
   "puzzleThemeVukovicMate": "Vukovic mate",
   "puzzleThemeVukovicMateDescription": "A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king's escape squares.",
   "puzzleThemeKnightEndgame": "Knight endgame",
@@ -1037,6 +1061,8 @@
   "puzzleThemeOneMoveDescription": "A puzzle that is only one move long.",
   "puzzleThemeOpening": "Opening",
   "puzzleThemeOpeningDescription": "A tactic during the first phase of the game.",
+  "puzzleThemeOperaMate": "Opera mate",
+  "puzzleThemeOperaMateDescription": "Check the king with a rook and use a bishop to defend the rook.",
   "puzzleThemePawnEndgame": "Pawn endgame",
   "puzzleThemePawnEndgameDescription": "An endgame with only pawns.",
   "puzzleThemePin": "Pin",
@@ -1224,7 +1250,7 @@
     }
   },
   "dtzWithRounding": "DTZ50'' with rounding, based on number of half-moves until next capture, pawn move, or checkmate",
-  "noGameFound": "No game found",
+  "noGameFound": "No games found",
   "maxDepthReached": "Max depth reached!",
   "maybeIncludeMoreGamesFromThePreferencesMenu": "Maybe include more games from the preferences menu?",
   "openings": "Openings",
@@ -1325,7 +1351,7 @@
   "changeUsernameNotSame": "Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".",
   "changeUsernameDescription": "Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.",
   "signupUsernameHint": "Make sure to choose a username that's appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!",
-  "signupEmailHint": "We will only use it for password reset.",
+  "signupEmailHint": "We will only use it for password reset and account activation.",
   "password": "Password",
   "changePassword": "Change password",
   "changeEmail": "Change email",
@@ -2085,6 +2111,7 @@
   "cyclePreviousOrNextVariation": "Cycle previous/next variation",
   "toggleGlyphAnnotations": "Toggle move annotations",
   "togglePositionAnnotations": "Toggle position annotations",
+  "toggleObservationAnnotations": "Toggle observation annotations",
   "variationArrowsInfo": "Variation arrows let you navigate without using the move list.",
   "playSelectedMove": "play selected move",
   "newTournament": "New tournament",
@@ -2440,6 +2467,7 @@
   "agreementPolicy": "I agree that I will follow all Lichess policies.",
   "searchOrStartNewDiscussion": "Search or start new conversation",
   "edit": "Edit",
+  "ultraBullet": "UltraBullet",
   "bullet": "Bullet",
   "blitz": "Blitz",
   "rapid": "Rapid",
@@ -2979,14 +3007,6 @@
       }
     }
   },
-  "lessThanNbMinutes": "{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}",
-  "@lessThanNbMinutes": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "nbGamesInPlay": "{count, plural, =1{{count} game in play} other{{count} games in play}}",
   "@nbGamesInPlay": {
     "placeholders": {
@@ -3440,6 +3460,22 @@
   },
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teamBattleOfNbTeams": "{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}",
+  "@teamBattleOfNbTeams": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teamNbLeadersPerTeam": "{count, plural, =1{One leader per team} other{{count} leaders per team}}",
+  "@teamNbLeadersPerTeam": {
     "placeholders": {
       "count": {
         "type": "int"

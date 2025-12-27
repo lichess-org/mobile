@@ -2,18 +2,22 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'coordinate_training_controller.freezed.dart';
-part 'coordinate_training_controller.g.dart';
 
 enum Guess { correct, incorrect }
 
-@riverpod
-class CoordinateTrainingController extends _$CoordinateTrainingController {
+final coordinateTrainingControllerProvider =
+    NotifierProvider.autoDispose<CoordinateTrainingController, CoordinateTrainingState>(
+      CoordinateTrainingController.new,
+      name: 'CoordinateTrainingControllerProvider',
+    );
+
+class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
   final _random = Random(DateTime.now().millisecondsSinceEpoch);
 
   final _stopwatch = Stopwatch();
