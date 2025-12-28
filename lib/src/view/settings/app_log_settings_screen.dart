@@ -1,5 +1,7 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -14,6 +16,8 @@ import 'package:share_plus/share_plus.dart';
 
 final Logger _logger = Logger('AppLogSettingsScreen');
 
+final _logDateFormatter = DateFormat.Hms();
+
 class AppLogSettingsScreen extends ConsumerWidget {
   const AppLogSettingsScreen({super.key});
 
@@ -24,14 +28,7 @@ class AppLogSettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLevel = ref.watch(logPreferencesProvider.select((prefs) => prefs.level));
-    final logs = ref
-        .watch(appLogStorageProvider.select((state) => state.logs))
-        .reversed
-        .map(
-          (record) =>
-              '[${record.time.hour}:${record.time.minute}:${record.time.second}] [${record.loggerName}] ${record.message}',
-        )
-        .join('\n');
+    final logs = ref.read(appLogStorageServiceProvider).logs.toIList().reversed;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +37,17 @@ class AppLogSettingsScreen extends ConsumerWidget {
           IconButton(
             tooltip: 'Export',
             icon: const Icon(Icons.share),
-            onPressed: () => launchShareDialog(context, ShareParams(text: logs)),
+            onPressed: () => launchShareDialog(
+              context,
+              ShareParams(
+                text: logs
+                    .map(
+                      (record) =>
+                          '[${_logDateFormatter.format(record.time)}] [${record.loggerName}] ${record.message}',
+                    )
+                    .join('\n'),
+              ),
+            ),
           ),
           IconButton(
             tooltip: 'Delete all logs',
@@ -49,7 +56,7 @@ class AppLogSettingsScreen extends ConsumerWidget {
               showConfirmDialog<dynamic>(
                 context,
                 title: const Text('Delete all logs'),
-                onConfirm: ref.read(appLogStorageProvider.notifier).clear,
+                onConfirm: ref.read(appLogStorageServiceProvider).clear,
               );
             },
           ),
@@ -83,13 +90,40 @@ class AppLogSettingsScreen extends ConsumerWidget {
                 padding: Styles.bodySectionPadding,
                 child: Card(
                   margin: EdgeInsets.zero,
-                  child: SingleChildScrollView(
-                    child: Padding(padding: const EdgeInsets.all(8.0), child: Text(logs)),
+                  child: ListView.separated(
+                    itemCount: logs.length,
+                    separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
+                    itemBuilder: (_, index) => _LogTile(record: logs[index]),
                   ),
                 ),
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _LogTile extends StatelessWidget {
+  const _LogTile({required this.record});
+
+  final LogRecord record;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      dense: true,
+      leading: SizedBox(
+        width: 30,
+        child: Text(record.level.name, style: const TextStyle(fontSize: 12)),
+      ),
+      title: Text(
+        '[${record.loggerName}] ${record.message}',
+        style: const TextStyle(fontSize: 14, letterSpacing: -0.15),
+      ),
+      subtitle: Text(
+        _logDateFormatter.format(record.time),
+        style: TextStyle(color: textShade(context, 0.7), fontSize: 12),
       ),
     );
   }

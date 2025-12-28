@@ -1,29 +1,32 @@
 import 'dart:developer' as developer;
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
+import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
 
 const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService'};
 
-typedef LogState = ({IList<LogRecord> logs});
-
-/// Provides an instance of [AppLogStorage] using Riverpod.
-final appLogStorageProvider = NotifierProvider<AppLogStorage, LogState>(
-  AppLogStorage.new,
-  name: 'AppLogStorageProvider',
+/// Provides an instance of [AppLogStorageService] using Riverpod.
+final appLogStorageServiceProvider = Provider<AppLogStorageService>(
+  (Ref ref) => AppLogStorageService(ref),
+  name: 'AppLogStorageServiceProvider',
 );
 
 /// Manages log entries created via [Logger] instances
 ///
-/// Currently, simply saves log entries in memory, so they do not persists across app restarts.
-class AppLogStorage extends Notifier<LogState> {
-  @override
-  LogState build() => (logs: const IList.empty());
+/// Currently, simply saves the most recent log entries in memory, so they do not persists across app restarts.
+class AppLogStorageService {
+  AppLogStorageService(this.ref);
 
-  void setup() {
+  final Ref ref;
+  final _logs = LRUList<LogRecord>(capacity: 1024);
+
+  /// Currently stored log entries, ordered from oldest to newest.
+  Iterable<LogRecord> get logs => _logs.values;
+
+  void start() {
     ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
       if (next != prev) {
         Logger.root.level = next;
@@ -46,19 +49,12 @@ class AppLogStorage extends Notifier<LogState> {
         }
       }
 
-      _save(record);
+      _logs.put(record);
     });
   }
 
   void clear() {
-    state = (logs: const IList.empty());
-  }
-
-  void _save(LogRecord record) {
-    // Avoid the "Tried to modify a provider while the widget tree was building" error
-    Future.microtask(() {
-      state = (logs: state.logs.add(record));
-    });
+    _logs.clear();
   }
 }
 

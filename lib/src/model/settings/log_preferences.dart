@@ -32,7 +32,7 @@ class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<
   }
 }
 
-const _kDefaultLevel = kDebugMode ? Level.FINE : Level.OFF;
+const _kDefaultLevel = kDebugMode ? Level.FINE : Level.WARNING;
 
 @Freezed(fromJson: true, toJson: true)
 sealed class LogPrefs with _$LogPrefs implements Serializable {
