@@ -41,7 +41,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final client = ref.read(defaultClientProvider);
+    final client = ref.watch(defaultClientProvider);
     return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),

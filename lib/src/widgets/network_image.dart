@@ -30,7 +30,7 @@ class HttpNetworkImageWidget extends ConsumerWidget {
       image: ResizeImage.resizeIfNeeded(
         cacheWidth,
         cacheHeight,
-        HttpNetworkImage(url, ref.read(defaultClientProvider)),
+        HttpNetworkImage(url, ref.watch(defaultClientProvider)),
       ),
       width: width,
       fit: fit,
