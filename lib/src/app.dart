@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -65,6 +66,7 @@ class _AppState extends ConsumerState<Application> {
   @override
   void initState() {
     // Start services
+    ref.read(appLogStorageServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();
     ref.read(challengeServiceProvider).start();
