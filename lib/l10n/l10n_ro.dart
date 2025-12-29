@@ -809,7 +809,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastFederation => 'Federație';
 
   @override
-  String get broadcastAgeThisYear => 'Vârsta în acest an';
+  String get broadcastAge => 'Vârstă';
 
   @override
   String get broadcastUnrated => 'Fără rating';
@@ -1919,6 +1919,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mat în triunghi';
 
   @override
@@ -2007,6 +2019,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'O tactică în prima etapă a jocului.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final cu pioni';
@@ -3966,6 +3984,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get togglePositionAnnotations => 'Activează/Dezactivează adnotările pozițiilor';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Săgețile de variație vă permit să navigați fără a utiliza lista mutărilor.';
 
   @override
@@ -4501,6 +4522,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get edit => 'Modifică';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5271,18 +5295,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count urmăriți',
       few: '$count urmăriți',
       one: 'Unul urmărit',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mai puțin de $count de minute',
-      few: 'Mai puțin de $count minute',
-      one: 'Mai puțin de un minut',
     );
     return '$_temp0';
   }

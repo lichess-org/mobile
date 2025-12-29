@@ -93,7 +93,8 @@ abstract class AnalysisBoardState<
     }
 
     final bestMoveShapes = computeBestMoveShapes(
-      eval.bestMoves,
+      // cloud eval might have more lines than local eval so make sure to only show as many as allowed
+      eval.bestMoves.take(enginePrefs.numEvalLines).toIList(),
       currentPosition.turn,
       pieceAssets,
       // Same colors as in the Web UI with a slightly different opacity

@@ -37,15 +37,15 @@ class AuthController extends Notifier<AuthUser?> {
 
     await ref.read(authStorageProvider).write(authUser);
 
+    if (!ref.mounted) return;
+    state = authUser;
+
     // register device and reconnect to the current socket once the authUser token is updated
     await Future.wait([
       ref.read(notificationServiceProvider).registerDevice(),
       // force reconnect to the current socket with the new token
       ref.read(socketPoolProvider).currentClient.connect(),
     ]);
-
-    if (!ref.mounted) return;
-    state = authUser;
   }
 
   /// Signs out the user.

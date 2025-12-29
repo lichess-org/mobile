@@ -439,7 +439,7 @@
   "broadcastFidePlayerNotFound": "FIDE player not found",
   "broadcastFideProfile": "FIDE profile",
   "broadcastFederation": "Federation",
-  "broadcastAgeThisYear": "Age this year",
+  "broadcastAge": "Age",
   "broadcastUnrated": "Unrated",
   "broadcastRecentTournaments": "Recent tournaments",
   "broadcastOpenLichess": "Open in Lichess",
@@ -1027,6 +1027,10 @@
   "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
   "puzzleThemeKillBoxMate": "Kill box mate",
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
+  "puzzleThemePillsburysMate": "Pillsbury's mate",
+  "puzzleThemePillsburysMateDescription": "The rook delivers checkmate, while the bishop helps to confine it.",
+  "puzzleThemeMorphysMate": "Morphy's mate",
+  "puzzleThemeMorphysMateDescription": "Use the bishop to check the king, while your rook helps to confine it.",
   "puzzleThemeTriangleMate": "Triangle mate",
   "puzzleThemeTriangleMateDescription": "The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.",
   "puzzleThemeVukovicMate": "Vukovic mate",
@@ -1057,6 +1061,8 @@
   "puzzleThemeOneMoveDescription": "A puzzle that is only one move long.",
   "puzzleThemeOpening": "Opening",
   "puzzleThemeOpeningDescription": "A tactic during the first phase of the game.",
+  "puzzleThemeOperaMate": "Opera mate",
+  "puzzleThemeOperaMateDescription": "Check the king with a rook and use a bishop to defend the rook.",
   "puzzleThemePawnEndgame": "Pawn endgame",
   "puzzleThemePawnEndgameDescription": "An endgame with only pawns.",
   "puzzleThemePin": "Pin",
@@ -1345,7 +1351,7 @@
   "changeUsernameNotSame": "Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".",
   "changeUsernameDescription": "Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.",
   "signupUsernameHint": "Make sure to choose a username that's appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!",
-  "signupEmailHint": "We will only use it for password reset.",
+  "signupEmailHint": "We will only use it for password reset and account activation.",
   "password": "Password",
   "changePassword": "Change password",
   "changeEmail": "Change email",
@@ -2105,6 +2111,7 @@
   "cyclePreviousOrNextVariation": "Cycle previous/next variation",
   "toggleGlyphAnnotations": "Toggle move annotations",
   "togglePositionAnnotations": "Toggle position annotations",
+  "toggleObservationAnnotations": "Toggle observation annotations",
   "variationArrowsInfo": "Variation arrows let you navigate without using the move list.",
   "playSelectedMove": "play selected move",
   "newTournament": "New tournament",
@@ -2460,6 +2467,7 @@
   "agreementPolicy": "I agree that I will follow all Lichess policies.",
   "searchOrStartNewDiscussion": "Search or start new conversation",
   "edit": "Edit",
+  "ultraBullet": "UltraBullet",
   "bullet": "Bullet",
   "blitz": "Blitz",
   "rapid": "Rapid",
@@ -2993,14 +3001,6 @@
   },
   "nbFollowing": "{count, plural, =1{{count} following} other{{count} following}}",
   "@nbFollowing": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "lessThanNbMinutes": "{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}",
-  "@lessThanNbMinutes": {
     "placeholders": {
       "count": {
         "type": "int"

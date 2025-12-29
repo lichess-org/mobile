@@ -789,7 +789,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastFederation => 'Federasie';
 
   @override
-  String get broadcastAgeThisYear => 'Ouderdom vanjaar';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Ongegradeerd';
@@ -1891,6 +1891,18 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => '\'N Taktiek tydens die eerste fase van die wedstryd.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pand eindspel';
@@ -3938,6 +3956,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variasie pyle laat jou toe om te vaar sonder die skuif lys.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get edit => 'Pas aan';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsAf extends AppLocalizations {
       locale: localeName,
       other: 'volg $count',
       one: 'volg $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Minder as $count minute',
-      one: 'Minder as $count minuut',
     );
     return '$_temp0';
   }

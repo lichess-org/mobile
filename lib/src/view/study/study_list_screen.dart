@@ -364,9 +364,9 @@ class StudyFlair extends StatelessWidget {
     final iconIfNoFlair = Icon(LichessIcons.study, size: size);
 
     return (flair != null)
-        ? CachedHttpNetworkImage(
+        ? HttpNetworkImageWidget(
             lichessFlairSrc(flair!),
-            errorWidget: (_, _, _) => iconIfNoFlair,
+            errorBuilder: (_, _, _) => iconIfNoFlair,
             width: size,
             height: size,
           )

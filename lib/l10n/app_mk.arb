@@ -1059,7 +1059,6 @@
   "nbFriendsOnline": "{count, plural, =1{{count} пријател на линија} other{{count} пријатели на линија}}",
   "nbFollowers": "{count, plural, =1{{count} следбеници} other{{count} следбеници}}",
   "nbFollowing": "{count, plural, =1{{count} следи} other{{count} следи}}",
-  "lessThanNbMinutes": "{count, plural, =1{Помалку од {count} минути} other{Помалку од {count} минути}}",
   "nbGamesInPlay": "{count, plural, =1{{count} Игри во тек} other{{count} Игри во тек}}",
   "maximumNbCharacters": "{count, plural, =1{Максимум: {count} знак.} other{Максимум: {count} знаци.}}",
   "blocks": "{count, plural, =1{{count} блокиран} other{{count} блокирани}}",

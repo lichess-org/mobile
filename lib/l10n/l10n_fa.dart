@@ -789,7 +789,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastFederation => 'کشورگان';
 
   @override
-  String get broadcastAgeThisYear => 'سنِ امسال';
+  String get broadcastAge => 'سن';
 
   @override
   String get broadcastUnrated => 'بی‌درجه‌بندی';
@@ -897,7 +897,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastLiveboard => 'صفحه زنده';
 
   @override
-  String get broadcastCommunityBroadcast => 'پخش همگانی';
+  String get broadcastCommunityBroadcast => 'پخشِ همدارگان';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
@@ -1083,7 +1083,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'تمرین فقط روی ستون‌ها و ردیف‌های مشخص';
 
   @override
-  String get patronDonate => 'کمک مالی';
+  String get patronDonate => 'داشَنیدن';
 
   @override
   String get patronLichessPatron => 'یاورِ Lichess';
@@ -1443,13 +1443,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'این معما را دوست داشتید؟';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'موافقت برای بارگذاری معمای بعدی!';
+  String get puzzleVoteToLoadNextOne => 'رأی‌ دهید تا معمای بعدی بار شود!';
 
   @override
-  String get puzzleUpVote => 'معمای خوبی بود';
+  String get puzzleUpVote => 'رأیِ مثبت به معما';
 
   @override
-  String get puzzleDownVote => 'معمای بدی بود';
+  String get puzzleDownVote => 'رأیِ منفی به معما';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'درجه‌بندی معمایی شما تغییری نخواهد کرد. توجه داشته باشید که معماها یک رقابت نیستند. درجه‌بندی‌تان به انتخاب بهترین معماها برای سطح مهارت فعلی‌تان کمک می‌کند.';
@@ -1595,7 +1595,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleNewStreak => 'رکورد جدید';
 
   @override
-  String get puzzleFromMyGames => 'از بازی های من';
+  String get puzzleFromMyGames => 'از بازی‌های من';
 
   @override
   String get puzzleLookupOfPlayer => 'به دنبال معماهای برگرفته از بازی‌های یک بازیکن مشخص، بگردید';
@@ -1891,6 +1891,18 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'ماتِ مثلث';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'تاکتیک در مرحله اول بازی.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'آخربازی پیاده';
@@ -2177,7 +2195,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get strength => 'قدرت';
 
   @override
-  String get toggleTheChat => 'گپ روشن/خاموش';
+  String get toggleTheChat => 'کلیدِ گپ';
 
   @override
   String get chat => 'گپ';
@@ -2666,10 +2684,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get changePassword => 'تغییر گذرواژه';
 
   @override
-  String get changeEmail => 'تغییر ایمیل';
+  String get changeEmail => 'تغییرِ رایانامه';
 
   @override
-  String get email => 'ایمیل';
+  String get email => 'رایانامه';
 
   @override
   String get passwordReset => 'بازنشانی گذرواژه';
@@ -2704,7 +2722,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get emailSuggestion => 'از ایمیلی که از شخص دیگر به شما پیشنهاد داده است استفاده نکنید. در این صورت احتمال سرقت حساب شما وجود دارد.';
 
   @override
-  String get emailConfirmHelp => 'کمک با تائید ایمیل';
+  String get emailConfirmHelp => 'کمک با تائید رایانامه';
 
   @override
   String get emailConfirmNotReceived => 'آیا رایانامهٔ تاییدتان را پس از نام‌نویسی دریافت نکردید؟';
@@ -2722,20 +2740,20 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String emailSent(String param) {
-    return 'ما یک ایمیل به آدرس $param ارسال کرده ایم.';
+    return 'ما رایانامه‌ای به $param فرستاده‌ایم.';
   }
 
   @override
   String get emailCanTakeSomeTime => 'ممکن است کمی طول بکشد تا برسد.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => '5 دقیقه صبر کنید و صندوق ورودی ایمیل خود را تازه کنید.';
+  String get refreshInboxAfterFiveMinutes => '۵ دقیقه بصبرید و صندوق رایانامه‌تان را تازه کنید.';
 
   @override
   String get checkSpamFolder => 'پوشه هرزنامه خود را نیز بررسی کنید، ممکن است در آنجا باشد. اگر چنین است، آن را به عنوان غیر هرزنامه علامت‌گذاری کنید.';
 
   @override
-  String get emailForSignupHelp => 'اگر تمام موارد ناموفق بود، این ایمیل را برای ما ارسال کنید:';
+  String get emailForSignupHelp => 'اگر تمام موارد ناموفق بود، این رایانامه را به ما بفرستید:';
 
   @override
   String copyTextToEmail(String param) {
@@ -2756,7 +2774,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded => 'شما نیازی به ایمیل تایید ندارید.';
+  String get accountConfirmationEmailNotNeeded => 'به رایانامهٔ تایید نیاز ندارید.';
 
   @override
   String accountClosed(String param) {
@@ -2765,7 +2783,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return 'حساب کاربری $param بدون ایمیل ثبت نام شده بود.';
+    return 'حسابِ $param بدون رایانامه نام‌نویسی شده بود.';
   }
 
   @override
@@ -3535,7 +3553,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get invalidAuthenticationCode => 'کد راستین‌آزمایی نامعتبر';
 
   @override
-  String get emailMeALink => 'یک لینک به من ایمیل کنید';
+  String get emailMeALink => 'پیوندی به رایانامه‌ام بفرست';
 
   @override
   String get currentPassword => 'گذرواژهٔ جاری';
@@ -3687,16 +3705,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get error_required => 'حتماً باید این خانه را پر کنید';
 
   @override
-  String get error_email => 'آدرس ایمیل غیر معتبر است';
+  String get error_email => 'نشانی رایانامه نامعتبر است';
 
   @override
   String get error_email_acceptable => 'این نشانی رایانامه پذیرفتنی نیست. لطفا باز به آن سر زنید و دوباره بکوشید.';
 
   @override
-  String get error_email_unique => 'آدرس ایمیل نامعتبر است یا قبلا در سیستم ثبت شده است';
+  String get error_email_unique => 'نشانیِ رایانامه نامعتبر یا قبلاً گرفته شده است';
 
   @override
-  String get error_email_different => 'اکنون، این نشانی رایانامه‌تان شما است';
+  String get error_email_different => 'اکنون، این نشانیِ رایانامه‌تان است';
 
   @override
   String error_minLength(String param) {
@@ -3938,6 +3956,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get togglePositionAnnotations => 'تغییر حرکت‌نویسی وضعیت';
 
   @override
+  String get toggleObservationAnnotations => 'کلید مشاهدهٔ حرکت‌نویسی';
+
+  @override
   String get variationArrowsInfo => 'پیکان های وَرتِش به شما امکان ناوِش بدون استفاده از فهرستِ حرکت را می‌دهد.';
 
   @override
@@ -4007,25 +4028,25 @@ class AppLocalizationsFa extends AppLocalizations {
   String get checkYourEmail => 'به رایانامه‌تان سر زنید';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'ما به شما ایمیل فرستادیم. روی لینکی که در ایمیل است کلیک کنید';
+  String get weHaveSentYouAnEmailClickTheLink => 'ما به شما ایمیل فرستادیم. روی لینکی که در ایمیل است کلیک کنید\nما به شما یک رایانامه‌ای فرستاده‌ایم. برای فعال‌سازی حساب کاربری‌تان روی پیوند موجود در رایانامه بِتِلیکید.';
 
   @override
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'اگر رایانامه را نمی‌بینید، جاهای دیگری مانند پوشه‌های ناخواسته، هرزنامه، اجتماعی یا سایر موردها را بررسی کنید.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'اگر ایمیل را در 5 دقیقه دریافت نکرده اید';
+  String get ifYouDoNotGetTheEmail => 'اگر ظرفِ ۵ دقیقه رایانامه را نگرفتید:';
 
   @override
   String get checkAllEmailFolders => 'فولدر های junk, spam و دیگر را چک کنید';
 
   @override
   String verifyYourAddress(String param) {
-    return 'تائید کنید که $param ایمیل شما هست';
+    return 'تائید کنید که $param نشانیِ رایانامه‌تان است';
   }
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'ما یک رایانامه به $param فرستاده‌ایم. برای بازنشانی گذرواژه‌تان، روی پیوند موجود در رایانامه بزنید.';
+    return 'ما رایانامه‌ای به $param فرستاده‌ایم. برای بازنشانی گذرواژه‌تان، روی پیوند موجود در رایانامه بزنید.';
   }
 
   @override
@@ -4475,6 +4496,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get edit => 'ویرایش';
 
   @override
+  String get ultraBullet => 'اولاگلوله';
+
+  @override
   String get bullet => 'گلوله';
 
   @override
@@ -4742,7 +4766,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reopenYourAccountDescription => 'اگر حسابتان را بسته اید ولی نظرتان عوض شده، فرصت بازپس‌گیری آن را دارید.';
 
   @override
-  String get emailAssociatedToaccount => 'آدرس ایمیلی که به حساب کاربری مربوط شده است';
+  String get emailAssociatedToaccount => 'نشانیِ رایانامهٔ مرتبط با حساب';
 
   @override
   String get sentEmailWithLink => 'ما رایانامه‌ای شامل یک پیوند را به شما فرستاده‌ایم.';
@@ -4792,7 +4816,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showMeEverything => 'همه چیز را به من نشان بده';
 
   @override
-  String get lichessPatronInfo => 'لایچس یک خیریه و کاملا رایگان و نرم افزاری متن باز است. تمام هزینه های اجرا، توسعه و محتوا تنها بر پایه هدایای کاربران بنا شده است.';
+  String get lichessPatronInfo => 'وبگاهِ Lichess خیریه است و نرم‌افزار متن‌بازِ تمام‌رایگانی است. همهٔ هزینه‌های عملیات، توسعه و محتوا تنها از راهِ داشَن‌های کاربران تأمین می‌شود.';
 
   @override
   String get nothingToSeeHere => 'فعلا هیچی اینجا نیست.';
@@ -5213,17 +5237,6 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'کمتر از $count دقیقه',
-      one: 'کمتر از $count دقیقه',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5539,7 +5552,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyNoneYet => 'هیچکدام تا به حال.';
 
   @override
-  String get studyHot => 'شلوغ';
+  String get studyHot => 'داغ';
 
   @override
   String get studyDateAddedNewest => 'تاریخ افزوده شدن (نوترین)';
@@ -6022,7 +6035,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyConclusionTitle => 'ممنون از وقتی که گذاشتید';
 
   @override
-  String get studyConclusionText => 'شما می‌توانید مطالعه‌های قبلی خود را از صفحهٔ پروفایلتان پیدا کنید، همچنین یک پست وبلاگ دربارهٔ مطالعه‌ها وجود دارد. کاربران حرفه‌ای می‌توانند کلید «؟» را برای دیدن میان‌برهای صفحه‌کلید فشار دهند. خوش بگذره!';
+  String get studyConclusionText => 'شما می‌توانید <a href=\'/study/mine/hot\'>مطالعه‌های پیشین‌تان</a> از صفحهٔ رُخ‌نمای‌تان بیابید.<br>همچنین یک <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>وبنوشته دربارهٔ مطالعه‌ها</a> وجود دارد.<br>کاربران حرفه‌ای می‌توانند کلید «؟» را برای دیدن میان‌برهای صفحه‌کلید بِفِشارند.<br>خوش بگذرد!';
 
   @override
   String get studyCreateChapterTitle => 'بیایید یک فصل مطالعه بسازیم';

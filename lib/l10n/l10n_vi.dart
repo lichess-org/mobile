@@ -769,7 +769,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastFederation => 'Liên đoàn';
 
   @override
-  String get broadcastAgeThisYear => 'Tuổi năm nay';
+  String get broadcastAge => 'Tuổi';
 
   @override
   String get broadcastUnrated => 'Chưa xếp hạng';
@@ -1863,6 +1863,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Một quân xe ở cạnh vua địch và được hỗ trợ bởi quân hậu cũng chặn các ô trốn thoát của vua địch. Xe và hậu bắt vua địch trong ô \"kill box\" chết chóc 3 x 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Chiếu hết kiểu Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Dùng quân tượng để chiếu vua, trong khi quân xe giúp kìm hãm vua.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Chiếu hết kiểu tam giác';
 
   @override
@@ -1951,6 +1963,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Chiến thuật trong phần mở đầu của ván cờ.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Dùng quân xe chiếu vua và dùng quân tượng để bảo vệ quân xe.';
 
   @override
   String get puzzleThemePawnEndgame => 'Tàn cuộc Tốt';
@@ -2114,7 +2132,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get gameMode => 'Chế độ chơi';
 
   @override
-  String get createLobbyGame => 'Tạo sảnh ván đấu';
+  String get createLobbyGame => 'Tạo ván đấu tại sảnh';
 
   @override
   String get youPlayAs => 'Bạn cầm quân';
@@ -3910,6 +3928,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get togglePositionAnnotations => 'Chuyển đổi chú thích thế cờ';
 
   @override
+  String get toggleObservationAnnotations => 'Chuyển đổi chú thích quan sát';
+
+  @override
   String get variationArrowsInfo => 'Mũi tên của biến cho phép bạn điều hướng mà không cần sử dụng danh sách nước đi.';
 
   @override
@@ -4447,6 +4468,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get edit => 'Chỉnh sửa';
 
   @override
+  String get ultraBullet => 'Cờ siêu đạn';
+
+  @override
   String get bullet => 'Cờ đạn';
 
   @override
@@ -4964,7 +4988,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count cấu đố',
+      other: '$count câu đố',
     );
     return '$_temp0';
   }
@@ -5145,16 +5169,6 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Đang theo dõi $count người',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ít hơn $count phút',
     );
     return '$_temp0';
   }

@@ -73,7 +73,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
 
   @override
   String get mobileOkButton => 'Tamam';
@@ -789,7 +789,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastFederation => 'Federasyon';
 
   @override
-  String get broadcastAgeThisYear => 'Bu yılki yaşı';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Derecelendirilmemiş';
@@ -1428,7 +1428,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleMates => 'Matlar';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Mat temaları';
 
   @override
   String get puzzleGoals => 'Hedefler';
@@ -1891,6 +1891,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Rakip şahının yanında bir kale bulunur ve bir vezir tarafından desteklenir ve bu kale aynı zamanda şahın kaçış karelerini de engeller. Kale ve vezir, düşman şahını 3\'e 3\'lük bir \"kafeste\" sıkıştırır.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Oyunun ilk aşamasında hayatınızı kolaylaştıran taktikler.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Piyon oyunsonu';
@@ -2139,7 +2157,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get playAgainstComputer => 'Bilgisayara karşı oyna';
 
   @override
-  String get gameMode => 'Oyun modü';
+  String get gameMode => 'Oyun modu';
 
   @override
   String get createLobbyGame => 'Lobi oyunu oluştur';
@@ -2921,7 +2939,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exportGames => 'Oyunları indir';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Puan filtreleme';
 
   @override
   String get thisAccountViolatedTos => 'Bu hesap Lichess Hizmet Şartları\'nı ihlal etti';
@@ -3938,6 +3956,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get togglePositionAnnotations => 'Konum açıklamalarını değiştir';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Varyasyon okları, hamle listesini kullanmadan gezinmenizi sağlar.';
 
   @override
@@ -4400,7 +4421,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Meydan Oku $param';
   }
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get edit => 'Düzenle';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -4690,7 +4714,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param formatlanmak için uygun.';
   }
 
   @override
@@ -5213,17 +5237,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count dakikadan daha az',
-      one: '$count dakikadan daha az',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5557,7 +5570,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyAlphabetical => 'Alfabetik';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'İlgili';
 
   @override
   String get studyAddNewChapter => 'Yeni bir bölüm ekle';
@@ -6052,22 +6065,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyFromFenStringTitle => 'Bir FEN dizisinden';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'FEN formatında bir pozisyon <br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br> yapıştırarak bölümü belirli bir yerden başlat.';
 
   @override
   String get studyFromPgnGameTitle => 'PGN oyunundan';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Bir oyunu PGN formatında<br>yapıştırarak hamleleri, yorumları ve varyasyonları bölüme yükle.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Çalışmaların desteklediği oyun türleri';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Evet, çılgın satranç<br>dahil olmak üzere tüm oyun türlerini çalışabilirsin!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Bölümler sonsuza kadar kayıt altında kalır.<br>Satranç içeriğini yönetirken keyfine bak!';
 
   @override
   String get studyDoubleDefeat => 'Çift mağlubiyet';

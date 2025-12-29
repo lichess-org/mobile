@@ -94,7 +94,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                       builder: (BuildContext context) {
                         return const CreateCorrespondenceGameBottomSheet();
                       },
-                    );
+                    ).then((_) {
+                      ref.invalidate(correspondenceSeeksProvider);
+                    });
                   },
                 ),
             ],

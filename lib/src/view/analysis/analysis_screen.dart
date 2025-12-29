@@ -553,6 +553,13 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        if (options case Standalone())
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.clearSavedMoves),
+            onPressed: () => ref
+                .read(analysisControllerProvider(options).notifier)
+                .clearSavedStandaloneAnalysis(),
+          ),
         if (analysisState.isEngineAvailable(evalPrefs))
           BottomSheetAction(
             makeLabel: (context) => Text(

@@ -769,7 +769,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastFederation => '연맹';
 
   @override
-  String get broadcastAgeThisYear => '올해 나이';
+  String get broadcastAge => '나이';
 
   @override
   String get broadcastUnrated => '비레이팅';
@@ -1752,10 +1752,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => '디스커버드 체크';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => '기물을 움직여서 가려졌던 공격 기물로 체크합니다. 많은 경우 결정적인 이점을 얻습니다.';
 
   @override
   String get puzzleThemeDoubleBishopMate => '2비숍 메이트';
@@ -1863,6 +1863,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
 
   @override
+  String get puzzleThemePillsburysMate => '필즈버리 메이트';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => '비숍이 킹을 가두어두는 동안 룩을 이용해 메이트를 합니다.';
+
+  @override
+  String get puzzleThemeMorphysMate => '모피 메이트';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => '룩으로 킹의 퇴로를 차단하고, 비숍으로 킹에게 체크합니다.';
+
+  @override
   String get puzzleThemeTriangleMate => '트라이앵글 메이트';
 
   @override
@@ -1951,6 +1963,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => '게임 초반부에서의 전략';
+
+  @override
+  String get puzzleThemeOperaMate => '오페라 메이트';
+
+  @override
+  String get puzzleThemeOperaMateDescription => '룩으로 킹을 체크하고, 비숍이 룩이 있는 칸을 지킵니다.';
 
   @override
   String get puzzleThemePawnEndgame => '폰 엔드게임';
@@ -2093,7 +2111,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => '대소문자가 다르더라도, 똑같은 이름으로는 다시 회원가입할 수 없습니다.';
 
   @override
-  String get settingsCancelKeepAccount => '취소하고 계정 지키기';
+  String get settingsCancelKeepAccount => '취소하고 계정 유지하기';
 
   @override
   String get settingsCloseAccountAreYouSure => '정말로 탈퇴하시겠습니까?';
@@ -2389,7 +2407,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => '다음 포획 혹은 폰 수까지 남은 반수를 반올림후 나타낸 DTZ50\" 수치';
+  String get dtzWithRounding => '다음 포획, 폰 이동 혹은 체크메이트까지 남은 반수를 반올림 후 나타낸 DTZ50\" 수치';
 
   @override
   String get noGameFound => '대국을 찾을 수 없습니다';
@@ -2963,25 +2981,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String yourPerfRatingIsProvisional(String param) {
-    return '사용자의 임시 등급 $param는 임시적입니다.';
+    return '당신의 $param 레이팅은 임시 레이팅입니다';
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '귀하의 평가가 안정적이지 않기 때문에 평가 필터가 잠겨 있습니다. 정격 게임을 플레이하면 안정성이 향상됩니다.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '귀하의 레이팅이 안정적이지 않기 때문에 레이팅 필터가 잠겨 있습니다. 레이팅 반영 게임을 플레이하면 안정성이 향상됩니다.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return '귀하의 $param1 레이팅($param2)은 너무 높습니다.';
+    return '당신의 $param1 레이팅($param2)은 너무 높습니다.';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return '$param1 랭크가 너무 높습니다. ($param2)';
+    return '당신의 주간 최고 $param1 레이팅($param2)은 너무 높습니다.';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return '$param1 랭크가 너무 낮습니다. ($param2)';
+    return '당신의 $param1 레이팅($param2)은 너무 낮습니다.';
   }
 
   @override
@@ -3910,6 +3928,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get togglePositionAnnotations => '포지션 주석 켜기/끄기';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => '변형 화살표를 사용하면 이동 목록을 사용하지 않고 탐색이 가능합니다.';
 
   @override
@@ -4230,7 +4251,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return '$param 귀하의 평가는';
+    return '당신의 레이팅: $param';
   }
 
   @override
@@ -4445,6 +4466,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get edit => '편집';
+
+  @override
+  String get ultraBullet => '울트라불릿';
 
   @override
   String get bullet => '불릿';
@@ -4662,7 +4686,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param 서식을 사용할 수 있습니다.';
   }
 
   @override
@@ -4894,7 +4918,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '대국 $count개',
+      other: '$count개의 대국',
     );
     return '$_temp0';
   }
@@ -5145,16 +5169,6 @@ class AppLocalizationsKo extends AppLocalizations {
       count,
       locale: localeName,
       other: '팔로잉 $count명',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 미만',
     );
     return '$_temp0';
   }

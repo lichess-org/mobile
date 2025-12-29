@@ -789,7 +789,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastFederation => 'Federação';
 
   @override
-  String get broadcastAgeThisYear => 'Idade neste ano';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Sem classificação';
@@ -1891,6 +1891,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Uma torre está ao lado do rei inimigo apoiada por uma dama que também bloqueia as casas de fuga do rei. A torre e a dama apanham o rei inimigo numa “caixa de morte” de 3 por 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Uma tática durante a primeira fase do jogo.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peões';
@@ -3938,6 +3956,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get togglePositionAnnotations => 'Ativar/desativar anotações de posição';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Setas de variação permitem navegar sem usar a lista de movimentos.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get edit => 'Editar';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: 'a seguir $count jogadores',
       one: 'a seguir $count jogador',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menos de $count minutos',
-      one: 'Menos de $count minuto',
     );
     return '$_temp0';
   }
@@ -7107,7 +7120,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastFederation => 'Federação';
 
   @override
-  String get broadcastAgeThisYear => 'Idade atual';
+  String get broadcastAge => 'Idade';
 
   @override
   String get broadcastUnrated => 'Sem rating';
@@ -8209,6 +8222,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeKillBoxMateDescription => 'Uma torre fica perto do rei inimigo e é defendida por uma dama que também bloqueia as casas de fuga. A torre e a dama capturam o rei inimigo em uma \"caixa mortal\" de 3 por 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Mate de Pillsbury';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Mate de Morphy';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mate do triângulo';
 
   @override
@@ -8297,6 +8316,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeOpeningDescription => 'Tática durante a primeira fase do jogo.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Mate da ópera';
 
   @override
   String get puzzleThemePawnEndgame => 'Finais de peões';
@@ -10256,6 +10278,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get togglePositionAnnotations => 'Ativar/desativar anotações de posição';
 
   @override
+  String get toggleObservationAnnotations => 'Ativar/desativar anotações de observação';
+
+  @override
   String get variationArrowsInfo => 'Setas de variação permitem navegar sem usar a lista de movimentos.';
 
   @override
@@ -10793,6 +10818,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get edit => 'Editar';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -11238,8 +11266,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count jogadores conectados',
-      one: '$count jogadores conectados',
+      other: '$count jogadores',
+      one: '$count jogador',
     );
     return '$_temp0';
   }
@@ -11526,17 +11554,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       locale: localeName,
       other: '$count seguidos',
       one: '$count seguidos',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menos que $count minutos',
-      one: 'Menos que $count minutos',
     );
     return '$_temp0';
   }

@@ -7,12 +7,12 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider that gets the conversation data for the current user.
 final contactsProvider = FutureProvider.autoDispose<Contacts>((ref) {
-  return ref.read(messageRepositoryProvider).loadContacts();
+  return ref.watch(messageRepositoryProvider).loadContacts();
 }, name: 'ContactsProvider');
 
 /// A provider for [MessageRepository].
 final messageRepositoryProvider = Provider<MessageRepository>((ref) {
-  return MessageRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
+  return MessageRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
 }, name: 'MessageRepositoryProvider');
 
 /// A provider that gets the unread messages count for the current user.

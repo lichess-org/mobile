@@ -65,7 +65,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.value?.round.status == RoundStatus.live) {
+      if (ref.mounted && state.value?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
           _syncRound();
         });
@@ -74,7 +74,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.value?.round.status == RoundStatus.live) {
+        if (ref.mounted && state.value?.round.status == RoundStatus.live) {
           _syncRoundDebouncer(() {
             _syncRound();
           });

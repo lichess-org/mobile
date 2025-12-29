@@ -789,7 +789,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastFederation => 'Verband';
 
   @override
-  String get broadcastAgeThisYear => 'Alter in diesem Jahr';
+  String get broadcastAge => 'Alter';
 
   @override
   String get broadcastUnrated => 'Ungewertet';
@@ -1891,6 +1891,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburys Matt';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Der Turm setzt Matt, während der Läufer hilft, ihn zu beschränken.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphys Matt';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Benutze den Läufer, um den König ins Schach zu stellen, während dein Turm ihn weiter beschränkt.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Dreiecks-Matt';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Eine Taktik in der ersten Phase der Partie.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opern Matt';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Stelle den König mithilfe deines Turms ins Schach und benutze einen Läufer, um den Turm zu verteidigen.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bauernendspiel';
@@ -3938,6 +3956,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get togglePositionAnnotations => 'Positionsanmerkungen umschalten';
 
   @override
+  String get toggleObservationAnnotations => 'Stellungsanmerkungen umschalten';
+
+  @override
   String get variationArrowsInfo => 'Mit Varianten-Pfeilen navigierst du durch die Zugliste.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get edit => 'Bearbeiten';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: '$count folgend',
       one: '$count folgend',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Weniger als $count Minuten',
-      one: 'Weniger als $count Minute',
     );
     return '$_temp0';
   }

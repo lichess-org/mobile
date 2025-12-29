@@ -19,9 +19,9 @@ class EmojiItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       alignment: Alignment.center,
-      icon: CachedHttpNetworkImage(
+      icon: HttpNetworkImageWidget(
         emoji,
-        errorWidget: (_, _, _) => kEmptyWidget,
+        errorBuilder: (_, _, _) => kEmptyWidget,
         width: size,
         height: size,
       ),

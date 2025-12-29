@@ -61,7 +61,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileHomeTab => 'Hasiera';
 
   @override
-  String get mobileLiveStreamers => 'Zuzeneko streamerrak';
+  String get mobileLiveStreamers => 'Zuzeneko esatariak';
 
   @override
   String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
@@ -789,7 +789,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastFederation => 'Federazioa';
 
   @override
-  String get broadcastAgeThisYear => 'Adina';
+  String get broadcastAge => 'Adina';
 
   @override
   String get broadcastUnrated => 'Ez du sailkapenik';
@@ -1362,7 +1362,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesCorrespondenceEmailNotification => 'Jaso posta elektronikoz zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
 
   @override
-  String get preferencesNotifyStreamStart => 'Streamerra zuzenean dago';
+  String get preferencesNotifyStreamStart => 'Esataria zuzenean dago';
 
   @override
   String get preferencesNotifyInboxMsg => 'Mezu berria postontzian';
@@ -1780,10 +1780,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Akatsa aurkitu eta guztizko abantaila lortu. (ebaluazioa ≥ 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Ageriko xakea';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Mugitu pieza bat, atzean dagoen pieza batek aurkariari xake emateko. Normalean abantaila nabarmena lortzen da.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Bi alfilen matea';
@@ -1891,6 +1891,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Gaztelua aurkariaren erregearen ondoan dago damaren laguntzarekin, honek gainera erregearen ihes-laukiak babesten ditu. Gazteluak eta damak erregea 3x3ko \"hilkutxa\" baten harrapatu dezakete.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburyren matea';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Gazteluak ematen du matea, alfilak erregea baztertuta mantentzen duen bitartean.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphyren matea';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Erabili alfila erregeari mate emateko gazteluak erregea baztertuta mantentzen duen artean.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Hirukiaren matea';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Partidaren lehenengo faseko taktika.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera matea';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Eman xake erregeari gazteluarekine ta erabili alfila gaztelua defendatzeko.';
 
   @override
   String get puzzleThemePawnEndgame => 'Peoien finala';
@@ -3938,6 +3956,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get togglePositionAnnotations => 'Aktibatu/Desaktibatu posizioko oharrak';
 
   @override
+  String get toggleObservationAnnotations => 'Aktibatu/Desaktibatu oharrak';
+
+  @override
   String get variationArrowsInfo => 'Ingurabidearen geziek jokaldi zerrenda erabili gabe nabigatzen uzten dute.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get edit => 'Aldatu';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5213,17 +5237,6 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count minutu baino gutxiago',
-      one: '$count minutu baino gutxiago',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5504,7 +5517,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'Lichess streamerrak';
+  String get streamerLichessStreamers => 'Lichess esatariak';
 
   @override
   String get studyPrivate => 'Pribatua';

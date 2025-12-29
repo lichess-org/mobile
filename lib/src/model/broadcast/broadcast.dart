@@ -80,6 +80,7 @@ sealed class BroadcastTournament with _$BroadcastTournament {
     required IList<BroadcastRound> rounds,
     required BroadcastRoundId defaultRoundId,
     required IList<BroadcastTournamentGroup>? group,
+    BroadcastPhotos? photos,
   }) = _BroadcastTournament;
 }
 
@@ -130,12 +131,17 @@ sealed class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
+typedef BroadcastPhoto = ({String smallUrl, String mediumUrl});
+
+typedef BroadcastPhotos = IMap<FideId, BroadcastPhoto>;
+
 typedef BroadcastRoundResponse = ({
   String? groupName,
   IList<BroadcastTournamentGroup>? group,
   BroadcastTournamentData tournament,
   BroadcastRound round,
   BroadcastRoundGames games,
+  BroadcastPhotos? photos,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
@@ -176,6 +182,8 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
   }) = _BroadcastPlayer;
 
   String? get id => (fideId != null) ? fideId.toString() : name;
+
+  bool get isBot => title == 'BOT';
 }
 
 @freezed
@@ -192,10 +200,14 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
     required BroadcastPlayer player,
     required int played,
     required double? score,
+    required int? rank,
     required int? ratingDiff,
     required int? performance,
+    required IList<BroadcastTieBreakDetail>? tieBreaks,
   }) = _BroadcastPlayerWithOverallResult;
 }
+
+typedef BroadcastTieBreakDetail = ({String extendedCode, String description, double points});
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 

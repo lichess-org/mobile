@@ -808,7 +808,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastFederation => 'Federācija';
 
   @override
-  String get broadcastAgeThisYear => 'Vecums šogad';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nevērtēta';
@@ -1915,6 +1915,18 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -2003,6 +2015,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Atklātnes posma taktika.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bandinieku beigu spēle';
@@ -3962,6 +3980,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get togglePositionAnnotations => 'Rādīt/slēpt pozīciju piezīmes';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Ar variantu bultiņām vari izskatīt variantus neizmantojot gājienu sarakstu.';
 
   @override
@@ -4497,6 +4518,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get edit => 'Rediģēt';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5267,18 +5291,6 @@ class AppLocalizationsLv extends AppLocalizations {
       other: '$count sekotie',
       one: '$count sekotais',
       zero: '$count sekotie',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mazāk kā $count minūtes',
-      one: 'Mazāk kā $count minūte',
-      zero: 'Mazāk kā $count minūtes',
     );
     return '$_temp0';
   }

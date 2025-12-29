@@ -183,7 +183,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Zobrazit okraj';
 
   @override
   String get mobileSettingsTouchFeedback => 'Odezva při klepnutí';
@@ -829,7 +829,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastFederation => 'Federace';
 
   @override
-  String get broadcastAgeThisYear => 'Věk tento rok';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nehodnocen';
@@ -946,11 +946,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Kolo $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Ponechání výchozího jména se automaticky přeloží do jiného jazyka.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1472,7 +1472,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleMates => 'Maty';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Motivy matu';
 
   @override
   String get puzzleGoals => 'Cíle';
@@ -1822,7 +1822,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Sebrání figury, která brání jinou figuru, a poté dalším tahem dobereme tuto nechráněnou figuru.';
 
   @override
-  String get puzzleThemeCornerMate => 'Corner mate';
+  String get puzzleThemeCornerMate => 'Mat v rohu';
 
   @override
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
@@ -1834,7 +1834,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Odhalte chybu soupeře a získejte drtivou výhodu. (eval ≥ 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Odtažný šach';
 
   @override
   String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
@@ -1945,7 +1945,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Věž je vedle soupeřova krále a je podporován dámou, která též blokuje úniková políčka krále. Věž a dáma tak společně uvězní soupeřova krále ve 3 krát 3 „smrtící zóně“.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trojúhelníkový mat';
 
   @override
   String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
@@ -2033,6 +2045,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktický obrat v zahájení.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pěšcové koncovky';
@@ -2193,7 +2211,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playAgainstComputer => 'Hrát proti počítači';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Herní mód';
 
   @override
   String get createLobbyGame => 'Create lobby game';
@@ -2318,13 +2336,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get forceResignation => 'Vynutit vzdání partie';
 
   @override
-  String get forceDraw => 'Vynutit remízu';
+  String get forceDraw => 'Nabídnout remízu';
 
   @override
-  String get talkInChat => 'Pro povídání v chatu pište sem';
+  String get talkInChat => 'Prosím, chovejte se v chatu slušně!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'První kdo přijde pomocí tohoto odkazu, bude s Vámi hrát';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'První, kdo přijde pomocí tohoto odkazu, bude s Vámi hrát.';
 
   @override
   String get whiteResigned => 'Bílý se vzdal';
@@ -3992,6 +4010,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get togglePositionAnnotations => 'Přepni zvýraznění pozice';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Šipky variant umožňují navigaci bez použití seznamu tahů.';
 
   @override
@@ -4312,7 +4333,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Tvůj rating je $param';
   }
 
   @override
@@ -4527,6 +4548,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get edit => 'Upravit';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -4864,7 +4888,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get disableBlindMode => 'Vypnout režim sleposti';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Zkopíruj do schránky';
 
   @override
   String get online => 'online';
@@ -5332,19 +5356,6 @@ class AppLocalizationsCs extends AppLocalizations {
       many: '$count sleduje',
       few: '$count sleduje',
       one: '$count sleduje',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Méně než $count minut',
-      many: 'Méně než $count minut',
-      few: 'Méně než $count minuty',
-      one: 'Méně než $count minuta',
     );
     return '$_temp0';
   }

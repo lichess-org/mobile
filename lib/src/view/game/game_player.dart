@@ -138,9 +138,9 @@ class GamePlayer extends StatelessWidget {
               ),
               if (player.user?.flair != null) ...[
                 const SizedBox(width: 5),
-                CachedHttpNetworkImage(
+                HttpNetworkImageWidget(
                   lichessFlairSrc(player.user!.flair!),
-                  errorWidget: (_, _, _) => kEmptyWidget,
+                  errorBuilder: (_, _, _) => kEmptyWidget,
                   width: 16,
                   height: 16,
                 ),

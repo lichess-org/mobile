@@ -829,7 +829,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastFederation => 'Federacija';
 
   @override
-  String get broadcastAgeThisYear => 'Amžius šiemet';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nereitinguota(s)';
@@ -1945,6 +1945,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Bokštas yra šalia varžovo karaliaus ir jį palaiko karalienė, kuri tuo pačiu uždaro karaliaus pabėgimo langelius. Bokštas ir karalienė sugauna varžovo karalių 3×3 langelių „mirties dėžutėje“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -2033,6 +2045,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika, kuri galioja pirmoje žaidimo fazėje.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pėstininkų endšpilis';
@@ -3992,6 +4010,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get togglePositionAnnotations => 'Įjungti pozicijos komentarus';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variacijų rodyklės leidžia jums naviguoti nenaudojant ėjimų sarašo.';
 
   @override
@@ -4527,6 +4548,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get edit => 'Keisti';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Kulka';
@@ -5332,19 +5356,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekamų',
       few: '$count sekami',
       one: '$count sekamas',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mažiau nei $count minučių',
-      many: 'Mažiau nei $count minučių',
-      few: 'Mažiau nei $count minutės',
-      one: 'Mažiau nei $count minutė',
     );
     return '$_temp0';
   }

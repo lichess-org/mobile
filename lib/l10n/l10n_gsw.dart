@@ -73,7 +73,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastFederation => 'Verband';
 
   @override
-  String get broadcastAgeThisYear => 'Alter i dem Jahr';
+  String get broadcastAge => 'Alter';
 
   @override
   String get broadcastUnrated => 'Ungwertet';
@@ -906,11 +906,11 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Rundi $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Wänn du de Standardname b\'haltsch, wird er automatisch i alli andere Schprache übersetzt.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1891,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Drüeck-Matt';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'E Taktik für die erscht Fase vum Schpiel.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pure Ändschpiel';
@@ -3938,6 +3956,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get togglePositionAnnotations => 'Positionsamerkige umschalte';
 
   @override
+  String get toggleObservationAnnotations => 'Beobachtigs-Bemerkige umschalte';
+
+  @override
   String get variationArrowsInfo => 'Mit de Variationspfil chasch ohni d\'Zugslischte navigiere.';
 
   @override
@@ -4069,7 +4090,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get analysisShapesHowTo => 'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl oder shift = rot; command, alt, oder meta = blau; je eini devo = gähl.';
 
   @override
   String get letOtherPlayersMessageYou => 'Erlaub andere Schpiller dir Nachrichte z\'schicke';
@@ -4473,6 +4494,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get edit => 'Bearbeite';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsGsw extends AppLocalizations {
       locale: localeName,
       other: '$count folgänd',
       one: '$count folgänd',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Weniger als $count Minute',
-      one: 'Weniger als $count Minute',
     );
     return '$_temp0';
   }

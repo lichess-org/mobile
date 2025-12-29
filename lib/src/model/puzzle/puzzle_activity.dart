@@ -6,7 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'puzzle_activity.freezed.dart';
@@ -67,9 +66,9 @@ class PuzzleActivity extends AsyncNotifier<PuzzleActivityState> {
     if (currentVal.hasMore && _list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       try {
-        final value = await ref.withClient(
-          (client) => PuzzleRepository(client).puzzleActivity(_nbPerPage, before: _list.last.date),
-        );
+        final value = await ref
+            .read(puzzleRepositoryProvider)
+            .puzzleActivity(_nbPerPage, before: _list.last.date);
         if (value.isEmpty) {
           state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
           return;

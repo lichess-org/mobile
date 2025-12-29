@@ -869,7 +869,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastFederation => 'إتحاد';
 
   @override
-  String get broadcastAgeThisYear => 'العمر هذا العام';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'غير مقيم';
@@ -2003,6 +2003,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -2091,6 +2103,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'تكتيك في مرحلة الافتتاح.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'نهاية اللعبة بالجنود';
@@ -4050,6 +4068,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get togglePositionAnnotations => 'تبديل تحليل الموقف';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'أسمهم النقلات تسمح لك بلعبها دون استخدام قائمة النقلات المرشحة.';
 
   @override
@@ -4585,6 +4606,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get edit => 'تعديل';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'الرصاصة';
@@ -5460,21 +5484,6 @@ class AppLocalizationsAr extends AppLocalizations {
       two: '$count يتابعهم',
       one: '$count يتابعهم',
       zero: '$count يتابعهم',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'أقل من $count دقيقة',
-      many: 'أقل من $count دقيقة',
-      few: 'أقل من $count دقيقة',
-      two: 'أقل من $count دقيقة',
-      one: 'أقل من $count دقيقة',
-      zero: 'أقل من $count دقيقة',
     );
     return '$_temp0';
   }

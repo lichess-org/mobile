@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
-import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
@@ -112,10 +111,12 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
               ListTile(
                 title: Text(context.l10n.rated),
                 trailing: Switch.adaptive(
-                  value: preferences.customRated,
-                  onChanged: (bool value) {
-                    ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
-                  },
+                  value: preferences.customVariant == Variant.standard && preferences.customRated,
+                  onChanged: preferences.customVariant == Variant.standard
+                      ? (bool value) {
+                          ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
+                        }
+                      : null,
                 ),
               ),
             if (userPerf != null)
@@ -154,7 +155,6 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                               });
                             }
                             if (context.mounted) {
-                              ref.invalidate(correspondenceSeeksProvider);
                               Navigator.of(
                                 context,
                               ).popUntil((route) => route is! ModalBottomSheetRoute);

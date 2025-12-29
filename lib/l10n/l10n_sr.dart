@@ -685,19 +685,19 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get broadcastBroadcasts => 'Емитовања';
+  String get broadcastBroadcasts => 'Преноси';
 
   @override
   String get broadcastMyBroadcasts => 'Моји преноси';
 
   @override
-  String get broadcastLiveBroadcasts => 'Уживо емитовање турнира';
+  String get broadcastLiveBroadcasts => 'Преноси турнира уживо';
 
   @override
   String get broadcastBroadcastCalendar => 'Broadcast calendar';
 
   @override
-  String get broadcastNewBroadcast => 'Нова ужива емитовања';
+  String get broadcastNewBroadcast => 'Нови пренос уживо';
 
   @override
   String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
@@ -715,10 +715,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastAddRound => 'Add a round';
 
   @override
-  String get broadcastOngoing => 'Текућа';
+  String get broadcastOngoing => 'У току';
 
   @override
-  String get broadcastUpcoming => 'Предстојећа';
+  String get broadcastUpcoming => 'Предстојећи';
 
   @override
   String get broadcastRoundName => 'Round name';
@@ -730,18 +730,18 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastTournamentDescription => 'Short tournament description';
 
   @override
-  String get broadcastFullDescription => 'Цео опис догађаја';
+  String get broadcastFullDescription => 'Потпуни опис турнира';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Optional long description of the tournament. $param1 is available. Length must be less than $param2 characters.';
+    return 'Опциони дуги опис турнира. $param1 је доступан. Дужина мора бити мања од $param2 знакова.';
   }
 
   @override
   String get broadcastSourceSingleUrl => 'PGN Source URL';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
+  String get broadcastSourceUrlHelp => 'Линк који ће Lichess проверити да добије ажурирања PGN-а. Мора бити јавно доступан са интернета.';
 
   @override
   String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
@@ -752,7 +752,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartDateHelp => 'Optional, if you know when the event starts';
+  String get broadcastStartDateHelp => 'Опционо, ако знаш када почиње догађај';
 
   @override
   String get broadcastCurrentGameUrl => 'Current game URL';
@@ -806,7 +806,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -1907,6 +1907,18 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1995,6 +2007,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактика у току прве фазе партије.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пешачка завршница';
@@ -3472,7 +3490,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get replyToThisTopic => 'Одговори на ову тему';
 
   @override
-  String get reply => 'Одговор';
+  String get reply => 'Одговори';
 
   @override
   String get message => 'Порука';
@@ -3952,6 +3970,9 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get togglePositionAnnotations => 'Анотација позиције';
+
+  @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
 
   @override
   String get variationArrowsInfo => 'Стрелице за варијације вам омогућавају да се крећете без коришћења листе за померање.';
@@ -4489,6 +4510,9 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get edit => 'Уреди';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Муњевити';
@@ -5259,18 +5283,6 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Мање од $count минута',
-      few: 'Мање од $count минута',
-      one: 'Мање од $count минуте',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5562,7 +5574,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'Личес стримери';
+  String get streamerLichessStreamers => 'Lichess стримери';
 
   @override
   String get studyPrivate => 'Приватна';

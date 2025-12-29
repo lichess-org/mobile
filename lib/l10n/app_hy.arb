@@ -1227,7 +1227,6 @@
   "nbFriendsOnline": "{count, plural, =1{{count} ընկեր առցանց է} other{{count} ընկեր առցանց է}}",
   "nbFollowers": "{count, plural, =1{{count} հետևողներ} other{{count} հետևողներ}}",
   "nbFollowing": "{count, plural, =1{{count} հետևում են} other{{count} հետևում են}}",
-  "lessThanNbMinutes": "{count, plural, =1{ավելի քիչ քան {count} րոպե} other{ավելի քիչ քան {count} րոպե}}",
   "nbGamesInPlay": "{count, plural, =1{Ընթանում է {count} խաղ} other{Ընթանում է {count} խաղ}}",
   "maximumNbCharacters": "{count, plural, =1{Առավելագույնը՝ {count} նշան։} other{Առավելագույնը՝ {count} նշան։}}",
   "blocks": "{count, plural, =1{{count} արգելափակում} other{{count} արգելափակում}}",

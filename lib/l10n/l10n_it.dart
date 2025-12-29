@@ -789,7 +789,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastFederation => 'Federazione';
 
   @override
-  String get broadcastAgeThisYear => 'Età quest\'anno';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Non classificato';
@@ -1891,6 +1891,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Matto triangolare';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Una tattica durante la prima fase della partita.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finale di pedoni';
@@ -3938,6 +3956,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get togglePositionAnnotations => 'Mostra le annotazioni della posizione';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Le frecce delle varianti ti permettono di esplorare le mosse senza usare la lista.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get edit => 'Modifica';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5213,17 +5237,6 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Meno di $count minuti',
-      one: 'Meno di $count minuto',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5599,7 +5612,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyLike => 'Mi piace';
 
   @override
-  String get studyUnlike => 'Non mi Piace';
+  String get studyUnlike => 'Non mi piace più';
 
   @override
   String get studyNewTag => 'Nuovo tag';

@@ -32,7 +32,7 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
 
 /// Fetches a storm of puzzles.
 final stormProvider = FutureProvider.autoDispose<PuzzleStormResponse>((Ref ref) {
-  return ref.withClient((client) => PuzzleRepository(client).storm());
+  return ref.read(puzzleRepositoryProvider).storm();
 }, name: 'StormProvider');
 
 /// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
@@ -43,7 +43,7 @@ final puzzleProvider = FutureProvider.autoDispose.family<Puzzle, PuzzleId>((
   final puzzleStorage = await ref.watch(puzzleStorageProvider.future);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
-  return ref.withClient((client) => PuzzleRepository(client).fetch(id));
+  return ref.read(puzzleRepositoryProvider).fetch(id);
 }, name: 'PuzzleProvider');
 
 /// Fetches the daily puzzle.
@@ -107,7 +107,7 @@ final stormDashboardProvider = FutureProvider.autoDispose.family<StormDashboard?
   Ref ref,
   UserId id,
 ) {
-  return ref.withClient((client) => PuzzleRepository(client).stormDashboard(id));
+  return ref.read(puzzleRepositoryProvider).stormDashboard(id);
 }, name: 'StormDashboardProvider');
 
 /// Fetches available puzzle themes.

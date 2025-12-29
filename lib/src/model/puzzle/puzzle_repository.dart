@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -20,6 +21,12 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'puzzle_repository.freezed.dart';
+
+/// A provider for the [PuzzleRepository].
+final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
+  final client = ref.watch(lichessClientProvider);
+  return PuzzleRepository(client);
+}, name: 'PuzzleRepositoryProvider');
 
 class PuzzleRepository {
   PuzzleRepository(this.client);

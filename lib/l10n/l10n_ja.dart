@@ -769,7 +769,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastFederation => '所属協会';
 
   @override
-  String get broadcastAgeThisYear => '今年時点の年齢';
+  String get broadcastAge => '年齢';
 
   @override
   String get broadcastUnrated => 'レーティングなし';
@@ -1752,10 +1752,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCrushingDescription => '相手の悪手をとがめて圧倒的な優位を築きます。（評価値は 600cp 以上）';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'ディスカバード・チェック';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => '駒を動かして、その陰にいた別の駒でチェックをかける。決定的な優位につながることが多い。';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'ダブル・ビショップのメイト';
@@ -1863,6 +1863,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'ルークが敵キングの隣にあり、クイーンがルークを守ると同時にキングの逃げ道をふさいでいる。ルークとクイーンが 3 × 3 の「キルボックス」に敵キングを捕えた形。';
 
   @override
+  String get puzzleThemePillsburysMate => 'ピルズベリーのメイト';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'ルークがチェックをかけ、ビショップがルークを守っているメイト。';
+
+  @override
+  String get puzzleThemeMorphysMate => 'モーフィのメイト';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。';
+
+  @override
   String get puzzleThemeTriangleMate => '三角のメイト';
 
   @override
@@ -1951,6 +1963,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'ゲームの序盤でのタクティクス。';
+
+  @override
+  String get puzzleThemeOperaMate => 'オペラのメイト';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'ルークがチェックをかけ、ビショップがルークを守っているメイト。';
 
   @override
   String get puzzleThemePawnEndgame => 'ポーン・エンドゲーム';
@@ -3910,6 +3928,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get togglePositionAnnotations => 'わからん';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => '変化手順の矢印があれば棋譜記録を使わずにナビゲーションできます。';
 
   @override
@@ -4445,6 +4466,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get edit => '編集';
+
+  @override
+  String get ultraBullet => 'ウルトラブレット';
 
   @override
   String get bullet => 'ブレット';
@@ -5145,16 +5169,6 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count 人をフォロー',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 分未満',
     );
     return '$_temp0';
   }

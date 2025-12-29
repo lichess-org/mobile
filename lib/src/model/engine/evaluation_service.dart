@@ -104,23 +104,15 @@ class EvaluationService {
     return (bigNet: bigNetFile, smallNet: smallNetFile);
   }
 
-  Future<Engine> _engineFactory(ChessEnginePref pref) async {
+  Engine _engineFactory(ChessEnginePref pref) {
     // TODO support variants
     switch (pref) {
       case ChessEnginePref.sfLatest:
-        try {
-          if (!await checkNNUEFiles()) {
-            throw Exception('NNUE files not found or corrupted.');
-          }
-          return StockfishEngine(
-            StockfishFlavor.latestNoNNUE,
-            bigNetPath: nnueFiles.bigNet.path,
-            smallNetPath: nnueFiles.smallNet.path,
-          );
-        } catch (e, st) {
-          _logger.warning('Failed to load NNUE files: $e\n$st');
-          return StockfishEngine(StockfishFlavor.sf16);
-        }
+        return StockfishEngine(
+          StockfishFlavor.latestNoNNUE,
+          bigNetPath: nnueFiles.bigNet.path,
+          smallNetPath: nnueFiles.smallNet.path,
+        );
       case ChessEnginePref.sf16:
         return StockfishEngine(StockfishFlavor.sf16);
     }
@@ -137,7 +129,14 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = await _engineFactory(options.enginePref);
+    ChessEnginePref pref = options.enginePref;
+    if (options.enginePref == ChessEnginePref.sfLatest) {
+      if (!await checkNNUEFiles()) {
+        _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
+        pref = ChessEnginePref.sf16;
+      }
+    }
+    _engine = _engineFactory(pref);
     _engine!.state.addListener(() {
       _logger.fine('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||

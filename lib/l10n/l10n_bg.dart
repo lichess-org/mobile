@@ -9,10 +9,10 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Предпочитания за акаунта';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Тези предпочитания се прилагат към вашия Lichess акаунт и ще се използват на всички устройства.';
 
   @override
   String get mobileAllGames => 'Всички игри';
@@ -33,7 +33,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Изтрий запазения ход';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Намери игра';
 
   @override
   String get mobileFeedbackButton => 'Отзиви';
@@ -789,7 +789,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastFederation => 'Федерация';
 
   @override
-  String get broadcastAgeThisYear => 'Възраст (тази година)';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -1080,7 +1080,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get coordinatesNameSquare => 'Назови полето';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Само някои вертикали & хоризонтали';
 
   @override
   String get patronDonate => 'Дарете';
@@ -1428,7 +1428,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleMates => 'Матове';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Матови мотиви';
 
   @override
   String get puzzleGoals => 'Цели';
@@ -1891,6 +1891,18 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактика в първата фаза на играта.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пешечен Ендшпил';
@@ -3938,6 +3956,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Показване/скриване на анотациите';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get edit => 'Редактиране';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsBg extends AppLocalizations {
       locale: localeName,
       other: '$count следва',
       one: '$count следва',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'По-малко от $count минути',
-      one: 'По-малко от $count минута',
     );
     return '$_temp0';
   }

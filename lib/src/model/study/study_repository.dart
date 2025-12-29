@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for [StudyRepository].
 final studyRepositoryProvider = Provider<StudyRepository>((Ref ref) {
-  return StudyRepository(ref, ref.read(lichessClientProvider));
+  return StudyRepository(ref, ref.watch(lichessClientProvider));
 }, name: 'StudyRepositoryProvider');
 
 class StudyRepository {

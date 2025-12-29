@@ -14,7 +14,7 @@
   <string name="newPatrons">Nýlegir velunnarar</string>
   <string name="freeChess">Ókeypis skák fyrir alla, til eilífðarnóns!</string>
   <string name="noAdsNoSubs">Engar auglýsingar, engar áskriftir; heldur opinn hugbúnaður og ástríða.</string>
-  <string name="thankYou">Takk fyrir fjárframlagið!</string>
+  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Takk fyrir fjárframlagið!</string>
   <string name="youHaveLifetime">Þú ert með ævilangan velunnaraaðgang. Það er ansi magnað!</string>
   <string name="patronUntil">Þú ert með velunnaraaðgang uns %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Ef aðgangurinn þinn er ekki endurnýjaður verður hann síðan breyttur í venjulegan aðgang.</string>

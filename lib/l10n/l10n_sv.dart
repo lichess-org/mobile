@@ -789,7 +789,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastFederation => 'Förbund';
 
   @override
-  String get broadcastAgeThisYear => 'Ålder i år';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Ej rankat';
@@ -1891,6 +1891,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ett torn ligger bredvid motståndarens kung och understöds av en dam som också stänger kungens flyktrutor. Tornet och damen fångar fiendens kung i en 3 gånger 3-kvadrat, \"dödsbox\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'En taktik under spelets första fas.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondeslutspel';
@@ -3938,6 +3956,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get togglePositionAnnotations => 'Växla positionsanteckningar';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variationspilar låter dig navigera utan att använda draglistan.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get edit => 'Redigera';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Bullet';
@@ -5208,17 +5232,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'följer $count',
       one: 'följer $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mindre än $count minuter',
-      one: 'Mindre än $count minut',
     );
     return '$_temp0';
   }

@@ -5,7 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        <b>Thank you for reporting an issue. Before submitting, please [search existing issues](https://github.com/lichess-org/mobile/issues) to confirm this is not a duplicate issue.</b>
+        Thank you for reporting an issue. <b>Before submitting, please [search existing issues](https://github.com/lichess-org/mobile/issues) to confirm this is not a duplicate issue.</b>
+        <b>If your application version is 8.0.0 you are using the old application that is not maintained anymore. [Please download the new one](https://lichess.org/mobile) and do not report bugs of the old one here.</b>
   - type: textarea
     id: desc
     attributes:
@@ -27,7 +28,7 @@ body:
   - type: input
     attributes:
       label: App version
-      description: Specify the application version (e.g. 0.7.8).
+      description: Specify the application version (e.g. 0.7.8). If your version is 8.0.0 it means you are using the old application. You should [download the new one](https://lichess.org/mobile).
     validations:
       required: true
   - type: input

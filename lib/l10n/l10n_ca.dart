@@ -789,7 +789,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastFederation => 'Federació';
 
   @override
-  String get broadcastAgeThisYear => 'Edat aquest any';
+  String get broadcastAge => 'Edat';
 
   @override
   String get broadcastUnrated => 'Sense avaluació';
@@ -1891,6 +1891,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mat del triangle';
 
   @override
@@ -1979,6 +1991,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Una tàctica durant la primera fase del joc.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peons';
@@ -3938,6 +3956,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get togglePositionAnnotations => 'Mostra/amaga les anotacions de la posició';
 
   @override
+  String get toggleObservationAnnotations => 'Motra/amaga les anotacions dels observadors';
+
+  @override
   String get variationArrowsInfo => 'Les fletxes de variants et permeten navegar sense utilitzar la llista de moviments.';
 
   @override
@@ -4473,6 +4494,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get edit => 'Edita';
+
+  @override
+  String get ultraBullet => 'Ultra-Bala';
 
   @override
   String get bullet => 'Bala';
@@ -5208,17 +5232,6 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: 'Seguint $count jugadors',
       one: 'Seguint $count jugadors',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Menys de $count minuts',
-      one: 'Menys de $count minuts',
     );
     return '$_temp0';
   }

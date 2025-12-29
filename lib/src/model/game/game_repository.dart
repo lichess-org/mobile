@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for the [GameRepository].
 final gameRepositoryProvider = Provider<GameRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
   return GameRepository(client, aggregator);
 }, name: 'GameRepositoryProvider');
 
