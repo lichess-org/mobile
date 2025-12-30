@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -176,31 +174,28 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   /// When widget.livePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
   late UciPath? pathToLiveMove;
 
-  Timer? _scrollTimer;
-
   @override
   void initState() {
     super.initState();
     pathToCurrentMove = widget.currentPath;
     pathToLiveMove = widget.livePath;
+
+    // Scrollable.ensureVisible breaks animation when swiping between tabs (see https://github.com/lichess-org/mobile/issues/1232)
+    // Explicitly use the Scrollable of our TreeView instead, so that it won't affect the TabController's state.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollTimer?.cancel();
-      _scrollTimer = Timer(const Duration(milliseconds: 500), () {
-        if (currentMoveKey.currentContext != null) {
-          Scrollable.ensureVisible(
-            currentMoveKey.currentContext!,
-            alignment: 0.5,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-          );
-        }
-      });
+      if (currentMoveKey.currentContext != null) {
+        Scrollable.of(currentMoveKey.currentContext!).position.ensureVisible(
+          currentMoveKey.currentContext!.findRenderObject()!,
+          alignment: 0.5,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+        );
+      }
     });
   }
 
   @override
   void dispose() {
     _debounce.cancel();
-    _scrollTimer?.cancel();
     super.dispose();
   }
 
