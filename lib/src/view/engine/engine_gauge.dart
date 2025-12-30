@@ -12,7 +12,7 @@ const double _kEvalGaugeSize = 24.0;
 const double _kEvalGaugeFontSize = 11.0;
 
 double getEvalGaugeWidth(BuildContext context) {
-  return isTabletOrLarger(context) ? _kEvalGaugeSize : _kEvalGaugeSize - 6.0;
+  return isTabletOrLarger(context) ? _kEvalGaugeSize : _kEvalGaugeSize - 2.0;
 }
 
 double getEvalGaugeFontSize(BuildContext context) {
@@ -110,11 +110,19 @@ class _EvalGaugeState extends State<_EvalGauge> {
 
   @override
   Widget build(BuildContext context) {
-    final evalDisplay = widget.position.outcome != null
+    String? evalDisplay = widget.position.outcome != null
         ? widget.position.outcome!.winner == null
               ? ''
               : '#'
         : widget.eval?.evalString ?? oldEval?.evalString;
+
+    final evalIntegerPart = evalDisplay == null || evalDisplay.startsWith('#')
+        ? null
+        : evalDisplay.split('.').first;
+
+    evalDisplay = evalIntegerPart != null && evalIntegerPart.length > 2
+        ? evalIntegerPart
+        : evalDisplay;
 
     final evalStyle = TextStyle(
       color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
@@ -158,18 +166,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                           padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 3.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Text(
-                              //   evalDisplay?.startsWith(RegExp('[-+]')) == true
-                              //       ? evalDisplay!.substring(0, 1)
-                              //       : '',
-                              //   style: evalStyle,
-                              // ),
-                              Text(
-                                evalDisplay?.replaceFirst(RegExp('[-+]'), '') ?? '',
-                                style: evalStyle,
-                              ),
-                            ],
+                            children: [Text(evalDisplay ?? '', style: evalStyle)],
                           ),
                         ),
                       )

@@ -702,7 +702,7 @@ void main() {
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(EngineGauge), findsOne);
-        expect(find.widgetWithText(EngineGauge, '0.2'), findsOne);
+        expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
       });
 
       testWidgets('is displayed on an analysed game, even if engine eval is disabled', (
