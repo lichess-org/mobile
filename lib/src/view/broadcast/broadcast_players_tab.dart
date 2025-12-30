@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -41,7 +40,7 @@ class BroadcastPlayersTab extends ConsumerWidget {
   }
 }
 
-enum _SortingTypes { player, elo, score }
+enum _SortingTypes { elo, score }
 
 typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
 
@@ -130,7 +129,6 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   void sort() {
     final compare = switch (currentSort) {
-      _SortingTypes.player => nullableCompare((p) => p.player.name),
       _SortingTypes.elo =>
         (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
             bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
@@ -151,7 +149,6 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    const double eloWidth = 60;
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
     final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
 
@@ -159,61 +156,50 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
       itemCount: players.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return ColoredBox(
-            color: ColorScheme.of(context).surfaceDim,
-            child: Column(
-              mainAxisSize: .min,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info, size: 16),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Standings are calculated using broadcasted games and may differ from official results.',
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  crossAxisAlignment: .center,
+          return Column(
+            mainAxisSize: .min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
                   children: [
+                    Icon(Icons.info, size: 16),
+                    SizedBox(width: 8),
                     Expanded(
-                      child: _TableTitleCell(
-                        title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                        onTap: () => toggleSort(_SortingTypes.player),
-                        sortIcon: (currentSort == _SortingTypes.player) ? sortIcon : null,
-                      ),
-                    ),
-                    if (withRating)
-                      SizedBox(
-                        width: eloWidth,
-                        child: _TableTitleCell(
-                          title: const Text('Elo', style: _kHeaderTextStyle),
-                          onTap: () => toggleSort(_SortingTypes.elo),
-                          sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
-                        ),
-                      ),
-                    SizedBox(
-                      width: scoreWidth,
-                      child: _TableTitleCell(
-                        title: Text(
-                          withScores ? context.l10n.broadcastScore : context.l10n.games,
-                          style: _kHeaderTextStyle,
-                        ),
-                        onTap: () => toggleSort(_SortingTypes.score),
-                        sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
+                      child: Text(
+                        'Standings are calculated using broadcasted games and may differ from official results.',
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 13),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Row(
+                crossAxisAlignment: .center,
+                children: [
+                  if (withRating)
+                    Expanded(
+                      child: _TableTitleCell(
+                        title: Text('${context.l10n.player} (Elo)', style: _kHeaderTextStyle),
+                        onTap: () => toggleSort(_SortingTypes.elo),
+                        sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                      ),
+                    ),
+                  SizedBox(
+                    width: scoreWidth,
+                    child: _TableTitleCell(
+                      title: Text(
+                        withScores ? context.l10n.broadcastScore : context.l10n.games,
+                        style: _kHeaderTextStyle,
+                      ),
+                      onTap: () => toggleSort(_SortingTypes.score),
+                      sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           );
         } else {
           return BroadcastPlayerRow(
@@ -238,7 +224,7 @@ class _TableTitleCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 44,
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: _kTableRowPadding,
@@ -273,7 +259,7 @@ class BroadcastPlayerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played) =
+    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played, :rank) =
         playerWithOverallResult;
     final BroadcastPlayer(:federation, :title, :name, :rating) = player;
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
@@ -292,11 +278,14 @@ class BroadcastPlayerRow extends StatelessWidget {
           );
         }
       },
-      leading: pic != null
-          ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
-          : player.isBot
-          ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
-          : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      leading: ClipRRect(
+        borderRadius: Styles.thumbnailBorderRadius,
+        child: pic != null
+            ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
+            : player.isBot
+            ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
+            : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      ),
       title: Row(
         mainAxisSize: .min,
         children: [
@@ -319,7 +308,16 @@ class BroadcastPlayerRow extends StatelessWidget {
               children: [
                 Image.asset('assets/images/fide-fed/$federation.png', height: 12),
                 const SizedBox(width: 5),
-                Text('${federationIdToName[federation]}'),
+                if (rating != null)
+                  Text(
+                    rating.toString(),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                const SizedBox(width: 4),
+                if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
               ],
             )
           : null,
@@ -328,11 +326,11 @@ class BroadcastPlayerRow extends StatelessWidget {
               width: 65,
               child: Column(
                 mainAxisSize: .min,
-                crossAxisAlignment: .stretch,
+                crossAxisAlignment: .end,
                 children: [
                   if (score != null)
                     Text(
-                      '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                      score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -348,20 +346,14 @@ class BroadcastPlayerRow extends StatelessWidget {
                         fontFeatures: [FontFeature.tabularFigures()],
                       ),
                     ),
-                  if (rating != null)
-                    Row(
-                      mainAxisSize: .min,
-                      children: [
-                        Text(
-                          rating.toString(),
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontFeatures: [FontFeature.tabularFigures()],
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
-                      ],
+                  if (rank != null)
+                    Text(
+                      '#$rank',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: textShade(context, Styles.subtitleOpacity),
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
                     ),
                 ],
               ),

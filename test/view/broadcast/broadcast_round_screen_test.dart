@@ -351,7 +351,7 @@ void main() {
       // Load the players
       await tester.pump();
 
-      await tester.tap(find.text('Elo'));
+      await tester.tap(find.text('Player (Elo)'));
       await tester.pump();
 
       final playersList = tester
@@ -361,59 +361,7 @@ void main() {
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
 
-      await tester.tap(find.text('Elo'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
-
-    testWidgets('Test player sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_liveBroadcastClient(), ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Player'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Player'));
+      await tester.tap(find.text('Player (Elo)'));
       await tester.pump();
 
       final playersListReversed = tester

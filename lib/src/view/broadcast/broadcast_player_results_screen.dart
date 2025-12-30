@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -100,8 +101,8 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
       ),
       body: _Body(tournamentId, playerId),
@@ -219,50 +220,68 @@ class _OverallStatPlayer extends StatelessWidget {
         (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
+    final picWidth = MediaQuery.sizeOf(context).width / 3;
+
     return Padding(
       padding: Styles.bodyPadding,
       child: Column(
         spacing: cardSpacing,
         children: [
-          if (pic != null) HttpNetworkImageWidget(pic.mediumUrl),
-          if (federation != null)
-            Row(
-              children: [
-                SizedBox(width: 150, child: Text(context.l10n.broadcastFederation)),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Image.asset('assets/images/fide-fed/$federation.png', height: 12),
-                      const SizedBox(width: 5),
-                      Flexible(
-                        child: Text(
-                          federationIdToName[federation]!,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold, height: 1.2),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+          Row(
+            children: [
+              if (pic != null) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: HttpNetworkImageWidget(pic.mediumUrl, width: picWidth),
+                ),
+                const SizedBox(width: 16),
+              ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: .spaceAround,
+                  children: [
+                    if (federation != null)
+                      Row(
+                        children: [
+                          SizedBox(width: 100, child: Text(context.l10n.broadcastFederation)),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                const SizedBox(width: 5),
+                                Flexible(
+                                  child: Text(
+                                    federationIdToName[federation]!,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyLarge?.copyWith(height: 1.2),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    const SizedBox(height: 16),
+                    if (birthYear != null)
+                      Row(
+                        children: [
+                          SizedBox(width: 100, child: Text(context.l10n.broadcastAge)),
+                          Expanded(
+                            child: Text(
+                              (DateTime.now().year - birthYear).toString(),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
-              ],
-            ),
-          if (birthYear != null)
-            Row(
-              children: [
-                SizedBox(width: 150, child: Text(context.l10n.broadcastAge)),
-                Expanded(
-                  child: Text(
-                    (DateTime.now().year - birthYear).toString(),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
+          ),
           if (standard != null || rapid != null || blitz != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -396,11 +415,14 @@ class _GameResultListTile extends StatelessWidget {
           ),
         );
       },
-      leading: pic != null
-          ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
-          : opponent.isBot
-          ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
-          : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      leading: ClipRRect(
+        borderRadius: Styles.thumbnailBorderRadius,
+        child: pic != null
+            ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
+            : opponent.isBot
+            ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
+            : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      ),
       title: Row(
         mainAxisSize: .min,
         children: [
@@ -423,7 +445,7 @@ class _GameResultListTile extends StatelessWidget {
               children: [
                 Image.asset('assets/images/fide-fed/$federation.png', height: 12),
                 const SizedBox(width: 5),
-                Text('${federationIdToName[federation]}'),
+                if (opponent.rating != null) Text(opponent.rating.toString()),
               ],
             )
           : null,
@@ -447,13 +469,12 @@ class _GameResultListTile extends StatelessWidget {
                     context,
                   ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(width: 3),
-                if (showRatingDiff && playerGameResult.ratingDiff != null)
-                  ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 13),
               ],
             ),
-            if (opponent.rating != null)
-              Text(opponent.rating.toString(), style: Theme.of(context).textTheme.bodyMedium),
+            if (showRatingDiff &&
+                playerGameResult.ratingDiff != null &&
+                playerGameResult.ratingDiff != 0)
+              ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 12),
           ],
         ),
       ),

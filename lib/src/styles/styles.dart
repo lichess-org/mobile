@@ -37,6 +37,8 @@ abstract class Styles {
   // boards
   static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
 
+  static const thumbnailBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
   static Color chartColor(BuildContext context) {
     return ColorScheme.of(context).tertiary;
   }
