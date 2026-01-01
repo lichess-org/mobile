@@ -8903,7 +8903,7 @@ abstract class AppLocalizations {
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}'**
+  /// **'{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}'**
   String opponentLeftCounter(int count);
 
   /// No description provided for @mateInXHalfMoves.
