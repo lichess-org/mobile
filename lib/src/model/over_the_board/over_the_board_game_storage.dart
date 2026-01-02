@@ -40,7 +40,7 @@ class OverTheBoardGameStorage {
   final Ref ref;
 
   Future<File> _getFile() async {
-    final dir = await getApplicationCacheDirectory();
+    final dir = await getApplicationSupportDirectory();
     return File('${dir.path}/$kOtbGameFileName');
   }
 
