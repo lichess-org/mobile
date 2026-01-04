@@ -3,7 +3,7 @@
   <string name="donate">Donera</string>
   <string name="donateAsX">Donera som %s</string>
   <string name="lichessPatron">Lichess-donator</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">Beskyddare sedan %s</string>
+  <string name="patronSince" comment="string is a date">Beskyddare sedan %s</string>
   <string name="freeAccount">Gratis konto</string>
   <string name="becomePatron">Bli en Lichess Patron</string>
   <string name="xBecamePatron">%s blev en Lichess Patron</string>
@@ -14,7 +14,7 @@
   <string name="newPatrons">Nya beskyddare (Patrons)</string>
   <string name="freeChess">Gratis schack för alla, för evigt!</string>
   <string name="noAdsNoSubs">Inga annonser, inga prenumerationer; men öppen källkod och passion.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Tack för din gåva!</string>
+  <string name="thankYou">Tack för din gåva!</string>
   <string name="youHaveLifetime">Du har ett livstids Patron-konto. Det är ganska häftigt!</string>
   <string name="patronUntil">Du har ett Patron-konto till %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Om donationen inte förnyas kommer ditt konto sedan återgå till ett vanligt konto.</string>

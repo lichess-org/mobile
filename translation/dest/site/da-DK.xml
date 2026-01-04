@@ -950,7 +950,7 @@
   <string name="timeAlmostUp">Tiden er næsten udløbet!</string>
   <string name="clickToRevealEmailAddress">[Klik for at vise e-mailadresse]</string>
   <string name="download">Download</string>
-  <string name="coachManager">Træner-administration</string>
+  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Træner-administration</string>
   <string name="streamerManager">Streamer-administration</string>
   <string name="cancelTournament">Aflys turneringen</string>
   <string name="tournDescription">Turneringsbeskrivelse</string>

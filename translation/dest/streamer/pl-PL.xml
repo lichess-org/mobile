@@ -41,8 +41,8 @@
     <item quantity="many">Zachowaj zwięzłość: maksymalnie %s znaków</item>
     <item quantity="other">Zachowaj zwięzłość: maksymalnie %s znaków</item>
   </plurals>
-  <string name="visibility">Widoczne na stronie streamerów</string>
-  <string name="whenApproved">Po zatwierdzeniu przez moderatorów</string>
+  <string name="visibility" comment="A togglable setting. When enabled, the streamer profile you created will be listed on https://lichess.org/streamer">Widoczne na stronie streamerów</string>
+  <string name="whenApproved" comment="Subtitle to &quot;Visible on the streamers page&quot;.&#10;&#10;This subtitle is to clarify that Lichess moderators approve all applications for the https://lichess.org/streamer page">Po zatwierdzeniu przez moderatorów</string>
   <string name="headline">Nagłówek</string>
   <string name="tellUsAboutTheStream">W jednym zdaniu powiedz nam o Twoim streamie</string>
   <string name="longDescription">Szczegółowy opis</string>
