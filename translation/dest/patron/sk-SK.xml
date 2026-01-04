@@ -3,7 +3,7 @@
   <string name="donate">Prispieť</string>
   <string name="donateAsX">Prispieť ako %s</string>
   <string name="lichessPatron">Lichess Patrón</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">Patrónom od %s</string>
+  <string name="patronSince" comment="string is a date">Patrónom od %s</string>
   <string name="freeAccount">Účet zdarma</string>
   <string name="becomePatron">Staňte sa Lichess Patrónom</string>
   <string name="xBecamePatron">%s sa stal Lichess Patronom</string>
@@ -16,7 +16,7 @@
   <string name="newPatrons">Noví Patróni</string>
   <string name="freeChess">Šach zdarma pre všetkých, navždy!</string>
   <string name="noAdsNoSubs">Bez reklám, bez predplatného; iba otvorený zdrojový kód a vášeň.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Ďakujeme za Váš príspevok!</string>
+  <string name="thankYou">Ďakujeme za Váš príspevok!</string>
   <string name="youHaveLifetime">Si doživotným Patrónom. To je skvelé!</string>
   <string name="patronUntil">Máš Patrón účet do %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Ak to nebude obnovené, váš účet sa vráti na základnú formu.</string>

@@ -923,7 +923,7 @@
   <string name="timeAlmostUp">সময় প্রায় শেষ!</string>
   <string name="clickToRevealEmailAddress">[ইমেইল অ্যাড্রেস দেখতে ক্লিক করুন]</string>
   <string name="download">ডাউনলোড করুন</string>
-  <string name="coachManager">প্রশিক্ষক ব্যবস্থাপনা</string>
+  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">প্রশিক্ষক ব্যবস্থাপনা</string>
   <string name="streamerManager">সম্প্রচার নিয়ন্ত্রণ</string>
   <string name="cancelTournament">টুর্নামেন্ট বাতিল করুন</string>
   <string name="tournDescription">টুর্নামেন্টের বর্ণনা</string>

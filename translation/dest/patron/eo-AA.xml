@@ -3,7 +3,7 @@
   <string name="donate">Donaci</string>
   <string name="donateAsX">Donaci kiel %s</string>
   <string name="lichessPatron">Lichess Patrono</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">Patrono ekde %s</string>
+  <string name="patronSince" comment="string is a date">Patrono ekde %s</string>
   <string name="freeAccount">Senpaga konto</string>
   <string name="becomePatron">Fariĝu Lichess Patrono</string>
   <string name="xBecamePatron">%s fariĝu Lichess Patrono</string>
@@ -14,7 +14,7 @@
   <string name="newPatrons">Novaj Patronoj</string>
   <string name="freeChess">Senpaga ŝako por ĉiuj, por ĉiam!</string>
   <string name="noAdsNoSubs">Neniu anonco, neniu abono; sed malferma kodo kaj pasio.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Dankon pro via donaco!</string>
+  <string name="thankYou">Dankon pro via donaco!</string>
   <string name="youHaveLifetime">Vi havas dumvivan Patronan konton. Tio estas tre impresa!</string>
   <string name="patronUntil">Vi havas Patronan konton ĝis la %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Se ne renovigas, vian konton estos tiam reveni al senpaga konto.</string>

@@ -3,7 +3,7 @@
   <string name="donate">Поддержать проект</string>
   <string name="donateAsX">Пожертвовать как %s</string>
   <string name="lichessPatron">Lichess-спонсор</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">Покровитель с %s</string>
+  <string name="patronSince" comment="string is a date">Покровитель с %s</string>
   <string name="freeAccount">Бесплатный аккаунт</string>
   <string name="becomePatron">Стать спонсором Lichess</string>
   <string name="xBecamePatron">%s стал спонсором Lichess</string>
@@ -16,7 +16,7 @@
   <string name="newPatrons">Новые спонсоры</string>
   <string name="freeChess">Бесплатные шахматы для всех, навсегда!</string>
   <string name="noAdsNoSubs">Без рекламы, без подписок, но с открытым исходным кодом и преданностью делу.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Благодарим вас за пожертвование!</string>
+  <string name="thankYou">Благодарим вас за пожертвование!</string>
   <string name="youHaveLifetime">У вас есть пожизненная учётная запись спонсора. Это очень круто!</string>
   <string name="patronUntil">Ваш аккаунт покровителя действует до %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Если не будет обновляться, то учётная запись опять станет обычной.</string>

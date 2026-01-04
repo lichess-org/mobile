@@ -90,7 +90,7 @@
   <string name="timePlaying">زمان بازی کردن</string>
   <string name="variantXOverLastY">%1$s در %2$s روز اخیر</string>
   <string name="winrate">نرخِ برد</string>
-  <string name="na">در دسترس نیست</string>
+  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">در دسترس نیست</string>
   <string name="overview">نمای کلی</string>
   <string name="news">اخبار</string>
   <string name="classNews">اخبار کلاس</string>

@@ -3,7 +3,7 @@
   <string name="donate">Bağış yap</string>
   <string name="donateAsX">%s olarak bağış yap</string>
   <string name="lichessPatron">Lichess Destekçisi</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">%s\'den beri Patron</string>
+  <string name="patronSince" comment="string is a date">%s\'den beri Patron</string>
   <string name="freeAccount">Ücretsiz Hesap</string>
   <string name="becomePatron">Lichess Destekçisi olun</string>
   <string name="xBecamePatron">%s Lichess Destekçisi oldu</string>
@@ -15,7 +15,7 @@
   <string name="freeChess">Herkes için ücretsiz satranç,
 sonsuza kadar!</string>
   <string name="noAdsNoSubs">Ne reklam var ne abonelik; kodumuz açık kaynaklı, tutkumuz epik.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Yardımınız için teşekkür ederiz!</string>
+  <string name="thankYou">Yardımınız için teşekkür ederiz!</string>
   <string name="youHaveLifetime">Artık Ömür Boyu Destekçi hesabınız var. Bu müthiş bir şey!</string>
   <string name="patronUntil">Destekçi hesabınızın süresi %s tarihinde sona erecek.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Bağışınızı yenilemediğiniz takdirde hesabınız normal hesaba çevrilecektir.</string>
