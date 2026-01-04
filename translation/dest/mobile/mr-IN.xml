@@ -4,47 +4,76 @@
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ही प्राधान्ये तुमच्या Lichess खात्यावर लागू केली जातील  आणि सर्व उपकरणांवर वापरली जातील.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">सर्व खेळ</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">तुम्हाला खात्री आहे का ? </string>
-  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">फळीचे प्राधान्ये  </string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">परत घेण्याची देण रद्द करा</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">साफ करा</string>
-  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">जतन केलेले डाव मागे घ्या   </string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">पटाची प्राधान्ये</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">चाल परत घेण्याचा प्रस्ताव रद्द करा</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">पुसा</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">जतन केलेली चाल पुसा</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">खेळात सामील व्हा </string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">अभिप्राय</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार ,  %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार </string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार</string>
   <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">नमस्कार, %s</string>
-  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">नमस्कार </string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">नमस्कार</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">भिन्नतांना लपवा </string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">मुखपृष्ठ</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ऑनलाईन स्ट्रीमर</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">तुम्हाला ह्या पृष्ठाला पाहण्यासाठी लॉग इन करावं लागेल.</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">कोणताही परिणाम नाही </string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">थेट प्रसारक</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">हे पृष्ठ पाहण्यासाठी तुम्हाला लॉग इन करावे लागेल.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">कोणताही निकाल नाही</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">कृपया ह्याची नोंद घ्यावी की जुन्या अँप व वेबसाईटचे वैशिष्ट्ये सध्या उपलब्ध नाही आहेत, पण आम्ही नेहमी नवीन 
 वैशिष्ट्यांचे आगमन करत असतो.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">तुम्ही कोणत्याही वापरकर्त्याला अनुसरणत नाही.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ठिक आहे</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">पटावर खेळा</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">तुम्हाला खात्री आहे का??</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" बरोबरचे खेळाडू</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">डावा</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">उजवा</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">पकडलेल्या मोहऱ्याला मोठे करा</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">तुम्हाला ही लकीर संपवायची आहे का ?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">येथे काही दाखवायला नाही, कृपया फिल्टर बदला </string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">येथे काही दाखवायला नाही, कृपया पझ्झल स्टॉर्म  खेळा.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">जेवढे कोडे ३ मिनिटांत होऊ शकतील, तेवढे सोडवा.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">तुम्ही तुमची सध्याची लकीर गमवाल व तुमच्या गुणांचे जतन केले जाईल.</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">तुमच्या आवडत्या आगमनाचे कोडे खेळा किंवा एक सूत्र निवडा.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">येथे दाखवण्यासाठी काही नाही, कृपया पझल स्टॉर्म खेळा.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">३ मिनिटांत जास्तीतजास्त कोडी सोडवा.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">तुम्ही तुमची सद्य मालिका गमवाल व तुमचे गुण जतन होतील.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">तुमच्या आवडत्या ओपनिंगचे कोडे खेळा किंवा एक विषय निवडा.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">कोडी</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">ताजे शोध </string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">बुकमार्क काढा </string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">सर्व्हर विशलेषण </string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">अलीकडील शोध</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">बुकमार्क काढा</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">सर्व्हर विशलेषण</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">घड्याळाची जागा</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">प्रीसेट</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ओढलेल्या सोंगट्याचे निशाण</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">वर्तुळ</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">चौरस</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">घरचे परस्परसंवादी </string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">विसर्जित रीत</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">खेळताना प्रणालीचे व्यासपीठ लपवा. जर तुम्हाला स्क्रीनच्या कडांवर असलेल्या सिस्टमच्या हालचाल नियंत्रणाचा त्रास होत असेल तर हे वापरा. ​​खेळ आणि कोडी स्क्रीनवर लागू होते.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">पकडलेल्या सोंगट्या</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">प्रतिमा निवडा</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">दस्तुरी पार्श्वभूमी फक्त कृष्णरीतात काम करते. एक गडद चित्र शिफारसीत आहे.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">चित्राला अस्पष्ट करा</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">पट लपवा</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">पट दाखवा</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">इतर पार्श्वभूमी प्रदर्शित करण्यासाठी बाजूला जा</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">दाब किंवा ओढा</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">दोन घरांना दाबा</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">आकाराचे रेखाचित्र काढा</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">दोन बोटांनी आकार काढा: एक बोट रिकाम्या चौकोनावर ठेवा आणि आकार काढण्यासाठी दुसरे बोट ओढा.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">काडी दाखवा</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">अभिप्राय स्पर्श करा</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">सक्षम केल्यावर, तुम्ही एखादी सोंगटी हलवली किंवा पकडली तर तुमचे साधन थोडा वेळ कंपन करेल.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">सेटिंग्ज</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN पाठवा</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">खेळाची URL पाठवा</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">ह्या स्थानाला FEN म्हणून पाठवा</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ह्या कोडीला पाठवा</string>
+  <string name="showComments" comment="Shown in the analysis screen.">दुसऱ्यांचे मत दाखवा</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">निकाल दाखवा</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">भिन्नता दाखवा</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">काहीतरी चूक झ्हाली.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">प्रणालीचे रंग</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">विषय</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">साधने</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">हे प्रकार ह्या आवृत्तीमध्ये समर्थित नाही.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">विरोधकाला जुळण्याची वाट बघतोय...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">पहा</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess मध्ये तुमचे स्वागत आहे!</string>
 </resources>
