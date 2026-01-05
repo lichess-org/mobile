@@ -619,9 +619,10 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.copyToClipboard),
-          onPressed: () {
-            Clipboard.setData(ClipboardData(text: lichessUri('/${id.gameId}').toString()));
-            showSnackBar(context, 'Copied!');
+          onPressed: () async {
+            await Clipboard.setData(ClipboardData(text: lichessUri('/${id.gameId}').toString()));
+            if (!context.mounted) return;
+            showSnackBar(context, context.l10n.copyToClipboard);
           },
         ),
         if (gameState.game.abortable)
