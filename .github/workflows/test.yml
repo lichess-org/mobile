@@ -6,13 +6,17 @@ on:
       - 'lib/**'
       - '!lib/l10n/**'
       - 'test/**'
-    branches: [ "main" ]
+    branches:
+      - main
+      - v0.18.x
   pull_request:
     paths:
       - 'lib/**'
       - '!lib/l10n/**'
       - 'test/**'
-    branches: [ "main" ]
+    branches:
+      - main
+      - v0.18.x
 
 # Declare default permissions as read only.
 permissions: read-all
