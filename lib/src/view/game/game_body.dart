@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -32,6 +34,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -614,6 +617,13 @@ class _GameBottomBar extends ConsumerWidget {
               ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
           ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.copyToClipboard),
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: lichessUri('/${id.gameId}').toString()));
+            showSnackBar(context, 'Copied!');
+          },
+        ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
