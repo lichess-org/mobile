@@ -137,6 +137,13 @@ class StockfishEngine implements Engine {
 
         stockfish.state.addListener(onReadyOnce);
 
+        // Check immediately in case the engine is already ready
+        // This prevents a race where the engine becomes ready between
+        // adding _stockfishStateListener and adding onReadyOnce
+        if (stockfish.state.value == StockfishState.ready) {
+          onReadyOnce();
+        }
+
         _protocol.isComputing.addListener(() {
           if (_protocol.isComputing.value) {
             _state.value = EngineState.computing;
