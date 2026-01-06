@@ -250,6 +250,15 @@ class PuzzleController extends Notifier<PuzzleState> {
         );
       }
     } else {
+      ref
+          .read(
+            puzzleSessionProvider((
+              userId: initialContext.userId,
+              angle: initialContext.angle,
+            )).notifier,
+          )
+          .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
+
       final currentPuzzle = state.puzzle.puzzle;
       final service = await _service;
       final next =
@@ -269,16 +278,9 @@ class PuzzleController extends Notifier<PuzzleState> {
               ),
             );
 
-      state = state.copyWith(nextContext: next);
+      if (!ref.mounted) return;
 
-      ref
-          .read(
-            puzzleSessionProvider((
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-            )).notifier,
-          )
-          .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
+      state = state.copyWith(nextContext: next);
 
       final rounds = next?.rounds;
       if (rounds != null) {
