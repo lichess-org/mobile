@@ -34,17 +34,16 @@ class AppInitializationScreen extends ConsumerWidget {
       }
     });
 
-    return ref
-        .watch(preloadedDataProvider)
-        .when(
-          data: (_) => const Application(),
-          // loading screen is handled by the native splash screen
-          loading: () => const SizedBox.shrink(),
-          error: (err, st) {
-            debugPrint('SEVERE: [App] could not initialize app; $err\n$st');
-            return const SizedBox.shrink();
-          },
-        );
+    switch (ref.watch(preloadedDataProvider)) {
+      case AsyncData():
+        return const Application();
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [App] could not initialize app; $error\n$stackTrace');
+        return const SizedBox.shrink();
+      case _:
+        // loading screen is handled by the native splash screen
+        return const SizedBox.shrink();
+    }
   }
 }
 
