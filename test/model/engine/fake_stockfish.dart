@@ -6,11 +6,13 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 class FakeStockfishFactory extends StockfishFactory {
-  const FakeStockfishFactory();
+  const FakeStockfishFactory([this._instance]);
+
+  final Stockfish? _instance;
 
   @override
   Stockfish call(StockfishFlavor flavor, {String? bigNetPath, String? smallNetPath}) =>
-      FakeStockfish(flavor);
+      _instance ?? FakeStockfish(flavor);
 }
 
 /// A fake implementation of [Stockfish].
@@ -92,6 +94,45 @@ class FakeStockfish implements Stockfish {
           }
         }
     }
+  }
+
+  @override
+  void dispose() {}
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
+/// A fake Stockfish that transitions to error state instead of ready.
+/// This simulates initialization failure scenarios.
+class ErrorStockfish implements Stockfish {
+  ErrorStockfish(this.flavor) {
+    scheduleMicrotask(() {
+      _state.value = StockfishState.error;
+    });
+  }
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => throw UnimplementedError();
+
+  @override
+  String? get smallNetPath => throw UnimplementedError();
+
+  @override
+  final StockfishFlavor flavor;
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.starting);
+  final _stdoutController = StreamController<String>();
+
+  @override
+  set stdin(String line) {
+    // Do nothing - engine is in error state
   }
 
   @override
