@@ -209,14 +209,23 @@ class StockfishEngine implements Engine {
           _stockfish!.dispose();
         case StockfishState.initial:
         case StockfishState.starting:
-          // wait to be ready, then dispose
-          void onReadyOnce() {
-            if (_stockfish!.state.value == StockfishState.ready) {
+          // wait to be ready or error, then dispose
+          void onReadyOrErrorOnce() {
+            final currentState = _stockfish!.state.value;
+            if (currentState == StockfishState.ready) {
               _stockfish!.dispose();
-              _stockfish!.state.removeListener(onReadyOnce);
+              _stockfish!.state.removeListener(onReadyOrErrorOnce);
+            } else if (currentState == StockfishState.error || currentState == StockfishState.disposed) {
+              // Engine failed to start, complete the exit completer
+              if (_exitCompleter.isCompleted == false) {
+                _exitCompleter.complete();
+              }
+              _stockfish!.state.removeListener(onReadyOrErrorOnce);
             }
           }
-          _stockfish!.state.addListener(onReadyOnce);
+          _stockfish!.state.addListener(onReadyOrErrorOnce);
+          // Check immediately in case state already transitioned
+          onReadyOrErrorOnce();
       }
     } else {
       if (_exitCompleter.isCompleted == false) {
