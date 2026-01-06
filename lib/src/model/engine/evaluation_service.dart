@@ -65,6 +65,7 @@ class EvaluationService {
   final int maxMemory;
 
   Engine? _engine;
+  bool _engineInitInProgress = false;
 
   EvaluationContext? _context;
 
@@ -160,11 +161,22 @@ class EvaluationService {
     EvaluationContext context, {
     EvaluationOptions? initOptions,
   }) async {
+    // Prevent concurrent initialization operations
+    if (_engineInitInProgress) {
+      _logger.warning('Engine initialization already in progress, ignoring request');
+      return;
+    }
+
     if (_engine == null ||
         _engine?.isDisposed == true ||
         _context != context ||
         options != initOptions) {
-      await _initEngine(context, initOptions: initOptions);
+      _engineInitInProgress = true;
+      try {
+        await _initEngine(context, initOptions: initOptions);
+      } finally {
+        _engineInitInProgress = false;
+      }
     }
   }
 
