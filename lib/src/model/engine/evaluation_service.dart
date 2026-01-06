@@ -69,6 +69,7 @@ class EvaluationService {
   EvaluationContext? _context;
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
+  bool _nnueOperationInProgress = false;
 
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
   bool get isDownloadingNNUEFiles =>
@@ -301,63 +302,76 @@ class EvaluationService {
   }
 
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
-    final (:bigNet, :smallNet) = nnueFiles;
-
-    // delete any existing nnue files before downloading
-    await deleteNNUEFiles();
-
-    Future<bool> doDownload() {
-      final client = _ref.read(defaultClientProvider);
-      return downloadFiles(
-        client,
-        [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
-        [bigNet, smallNet],
-        onProgress: (received, length) {
-          _nnueDownloadProgress.value = received / length;
-        },
-      );
+    // Prevent concurrent download operations
+    if (_nnueOperationInProgress) {
+      _logger.warning('NNUE download already in progress, ignoring request');
+      return false;
     }
 
-    final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
-    final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
-    if (onWifi == false) {
-      if (inBackground) {
-        throw Exception('Cannot download in background on mobile data.');
-      } else {
-        final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) return false;
-        final isOk = await showAdaptiveDialog<bool>(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return AlertDialog.adaptive(
-              content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
-              actions: [
-                PlatformDialogAction(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-                PlatformDialogAction(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              ],
-            );
+    _nnueOperationInProgress = true;
+
+    try {
+      final (:bigNet, :smallNet) = nnueFiles;
+
+      // delete any existing nnue files before downloading
+      await deleteNNUEFiles();
+
+      Future<bool> doDownload() {
+        final client = _ref.read(defaultClientProvider);
+        return downloadFiles(
+          client,
+          [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
+          [bigNet, smallNet],
+          onProgress: (received, length) {
+            _nnueDownloadProgress.value = received / length;
           },
         );
-        if (isOk == true) {
-          await doDownload();
-          return checkNNUEFiles();
-        } else {
-          return Future.value(false);
-        }
       }
-    } else {
-      return doDownload();
+
+      final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
+      final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
+      if (onWifi == false) {
+        if (inBackground) {
+          throw Exception('Cannot download in background on mobile data.');
+        } else {
+          final context = _ref.read(currentNavigatorKeyProvider).currentContext;
+          if (context == null || !context.mounted) return false;
+          final isOk = await showAdaptiveDialog<bool>(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) {
+              return AlertDialog.adaptive(
+                content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
+                actions: [
+                  PlatformDialogAction(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                  PlatformDialogAction(
+                    child: Text(context.l10n.cancel),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+          if (isOk == true) {
+            await doDownload();
+            return checkNNUEFiles();
+          } else {
+            return Future.value(false);
+          }
+        }
+      } else {
+        return doDownload();
+      }
+    } finally {
+      _nnueOperationInProgress = false;
+      _nnueDownloadProgress.value = 0.0;
     }
   }
 
