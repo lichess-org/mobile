@@ -1,13 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">ການຕັ້ງຄ່າບັນຊີ</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ການຕັ້ງຄ່າເຫຼົ່ານີ້ຖືກນຳໃຊ້ກັບບັນຊີ Lichess ຂອງທ່ານແລະຈະຖືກນຳໃຊ້ໃນທົ່ວທຸກອຸປະກອນ</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ເກມທັງໝົດ</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">ເຈົ້າແນ່ໃຈແລ້ວບໍ?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ການຕັ້ງຄ່າກະດານ</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ຍົກເລີກການຍ່າງໃໝ່</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ລຶບ</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ລຶບການຍ່າງທີ່ບັນທຶກໄວ້</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ເຂົ້າຮ່ວມເກມ</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ຂໍ້ສະເໜີແນະ</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ສະບາຍດີຕອນແລງ %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ສະບາຍດີຕອນແລງ</string>
+  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">ສະບາຍດີ %s</string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">ສະບາຍດີ</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">ເຊື່ອງການປ່ຽນແປງ</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ໜ້າຫຼັກ</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ຜູ້ຖ່າຍທອດສົດ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ທ່ານຕ້ອງ​ລົງ​ຊື່​ເຂົ້າ​ໃຊ້ເພື່ອເຂົ້າ​ສູ່​ໜ້ານີ້.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">ບໍ່ມີຜົນໄດ້ຮັບ</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">ກະລຸນາຮັບຊາບວ່າບໍ່ແມ່ນຄຸນສົມບັດທັງໝົດຈາກແອັບຯເກົ່າ ຫຼືເວັບໄຊທ໌ທີ່ມີຢູ່ໃນປັດຈຸບັນ, ແຕ່ພວກເຮົາກຳລັງເພີ່ມຄຸນສົມບັດຢູ່ຕະຫຼອດເວລາ</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ເຈົ້າຍັງບໍ່ໄດ້ຕິດຕາມຜູ້ໃຊ້ໃດໆ</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ເກມກະດານຈິງ</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">ຜູ້ຫຼິ້ນທີ່ມີ \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">​ຊ້າຍ</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ຂວາ</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">ຂະຫຍາຍຫມາກທີ່ຖືກລາກ</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">ທ່ານຕ້ອງການສິ້ນສຸດເກມນີ້ບໍ</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ, ກະລຸນາປ່ຽນຕົວກອງ</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ ຫຼິ້ນບາງໄລຍະຂອງ Puzzle Storm</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">ແກ້ໄຂປິດສະຫຼາຍເທົ່າທີ່ເປັນໄປໄດ້ໃນ ໓ ນາທີ</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">ທ່ານຈະສູນເສຍສະຕຣີມປັດຈຸບັນຂອງເຈົ້າ ແລະຄະແນນຂອງເຈົ້າຈະຖືກບັນທຶກໄວ້</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">ຫຼິ້ນປິດສະໜາຈາກການເປີດໝາກທີ່ທ່ານມັກຫຼືເລືອກຮູບແບບອື່ນໆ</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ປຮິສນາປ</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">ການຄົ້ນຫາທີ່ຜ່ານມາ</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">ເອົາບຸກມາກອອກ</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">ການວິເຄາະໃນເຊີບເວີ</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ຕໍາ​ແຫນ່ງນາລິກາ</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">ຕັ້ງໄວ້ລ່ວງໜ້າ</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ເປ້າໝາຢຂວງຕ່ອນໝາກທີ່ລາກ</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">ວົງ</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">ສີ່ຫຼ່ຽມ</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Widgets ເຮືອນ</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ໂໝດ immersive</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ເຊື່ອງ UI ຂອງລະບົບໃນຂະນະທີ່ຫຼິ້ນ. ໃຊ້ນີ້ຖ້າທ່ານຖືກລົບກວນໂດຍ gestures ນໍາທາງຂອງລະບົບຢູ່ຂອບຂອງຫນ້າຈໍ. ນຳໃຊ້ກັບໜ້າຈໍເກມ ແລະປິດສະໜາ.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">ໝາກທີ່ຖືກກິນ</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">ເລືອກຮູບ</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">ພື້ນຫຼັງແບບກຳນົດເອງໃຊ້ໄດ້ໃນໂໝດມືດເທົ່ານັ້ນ. ແນະນຳໃຫ້ໃຊ້ຮູບພາບມືດ</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">ມົວຮູບພາບ</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">ເຊື່ອງກະດານ</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">ສະແດງກະດານ</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">ປັດເພື່ອສະແດງພື້ນຫຼັງອື່ນໆ</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">ແຕະ ຫຼື ລາກ</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">ແຕະສອງສີ່ຫຼ່ຽມ</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">ການແຕ້ມຮູບ</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">ແຕ້ມຮູບຮ່າງໂດຍໃຊ້ສອງນິ້ວມື: ຮັກສານິ້ວມືຫນຶ່ງໃສ່ສີ່ຫຼ່ຽມຫວ່າງເປົ່າແລະລາກນິ້ວມືອື່ນເພື່ອແຕ້ມຮູບຮ່າງ</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">ສະແດງຂອບ</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">ສໍາ​ພັດ​ຄໍາ​ຄຶດ​ຄໍາ​ເຫັນ​</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">ເມື່ອເປີດໃຊ້ງານແລ້ວ ອຸປະກອນຈະສັ່ນສະເທືອນໃນໄວໆນີ້ເມື່ອທ່ານຢ່າງຫຼືກິນໝາກ</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ການຕັ້ງຄ່າ</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">ແບ່ງປັນ PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ແບ່ງປັນ URL</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">ແບ່ງປັນຕໍາແຫນ່ງເປັນ FEN</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ແບ່ງປັນປິດສະໜານີ້</string>
+  <string name="showComments" comment="Shown in the analysis screen.">ສະແດງຄຳເຫັນ</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ສະແດງຜົນ</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">ສະແດງຕາຢ່າ່ງອື່ນໆ</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">ມີບາງຢ່າງຜິດພາດ</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ສີລະບົບ</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">ລັກສະນະ</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ເຄື່ອງມື</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app."> %s ບໍ່ຮອງຮັບໃນເວີຊັນນີ້</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ກຳລັງລໍຖ້າຄູ່ແຂ່ງເຂົ້າຮ່ວມ...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ເບິ່ງ</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">ຍິນ​ດີ​ຕ້ອນ​ຮັບ​ກັບແອັບ Lichess​!</string>
 </resources>
