@@ -26,7 +26,7 @@ typedef PreloadedData = ({
 
 /// A provider that preloads various data needed throughout the app.
 final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
-  final authStorage = ref.watch(authStorageProvider);
+  final authStorage = ref.read(authStorageProvider);
 
   final pInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
