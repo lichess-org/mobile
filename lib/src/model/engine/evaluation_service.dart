@@ -161,7 +161,6 @@ class EvaluationService {
     EvaluationContext context, {
     EvaluationOptions? initOptions,
   }) async {
-    // Prevent concurrent initialization operations
     if (_engineInitInProgress) {
       _logger.warning('Engine initialization already in progress, ignoring request');
       return;
@@ -314,7 +313,6 @@ class EvaluationService {
   }
 
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
-    // Prevent concurrent download operations
     if (_nnueOperationInProgress) {
       _logger.warning('NNUE download already in progress, ignoring request');
       return false;
