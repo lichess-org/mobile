@@ -12,16 +12,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileAccountPreferences => 'Preferências da conta';
 
   @override
-  String get mobileAccountPreferencesHelp => 'Estas preferências são aplicadas à tua conta Lichess e serão usadas em todos os dispositivos.';
+  String get mobileAccountPreferencesHelp => 'Estas preferências são aplicadas à sua conta Lichess e serão usadas em todos os dispositivos.';
 
   @override
   String get mobileAllGames => 'Todos os jogos';
 
   @override
-  String get mobileAreYouSure => 'Tens a certeza?';
+  String get mobileAreYouSure => 'Tem certeza?';
 
   @override
-  String get mobileBoardSettings => 'Configurações do Tabuleiro';
+  String get mobileBoardSettings => 'Configurações do tabuleiro';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar pedido de voltar';
@@ -73,7 +73,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Por favor, note que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar funcionalidades o tempo todo.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Não está a seguir nenhum utilizador.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -147,7 +147,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Ocultar a interface do sistema durante o jogo. Utiliza esta opção se sentires incomodado com os gestos de navegação do sistema nas extremidades do ecrã. Aplica-se aos ecrãs de jogo e de problemas.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ocultar a interface do sistema durante o jogo. Utiliza esta opção se sentir incomodado com os gestos de navegação do sistema nas extremidades do ecrã. Aplica-se aos ecrãs de jogo e de problemas.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Peças capturadas';
@@ -789,7 +789,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastFederation => 'Federação';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Idade';
 
   @override
   String get broadcastUnrated => 'Sem classificação';
@@ -2175,7 +2175,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get waitingForOpponent => 'Aguardando oponente';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Ou deixa o teu oponente ler este código QR';
+  String get orLetYourOpponentScanQrCode => 'Ou deixe o seu oponente ler este código QR';
 
   @override
   String get waiting => 'A aguardar';
@@ -3956,7 +3956,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get togglePositionAnnotations => 'Ativar/desativar anotações de posição';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Ativar/desativar anotações';
 
   @override
   String get variationArrowsInfo => 'Setas de variação permitem navegar sem usar a lista de movimentos.';
@@ -4496,7 +4496,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get edit => 'Editar';
 
   @override
-  String get ultraBullet => 'UltraBullet';
+  String get ultraBullet => 'Ultra-Bala';
 
   @override
   String get bullet => 'Bullet';
@@ -4714,7 +4714,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param está disponível para formatação.';
   }
 
   @override
@@ -8225,7 +8225,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemePillsburysMate => 'Mate de Pillsbury';
 
   @override
+  String get puzzleThemePillsburysMateDescription => 'A torre realiza o checkmate, enquanto o bispo ajuda a prender o rei.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Mate de Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use o bispo para dar xeque no rei, enquanto sua torre ajuda a confiná-lo.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mate do triângulo';
@@ -8319,6 +8325,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeOperaMate => 'Mate da ópera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Dê xeque no rei com uma torre e use um bispo para defender a torre.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finais de peões';

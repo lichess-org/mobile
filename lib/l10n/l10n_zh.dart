@@ -1902,13 +1902,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeMaster => '大师对局';
 
   @override
-  String get puzzleThemeMasterDescription => '来自有称号棋手对局的谜题。';
+  String get puzzleThemeMasterDescription => '来自有头衔棋手对局的谜题。';
 
   @override
   String get puzzleThemeMasterVsMaster => '大师对战大师';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => '来自两位有称号棋手之间对局的谜题。';
+  String get puzzleThemeMasterVsMasterDescription => '来自两位有头衔棋手之间对局的谜题。';
 
   @override
   String get puzzleThemeMate => '将杀';
@@ -2194,7 +2194,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get asBlack => '执黑';
 
   @override
-  String get randomColor => '随机选色';
+  String get randomColor => '随机';
 
   @override
   String get createAGame => '创建对局';
@@ -3549,7 +3549,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clockIncrement => '加秒';
 
   @override
-  String get privacy => '隐私';
+  String get privacy => '隐私政策';
 
   @override
   String get privacyPolicy => '隐私政策';
@@ -3772,11 +3772,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 是一个免费（$param2）、自由、无广告、开源的国际象棋平台。';
+    return '$param1 是一个$param2免费、开源共享、绝无广告的国际象棋平台。';
   }
 
   @override
-  String get really => '千真万确';
+  String get really => '完全';
 
   @override
   String get contribute => '协助我们';

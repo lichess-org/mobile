@@ -454,7 +454,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaIsNotRated => 'Giải đấu này *không* xếp hạng và sẽ *không* ảnh hưởng đến hệ số của bạn.';
 
   @override
-  String get arenaSomeRated => 'Ngáo à';
+  String get arenaSomeRated => 'Một số giải đấu có xếp hạng và sẽ ảnh hưởng đến hệ số của bạn.';
 
   @override
   String get arenaHowAreScoresCalculated => 'Điểm được tính thế nào?';
@@ -1863,10 +1863,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Một quân xe ở cạnh vua địch và được hỗ trợ bởi quân hậu cũng chặn các ô trốn thoát của vua địch. Xe và hậu bắt vua địch trong ô \"kill box\" chết chóc 3 x 3.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Chiếu hết kiểu Pillsbury';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Quân xe chiếu hết, trong khi quân tượng giúp khống chế nước đi đó.';
 
   @override
   String get puzzleThemeMorphysMate => 'Chiếu hết kiểu Morphy';
@@ -1965,7 +1965,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Chiến thuật trong phần mở đầu của ván cờ.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Chiếu hết kiểu Opera';
 
   @override
   String get puzzleThemeOperaMateDescription => 'Dùng quân xe chiếu vua và dùng quân tượng để bảo vệ quân xe.';

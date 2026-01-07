@@ -10261,6 +10261,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override

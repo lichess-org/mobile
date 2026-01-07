@@ -1794,10 +1794,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman znajduje się jedno pole z tyłu i z boku matowanego króla i blokuje mu drogę ucieczki';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Mat dwoma wieżami na tej samej linii';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Dwie wieże współpracują, aby zamatować króla przeciwnika w kwadracie 2 × 2.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Końcówka gońcowa';
@@ -1836,7 +1836,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Znajdź błąd przeciwnika i zdobądź decydującą przewagę (ocena pozycji: powyżej 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Szach z odsłony';
 
   @override
   String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
@@ -2037,7 +2037,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeMiddlegameDescription => 'Taktyka w drugiej fazie gry.';
 
   @override
-  String get puzzleThemeOneMove => 'Jednochodówka';
+  String get puzzleThemeOneMove => 'Bardzo krótkie zadanie';
 
   @override
   String get puzzleThemeOneMoveDescription => 'Zadanie, którego długość to tylko jedno posunięcie.';
@@ -2049,7 +2049,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Taktyka w pierwszej fazie gry.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Mat operowy';
 
   @override
   String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';

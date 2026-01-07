@@ -1891,16 +1891,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Pillsbury Matt';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Schachmatt mit em Turm, wobi de Läufer hilft, de König z\'fange.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphy Matt';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Schachmatt mit em Läufer, wobi de Turm hilft, de König z\'fange.';
 
   @override
   String get puzzleThemeTriangleMate => 'Drüeck-Matt';
@@ -1993,10 +1993,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'E Taktik für die erscht Fase vum Schpiel.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Opern Matt';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Schachmatt mit em Turm, wo vum Läufer gschützt wird.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pure Ändschpiel';

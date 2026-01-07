@@ -21,7 +21,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileAreYouSure => 'בטוח?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'הגדרות לוח';
 
   @override
   String get mobileCancelTakebackOffer => 'ביטול ההצעה להחזיר את המהלך האחרון';
@@ -40,15 +40,15 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'ערב טוב, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'ערב טוב';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'יום טוב, $param';
   }
 
   @override
@@ -162,10 +162,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'הסתרת לוח';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'הצגת לוח';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -829,7 +829,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastFederation => 'איגוד';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'גיל';
 
   @override
   String get broadcastUnrated => 'לא מדורג';
@@ -946,7 +946,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'סיבוב מספר $param';
   }
 
   @override
@@ -1251,7 +1251,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifications => 'התראות';
 
   @override
-  String get preferencesPieceAnimation => 'אנימציית הכלים';
+  String get preferencesPieceAnimation => 'הנפשת הכלים';
 
   @override
   String get preferencesMaterialDifference => 'הבדל בחומר';
@@ -1272,7 +1272,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesPgnPieceNotation => 'רישום המהלכים';
 
   @override
-  String get preferencesChessPieceSymbol => 'סימן הכלי';
+  String get preferencesChessPieceSymbol => 'סימן כלי השחמט';
 
   @override
   String get preferencesPgnLetter => 'אות (K, Q, R, B, N)';
@@ -1281,13 +1281,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesZenMode => 'מצב זן';
 
   @override
-  String get preferencesShowPlayerRatings => 'הצג דירוג שחקנים';
+  String get preferencesShowPlayerRatings => 'הצגת דירוגי שחקנים';
 
   @override
   String get preferencesShowFlairs => 'הצגת הסמלילים של השחקנים';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'אם תבחר/י להסתיר את הדירוג, הדירוג של השחקן היריב לא יופיע כדי לאפשר לך להתרכז בשח, אך המשחק יהיה מדורג.';
+  String get preferencesExplainShowPlayerRatings => 'אפשרות זו מסתירה את כל הדירוגים מ־Lichess, כדי לסייע לך להתרכז במשחק. משחקים עם דירוג עדיין ישפיעו על הדירוג שלך, אפשרות זו רק מציגה או מסתירה אותו.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'הצג סמן להגדלת הלוח';
@@ -1311,13 +1311,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesWhenTimeRemainingLessThanTenSeconds => 'כאשר הזמן שנותר קטן מעשר שניות';
 
   @override
-  String get preferencesHorizontalGreenProgressBars => 'מדי התקדמות ירוקים אופקיים';
+  String get preferencesHorizontalGreenProgressBars => 'שורות התקדמות ירוקות אופקיות';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical => 'השמע צליל כאשר הזמן נהיה קריטי';
+  String get preferencesSoundWhenTimeGetsCritical => 'השמעת צליל כאשר הזמן עומד להיגמר';
 
   @override
-  String get preferencesGiveMoreTime => 'תן עוד זמן';
+  String get preferencesGiveMoreTime => 'לתת עוד זמן';
 
   @override
   String get preferencesGameBehavior => 'התנהגות המשחק';
@@ -1341,7 +1341,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesTakebacksWithOpponentApproval => 'החזרת המהלך האחרון: מותנה בהסכמת היריב';
 
   @override
-  String get preferencesInCasualGamesOnly => 'במשחקים ללא דירוג בלבד';
+  String get preferencesInCasualGamesOnly => 'במשחקים מזדמנים בלבד';
 
   @override
   String get preferencesPromoteToQueenAutomatically => 'הכתרה אוטומטית למלכה';
@@ -1371,7 +1371,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'התכתבות וללא הגבלה';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'אשרו כניעה והצעות תיקו';
+  String get preferencesConfirmResignationAndDrawOffers => 'אישור כניעה והצעות תיקו';
 
   @override
   String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'שיטת הצרחה';
@@ -1392,7 +1392,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'התאמת החצים למסעים חוקיים';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'כתבו ״Good game, well played\" בצ׳אט לאחר הפסד או תיקו (בתרגום חופשי: משחק יפה, שיחקת טוב)';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'לכתוב \"Good game, well played\" (משחק טוב, שיחקת נהדר) לאחר הפסד או תיקו';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'העדפותיך נשמרו.';
@@ -1401,7 +1401,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesScrollOnTheBoardToReplayMoves => 'גלול על גבי הלוח כדי להראות מהלכים קודמים';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'הודעת מייל יומית עם רשימת המשחקים שלך בהתכתבות';
+  String get preferencesCorrespondenceEmailNotification => 'הודעת דוא״ל יומית עם רשימת המשחקים שלך בהתכתבות';
 
   @override
   String get preferencesNotifyStreamStart => 'משדר עולה לשידור חי';
@@ -1440,7 +1440,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyDevice => 'מכשיר';
 
   @override
-  String get preferencesBellNotificationSound => 'השמע צליל עבור התראות פעמון';
+  String get preferencesBellNotificationSound => 'השמעת צליל עבור התראות פעמון';
 
   @override
   String get preferencesBlindfold => 'משחק עיוור';
@@ -2191,10 +2191,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => 'לא תוכל/י לפתוח חשבון חדש עם אותו השם, אפילו בשינוי אותיות קטנות לגדולות והפוך.';
 
   @override
-  String get settingsCancelKeepAccount => 'Cancel and keep my account';
+  String get settingsCancelKeepAccount => 'ביטול והשארת החשבון שלי';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'לסגור את חשבונך?';
 
   @override
   String get settingsThisAccountIsClosed => 'החשבון הזה סגור.';
@@ -3006,31 +3006,31 @@ class AppLocalizationsHe extends AppLocalizations {
   String get proposeATakeback => 'הצע החזרת המהלך האחרון';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'הלבן מציע ביטול מהלך';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'השחור מציע ביטול מהלך';
 
   @override
   String get takebackPropositionSent => 'הצעה להחזרת המהלך האחרון נשלחה';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'הלבן מסרב לביטול מהלך';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'השחור מסרב לביטול מהלך';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'הלבן מסכים לביטול מהלך';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'השחור מסכים לביטול מהלך';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'הלבן מבטל את ביטול המהלך';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'השחור מבטל את ביטול המהלך';
 
   @override
   String get yourOpponentProposesATakeback => 'יריבך מציע/ה להחזיר את המהלך האחרון';
@@ -6227,13 +6227,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'תבוסה כפולה';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'השחור הובס, אבל הלבן אינו יכול לנצח';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'הלבן הובס, אבל השחור אינו יכול לנצח';
 
   @override
   String studyNbChapters(int count) {

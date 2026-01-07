@@ -4650,7 +4650,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get download => 'Descarga';
 
   @override
-  String get coachManager => 'Administrador de adestradores';
+  String get coachManager => 'Adestrador';
 
   @override
   String get streamerManager => 'Administrador de presentadores';

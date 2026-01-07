@@ -73,7 +73,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Figyelem, a régi alkalmazásból vagy a weboldalról nem minden funkció érhető el jelenleg, de folyamatosan bővítjük az elérhető funkciókat.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
 
   @override
   String get mobileOkButton => 'OKÉ';
@@ -789,7 +789,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastFederation => 'Ország';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Életkor';
 
   @override
   String get broadcastUnrated => 'Nem értékelt';
@@ -1428,7 +1428,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleMates => 'Mattok';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Típusmattok';
 
   @override
   String get puzzleGoals => 'Célok';
@@ -1780,7 +1780,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Az ellenfél sakkvakságának kihasználása elsöprő előnnyé fordítható. (> 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Felfedett sakk';
 
   @override
   String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
@@ -1993,7 +1993,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Taktikák a játszma kezdeti fázisában.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Opera matt';
 
   @override
   String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
@@ -5651,7 +5651,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyShowResults => 'Eredmények';
 
   @override
-  String get studyShowEvalBar => 'Értéksávok';
+  String get studyShowEvalBar => 'Állásértékelő oldaljelzés';
 
   @override
   String get studyNext => 'Következő';
@@ -6029,7 +6029,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Jegyezd le az állást';
 
   @override
-  String get studyAnnotatePositionText => 'Kattints a !? parancsra, vagy jobb klikk a jobb oldali lépéslistára!<br>Így az értékelő jelzéseket megosztod és elmented.';
+  String get studyAnnotatePositionText => 'Kattints a !? gombra, vagy jobb klikk a jobb oldali lépéslistára.<br>Így a jelöléseket megosztod és elmented.';
 
   @override
   String get studyConclusionTitle => 'Köszönjük az idődet';
