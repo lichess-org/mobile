@@ -40,8 +40,8 @@
     <item quantity="one">Kurz fassen: Maximal %s Zeichen</item>
     <item quantity="other">Kurz halten: Maximal %s Zeichen</item>
   </plurals>
-  <string name="visibility">Sichtbar auf der Streamerseite</string>
-  <string name="whenApproved">Sobald von den Moderatoren genehmigt</string>
+  <string name="visibility" comment="A togglable setting. When enabled, the streamer profile you created will be listed on https://lichess.org/streamer">Sichtbar auf der Streamerseite</string>
+  <string name="whenApproved" comment="Subtitle to &quot;Visible on the streamers page&quot;.&#10;&#10;This subtitle is to clarify that Lichess moderators approve all applications for the https://lichess.org/streamer page">Sobald von den Moderatoren genehmigt</string>
   <string name="headline">Titel</string>
   <string name="tellUsAboutTheStream">Erzähle uns in einem Satz etwas über deinen Stream</string>
   <string name="longDescription">Ausführliche Beschreibung</string>

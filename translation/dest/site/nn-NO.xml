@@ -951,7 +951,7 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="timeAlmostUp">Tida er nesten ute!</string>
   <string name="clickToRevealEmailAddress">[Klikk for å visa epost-adresse]</string>
   <string name="download">Last ned</string>
-  <string name="coachManager">Trenarleiar</string>
+  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Trenarleiar</string>
   <string name="streamerManager">Strøymingsleiar</string>
   <string name="cancelTournament">Avlys turneringa</string>
   <string name="tournDescription">Beskriving av turneringa</string>

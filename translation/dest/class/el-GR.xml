@@ -90,7 +90,7 @@
   <string name="timePlaying">Χρόνος που διατέθηκε παίζοντας</string>
   <string name="variantXOverLastY">%1$s για τις τελευταίες %2$s</string>
   <string name="winrate">Ποσοστό νικών</string>
-  <string name="na">Μη διαθέσιμο</string>
+  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Μη διαθέσιμο</string>
   <string name="overview">Επισκόπηση</string>
   <string name="news">Νέα</string>
   <string name="classNews">Τα νέα της τάξης</string>

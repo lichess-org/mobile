@@ -3,7 +3,7 @@
   <string name="donate">Doar</string>
   <string name="donateAsX">Doar em nome de %s</string>
   <string name="lichessPatron">Patrono do Lichess</string>
-  <string name="patronSince" comment="%s is a date e.g. &quot;21 Jan 2025&quot;,&#10;meaning the final text would be something like &quot;Patron since 21 Jan 2025&quot;.">Patrono desde %s</string>
+  <string name="patronSince" comment="string is a date">Patrono desde %s</string>
   <string name="freeAccount">Conta gratuita</string>
   <string name="becomePatron">Tornar-se um patrono do Lichess</string>
   <string name="xBecamePatron">%s tornou-se um patrono do Lichess</string>
@@ -14,7 +14,7 @@
   <string name="newPatrons">Novos patronos</string>
   <string name="freeChess">Xadrez grátis para todos, para sempre!</string>
   <string name="noAdsNoSubs">Sem anúncios, sem subscrições; mas open-source e paixão.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Obrigado pela tua doação!</string>
+  <string name="thankYou">Obrigado pela tua doação!</string>
   <string name="youHaveLifetime">Tens um conta patrono vitalícia. Isso é bem fixe!</string>
   <string name="patronUntil">Tens uma conta de patrono até %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Se não for renovada, a sua conta voltará a ser uma conta normal.</string>
