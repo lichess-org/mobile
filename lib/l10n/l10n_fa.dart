@@ -21,7 +21,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAreYouSure => 'مطمئنید؟';
 
   @override
-  String get mobileBoardSettings => 'تنظیمات صفحه';
+  String get mobileBoardSettings => 'تنظیماتِ تخته';
 
   @override
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
@@ -79,7 +79,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOkButton => 'باشه';
 
   @override
-  String get mobileOverTheBoard => 'سَرِ صفحه';
+  String get mobileOverTheBoard => 'سَرِ میز';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -162,10 +162,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'تصویر را تار کنید';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'پنهانیدنِ صفحه';
+  String get mobileSettingsPickAnImageHideBoard => 'پنهانیدنِ تخته';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'نَماییدن صفحه';
+  String get mobileSettingsPickAnImageShowBoard => 'نَماییدن تخته';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'برای نمایش پس‌زمینه‌های دیگر، انگشت بکشید';
@@ -894,7 +894,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastSinceHideResults => 'چون شما پنهان کردن نتایج را انتخاب کردید، تمام صفحه‌های پیش‌نمایش برای جلوگیری از لو رفتن نتیجه، خالی هستند.';
 
   @override
-  String get broadcastLiveboard => 'صفحه زنده';
+  String get broadcastLiveboard => 'میزِ زنده';
 
   @override
   String get broadcastCommunityBroadcast => 'پخشِ همدارگان';
@@ -1038,7 +1038,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard => 'دانستن همآرای صفحه شطرنج، مهارت خیلی مهمی است، به چند دلیل:';
+  String get coordinatesKnowingTheChessBoard => 'دانستن همآرای تختهٔ شطرنج، مهارت خیلی مهمی است، به چند دلیل:';
 
   @override
   String get coordinatesMostChessCourses => 'بیشتر دوره‌ها و تمرین‌های شطرنج، از نشانه‌گذاری جبری استفاده می‌کنند.';
@@ -1050,10 +1050,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coordinatesYouCanAnalyseAGameMoreEffectively => 'اگر بتوانید همآرا را به‌تندی تشخیص دهید، می‌توانید یک بازی را موثرتر واکاوید.';
 
   @override
-  String get coordinatesACoordinateAppears => 'همآرا روی صفحه ظاهر می‌شود و شما باید روی خانهٔ همنوا بزنید.';
+  String get coordinatesACoordinateAppears => 'همآرا روی تخته ظاهر می‌شود و شما باید روی خانهٔ همنوا بزنید.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation => 'یک خانه روی صفحه رنگی شده است و شما باید همآرای آن را وارد کنید (مثال «e4»).';
+  String get coordinatesASquareIsHighlightedExplanation => 'یک خانه روی تخته رنگی شده است و شما باید همآرای آن را وارد کنید (مثال «e4»).';
 
   @override
   String get coordinatesYouHaveThirtySeconds => 'شما 30 ثانیه فرصت دارید تا هر چه بیشتر خانه‌ها را به‌درستی بیابید!';
@@ -1215,7 +1215,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesMaterialDifference => 'تفاوت مُهره‌ها';
 
   @override
-  String get preferencesBoardHighlights => 'رنگ‌نمایی صفحه (آخرین حرکت و کیش)';
+  String get preferencesBoardHighlights => 'رنگ‌نمایی تخته (آخرین حرکت و کیش)';
 
   @override
   String get preferencesPieceDestinations => 'مقصد مهره(حرکت معتبر و پیش حرکت )';
@@ -1248,7 +1248,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesExplainShowPlayerRatings => 'این گزینه همه درجه‌بندی‌ها در Lichess را پنهان می‌کند تا کمک کند روی شطرنج تمرکز کنید. بازی‌های رسمی همچنان بر درجه‌بندی‌تان تاثیر می‌گذارند، این گزینه فقط مربوط به دیدن/ندیدن درجه‌بندی‌هاست.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle => 'نمایش دستگیره برای تغییر اندازه صفحه';
+  String get preferencesDisplayBoardResizeHandle => 'نمایش دستگیرهٔ تغییر اندازهٔ تخته';
 
   @override
   String get preferencesOnlyOnInitialPosition => 'فقط در وضعیت آغازین';
@@ -1320,7 +1320,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تایید حرکت';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'می‌تواند هنگام بازی با «گزینگان صفحه‌بازی» خاموش شود';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'می‌تواند هنگام بازی با «گزینگانِ تخته» خاموش شود';
 
   @override
   String get preferencesInCorrespondenceGames => 'در حال بازی مکاتبه ای';
@@ -1341,7 +1341,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesCastleByMovingOntoTheRook => 'شاه را روی رخ گذارید';
 
   @override
-  String get preferencesInputMovesWithTheKeyboard => 'ورود حرکات با استفاده از صفحه کلید';
+  String get preferencesInputMovesWithTheKeyboard => 'حرکاتِ ورودی با صفحه‌کلید';
 
   @override
   String get preferencesInputMovesWithVoice => 'حرکات را با صدای خود وارد کنید';
@@ -1356,7 +1356,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesYourPreferencesHaveBeenSaved => 'تغییرات شما ذخیره شده است';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'برای بازپخش حرکت‌ها، روی صفحه بازی بِنَوَردید';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'برای بازپخش حرکت‌ها، روی تخته بِنَوَردید';
 
   @override
   String get preferencesCorrespondenceEmailNotification => 'فهرست رایانامهٔ روزانه از بازی‌های مکاتبه‌ای‌تان';
@@ -1720,7 +1720,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeAttackingF2F7Description => 'حمله ای که در آن روی پیاده های f2 و f7 تمرکز می شود، مانند دفاع دو اسب.';
 
   @override
-  String get puzzleThemeAttraction => 'جلب کردن';
+  String get puzzleThemeAttraction => 'جلب';
 
   @override
   String get puzzleThemeAttractionDescription => 'تبادل یا فداکاری یک مهره برای تشویق یا وادار کردن حریف به حرکتی که امکان تاکتیک بعدی را فراهم میکند.';
@@ -1891,16 +1891,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'ماتِ پیزبِری';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'فیل به محدود کردنِ شاه کمک می‌کند، رُخ مات می‌کند.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'ماتِ مُرفی';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'رُخ به محدود کردنِ شاه کمک می‌کند، فیل مات می‌کند.';
 
   @override
   String get puzzleThemeTriangleMate => 'ماتِ مثلث';
@@ -1993,10 +1993,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'تاکتیک در مرحله اول بازی.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'ماتِ نَغمایش';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'با رُخی که فیلی از او دفاع می‌کند، شاه را مات کنید.';
 
   @override
   String get puzzleThemePawnEndgame => 'آخربازی پیاده';
@@ -2255,7 +2255,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get threeChecks => 'سه‌کیش';
 
   @override
-  String get raceFinished => 'پایان تاخت';
+  String get raceFinished => 'پایانِ دو';
 
   @override
   String get variantEnding => 'پایان وَرتا';
@@ -2285,7 +2285,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get forceDraw => 'اعلام تساوی';
 
   @override
-  String get talkInChat => 'لطفا در گپ‌زنی بااَدب باشید!';
+  String get talkInChat => 'لطفا در گپیدن بااَدب باشید!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'نخستین کسی که به این وب‌نشانی آید با شما بازی خواهد کرد.';
@@ -2497,7 +2497,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get realtimeReplay => 'مشابه بازی';
 
   @override
-  String get byCPL => 'درنگ هنگام اشتباه';
+  String get byCPL => 'مَکث حینِ اشتباه';
 
   @override
   String get enable => 'فعال سازی';
@@ -2533,13 +2533,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mistake => 'اشتباه';
 
   @override
-  String get inaccuracy => 'بی دقتی';
+  String get inaccuracy => 'نادقیق';
 
   @override
   String get moveTimes => 'مدت حركت‌ها';
 
   @override
-  String get flipBoard => 'چرخاندن صفحه';
+  String get flipBoard => 'چرخاندن میز';
 
   @override
   String get threefoldRepetition => 'تکرار سه‌گانه';
@@ -2912,7 +2912,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get chatRoom => 'گپ‌سرا';
 
   @override
-  String get loginToChat => 'برای گپ زدن، وارد حساب‌تان شوید';
+  String get loginToChat => 'برای گپیدن، وارد شوید';
 
   @override
   String get youHaveBeenTimedOut => 'زمان شما به پایان رسید.';
@@ -3132,7 +3132,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get thisIsAChessCaptcha => 'این یک کپچا [کد امنیتی] شطرنجی است';
 
   @override
-  String get clickOnTheBoardToMakeYourMove => 'روی صفحه بزنید تا حرکت‌تان را بروید و اثبات کنید که انسانید.';
+  String get clickOnTheBoardToMakeYourMove => 'روی میز بزنید تا حرکت‌تان را بروید و اثبات کنید که انسانید.';
 
   @override
   String get captcha_fail => 'لطفا captcha را حل کنید';
@@ -3330,7 +3330,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get startPosition => 'وضعیت آغازش';
 
   @override
-  String get clearBoard => 'پاک کردن صفحه';
+  String get clearBoard => 'پاکیدنِ میز';
 
   @override
   String get loadPosition => 'بارگذاری وضعیت';
@@ -3607,13 +3607,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get slow => 'آرام';
 
   @override
-  String get insideTheBoard => 'در صفحه';
+  String get insideTheBoard => 'درونِ تخته';
 
   @override
-  String get outsideTheBoard => 'بیرون صفحه';
+  String get outsideTheBoard => 'بیرونِ تخته';
 
   @override
-  String get allSquaresOfTheBoard => 'همه خانه‌های صفحه';
+  String get allSquaresOfTheBoard => 'همه خانه‌های تخته';
 
   @override
   String get onSlowGames => 'در بازی های آرام';
@@ -3718,7 +3718,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String error_minLength(String param) {
-    return 'باید حداقل $param حرف داشته باشد';
+    return 'باید حداقل $param نویسه داشته باشد';
   }
 
   @override
@@ -4081,7 +4081,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get crosstable => 'رودررو';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'برای حرکت، روی صفحه بازی بِنَوَردید.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'برای حرکت، روی تختهٔ بازی بِنَوَردید.';
 
   @override
   String get scrollOverComputerVariationsToPreviewThem => 'برای پیش‌نمایش آن‌ها، روی وَرتِش‌های رایانه‌ای بِغَرالید.';
@@ -4208,7 +4208,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get backgroundImageUrl => 'وب‌نشانی تصویر پس‌زمینه:';
 
   @override
-  String get board => 'صفحه شطرنج';
+  String get board => 'میز';
 
   @override
   String get size => 'اندازه';
@@ -4724,7 +4724,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get inYourLocalTimezone => 'ذر منطقه زمانی شما';
 
   @override
-  String get tournChat => 'چت مسابقه';
+  String get tournChat => 'گپِ مسابقات';
 
   @override
   String get noChat => 'بدون گپ';
@@ -4834,7 +4834,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get disableBlindMode => 'غیرفعال سازی حالت نابینایی';
 
   @override
-  String get copyToClipboard => 'کپی در کلیپ‌بورد';
+  String get copyToClipboard => 'رونوشت در بُریده‌دان';
 
   @override
   String get online => 'بَرخط';
@@ -5252,8 +5252,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'حداکثر: $count حرف',
-      one: 'حداکثر: $count حرف',
+      other: 'حداکثر: $count نویسه.',
+      one: 'حداکثر: $count نویسه.',
     );
     return '$_temp0';
   }
@@ -5421,16 +5421,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormWaitingForMorePlayers => 'در انتظارِ پیوستن بازیکنان بیشتر...';
 
   @override
-  String get stormRaceComplete => 'تاخت تمام شد!';
+  String get stormRaceComplete => 'تاز تمام شد!';
 
   @override
   String get stormSpectating => 'در حال تماشا';
 
   @override
-  String get stormJoinTheRace => 'به تاخت بپیوندید!';
+  String get stormJoinTheRace => 'به تاز بپیوندید!';
 
   @override
-  String get stormStartTheRace => 'آغازِ تاخت';
+  String get stormStartTheRace => 'آغازِ تاز';
 
   @override
   String stormYourRankX(String param) {
@@ -5441,7 +5441,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormWaitForRematch => 'در انتظار بازرویارویی';
 
   @override
-  String get stormNextRace => 'تاختِ بعدی';
+  String get stormNextRace => 'تازِ بعدی';
 
   @override
   String get stormJoinRematch => 'پیوستن به بازی مجدد';
@@ -5453,19 +5453,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stormCreateNewGame => 'ایجاد تاختِ جدید';
 
   @override
-  String get stormJoinPublicRace => 'به یک تاختِ همگانی بپیوندید';
+  String get stormJoinPublicRace => 'به یک تازِ همگانی بپیوندید';
 
   @override
-  String get stormRaceYourFriends => 'تاخت با دوستان‌تان';
+  String get stormRaceYourFriends => 'تاز با دوستان‌تان';
 
   @override
   String get stormSkip => 'رد کردن';
 
   @override
-  String get stormSkipHelp => 'در هر تاخت می‌توانید یک حرکت را رد کنید:';
+  String get stormSkipHelp => 'در هر تاز می‌توانید یک حرکت را رد کنید:';
 
   @override
-  String get stormSkipExplanation => 'این حرکت را برای حفظ توالی‌تان رَد کنید! در هر تاخت، فقط یک بار شدنی است.';
+  String get stormSkipExplanation => 'این حرکت را برای حفظ توالی‌تان رَد کنید! در هر تاز، فقط یک بار شدنی است.';
 
   @override
   String get stormFailedPuzzles => 'معماهای ناموفق';
@@ -5753,7 +5753,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyClearAllCommentsInThisChapter => 'همه دیدگاه‌ها، نمادها و شکل‌های ترسیم شده در این بخش، پاک شوند';
 
   @override
-  String get studyRightUnderTheBoard => 'درست زیر صفحهٔ بازی';
+  String get studyRightUnderTheBoard => 'درست زیر تختهٔ بازی';
 
   @override
   String get studyNoPinnedComment => 'هیچ';
@@ -5765,7 +5765,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyHideNextMoves => 'پنهان کردن حرکت بعدی';
 
   @override
-  String get studyInteractiveLesson => 'درس میان‌کنشی';
+  String get studyInteractiveLesson => 'درس تعاملی';
 
   @override
   String studyChapterX(String param) {
@@ -5857,7 +5857,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studySave => 'ذخیره';
 
   @override
-  String get studyClearChat => 'پاک کردن گفتگو';
+  String get studyClearChat => 'پاکیدنِ گپ';
 
   @override
   String get studyDeleteTheStudyChatHistory => 'پیشینه گپِ مطالعه پاک شود؟ بازگشت وجود ندارد!';

@@ -2195,7 +2195,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get strength => 'Styrka';
 
   @override
-  String get toggleTheChat => 'Dölj/visa chatten';
+  String get toggleTheChat => 'Chattruta av/på';
 
   @override
   String get chat => 'Chatta';
@@ -2228,7 +2228,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get createAGame => 'Skapa ett parti';
 
   @override
-  String get createTheGame => 'Skapa ett parti';
+  String get createTheGame => 'Skapa parti';
 
   @override
   String get whiteIsVictorious => 'Vit har vunnit';
@@ -2237,10 +2237,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackIsVictorious => 'Svart har vunnit';
 
   @override
-  String get youPlayTheWhitePieces => 'Du spelar med de vita pjäserna';
+  String get youPlayTheWhitePieces => 'Du spelar med vita pjäser';
 
   @override
-  String get youPlayTheBlackPieces => 'Du spelar med de svarta pjäserna';
+  String get youPlayTheBlackPieces => 'Du spelar med svarta pjäser';
 
   @override
   String get itsYourTurn => 'Det är din tur!';
@@ -2285,7 +2285,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get forceDraw => 'Begär remi';
 
   @override
-  String get talkInChat => 'Vänligen uppträd trevligt i chatten!';
+  String get talkInChat => 'Var snäll i chatten!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Den första som använder den här länken kommer att spela med dig.';
@@ -2297,16 +2297,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackResigned => 'Svart har gett upp';
 
   @override
-  String get whiteLeftTheGame => 'Vit har lämnat partiet';
+  String get whiteLeftTheGame => 'Vit lämnade partiet';
 
   @override
   String get blackLeftTheGame => 'Svart har lämnat partiet';
 
   @override
-  String get whiteDidntMove => 'Vit flyttade inte';
+  String get whiteDidntMove => 'Vit flyttade ingen pjäs';
 
   @override
-  String get blackDidntMove => 'Vit flyttade inte';
+  String get blackDidntMove => 'Svart flyttade ingen pjäs';
 
   @override
   String get requestAComputerAnalysis => 'Begär datoranalys';
@@ -2318,7 +2318,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get computerAnalysisAvailable => 'Datoranalys tillgänglig';
 
   @override
-  String get computerAnalysisDisabled => 'Datoranalys otillgänglig';
+  String get computerAnalysisDisabled => 'Datoranalys avstängd';
 
   @override
   String get analysis => 'Analysbräde';
@@ -2374,7 +2374,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get forceVariation => 'Visa som variant';
 
   @override
-  String get copyVariationPgn => 'Kopiera variations-PGN';
+  String get copyVariationPgn => 'Kopiera variationens PGN';
 
   @override
   String get copyMainLinePgn => 'Kopiera huvudvariantens PGN';
@@ -2567,7 +2567,7 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Anslöt $param';
   }
 
   @override
@@ -3956,7 +3956,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get togglePositionAnnotations => 'Växla positionsanteckningar';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Analysmarkeringar av/på';
 
   @override
   String get variationArrowsInfo => 'Variationspilar låter dig navigera utan att använda draglistan.';
@@ -4856,7 +4856,7 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekunder.',
+      other: 'Motståndaren lämnade partiet. Du kan kräva seger om $count sekunder.',
       one: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekund.',
     );
     return '$_temp0';

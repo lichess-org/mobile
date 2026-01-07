@@ -30,7 +30,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileClearButton => 'মুছে ফেলুন';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'সংরক্ষিত করা চাল মুছে ফেলুন';
 
   @override
   String get mobileCustomGameJoinAGame => 'একটি গেমে যুক্ত হোন';
@@ -67,7 +67,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে লগইন করুন।';
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'কোনো ফলাফল নেই';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => 'অনুগ্রহ করে লক্ষ্য করুন, পুরনো অ্যাপ অথবা ওয়েবসাইটের সমস্ত উপাদান ও বৈশিষ্ট্য সমূহ বর্তমানে উপলব্ধ নয়, কিন্ত আমরা উপাদানগুলি সর্বদা যুক্ত করতে থাকছি.';
@@ -150,22 +150,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'কেটে যাওয়া গুটিগুলো';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'একটি ছবি বাছাই করুন';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'কাস্টম ব্যাকগ্রাউন্ড কেবল ডার্ক মোডে কাজ করে। একটি ডার্ক ইমেজ প্রস্তাবিত।';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'ছবিটি ঝাপসা করুন';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'বোর্ড লুকান';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'বোর্ড দেখান';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';

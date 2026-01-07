@@ -1172,6 +1172,7 @@
   "cyclePreviousOrNextVariation": "Cycle previous/next variation",
   "toggleGlyphAnnotations": "Toggle move annotations",
   "togglePositionAnnotations": "Toggle position annotations",
+  "toggleObservationAnnotations": "Toggle observation annotations",
   "variationArrowsInfo": "Variation arrows let you navigate without using the move list.",
   "playSelectedMove": "play selected move",
   "newTournament": "New tournament",

@@ -1229,31 +1229,31 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preferencesPieceAnimation => 'Aнимација фигура';
 
   @override
-  String get preferencesMaterialDifference => 'Разлика у материјалу';
+  String get preferencesMaterialDifference => 'Материјална разлика';
 
   @override
-  String get preferencesBoardHighlights => 'Осветли последњи потез и шах';
+  String get preferencesBoardHighlights => 'Истицања на табли (последњи потез и шах)';
 
   @override
-  String get preferencesPieceDestinations => 'Bажећи потези (важећи помаци и претпотези)';
+  String get preferencesPieceDestinations => 'Дестинације фигура (важећи потези и предпотези)';
 
   @override
-  String get preferencesBoardCoordinates => 'Прикажи координате табле (A-H, 1-8)';
+  String get preferencesBoardCoordinates => 'Координате табле (A-H, 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => 'Листа потеза током партије';
+  String get preferencesMoveListWhilePlaying => 'Листа потеза док играш';
 
   @override
-  String get preferencesPgnPieceNotation => 'Нотација';
+  String get preferencesPgnPieceNotation => 'Нотација потеза';
 
   @override
-  String get preferencesChessPieceSymbol => 'симболи фигура';
+  String get preferencesChessPieceSymbol => 'Шаховски симбол фигуре';
 
   @override
-  String get preferencesPgnLetter => 'Cлова (К, Q, R, B, N)';
+  String get preferencesPgnLetter => 'Cлово (К, Q, R, B, N)';
 
   @override
-  String get preferencesZenMode => 'зен стање';
+  String get preferencesZenMode => 'Зен режим';
 
   @override
   String get preferencesShowPlayerRatings => 'Show player ratings';
@@ -1265,10 +1265,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle => 'Прикажи ручицу за мењање величине табле';
+  String get preferencesDisplayBoardResizeHandle => 'Прикажи ручицу за промену величине табле';
 
   @override
-  String get preferencesOnlyOnInitialPosition => 'Само на почетку партије';
+  String get preferencesOnlyOnInitialPosition => 'Само на почетној позицији';
 
   @override
   String get preferencesInGameOnly => 'In-game only';
@@ -1277,49 +1277,49 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preferencesExceptInGame => 'Except in-game';
 
   @override
-  String get preferencesChessClock => 'Шаховски сат';
+  String get preferencesChessClock => 'Сат';
 
   @override
   String get preferencesTenthsOfSeconds => 'Десетинке';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Када имате < 10 секунди';
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Када преостало време < 10 секунди';
 
   @override
-  String get preferencesHorizontalGreenProgressBars => 'Хоризонтални зелени индикатор';
+  String get preferencesHorizontalGreenProgressBars => 'Водоравне зелене линије напредка';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Звук када преостане мало времена';
+  String get preferencesSoundWhenTimeGetsCritical => 'Звук када време постане критично';
 
   @override
-  String get preferencesGiveMoreTime => 'Додај још времена';
+  String get preferencesGiveMoreTime => 'Дај више времена';
 
   @override
   String get preferencesGameBehavior => 'Понашање игре';
 
   @override
-  String get preferencesHowDoYouMovePieces => 'Како померате фигуре?';
+  String get preferencesHowDoYouMovePieces => 'Како помераш фигуре?';
 
   @override
-  String get preferencesClickTwoSquares => '\"кликни\" два поља';
+  String get preferencesClickTwoSquares => 'Кликни два поља';
 
   @override
-  String get preferencesDragPiece => 'вуци фигуру';
+  String get preferencesDragPiece => 'Превуци фигуру';
 
   @override
-  String get preferencesBothClicksAndDrag => 'на оба начина';
+  String get preferencesBothClicksAndDrag => 'Било како';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Претпотез (игра се током противниковог потеза)';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Претпотези (играње током противничког потеза)';
 
   @override
-  String get preferencesTakebacksWithOpponentApproval => 'Враћања потеза (са пристанком противника)';
+  String get preferencesTakebacksWithOpponentApproval => 'Враћања потеза (са одобрењем противника)';
 
   @override
-  String get preferencesInCasualGamesOnly => 'Само у неформалним партијама';
+  String get preferencesInCasualGamesOnly => 'Само у нерангираним партијама';
 
   @override
-  String get preferencesPromoteToQueenAutomatically => 'Промовишите у Даму аутоматски';
+  String get preferencesPromoteToQueenAutomatically => 'Промовиши у Даму аутоматски';
 
   @override
   String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
@@ -1328,37 +1328,37 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preferencesWhenPremoving => 'Током претпотеза';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'аутоматски реми после три понављања позиције';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Прогласи реми на троструко понављање потеза аутоматски';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Када преостане < 30 секунди';
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Када преостало време < 30 секунди';
 
   @override
-  String get preferencesMoveConfirmation => 'Потврди потез';
+  String get preferencesMoveConfirmation => 'Потврда потеза';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
 
   @override
-  String get preferencesInCorrespondenceGames => 'У дописним играма';
+  String get preferencesInCorrespondenceGames => 'Дописне партије';
 
   @override
-  String get preferencesCorrespondenceAndUnlimited => 'Dopisno i neograniceno';
+  String get preferencesCorrespondenceAndUnlimited => 'Дописне и неограничене';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Потврда за предавање и предлагање ремија';
+  String get preferencesConfirmResignationAndDrawOffers => 'Потврди предају и понуду за реми';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Метода прављења рокаде';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Метода рокадирања';
 
   @override
-  String get preferencesCastleByMovingTwoSquares => 'Помери краља за два поља';
+  String get preferencesCastleByMovingTwoSquares => 'Помери краља два поља';
 
   @override
   String get preferencesCastleByMovingOntoTheRook => 'Помери краља на топа';
 
   @override
-  String get preferencesInputMovesWithTheKeyboard => 'Уноеси потезе са тастатуром';
+  String get preferencesInputMovesWithTheKeyboard => 'Унеси потезе са тастатуром';
 
   @override
   String get preferencesInputMovesWithVoice => 'Input moves with your voice';
@@ -1370,7 +1370,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get preferencesSayGgWpAfterLosingOrDrawing => 'Кажи \"Добра партија, добро одиграно\" након пораза или нерешеног';
 
   @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Ваше преференце су сачуване.';
+  String get preferencesYourPreferencesHaveBeenSaved => 'Твоје преференсе су сачуване.';
 
   @override
   String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
@@ -2146,13 +2146,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsSettings => 'Подешавања';
 
   @override
-  String get settingsCloseAccount => 'Затворите налог';
+  String get settingsCloseAccount => 'Затвори налог';
 
   @override
   String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'Неће Вам бити допуштено да отворите нови налог са истим именом, чак и ако капитализација слова буде другачија.';
+  String get settingsCantOpenSimilarAccount => 'Корисничко име НЕЋЕ бити опет доступно за регистрацију.';
 
   @override
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
@@ -3264,7 +3264,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get emptyTournamentName => 'Остави празно да би назвао/ла турнир по познатом шаховском играчу.';
 
   @override
-  String get makePrivateTournament => 'Учини турнир приватним и ограничи приступ са шифром';
+  String get makePrivateTournament => 'Направи турнир приватним и ограничи приступ са лозинком';
 
   @override
   String get join => 'Придружи се';
@@ -3400,7 +3400,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get thankYou => 'Хвала!';
 
   @override
-  String get socialMediaLinks => 'Линкови за социјалне медије';
+  String get socialMediaLinks => 'Линкови друштвених мрежа';
 
   @override
   String get oneUrlPerLine => 'Један УРЛ по линији.';
@@ -3587,10 +3587,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get newPasswordStrength => 'Јачина лозинке';
 
   @override
-  String get clockInitialTime => 'Почетно време на сату';
+  String get clockInitialTime => 'Почетно време сата';
 
   @override
-  String get clockIncrement => 'Повећање времена';
+  String get clockIncrement => 'Додатак сата';
 
   @override
   String get privacy => 'Приватност';

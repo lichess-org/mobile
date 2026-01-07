@@ -189,7 +189,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Hmatová odozva';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Keď je táto funkcia zapnutá, zariadenie pri presunutí alebo braní figúrky krátko zavibruje.';
 
   @override
   String get mobileSettingsTab => 'Nastavenia';
@@ -239,7 +239,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileWatchTab => 'Sledovať';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Vitajte v Lichess aplikácii!';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -829,7 +829,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastFederation => 'Federácia';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Vek';
 
   @override
   String get broadcastUnrated => 'Bez hodnotenia';
@@ -1947,16 +1947,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Veža je vedľa súperovho kráľa a podporuje ju dáma, ktorá zároveň blokuje kráľove únikové polia. Veža a dáma chytia súperovho kráľa do pasce na 3 x 3 „poli smrti“.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Pillsburyho mat';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Veža dáva kráľovi mat, zatiaľ čo strelec obmedzuje jeho pohyb.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphyho mat';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Strelec dáva kráľovi mat, zatiaľ čo veža obmedzuje jeho pohyb.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trojuholníkový mat';
@@ -2049,10 +2049,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Taktika počas prvého úseku hry.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Opera mat';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Veža dáva kráľovi mat, zatiaľ čo strelec ju kryje.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pešiaková koncovka';
@@ -4146,7 +4146,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get analysisShapesHowTo => 'Stlačte shift+ľavé tlačidlo na myši alebo pravé tlačidlo na myši na kreslenie kruhov a šípok na šachovnici.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl / Shift = červená; Command / Alt / Meta = modrá; Dve klávesy naraz (z oboch skupín jedna) = žltá.';
 
   @override
   String get letOtherPlayersMessageYou => 'Povoliť ostatným hráčom aby Vám napísali správu';

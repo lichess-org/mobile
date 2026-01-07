@@ -1894,13 +1894,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsburyn matti';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Torni matittaa kuninkaan samalla kun lähetti vie kuninkaalta pakoruudut.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphyn matti';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Matita vastustajan kuningas lähetilläsi samalla kun torni vie kuninkaalta pakoruudut.';
 
   @override
   String get puzzleThemeTriangleMate => 'Kolmiomatti';
@@ -1993,10 +1993,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Taktiikka pelin ensimmäisessä vaiheessa.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Oopperamatti';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Matita vastustajan kuningas tornilla lähetin suojellessa tornia.';
 
   @override
   String get puzzleThemePawnEndgame => 'Sotilasloppupeli';

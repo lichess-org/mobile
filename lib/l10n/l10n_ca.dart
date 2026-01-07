@@ -1891,16 +1891,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una torre està al costat del rei enemic sostinguda per una dama que també bloqueja les caselles d\'escapament. La torre i la dama cacen el rei enemic amb una \"caixa de matar\" de 3 per 3.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Mat de Pillsbury';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'La torre fa escac i mat mentre l\'alfil ajuda a confinar el rei.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Mat de Morphy';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Utilitza l\'alfil per fer escac al rei mentre la torre ajuda a confinar-lo.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat del triangle';
@@ -1993,10 +1993,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Una tàctica durant la primera fase del joc.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Mat de l\'òpera';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Fes escac al rei amb la torre i utilitza l\'alfil per defensar la torre.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peons';
