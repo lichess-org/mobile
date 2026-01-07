@@ -905,7 +905,7 @@
   <string name="timeAlmostUp">시간이 거의 다 되었어요!</string>
   <string name="clickToRevealEmailAddress">[이메일 주소를 보려면 클릭]</string>
   <string name="download">다운로드</string>
-  <string name="coachManager">코치 설정</string>
+  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">코치 설정</string>
   <string name="streamerManager">스트리머 설정</string>
   <string name="cancelTournament">토너먼트 취소하기</string>
   <string name="tournDescription">토너먼트 설명</string>

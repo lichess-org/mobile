@@ -13,7 +13,7 @@
   <string name="newPatrons">Uued toetajad</string>
   <string name="freeChess">Tasuta malet kõigile, igavesti!</string>
   <string name="noAdsNoSubs">Ei reklaame, ei tellimist; vaid avatud lähtekoodi ja kirge.</string>
-  <string name="thankYou" comment="&quot;you&quot; is in singular here.">Aitäh annetuse eest!</string>
+  <string name="thankYou">Aitäh annetuse eest!</string>
   <string name="youHaveLifetime">Sinul on eluaegne toetuskonto. See on väga lahe!</string>
   <string name="patronUntil">Sul on toetuskonto kuni %s.</string>
   <string name="ifNotRenewedThenAccountWillRevert">Kui seda ei uuendata, siis taastub teie konto tavaliseks kontoks.</string>
