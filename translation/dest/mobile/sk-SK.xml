@@ -58,6 +58,7 @@
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Kreslenie šípok/kruhov pomocou dvoch prstov: podržte jeden prst na prázdnom štvorci a ťahaním druhého prsta nakreslite požadovaný útvar.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Zobraziť okraj</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Hmatová odozva</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Keď je táto funkcia zapnutá, zariadenie pri presunutí alebo braní figúrky krátko zavibruje.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavenia</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Zdieľať PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Zdieľať URL partie</string>
@@ -73,4 +74,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s nie je podporovaný v tejto verzií.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čaká sa na pripojenie súpera...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sledovať</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Vitajte v Lichess aplikácii!</string>
 </resources>
