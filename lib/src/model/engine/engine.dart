@@ -217,7 +217,6 @@ class StockfishEngine implements Engine {
               _stockfish!.state.removeListener(onReadyOrErrorOnce);
             } else if (currentState == StockfishState.error ||
                 currentState == StockfishState.disposed) {
-              // Engine failed to start, complete the exit completer
               if (_exitCompleter.isCompleted == false) {
                 _exitCompleter.complete();
               }
