@@ -248,7 +248,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     _root = switch (options) {
       Standalone(:final pgn) when _savedStandaloneRoot != null && pgn.isEmpty =>
-          _savedStandaloneRoot!,
+        _savedStandaloneRoot!,
       _ => Root.fromPgnGame(
         game,
         isLichessAnalysis: options.isLichessGameAnalysis,
@@ -287,9 +287,11 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           }
         });
 
-    final currentPath = _savedStandalonePath != null && options is Standalone
-        ? _savedStandalonePath!
-        : (options.initialMoveCursor == null ? _root.mainlinePath : path);
+    final currentPath = switch (options) {
+      Standalone(:final pgn) when _savedStandalonePath != null && pgn.isEmpty =>
+        _savedStandalonePath!,
+      _ => options.initialMoveCursor == null ? _root.mainlinePath : path,
+    };
     final currentNode = _root.nodeAt(currentPath);
 
     late final Forecast? forecast;
