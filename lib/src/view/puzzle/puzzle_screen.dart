@@ -775,19 +775,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.analysis),
-          onPressed: () {
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                context,
-                puzzleState.makeAnalysisOptions(
-                  ref.read(puzzleControllerProvider(widget.initialPuzzleContext).notifier).makePgn,
-                ),
-              ),
-            );
-          },
-        ),
-        BottomSheetAction(
           makeLabel: (context) =>
               Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
