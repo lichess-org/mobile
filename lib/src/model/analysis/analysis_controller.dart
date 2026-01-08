@@ -111,9 +111,11 @@ final analysisControllerProvider = AsyncNotifierProvider.autoDispose
     );
 
 Root? _savedStandaloneRoot;
+UciPath? _savedStandalonePath;
 
 void clearSavedStandaloneAnalysis() {
   _savedStandaloneRoot = null;
+  _savedStandalonePath = null;
 }
 
 class AnalysisController extends AsyncNotifier<AnalysisState>
@@ -129,6 +131,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
   late Root _root;
   late Variant _variant;
+  late UciPath _currentPath;
 
   @override
   @protected
@@ -194,6 +197,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           ref.onCancel(() {
             if (_root.mainline.isNotEmpty) {
               _savedStandaloneRoot = _root;
+              _savedStandalonePath = _currentPath;
             }
           });
         }
@@ -243,7 +247,9 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
     _root = switch (options) {
-      Standalone() when _savedStandaloneRoot != null => _savedStandaloneRoot!,
+      Standalone(:final pgn) when _savedStandaloneRoot != null && pgn.isEmpty => (() {
+        return _savedStandaloneRoot!;
+      })(),
       _ => Root.fromPgnGame(
         game,
         isLichessAnalysis: options.isLichessGameAnalysis,
@@ -282,7 +288,9 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           }
         });
 
-    final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentPath = _savedStandalonePath != null && options is Standalone
+        ? _savedStandalonePath!
+        : (options.initialMoveCursor == null ? _root.mainlinePath : path);
     final currentNode = _root.nodeAt(currentPath);
 
     late final Forecast? forecast;
@@ -325,7 +333,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
-      pathToLiveMove: isGameFinished ? null : currentPath,
+      pathToLiveMove: isGameFinished || options is Standalone ? null : currentPath,
       forecast: forecast,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
@@ -346,6 +354,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // We need to define the state value in the build method because `requestEval` require the state
     // to have a value.
     state = AsyncData(analysisState);
+    _currentPath = analysisState.currentPath;
 
     socketClient.firstConnection
         .timeout(const Duration(seconds: 3))
@@ -363,6 +372,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
   void clearSavedStandaloneAnalysis() {
     _savedStandaloneRoot = null;
+    _savedStandalonePath = null;
     ref.invalidateSelf();
   }
 
@@ -687,6 +697,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
   }) {
+    _currentPath = path;
     final curState = state.requireValue;
     final pathChange = curState.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
