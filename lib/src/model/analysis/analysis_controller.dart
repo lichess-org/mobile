@@ -247,9 +247,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
     _root = switch (options) {
-      Standalone(:final pgn) when _savedStandaloneRoot != null && pgn.isEmpty => (() {
-        return _savedStandaloneRoot!;
-      })(),
+      Standalone(:final pgn) when _savedStandaloneRoot != null && pgn.isEmpty =>
+          _savedStandaloneRoot!,
       _ => Root.fromPgnGame(
         game,
         isLichessAnalysis: options.isLichessGameAnalysis,
