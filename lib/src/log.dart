@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
@@ -46,6 +47,14 @@ class AppLogService {
 
         if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
           debugPrint('[${record.loggerName}] ${record.message}');
+        }
+      } else {
+        if (record.loggerName == 'Stockfish' && record.level >= Level.SEVERE) {
+          // help debugging engine in error state issues in production
+          LichessBinding.instance.firebaseCrashlytics.recordError(
+            record.message,
+            record.stackTrace,
+          );
         }
       }
 
