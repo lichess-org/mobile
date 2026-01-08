@@ -8,6 +8,7 @@ permissions: read-all
 jobs:
   github-upload:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/fdroid'  # only runs if on the 'fdroid' branch
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v5
