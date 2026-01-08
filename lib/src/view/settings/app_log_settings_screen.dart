@@ -28,7 +28,7 @@ class AppLogSettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLevel = ref.watch(logPreferencesProvider.select((prefs) => prefs.level));
-    final logs = ref.read(appLogStorageServiceProvider).logs.toIList().reversed;
+    final logs = ref.read(appLogServiceProvider).logs.toIList().reversed;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +56,7 @@ class AppLogSettingsScreen extends ConsumerWidget {
               showConfirmDialog<dynamic>(
                 context,
                 title: const Text('Delete all logs'),
-                onConfirm: ref.read(appLogStorageServiceProvider).clear,
+                onConfirm: ref.read(appLogServiceProvider).clear,
               );
             },
           ),

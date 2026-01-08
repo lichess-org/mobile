@@ -8,17 +8,17 @@ import 'package:logging/logging.dart';
 
 const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService'};
 
-/// Provides an instance of [AppLogStorageService] using Riverpod.
-final appLogStorageServiceProvider = Provider<AppLogStorageService>(
-  (Ref ref) => AppLogStorageService(ref),
-  name: 'AppLogStorageServiceProvider',
+/// Provides an instance of [AppLogService] using Riverpod.
+final appLogServiceProvider = Provider<AppLogService>(
+  (Ref ref) => AppLogService(ref),
+  name: 'AppLogServiceProvider',
 );
 
 /// Manages log entries created via [Logger] instances
 ///
 /// Currently, simply saves the most recent log entries in memory, so they do not persists across app restarts.
-class AppLogStorageService {
-  AppLogStorageService(this.ref);
+class AppLogService {
+  AppLogService(this.ref);
 
   final Ref ref;
   final _logs = LRUList<LogRecord>(capacity: 1024);
