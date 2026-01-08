@@ -65,7 +65,7 @@ class _AppState extends ConsumerState<Application> {
   @override
   void initState() {
     // Start services
-    ref.read(appLogStorageServiceProvider).start();
+    ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();
     ref.read(challengeServiceProvider).start();
