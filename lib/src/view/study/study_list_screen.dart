@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -88,6 +89,21 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
     }
   }
 
+  String get orderLabel {
+    switch (order) {
+      case StudyListOrder.hot:
+        return context.l10n.studyHot;
+      case StudyListOrder.newest:
+        return context.l10n.studyDateAddedNewest;
+      case StudyListOrder.updated:
+        return context.l10n.studyRecentlyUpdated;
+      case StudyListOrder.popular:
+        return context.l10n.studyMostPopular;
+      default:
+        return context.l10n.studyHot;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider)?.user;
@@ -125,7 +141,11 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(authUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        title: AppBarTitleText(
+          authUser != null
+              ? '${context.l10n.studyMenu} • $orderLabel'
+              : context.l10n.studyAllStudies,
+        ),
         actions: [
           ContextMenuIconButton(
             consumeOutsideTap: true,
