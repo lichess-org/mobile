@@ -110,12 +110,10 @@ final analysisControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'AnalysisControllerProvider',
     );
 
-Root? _savedStandaloneRoot;
-UciPath? _savedStandalonePath;
+({Root root, UciPath path})? _savedStandalone;
 
 void clearSavedStandaloneAnalysis() {
-  _savedStandaloneRoot = null;
-  _savedStandalonePath = null;
+  _savedStandalone = null;
 }
 
 class AnalysisController extends AsyncNotifier<AnalysisState>
@@ -196,8 +194,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           // We want to keep the standalone analysis session alive even if the user navigates away
           ref.onCancel(() {
             if (_root.mainline.isNotEmpty) {
-              _savedStandaloneRoot = _root;
-              _savedStandalonePath = _currentPath;
+              _savedStandalone = (root: _root, path: _currentPath);
             }
           });
         }
@@ -247,8 +244,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
     _root = switch (options) {
-      Standalone(:final pgn) when _savedStandaloneRoot != null && pgn.isEmpty =>
-        _savedStandaloneRoot!,
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty =>
+        _savedStandalone!.root,
       _ => Root.fromPgnGame(
         game,
         isLichessAnalysis: options.isLichessGameAnalysis,
@@ -288,8 +285,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         });
 
     final currentPath = switch (options) {
-      Standalone(:final pgn) when _savedStandalonePath != null && pgn.isEmpty =>
-        _savedStandalonePath!,
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty =>
+        _savedStandalone!.path,
       _ => options.initialMoveCursor == null ? _root.mainlinePath : path,
     };
     final currentNode = _root.nodeAt(currentPath);
@@ -372,8 +369,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
   }
 
   void clearSavedStandaloneAnalysis() {
-    _savedStandaloneRoot = null;
-    _savedStandalonePath = null;
+    _savedStandalone = null;
     ref.invalidateSelf();
   }
 
