@@ -244,8 +244,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
     _root = switch (options) {
-      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty =>
-        _savedStandalone!.root,
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty => _savedStandalone!.root,
       _ => Root.fromPgnGame(
         game,
         isLichessAnalysis: options.isLichessGameAnalysis,
@@ -285,8 +284,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         });
 
     final currentPath = switch (options) {
-      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty =>
-        _savedStandalone!.path,
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty => _savedStandalone!.path,
       _ => options.initialMoveCursor == null ? _root.mainlinePath : path,
     };
     final currentNode = _root.nodeAt(currentPath);
