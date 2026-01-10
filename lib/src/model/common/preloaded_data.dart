@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -51,17 +51,21 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   AuthUser? authUser = await authStorage.read();
 
   if (authUser != null) {
+    final userAgent = makeUserAgent(pInfo, deviceInfo, sri, null);
+    final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
     try {
-      final isValid = await ref
-          .read(authRepositoryProvider)
-          .checkToken(authUser)
-          .timeout(const Duration(seconds: 1));
+      final data = await client
+          .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
+          .timeout(const Duration(seconds: 5));
+      final isValid = data[authUser.token] != null;
       if (!isValid) {
         await ref.read(authStorageProvider).delete();
         authUser = null;
       }
     } catch (_) {
       // in case of network error, assume the authUser is still valid
+    } finally {
+      client.close();
     }
   }
 
