@@ -19,6 +19,8 @@ part 'over_the_board_game.g.dart';
 abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableSteps {
   const OverTheBoardGame._();
 
+  factory OverTheBoardGame.fromJson(Map<String, dynamic> json) => _$OverTheBoardGameFromJson(json);
+
   @override
   Player get white => Player(
     onGame: true,

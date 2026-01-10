@@ -2,19 +2,46 @@ import 'dart:io';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
+
 void main() {
+  registerFallbackValue(
+    OverTheBoardGame(
+      steps: [const GameStep(position: Chess.initial)].lock,
+      meta: GameMeta(
+        createdAt: DateTime.now(),
+        rated: false,
+        variant: Variant.standard,
+        speed: Speed.rapid,
+        perf: Perf.rapid,
+      ),
+      initialFen: null,
+      status: GameStatus.unknown,
+    ),
+  );
+  registerFallbackValue(const TimeIncrement(0, 0));
+
   group('Playing over the board (offline)', () {
     testWidgets('Checkmate and Rematch', (tester) async {
       final boardRect = await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
@@ -173,11 +200,116 @@ void main() {
 
       expect(findWhiteClock(tester).timeLeft, lessThan(time));
     });
+
+    testWidgets('Loading saved game', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+        (_) async => SavedOtbGame(
+          game: OverTheBoardGame(
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.rapid,
+              perf: Perf.rapid,
+            ),
+            initialFen: null,
+            status: GameStatus.started,
+          ),
+          whiteTimeLeft: const Duration(minutes: 2),
+          blackTimeLeft: const Duration(minutes: 1),
+          timeIncrement: const TimeIncrement(5, 3),
+        ),
+      );
+      when(
+        () => gameStorage.save(
+          any(),
+          timeIncrement: any(named: 'timeIncrement'),
+          whiteTimeLeft: any(named: 'whiteTimeLeft'),
+          blackTimeLeft: any(named: 'blackTimeLeft'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for previous game to be loaded
+      await tester.pumpAndSettle();
+
+      verify(() => gameStorage.fetchOngoingGame()).called(1);
+
+      // Should not show bottom sheet if we loaded a previous game
+      expect(find.text('Play'), findsNothing);
+
+      // Should load the game's current position, i.e. e4 was played
+      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
+      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+
+      expect(activeClock(tester), null);
+      expect(findWhiteClock(tester).timeLeft, const Duration(minutes: 2));
+      expect(findBlackClock(tester).timeLeft, const Duration(minutes: 1));
+
+      // Start black's clock
+      await tester.tap(find.byTooltip('Resume'));
+      await tester.pump();
+      expect(activeClock(tester), Side.black);
+
+      // Hide OTB screen to trigger save
+      await tester.pumpWidget(const SizedBox.shrink());
+
+      verify(
+        () => gameStorage.save(
+          any(),
+          timeIncrement: const TimeIncrement(5, 3),
+          whiteTimeLeft: const Duration(minutes: 2),
+          blackTimeLeft: const Duration(minutes: 1),
+        ),
+      ).called(1);
+    });
   });
 }
 
 Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
-  final app = await makeTestProviderScopeApp(tester, home: const OverTheBoardScreen());
+  final gameStorage = MockOverTheBoardGameStorage();
+
+  when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+  when(
+    () => gameStorage.save(
+      any(),
+      timeIncrement: any(named: 'timeIncrement'),
+      whiteTimeLeft: any(named: 'whiteTimeLeft'),
+      blackTimeLeft: any(named: 'blackTimeLeft'),
+    ),
+  ).thenAnswer((_) async {});
+
+  final app = await makeTestProviderScopeApp(
+    tester,
+    home: const OverTheBoardScreen(),
+    overrides: {
+      overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+        (_) => gameStorage,
+      ),
+    },
+  );
   await tester.pumpWidget(app);
 
   // Wait for bottom sheet to show up
