@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -97,7 +96,6 @@ class _IsEditingHome extends InheritedWidget {
 
 class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
-  bool _imageAreCached = false;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   DateTime? _focusLostAt;
@@ -108,27 +106,16 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   @override
   void initState() {
     super.initState();
-    _precacheImages();
+    _loadImageWorker();
 
     showWelcomeMessage();
   }
 
-  Future<void> _precacheImages() async {
+  Future<void> _loadImageWorker() async {
     final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
-      });
-      ref.listenManual(blogCarouselProvider, (_, current) async {
-        if (current.hasValue && !_imageAreCached) {
-          _imageAreCached = true;
-          await preCacheBlogImages(
-            context,
-            posts: current.value!,
-            worker: worker,
-            externalClient: ref.read(defaultClientProvider),
-          );
-        }
       });
     }
   }
