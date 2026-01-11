@@ -90,7 +90,7 @@ Jen la ligo por aliri la klason.</string>
   <string name="timePlaying">Tempo pasita ludante</string>
   <string name="variantXOverLastY">%1$s sur la lastaj %2$s</string>
   <string name="winrate">Venka procento</string>
-  <string name="na">Ne havebla</string>
+  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Ne havebla</string>
   <string name="overview">Superrigardo</string>
   <string name="news">Novaĵoj</string>
   <string name="classNews">Novaĵoj de la lecionoj</string>
