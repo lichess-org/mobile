@@ -949,7 +949,7 @@
   <string name="timeAlmostUp">El temps quasi s\'ha exhaurit!</string>
   <string name="clickToRevealEmailAddress">[Clica per a mostrar l\'adreça de correu electrònic]</string>
   <string name="download">Descarregar</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Gestionament d\'entrenador</string>
+  <string name="coachManager">Gestionament d\'entrenador</string>
   <string name="streamerManager">Gestionament de retransmissor</string>
   <string name="cancelTournament">Cancel-lar el torneig</string>
   <string name="tournDescription">Descripció del torneig</string>
@@ -1018,4 +1018,5 @@ Les despeses de funcionament, desenvolupament i continguts es financen exclusiva
   <string name="search">Cerca</string>
   <string name="clearSearch">Neteja la cerca</string>
   <string name="tags">Etiquetes</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">Captura al pas</string>
 </resources>

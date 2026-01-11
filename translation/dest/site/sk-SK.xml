@@ -1037,7 +1037,7 @@
   <string name="timeAlmostUp">Čas čoskoro vyprší!</string>
   <string name="clickToRevealEmailAddress">[Kliknite pre zobrazenie e-mailovej adresy]</string>
   <string name="download">Stiahnuť</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Nastavenia trénera</string>
+  <string name="coachManager">Nastavenia trénera</string>
   <string name="streamerManager">Správca streamov</string>
   <string name="cancelTournament">Zrušiť turnaj</string>
   <string name="tournDescription">Popis turnaja</string>

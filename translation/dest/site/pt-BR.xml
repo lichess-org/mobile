@@ -950,7 +950,7 @@
   <string name="timeAlmostUp">O tempo está quase acabando!</string>
   <string name="clickToRevealEmailAddress">[Clique para revelar o endereço de e-mail]</string>
   <string name="download">Baixar</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Configurações para professores</string>
+  <string name="coachManager">Configurações para professores</string>
   <string name="streamerManager">Configurações para streamers</string>
   <string name="cancelTournament">Cancelar o torneio</string>
   <string name="tournDescription">Descrição do torneio</string>
@@ -1018,4 +1018,5 @@ Deixe em branco para começar as partidas na posição inicial padrão.</string>
   <string name="search">Busca</string>
   <string name="clearSearch">Limpar busca</string>
   <string name="tags">Etiquetas</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">En passant</string>
 </resources>
