@@ -204,6 +204,7 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
     required int? ratingDiff,
     required int? performance,
     required IList<BroadcastTieBreakDetail>? tieBreaks,
+    required String? team,
   }) = _BroadcastPlayerWithOverallResult;
 }
 

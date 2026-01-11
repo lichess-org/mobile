@@ -210,8 +210,14 @@ class _OverallStatPlayer extends StatelessWidget {
         playerWithGameResults;
     final birthYear = fideData.birthYear;
     final (:standard, :rapid, :blitz) = fideData.ratings;
-    final BroadcastPlayerWithOverallResult(:player, :score, :played, :performance, :ratingDiff) =
-        playerWithOverallResult;
+    final BroadcastPlayerWithOverallResult(
+      :player,
+      :score,
+      :played,
+      :performance,
+      :ratingDiff,
+      :team,
+    ) = playerWithOverallResult;
     final BroadcastPlayer(:federation, :fideId) = player;
 
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
@@ -265,6 +271,17 @@ class _OverallStatPlayer extends StatelessWidget {
                         ],
                       ),
                     const SizedBox(height: 16),
+                    if (team != null) ...[
+                      Row(
+                        children: [
+                          const SizedBox(width: 100, child: Text('Team')),
+                          Expanded(
+                            child: Text(team.trim(), style: Theme.of(context).textTheme.bodyLarge),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     if (birthYear != null)
                       Row(
                         children: [
