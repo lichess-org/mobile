@@ -3,6 +3,7 @@
   <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Kontaj Preferoj</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Ĉiuj ludoj</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ĉu vi certas?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Agordoj de la tabulo</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Nuligi proponon pri malmovo</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Malplenigi</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Malplenigi konservitan movon</string>
@@ -35,6 +36,7 @@
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Cirklo</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrato</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Enakviĝa reĝimo</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Kaŝi la tabulon</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Montri tabulon</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Agordoj</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Kunhavigi PGN-on</string>
