@@ -26,7 +26,7 @@ dependencies:
   device_info_plus: ^12.1.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
-  file_picker: ^8.1.6
+  file_picker: ^10.3.8
   firebase_core: ^4.0.0
   firebase_crashlytics: ^5.0.0
   firebase_messaging: ^16.0.0
