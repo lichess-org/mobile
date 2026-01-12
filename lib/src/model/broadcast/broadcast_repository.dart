@@ -283,6 +283,7 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     performance: pick('performance').asIntOrNull(),
     tieBreaks: pick('tiebreaks').asListOrNull(_tieBreakDetailFromPick)?.toIList(),
+    team: pick('team').asStringOrNull(),
   );
 }
 
