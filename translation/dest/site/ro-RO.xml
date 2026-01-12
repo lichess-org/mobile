@@ -993,7 +993,7 @@
   <string name="timeAlmostUp">Timpul se apropie de sfârșit!</string>
   <string name="clickToRevealEmailAddress">[Click pentru a dezvălui adresa de e-mail]</string>
   <string name="download">Descărcare</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Setări pentru antrenor</string>
+  <string name="coachManager">Setări pentru antrenor</string>
   <string name="streamerManager">Setări pentru streamer</string>
   <string name="cancelTournament">Anulează turneul</string>
   <string name="tournDescription">Descrierea turneului</string>

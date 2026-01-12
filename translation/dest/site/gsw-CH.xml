@@ -959,7 +959,7 @@ gits nöd und es isch nie g\'wertet.</string>
   <string name="timeAlmostUp">D\'Zit isch fascht abgloffe!</string>
   <string name="clickToRevealEmailAddress">[Klick, zum die E-Mail-Adrässe azeige]</string>
   <string name="download">Abelade</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Trainer Verwalter</string>
+  <string name="coachManager">Trainer Verwalter</string>
   <string name="streamerManager">Streamer Verwalter</string>
   <string name="cancelTournament">Brich das Turnier ab</string>
   <string name="tournDescription">Turnier Beschribig</string>
@@ -1029,4 +1029,5 @@ Alli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur B
   <string name="search">Suechi</string>
   <string name="clearSearch">Suechi lösche</string>
   <string name="tags">Tags</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">En passant</string>
 </resources>

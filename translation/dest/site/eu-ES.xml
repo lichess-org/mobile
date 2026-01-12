@@ -950,7 +950,7 @@
   <string name="timeAlmostUp">Denbora ia agortu da!</string>
   <string name="clickToRevealEmailAddress">[Egin klik eposta helbidea erakusteko]</string>
   <string name="download">Deskargatu</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">Entrenatzaileen kudeatzailea</string>
+  <string name="coachManager">Entrenatzaileen kudeatzailea</string>
   <string name="streamerManager">Zuzenekoen kudeatzailea</string>
   <string name="cancelTournament">Bertan behera utzi txapelketa</string>
   <string name="tournDescription">Txapelketaren deskribapena</string>
@@ -1018,4 +1018,5 @@ Garapen eta mantentze-kostu guztiak erabiltzaileen dohaintzekin ordaintzen dira.
   <string name="search">Bilatu</string>
   <string name="clearSearch">Garbitu bilaketa</string>
   <string name="tags">Etiketak</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">Igarotzean harrapatzea</string>
 </resources>
