@@ -1441,6 +1441,7 @@
   "search": "Søk",
   "clearSearch": "Tøm søk",
   "tags": "Merkelapper",
+  "enPassant": "En passant",
   "opponentLeftCounter": "{count, plural, =1{Motspilleren din har forlatt partiet. Du kan kreve seier om {count} sekund.} other{Motspilleren din har forlatt partiet. Du kan kreve seier om {count} sekunder.}}",
   "mateInXHalfMoves": "{count, plural, =1{Matt om {count} halvtrekk} other{Matt om {count} halvtrekk}}",
   "nbBlunders": "{count, plural, =1{{count} bukk} other{{count} bukker}}",

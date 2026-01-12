@@ -1427,6 +1427,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Onedlho začínajúci turnaj';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Dochádza čas v korešpondenčnej partii';
 
   @override
@@ -1446,6 +1449,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Naslepo';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Šachové úlohy';
@@ -4906,6 +4912,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tags => 'Značky';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

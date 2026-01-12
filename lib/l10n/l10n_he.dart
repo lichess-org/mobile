@@ -1425,6 +1425,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'טורניר מתחיל בקרוב';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'אוזל הזמן במשחק התכתבות';
 
   @override
@@ -1444,6 +1447,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'משחק עיוור';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'פאזלים';
@@ -4902,6 +4908,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get tags => 'תגיות';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

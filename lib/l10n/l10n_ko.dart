@@ -1361,6 +1361,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
 
   @override
+  String get preferencesNotifyBroadcasts => '구독한 방송';
+
+  @override
   String get preferencesNotifyTimeAlarm => '통신 대국 시간 곧 만료됨';
 
   @override
@@ -1380,6 +1383,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => '기물 숨기기';
+
+  @override
+  String get preferencesShowClockOnTheLeft => '모바일 기기에서 왼쪽에 보이기';
 
   @override
   String get puzzlePuzzles => '퍼즐';
@@ -3928,7 +3934,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get togglePositionAnnotations => '포지션 주석 켜기/끄기';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => '의견 주석 켜기/끄기';
 
   @override
   String get variationArrowsInfo => '변형 화살표를 사용하면 이동 목록을 사용하지 않고 탐색이 가능합니다.';
@@ -4822,6 +4828,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tags => '태그';
+
+  @override
+  String get enPassant => '앙파상';
 
   @override
   String opponentLeftCounter(int count) {

@@ -1383,6 +1383,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Hamarosan kezdődő verseny';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Hamarosan lejár az idő levelezős játszmában';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Vakjátszma mód';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Feladványok';
@@ -4850,6 +4856,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tags => 'Címkék';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

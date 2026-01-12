@@ -1383,6 +1383,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Մրցաշարը շուտով կսկսվի';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Նամակագրական խաղում ժամանակը շուտով կսպառվի';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Խնդիրներ';
@@ -4850,6 +4856,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

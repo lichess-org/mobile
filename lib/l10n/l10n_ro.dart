@@ -1405,6 +1405,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneul începe în curând';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Transmisiuni la care te-ai abonat';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Timpul rămas la jocurile prin corespondență e scurt';
 
   @override
@@ -1424,6 +1427,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Legat la ochi';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Afișează în partea stângă pe dispozitive mobile';
 
   @override
   String get puzzlePuzzles => 'Probleme de șah';
@@ -4878,6 +4884,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get tags => 'Etichete';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

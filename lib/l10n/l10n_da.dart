@@ -1383,6 +1383,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringsstart nærmer sig';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Udsendelser, du abonnerer på';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Ur i korrespondance er ved at løbe ud';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindskak';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheder';
 
   @override
   String get puzzlePuzzles => 'Taktikopgaver';
@@ -4850,6 +4856,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get tags => 'Etiketter';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

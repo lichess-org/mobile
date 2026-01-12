@@ -73,7 +73,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'कृपया ध्यान दें कि पुराने ऐप या वेबसाइट की सभी सुविधाएं वर्तमान में उपलब्ध नहीं हैं, लेकिन हम लगातार सुविधाएं जोड़ रहे हैं।';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'आप किसी उपभोक्ता को अनुसरण नहीं कर रहे हैं।';
 
   @override
   String get mobileOkButton => 'ठीक है';
@@ -1383,6 +1383,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'पहेलियाँ';
@@ -4848,6 +4854,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

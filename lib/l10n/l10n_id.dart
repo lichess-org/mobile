@@ -1364,6 +1364,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnamen akan segera dimulai';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Waktu korespondensi akan habis';
 
   @override
@@ -1383,6 +1386,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Menutup mata';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Teka-teki';
@@ -4826,6 +4832,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

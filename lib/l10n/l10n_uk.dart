@@ -1427,6 +1427,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнір скоро почнеться';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Трансляції, на які ви підписані';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Час на відповідь закінчується';
 
   @override
@@ -1446,6 +1449,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Наосліп';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Показувати ліворуч на мобільних пристроях';
 
   @override
   String get puzzlePuzzles => 'Задачі';
@@ -4906,6 +4912,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tags => 'Теги';
+
+  @override
+  String get enPassant => 'Взяття на проході';
 
   @override
   String opponentLeftCounter(int count) {

@@ -1383,6 +1383,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Kirjeshakkipelin aika loppumassa';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Sokko';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -4850,6 +4856,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get tags => 'Tunnisteet';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

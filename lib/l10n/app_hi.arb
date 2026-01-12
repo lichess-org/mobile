@@ -19,6 +19,7 @@
   "mobileMustBeLoggedIn": "इस पेज को देखने के लिए आपको लॉगिन करना होगा।",
   "mobileNoSearchResults": "कोई रिजल्ट नहीं मिला",
   "mobileNotAllFeaturesAreAvailable": "कृपया ध्यान दें कि पुराने ऐप या वेबसाइट की सभी सुविधाएं वर्तमान में उपलब्ध नहीं हैं, लेकिन हम लगातार सुविधाएं जोड़ रहे हैं।",
+  "mobileNotFollowingAnyUser": "आप किसी उपभोक्ता को अनुसरण नहीं कर रहे हैं।",
   "mobileOkButton": "ठीक है",
   "mobileOverTheBoard": "बोर्ड पर",
   "mobilePlayersMatchingSearchTerm": "\"{param}\" नाम वाले खिलाड़ी",

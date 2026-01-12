@@ -1383,6 +1383,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'El torneo empieza pronto';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Transmisiones a las que te has suscrito';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Poco tiempo restante en la partida por correspondencia';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'A ciegas';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Mostrar a la izquierda en dispositivos móviles';
 
   @override
   String get puzzlePuzzles => 'Ejercicios';
@@ -4850,6 +4856,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tags => 'Etiquetas';
+
+  @override
+  String get enPassant => 'Captura al paso';
 
   @override
   String opponentLeftCounter(int count) {

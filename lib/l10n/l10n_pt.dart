@@ -1383,6 +1383,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'O torneio começará em breve';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Está a acabar o tempo no jogo por correspondência';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'De olhos vendados';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Problemas';
@@ -1428,7 +1434,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleMates => 'Xeque-mates';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Temas de mate';
 
   @override
   String get puzzleGoals => 'Objetivos';
@@ -1732,16 +1738,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Dá mate ao rei na fila inicial, quando está preso pelas suas próprias peças.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Mate de balestra';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'Um bispo faz xeque-mate, enquanto a rainha bloqueia os restantes quadrados de fuga';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Mate do Porco Cego';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Duas torres cooperam para dar xeque-mate ao rei numa área de 2 por 2 quadrados.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Final de bispos';
@@ -1780,7 +1786,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Descobre um erro grave do oponente e obtém uma vantagem esmagadora. (avaliação ≥ 600cp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Xeque Descoberto';
 
   @override
   String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
@@ -2166,7 +2172,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get youPlayAs => 'Jogas com';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidares alguém para jogar, envia este URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidar alguém para jogar, envia este URL';
 
   @override
   String get gameOver => 'Fim da partida';
@@ -4850,6 +4856,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tags => 'Etiquetas';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -7714,6 +7723,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesNotifyTournamentSoon => 'O torneio vai começar em breve';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Transmissões nas quais você se inscreveu';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Tempo de partida por correspondência esgotando';
 
   @override
@@ -7733,6 +7745,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get preferencesBlindfold => 'Às cegas';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Mostrar à esquerda em dispositivos móveis';
 
   @override
   String get puzzlePuzzles => 'Quebra-cabeças';
@@ -11181,6 +11196,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tags => 'Etiquetas';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

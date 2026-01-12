@@ -1427,6 +1427,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turniej rozpocznie się wkrótce';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Transmisje subskrybowane przez Ciebie';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Czas w partii korespondencyjnej dobiega końca';
 
   @override
@@ -1446,6 +1449,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Gra na ślepo';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Pokaż po lewej stronie na urządzeniach mobilnych';
 
   @override
   String get puzzlePuzzles => 'Zadania szachowe';
@@ -1791,10 +1797,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeBalestraMate => 'Mat Balestra';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman znajduje się jedno pole z tyłu i z boku matowanego króla i blokuje mu drogę ucieczki';
+  String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman blokuje pozostałe pola ucieczki';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Mat dwoma wieżami na tej samej linii';
+  String get puzzleThemeBlindSwineMate => 'Mat dwoma wieżami na 2. lub 7. linii';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'Dwie wieże współpracują, aby zamatować króla przeciwnika w kwadracie 2 × 2.';
@@ -1818,10 +1824,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
 
   @override
-  String get puzzleThemeCapturingDefender => 'Zabicie obrońcy';
+  String get puzzleThemeCapturingDefender => 'Zbicie obrońcy';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
+  String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy, który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
 
   @override
   String get puzzleThemeCornerMate => 'Corner mate';
@@ -1839,7 +1845,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeDiscoveredCheck => 'Szach z odsłony';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Rusz bierką, aby zaszachować króla przeciwnika ukrytą figurą.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dwoma gońcami';
@@ -1860,13 +1866,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeEqualityDescription => 'Odzyskaj remis bądź równowagę wychodząc z przegrywającej pozycji. (ocena pozycji: poniżej 200cp)';
 
   @override
-  String get puzzleThemeKingsideAttack => 'Atak skrzydłem królewskim';
+  String get puzzleThemeKingsideAttack => 'Atak na skrzydle królewskim';
 
   @override
   String get puzzleThemeKingsideAttackDescription => 'Atak na króla przeciwnika po krótkiej roszadzie.';
 
   @override
-  String get puzzleThemeClearance => 'Zwolnienie';
+  String get puzzleThemeClearance => 'Zwolnienie pola';
 
   @override
   String get puzzleThemeClearanceDescription => 'Posunięcie, często z tempem, które udostępnia pole, linię bądź przekątną do wykorzystania w następnej taktyce.';
@@ -1941,22 +1947,22 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Zamiast zagrania spodziewanego posunięcia, wykonanie takiego, które stanowi bezpośrednią groźbę, na którą przeciwnik zmuszony jest odpowiedzieć. Znane również jako „zwischenzug”.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Mat w klatce (Kill box mate)';
+  String get puzzleThemeKillBoxMate => 'Mat w klatce 3x3';
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Wieża stoi obok wrogiego króla i broniona jest przez hetmana, który równocześnie blokuje wszystkie pola ucieczki tego króla. Wieża i hetman łapią króla przeciwnika w klatce 3 na 3 (tzw. \"kill box\").';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Mat Pillsbury\'ego';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Wieża daje mata, a goniec blokuje pola ucieczki.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Mat Morphy\'ego';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Goniec daje mata w narożniku, a wieża blokuje pola ucieczki w sąsiedniej kolumnie.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -2052,7 +2058,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeOperaMate => 'Mat operowy';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Wieża broniona przez gońca daje mata, stojąc bezpośrednio przy królu przeciwnika.';
 
   @override
   String get puzzleThemePawnEndgame => 'Końcówka pionkowa';
@@ -2067,10 +2073,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemePinDescription => 'Taktyka wykorzystująca związania, czyli sytuacje, w których ruch bierki naraża na atak figurę o wyższej wartości.';
 
   @override
-  String get puzzleThemePromotion => 'Promocja';
+  String get puzzleThemePromotion => 'Przemiana piona';
 
   @override
-  String get puzzleThemePromotionDescription => 'Promocja piona lub zagrożenie promocją jest kluczem tej taktyki.';
+  String get puzzleThemePromotionDescription => 'Zaawansowany pion lub pion grożący przemianą jest kluczowy w tej taktyce.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Końcówka hetmańska';
@@ -2085,7 +2091,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeQueenRookEndgameDescription => 'Gra końcowa wyłącznie z wieżami, hetmanami i pionami.';
 
   @override
-  String get puzzleThemeQueensideAttack => 'Atak skrzydłem hetmańskim';
+  String get puzzleThemeQueensideAttack => 'Atak na skrzydle hetmańskim';
 
   @override
   String get puzzleThemeQueensideAttackDescription => 'Atak na króla przeciwnika po długiej roszadzie.';
@@ -4906,6 +4912,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tags => 'Tagi';
+
+  @override
+  String get enPassant => 'Bicie w przelocie';
 
   @override
   String opponentLeftCounter(int count) {

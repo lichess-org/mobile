@@ -1383,6 +1383,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Το τουρνουά ξεκινά σύντομα';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Μεταδόσεις στις οποίες έχετε εγγραφεί';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Λίγος χρόνος σε παρτίδα δι\' αλληλογραφίας';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Τυφλό';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Εμφάνιση στα αριστερά στις κινητές συσκευές';
 
   @override
   String get puzzlePuzzles => 'Γρίφοι';
@@ -1738,7 +1744,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Ένας αξιωματικός κάνει ματ στον αντίπαλο βασιλιά, ενώ η βασίλισσα εμποδίζει τη διαφυγή του στα γειτονικά τετράγωνα';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Ματ Blind Swine';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'Δύο πύργοι συνεργάζονται προκειμένου να κάνουν ματ στον αντίπαλο βασιλιά παγιδεύοντάς τον σε μία περιοχή 2 επί 2 τετραγώνων της σκακιέρας.';
@@ -4850,6 +4856,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get tags => 'Ετικέτες';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

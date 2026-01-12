@@ -1383,6 +1383,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Me sytë lidhur';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -4850,6 +4856,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get tags => 'Etiketa';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

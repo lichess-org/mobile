@@ -2462,6 +2462,12 @@ abstract class AppLocalizations {
   /// **'Tournament starting soon'**
   String get preferencesNotifyTournamentSoon;
 
+  /// No description provided for @preferencesNotifyBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcasts you have subscribed to'**
+  String get preferencesNotifyBroadcasts;
+
   /// No description provided for @preferencesNotifyTimeAlarm.
   ///
   /// In en, this message translates to:
@@ -2503,6 +2509,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Blindfold'**
   String get preferencesBlindfold;
+
+  /// No description provided for @preferencesShowClockOnTheLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on the left on mobile devices'**
+  String get preferencesShowClockOnTheLeft;
 
   /// No description provided for @puzzlePuzzles.
   ///
@@ -8899,6 +8911,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tags'**
   String get tags;
+
+  /// No description provided for @enPassant.
+  ///
+  /// In en, this message translates to:
+  /// **'En passant'**
+  String get enPassant;
 
   /// No description provided for @opponentLeftCounter.
   ///

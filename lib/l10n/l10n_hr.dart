@@ -1404,6 +1404,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnir započinje ubrzo';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Sat za dopisivanje ističe';
 
   @override
@@ -1423,6 +1426,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Slijepo';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Zadaci';
@@ -4876,6 +4882,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
