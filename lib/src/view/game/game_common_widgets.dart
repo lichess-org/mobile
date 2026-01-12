@@ -121,7 +121,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
   WidgetRef ref, {
   required GameId gameId,
   required Side orientation,
-  int ply = 0
+  int ply = 0,
 }) {
   return [
     ContextMenuAction(
