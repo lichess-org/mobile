@@ -466,7 +466,7 @@ class _BroadcastCardContent extends StatelessWidget {
                         : Icons.share_outlined,
                     label: context.l10n.studyShareAndExport,
                     onPressed: () {
-                      showBroadcastShareMenu(context, broadcast);
+                      showBroadcastShareMenu(context, broadcast.tour, broadcast.round);
                     },
                   ),
                 ],
