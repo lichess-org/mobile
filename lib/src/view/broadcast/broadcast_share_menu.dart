@@ -7,41 +7,38 @@ import 'package:share_plus/share_plus.dart';
 
 Future<void> showBroadcastShareMenu(
   BuildContext context,
-  Broadcast broadcast,
+  BroadcastTournamentData broadcastData,
+  BroadcastRound round,
 ) => showAdaptiveActionSheet<void>(
   context: context,
   actions: [
     BottomSheetAction(
-      makeLabel: (context) => Text(broadcast.title),
+      makeLabel: (context) => Text(broadcastData.name),
       onPressed: () {
         launchShareDialog(
           context,
-          ShareParams(uri: lichessUri('/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}')),
+          ShareParams(uri: lichessUri('/broadcast/${broadcastData.slug}/${broadcastData.id}')),
         );
       },
     ),
     BottomSheetAction(
-      makeLabel: (context) => Text(broadcast.round.name),
+      makeLabel: (context) => Text(round.name),
       onPressed: () {
         launchShareDialog(
           context,
           ShareParams(
-            uri: lichessUri(
-              '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}',
-            ),
+            uri: lichessUri('/broadcast/${broadcastData.slug}/${round.slug}/${round.id}'),
           ),
         );
       },
     ),
     BottomSheetAction(
-      makeLabel: (context) => Text('${broadcast.round.name} PGN'),
+      makeLabel: (context) => Text('${round.name} PGN'),
       onPressed: () {
         launchShareDialog(
           context,
           ShareParams(
-            uri: lichessUri(
-              '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}.pgn',
-            ),
+            uri: lichessUri('/broadcast/${broadcastData.slug}/${round.slug}/${round.id}.pgn'),
           ),
         );
       },
