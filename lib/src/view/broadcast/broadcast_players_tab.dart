@@ -151,6 +151,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   Widget build(BuildContext context) {
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
     final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
+    final withRank = players.any((p) => p.rank != null);
 
     return ListView.builder(
       itemCount: players.length + 1,
@@ -159,22 +160,23 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
           return Column(
             mainAxisSize: .min,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.info, size: 16),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Standings are calculated using broadcasted games and may differ from official results.',
-                        maxLines: 2,
-                        style: TextStyle(fontSize: 13),
+              if (withRank)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info, size: 16),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Standings are calculated using broadcasted games and may differ from official results.',
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 13),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
               Row(
                 crossAxisAlignment: .center,
                 children: [
@@ -289,6 +291,16 @@ class BroadcastPlayerRow extends StatelessWidget {
       title: Row(
         mainAxisSize: .min,
         children: [
+          if (rank != null) ...[
+            Text(
+              rank.toString(),
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+            const SizedBox(width: 5),
+          ],
           if (title != null) ...[
             Text(
               title,
@@ -323,39 +335,26 @@ class BroadcastPlayerRow extends StatelessWidget {
           : null,
       trailing: rating != null || score != null
           ? SizedBox(
-              width: 65,
-              child: Column(
-                mainAxisSize: .min,
-                crossAxisAlignment: .end,
-                children: [
-                  if (score != null)
-                    Text(
-                      score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        fontFeatures: [FontFeature.tabularFigures()],
+              width: 35,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: score != null
+                    ? Text(
+                        score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      )
+                    : Text(
+                        played.toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
                       ),
-                    )
-                  else
-                    Text(
-                      played.toString(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  if (rank != null)
-                    Text(
-                      '#$rank',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: textShade(context, Styles.subtitleOpacity),
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                ],
               ),
             )
           : null,
