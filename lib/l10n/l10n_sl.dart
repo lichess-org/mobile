@@ -73,7 +73,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Upoštevajte, da trenutno niso na voljo vse funkcije iz stare aplikacije ali spletnega mesta, vendar jih ves čas dodajamo.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Ne sledite nobenemu uporabniku.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -946,11 +946,11 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Krog $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Če ohranite privzeto ime, se bo samodejno prevedlo v vse druge jezike.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1427,6 +1427,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnir se bo kmalu začel';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Oddaje, na katere ste naročeni';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Potekel vam bo čas';
 
   @override
@@ -1446,6 +1449,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Šah z zavezanimi očmi';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Prikaži na levi strani na mobilnih napravah';
 
   @override
   String get puzzlePuzzles => 'Šahovski problemi';
@@ -1794,10 +1800,10 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Lovec da šah-mat, medtem ko dama blokira preostala polja za pobeg';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Slepi prašičji mat';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Dva topova se združita, da bi matirala kralja na območju 2 krat 2 polj.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Končnica lovcev';
@@ -4012,7 +4018,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get togglePositionAnnotations => 'Preklop opomb o položaju';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Preklop opomb o položaju';
 
   @override
   String get variationArrowsInfo => 'Puščice variant vam omogočajo, da krmarite brez uporabe seznama potez';
@@ -4146,7 +4152,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisni shift+klik ali desni klik za risanje krožcev in puščic po šahovnici';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl ali shift = rdeča; command, alt ali meta = modra; tipka od vsake = rumena.';
 
   @override
   String get letOtherPlayersMessageYou => 'Dovoli drugim, da ti pišejo sporočila';
@@ -4770,7 +4776,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param je na voljo za oblikovanje.';
   }
 
   @override
@@ -4906,6 +4912,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get tags => 'Oznake';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5718,7 +5727,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyAlphabetical => 'Po abecednem redu';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'Pomembno';
 
   @override
   String get studyAddNewChapter => 'Dodaj poglavje';

@@ -1427,6 +1427,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Greitai prasideda turnyras';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Baigiasi korespondencinės partijos laikmatis';
 
   @override
@@ -1446,6 +1449,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Užduotys';
@@ -4904,6 +4910,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get tags => 'Žymos';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

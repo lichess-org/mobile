@@ -789,7 +789,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastFederation => 'Federasyon';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Yaş';
 
   @override
   String get broadcastUnrated => 'Derecelendirilmemiş';
@@ -906,11 +906,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Tur $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Varsayılan adı korumak, adın otomatik olarak diğer tüm dillere çevrilmesini sağlayacaktır.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1383,6 +1383,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Yakında başlayan turnuva';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Abone olduğunuz canlı turnuvalar';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Yazışmalı oyununuzda süreniz azalıyor';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Körleme modu';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Mobil cihazlarda solda göster';
 
   @override
   String get puzzlePuzzles => 'Bulmacalar';
@@ -1732,16 +1738,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Kendi taşları arkasında sıkışıp kalmış şaha koridorun kapısını göster.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Balestra matı';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Blind Swine matı';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2 ye 2 bir alanda işbirliği yapıyorlar.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Fil oyunsonu';
@@ -1768,10 +1774,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Bir taşı savunan diğer bir taşı ortadan kaldırarak savunmasız kalan taşı sonraki hamlede ele geçir.';
 
   @override
-  String get puzzleThemeCornerMate => 'Corner mate';
+  String get puzzleThemeCornerMate => 'Köşe matı';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+  String get puzzleThemeCornerMateDescription => 'Kale veya vezir ve at kullanarak şahı köşeye çekin ve mat girişiminde bulunun.';
 
   @override
   String get puzzleThemeCrushing => 'Ezici üstünlük';
@@ -1780,10 +1786,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeCrushingDescription => 'Rakibin vahim hatasını yakalayarak ezici bir üstünlük elde et. (analiz ≥ 600sp)';
 
   @override
-  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+  String get puzzleThemeDiscoveredCheck => 'Açarak şah';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Bir taşı hareket ettirerek gizli bir saldırı taşının şah çekmesini sağlayın, bu genelde belirleyici bir avantaj ortaya çıkarır.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Çift fil matı';
@@ -1891,22 +1897,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Rakip şahının yanında bir kale bulunur ve bir vezir tarafından desteklenir ve bu kale aynı zamanda şahın kaçış karelerini de engeller. Kale ve vezir, düşman şahını 3\'e 3\'lük bir \"kafeste\" sıkıştırır.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Pillsbury matı';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Fil şahı sınırlarken, kale matı gerçekleştirir.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphy matı';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Kale şahı sınırlarken, fil matı gerçekleştirir.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeTriangleMate => 'Üçgen matı';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeTriangleMateDescription => 'Rakip şahtan bir kare uzakta olan vezir veya kale, aynı sıra veya sütunda yer alır ve aralarında bir karelik boşluk bulunur; bu da bir üçgen oluşturur.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic matı';
@@ -1993,10 +1999,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Oyunun ilk aşamasında hayatınızı kolaylaştıran taktikler.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Opera matı';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Kale ile şah çekin ve kaleyi korumak için fil kullanın.';
 
   @override
   String get puzzleThemePawnEndgame => 'Piyon oyunsonu';
@@ -3956,7 +3962,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get togglePositionAnnotations => 'Konum açıklamalarını değiştir';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Gözlem açıklamalarını aç/kapat';
 
   @override
   String get variationArrowsInfo => 'Varyasyon okları, hamle listesini kullanmadan gezinmenizi sağlar.';
@@ -4090,7 +4096,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisShapesHowTo => 'Tahta üzerinde çember ya da ok çizmek için lütfen shift+click ya da right+click kullanın.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl veya shift = kırmızı; command, alt veya meta = mavi; her birinden bir tuş = sarı.';
 
   @override
   String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj yollayabilsinler mi?';
@@ -4850,6 +4856,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tags => 'Etiketler';
+
+  @override
+  String get enPassant => 'Geçerken alma';
 
   @override
   String opponentLeftCounter(int count) {

@@ -1421,6 +1421,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Час зыходзіць у гульні па перепісцы';
 
   @override
@@ -1440,6 +1443,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Задачы';
@@ -4898,6 +4904,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

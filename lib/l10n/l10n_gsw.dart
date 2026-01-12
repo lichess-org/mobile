@@ -1383,6 +1383,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier schtarted bald';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Vu dir abonnierti Überträgige';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Korreschpondänzzit lauft ab';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blind schpille';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Uf mobile Grät, limks azeige';
 
   @override
   String get puzzlePuzzles => 'Ufgabe';
@@ -4850,6 +4856,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

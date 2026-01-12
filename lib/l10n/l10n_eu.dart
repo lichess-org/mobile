@@ -1383,6 +1383,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Txapelketa laster hasiko da';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Harpidetu zaren zuzenekoak';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Posta bidezko partidaren denbora amaitzen ari da';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Itsuka';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Erakutsi ezkerrean gailu mugikorretan';
 
   @override
   String get puzzlePuzzles => 'Ariketak';
@@ -4850,6 +4856,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get tags => 'Etiketak';
+
+  @override
+  String get enPassant => 'Igarotzean harrapatzea';
 
   @override
   String opponentLeftCounter(int count) {

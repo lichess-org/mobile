@@ -1361,6 +1361,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'トーナメントが間もなく開始';
 
   @override
+  String get preferencesNotifyBroadcasts => 'あなたがフォローしている配信';
+
+  @override
   String get preferencesNotifyTimeAlarm => '通信戦の時間切迫';
 
   @override
@@ -1380,6 +1383,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'めかくしモード';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'モバイル機器では左側に表示';
 
   @override
   String get puzzlePuzzles => 'タクティクス問題';
@@ -4822,6 +4828,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tags => 'タグ';
+
+  @override
+  String get enPassant => 'アンパッサン';
 
   @override
   String opponentLeftCounter(int count) {

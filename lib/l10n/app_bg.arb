@@ -1450,6 +1450,7 @@
   "search": "Търсене",
   "clearSearch": "Изчистване на търсенето",
   "tags": "Етикети",
+  "enPassant": "Ан пасан",
   "opponentLeftCounter": "{count, plural, =1{Противникът напусна играта. Можете да заявите победа след {count} секунди.} other{Опонентът напусна играта. Можете да заявите победа след {count} секунди.}}",
   "mateInXHalfMoves": "{count, plural, =1{Мат в {count} полуход} other{Мат в {count} полухода}}",
   "nbBlunders": "{count, plural, =1{{count} груба грешка} other{{count} груби грешки}}",

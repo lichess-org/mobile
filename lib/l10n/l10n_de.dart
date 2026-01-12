@@ -1383,6 +1383,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier beginnt bald';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Übertragungen, die du abonniert hast';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Zeit in Fernschachpartie neigt sich dem Ende zu';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindschach';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Auf der linken Seite auf mobilen Geräten anzeigen';
 
   @override
   String get puzzlePuzzles => 'Taktikaufgaben';
@@ -4850,6 +4856,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tags => 'Schlagwörter';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

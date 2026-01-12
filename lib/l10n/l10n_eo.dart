@@ -21,7 +21,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileAreYouSure => 'Ĉu vi certas?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Agordoj de la tabulo';
 
   @override
   String get mobileCancelTakebackOffer => 'Nuligi proponon pri malmovo';
@@ -162,7 +162,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Kaŝi la tabulon';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Montri tabulon';
@@ -1383,6 +1383,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turniro baldaŭ komencos';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Koresponda horloĝo baldaŭ finiĝas';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Puzloj';
@@ -4850,6 +4856,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get tags => 'Etikedoj';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

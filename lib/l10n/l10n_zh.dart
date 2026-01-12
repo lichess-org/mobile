@@ -1361,6 +1361,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '锦标赛即将开始';
 
   @override
+  String get preferencesNotifyBroadcasts => '订阅的转播';
+
+  @override
   String get preferencesNotifyTimeAlarm => '通讯棋即将超时';
 
   @override
@@ -1380,6 +1383,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => '盲棋';
+
+  @override
+  String get preferencesShowClockOnTheLeft => '在移动设备上左侧显示';
 
   @override
   String get puzzlePuzzles => '谜题';
@@ -4822,6 +4828,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tags => '标签';
+
+  @override
+  String get enPassant => '吃过路兵';
 
   @override
   String opponentLeftCounter(int count) {

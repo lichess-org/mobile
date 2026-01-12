@@ -1383,6 +1383,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Puzzles';
@@ -4850,6 +4856,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tags => 'Tags';
 
   @override
+  String get enPassant => 'En passant';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7118,6 +7127,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastFederation => 'Federation';
 
   @override
+  String get broadcastAge => 'Age';
+
+  @override
   String get broadcastUnrated => 'Unrated';
 
   @override
@@ -8097,6 +8109,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Crushing';
 
   @override
@@ -8214,6 +8229,18 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
 
   @override
@@ -8302,6 +8329,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pawn endgame';
@@ -10395,6 +10428,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get analysisShapesHowTo => 'Press shift+click or right-click to draw circles and arrows on the board.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Let other players message you';
 
   @override
@@ -10798,6 +10834,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get edit => 'Edit';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -11149,6 +11188,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

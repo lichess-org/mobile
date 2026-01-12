@@ -1383,6 +1383,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringen startar snart';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Korrespondensklockans tid tar slut';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'I blindo';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Problem';
@@ -2503,13 +2509,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get enable => 'Aktivera';
 
   @override
-  String get bestMoveArrow => 'Pil som anger bästa drag';
+  String get bestMoveArrow => 'Bästa drag-pil';
 
   @override
-  String get showVariationArrows => 'Visa variationspilar';
+  String get showVariationArrows => 'Visa variantpilar';
 
   @override
-  String get evaluationGauge => 'Utvärderingsmätare';
+  String get evaluationGauge => 'Evalueringsmätare';
 
   @override
   String get multipleLines => 'Flera linjer';
@@ -2533,7 +2539,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mistake => 'Misstag';
 
   @override
-  String get inaccuracy => 'Felaktighet';
+  String get inaccuracy => 'Småfel';
 
   @override
   String get moveTimes => 'Dragtider';
@@ -4852,6 +4858,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get tags => 'Taggar';
 
   @override
+  String get enPassant => 'En passant';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4878,7 +4887,7 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blundrar',
+      other: '$count blunders',
       one: '$count blunder',
     );
     return '$_temp0';
@@ -4889,7 +4898,7 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Blundrar',
+      other: '$count Blunders',
       one: '$count Blunder',
     );
     return '$_temp0';
@@ -4922,8 +4931,8 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count felaktigheter',
-      one: '$count felaktighet',
+      other: '$count småfel',
+      one: '$count småfel',
     );
     return '$_temp0';
   }
@@ -4933,8 +4942,8 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Felaktigheter',
-      one: '$count Felaktighet',
+      other: '$count Småfel',
+      one: '$count Småfel',
     );
     return '$_temp0';
   }

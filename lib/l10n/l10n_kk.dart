@@ -1383,6 +1383,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Хат-хабарлы ойын уақыты бітер алдында';
 
   @override
@@ -1402,6 +1405,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Жұмбақтар';
@@ -4850,6 +4856,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {

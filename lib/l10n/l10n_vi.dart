@@ -1361,6 +1361,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Giải đấu sắp bắt đầu';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Những phát sóng bạn đã đăng ký theo dõi';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Thời gian đánh cờ qua thư sắp hết';
 
   @override
@@ -1380,6 +1383,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Bịt mắt';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Hiện ở bên trái trên thiết bị di động';
 
   @override
   String get puzzlePuzzles => 'Câu đố';
@@ -4822,6 +4828,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get tags => 'Thẻ';
+
+  @override
+  String get enPassant => 'Bắt tốt qua đường';
 
   @override
   String opponentLeftCounter(int count) {
