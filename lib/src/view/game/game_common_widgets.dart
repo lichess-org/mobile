@@ -121,6 +121,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
   WidgetRef ref, {
   required GameId gameId,
   required Side orientation,
+  int ply = 0
 }) {
   return [
     ContextMenuAction(
@@ -129,7 +130,8 @@ List<Widget> makeFinishedGameShareContextMenuActions(
           : Icons.share_outlined,
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
-        launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
+        final uri = lichessUri('/$gameId/${orientation.name}').replace(fragment: '$ply');
+        launchShareDialog(context, ShareParams(uri: uri));
       },
     ),
     ContextMenuAction(

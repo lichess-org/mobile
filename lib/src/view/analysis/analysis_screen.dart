@@ -259,6 +259,7 @@ class _AnalysisMenu extends ConsumerWidget {
                         ref,
                         gameId: value.archivedGame!.id,
                         orientation: value.pov,
+                        ply: value.currentPosition.ply,
                       ),
                   ]
                 : [],
