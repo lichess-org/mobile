@@ -905,7 +905,7 @@
   <string name="timeAlmostUp">残り時間わずか！</string>
   <string name="clickToRevealEmailAddress">[ クリックでメールアドレスを表示 ]</string>
   <string name="download">ダウンロード</string>
-  <string name="coachManager" comment="coachManager&#10;&#10;In the user pop-up menu, a link to the Coach Manager page (http://lichess.org/coach/edit)&#10;It leads to coach-specific settings, and is only visible to coaches.">コーチ用設定</string>
+  <string name="coachManager">コーチ用設定</string>
   <string name="streamerManager">配信者用設定</string>
   <string name="cancelTournament">トーナメントをキャンセル</string>
   <string name="tournDescription">トーナメントの説明</string>
@@ -974,4 +974,5 @@
   <string name="search">検索</string>
   <string name="clearSearch">検索をクリア</string>
   <string name="tags">タグ</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">アンパッサン</string>
 </resources>

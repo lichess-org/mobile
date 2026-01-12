@@ -96,7 +96,7 @@ Tukaj je povezava za dostop do razreda.</string>
   <string name="timePlaying">Čas igranja</string>
   <string name="variantXOverLastY">%1$s v zadnjih %2$s</string>
   <string name="winrate">Delež zmag</string>
-  <string name="na">Ni na voljo</string>
+  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Ni na voljo</string>
   <string name="overview">Pregled</string>
   <string name="news">Obvestila</string>
   <string name="classNews">Novice razreda</string>

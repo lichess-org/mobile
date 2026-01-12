@@ -2,7 +2,7 @@
 <resources>
   <string name="standard" comment="As in standard chess (not a variant)">스탠다드</string>
   <string name="standardTitle" comment="Description for standard chess (it has to have a description, just like all variants of the game).">체스(FIDE)의 표준 규칙</string>
-  <string name="chess960" comment="A chess variant where the setup of the back rank is randomised into up to 960 positions. Also known as Fischerandom and freestyle chess.&#10;&#10;Consider checking for already accepted names for this variant in your language through Wikidata: https://w.wiki/FkdK">체스960</string>
+  <string name="chess960" comment="A chess variant where the setup of the back rank is randomised into up to 960 positions. Also known as Fischerandom and freestyle chess.&#10;&#10;Consider checking for already accepted names for this variant in your language through Wikidata: https://query.wikidata.org/embed.html#SELECT%20%3Flabel%20WHERE%20%7B%20%0A%20%20wd%3AQ724903%20rdfs%3Alabel%20%3Flabel.%20%0A%7D%0A">체스960</string>
   <string name="chess960Title" comment="Description for the Chess960 variant.&#10;&#10;The &quot;home rank&quot; here is the back rank of each side (1 for white and 8 for blank) - which has the rooks, knights, bishops, king and queen.">백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.</string>
   <string name="kingOfTheHill" comment="The name of a chess variant which follows standard rule, with the additional option that you can bring your king to the centre to win the game.&#10;&#10;The four centre tiles (e4, d4, e5, d5) appear to be visually elevated, like a hill.">언덕의 왕</string>
   <string name="kingOfTheHillTitle" comment="Description for the King of the Hill chess variant">킹을 중앙 칸에 놓으면 승리합니다.</string>
