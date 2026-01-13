@@ -171,7 +171,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.read(archivedGameProvider(gameId).future);
+          archivedGame = await ref.watch(archivedGameProvider(gameId).future);
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);
