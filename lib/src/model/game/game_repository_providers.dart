@@ -4,27 +4,13 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 
-/// Fetches a game from the server or from the local storage if not available online.
 final archivedGameProvider = FutureProvider.autoDispose.family<ExportedGame, GameId>((
   Ref ref,
   GameId id,
-) async {
-  ExportedGame game;
-  try {
-    final isLoggedIn = ref.watch(isLoggedInProvider);
-    game = await ref.read(gameRepositoryProvider).getGame(id, withBookmarked: isLoggedIn);
-  } catch (_) {
-    final gameStorage = await ref.watch(gameStorageProvider.future);
-    final storedGame = await gameStorage.fetch(gameId: id);
-    if (storedGame != null) {
-      game = storedGame;
-    } else {
-      throw Exception('Game $id not found in local storage.');
-    }
-  }
-  return game;
+) {
+  final isLoggedIn = ref.watch(isLoggedInProvider);
+  return ref.read(gameRepositoryProvider).getGame(id, withBookmarked: isLoggedIn);
 }, name: 'ArchivedGameProvider');
 
 final gamesByIdProvider = FutureProvider.autoDispose.family<IList<LightExportedGame>, ISet<GameId>>(

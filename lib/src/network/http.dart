@@ -840,8 +840,8 @@ extension ClientRefExtension on Ref {
   ///
   /// This is primarily used for caching network requests in a [FutureProvider].
   ///
-  /// If [fn] throws with a [SocketException], the provider is not kept alive, this
-  /// allows to retry the request later.
+  /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
+  /// server errors immediately.
   Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
@@ -851,10 +851,9 @@ extension ClientRefExtension on Ref {
     });
     try {
       return await fn(client);
-    } on SocketException catch (_) {
-      link.close();
+    } on ServerException {
       rethrow;
-    } on ClientException catch (_) {
+    } on Exception {
       link.close();
       rethrow;
     }
@@ -864,8 +863,8 @@ extension ClientRefExtension on Ref {
   ///
   /// This is primarily used for caching network requests in a [FutureProvider].
   ///
-  /// If [fn] throws with a [SocketException], the provider is not kept alive, this
-  /// allows to retry the request later.
+  /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
+  /// server errors immediately.
   Future<U> withAggregatorCacheFor<U>(
     Future<U> Function(LichessClient, Aggregator) fn,
     Duration duration,
@@ -879,10 +878,9 @@ extension ClientRefExtension on Ref {
     });
     try {
       return await fn(client, aggregator);
-    } on SocketException catch (_) {
-      link.close();
+    } on ServerException {
       rethrow;
-    } on ClientException catch (_) {
+    } on Exception {
       link.close();
       rethrow;
     }
