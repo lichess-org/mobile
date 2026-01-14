@@ -713,7 +713,7 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: () => onNewOpponentCallback(gameState.game),
           ),
-        if (gameState.tournament?.isFinished == true)
+        if (gameState.tournament != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
