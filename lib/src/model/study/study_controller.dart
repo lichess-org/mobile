@@ -45,7 +45,6 @@ class StudyController extends AsyncNotifier<StudyState>
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
-  Timer? _sendMoveToSocketTimer;
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
@@ -63,7 +62,6 @@ class StudyController extends AsyncNotifier<StudyState>
   Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
-      _sendMoveToSocketTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
     });
@@ -210,9 +208,6 @@ class StudyController extends AsyncNotifier<StudyState>
             study: state.requireValue.study.copyWith(liked: meLiked, likes: likes),
           ),
         );
-      case 'node':
-        // let's just ack the node for now
-        _sendMoveToSocketTimer?.cancel();
     }
   }
 
@@ -399,17 +394,11 @@ class StudyController extends AsyncNotifier<StudyState>
   void _sendMoveToSocket(NormalMove move) {
     if (state.requireValue.isWriteable == false) return;
 
-    _sendMoveToSocketTimer?.cancel();
     _recordChange('anaMove', {
       'orig': move.from.name,
       'dest': move.to.name,
       'fen': state.requireValue.currentPosition!.fen,
       'path': state.requireValue.currentPath.value,
-    });
-
-    _sendMoveToSocketTimer = Timer(const Duration(seconds: 3), () {
-      // resend the move in case it was lost
-      _sendMoveToSocket(move);
     });
   }
 
