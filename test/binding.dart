@@ -5,8 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:logging/logging.dart';
+import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/engine/fake_stockfish.dart';
@@ -115,13 +115,13 @@ class TestLichessBinding extends LichessBinding {
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
 
-  StockfishFactory _stockfishFactory = const FakeStockfishFactory();
+  Stockfish _stockfish = FakeStockfish();
 
   @override
-  StockfishFactory get stockfishFactory => _stockfishFactory;
+  Stockfish get stockfish => _stockfish;
 
-  set stockfishFactory(StockfishFactory factory) {
-    _stockfishFactory = factory;
+  set stockfish(Stockfish instance) {
+    _stockfish = instance;
   }
 }
 

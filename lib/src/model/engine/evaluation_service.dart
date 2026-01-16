@@ -128,7 +128,7 @@ class EvaluationService {
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
   Future<void> _initEngine(EvaluationContext context, {EvaluationOptions? initOptions}) async {
-    await disposeEngine();
+    disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
     ChessEnginePref pref = options.enginePref;
@@ -181,13 +181,11 @@ class EvaluationService {
 
   /// Dispose the engine.
   ///
-  /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
-  Future<void> disposeEngine() {
-    return (_engine?.dispose() ?? Future.value()).then((_) {
-      _engine = null;
-      _state.value = _defaultState;
-    });
+  void disposeEngine() {
+    _engine?.dispose();
+    _engine = null;
+    _state.value = _defaultState;
   }
 
   /// Dispose the service.
