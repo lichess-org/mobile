@@ -92,7 +92,7 @@ void main() {
       // Options should still match the first initialization
       expect(service.options, options);
 
-      await service.disposeEngine();
+      service.disposeEngine();
     });
 
     test('Sequential engine initializations are allowed', () async {
@@ -124,7 +124,7 @@ void main() {
       // Second call should be allowed since first completed
       expect(service.options, options2);
 
-      await service.disposeEngine();
+      service.disposeEngine();
     });
   });
 }

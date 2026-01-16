@@ -1,42 +1,20 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/src/foundation/change_notifier.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:flutter/foundation.dart';
 import 'package:multistockfish/multistockfish.dart';
 
-class FakeStockfishFactory extends StockfishFactory {
-  const FakeStockfishFactory([this._instance]);
-
-  final Stockfish? _instance;
-
-  @override
-  Stockfish call(StockfishFlavor flavor, {String? bigNetPath, String? smallNetPath}) =>
-      _instance ?? FakeStockfish(flavor);
-}
-
-/// A fake implementation of [Stockfish].
+/// A fake implementation of [Stockfish] for testing.
 class FakeStockfish implements Stockfish {
-  FakeStockfish(this.flavor) {
-    scheduleMicrotask(() {
-      _state.value = StockfishState.ready;
-    });
-  }
+  FakeStockfish();
 
-  @override
-  String? get variant => null;
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
 
-  @override
-  String? get bigNetPath => throw UnimplementedError();
-
-  @override
-  String? get smallNetPath => throw UnimplementedError();
-
-  @override
-  final StockfishFlavor flavor;
-
-  final _state = ValueNotifier<StockfishState>(StockfishState.starting);
-  final _stdoutController = StreamController<String>();
+  StockfishFlavor _flavor = StockfishFlavor.sf16;
+  String? _variant;
+  String? _smallNetPath;
+  String? _bigNetPath;
 
   Position? _position;
 
@@ -44,6 +22,39 @@ class FakeStockfish implements Stockfish {
     scheduleMicrotask(() {
       _stdoutController.add(line);
     });
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => _variant;
+
+  @override
+  String? get bigNetPath => _bigNetPath;
+
+  @override
+  String? get smallNetPath => _smallNetPath;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _flavor = flavor;
+    _variant = variant;
+    _smallNetPath = smallNetPath;
+    _bigNetPath = bigNetPath;
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    _state.value = StockfishState.initial;
   }
 
   @override
@@ -97,9 +108,6 @@ class FakeStockfish implements Stockfish {
   }
 
   @override
-  void dispose() {}
-
-  @override
   ValueListenable<StockfishState> get state => _state;
 
   @override
@@ -109,34 +117,44 @@ class FakeStockfish implements Stockfish {
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
 class ErrorStockfish implements Stockfish {
-  ErrorStockfish(this.flavor) {
-    scheduleMicrotask(() {
-      _state.value = StockfishState.error;
-    });
-  }
+  ErrorStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
 
   @override
   String? get variant => null;
 
   @override
-  String? get bigNetPath => throw UnimplementedError();
+  String? get bigNetPath => null;
 
   @override
-  String? get smallNetPath => throw UnimplementedError();
+  String? get smallNetPath => null;
 
   @override
-  final StockfishFlavor flavor;
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.error;
+  }
 
-  final _state = ValueNotifier<StockfishState>(StockfishState.starting);
-  final _stdoutController = StreamController<String>();
+  @override
+  Future<void> quit() async {
+    _state.value = StockfishState.initial;
+  }
 
   @override
   set stdin(String line) {
     // Do nothing - engine is in error state
   }
-
-  @override
-  void dispose() {}
 
   @override
   ValueListenable<StockfishState> get state => _state;

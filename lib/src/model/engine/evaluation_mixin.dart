@@ -110,7 +110,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval(forceRestart: true);
     } else {
-      await _evaluationService.disposeEngine();
+      _evaluationService.disposeEngine();
     }
   }
 

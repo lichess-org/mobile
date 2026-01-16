@@ -16,8 +16,7 @@ void main() {
   TestLichessBinding.ensureInitialized();
 
   setUp(() {
-    final testBinding = TestLichessBinding.instance;
-    testBinding.stockfishFactory = const FakeStockfishFactory();
+    testBinding.stockfish = FakeStockfish();
   });
 
   group('Engine', () {
@@ -40,10 +39,10 @@ void main() {
       expect(eval.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
     });
 
-    test('Dispose completes even when engine transitions to error state', () {
+    test('Dispose works when engine transitions to error state', () {
       fakeAsync((async) {
-        final errorStockfish = ErrorStockfish(StockfishFlavor.variant);
-        testBinding.stockfishFactory = FakeStockfishFactory(errorStockfish);
+        final errorStockfish = ErrorStockfish();
+        testBinding.stockfish = errorStockfish;
 
         final stockfishEngine = StockfishEngine(StockfishFlavor.variant);
 
@@ -60,15 +59,14 @@ void main() {
 
         stockfishEngine.start(work);
 
-        final disposeFuture = stockfishEngine.dispose();
-
         async.flushMicrotasks();
 
-        expectLater(disposeFuture, completes);
+        stockfishEngine.dispose();
 
         async.elapse(const Duration(seconds: 1));
 
-        expect(stockfishEngine.state.value, EngineState.error);
+        expect(stockfishEngine.state.value, EngineState.disposed);
+        expect(stockfishEngine.isDisposed, isTrue);
       });
     });
   });
