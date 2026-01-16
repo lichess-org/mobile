@@ -141,8 +141,7 @@ class EvaluationService {
     _engine = _engineFactory(pref);
     _engine!.state.addListener(() {
       _logger.fine('Engine state: ${_engine?.state.value}');
-      if (_engine?.state.value == EngineState.initial ||
-          _engine?.state.value == EngineState.disposed) {
+      if (_engine?.state.value == EngineState.initial) {
         _state.value = _defaultState;
       }
       if (_engine?.state != null) {
