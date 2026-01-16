@@ -76,14 +76,8 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      const options = EvaluationOptions(
-        enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
-        searchTime: Duration(seconds: 1),
-      );
-
       final work1 = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -95,6 +89,7 @@ void main() {
       );
 
       final work2 = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
@@ -106,10 +101,10 @@ void main() {
       );
 
       // Start first evaluation
-      service.evaluate(work1, options: options);
+      service.evaluate(work1);
 
       // Start second evaluation - should take over
-      final stream2 = service.evaluate(work2, options: options);
+      final stream2 = service.evaluate(work2);
 
       // The second evaluation should be the current one
       expect(service.currentWork, work2);
@@ -125,14 +120,8 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      const options = EvaluationOptions(
-        enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
-        searchTime: Duration(seconds: 1),
-      );
-
       final work = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -143,7 +132,7 @@ void main() {
         threatMode: false,
       );
 
-      service.evaluate(work, options: options);
+      service.evaluate(work);
       expect(service.currentWork, work);
 
       service.stop();

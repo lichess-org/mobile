@@ -136,12 +136,7 @@ class EvaluationService {
   /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
   /// Returns `null` if the variant is not supported or if a cached eval is sufficient.
-  Stream<EvalResult>? evaluate(
-    Work work, {
-    required EvaluationOptions options,
-    bool goDeeper = false,
-    bool forceRestart = false,
-  }) {
+  Stream<EvalResult>? evaluate(Work work, {bool goDeeper = false, bool forceRestart = false}) {
     if (!engineSupportedVariants.contains(work.variant)) {
       return null;
     }
@@ -159,13 +154,12 @@ class EvaluationService {
     }
 
     // Determine flavor based on options
-    final flavor = options.enginePref == ChessEnginePref.sfLatest
+    final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
         : StockfishFlavor.sf16;
 
     // Check if we need to restart the engine (different flavor or not running)
-    final needsRestart = _currentFlavor != flavor ||
-        _stockfish.state.value != StockfishState.ready;
+    final needsRestart = _currentFlavor != flavor || _stockfish.state.value != StockfishState.ready;
 
     _currentWork = work;
 
@@ -178,7 +172,7 @@ class EvaluationService {
     if (needsRestart) {
       _initInProgress = true;
       _engineState.value = EngineState.loading;
-      _initEngine(flavor, options).then((_) {
+      _initEngine(flavor).then((_) {
         // Compute the current work (might be different from original if another evaluate() came in)
         final currentWork = _currentWork;
         if (currentWork != null) {
@@ -193,7 +187,7 @@ class EvaluationService {
     return evalStream.where((result) => result.$1 == work);
   }
 
-  Future<void> _initEngine(StockfishFlavor flavor, EvaluationOptions options) async {
+  Future<void> _initEngine(StockfishFlavor flavor) async {
     try {
       _stdoutSubscription?.cancel();
 
@@ -443,8 +437,12 @@ final engineStateProvider = NotifierProvider.autoDispose<EngineStateNotifier, En
 );
 
 /// A record type holding the current engine evaluation state.
-typedef EngineEvaluationState =
-    ({String? engineName, LocalEval? eval, EngineState state, Work? currentWork});
+typedef EngineEvaluationState = ({
+  String? engineName,
+  LocalEval? eval,
+  EngineState state,
+  Work? currentWork,
+});
 
 /// A provider that exposes the current engine evaluation state to the UI.
 final engineEvaluationProvider =

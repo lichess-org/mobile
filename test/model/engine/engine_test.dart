@@ -26,14 +26,8 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      const options = EvaluationOptions(
-        enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
-        searchTime: Duration(seconds: 3),
-      );
-
       final work = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -44,7 +38,7 @@ void main() {
         threatMode: false,
       );
 
-      final stream = service.evaluate(work, options: options);
+      final stream = service.evaluate(work);
       expect(stream, isNotNull);
 
       final (_, eval) = await stream!.first;
@@ -61,14 +55,8 @@ void main() {
       fakeAsync((async) {
         final service = container.read(evaluationServiceProvider);
 
-        const options = EvaluationOptions(
-          enginePref: ChessEnginePref.sf16,
-          multiPv: 1,
-          cores: 1,
-          searchTime: Duration(seconds: 1),
-        );
-
         final work = Work(
+          enginePref: ChessEnginePref.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,
@@ -79,7 +67,7 @@ void main() {
           threatMode: false,
         );
 
-        service.evaluate(work, options: options);
+        service.evaluate(work);
 
         async.flushMicrotasks();
 
@@ -92,14 +80,8 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      const options = EvaluationOptions(
-        enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
-        searchTime: Duration(seconds: 3),
-      );
-
       final work = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -110,7 +92,7 @@ void main() {
         threatMode: false,
       );
 
-      service.evaluate(work, options: options);
+      service.evaluate(work);
       service.stop();
 
       // After stop, the engine should be idle
