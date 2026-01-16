@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
-enum EngineState { initial, loading, idle, computing, error, disposed }
+enum EngineState { initial, loading, idle, computing, error }
 
 /// An engine that can compute chess positions.
 ///
