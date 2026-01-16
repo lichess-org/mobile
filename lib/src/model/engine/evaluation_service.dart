@@ -163,25 +163,22 @@ class EvaluationService {
 
   /// Dispose the engine.
   ///
-  /// If [silent] is true, state updates are skipped (used during provider disposal
-  /// to avoid triggering listeners that may use ref.read()).
-  ///
   /// It is safe to call this method multiple times.
-  void disposeEngine({bool silent = false}) {
-    // Set _engine to null BEFORE disposing so the listener in _initEngine
-    // sees null and skips state updates.
+  Future<void> disposeEngine() {
     final engine = _engine;
     _engine = null;
-    engine?.dispose();
-    if (!silent) {
+    return (engine?.dispose() ?? Future.value()).then((_) {
+      _logger.fine('Engine disposed');
       _state.value = _defaultState;
-    }
+    });
   }
 
   /// Dispose the service.
   void _dispose() {
-    disposeEngine(silent: true);
-    _state.dispose();
+    disposeEngine().then((_) {
+      _logger.fine('EvaluationService disposed');
+      _state.dispose();
+    });
   }
 
   /// Evaluate a position using the engine.

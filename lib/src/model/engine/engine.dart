@@ -37,7 +37,9 @@ abstract class Engine {
   /// Dispose the engine. It cannot be used after this method is called.
   ///
   /// It is safe to call this method multiple times.
-  void dispose();
+  ///
+  /// Returns a [Future] that completes when the underlying engine process is terminated.
+  Future<void> dispose();
 }
 
 const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
@@ -74,7 +76,7 @@ class StockfishEngine implements Engine {
 
   String _name = 'Stockfish';
   StreamSubscription<String>? _stdoutSubscription;
-  bool _isDisposed = false;
+  Future<void>? _exitFuture;
   bool _initInProgress = false;
 
   final _state = ValueNotifier(EngineState.initial);
@@ -88,7 +90,7 @@ class StockfishEngine implements Engine {
   String get name => _name;
 
   @override
-  bool get isDisposed => _isDisposed;
+  bool get isDisposed => _exitFuture != null;
 
   @override
   Stream<EvalResult> start(Work work) {
@@ -156,14 +158,13 @@ class StockfishEngine implements Engine {
   }
 
   @override
-  void dispose() {
-    if (isDisposed) return;
+  Future<void> dispose() {
+    if (isDisposed) return _exitFuture!;
     _log.fine('disposing engine');
-    _isDisposed = true;
     _stdoutSubscription?.cancel();
     _protocol.dispose();
     _stockfish.state.removeListener(_stockfishStateListener);
-    _stockfish.quit();
     _state.dispose();
+    return _exitFuture = _stockfish.quit();
   }
 }

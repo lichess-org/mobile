@@ -94,7 +94,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
       _socketSubscription?.cancel();
-      _evaluationService.disposeEngine(silent: true);
+      _evaluationService.disposeEngine();
     });
 
     super.runBuild();
