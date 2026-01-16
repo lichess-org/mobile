@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_provider
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -41,6 +42,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? tournamentSlug;
   final String? roundSlug;
   final String? title;
+  final bool fromDeeplink;
 
   const BroadcastGameScreen({
     this.tournamentId,
@@ -49,6 +51,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.tournamentSlug,
     this.roundSlug,
     this.title,
+    this.fromDeeplink = false,
   });
 
   static Route<dynamic> buildRoute(
@@ -59,6 +62,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? tournamentSlug,
     String? roundSlug,
     String? title,
+    bool fromDeeplink = false,
   }) {
     return buildScreenRoute(
       context,
@@ -69,6 +73,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
         tournamentSlug: tournamentSlug,
         roundSlug: roundSlug,
         title: title,
+        fromDeeplink: fromDeeplink,
       ),
     );
   }
@@ -110,26 +115,40 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             _ => const SizedBox.shrink(),
           };
 
-    return Scaffold(
-      appBar: AppBar(
-        title: title,
-        actions: [
-          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          _BroadcastGameMenu(
-            roundId: widget.roundId,
-            gameId: widget.gameId,
-            tournamentSlug: widget.tournamentSlug,
-            roundSlug: widget.roundSlug,
-          ),
-        ],
-      ),
-      body: _Body(
-        widget.tournamentId,
-        widget.roundId,
-        widget.gameId,
-        widget.tournamentSlug,
-        widget.roundSlug,
-        tabController: _tabController,
+    return PopScope(
+      canPop: !widget.fromDeeplink,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && widget.fromDeeplink) {
+          Navigator.of(context).pushReplacement(
+            BroadcastRoundScreenLoading.buildRoute(
+              context,
+              widget.roundId,
+              initialTab: BroadcastRoundTab.boards,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: title,
+          actions: [
+            AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+            _BroadcastGameMenu(
+              roundId: widget.roundId,
+              gameId: widget.gameId,
+              tournamentSlug: widget.tournamentSlug,
+              roundSlug: widget.roundSlug,
+            ),
+          ],
+        ),
+        body: _Body(
+          widget.tournamentId,
+          widget.roundId,
+          widget.gameId,
+          widget.tournamentSlug,
+          widget.roundSlug,
+          tabController: _tabController,
+        ),
       ),
     );
   }

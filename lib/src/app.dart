@@ -129,14 +129,16 @@ class _AppState extends ConsumerState<Application> {
                 context,
               ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
-      onGenerateRoute: (settings) =>
-          settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
+      onGenerateRoute: (settings) => settings.name != null
+          ? resolveAppRoutes(context, Uri.parse(settings.name!), deepLinkWarmStart: true)?.last
+          : null,
       onGenerateInitialRoutes: (initialRoute) {
         final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
-        return <Route<dynamic>?>[
+        final routes = <Route<dynamic>?>[
           homeRoute,
-          resolveAppLinkUri(context, Uri.parse(initialRoute)),
+          ...?resolveAppRoutes(context, Uri.parse(initialRoute)),
         ].nonNulls.toList(growable: false);
+        return routes;
       },
       navigatorObservers: [rootNavPageRouteObserver],
     );
