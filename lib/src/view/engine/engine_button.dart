@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -289,9 +288,9 @@ class _EnginePopup extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
 
     // remove Fairy-Stockfish version from engine name
-    final fixedEngineName = engineName.startsWith('Fairy-Stockfish')
+    final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
         ? 'Fairy-Stockfish'
-        : engineName;
+        : engineName ?? 'Stockfish';
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),

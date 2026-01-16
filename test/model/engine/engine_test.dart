@@ -4,11 +4,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
+import '../../test_container.dart';
 import 'fake_stockfish.dart';
 
 void main() {
@@ -19,9 +20,18 @@ void main() {
     testBinding.stockfish = FakeStockfish();
   });
 
-  group('Engine', () {
-    test('Test fake engine', () async {
-      final stockfishEngine = StockfishEngine(StockfishFlavor.variant);
+  group('EvaluationService', () {
+    test('Test engine evaluation with fake stockfish', () async {
+      final container = await makeContainer();
+
+      final service = container.read(evaluationServiceProvider);
+
+      const options = EvaluationOptions(
+        enginePref: ChessEnginePref.sf16,
+        multiPv: 1,
+        cores: 1,
+        searchTime: Duration(seconds: 3),
+      );
 
       final work = Work(
         variant: Variant.standard,
@@ -34,17 +44,29 @@ void main() {
         threatMode: false,
       );
 
-      final (_, eval) = await stockfishEngine.start(work).first;
+      final stream = service.evaluate(work, options: options);
+      expect(stream, isNotNull);
+
+      final (_, eval) = await stream!.first;
 
       expect(eval.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
     });
 
-    test('Dispose works when engine transitions to error state', () {
-      fakeAsync((async) {
-        final errorStockfish = ErrorStockfish();
-        testBinding.stockfish = errorStockfish;
+    test('Engine transitions to error state on startup failure', () async {
+      final errorStockfish = ErrorStockfish();
+      testBinding.stockfish = errorStockfish;
 
-        final stockfishEngine = StockfishEngine(StockfishFlavor.variant);
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        const options = EvaluationOptions(
+          enginePref: ChessEnginePref.sf16,
+          multiPv: 1,
+          cores: 1,
+          searchTime: Duration(seconds: 1),
+        );
 
         final work = Work(
           variant: Variant.standard,
@@ -57,16 +79,42 @@ void main() {
           threatMode: false,
         );
 
-        stockfishEngine.start(work);
+        service.evaluate(work, options: options);
 
         async.flushMicrotasks();
 
-        stockfishEngine.dispose();
-
-        async.elapse(const Duration(seconds: 1));
-
-        expect(stockfishEngine.isDisposed, isTrue);
+        expect(service.engineState.value, EngineState.error);
       });
+    });
+
+    test('Stop evaluation clears current work', () async {
+      final container = await makeContainer();
+
+      final service = container.read(evaluationServiceProvider);
+
+      const options = EvaluationOptions(
+        enginePref: ChessEnginePref.sf16,
+        multiPv: 1,
+        cores: 1,
+        searchTime: Duration(seconds: 3),
+      );
+
+      final work = Work(
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.empty,
+        searchTime: const Duration(seconds: 3),
+        multiPv: 1,
+        initialPosition: Chess.initial,
+        steps: IList(),
+        threatMode: false,
+      );
+
+      service.evaluate(work, options: options);
+      service.stop();
+
+      // After stop, the engine should be idle
+      expect(service.engineState.value, isNot(EngineState.computing));
     });
   });
 }

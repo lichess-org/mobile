@@ -1,12 +1,23 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/work.dart';
 
+import '../../binding.dart';
 import '../../test_container.dart';
+import 'fake_stockfish.dart';
 
 void main() {
+  TestLichessBinding.ensureInitialized();
+
+  setUp(() {
+    testBinding.stockfish = FakeStockfish();
+  });
+
   group('EvaluationService', () {
     test('Concurrent NNUE download operations are prevented', () async {
       final container = await makeContainer();
@@ -61,11 +72,9 @@ void main() {
       expect(secondResult, isA<bool>());
     });
 
-    test('Concurrent engine initialization operations are prevented', () async {
+    test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
-
-      const context = EvaluationContext(variant: Variant.standard, initialPosition: Chess.initial);
 
       const options = EvaluationOptions(
         enginePref: ChessEnginePref.sf16,
@@ -74,32 +83,47 @@ void main() {
         searchTime: Duration(seconds: 1),
       );
 
-      // Start first initialization
-      final firstInit = service.ensureEngineInitialized(context, initOptions: options);
-
-      // Immediately start second initialization while first is in progress
-      final secondInit = service.ensureEngineInitialized(
-        context,
-        initOptions: options.copyWith(multiPv: 2),
+      final work1 = Work(
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.empty,
+        searchTime: const Duration(seconds: 1),
+        multiPv: 1,
+        initialPosition: Chess.initial,
+        steps: IList(),
+        threatMode: false,
       );
 
-      await Future.wait([firstInit, secondInit]);
+      final work2 = Work(
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        searchTime: const Duration(seconds: 1),
+        multiPv: 1,
+        initialPosition: Chess.initial,
+        steps: IList(),
+        threatMode: false,
+      );
 
-      // Second call returns immediately without re-initializing. Both should complete successfully.
-      expect(firstInit, completes);
-      expect(secondInit, completes);
+      // Start first evaluation
+      service.evaluate(work1, options: options);
 
-      // Options should still match the first initialization
-      expect(service.options, options);
+      // Start second evaluation - should take over
+      final stream2 = service.evaluate(work2, options: options);
 
-      service.disposeEngine();
+      // The second evaluation should be the current one
+      expect(service.currentWork, work2);
+
+      // Results from stream2 should have work2
+      if (stream2 != null) {
+        final result = await stream2.first;
+        expect(result.$1, work2);
+      }
     });
 
-    test('Sequential engine initializations are allowed', () async {
+    test('Stop clears current work', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
-
-      const context = EvaluationContext(variant: Variant.standard, initialPosition: Chess.initial);
 
       const options = EvaluationOptions(
         enginePref: ChessEnginePref.sf16,
@@ -108,23 +132,22 @@ void main() {
         searchTime: Duration(seconds: 1),
       );
 
-      // First initialization
-      await service.ensureEngineInitialized(context, initOptions: options);
-
-      // Wait for first to complete, then start second with different options
-      const options2 = EvaluationOptions(
-        enginePref: ChessEnginePref.sf16,
-        multiPv: 2,
-        cores: 1,
-        searchTime: Duration(seconds: 2),
+      final work = Work(
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.empty,
+        searchTime: const Duration(seconds: 1),
+        multiPv: 1,
+        initialPosition: Chess.initial,
+        steps: IList(),
+        threatMode: false,
       );
 
-      await service.ensureEngineInitialized(context, initOptions: options2);
+      service.evaluate(work, options: options);
+      expect(service.currentWork, work);
 
-      // Second call should be allowed since first completed
-      expect(service.options, options2);
-
-      service.disposeEngine();
+      service.stop();
+      expect(service.currentWork, isNull);
     });
   });
 }
