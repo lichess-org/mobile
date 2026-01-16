@@ -168,7 +168,6 @@ class StockfishEngine implements Engine {
     _protocol.dispose();
     _stockfish.state.removeListener(_stockfishStateListener);
     _stockfish.quit();
-    _state.value = EngineState.disposed;
     _state.dispose();
   }
 }
