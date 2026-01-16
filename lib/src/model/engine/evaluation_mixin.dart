@@ -122,8 +122,6 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
     requestEval(forceRestart: true);
   }
 
@@ -131,16 +129,12 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   void setEngineCores(int numEngineCores) {
     _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
     requestEval(forceRestart: true);
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
     _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
-
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
 
     requestEval(forceRestart: true);
   }
@@ -267,58 +261,68 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   Future<void> _startEngineEval({bool goDeeper = false, bool forceRestart = false}) async {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
-    await _evaluationService.ensureEngineInitialized(
-      state.requireValue.evaluationContext,
-      initOptions: evaluationPrefs.evaluationOptions,
+
+    final context = curState.evaluationContext;
+    final prefs = evaluationPrefs;
+
+    final work = Work(
+      enginePref: prefs.enginePref,
+      variant: context.variant,
+      threads: prefs.numEngineCores,
+      path: curState.currentPath,
+      searchTime: prefs.engineSearchTime,
+      multiPv: prefs.numEvalLines,
+      threatMode: false,
+      initialPosition: context.initialPosition,
+      steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
-    _evaluationService
-        .start(
-          curState.currentPath,
-          positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: positionTree.eval,
-          shouldEmit: _shouldEmit,
-          goDeeper: goDeeper,
-          forceRestart: forceRestart,
-          threatMode: curState.engineInThreatMode,
-        )
-        ?.forEach((event) {
-          if (curState.engineInThreatMode) {
+
+    final evalStream = await _evaluationService.evaluate(
+      work,
+      shouldEmit: _shouldEmit,
+      goDeeper: goDeeper,
+      forceRestart: forceRestart,
+      threatMode: curState.engineInThreatMode,
+    );
+
+    evalStream?.forEach((event) {
+      if (curState.engineInThreatMode) {
+        return;
+      }
+      final (work, eval) = event;
+      bool isSameEvalString = true;
+      positionTree.updateAt(work.path, (node) {
+        final nodeEval = node.eval;
+        if (nodeEval is CloudEval) {
+          if (nodeEval.depth >= eval.depth &&
+              work.isDeeper != true &&
+              work.searchTime != kMaxEngineSearchTime) {
+            final targetTime = work.searchTime;
+            final searchTime = eval.searchTime;
+            final likelyNodes =
+                ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
+            // if the cloud eval is likely better, stop the local engine
+            // nps varies with positional complexity so this is rough, but save planet earth
+            if (likelyNodes < nodeEval.nodes) {
+              _evaluationService.stop();
+            }
             return;
           }
-          final (work, eval) = event;
-          bool isSameEvalString = true;
-          positionTree.updateAt(work.path, (node) {
-            final nodeEval = node.eval;
-            if (nodeEval is CloudEval) {
-              if (nodeEval.depth >= eval.depth &&
-                  work.isDeeper != true &&
-                  work.searchTime != kMaxEngineSearchTime) {
-                final targetTime = work.searchTime;
-                final searchTime = eval.searchTime;
-                final likelyNodes =
-                    ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
-                // if the cloud eval is likely better, stop the local engine
-                // nps varies with positional complexity so this is rough, but save planet earth
-                if (likelyNodes < nodeEval.nodes) {
-                  _evaluationService.stop();
-                }
-                return;
-              }
-            } else if (nodeEval is LocalEval) {
-              if (nodeEval.isBetter(eval)) {
-                return;
-              }
-            }
-            isSameEvalString = eval.evalString == nodeEval?.evalString;
-            node.eval = eval;
-          });
-
-          if (!ref.mounted) return;
-
-          if (work.path == state.requireValue.currentPath) {
-            onCurrentPathEvalChanged(isSameEvalString);
+        } else if (nodeEval is LocalEval) {
+          if (nodeEval.isBetter(eval)) {
+            return;
           }
-        });
+        }
+        isSameEvalString = eval.evalString == nodeEval?.evalString;
+        node.eval = eval;
+      });
+
+      if (!ref.mounted) return;
+
+      if (work.path == state.requireValue.currentPath) {
+        onCurrentPathEvalChanged(isSameEvalString);
+      }
+    });
   }
 
   bool _shouldEmit(Work work) {

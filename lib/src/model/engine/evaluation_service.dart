@@ -6,7 +6,6 @@ import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dartchess/dartchess.dart' hide File;
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +13,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -67,7 +65,8 @@ class EvaluationService {
   Engine? _engine;
   bool _engineInitInProgress = false;
 
-  EvaluationContext? _context;
+  /// The engine preference the current engine was initialized with.
+  ChessEnginePref? _currentEnginePref;
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
   bool _nnueOperationInProgress = false;
@@ -75,13 +74,6 @@ class EvaluationService {
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
   bool get isDownloadingNNUEFiles =>
       nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
-
-  EvaluationOptions options = EvaluationOptions(
-    enginePref: ChessEnginePref.sf16,
-    multiPv: 1,
-    cores: defaultEngineCores,
-    searchTime: const Duration(seconds: 10),
-  );
 
   static const _defaultState = (
     engineName: 'Stockfish',
@@ -120,24 +112,19 @@ class EvaluationService {
     }
   }
 
-  /// Initialize the engine with the given context and options.
+  /// Initialize the engine with the given preference.
   ///
   /// If the engine is already initialized, it is disposed first.
-  ///
-  /// If [options] is not provided, the default options are used.
-  /// This method must be called before calling [start]. It is the caller's
-  /// responsibility to close the engine.
-  Future<void> _initEngine(EvaluationContext context, {EvaluationOptions? initOptions}) async {
+  Future<void> _initEngine(ChessEnginePref enginePref) async {
     disposeEngine();
-    _context = context;
-    if (initOptions != null) options = initOptions;
-    ChessEnginePref pref = options.enginePref;
-    if (options.enginePref == ChessEnginePref.sfLatest) {
+    ChessEnginePref pref = enginePref;
+    if (enginePref == ChessEnginePref.sfLatest) {
       if (!await checkNNUEFiles()) {
         _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
         pref = ChessEnginePref.sf16;
       }
     }
+    _currentEnginePref = pref;
     _engine = _engineFactory(pref);
     _engine!.state.addListener(() {
       _logger.fine('Engine state: ${_engine?.state.value}');
@@ -155,23 +142,19 @@ class EvaluationService {
     });
   }
 
-  /// Ensure the engine is initialized with the given context and options.
-  Future<void> ensureEngineInitialized(
-    EvaluationContext context, {
-    EvaluationOptions? initOptions,
-  }) async {
+  /// Ensure the engine is initialized with the given preference.
+  ///
+  /// The engine is re-initialized if the preference has changed.
+  Future<void> _ensureEngineInitialized(ChessEnginePref enginePref) async {
     if (_engineInitInProgress) {
       _logger.warning('Engine initialization already in progress, ignoring request');
       return;
     }
 
-    if (_engine == null ||
-        _engine?.isDisposed == true ||
-        _context != context ||
-        options != initOptions) {
+    if (_engine == null || _engine?.isDisposed == true || _currentEnginePref != enginePref) {
       _engineInitInProgress = true;
       try {
-        await _initEngine(context, initOptions: initOptions);
+        await _initEngine(enginePref);
       } finally {
         _engineInitInProgress = false;
       }
@@ -201,33 +184,37 @@ class EvaluationService {
     _state.dispose();
   }
 
-  /// Start the engine evaluation with the given [path] and [steps].
+  /// Evaluate a position using the engine.
+  ///
+  /// Takes a [Work] object containing all the parameters for the evaluation.
   ///
   /// Returns a stream of [EvalResult]s. The stream is throttled to emit at most
   /// one value every 200 milliseconds.
   /// For each evaluation in the stream, if [shouldEmit] returns true, the eval
   /// is emitted by the [EngineEvaluation] provider.
   ///
-  /// [initEngine] must be called before calling this method.
-  Stream<EvalResult>? start(
-    UciPath path,
-    Iterable<Step> steps, {
-    ClientEval? initialPositionEval,
+  /// The engine is automatically initialized if needed.
+  ///
+  /// If [goDeeper] is true, the search time is overridden to [kMaxEngineSearchTime].
+  /// If [threatMode] is true, the work is modified to evaluate threats.
+  Future<Stream<EvalResult>?> evaluate(
+    Work work, {
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
     bool threatMode = false,
 
     /// If true, forces the engine to restart the evaluation even if the saved eval has more search time.
     bool forceRestart = false,
-  }) {
-    final context = _context;
-    final engine = _engine;
-    if (context == null || engine == null) {
-      assert(false, 'Engine not initialized');
+  }) async {
+    if (!engineSupportedVariants.contains(work.variant)) {
       return null;
     }
 
-    if (!engineSupportedVariants.contains(context.variant)) {
+    await _ensureEngineInitialized(work.enginePref);
+
+    final engine = _engine;
+    if (engine == null) {
+      assert(false, 'Engine not initialized');
       return null;
     }
 
@@ -239,23 +226,17 @@ class EvaluationService {
       currentWork: null,
     );
 
-    final work = Work(
-      variant: context.variant,
-      threads: options.cores,
+    final effectiveWork = work.copyWith(
       hashSize: maxMemory,
       threatMode: threatMode,
-      searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
+      searchTime: goDeeper ? kMaxEngineSearchTime : work.searchTime,
       isDeeper: goDeeper,
-      multiPv: options.multiPv,
-      path: path,
-      initialPosition: context.initialPosition,
-      steps: IList(steps),
     );
 
-    if (!work.threatMode && !forceRestart) {
-      switch (work.evalCache) {
+    if (!effectiveWork.threatMode && !forceRestart) {
+      switch (effectiveWork.evalCache) {
         // if the search time is greater than the current search time, don't evaluate again
-        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case final LocalEval localEval when localEval.searchTime >= effectiveWork.searchTime:
         case CloudEval _ when goDeeper == false:
           // stop the engine if running (can happen if last eval was launched with goDeeper = true)
           engine.stop();
@@ -266,7 +247,7 @@ class EvaluationService {
     }
 
     final evalStream = engine
-        .start(work)
+        .start(effectiveWork)
         .throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
 
     evalStream.forEach((t) {
@@ -448,16 +429,6 @@ class EngineEvaluation extends Notifier<EngineEvaluationState> {
 sealed class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
       _EvaluationContext;
-}
-
-@freezed
-sealed class EvaluationOptions with _$EvaluationOptions {
-  const factory EvaluationOptions({
-    required ChessEnginePref enginePref,
-    required int multiPv,
-    required int cores,
-    required Duration searchTime,
-  }) = _EvaluationOptions;
 }
 
 /// A function to choose the eval that should be displayed.

@@ -115,11 +115,7 @@ class StockfishEngine implements Engine {
       await _stockfish.quit();
       if (isDisposed) return;
 
-      await _stockfish.start(
-        flavor: flavor,
-        smallNetPath: _smallNetPath,
-        bigNetPath: _bigNetPath,
-      );
+      await _stockfish.start(flavor: flavor, smallNetPath: _smallNetPath, bigNetPath: _bigNetPath);
       if (isDisposed) return;
 
       _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);

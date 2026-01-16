@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 part 'work.freezed.dart';
 
@@ -16,6 +17,7 @@ sealed class Work with _$Work {
   const Work._();
 
   const factory Work({
+    required ChessEnginePref enginePref,
     required Variant variant,
     required int threads,
     int? hashSize,

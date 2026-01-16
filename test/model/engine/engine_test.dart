@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -24,6 +25,7 @@ void main() {
       final stockfishEngine = StockfishEngine(StockfishFlavor.variant);
 
       final work = Work(
+        enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -47,6 +49,7 @@ void main() {
         final stockfishEngine = StockfishEngine(StockfishFlavor.variant);
 
         final work = Work(
+          enginePref: ChessEnginePref.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,

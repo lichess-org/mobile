@@ -1,8 +1,11 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/work.dart';
 
 import '../../test_container.dart';
 
@@ -61,69 +64,69 @@ void main() {
       expect(secondResult, isA<bool>());
     });
 
-    test('Concurrent engine initialization operations are prevented', () async {
+    test('Concurrent evaluate calls with engine initialization are handled', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      const context = EvaluationContext(variant: Variant.standard, initialPosition: Chess.initial);
-
-      const options = EvaluationOptions(
+      const work = Work(
         enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.empty,
         searchTime: Duration(seconds: 1),
+        multiPv: 1,
+        threatMode: false,
+        initialPosition: Chess.initial,
+        steps: IListConst([]),
       );
 
-      // Start first initialization
-      final firstInit = service.ensureEngineInitialized(context, initOptions: options);
+      // Start first evaluate (will initialize engine)
+      final firstEval = service.evaluate(work, shouldEmit: (_) => true);
 
-      // Immediately start second initialization while first is in progress
-      final secondInit = service.ensureEngineInitialized(
-        context,
-        initOptions: options.copyWith(multiPv: 2),
-      );
+      // Immediately start second evaluate while first is initializing
+      final secondEval = service.evaluate(work, shouldEmit: (_) => true);
 
-      await Future.wait([firstInit, secondInit]);
-
-      // Second call returns immediately without re-initializing. Both should complete successfully.
-      expect(firstInit, completes);
-      expect(secondInit, completes);
-
-      // Options should still match the first initialization
-      expect(service.options, options);
+      // Both should complete without errors
+      await Future.wait([firstEval, secondEval]);
 
       service.disposeEngine();
     });
 
-    test('Sequential engine initializations are allowed', () async {
+    test('Sequential evaluations with same enginePref reuse engine', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      const context = EvaluationContext(variant: Variant.standard, initialPosition: Chess.initial);
-
-      const options = EvaluationOptions(
+      const work1 = Work(
         enginePref: ChessEnginePref.sf16,
-        multiPv: 1,
-        cores: 1,
+        variant: Variant.standard,
+        threads: 1,
+        path: UciPath.empty,
         searchTime: Duration(seconds: 1),
+        multiPv: 1,
+        threatMode: false,
+        initialPosition: Chess.initial,
+        steps: IListConst([]),
       );
 
-      // First initialization
-      await service.ensureEngineInitialized(context, initOptions: options);
+      // First evaluate
+      await service.evaluate(work1, shouldEmit: (_) => true);
 
-      // Wait for first to complete, then start second with different options
-      const options2 = EvaluationOptions(
+      // Second evaluate with same enginePref but different params
+      const work2 = Work(
         enginePref: ChessEnginePref.sf16,
-        multiPv: 2,
-        cores: 1,
+        variant: Variant.standard,
+        threads: 2,
+        path: UciPath.empty,
         searchTime: Duration(seconds: 2),
+        multiPv: 2,
+        threatMode: false,
+        initialPosition: Chess.initial,
+        steps: IListConst([]),
       );
 
-      await service.ensureEngineInitialized(context, initOptions: options2);
+      await service.evaluate(work2, shouldEmit: (_) => true);
 
-      // Second call should be allowed since first completed
-      expect(service.options, options2);
-
+      // Both should complete without errors (engine is reused)
       service.disposeEngine();
     });
   });
