@@ -54,6 +54,7 @@ class FakeStockfish implements Stockfish {
 
   @override
   Future<void> quit() async {
+    await Future.microtask(() {});
     _state.value = StockfishState.initial;
   }
 
@@ -148,6 +149,7 @@ class ErrorStockfish implements Stockfish {
 
   @override
   Future<void> quit() async {
+    await Future.microtask(() {});
     _state.value = StockfishState.initial;
   }
 

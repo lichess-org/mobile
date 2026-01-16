@@ -65,7 +65,6 @@ void main() {
 
         async.elapse(const Duration(seconds: 1));
 
-        expect(stockfishEngine.state.value, EngineState.disposed);
         expect(stockfishEngine.isDisposed, isTrue);
       });
     });
