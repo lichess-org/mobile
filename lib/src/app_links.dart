@@ -46,7 +46,8 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       );
     case _:
       final gameId = GameId(appLinkUri.pathSegments[0]);
-      final orientation = appLinkUri.pathSegments.getOrNull(2);
+      final orientation = appLinkUri.pathSegments.getOrNull(1);
+      final int ply = int.tryParse(appLinkUri.fragment) ?? 0;
       // The game id can also be a challenge. Challenge by link is not supported yet so let's ignore it.
       if (gameId.isValid) {
         return AnalysisScreen.buildRoute(
@@ -54,7 +55,7 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
           AnalysisOptions.archivedGame(
             orientation: orientation == 'black' ? Side.black : Side.white,
             gameId: gameId,
-            initialMoveCursor: 0,
+            initialMoveCursor: ply,
           ),
         );
       }
