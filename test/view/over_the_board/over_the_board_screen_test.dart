@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:mocktail/mocktail.dart';
@@ -216,6 +218,13 @@ void main() {
                 ),
                 sanMove: SanMove('e4', Move.parse('e2e4')!),
               ),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
+                ),
+                sanMove: SanMove('e5', Move.parse('e7e5')!),
+              ),
             ].lock,
             meta: GameMeta(
               createdAt: DateTime.now(),
@@ -243,7 +252,17 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const OverTheBoardScreen(),
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test OTB Screen')),
+            body: FilledButton(
+              child: const Text('OTB'),
+              onPressed: () => Navigator.of(
+                context,
+              ).push(buildScreenRoute<void>(context, screen: const OverTheBoardScreen())),
+            ),
+          ),
+        ),
         overrides: {
           overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
             (_) => gameStorage,
@@ -251,6 +270,8 @@ void main() {
         },
       );
       await tester.pumpWidget(app);
+
+      await tester.tap(find.text('OTB'));
 
       // Wait for previous game to be loaded
       await tester.pumpAndSettle();
@@ -260,21 +281,26 @@ void main() {
       // Should not show bottom sheet if we loaded a previous game
       expect(find.text('Play'), findsNothing);
 
-      // Should load the game's current position, i.e. e4 was played
+      // Should load the game's current position, i.e. e4 and e5 were played
       expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
       expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+
+      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
 
       expect(activeClock(tester), null);
       expect(findWhiteClock(tester).timeLeft, const Duration(minutes: 2));
       expect(findBlackClock(tester).timeLeft, const Duration(minutes: 1));
 
-      // Start black's clock
+      // Start white's clock
       await tester.tap(find.byTooltip('Resume'));
       await tester.pump();
-      expect(activeClock(tester), Side.black);
+      expect(activeClock(tester), Side.white);
 
-      // Hide OTB screen to trigger save
-      await tester.pumpWidget(const SizedBox.shrink());
+      // Close OTB screen and confirm dialog to trigger save
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Yes'));
 
       verify(
         () => gameStorage.save(
