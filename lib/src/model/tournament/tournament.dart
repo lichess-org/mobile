@@ -137,6 +137,7 @@ sealed class Tournament with _$Tournament {
     required String? description,
     required bool? isFinished,
     required bool? isStarted,
+    required bool private,
     required (Duration, DateTime)? timeToStart,
     required (Duration, DateTime)? timeToFinish,
     required bool pairingsClosed,
@@ -175,6 +176,7 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     startsAt: pick('startsAt').letOrNull((p) => DateTime.parse(p.asStringOrThrow())),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
+    private: pick('private').asBoolOrFalse(),
     timeToStart: pick(
       'secondsToStart',
     ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),

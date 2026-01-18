@@ -207,16 +207,18 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     }
   }
 
-  void joinOrPause({TeamId? teamId}) {
+  Future<void> joinOrPause({TeamId? teamId, String? password}) async {
     final state = this.state.value;
     if (state == null) {
       return;
     }
 
     if (state.joined) {
-      ref.read(tournamentRepositoryProvider).withdraw(state.id);
+      await ref.read(tournamentRepositoryProvider).withdraw(state.id);
     } else {
-      ref.read(tournamentRepositoryProvider).join(state.id, teamId: teamId);
+      await ref
+          .read(tournamentRepositoryProvider)
+          .join(state.id, teamId: teamId, password: password);
     }
   }
 }
