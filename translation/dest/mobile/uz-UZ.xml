@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Akkaunt sozlamalari</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Barcha o\'yinlar</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taxta sozlamalari</string>
@@ -10,13 +11,15 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Fikr-mulohaza</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kech, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kech</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun, %s</string>
-  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun</string>
+  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Xayrli kun, %s</string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Xayrli kun</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Variantni yashirish</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Uy</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Jonli translyatorlar</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ushbu sahifani ko\'rish uchun tizimga kirgan bo\'lishingiz kerak.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Natija yoʻq</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Hozircha eski ilova yoki veb-saytdagi barcha funksiyalar mavjud emas, ammo funksiyalar doimiy qo‘shib borilmoqda.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Siz hech qanday foydalanuvchiga obuna bo‘lmagansiz.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Xo\'p</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Shahmat taxtasini sozlash</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">“%s” bilan oʻyinchilar</string>
@@ -38,6 +41,7 @@
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiv rejim</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Rasm tanlang</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Tasvirni xiralashtirish</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sozlamalar</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN-ni baham ko\'ring</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin URL manzilini baham koʻring</string>
@@ -53,4 +57,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s variant ushbu talqinda qo‘llab quvvatlanmaydi.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Raqibning qoʻshilishi kutilmoqda...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ko\'rish</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess ilovasiga xush kelibsiz!</string>
 </resources>
