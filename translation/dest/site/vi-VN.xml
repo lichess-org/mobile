@@ -5,7 +5,6 @@
   <string name="playAgainstComputer">Chơi với máy</string>
   <string name="gameMode">Chế độ chơi</string>
   <string name="createLobbyGame">Tạo ván đấu tại sảnh</string>
-  <string name="youPlayAs">Bạn cầm quân</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Để mời ai đó chơi, hãy gửi đường dẫn này</string>
   <string name="gameOver">Ván cờ kết thúc</string>
   <string name="waitingForOpponent">Đang chờ đối thủ</string>
@@ -124,6 +123,10 @@
   <string name="bestMoveArrow">Mũi tên chỉ nước đi tốt nhất</string>
   <string name="showVariationArrows">Hiển thị mũi tên biến</string>
   <string name="evaluationGauge">Thang đo lợi thế</string>
+  <string name="visualMotifs">Họa tiết thị giác</string>
+  <string name="undefendedPieces">Các quân cờ không được bảo vệ</string>
+  <string name="pinnedPieces">Quân cờ bị ghim</string>
+  <string name="checkableKing">Có thể chiếu tướng</string>
   <string name="multipleLines">Số hàng phân tích</string>
   <string name="cpus">CPU</string>
   <string name="memory">Bộ nhớ</string>
@@ -193,6 +196,7 @@
   <string name="minutesPerSide">Số phút cho mỗi bên</string>
   <string name="variant">Biến thể</string>
   <string name="variants">Biến thể</string>
+  <string name="variantsDescription">Nhiều cách chơi hơn</string>
   <string name="timeControl">Kiểu thời gian</string>
   <string name="realTime">Thời gian thực</string>
   <string name="correspondence">Cờ qua thư</string>
@@ -281,6 +285,7 @@
   <string name="standard">Tiêu chuẩn</string>
   <string name="customPosition">Thế trận tùy chỉnh</string>
   <string name="unlimited">Vô hạn</string>
+  <string name="unlimitedDescription">Hãy dành tất cả thời gian bạn cần</string>
   <string name="mode">Chế độ</string>
   <string name="casual">Không xếp hạng</string>
   <string name="rated">Có xếp hạng</string>
@@ -396,7 +401,6 @@
   <string name="pasteTheFenStringHere">Dán chuỗi FEN vào đây</string>
   <string name="pasteThePgnStringHere">Dán chuỗi PGN vào đây</string>
   <string name="orUploadPgnFile">Hoặc tải lên tệp PGN</string>
-  <string name="fromPosition">Từ thế cờ</string>
   <string name="continueFromHere">Tiếp tục từ đây</string>
   <string name="toStudy">Nghiên cứu</string>
   <string name="importGame">Nhập ván cờ</string>
@@ -975,5 +979,5 @@ Mọi chi phí vận hành, phát triển, và nội dung được tài trợ b�
   <string name="search">Tìm kiếm</string>
   <string name="clearSearch">Xóa nội dung tìm kiếm</string>
   <string name="tags">Thẻ</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.">Bắt tốt qua đường</string>
+  <string name="enPassant">Bắt tốt qua đường</string>
 </resources>
