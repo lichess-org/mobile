@@ -54,6 +54,9 @@ abstract class LichessBinding {
     return instance!;
   }
 
+  /// Counts how many times the app has been (cold) started.
+  int get numAppStarts;
+
   /// The shared preferences instance. Must be preloaded before use.
   ///
   /// This is a synchronous getter that throws an error if shared preferences
@@ -122,6 +125,11 @@ class AppLichessBinding extends LichessBinding {
     return _syncSharedPreferencesWithCache!;
   }
 
+  static const String _kNumAppStartsKey = 'app_starts';
+
+  @override
+  int get numAppStarts => sharedPreferences.getInt(_kNumAppStartsKey) ?? 0;
+
   /// Preload shared preferences.
   ///
   /// This should be called only once before the app starts. Must be called before
@@ -131,6 +139,9 @@ class AppLichessBinding extends LichessBinding {
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     );
     _syncSharedPreferencesWithCache = await _sharedPreferencesWithCache;
+
+    final appStarts = sharedPreferences.getInt(_kNumAppStartsKey) ?? 0;
+    sharedPreferences.setInt(_kNumAppStartsKey, appStarts + 1);
   }
 
   @override

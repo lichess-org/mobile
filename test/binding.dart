@@ -75,6 +75,9 @@ class TestLichessBinding extends LichessBinding {
   FakeSharedPreferences? _sharedPreferences;
 
   @override
+  int get numAppStarts => 0;
+
+  @override
   FakeSharedPreferences get sharedPreferences {
     return _sharedPreferences ??= FakeSharedPreferences();
   }

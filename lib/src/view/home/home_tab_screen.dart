@@ -94,6 +94,9 @@ class _IsEditingHome extends InheritedWidget {
   }
 }
 
+const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
+const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
+
 class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -121,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   Future<bool> shouldDisplayWelcomeMessage() async {
-    if (LichessBinding.instance.sharedPreferences.getBool('app_welcome_message_shown') == true) {
+    if (LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) == true) {
       return false;
     }
 
@@ -176,7 +179,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ],
           ),
         ).then((_) {
-          prefs.setBool('app_welcome_message_shown', true);
+          prefs.setBool(kWelcomeMessageShownKey, true);
         });
       });
     }
@@ -262,6 +265,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   child: Text(context.l10n.aboutX('Lichess...')),
                 ),
               ),
+              const _HomeCustomizationTip(),
             ],
           ];
 
@@ -311,6 +315,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
+            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
             if (status.isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
@@ -367,6 +372,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
+            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
               shouldShow: authUser != null && status.isOnline,
@@ -993,5 +999,75 @@ class _ChallengeScreenButton extends ConsumerWidget {
         onPressed: null,
       ),
     };
+  }
+}
+
+class _HomeCustomizationTip extends StatefulWidget {
+  const _HomeCustomizationTip();
+
+  @override
+  State<_HomeCustomizationTip> createState() => _HomeCustomizationTipState();
+}
+
+class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
+  bool _shouldDisplayHomeWidgetCustomizationTip() {
+    final prefs = LichessBinding.instance.sharedPreferences;
+
+    return prefs.getBool(kHideHomeWidgetCustomizationTip) != true &&
+        LichessBinding.instance.numAppStarts <= 3;
+  }
+
+  void _setHideHomeWidgetCustomizationTip(BuildContext context) {
+    LichessBinding.instance.sharedPreferences.setBool(kHideHomeWidgetCustomizationTip, true);
+
+    // trigger rebuild to hide the tip
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_shouldDisplayHomeWidgetCustomizationTip()) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(context.l10n.mobileCustomizeHomeTip),
+              ),
+
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+
+                      _setHideHomeWidgetCustomizationTip(context);
+                    },
+                    child: Text(context.l10n.mobileCustomizeButton),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      _setHideHomeWidgetCustomizationTip(context);
+                    },
+                    child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

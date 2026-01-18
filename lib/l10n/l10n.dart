@@ -650,6 +650,24 @@ abstract class AppLocalizations {
   /// **'View Game'**
   String get mobileViewGame;
 
+  /// No description provided for @mobileCustomizeHomeTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!'**
+  String get mobileCustomizeHomeTip;
+
+  /// No description provided for @mobileCustomizeHomeTipDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get mobileCustomizeHomeTipDismiss;
+
+  /// No description provided for @mobileCustomizeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize'**
+  String get mobileCustomizeButton;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:

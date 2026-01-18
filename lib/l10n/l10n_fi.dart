@@ -245,6 +245,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileViewGame => 'View Game';
 
   @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Toiminta';
 
   @override
