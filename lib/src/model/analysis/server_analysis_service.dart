@@ -161,13 +161,13 @@ class ServerAnalysisService {
       } else {
         final san = n2child['san'] as String;
         final move = Move.parse(uci)!;
-        n1.addChild(
-          Branch(
-            position: n1.position.playUnchecked(move),
-            sanMove: SanMove(san, move),
-            isCollapsed: children.length > 1,
-          ),
+        final newBranch = Branch(
+          position: n1.position.playUnchecked(move),
+          sanMove: SanMove(san, move),
+          isCollapsed: children.length > 1,
         );
+        n1.addChild(newBranch);
+        mergeOngoingAnalysis(newBranch, n2child);
       }
     }
   }

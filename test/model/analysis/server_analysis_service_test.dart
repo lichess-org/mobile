@@ -110,5 +110,53 @@ void main() {
       expect(root.children.first.lichessAnalysisComments?.length, 1);
       expect(root.children.first.lichessAnalysisComments?.first.text, 'Best move!');
     });
+
+    test('recursively merges nested children in new variations', () {
+      final root = Root(position: Chess.initial);
+
+      // Server sends a new variation with nested children - no 'id' fields
+      final serverNode = {
+        'children': [
+          {
+            'uci': 'e2e4',
+            'san': 'e4',
+            'eval': {'cp': 20},
+            'children': [
+              {
+                'uci': 'e7e5',
+                'san': 'e5',
+                'eval': {'cp': 25},
+                'comments': [
+                  {'text': 'Classic response'},
+                ],
+                'children': [
+                  {
+                    'uci': 'g1f3',
+                    'san': 'Nf3',
+                    'eval': {'cp': 30},
+                    'children': <Map<String, dynamic>>[],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      ServerAnalysisService.mergeOngoingAnalysis(root, serverNode);
+
+      // Verify the entire tree was built
+      expect(root.children.length, 1);
+      expect(root.children.first.sanMove.san, 'e4');
+      
+      final e4 = root.children.first;
+      expect(e4.children.length, 1);
+      expect(e4.children.first.sanMove.san, 'e5');
+      expect(e4.children.first.lichessAnalysisComments?.first.text, 'Classic response');
+      
+      final e5 = e4.children.first;
+      expect(e5.children.length, 1);
+      expect(e5.children.first.sanMove.san, 'Nf3');
+    });
   });
 }
