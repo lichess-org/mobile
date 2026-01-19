@@ -66,7 +66,7 @@ void main() {
       expect(states.last, anyOf(EngineState.idle, EngineState.computing));
     });
 
-    test('quit() resets all internal state', () async {
+    test('quit() resets engine state to initial', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -76,6 +76,12 @@ void main() {
 
       service.quit();
 
+      // Wait for async stockfish.quit() to complete and trigger state change
+      while (service.engineState.value != EngineState.initial) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      expect(service.engineState.value, EngineState.initial);
       expect(service.currentWork, isNull);
     });
 

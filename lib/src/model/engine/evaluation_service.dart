@@ -263,13 +263,15 @@ class EvaluationService {
 
   void _onStockfishStateChange() {
     switch (_stockfish.state.value) {
+      case StockfishState.initial:
+        _setEngineState(EngineState.initial);
       case StockfishState.ready:
         if (_engineState.value != EngineState.computing) {
           _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
         _setEngineState(EngineState.error);
-      default:
+      case StockfishState.starting:
         break;
     }
   }
