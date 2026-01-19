@@ -79,6 +79,43 @@ void main() {
       expect(service.currentWork, isNull);
     });
 
+    test('state transitions idle -> computing -> idle when work completes', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // First evaluation to get engine into idle state
+      final initWork = makeWork();
+      final initStream = service.evaluate(initWork);
+      await initStream!.first;
+
+      // Wait for state to settle to idle
+      while (service.engineState.value != EngineState.idle) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(service.engineState.value, EngineState.idle);
+
+      // Track state transitions for the next evaluation
+      final states = <EngineState>[];
+      service.engineState.addListener(() {
+        states.add(service.engineState.value);
+      });
+
+      // Start new evaluation - should transition to computing
+      final work = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final stream = service.evaluate(work);
+      expect(stream, isNotNull);
+
+      // Wait for evaluation to complete
+      await stream!.first;
+
+      // Wait for state to settle back to idle
+      while (service.engineState.value != EngineState.idle) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      expect(states, [EngineState.computing, EngineState.idle]);
+    });
+
     test('evaluate() after quit() restarts engine', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
