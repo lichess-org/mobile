@@ -17,13 +17,41 @@ class UCIProtocol {
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
-  final _evalController = StreamController<EvalResult>.broadcast();
-  final _engineNameCompleter = Completer<String>();
+  StreamController<EvalResult> _evalController = StreamController<EvalResult>.broadcast();
+  Completer<String> _engineNameCompleter = Completer<String>();
   final _isComputing = ValueNotifier(false);
 
   Stream<EvalResult> get evalStream => _evalController.stream;
 
   Future<String> get engineName => _engineNameCompleter.future;
+
+  /// Resets the protocol state for a new engine session.
+  ///
+  /// This should be called when the engine is restarted to ensure
+  /// the protocol can capture the new engine's name and state.
+  void reset() {
+    _work = null;
+    _nextWork = null;
+    _stopRequested = false;
+    _send = null;
+    _currentEval = null;
+    _expectedPvs = 1;
+
+    // Reset options to defaults so they get sent to the new engine instance
+    _options.clear();
+    _options['Threads'] = '1';
+    _options['Hash'] = '16';
+    _options['MultiPV'] = '1';
+
+    // Create new completer for engine name (old one may be completed)
+    _engineNameCompleter = Completer<String>();
+
+    // Create new eval controller (old one may have listeners)
+    if (!_evalController.isClosed) {
+      _evalController.close();
+    }
+    _evalController = StreamController<EvalResult>.broadcast();
+  }
 
   Work? _work;
   Work? _nextWork;

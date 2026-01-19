@@ -190,9 +190,13 @@ class EvaluationService {
   Future<void> _initEngine(StockfishFlavor flavor) async {
     try {
       _stdoutSubscription?.cancel();
+      _evalSubscription?.cancel();
 
       await _stockfish.quit();
       if (_isDisposed) return;
+
+      // Reset the protocol for the new engine session
+      _protocol.reset();
 
       // Check NNUE files for latest flavor
       String? smallNetPath;
