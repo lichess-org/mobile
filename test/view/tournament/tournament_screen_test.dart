@@ -1420,7 +1420,7 @@ void main() {
       await tester.pump();
 
       // Verify error message appears
-      expect(find.text('Incorrect entry code'), findsOneWidget);
+      expect(find.text('Incorrect entry code.'), findsOneWidget);
 
       // Verify still not joined
       expect(find.text('Join'), findsOneWidget);
