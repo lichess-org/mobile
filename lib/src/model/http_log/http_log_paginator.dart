@@ -1,21 +1,25 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'http_log_paginator.freezed.dart';
-part 'http_log_paginator.g.dart';
 
 /// The number of HTTP logs to fetch per page.
 const _pageSize = 20;
+
+/// A provider for [HttpLogPaginator].
+final httpLogPaginatorProvider = AsyncNotifierProvider.autoDispose<HttpLogPaginator, HttpLogState>(
+  HttpLogPaginator.new,
+  name: 'HttpLogPaginatorProvider',
+);
 
 /// A Riverpod controller for managing HTTP logs.
 ///
 /// The `HttpLogController` class is responsible for fetching and managing
 /// paginated HTTP log entries from the storage. It uses a throttler to limit
 /// the rate of fetching new pages.
-@riverpod
-class HttpLogPaginator extends _$HttpLogPaginator {
+class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   @override
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
@@ -68,9 +72,8 @@ sealed class HttpLogState with _$HttpLogState {
   const factory HttpLogState({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;
 
   bool get initialized => data.isNotEmpty;
-  List<HttpLogEntry> get logs =>
-      data.expand((e) => e.valueOrNull?.items ?? <HttpLogEntry>[]).toList();
-  int? get nextPage => data.lastOrNull?.valueOrNull?.next;
+  List<HttpLogEntry> get logs => data.expand((e) => e.value?.items ?? <HttpLogEntry>[]).toList();
+  int? get nextPage => data.lastOrNull?.value?.next;
   bool get hasMore => initialized && nextPage != null;
   bool get isLoading => data.lastOrNull?.isLoading == true;
   bool get isDeleteButtonVisible => logs.isNotEmpty;

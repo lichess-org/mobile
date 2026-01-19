@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -38,9 +38,9 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return IList();
-  return ref.read(userRepositoryProvider).getActivity(session.user.id);
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) return IList();
+  return ref.read(userRepositoryProvider).getActivity(authUser.user.id);
 }, name: 'userActivityProvider');
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
@@ -86,7 +86,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           }
           final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
-          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
           return HapticRefreshIndicator(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight

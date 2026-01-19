@@ -73,7 +73,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi luôn bổ sung thêm các tính năng.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
+  String get mobileNotFollowingAnyUser => 'Bạn không theo dõi bất kỳ người dùng nào.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -454,7 +454,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaIsNotRated => 'Giải đấu này *không* xếp hạng và sẽ *không* ảnh hưởng đến hệ số của bạn.';
 
   @override
-  String get arenaSomeRated => 'Ngáo à';
+  String get arenaSomeRated => 'Một số giải đấu có xếp hạng và sẽ ảnh hưởng đến hệ số của bạn.';
 
   @override
   String get arenaHowAreScoresCalculated => 'Điểm được tính thế nào?';
@@ -769,7 +769,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastFederation => 'Liên đoàn';
 
   @override
-  String get broadcastAgeThisYear => 'Tuổi năm nay';
+  String get broadcastAge => 'Tuổi';
 
   @override
   String get broadcastUnrated => 'Chưa xếp hạng';
@@ -883,6 +883,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Được tạo và quản lý bởi $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Vòng $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Giữ nguyên tên mặc định sẽ tự động dịch sang mọi ngôn ngữ khác.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1353,6 +1361,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Giải đấu sắp bắt đầu';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Những phát sóng bạn đã đăng ký theo dõi';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Thời gian đánh cờ qua thư sắp hết';
 
   @override
@@ -1372,6 +1383,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Bịt mắt';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Hiện ở bên trái trên thiết bị di động';
 
   @override
   String get puzzlePuzzles => 'Câu đố';
@@ -1396,6 +1410,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Chiếu hết';
+
+  @override
+  String get puzzleMateThemes => 'Chủ đề chiếu hết';
 
   @override
   String get puzzleGoals => 'Mục tiêu';
@@ -1693,6 +1710,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Chiếu hết trên hàng cuối, khi vua bị mắc kẹt bởi chính quân của nó.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Chiếu hết kiểu Nỏ thần';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Một tượng đưa ra nước chiếu hết, trong khi một hậu chặn các ô thoát còn lại';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Chiếu hết kiểu Chú lợn mù';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Hai quân xe cùng nhau chiếu hết vua trong một vùng có kích thước 2 x 2 ô vuông.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Cờ tàn tượng';
 
   @override
@@ -1702,7 +1731,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Chiếu hết kiểu Boden';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết một quân vua bị kẹt bởi đồng đội của nó.';
+  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết quân vua bị kẹt bởi đồng đội của nó.';
 
   @override
   String get puzzleThemeCastling => 'Nhập thành';
@@ -1717,10 +1746,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Loại bỏ một quân cực kỳ quan trọng đối với việc bảo vệ một quân cờ khác, khiến cho quân cờ hiện không được bảo vệ có thể bị ăn vào một nước sau đó.';
 
   @override
+  String get puzzleThemeCornerMate => 'Góc chiếu hết chết chóc';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Kìm hãm vua ở góc bằng cách sử dụng một xe hoặc hậu và một mã để chiếu hết.';
+
+  @override
   String get puzzleThemeCrushing => 'Áp đảo';
 
   @override
   String get puzzleThemeCrushingDescription => 'Phát hiện sai lầm nghiêm trọng của đối phương để giành được lợi thế áp đảo. (đánh giá ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Đòn chiếu mở';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Đi một quân để lộ ra quân cờ tấn công đang ẩn núp, điều này thường dẫn đến lợi thế quyết định.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Chiếu hết bằng cặp Tượng';
@@ -1828,10 +1869,28 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Một quân xe ở cạnh vua địch và được hỗ trợ bởi quân hậu cũng chặn các ô trốn thoát của vua địch. Xe và hậu bắt vua địch trong ô \"kill box\" chết chóc 3 x 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Chiếu hết kiểu Pillsbury';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Quân xe chiếu hết, trong khi quân tượng giúp khống chế nước đi đó.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Chiếu hết kiểu Morphy';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Dùng quân tượng để chiếu vua, trong khi quân xe giúp kìm hãm vua.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Chiếu hết kiểu tam giác';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Quân hậu và quân xe, cách quân vua của đối phương một ô, nằm trên cùng một hàng, cách nhau một ô, tạo thành một hình tam giác.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Chiếu hết kiểu Vukovic';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'Một quân xe và hiệp sĩ hợp tác với vua. Quân xe giao quân trong khi được hỗ trợ bởi quân thứ ba, và quân mã được sử dụng để chặn các ô thoát hiểm của vua.';
+  String get puzzleThemeVukovicMateDescription => 'Một quân xe và mã hợp tác với vua. Quân xe thực hiện chiếu hết trong khi được hỗ trợ bởi quân thứ ba, và quân mã được sử dụng để chặn các ô thoát hiểm của vua.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Tàn cuộc Mã';
@@ -1910,6 +1969,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Chiến thuật trong phần mở đầu của ván cờ.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Chiếu hết kiểu Opera';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Dùng quân xe chiếu vua và dùng quân tượng để bảo vệ quân xe.';
 
   @override
   String get puzzleThemePawnEndgame => 'Tàn cuộc Tốt';
@@ -2073,7 +2138,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get gameMode => 'Chế độ chơi';
 
   @override
-  String get createLobbyGame => 'Tạo sảnh ván đấu';
+  String get createLobbyGame => 'Tạo ván đấu tại sảnh';
 
   @override
   String get youPlayAs => 'Bạn cầm quân';
@@ -3869,6 +3934,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get togglePositionAnnotations => 'Chuyển đổi chú thích thế cờ';
 
   @override
+  String get toggleObservationAnnotations => 'Chuyển đổi chú thích quan sát';
+
+  @override
   String get variationArrowsInfo => 'Mũi tên của biến cho phép bạn điều hướng mà không cần sử dụng danh sách nước đi.';
 
   @override
@@ -4406,6 +4474,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get edit => 'Chỉnh sửa';
 
   @override
+  String get ultraBullet => 'Cờ siêu đạn';
+
+  @override
   String get bullet => 'Cờ đạn';
 
   @override
@@ -4759,6 +4830,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get tags => 'Thẻ';
 
   @override
+  String get enPassant => 'Bắt tốt qua đường';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4923,7 +4997,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count cấu đố',
+      other: '$count câu đố',
     );
     return '$_temp0';
   }
@@ -5104,16 +5178,6 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Đang theo dõi $count người',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ít hơn $count phút',
     );
     return '$_temp0';
   }
@@ -5998,6 +6062,26 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Dán PGN ở đây, tối đa $count ván',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Trận chiến giữa $count đội',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'mỗi đội lấy $count người dẫn đầu',
     );
     return '$_temp0';
   }

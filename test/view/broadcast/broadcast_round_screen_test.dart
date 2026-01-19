@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -21,9 +20,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_finishedBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -50,9 +51,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastRoundScreenLoading(roundId: BroadcastRoundId('S5VCwuVn')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_finishedBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -86,9 +89,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_finishedBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -117,9 +122,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _liveBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -145,9 +152,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _liveBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -193,9 +202,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _upcomingBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_upcomingBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_upcomingBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -207,8 +218,8 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      // Load the overview
-      await mockNetworkImages(() => tester.pump());
+      // Load the round
+      await tester.pump();
 
       final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
       final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
@@ -232,9 +243,11 @@ void main() {
           broadcast: _liveBroadcast,
           initialTab: BroadcastRoundTab.players,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -265,9 +278,11 @@ void main() {
           broadcast: _liveBroadcast,
           initialTab: BroadcastRoundTab.players,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -312,9 +327,11 @@ void main() {
           broadcast: _liveBroadcast,
           initialTab: BroadcastRoundTab.players,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -334,7 +351,7 @@ void main() {
       // Load the players
       await tester.pump();
 
-      await tester.tap(find.text('Elo'));
+      await tester.tap(find.text('Player (Elo)'));
       await tester.pump();
 
       final playersList = tester
@@ -344,57 +361,7 @@ void main() {
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
 
-      await tester.tap(find.text('Elo'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
-
-    testWidgets('Test player sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Player'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Player'));
+      await tester.tap(find.text('Player (Elo)'));
       await tester.pump();
 
       final playersListReversed = tester
@@ -412,11 +379,11 @@ void main() {
           broadcast: _liveBroadcast,
           initialTab: BroadcastRoundTab.players,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith(
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
             (ref) => LichessClient(_liveBroadcastClient(withPlayerScores: false), ref),
           ),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -462,9 +429,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _liveTeamBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveTeamBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveTeamBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);
@@ -489,9 +458,11 @@ void main() {
           broadcast: _liveTeamBroadcast,
           initialTab: BroadcastRoundTab.teams,
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveTeamBroadcastClient, ref)),
-        ],
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveTeamBroadcastClient, ref),
+          ),
+        },
       );
 
       await tester.pumpWidget(app);

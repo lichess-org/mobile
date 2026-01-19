@@ -789,7 +789,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastFederation => 'Verband';
 
   @override
-  String get broadcastAgeThisYear => 'Alter in diesem Jahr';
+  String get broadcastAge => 'Alter';
 
   @override
   String get broadcastUnrated => 'Ungewertet';
@@ -903,6 +903,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Erstellt und verwaltet von $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Runde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Wenn der Standardname beibehalten wird, wird er automatisch in alle anderen Sprachen übersetzt.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1375,6 +1383,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier beginnt bald';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Übertragungen, die du abonniert hast';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Zeit in Fernschachpartie neigt sich dem Ende zu';
 
   @override
@@ -1394,6 +1405,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindschach';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Auf der linken Seite auf mobilen Geräten anzeigen';
 
   @override
   String get puzzlePuzzles => 'Taktikaufgaben';
@@ -1418,6 +1432,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Matts';
+
+  @override
+  String get puzzleMateThemes => 'Matt-Themen';
 
   @override
   String get puzzleGoals => 'Ziele';
@@ -1721,6 +1738,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Setze den König auf der Grundreihe matt, wenn er dort durch seine eigenen Figuren blockiert wird.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra-Matt';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Ein Läufer setzt Matt während die Dame die verbleibenden Fluchtfelder blockiert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blinder-Säue-Matt';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türme arbeiten zusammen, um den König auf einer Fläche von 2x2 Feldern Matt zu setzen.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Läuferendspiel';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ein Verteidiger einer Figur (oder eines Feldes) wird geschlagen, wodurch das eigentliche Ziel die Deckung verliert.';
 
   @override
+  String get puzzleThemeCornerMate => 'Eck-Matt';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Sperrt den König in einer Ecke des Bretts ein, um dann mit Turm oder Dame und einem Springer Matt zu setzen.';
+
+  @override
   String get puzzleThemeCrushing => 'Vernichtend';
 
   @override
   String get puzzleThemeCrushingDescription => 'Finde den gegnerischen Patzer, um einen vernichtenden Vorteil zu erhalten. (Bewertung ≥ 600 Hundertstel-Bauern)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Abzugsschach';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Bewege eine Figur, um mit einer anderen versteckten Figur ein Schach zu gebe, was oft zu entscheidendem Vorteil führt.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Läuferpaarmatt';
@@ -1856,6 +1897,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburys Matt';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Der Turm setzt Matt, während der Läufer hilft, ihn zu beschränken.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphys Matt';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Benutze den Läufer, um den König ins Schach zu stellen, während dein Turm ihn weiter beschränkt.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Dreiecks-Matt';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Die Dame und der Turm bilden auf derselben Reihe oder Linie und im Abstand von einem Feld mit dem gegnerischen König ein Dreieck.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic-Matt';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Eine Taktik in der ersten Phase der Partie.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opern Matt';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Stelle den König mithilfe deines Turms ins Schach und benutze einen Läufer, um den Turm zu verteidigen.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bauernendspiel';
@@ -3897,6 +3962,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get togglePositionAnnotations => 'Positionsanmerkungen umschalten';
 
   @override
+  String get toggleObservationAnnotations => 'Stellungsanmerkungen umschalten';
+
+  @override
   String get variationArrowsInfo => 'Mit Varianten-Pfeilen navigierst du durch die Zugliste.';
 
   @override
@@ -4028,7 +4096,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analysisShapesHowTo => 'Drücke Shift+Mausklick oder Rechtsklick, um Kreise und Pfeile auf dem Brett zu zeichnen.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Strg oder Shift = rot; Befehl, Alt oder Meta = Blau; von beiden eine Taste = Gelb.';
 
   @override
   String get letOtherPlayersMessageYou => 'Erlaube anderen Spielern dich zu kontaktieren';
@@ -4434,6 +4502,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get edit => 'Bearbeiten';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4785,6 +4856,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tags => 'Schlagwörter';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5167,17 +5241,6 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: '$count folgend',
       one: '$count folgend',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Weniger als $count Minuten',
-      one: 'Weniger als $count Minute',
     );
     return '$_temp0';
   }
@@ -6077,6 +6140,28 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: 'Füge dein PGN Text hier ein, bis zu $count Partien',
       one: 'Füge deinen PGN Text hier ein, bis zu $count Partie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Kampf von $count Teams',
+      one: 'Kampf von $count Teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Führende pro Team',
+      one: '$count Führende pro Team',
     );
     return '$_temp0';
   }

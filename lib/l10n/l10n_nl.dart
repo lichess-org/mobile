@@ -73,7 +73,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Houd er rekening mee dat niet alle functies van de oude app of website beschikbaar zijn, maar we voegen voortdurend functies toe.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'U volgt geen gebruiker.';
+  String get mobileNotFollowingAnyUser => 'Je volgt geen gebruikers.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastFederation => 'Federatie';
 
   @override
-  String get broadcastAgeThisYear => 'Leeftijd dit jaar';
+  String get broadcastAge => 'Leeftijd';
 
   @override
   String get broadcastUnrated => 'Zonder rating';
@@ -903,6 +903,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Aangemaakt en beheerd door $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Ronde $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Laat de standaardnaam intact voor automatische vertaling naar alle andere talen.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1375,6 +1383,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
 
   @override
@@ -1394,6 +1405,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Geblinddoekt';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Puzzels';
@@ -1418,6 +1432,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Schaakmat';
+
+  @override
+  String get puzzleMateThemes => 'Matsituaties';
 
   @override
   String get puzzleGoals => 'Doelen';
@@ -1508,7 +1525,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get puzzleHidden => 'verborgen';
+  String get puzzleHidden => 'Verborgen';
 
   @override
   String puzzleFromGameLink(String param) {
@@ -1721,6 +1738,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Kruisboogmat';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Een loper zet mat waarbij een dame de resterende vluchtvelden blokkeert';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind zwijn-mat';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Twee torens werken samen om de koning mat te zetten in een 2x2-vierkant.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lopereindspel';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
 
   @override
+  String get puzzleThemeCornerMate => 'Mat in een hoek';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Dring de koning met behulp van een toren of dame en een paard een hoek in om hem schaakmat te zetten.';
+
+  @override
   String get puzzleThemeCrushing => 'Verpletteren';
 
   @override
   String get puzzleThemeCrushingDescription => 'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Aftrekschaak';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Een stuk verplaatsen om schaak te geven met een verborgen aanvalsstuk, wat vaak leidt tot beslissend voordeel.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat met twee lopers';
@@ -1856,6 +1897,24 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mat';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'De toren geeft mat, terwijl de loper helpt met opsluiten.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mat';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Gebruik de loper om de koning te mat te zetten, terwijl je toren helpt om hem te de pas af te snijden.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Driehoeksmat';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'De toren en koningin, een vakje verwijderd van de vijandelijke koning, staan op dezelfde rij of kolom, gescheiden door een vakje, en vormen samen een driehoek.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic-mat';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Tactiek in de eerste fase van de partij.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Operamat';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Zet de koning mat met een toren en gebruik een loper om de toren te verdedigen.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pionneneindspel';
@@ -3885,16 +3950,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get keyNextBranch => 'Volgende vertakking';
 
   @override
-  String get toggleVariationArrows => 'Schakel variatiepijlen in/uit';
+  String get toggleVariationArrows => 'Variatiepijlen in/uitschakelen';
 
   @override
   String get cyclePreviousOrNextVariation => 'Bekijk vorige/volgende variant';
 
   @override
-  String get toggleGlyphAnnotations => 'Zet glyph-aantekeningen aan of uit';
+  String get toggleGlyphAnnotations => 'Zetaantekeningen in-/uitschakelen';
 
   @override
-  String get togglePositionAnnotations => 'Zet stellingsaantekeningen aan of uit';
+  String get togglePositionAnnotations => 'Stellingsaantekeningen in-/uitschakelen';
+
+  @override
+  String get toggleObservationAnnotations => 'Observatie-aantekeningen in-/uitschakelen';
 
   @override
   String get variationArrowsInfo => 'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
@@ -4434,6 +4502,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get edit => 'Wijzigen';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4785,6 +4856,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get tags => 'Labels';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5167,17 +5241,6 @@ class AppLocalizationsNl extends AppLocalizations {
       locale: localeName,
       other: '$count volgend',
       one: '$count volgend',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Minder dan $count minuten',
-      one: 'Minder dan $count minuut',
     );
     return '$_temp0';
   }
@@ -5603,7 +5666,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyNext => 'Volgende';
 
   @override
-  String get studyShareAndExport => 'Deel & exporteer';
+  String get studyShareAndExport => 'Delen & exporteren';
 
   @override
   String get studyCloneStudy => 'Kopiëren';
@@ -6077,6 +6140,28 @@ class AppLocalizationsNl extends AppLocalizations {
       locale: localeName,
       other: 'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
       one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Wedstrijd met $count teams',
+      one: 'Wedstrijd met $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leiders per team',
+      one: 'Eén leider per team',
     );
     return '$_temp0';
   }

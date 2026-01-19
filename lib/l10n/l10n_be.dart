@@ -827,7 +827,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastFederation => 'Федэрацыя';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -941,6 +941,14 @@ class AppLocalizationsBe extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1413,6 +1421,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Час зыходзіць у гульні па перепісцы';
 
   @override
@@ -1432,6 +1443,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Задачы';
@@ -1456,6 +1470,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Маты';
+
+  @override
+  String get puzzleMateThemes => 'Mate themes';
 
   @override
   String get puzzleGoals => 'Мэты';
@@ -1769,6 +1786,18 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Пастаўце мат каралю на хатняй гарызанталі, калі ён заблакаваны сваімі фігурамі.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слановы эндшпіль';
 
   @override
@@ -1793,10 +1822,22 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Адцягненне або ўзяцце фігуры, якая з\'яўляца крытычнай для абароны іншай фігуры, што дазваляе ўзяце неабароненую фігуру наступным ходам.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Зруйнаванне';
 
   @override
   String get puzzleThemeCrushingDescription => 'Знайдзіце позех суперніка і атрымайце разгромную перавагу. (ацэнка ≥ 600сп)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Мат двума сланамі';
@@ -1904,6 +1945,24 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
 
   @override
@@ -1986,6 +2045,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактыка на першым этапе гульні.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пешачны эндшпіль';
@@ -2137,22 +2202,22 @@ class AppLocalizationsBe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Параметры гульні';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Запрасіць сябра';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Гуляць з камп\'ютарам';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Рэжым гульні';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Стварыць запыт на гульню';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Вы гуляеце за';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Выкарыстайце гэтую спасылку каб запрасіць кагосьці да гульні';
@@ -2217,7 +2282,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get createAGame => 'Стварыць гульню';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Стварыць гульню';
 
   @override
   String get whiteIsVictorious => 'Белыя перамаглі';
@@ -2357,7 +2422,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get collapseVariations => 'Ачысціць варыянты';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Разгарнуць варыянты';
 
   @override
   String get forceVariation => 'Прасунуць варыянт';
@@ -2366,7 +2431,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get copyVariationPgn => 'Скап\'яваць варыянт у фармаце PGN';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Скапіраваць PGN асноўнай лініі';
 
   @override
   String get move => 'Ход';
@@ -3945,6 +4010,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4482,6 +4550,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get edit => 'Рэдагаваць';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4833,6 +4904,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5281,19 +5355,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'падпісаны на $count гульцоў',
       few: 'падпісаны на $count гульцоў',
       one: 'падпісаны на $count гульца',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Менш за $count хвілін',
-      many: 'Менш за $count хвілін',
-      few: 'Менш за $count хвіліны',
-      one: 'Менш за $count хвіліну',
     );
     return '$_temp0';
   }
@@ -6223,6 +6284,28 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
       few: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульні',
       one: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульню',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

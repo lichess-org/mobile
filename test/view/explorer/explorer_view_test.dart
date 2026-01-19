@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -39,7 +40,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -64,7 +69,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -89,7 +98,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -112,7 +125,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -142,7 +159,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 
@@ -165,7 +186,11 @@ void main() {
             isComputerAnalysisAllowed: true,
           ),
         ),
-        overrides: [defaultClientProvider.overrideWithValue(mockClient)],
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
       );
       await tester.pumpWidget(app);
 

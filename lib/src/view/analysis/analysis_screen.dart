@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -176,14 +176,8 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (asyncState.valueOrNull?.isEngineAvailable(enginePrefs) == true)
-        EngineDepth(
-          savedEval: asyncState.valueOrNull?.currentNode.eval,
-          goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
-        ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
       _AnalysisMenu(options: widget.options, state: asyncState),
     ];
@@ -224,10 +218,17 @@ class _AnalysisMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showEngineLines = ref.watch(
+      analysisPreferencesProvider.select((prefs) => prefs.showEngineLines),
+    );
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
         ContextMenuAction(
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
@@ -235,9 +236,12 @@ class _AnalysisMenu extends ConsumerWidget {
             context,
           ).push(AnalysisSettingsScreen.buildRoute(context, options: options)),
         ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ContextMenuAction(
+          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
+          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
+          onPressed: () {
+            ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+          },
         ),
         ...(switch (state) {
           AsyncData(:final value) =>
@@ -346,36 +350,15 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
-        smallBoard: analysisPrefs.smallBoard,
         tabController: controller,
         pov: pov,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
         boardHeader: boardHeader,
         boardFooter: boardFooter,
-        engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-            ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                        params: analysisState.engineGaugeParams(enginePrefs),
-                        engineLinesState: isEngineAvailable && numEvalLines > 0
-                            ? analysisPrefs.showEngineLines
-                                  ? EngineLinesShowState.expanded
-                                  : EngineLinesShowState.collapsed
-                            : null,
-                        onTap: () {
-                          ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                        },
-                      )
-                    : Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                        child: EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.vertical,
-                          params: analysisState.engineGaugeParams(enginePrefs),
-                        ),
-                      );
+        engineGaugeBuilder: showEvaluationGauge && analysisState.hasAvailableEval(enginePrefs)
+            ? (context) {
+                return EngineGauge(params: analysisState.engineGaugeParams(enginePrefs));
               }
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
@@ -428,7 +411,6 @@ class _PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: kAnalysisBoardHeaderOrFooterHeight,
-      color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
@@ -493,7 +475,6 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
     final analysisState = ref.watch(ctrlProvider).requireValue;
-    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
       children: [
@@ -511,8 +492,8 @@ class _BottomBar extends ConsumerWidget {
               return FutureBuilder(
                 future: toggleFuture,
                 builder: (context, snapshot) {
-                  return BottomBarButton(
-                    label: context.l10n.toggleLocalEvaluation,
+                  return EngineButton(
+                    savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&
                             snapshot.connectionState != ConnectionState.waiting
@@ -525,8 +506,7 @@ class _BottomBar extends ConsumerWidget {
                             }
                           }
                         : null,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: analysisState.isEngineAvailable(evalPrefs),
+                    goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
                   );
                 },
               );
@@ -565,14 +545,21 @@ class _BottomBar extends ConsumerWidget {
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
     final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final session = ref.read(authSessionProvider);
-    final mySide = session != null
-        ? analysisState.archivedGame?.playerSideOf(session.user.id)
+    final authUser = ref.read(authControllerProvider);
+    final mySide = authUser != null
+        ? analysisState.archivedGame?.playerSideOf(authUser.user.id)
         : null;
 
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        if (options case Standalone())
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.clearSavedMoves),
+            onPressed: () => ref
+                .read(analysisControllerProvider(options).notifier)
+                .clearSavedStandaloneAnalysis(),
+          ),
         if (analysisState.isEngineAvailable(evalPrefs))
           BottomSheetAction(
             makeLabel: (context) => Text(

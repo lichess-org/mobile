@@ -1,13 +1,17 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_preferences.freezed.dart';
 part 'study_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyPrefs> {
+final studyPreferencesProvider = NotifierProvider<StudyPreferencesNotifier, StudyPrefs>(
+  StudyPreferencesNotifier.new,
+  name: 'StudyPreferencesProvider',
+);
+
+class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStorage<StudyPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.study;
@@ -51,10 +55,6 @@ class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyP
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -69,7 +69,6 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _StudyPrefs;
 
   static const defaults = StudyPrefs(
@@ -80,7 +79,6 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
   );
 
   factory StudyPrefs.fromJson(Map<String, dynamic> json) {

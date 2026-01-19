@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -33,17 +34,16 @@ class AppInitializationScreen extends ConsumerWidget {
       }
     });
 
-    return ref
-        .watch(preloadedDataProvider)
-        .when(
-          data: (_) => const Application(),
-          // loading screen is handled by the native splash screen
-          loading: () => const SizedBox.shrink(),
-          error: (err, st) {
-            debugPrint('SEVERE: [App] could not initialize app; $err\n$st');
-            return const SizedBox.shrink();
-          },
-        );
+    switch (ref.watch(preloadedDataProvider)) {
+      case AsyncData():
+        return const Application();
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [App] could not initialize app; $error\n$stackTrace');
+        return const SizedBox.shrink();
+      case _:
+        // loading screen is handled by the native splash screen
+        return const SizedBox.shrink();
+    }
   }
 }
 
@@ -65,6 +65,7 @@ class _AppState extends ConsumerState<Application> {
   @override
   void initState() {
     // Start services
+    ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();
     ref.read(challengeServiceProvider).start();

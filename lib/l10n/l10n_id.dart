@@ -770,7 +770,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -884,6 +884,14 @@ class AppLocalizationsId extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1356,6 +1364,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnamen akan segera dimulai';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Waktu korespondensi akan habis';
 
   @override
@@ -1375,6 +1386,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Menutup mata';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Teka-teki';
@@ -1399,6 +1413,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Mat';
+
+  @override
+  String get puzzleMateThemes => 'Mate themes';
 
   @override
   String get puzzleGoals => 'Tujuan';
@@ -1697,6 +1714,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
 
   @override
@@ -1721,10 +1750,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Memakan bidak yang sangat penting untuk menjaga bidak lain, memungkinkan bagian yang sekarang tidak terlindungi untuk ditangkap pada langkah berikut.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Hancurkan';
 
   @override
   String get puzzleThemeCrushingDescription => 'Temukan kesalahan lawan untuk mendapat keuntungan yang besar. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Skakmat gajah ganda';
@@ -1832,6 +1873,24 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Rokok berada di samping raja musuh dan didukung oleh ratu yang juga menghalangi petak pelarian raja. Benteng dan ratu menangkap raja musuh dalam \"kotak pembunuh\" 3x3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Teman Vukovic';
 
   @override
@@ -1914,6 +1973,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktik selama fase pertama permainan.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Babak akhir pion';
@@ -2068,19 +2133,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get gameSetup => 'Game setup';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Tantang teman';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Bermain lawan komputer';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Mode bermain';
 
   @override
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Anda bermain sebagai';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Undang yang lain dengan memberikan URL berikut';
@@ -2092,7 +2157,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get waitingForOpponent => 'Menunggu lawan';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Atau silakan lawan anda untuk melakukan scan pada kode QR ini';
+  String get orLetYourOpponentScanQrCode => 'Atau minta lawan Anda memindai kode QR ini';
 
   @override
   String get waiting => 'Menunggu';
@@ -2115,7 +2180,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get toggleTheChat => 'Ganti tampilan obrolan';
 
   @override
-  String get chat => 'Obrolan';
+  String get chat => 'Mengobrol';
 
   @override
   String get resign => 'Menyerah';
@@ -2133,10 +2198,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get black => 'Hitam';
 
   @override
-  String get asWhite => 'sebagai Putih';
+  String get asWhite => 'sebagai putih';
 
   @override
-  String get asBlack => 'sebagai Hitam';
+  String get asBlack => 'sebagai hitam';
 
   @override
   String get randomColor => 'Warna acak';
@@ -2145,7 +2210,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get createAGame => 'Mulai permainan baru';
 
   @override
-  String get createTheGame => 'BUAT GAMENYA';
+  String get createTheGame => 'Membuat permainannya';
 
   @override
   String get whiteIsVictorious => 'Putih menang';
@@ -2154,16 +2219,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get blackIsVictorious => 'Hitam menang';
 
   @override
-  String get youPlayTheWhitePieces => 'Anda bermain dipihak putih';
+  String get youPlayTheWhitePieces => 'Anda bermain sebagai putih';
 
   @override
-  String get youPlayTheBlackPieces => 'Anda bermain dipihak hitam';
+  String get youPlayTheBlackPieces => 'Anda bermain sebagai hitam';
 
   @override
   String get itsYourTurn => 'Giliran Anda!';
 
   @override
-  String get cheatDetected => 'Curang Terdeteksi';
+  String get cheatDetected => 'Kecurangan Terdeteksi';
 
   @override
   String get kingInTheCenter => 'Raja berada di tengah';
@@ -2178,7 +2243,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get variantEnding => 'Akhir sesuai aturan variasi';
 
   @override
-  String get newOpponent => 'Permainan yang baru';
+  String get newOpponent => 'Lawan baru';
 
   @override
   String get yourOpponentWantsToPlayANewGameWithYou => 'Lawan Anda ingin bermain lagi dengan Anda';
@@ -2193,7 +2258,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get blackPlays => 'Hitam melangkah';
 
   @override
-  String get opponentLeftChoices => 'Pemain lainnya telah meninggalkan permainan. Anda bisa klaim kemenangan, menyatakan remis, atau menunggunya.';
+  String get opponentLeftChoices => 'Lawan Anda meninggalkan permainan. Anda bisa klaim kemenangan, menyatakan remis, atau menunggunya.';
 
   @override
   String get forceResignation => 'Klaim menang';
@@ -2202,10 +2267,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get forceDraw => 'Nyatakan remis';
 
   @override
-  String get talkInChat => 'Silahkan mengobrol dengan sopan';
+  String get talkInChat => 'Silakan mengobrol dengan sopan!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Orang pertama yang datang ke URL ini akan bermain dengan Anda';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Orang pertama yang membuka URL ini akan bermain dengan Anda.';
 
   @override
   String get whiteResigned => 'Putih menyerah';
@@ -2226,19 +2291,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get blackDidntMove => 'Hitam tidak melangkah';
 
   @override
-  String get requestAComputerAnalysis => 'Minta analisa komputer';
+  String get requestAComputerAnalysis => 'Minta analisis komputer';
 
   @override
-  String get computerAnalysis => 'Analisa komputer';
+  String get computerAnalysis => 'Analisis komputer';
 
   @override
-  String get computerAnalysisAvailable => 'Analisa komputer tersedia';
+  String get computerAnalysisAvailable => 'Analisis komputer tersedia';
 
   @override
-  String get computerAnalysisDisabled => 'Analisa komputer tidak tersedia';
+  String get computerAnalysisDisabled => 'Analisis komputer nonaktif';
 
   @override
-  String get analysis => 'Papan analisa';
+  String get analysis => 'Papan analisis';
 
   @override
   String depthX(String param) {
@@ -2249,16 +2314,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get usingServerAnalysis => 'Menggunakan server analisa';
 
   @override
-  String get loadingEngine => 'Memuat...';
+  String get loadingEngine => 'Memuat komputer...';
 
   @override
-  String get calculatingMoves => 'Menghitung...';
+  String get calculatingMoves => 'Menghitung langkah...';
 
   @override
   String get engineFailed => 'Gagal memuat komputer';
 
   @override
-  String get cloudAnalysis => 'Analisis Cloud';
+  String get cloudAnalysis => 'Analisis cloud';
 
   @override
   String get goDeeper => 'Lihat lebih detail';
@@ -2484,7 +2549,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Bergabung $param';
   }
 
   @override
@@ -2856,7 +2921,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get exportGames => 'Ekspor Permainan';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filter rating';
 
   @override
   String get thisAccountViolatedTos => 'Akun ini melanggar Ketentuan Layanan Lichess';
@@ -3421,13 +3486,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get other => 'Lainnya';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Tempel link permainan yang bersangkutan dan jelaskan hal tidak benar yang dilakukan pengguna ini. Jangan hanya menulis \"ia curang\", tetapi beri tahu kami mengapa Anda bisa merasa demikian.';
 
   @override
   String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Laporan Anda akan diproses lebih cepat jika ditulis dalam bahasa Inggris.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Harap berikan setidaknya satu tautan ke permainan yang curang.';
@@ -3873,6 +3938,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
@@ -4256,7 +4324,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String xWasPlayed(String param) {
-    return '$param sedang diamainkan';
+    return '$param sedang dimainkan';
   }
 
   @override
@@ -4408,6 +4476,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get edit => 'Ubah';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Peluru';
@@ -4763,11 +4834,14 @@ class AppLocalizationsId extends AppLocalizations {
   String get tags => 'Tags';
 
   @override
+  String get enPassant => 'En passant';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Lawanmu telah meninggalkan permainan. Anda dapat mengklaim kemenangan dalam $count detik.',
+      other: 'Lawan Anda meninggalkan permainan. Anda dapat mengklaim kemenangan dalam $count detik.',
     );
     return '$_temp0';
   }
@@ -5108,16 +5182,6 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count mengikuti',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Kurang dari $count menit',
     );
     return '$_temp0';
   }
@@ -6002,6 +6066,28 @@ class AppLocalizationsId extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Tempelkan PGN kamu disini, lebih dari $count permainan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

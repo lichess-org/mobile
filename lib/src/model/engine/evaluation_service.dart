@@ -25,11 +25,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'evaluation_service.freezed.dart';
-part 'evaluation_service.g.dart';
 
 final _logger = Logger('EvaluationService');
 
@@ -47,8 +45,8 @@ typedef ShouldEmitEvalFilter = bool Function(Work work);
 
 typedef NNUEFiles = ({File bigNet, File smallNet});
 
-@Riverpod(keepAlive: true)
-EvaluationService evaluationService(Ref ref) {
+/// A provider for [EvaluationService].
+final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
   final service = EvaluationService(ref, maxMemory: maxMemory);
 
@@ -57,7 +55,7 @@ EvaluationService evaluationService(Ref ref) {
   });
 
   return service;
-}
+}, name: 'EvaluationServiceProvider');
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
@@ -67,10 +65,12 @@ class EvaluationService {
   final int maxMemory;
 
   Engine? _engine;
+  bool _engineInitInProgress = false;
 
   EvaluationContext? _context;
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
+  bool _nnueOperationInProgress = false;
 
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
   bool get isDownloadingNNUEFiles =>
@@ -106,23 +106,15 @@ class EvaluationService {
     return (bigNet: bigNetFile, smallNet: smallNetFile);
   }
 
-  Future<Engine> _engineFactory(ChessEnginePref pref) async {
+  Engine _engineFactory(ChessEnginePref pref) {
     // TODO support variants
     switch (pref) {
       case ChessEnginePref.sfLatest:
-        try {
-          if (!await checkNNUEFiles()) {
-            throw Exception('NNUE files not found or corrupted.');
-          }
-          return StockfishEngine(
-            StockfishFlavor.latestNoNNUE,
-            bigNetPath: nnueFiles.bigNet.path,
-            smallNetPath: nnueFiles.smallNet.path,
-          );
-        } catch (e, st) {
-          _logger.warning('Failed to load NNUE files: $e\n$st');
-          return StockfishEngine(StockfishFlavor.sf16);
-        }
+        return StockfishEngine(
+          StockfishFlavor.latestNoNNUE,
+          bigNetPath: nnueFiles.bigNet.path,
+          smallNetPath: nnueFiles.smallNet.path,
+        );
       case ChessEnginePref.sf16:
         return StockfishEngine(StockfishFlavor.sf16);
     }
@@ -139,7 +131,14 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = await _engineFactory(options.enginePref);
+    ChessEnginePref pref = options.enginePref;
+    if (options.enginePref == ChessEnginePref.sfLatest) {
+      if (!await checkNNUEFiles()) {
+        _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
+        pref = ChessEnginePref.sf16;
+      }
+    }
+    _engine = _engineFactory(pref);
     _engine!.state.addListener(() {
       _logger.fine('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -162,11 +161,21 @@ class EvaluationService {
     EvaluationContext context, {
     EvaluationOptions? initOptions,
   }) async {
+    if (_engineInitInProgress) {
+      _logger.warning('Engine initialization already in progress, ignoring request');
+      return;
+    }
+
     if (_engine == null ||
         _engine?.isDisposed == true ||
         _context != context ||
         options != initOptions) {
-      await _initEngine(context, initOptions: initOptions);
+      _engineInitInProgress = true;
+      try {
+        await _initEngine(context, initOptions: initOptions);
+      } finally {
+        _engineInitInProgress = false;
+      }
     }
   }
 
@@ -202,6 +211,9 @@ class EvaluationService {
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
     bool threatMode = false,
+
+    /// If true, forces the engine to restart the evaluation even if the saved eval has more search time.
+    bool forceRestart = false,
   }) {
     final context = _context;
     final engine = _engine;
@@ -235,11 +247,11 @@ class EvaluationService {
       steps: IList(steps),
     );
 
-    if (!work.threatMode) {
+    if (!work.threatMode && !forceRestart) {
       switch (work.evalCache) {
         // if the search time is greater than the current search time, don't evaluate again
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-        case CloudEval _:
+        case CloudEval _ when goDeeper == false:
           // stop the engine if running (can happen if last eval was launched with goDeeper = true)
           engine.stop();
           return null;
@@ -301,63 +313,75 @@ class EvaluationService {
   }
 
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
-    final (:bigNet, :smallNet) = nnueFiles;
-
-    // delete any existing nnue files before downloading
-    await deleteNNUEFiles();
-
-    Future<bool> doDownload() {
-      final client = _ref.read(defaultClientProvider);
-      return downloadFiles(
-        client,
-        [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
-        [bigNet, smallNet],
-        onProgress: (received, length) {
-          _nnueDownloadProgress.value = received / length;
-        },
-      );
+    if (_nnueOperationInProgress) {
+      _logger.warning('NNUE download already in progress, ignoring request');
+      return false;
     }
 
-    final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
-    final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
-    if (onWifi == false) {
-      if (inBackground) {
-        throw Exception('Cannot download in background on mobile data.');
-      } else {
-        final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) return false;
-        final isOk = await showAdaptiveDialog<bool>(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) {
-            return AlertDialog.adaptive(
-              content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
-              actions: [
-                PlatformDialogAction(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                ),
-                PlatformDialogAction(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              ],
-            );
+    _nnueOperationInProgress = true;
+
+    try {
+      final (:bigNet, :smallNet) = nnueFiles;
+
+      // delete any existing nnue files before downloading
+      await deleteNNUEFiles();
+
+      Future<bool> doDownload() {
+        final client = _ref.read(defaultClientProvider);
+        return downloadFiles(
+          client,
+          [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
+          [bigNet, smallNet],
+          onProgress: (received, length) {
+            _nnueDownloadProgress.value = received / length;
           },
         );
-        if (isOk == true) {
-          await doDownload();
-          return checkNNUEFiles();
-        } else {
-          return Future.value(false);
-        }
       }
-    } else {
-      return doDownload();
+
+      final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
+      final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
+      if (onWifi == false) {
+        if (inBackground) {
+          throw Exception('Cannot download in background on mobile data.');
+        } else {
+          final context = _ref.read(currentNavigatorKeyProvider).currentContext;
+          if (context == null || !context.mounted) return false;
+          final isOk = await showAdaptiveDialog<bool>(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) {
+              return AlertDialog.adaptive(
+                content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
+                actions: [
+                  PlatformDialogAction(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                  PlatformDialogAction(
+                    child: Text(context.l10n.cancel),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+          if (isOk == true) {
+            await doDownload();
+            return checkNNUEFiles();
+          } else {
+            return Future.value(false);
+          }
+        }
+      } else {
+        return doDownload();
+      }
+    } finally {
+      _nnueOperationInProgress = false;
+      _nnueDownloadProgress.value = 0.0;
     }
   }
 
@@ -387,8 +411,13 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that holds the state of the engine and the current evaluation.
-@riverpod
-class EngineEvaluation extends _$EngineEvaluation {
+final engineEvaluationProvider =
+    NotifierProvider.autoDispose<EngineEvaluation, EngineEvaluationState>(
+      EngineEvaluation.new,
+      name: 'EngineEvaluationProvider',
+    );
+
+class EngineEvaluation extends Notifier<EngineEvaluationState> {
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).state;

@@ -769,7 +769,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastFederation => '연맹';
 
   @override
-  String get broadcastAgeThisYear => '올해 나이';
+  String get broadcastAge => '나이';
 
   @override
   String get broadcastUnrated => '비레이팅';
@@ -883,6 +883,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return '$param로부터 생성되고 관리됨.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return '$param라운드';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => '기본 이름을 유지하면 자동으로 다른 모든 언어로 번역됩니다.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1353,6 +1361,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
 
   @override
+  String get preferencesNotifyBroadcasts => '구독한 방송';
+
+  @override
   String get preferencesNotifyTimeAlarm => '통신 대국 시간 곧 만료됨';
 
   @override
@@ -1372,6 +1383,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => '기물 숨기기';
+
+  @override
+  String get preferencesShowClockOnTheLeft => '모바일 기기에서 왼쪽에 보이기';
 
   @override
   String get puzzlePuzzles => '퍼즐';
@@ -1396,6 +1410,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleMates => '체크메이트';
+
+  @override
+  String get puzzleMateThemes => '메이트 테마';
 
   @override
   String get puzzleGoals => '목표';
@@ -1693,6 +1710,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => '킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.';
 
   @override
+  String get puzzleThemeBalestraMate => '발레스트라 메이트';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => '퀸이 남은 퇴로를 차단하고, 비숍이 체크메이트를 가합니다.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => '블라인드 스와인 메이트';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => '두 룩이 협력해서 2x2 사각형 영역 안에서 상대 킹을 메이트합니다.';
+
+  @override
   String get puzzleThemeBishopEndgame => '비숍 엔드게임';
 
   @override
@@ -1717,10 +1746,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 지켜지지 않는 기물을 잡을 수 있게 됩니다.';
 
   @override
+  String get puzzleThemeCornerMate => '코너 메이트';
+
+  @override
+  String get puzzleThemeCornerMateDescription => '킹을 룩이나 퀸으로 구석에 가두고, 나이트로 체크메이트를 가합니다.';
+
+  @override
   String get puzzleThemeCrushing => '박살내기';
 
   @override
   String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => '디스커버드 체크';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => '기물을 움직여서 가려졌던 공격 기물로 체크합니다. 많은 경우 결정적인 이점을 얻습니다.';
 
   @override
   String get puzzleThemeDoubleBishopMate => '2비숍 메이트';
@@ -1828,6 +1869,24 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
 
   @override
+  String get puzzleThemePillsburysMate => '필즈버리 메이트';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => '비숍이 킹을 가두어두는 동안 룩을 이용해 메이트를 합니다.';
+
+  @override
+  String get puzzleThemeMorphysMate => '모피 메이트';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => '룩으로 킹의 퇴로를 차단하고, 비숍으로 킹에게 체크합니다.';
+
+  @override
+  String get puzzleThemeTriangleMate => '트라이앵글 메이트';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => '퀸과 룩이 적 킹과 한 칸 떨어진 상태에서, 같은 랭크 혹은 파일에 있으며, 서로 한 칸을 사이에 두어 세 기물이 삼각형을 형성합니다.';
+
+  @override
   String get puzzleThemeVukovicMate => '부코비치 메이트';
 
   @override
@@ -1910,6 +1969,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => '게임 초반부에서의 전략';
+
+  @override
+  String get puzzleThemeOperaMate => '오페라 메이트';
+
+  @override
+  String get puzzleThemeOperaMateDescription => '룩으로 킹을 체크하고, 비숍이 룩이 있는 칸을 지킵니다.';
 
   @override
   String get puzzleThemePawnEndgame => '폰 엔드게임';
@@ -2052,7 +2117,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => '대소문자가 다르더라도, 똑같은 이름으로는 다시 회원가입할 수 없습니다.';
 
   @override
-  String get settingsCancelKeepAccount => '취소하고 계정 지키기';
+  String get settingsCancelKeepAccount => '취소하고 계정 유지하기';
 
   @override
   String get settingsCloseAccountAreYouSure => '정말로 탈퇴하시겠습니까?';
@@ -2348,7 +2413,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => '다음 포획 혹은 폰 수까지 남은 반수를 반올림후 나타낸 DTZ50\" 수치';
+  String get dtzWithRounding => '다음 포획, 폰 이동 혹은 체크메이트까지 남은 반수를 반올림 후 나타낸 DTZ50\" 수치';
 
   @override
   String get noGameFound => '대국을 찾을 수 없습니다';
@@ -2922,25 +2987,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String yourPerfRatingIsProvisional(String param) {
-    return '사용자의 임시 등급 $param는 임시적입니다.';
+    return '당신의 $param 레이팅은 임시 레이팅입니다';
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '귀하의 평가가 안정적이지 않기 때문에 평가 필터가 잠겨 있습니다. 정격 게임을 플레이하면 안정성이 향상됩니다.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '귀하의 레이팅이 안정적이지 않기 때문에 레이팅 필터가 잠겨 있습니다. 레이팅 반영 게임을 플레이하면 안정성이 향상됩니다.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return '귀하의 $param1 레이팅($param2)은 너무 높습니다.';
+    return '당신의 $param1 레이팅($param2)은 너무 높습니다.';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return '$param1 랭크가 너무 높습니다. ($param2)';
+    return '당신의 주간 최고 $param1 레이팅($param2)은 너무 높습니다.';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return '$param1 랭크가 너무 낮습니다. ($param2)';
+    return '당신의 $param1 레이팅($param2)은 너무 낮습니다.';
   }
 
   @override
@@ -3869,6 +3934,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get togglePositionAnnotations => '포지션 주석 켜기/끄기';
 
   @override
+  String get toggleObservationAnnotations => '의견 주석 켜기/끄기';
+
+  @override
   String get variationArrowsInfo => '변형 화살표를 사용하면 이동 목록을 사용하지 않고 탐색이 가능합니다.';
 
   @override
@@ -4189,7 +4257,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return '$param 귀하의 평가는';
+    return '당신의 레이팅: $param';
   }
 
   @override
@@ -4404,6 +4472,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get edit => '편집';
+
+  @override
+  String get ultraBullet => '울트라불릿';
 
   @override
   String get bullet => '불릿';
@@ -4621,7 +4692,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param 서식을 사용할 수 있습니다.';
   }
 
   @override
@@ -4759,6 +4830,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tags => '태그';
 
   @override
+  String get enPassant => '앙파상';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4853,7 +4927,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '대국 $count개',
+      other: '$count개의 대국',
     );
     return '$_temp0';
   }
@@ -5104,16 +5178,6 @@ class AppLocalizationsKo extends AppLocalizations {
       count,
       locale: localeName,
       other: '팔로잉 $count명',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 미만',
     );
     return '$_temp0';
   }
@@ -5998,6 +6062,26 @@ class AppLocalizationsKo extends AppLocalizations {
       count,
       locale: localeName,
       other: 'PGN을 여기에 붙여넣으세요. 최대 $count 게임까지 가능합니다.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count팀의 대국',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '팀 당 리더 $count명',
     );
     return '$_temp0';
   }

@@ -61,7 +61,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileHomeTab => 'Hasiera';
 
   @override
-  String get mobileLiveStreamers => 'Zuzeneko streamerrak';
+  String get mobileLiveStreamers => 'Zuzeneko esatariak';
 
   @override
   String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
@@ -789,7 +789,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastFederation => 'Federazioa';
 
   @override
-  String get broadcastAgeThisYear => 'Adina';
+  String get broadcastAge => 'Adina';
 
   @override
   String get broadcastUnrated => 'Ez du sailkapenik';
@@ -903,6 +903,14 @@ class AppLocalizationsEu extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return '$param erabiltzaileak sortu eta kudeatua.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return '$param. txanda';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Defektuzko izena uzten baduzu, hizkuntza guztietan ondo itzuliko da.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1354,7 +1362,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesCorrespondenceEmailNotification => 'Jaso posta elektronikoz zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
 
   @override
-  String get preferencesNotifyStreamStart => 'Streamerra zuzenean dago';
+  String get preferencesNotifyStreamStart => 'Esataria zuzenean dago';
 
   @override
   String get preferencesNotifyInboxMsg => 'Mezu berria postontzian';
@@ -1373,6 +1381,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get preferencesNotifyTournamentSoon => 'Txapelketa laster hasiko da';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Harpidetu zaren zuzenekoak';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Posta bidezko partidaren denbora amaitzen ari da';
@@ -1394,6 +1405,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Itsuka';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Erakutsi ezkerrean gailu mugikorretan';
 
   @override
   String get puzzlePuzzles => 'Ariketak';
@@ -1418,6 +1432,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Mateak';
+
+  @override
+  String get puzzleMateThemes => 'Mateen gaiak';
 
   @override
   String get puzzleGoals => 'Helburuak';
@@ -1721,6 +1738,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Bere piezekin trabatuta dagoenean erregeari bere errenkadan matea ematea.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra matea';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Damak ihes egiteko laukiak babesten dituenean alfilak mate ematen du';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Txerri itxuaren matea';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Bi gazteluk elkarrekin egiten dute lana 2x2 laukiko azalearen erregeari mate emateko.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Alfilen bukaera';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
 
   @override
+  String get puzzleThemeCornerMate => 'Bazterreko matea';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Baztertu erregea gaztelua edo dama eta zaldia erabiliz matea emateako.';
+
+  @override
   String get puzzleThemeCrushing => 'Zapalketa';
 
   @override
   String get puzzleThemeCrushingDescription => 'Akatsa aurkitu eta guztizko abantaila lortu. (ebaluazioa ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Ageriko xakea';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Mugitu pieza bat, atzean dagoen pieza batek aurkariari xake emateko. Normalean abantaila nabarmena lortzen da.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Bi alfilen matea';
@@ -1856,6 +1897,24 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Gaztelua aurkariaren erregearen ondoan dago damaren laguntzarekin, honek gainera erregearen ihes-laukiak babesten ditu. Gazteluak eta damak erregea 3x3ko \"hilkutxa\" baten harrapatu dezakete.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsburyren matea';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Gazteluak ematen du matea, alfilak erregea baztertuta mantentzen duen bitartean.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphyren matea';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Erabili alfila erregeari mate emateko gazteluak erregea baztertuta mantentzen duen artean.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Hirukiaren matea';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Dama eta gaztelua erregearengandik lauki batera daudela, errenkada edo zutabe berean, biak lauki batez banatuta, hiruki bat osatuz.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovicen matea';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Partidaren lehenengo faseko taktika.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera matea';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Eman xake erregeari gazteluarekine ta erabili alfila gaztelua defendatzeko.';
 
   @override
   String get puzzleThemePawnEndgame => 'Peoien finala';
@@ -3897,6 +3962,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get togglePositionAnnotations => 'Aktibatu/Desaktibatu posizioko oharrak';
 
   @override
+  String get toggleObservationAnnotations => 'Aktibatu/Desaktibatu oharrak';
+
+  @override
   String get variationArrowsInfo => 'Ingurabidearen geziek jokaldi zerrenda erabili gabe nabigatzen uzten dute.';
 
   @override
@@ -4434,6 +4502,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get edit => 'Aldatu';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4785,6 +4856,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get tags => 'Etiketak';
+
+  @override
+  String get enPassant => 'Igarotzean harrapatzea';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5172,17 +5246,6 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count minutu baino gutxiago',
-      one: '$count minutu baino gutxiago',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5463,7 +5526,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'Lichess streamerrak';
+  String get streamerLichessStreamers => 'Lichess esatariak';
 
   @override
   String get studyPrivate => 'Pribatua';
@@ -6077,6 +6140,28 @@ class AppLocalizationsEu extends AppLocalizations {
       locale: localeName,
       other: 'Itsatsi hemen zure PGNa, gehienez $count partida',
       one: 'Itsatsi hemen zure PGNa, gehienez partida $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count talderen arteko txapelketa',
+      one: 'Talde ${count}en arteko txapelketa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lider talde bakoitzeko',
+      one: 'Lider bat talde bakoitzeko',
     );
     return '$_temp0';
   }

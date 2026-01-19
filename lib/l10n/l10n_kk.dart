@@ -73,7 +73,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Сіз әзір ешкіге серік емессіз.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'Иә';
@@ -789,7 +789,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Unrated';
@@ -903,6 +903,14 @@ class AppLocalizationsKk extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1375,6 +1383,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Хат-хабарлы ойын уақыты бітер алдында';
 
   @override
@@ -1394,6 +1405,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Blindfold';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Жұмбақтар';
@@ -1418,6 +1432,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Маттар';
+
+  @override
+  String get puzzleMateThemes => 'Mate themes';
 
   @override
   String get puzzleGoals => 'Мақсаттар';
@@ -1721,6 +1738,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Өз сабында өз тастарымен қамалған патшаға мат.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Пiл ойынсоңы';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Бір тасты қорғап тұрған басқа тасты басып алсаңыз, әлгі тас қорғаусыз қалып, оны басып алуға жол ашылады.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Тас-талқан';
 
   @override
   String get puzzleThemeCrushingDescription => 'Жойқын артықшылыққа ие болу үшін қарсыластың қателігін анықтаңыз. (≥ 600 сп)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Пілдер маты';
@@ -1856,6 +1897,24 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Ойынның алғашқы кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Сарбаздар ойынсоңы';
@@ -3897,6 +3962,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get togglePositionAnnotations => 'Орналасым ескертпелерін көрсету';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Жүріс тізімін қолданбай-ақ аралаудың бір амалы - тармақ нұсқағыштар.';
 
   @override
@@ -4434,6 +4502,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get edit => 'Өзгерту';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Буллит';
 
   @override
@@ -4785,6 +4856,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get tags => 'Tags';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5167,17 +5241,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойыншыға серік',
       one: '$count ойыншыға серік',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count минутқа дейін',
-      one: '$count минутқа дейін',
     );
     return '$_temp0';
   }
@@ -6077,6 +6140,28 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'PGN мәтінін осында қойыңыз, $count ойынға дейін',
       one: 'PGN мәтінін осында қойыңыз, $count ойын ғана',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battle of $count teams',
+      one: 'Battle of $count teams',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leaders per team',
+      one: 'One leader per team',
     );
     return '$_temp0';
   }

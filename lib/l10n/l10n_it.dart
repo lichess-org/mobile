@@ -789,7 +789,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastFederation => 'Federazione';
 
   @override
-  String get broadcastAgeThisYear => 'Età quest\'anno';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Non classificato';
@@ -903,6 +903,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Creata e gestita da $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Turno $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Mantenendo il nome predefinito, questo verrà automaticamente tradotto in tutte le altre lingue.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1109,7 +1117,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Un valore inferiore indica che il punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
+    return 'Valori bassi indicano che un punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
   }
 
   @override
@@ -1375,6 +1383,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
 
   @override
@@ -1394,6 +1405,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Alla cieca';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -1418,6 +1432,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Matti';
+
+  @override
+  String get puzzleMateThemes => 'Matti tematici';
 
   @override
   String get puzzleGoals => 'Per obiettivo';
@@ -1721,6 +1738,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Matto della balestra';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'L\'alfiere dà scacco matto, mentre la regina blocca le caselle di fuga rimanenti';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Matto del maiale cieco';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Due torri collaborano per dare scacco al re in un\'area di 2 caselle per 2.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
 
   @override
+  String get puzzleThemeCornerMate => 'Matto nell\'angolo';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Restringi il re nell\'angolo usando una torre o una regina, e usa un cavallo per dare scacco matto.';
+
+  @override
   String get puzzleThemeCrushing => 'Posizione schiacciante';
 
   @override
   String get puzzleThemeCrushingDescription => 'Trova l\'errore grave del tuo avversario per ottenere un vantaggio schiacciante. (valutazione ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Scacco di scoperta';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Sposta un pezzo per rivelare uno scacco di un pezzo nascosto, che spesso porta a un vantaggio decisivo.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Matto dei due alfieri';
@@ -1856,6 +1897,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Matto triangolare';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'La regina e la torre, a una casella di distanza dal re avversario, sono sulla stessa riga o colonna, separati da una casella, formando un triangolo.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Scacco matto Vukovic';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Una tattica durante la prima fase della partita.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finale di pedoni';
@@ -3897,6 +3962,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get togglePositionAnnotations => 'Mostra le annotazioni della posizione';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'Le frecce delle varianti ti permettono di esplorare le mosse senza usare la lista.';
 
   @override
@@ -4434,6 +4502,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get edit => 'Modifica';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4785,6 +4856,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get tags => 'Tag';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5172,17 +5246,6 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Meno di $count minuti',
-      one: 'Meno di $count minuto',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5558,7 +5621,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyLike => 'Mi piace';
 
   @override
-  String get studyUnlike => 'Non mi Piace';
+  String get studyUnlike => 'Non mi piace più';
 
   @override
   String get studyNewTag => 'Nuovo tag';
@@ -6077,6 +6140,28 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Incolla qui i testi PGN, massimo $count partite',
       one: 'Incolla qui il testo PGN, massimo $count partita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Battaglia a $count squadre',
+      one: 'Battaglia ad $count squadra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count leader per squadra',
+      one: 'Un leader per squadra',
     );
     return '$_temp0';
   }

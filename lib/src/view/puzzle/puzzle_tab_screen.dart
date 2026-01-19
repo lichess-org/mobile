@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
@@ -43,7 +43,7 @@ class PuzzleTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedBatches = ref.watch(savedBatchesProvider).valueOrNull;
+    final savedBatches = ref.watch(savedBatchesProvider).value;
 
     if (savedBatches == null) {
       return const Center(child: CircularProgressIndicator.adaptive());
@@ -363,8 +363,8 @@ class _DashboardButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser == null) {
       return const SizedBox.shrink();
     }
     final onPressed = ref
@@ -389,8 +389,8 @@ class _HistoryButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) {
+    final authUser = ref.watch(authControllerProvider);
+    if (authUser == null) {
       return const SizedBox.shrink();
     }
     final onPressed = ref
@@ -425,7 +425,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -517,7 +517,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                       final service = await ref.read(puzzleServiceProvider.future);
                       if (context.mounted) {
                         service.deleteBatch(
-                          userId: ref.read(authSessionProvider)?.user.id,
+                          userId: ref.read(authControllerProvider)?.user.id,
                           angle: angle,
                         );
                       }
@@ -563,7 +563,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ],
                         PuzzleOpening(key: final openingKey) => [
                           Text(
-                            flatOpenings.valueOrNull
+                            flatOpenings.value
                                     ?.firstWhere(
                                       (o) => o.key == openingKey,
                                       orElse: () => (

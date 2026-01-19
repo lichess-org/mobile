@@ -17,7 +17,6 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Jonli translyatorlar</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ushbu sahifani ko\'rish uchun tizimga kirgan bo\'lishingiz kerak.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Natija yoʻq</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Siz hech qanday foydalanuvchini kuzatmayapsiz.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Xo\'p</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Shahmat taxtasini sozlash</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">“%s” bilan oʻyinchilar</string>
@@ -33,7 +32,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Masalalar</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Oxirgi qidiruvlar</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Xatchoʻpni oʻchirish</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server tahlili</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server tahlili</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Soatlar joylashuvi</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Aylana</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>

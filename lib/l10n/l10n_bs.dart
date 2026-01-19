@@ -809,7 +809,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastFederation => 'Federacija';
 
   @override
-  String get broadcastAgeThisYear => 'Starost ove godine';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Nema rejting';
@@ -923,6 +923,14 @@ class AppLocalizationsBs extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Kreirano od i njime upravlja $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Runda $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Zadržavanje zadanog imena će ga automatski prevesti na sve ostale jezike.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1397,6 +1405,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnir počinje uskoro';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Istječe vrijeme za dopisnu partiju';
 
   @override
@@ -1416,6 +1427,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Povez za oči';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -1440,6 +1454,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Matovi';
+
+  @override
+  String get puzzleMateThemes => 'Teme za prijatelje';
 
   @override
   String get puzzleGoals => 'Ciljevi';
@@ -1749,6 +1766,18 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Matirajte kralja na njegovom početnom redu kad je zarobljen od vlastitih figura.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra drug';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Lovac daje šah-mat, dok dama blokira preostala polja za bijeg.';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Slijepi svinjarski partner';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Dva topova se udružuju kako bi matirali kralja u području 2 puta 2 polja.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Lovačka završnica';
 
   @override
@@ -1773,10 +1802,22 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Uklanjanje figure koja je ključna za odbranu druge figure, što omogućuje da sada nebranjena figura bude uzeta u sljedećem potezu.';
 
   @override
+  String get puzzleThemeCornerMate => 'Suigrač iz ugla';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Ograničite kralja u ugao koristeći top ili damu i skakača kako biste se suočili sa šah-matom.';
+
+  @override
   String get puzzleThemeCrushing => 'Uništavanje';
 
   @override
   String get puzzleThemeCrushingDescription => 'Uočite protivnikov grubi previd kako biste stekli razornu prednost (≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Otkriveni ček';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Pomaknite figuru da biste otkrili šah skrivene napadačke figure, što često dovodi do odlučujuće prednosti.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Dvostruki biskupski mat';
@@ -1884,6 +1925,24 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Top se nalazi pored neprijateljskog kralja i podržava ga kraljica koja također blokira kraljeva polja za bijeg. Top i kraljica hvataju neprijateljskog kralja u \"ubistvenoj kutiji\" dimenzija 3 od 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Trokutni partner';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Kraljica i top, jedno polje udaljeni od protivničkog kralja, nalaze se u istom redu ili liniji, odvojene jednim poljem, formirajući trougao.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovićev mat';
 
   @override
@@ -1966,6 +2025,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Taktika u prvoj fazi igre.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pijunska krajnica';
@@ -2079,7 +2144,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeMix => 'Zdrava mješavina';
 
   @override
-  String get puzzleThemeMixDescription => 'Svega pomalo. Ne znate šta možete očekivati, pa ostajete spremni na sve! Baš kao u pravim partijama.';
+  String get puzzleThemeMixDescription => 'Pomalo od svega. Ne znate šta da očekujete, pa ste spremni na sve! Baš kao u pravim igrama.';
 
   @override
   String get puzzleThemePlayerGames => 'Igračke igre';
@@ -2117,22 +2182,22 @@ class AppLocalizationsBs extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ovaj račun je zatvoren.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Postavke igre';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Izazovi prijatelja';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Igraj protiv računara';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Način igre';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Kreiraj igru u lobiju';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Igrate kao';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Da bi ste pozvali nekoga na partiju, pošaljite ovaj link';
@@ -2908,7 +2973,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get exportGames => 'Izvezite odigrane partije';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filter za ocjenjivanje';
 
   @override
   String get thisAccountViolatedTos => 'Korisnik ovog računa prekršio je Lichessove uvjete korištenja';
@@ -2982,7 +3047,7 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filteri za ocjenjivanje su zaključani jer vaša ocjena nije stabilna. Igranje ocijenjenih igara će povećati stabilnost.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3925,6 +3990,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get togglePositionAnnotations => 'Uključi/isključi anotacije položaja';
 
   @override
+  String get toggleObservationAnnotations => 'Uključi/isključi bilješke o posmatranju';
+
+  @override
   String get variationArrowsInfo => 'Strelice za varijacije vam omogućavaju navigaciju bez korištenja liste poteza.';
 
   @override
@@ -4056,7 +4124,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisnite shift + lijevi ili desni klik miša kako bi ste nacrtali krugove i strelice na ploči.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl ili shift = crvena; command, alt ili meta = plava; tipka iz svake opcije = žuta.';
 
   @override
   String get letOtherPlayersMessageYou => 'Dopustite drugim igračima da Vam mogu poslati poruku';
@@ -4245,7 +4313,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Vaša ocjena je $param';
   }
 
   @override
@@ -4387,7 +4455,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Izazov $param';
   }
 
   @override
@@ -4460,6 +4528,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get edit => 'Uredite';
+
+  @override
+  String get ultraBullet => 'UltraBullet';
 
   @override
   String get bullet => 'Metak';
@@ -4677,7 +4748,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param je dostupan za formatiranje.';
   }
 
   @override
@@ -4800,19 +4871,22 @@ class AppLocalizationsBs extends AppLocalizations {
   String get copyToClipboard => 'Kopiraj u međuspremnik';
 
   @override
-  String get online => 'online';
+  String get online => 'na mreži';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'Bez mreže';
 
   @override
-  String get search => 'Search';
+  String get search => 'Pretraga';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Obriši pretragu';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Oznake';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5235,18 +5309,6 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Manje od $count minuta',
-      few: 'Manje od $count minuta',
-      one: 'Manje od $count minute',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbGamesInPlay(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5591,7 +5653,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyAlphabetical => 'Abecedno';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => 'Relevantno';
 
   @override
   String get studyAddNewChapter => 'Dodajte novo poglavlje';
@@ -5693,7 +5755,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopirajte PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Kopiraj sirovi PGN';
 
   @override
   String get studyDownloadGame => 'Skini partiju';
@@ -6156,6 +6218,30 @@ class AppLocalizationsBs extends AppLocalizations {
       other: 'Ovdje zalijepite svoj PGN tekst, do $count partija',
       few: 'Ovdje zalijepite svoj PGN tekst, do $count partije',
       one: 'Ovdje zalijepite svoj PGN tekst, do $count partije',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Bitka $count timova',
+      few: 'Bitka $count tima',
+      one: 'Bitka $count tima',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vođa po timu',
+      few: '$count vođe po timu',
+      one: 'Jedan vođa po timu',
     );
     return '$_temp0';
   }

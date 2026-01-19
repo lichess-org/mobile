@@ -47,7 +47,7 @@
   <string name="fidePlayerNotFound">Jogador FIDE não encontrado</string>
   <string name="fideProfile">Perfil FIDE</string>
   <string name="federation">Federação</string>
-  <string name="ageThisYear">Idade neste ano</string>
+  <string name="age" comment="Label for the age of a player. Appears on FIDE profiles of players.">Idade</string>
   <string name="unrated">Sem classificação</string>
   <string name="recentTournaments">Torneio recentes</string>
   <string name="openLichess">Abrir no Lichess</string>
@@ -83,4 +83,6 @@
   <string name="liveboard">Tabuleiro em direto</string>
   <string name="communityBroadcast">Transmissão comunitária</string>
   <string name="createdAndManagedBy">Criado e administrado por %s.</string>
+  <string name="roundX">Ronda %s</string>
+  <string name="defaultRoundNameHelp">Manter o nome padrão irá traduzi-lo automaticamente para todas as outras línguas.</string>
 </resources>

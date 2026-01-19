@@ -28,11 +28,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -98,11 +98,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StudyListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
       await tester.pumpWidget(app);
 
@@ -130,7 +130,7 @@ void main() {
 
       expect(requestedUrls, [
         'https://lichess.dev/study/all/hot?page=1',
-        'https://lichess.dev/study/search?page=1&q=Magnus',
+        'https://lichess.dev/study/search?page=1&q=Magnus&order=hot',
       ]);
     });
   });

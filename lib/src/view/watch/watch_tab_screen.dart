@@ -77,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? true;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -127,12 +127,11 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   ImageColorWorker? _worker;
-  bool _imageAreCached = false;
 
   @override
   void initState() {
     super.initState();
-    _precacheImages();
+    _loadImageWorker();
   }
 
   @override
@@ -141,17 +140,11 @@ class _BodyState extends ConsumerState<_Body> {
     super.dispose();
   }
 
-  Future<void> _precacheImages() async {
+  Future<void> _loadImageWorker() async {
     final worker = await ref.read(imageWorkerFactoryProvider).spawn();
     if (mounted) {
       setState(() {
         _worker = worker;
-      });
-      ref.listenManual(broadcastsPaginatorProvider, (_, current) async {
-        if (current.hasValue && !_imageAreCached) {
-          _imageAreCached = true;
-          await preCacheBroadcastImages(context, broadcasts: current.value!.active, worker: worker);
-        }
       });
     }
   }

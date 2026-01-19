@@ -7,7 +7,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Balay</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Kinahanglan nga naka-log in ka aron makita kini nga pahina.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walay resulta</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Wala ka nag-follow sa bisan kinsa nga user.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Modawat</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Ibabaw sa pisara</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga magdudula nga adunay \"%s\"</string>

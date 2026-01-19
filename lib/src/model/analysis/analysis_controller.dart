@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
@@ -34,10 +35,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';
-part 'analysis_controller.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
@@ -104,33 +103,33 @@ enum AnalysisGameResult {
   };
 }
 
-@riverpod
-class AnalysisController extends _$AnalysisController
+/// A provider for [AnalysisController].
+final analysisControllerProvider = AsyncNotifierProvider.autoDispose
+    .family<AnalysisController, AnalysisState, AnalysisOptions>(
+      AnalysisController.new,
+      name: 'AnalysisControllerProvider',
+    );
+
+({Root root, UciPath path})? _savedStandalone;
+
+void clearSavedStandaloneAnalysis() {
+  _savedStandalone = null;
+}
+
+class AnalysisController extends AsyncNotifier<AnalysisState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
+  AnalysisController(this.options);
+
+  final AnalysisOptions options;
+
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   late Root _root;
   late Variant _variant;
-
-  @override
-  @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
-
-  @override
-  @protected
-  EngineEvaluationPreferences get evaluationPreferencesNotifier =>
-      ref.read(engineEvaluationPreferencesProvider.notifier);
-
-  @override
-  @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
-
-  @override
-  @protected
-  AnalysisState get evaluationState => state.requireValue;
+  late UciPath _currentPath;
 
   @override
   @protected
@@ -143,12 +142,11 @@ class AnalysisController extends _$AnalysisController
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
-  Future<AnalysisState> build(AnalysisOptions options) async {
+  Future<AnalysisState> build() async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -173,7 +171,7 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.watch(archivedGameProvider(gameId).future);
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);
@@ -192,6 +190,13 @@ class AnalysisController extends _$AnalysisController
           serverAnalysis = null;
           division = null;
           activeCorrespondenceGame = null;
+
+          // We want to keep the standalone analysis session alive even if the user navigates away
+          ref.onCancel(() {
+            if (_root.mainline.isNotEmpty) {
+              _savedStandalone = (root: _root, path: _currentPath);
+            }
+          });
         }
       case ActiveCorrespondenceGame(:final gameFullId):
         {
@@ -238,21 +243,24 @@ class AnalysisController extends _$AnalysisController
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
-    _root = Root.fromPgnGame(
-      game,
-      isLichessAnalysis: options.isLichessGameAnalysis,
-      onVisitNode: (root, branch, isMainline) {
-        if (isMainline &&
-            options.initialMoveCursor != null &&
-            branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
-          path = path + branch.id;
-          lastMove = branch.sanMove.move;
-        }
-        if (isMainline && opening == null && branch.position.ply <= 10) {
-          openingFutures.add(_fetchOpening(branch.position.fen, path));
-        }
-      },
-    );
+    _root = switch (options) {
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty => _savedStandalone!.root,
+      _ => Root.fromPgnGame(
+        game,
+        isLichessAnalysis: options.isLichessGameAnalysis,
+        onVisitNode: (root, branch, isMainline) {
+          if (isMainline &&
+              options.initialMoveCursor != null &&
+              branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
+            path = path + branch.id;
+            lastMove = branch.sanMove.move;
+          }
+          if (isMainline && opening == null && branch.position.ply <= 10) {
+            openingFutures.add(_fetchOpening(branch.position.fen, path));
+          }
+        },
+      ),
+    };
 
     // wait for the opening to be fetched to recompute the branch opening
     Future.wait(openingFutures)
@@ -275,7 +283,10 @@ class AnalysisController extends _$AnalysisController
           }
         });
 
-    final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentPath = switch (options) {
+      Standalone(:final pgn) when _savedStandalone != null && pgn.isEmpty => _savedStandalone!.path,
+      _ => options.initialMoveCursor == null ? _root.mainlinePath : path,
+    };
     final currentNode = _root.nodeAt(currentPath);
 
     late final Forecast? forecast;
@@ -311,11 +322,6 @@ class AnalysisController extends _$AnalysisController
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    final isEngineAllowed = isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
-    if (isEngineAllowed) {
-      initEngineEvaluation();
-    }
-
     serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
     final analysisState = AnalysisState(
@@ -323,7 +329,7 @@ class AnalysisController extends _$AnalysisController
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
-      pathToLiveMove: isGameFinished ? null : currentPath,
+      pathToLiveMove: isGameFinished || options is Standalone ? null : currentPath,
       forecast: forecast,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
@@ -344,6 +350,7 @@ class AnalysisController extends _$AnalysisController
     // We need to define the state value in the build method because `requestEval` require the state
     // to have a value.
     state = AsyncData(analysisState);
+    _currentPath = analysisState.currentPath;
 
     socketClient.firstConnection
         .timeout(const Duration(seconds: 3))
@@ -357,6 +364,11 @@ class AnalysisController extends _$AnalysisController
         });
 
     return analysisState;
+  }
+
+  void clearSavedStandaloneAnalysis() {
+    _savedStandalone = null;
+    ref.invalidateSelf();
   }
 
   Future<void> onFocusRegained() async {
@@ -680,6 +692,7 @@ class AnalysisController extends _$AnalysisController
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
   }) {
+    _currentPath = path;
     final curState = state.requireValue;
     final pathChange = curState.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
@@ -933,7 +946,7 @@ sealed class AnalysisState
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
       isEngineAvailable(prefs) ||
-      (isComputerAnalysisAllowed && isServerAnalysisEnabled && currentNode.serverEval != null);
+      (isComputerAnalysisAllowed && isServerAnalysisEnabled && hasServerAnalysis);
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>

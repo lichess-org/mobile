@@ -2,51 +2,90 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
+import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
 
 const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService'};
 
-/// Setup logging
-void setupLogging() {
-  if (kDebugMode) {
-    Logger.root.level = Level.FINE;
-    Logger.root.onRecord.listen((record) {
-      developer.log(
-        record.message,
-        time: record.time,
-        name: record.loggerName,
-        level: record.level.value,
-        error: record.error,
-        stackTrace: record.stackTrace,
-      );
+/// Provides an instance of [AppLogService] using Riverpod.
+final appLogServiceProvider = Provider<AppLogService>(
+  (Ref ref) => AppLogService(ref),
+  name: 'AppLogServiceProvider',
+);
 
-      if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
-        debugPrint('[${record.loggerName}] ${record.message}');
+/// Manages log entries created via [Logger] instances
+///
+/// Currently, simply saves the most recent log entries in memory, so they do not persists across app restarts.
+class AppLogService {
+  AppLogService(this.ref);
+
+  final Ref ref;
+  final _logs = LRUList<LogRecord>(capacity: 1024);
+
+  /// Currently stored log entries, ordered from oldest to newest.
+  Iterable<LogRecord> get logs => _logs.values;
+
+  void start() {
+    ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
+      if (next != prev) {
+        Logger.root.level = next;
       }
+    }, fireImmediately: true);
+
+    Logger.root.onRecord.listen((record) {
+      if (kDebugMode) {
+        developer.log(
+          record.message,
+          time: record.time,
+          name: record.loggerName,
+          level: record.level.value,
+          error: record.error,
+          stackTrace: record.stackTrace,
+        );
+
+        if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
+          debugPrint('[${record.loggerName}] ${record.message}');
+        }
+      } else {
+        if (record.loggerName == 'Stockfish' && record.level >= Level.SEVERE) {
+          // help debugging engine in error state issues in production
+          LichessBinding.instance.firebaseCrashlytics.recordError(
+            record.message,
+            record.stackTrace,
+          );
+        }
+      }
+
+      _logs.put(record);
     });
+  }
+
+  void clear() {
+    _logs.clear();
   }
 }
 
-class ProviderLogger extends ProviderObserver {
+final class ProviderLogger extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override
-  void didAddProvider(ProviderBase<Object?> provider, Object? value, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} initialized', value);
+  void didAddProvider(ProviderObserverContext context, Object? value) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
-  void didDisposeProvider(ProviderBase<Object?> provider, ProviderContainer container) {
-    _logger.info('${provider.name ?? provider.runtimeType} disposed');
+  void didDisposeProvider(ProviderObserverContext context) {
+    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override
-  void providerDidFail(
-    ProviderBase<Object?> provider,
-    Object error,
-    StackTrace stackTrace,
-    ProviderContainer container,
-  ) {
-    _logger.severe('${provider.name ?? provider.runtimeType} error', error, stackTrace);
+  void providerDidFail(ProviderObserverContext context, Object error, StackTrace stackTrace) {
+    _logger.severe(
+      '${context.provider.name ?? context.provider.runtimeType} error',
+      error,
+      stackTrace,
+    );
   }
 }

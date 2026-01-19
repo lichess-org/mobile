@@ -73,7 +73,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Зверніть увагу, що не всі функції зі старого додатку або сайту наразі доступні, але ми додаємо функції постійно.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Ви ні на кого не підписані.';
+  String get mobileNotFollowingAnyUser => 'Ви не слідкуєте за користувачами.';
 
   @override
   String get mobileOkButton => 'Гаразд';
@@ -829,7 +829,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastFederation => 'Федерація';
 
   @override
-  String get broadcastAgeThisYear => 'Вік цього року';
+  String get broadcastAge => 'Вік';
 
   @override
   String get broadcastUnrated => 'Без рейтингу';
@@ -943,6 +943,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Створено та адмініструється $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Раунд $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Усталене ім\'я автоматично перекладатиметься іншими мовами.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1419,6 +1427,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнір скоро почнеться';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Трансляції, на які ви підписані';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Час на відповідь закінчується';
 
   @override
@@ -1438,6 +1449,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'Наосліп';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Показувати ліворуч на мобільних пристроях';
 
   @override
   String get puzzlePuzzles => 'Задачі';
@@ -1462,6 +1476,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Мати';
+
+  @override
+  String get puzzleMateThemes => 'Теми матів';
 
   @override
   String get puzzleGoals => 'Цілі';
@@ -1777,6 +1794,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Мат королю в домашньому ряду, коли він у пастці між власними фігурами.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Арбалетний мат';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'Слон ставить мат королю, а ферзь блокує решта полів для відступу';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Мат сліпої свині';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Дві тури об\'єднуються, аби поставити мат королю на полі 2 на 2.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Слоновий ендшпіль';
 
   @override
@@ -1801,10 +1830,22 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Захоплення фігури, що захищає іншу фігуру, дозволяє захопити незахищену фігуру наступним ходом.';
 
   @override
+  String get puzzleThemeCornerMate => 'Кутовий мат';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Тура й ферзь заганяють короля в кут, а кінь ставить мат.';
+
+  @override
   String get puzzleThemeCrushing => 'Руйнування';
 
   @override
   String get puzzleThemeCrushingDescription => 'Знайдіть грубу помилку суперника, щоб отримати нищівну перевагу. (eval ≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Відкритий шах';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Переміщення однієї фігури відкриває іншу, яка ставить шах королю. Часто призводить до вирішальної переваги.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Мат двома слонами';
@@ -1912,6 +1953,24 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Мат Пілсбері';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'Тура ставить мат королю, поки слон закриває поля для втечі.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Мат Мерфі';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Трикутний мат';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Ферзь і тура на відстані одного поля від ворожого короля перебувають на одній горизонталі чи вертикалі та формують трикутник.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Мат Вуковіча';
 
   @override
@@ -1994,6 +2053,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'Тактика на першому етапі гри.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Оперний мат';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Тура ставить шах королю, а слон захищає туру.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пішаковий ендшпіль';
@@ -3953,6 +4018,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get togglePositionAnnotations => 'Перемкнути анотації позицій';
 
   @override
+  String get toggleObservationAnnotations => 'Перемкнути анотації спостереження';
+
+  @override
   String get variationArrowsInfo => 'Стрілки варіантів дозволяють переміщуватись без використання списку ходів.';
 
   @override
@@ -4490,6 +4558,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get edit => 'Змінити';
 
   @override
+  String get ultraBullet => 'Ультракуля';
+
+  @override
   String get bullet => 'Куля';
 
   @override
@@ -4705,7 +4776,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param доступний для форматування.';
   }
 
   @override
@@ -4841,6 +4912,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tags => 'Теги';
+
+  @override
+  String get enPassant => 'Взяття на проході';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5293,19 +5367,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count спостерігають',
       few: '$count спостерігають',
       one: '$count спостерігає',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Менше $count хвилин',
-      many: 'Менше $count хвилин',
-      few: 'Менше $count хвилин',
-      one: 'Менше $count хвилини',
     );
     return '$_temp0';
   }
@@ -6235,6 +6296,32 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Вставте ваш PGN текст тут, до $count ігор',
       few: 'Вставте ваш PGN текст тут, до $count ігор',
       one: 'Вставте ваш PGN текст тут, до $count гри',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Битва $count команд',
+      many: 'Битва $count команд',
+      few: 'Битва $count команд',
+      one: 'Битва $count команд',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лідерів на команду',
+      many: '$count лідерів на команду',
+      few: '$count лідери на команду',
+      one: 'Один лідер на команду',
     );
     return '$_temp0';
   }

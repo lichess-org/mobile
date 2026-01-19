@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _dateFormatter = DateFormat.MMMd();
@@ -31,7 +32,10 @@ class BroadcastOverviewTab extends ConsumerWidget {
           padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
           children: [
             if (tournament.data.imageUrl != null) ...[
-              Image.network(tournament.data.imageUrl!),
+              HttpNetworkImageWidget(
+                tournament.data.imageUrl!,
+                errorBuilder: (context, _, _) => const SizedBox.shrink(),
+              ),
               const SizedBox(height: 16.0),
             ],
             Wrap(

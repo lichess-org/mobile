@@ -73,7 +73,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما';
 
   @override
-  String get mobileNotFollowingAnyUser => 'أنت لا تتابع أي مستخدم.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'موافق';
@@ -869,7 +869,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastFederation => 'إتحاد';
 
   @override
-  String get broadcastAgeThisYear => 'العمر هذا العام';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'غير مقيم';
@@ -983,6 +983,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'تم إنشاؤها وإدارتها بواسطة $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Round $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1463,6 +1471,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'البطولة ستبدأ قريباً';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'ساعة المراسلة تنفد';
 
   @override
@@ -1482,6 +1493,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'معصوب العينين';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'الألغاز';
@@ -1506,6 +1520,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleMates => 'كشّات';
+
+  @override
+  String get puzzleMateThemes => 'Mate themes';
 
   @override
   String get puzzleGoals => 'الغايات';
@@ -1833,6 +1850,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'كش مات في الصف الأخير حيث يكون الملك محاصر بقطعه.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'مرحلة نهاية المباراة بالفيلة';
 
   @override
@@ -1857,10 +1886,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'إزالة قطعة ذات أهمية حاسمة للدفاع عن قطعة أخرى، مما يسمح للقطعة التي لا يمكن الدفاع عنها الآن أن يتم الاستيلاء عليها في الحركة التالية.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'سحق';
 
   @override
   String get puzzleThemeCrushingDescription => 'اكتشف خطأ الخصم الفادح للحصول على تفوق ساحق (يساوي 600 جزء بالمئة من البيدق أو أكثر)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'كش مات بفيلين';
@@ -1968,6 +2009,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'كش مات فوكوفيتش';
 
   @override
@@ -2050,6 +2109,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'تكتيك في مرحلة الافتتاح.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'نهاية اللعبة بالجنود';
@@ -4009,6 +4074,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get togglePositionAnnotations => 'تبديل تحليل الموقف';
 
   @override
+  String get toggleObservationAnnotations => 'Toggle observation annotations';
+
+  @override
   String get variationArrowsInfo => 'أسمهم النقلات تسمح لك بلعبها دون استخدام قائمة النقلات المرشحة.';
 
   @override
@@ -4546,6 +4614,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get edit => 'تعديل';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'الرصاصة';
 
   @override
@@ -4897,6 +4968,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tags => 'تصنيفات';
+
+  @override
+  String get enPassant => 'En passant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5419,21 +5493,6 @@ class AppLocalizationsAr extends AppLocalizations {
       two: '$count يتابعهم',
       one: '$count يتابعهم',
       zero: '$count يتابعهم',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'أقل من $count دقيقة',
-      many: 'أقل من $count دقيقة',
-      few: 'أقل من $count دقيقة',
-      two: 'أقل من $count دقيقة',
-      one: 'أقل من $count دقيقة',
-      zero: 'أقل من $count دقيقة',
     );
     return '$_temp0';
   }
@@ -6393,6 +6452,36 @@ class AppLocalizationsAr extends AppLocalizations {
       two: 'ألصق نص PGN هنا، حتى $count مباراة',
       one: 'الصق نص الPGN هنا، حتى $count لعبة واحدة',
       zero: 'ألصق نص PGN هنا، حتى $count مباراة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'معركة $count فريقا',
+      many: 'معركة $count فريقا',
+      few: 'معركة $count أفرقة',
+      two: 'معركة فريقين',
+      one: 'معركة فريق واحد',
+      zero: 'معركة $count فريق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count قائد للفريق الواحد',
+      many: '$count قائد للفريق الواحد',
+      few: '$count قادة للفريق الواحد',
+      two: 'قائدين للفريق',
+      one: 'قائد واحد لكل فريق',
+      zero: '$count قائدا لكل فريق',
     );
     return '$_temp0';
   }

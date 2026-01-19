@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
@@ -34,6 +35,10 @@ import '../engine/test_engine_app.dart';
 void main() {
   // ignore: avoid_dynamic_calls
   final sanMoves = jsonDecode(gameResponse)['moves'] as String;
+
+  tearDown(() {
+    clearSavedStandaloneAnalysis();
+  });
 
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
@@ -131,12 +136,12 @@ void main() {
                 variant: Variant.standard,
               ),
         ),
-        overrides: [
+        overrides: {
           if (mockClient != null)
-            lichessClientProvider.overrideWith((ref) {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
               return LichessClient(mockClient, ref);
             }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -711,7 +716,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
 
         expect(find.byType(EngineGauge), findsOne);
-        expect(find.widgetWithText(EngineGauge, 'Checkmate'), findsOne);
+        expect(find.widgetWithText(EngineGauge, '#'), findsOne);
       });
     });
 
@@ -834,6 +839,170 @@ void main() {
       });
     }
   });
+  testWidgets('saves and restores root and path when navigating away and back', (tester) async {
+    // open from More tab and navigate to board analysis
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const MoreTabScreen(),
+      defaultPreferences: {
+        PrefCategory.engineEvaluation.storageKey: jsonEncode(
+          EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
+        ),
+      },
+    );
+
+    await tester.pumpWidget(app);
+
+    // Tap on "Analysis" button in More tab
+    await tester.tap(find.text('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Make some moves
+    await playMove(tester, 'e2', 'e4');
+    await playMove(tester, 'e7', 'e5');
+    await playMove(tester, 'f2', 'f4');
+
+    // Verify we made the moves
+    expect(find.textContaining('f4'), findsOneWidget);
+
+    // go back a move
+    await tester.tap(find.byKey(const Key('goto-previous')));
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+
+    // Navigate back to More tab
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Verify we're back at More tab
+    expect(find.text('Tools'), findsOneWidget);
+
+    // Navigate to board analysis again
+    await tester.tap(find.text('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Verify moves are still present and session was restored
+    expect(find.textContaining('e4'), findsOneWidget);
+    expect(find.textContaining('e5'), findsOneWidget);
+    expect(find.textContaining('f4'), findsOneWidget);
+
+    // Verify board state is correct
+    expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+    expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+  });
+  testWidgets('Clear moves clears standalone analysis', (tester) async {
+    // Open from More tab and navigate to board analysis
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const MoreTabScreen(),
+      defaultPreferences: {
+        PrefCategory.engineEvaluation.storageKey: jsonEncode(
+          EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
+        ),
+      },
+    );
+
+    await tester.pumpWidget(app);
+
+    // Open analysis board
+    await tester.tap(find.text('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Make some moves
+    await playMove(tester, 'e2', 'e4');
+    await playMove(tester, 'e7', 'e5');
+    await playMove(tester, 'f2', 'f4');
+
+    // Verify we made the moves
+    expect(find.textContaining('f4'), findsOneWidget);
+    expect(find.byKey(const ValueKey('f4-whitepawn')), findsOneWidget);
+
+    //open menu
+    await tester.tap(find.byIcon(Icons.menu));
+    await tester.pump();
+
+    //tap Clear moves
+    expect(find.text('Clear moves'), findsOneWidget);
+    await tester.tap(find.text('Clear moves'));
+    await tester.pump();
+
+    //verify moves are cleared
+    expect(find.textContaining('e4'), findsNothing);
+    expect(find.byKey(const ValueKey('e4-whitepawn')), findsNothing);
+
+    // Navigate back to More tab
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Verify we're back at More tab
+    expect(find.text('Tools'), findsOneWidget);
+
+    // Navigate to board analysis again
+    await tester.tap(find.text('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Verify moves are no longer present and analysis was cleared
+    expect(find.textContaining('e4'), findsNothing);
+    expect(find.byKey(const ValueKey('e4-whitepawn')), findsNothing);
+  });
+
+  testWidgets('Opening a position from board editor overwrites saved standalone analysis', (
+    tester,
+  ) async {
+    // Open from More tab and navigate to board analysis
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const MoreTabScreen(),
+      defaultPreferences: {
+        PrefCategory.engineEvaluation.storageKey: jsonEncode(
+          EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
+        ),
+      },
+    );
+
+    await tester.pumpWidget(app);
+
+    // Open analysis board
+    await tester.tap(find.text('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Make some moves
+    await playMove(tester, 'e2', 'e4');
+    await playMove(tester, 'e7', 'e5');
+    await playMove(tester, 'f2', 'f4');
+
+    // Verify we made the moves
+    expect(find.textContaining('f4'), findsOneWidget);
+    expect(find.byKey(const ValueKey('f4-whitepawn')), findsOneWidget);
+
+    // Navigate back to More tab
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    // Verify we're back at More tab
+    expect(find.text('Tools'), findsOneWidget);
+
+    // Navigate to board editor
+    await tester.tap(find.text('Board editor'));
+    await tester.pumpAndSettle();
+
+    //make moves that result in a different position than the previous analysis
+    await dragFromTo(tester, 'd2', 'd4');
+    await dragFromTo(tester, 'd7', 'd5');
+
+    //Open analysis from editor
+    expect(find.byTooltip('Analysis board'), findsOneWidget);
+    await tester.tap(find.byTooltip('Analysis board'));
+    await tester.pumpAndSettle();
+
+    // Verify board state is correct and previous analysis was overwritten
+    expect(find.byKey(const ValueKey('d4-whitepawn')), findsOneWidget);
+    expect(find.byKey(const ValueKey('d5-blackpawn')), findsOneWidget);
+    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+  });
 
   group('conditional premoves', () {
     testWidgets('no conditional premove tab for standalone analysis', (tester) async {
@@ -953,11 +1122,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1045,11 +1214,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1189,11 +1358,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1258,11 +1427,11 @@ void main() {
             gameFullId: kGameFullId,
           ),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) {
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-        ],
+        },
       );
 
       await tester.pumpWidget(app);
@@ -1384,4 +1553,21 @@ String makeCorrespondenceGameJsonWithForecast({
   }
 }
 ''';
+}
+
+Future<void> dragFromTo(WidgetTester tester, String from, String to) async {
+  final fromOffset = squareOffset(tester, Square.fromName(from));
+  await tester.dragFrom(fromOffset, squareOffset(tester, Square.fromName(to)) - fromOffset);
+  await tester.pumpAndSettle();
+}
+
+Offset squareOffset(WidgetTester tester, Square square) {
+  final editor = find.byType(ChessboardEditor);
+  final squareSize = tester.getSize(editor).width / 8;
+
+  return tester.getTopLeft(editor) +
+      Offset(
+        square.file.value * squareSize + squareSize / 2,
+        (7 - square.rank.value) * squareSize + squareSize / 2,
+      );
 }

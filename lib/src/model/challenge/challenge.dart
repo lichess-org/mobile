@@ -142,6 +142,42 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
   }
 }
 
+/// The user response of a challenge request.
+///
+/// It can be:
+/// - [ChallengeResponseCancelled]: The challenge was cancelled.
+/// - [ChallengeResponseAccepted]: The challenge was accepted and a game was created.
+/// - [ChallengeResponseDeclined]: The challenge was declined.
+sealed class ChallengeResponse {}
+
+/// The [ChallengeResponse] when challenge was cancelled.
+@freezed
+sealed class ChallengeResponseCancelled
+    with _$ChallengeResponseCancelled
+    implements ChallengeResponse {
+  const factory ChallengeResponseCancelled() = _ChallengeResponseCancelled;
+}
+
+/// The [ChallengeResponse] when challenge was accepted and a game was created.
+@freezed
+sealed class ChallengeResponseAccepted
+    with _$ChallengeResponseAccepted
+    implements ChallengeResponse {
+  const factory ChallengeResponseAccepted({required GameFullId gameFullId}) =
+      _ChallengeResponseAccepted;
+}
+
+/// The [ChallengeResponse] when challenge was declined.
+@freezed
+sealed class ChallengeResponseDeclined
+    with _$ChallengeResponseDeclined
+    implements ChallengeResponse {
+  const factory ChallengeResponseDeclined({
+    required Challenge challenge,
+    required ChallengeDeclineReason? declineReason,
+  }) = _ChallengeResponseDeclined;
+}
+
 enum ChallengeDirection { outward, inward }
 
 enum ChallengeStatus { created, offline, canceled, declined, accepted }

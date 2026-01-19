@@ -20,17 +20,14 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-part 'challenge_service.g.dart';
-
-@Riverpod(keepAlive: true)
-ChallengeService challengeService(Ref ref) {
+/// A provider for [ChallengeService].
+final challengeServiceProvider = Provider<ChallengeService>((Ref ref) {
   final service = ChallengeService(ref);
   ref.onDispose(() => service.dispose());
   return service;
-}
+}, name: 'ChallengeServiceProvider');
 
 /// A service that listens to challenge events and shows notifications.
 class ChallengeService {

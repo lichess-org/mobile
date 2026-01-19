@@ -8,6 +8,7 @@
   <string name="advanced">上級</string>
   <string name="lengths">手数</string>
   <string name="mates">メイト</string>
+  <string name="mateThemes">メイトのテーマ</string>
   <string name="goals">目標</string>
   <string name="origin">出所</string>
   <string name="specialMoves">特殊な手</string>
@@ -85,6 +86,6 @@
   </plurals>
   <string name="percentSolved">%s に正解</string>
   <string name="noPuzzlesToShow">データがありません、まず問題をプレイしてから！</string>
-  <string name="improvementAreasDescription">ここのテーマを練習して前進！</string>
+  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ここのテーマを練習して前進！</string>
   <string name="strengthDescription">これらのテーマで好成績でした</string>
 </resources>

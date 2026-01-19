@@ -1,41 +1,56 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for the [GameRepository].
 final gameRepositoryProvider = Provider<GameRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
-  return GameRepository(client, aggregator);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
+  final gameStorage = ref.watch(gameStorageProvider.future);
+  return GameRepository(client, aggregator, gameStorage);
 }, name: 'GameRepositoryProvider');
 
 class GameRepository {
-  const GameRepository(this.client, this.aggregator);
+  const GameRepository(this.client, this.aggregator, this.storage);
 
   final LichessClient client;
   final Aggregator aggregator;
+  final Future<GameStorage> storage;
 
-  Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) {
-    return client.readJson(
-      Uri(
-        path: '/game/export/$id',
-        queryParameters: {
-          'clocks': '1',
-          'accuracy': '1',
-          if (withBookmarked) 'withBookmarked': '1',
-        },
-      ),
-      headers: {'Accept': 'application/json'},
-      mapper: (json) => ExportedGame.fromServerJson(json, withBookmarked: withBookmarked),
-    );
+  /// Fetches a game from lichess API, or from local storage if there is no connectivity.
+  Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) async {
+    try {
+      return await client.readJson(
+        Uri(
+          path: '/game/export/$id',
+          queryParameters: {
+            'clocks': '1',
+            'accuracy': '1',
+            if (withBookmarked) 'withBookmarked': '1',
+          },
+        ),
+        headers: {'Accept': 'application/json'},
+        mapper: (json) => ExportedGame.fromServerJson(json, withBookmarked: withBookmarked),
+      );
+    } on ServerException {
+      rethrow;
+      // Catches other exceptions like no connectivity
+    } on Exception {
+      final storedGame = await (await storage).fetch(gameId: id);
+      if (storedGame != null) {
+        return storedGame;
+      }
+      throw Exception('Game $id cannot be found in local storage.');
+    }
   }
 
   Future<void> requestServerAnalysis(GameId id) async {
@@ -89,7 +104,7 @@ class GameRepository {
   }
 
   Future<IList<LightExportedGameWithPov>> getBookmarkedGames(
-    AuthSessionState session, {
+    AuthUser authUser, {
     int max = 20,
     DateTime? until,
   }) {
@@ -115,7 +130,7 @@ class GameRepository {
                 (e) => (
                   game: e,
                   // we know here user is not null for at least one of the players
-                  pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
+                  pov: e.white.user?.id == authUser.user.id ? Side.white : Side.black,
                 ),
               )
               .toIList(),

@@ -4,16 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
-part 'puzzle_storage.g.dart';
-
-@Riverpod(keepAlive: true)
-Future<PuzzleStorage> puzzleStorage(Ref ref) async {
+/// A provider for [PuzzleStorage].
+final puzzleStorageProvider = FutureProvider<PuzzleStorage>((Ref ref) async {
   final db = await ref.watch(databaseProvider.future);
   return PuzzleStorage(db);
-}
+}, name: 'PuzzleStorageProvider');
 
 const _tableName = 'puzzle';
 

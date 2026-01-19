@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/firebase_stubs.dart';
-import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -86,9 +85,7 @@ abstract class LichessBinding {
 
 /// A concrete implementation of [LichessBinding] for the app.
 class AppLichessBinding extends LichessBinding {
-  AppLichessBinding() {
-    setupLogging();
-  }
+  AppLichessBinding();
 
   /// Returns an instance of the binding that implements [LichessBinding].
   ///

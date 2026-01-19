@@ -10,16 +10,21 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'opening_explorer_repository.g.dart';
+final openingExplorerProvider = AsyncNotifierProvider.autoDispose
+    .family<OpeningExplorer, ({OpeningExplorerEntry entry, bool isIndexing})?, String>(
+      OpeningExplorer.new,
+      name: 'OpeningExplorerProvider',
+    );
 
-@riverpod
-class OpeningExplorer extends _$OpeningExplorer {
+class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool isIndexing})?> {
+  OpeningExplorer(this.fen);
+  final String fen;
+
   StreamSubscription<OpeningExplorerEntry>? _openingExplorerSubscription;
 
   @override
-  Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({required String fen}) async {
+  Future<({OpeningExplorerEntry entry, bool isIndexing})?> build() async {
     ref.onDispose(() {
       _openingExplorerSubscription?.cancel();
     });
@@ -67,10 +72,10 @@ class OpeningExplorer extends _$OpeningExplorer {
   }
 }
 
-@Riverpod(keepAlive: true)
-OpeningExplorerRepository openingExplorerRepository(Ref ref) {
+/// A provider for [OpeningExplorerRepository].
+final openingExplorerRepositoryProvider = Provider<OpeningExplorerRepository>((Ref ref) {
   return OpeningExplorerRepository(ref.read(defaultClientProvider));
-}
+}, name: 'OpeningExplorerRepositoryProvider');
 
 class OpeningExplorerRepository {
   const OpeningExplorerRepository(this.client);

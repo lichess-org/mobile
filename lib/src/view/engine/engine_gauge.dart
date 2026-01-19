@@ -6,18 +6,23 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
-const double kEvalGaugeSize = 24.0;
-const double kEvalGaugeFontSize = 11.0;
+const double _kEvalGaugeSize = 24.0;
+const double _kEvalGaugeFontSize = 11.0;
 
-enum EngineGaugeDisplayMode { vertical, horizontal }
+double getEvalGaugeWidth(BuildContext context) {
+  return isTabletOrLarger(context) ? _kEvalGaugeSize : _kEvalGaugeSize - 2.0;
+}
 
-enum EngineLinesShowState { expanded, collapsed }
+double getEvalGaugeFontSize(BuildContext context) {
+  return isTabletOrLarger(context) ? _kEvalGaugeFontSize : _kEvalGaugeFontSize - 2.0;
+}
 
 typedef EngineGaugeParams = ({
   bool isLocalEngineAvailable,
 
-  /// Only used for vertical display mode.
+  /// Orientation of the board.
   Side orientation,
 
   /// Position to evaluate.
@@ -31,21 +36,9 @@ typedef EngineGaugeParams = ({
 });
 
 class EngineGauge extends ConsumerWidget {
-  const EngineGauge({
-    required this.displayMode,
-    required this.params,
-    this.engineLinesState,
-    this.onTap,
-    super.key,
-  });
-
-  final EngineGaugeDisplayMode displayMode;
-
-  final EngineLinesShowState? engineLinesState;
+  const EngineGauge({required this.params, super.key});
 
   final EngineGaugeParams params;
-
-  final VoidCallback? onTap;
 
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
@@ -67,30 +60,19 @@ class EngineGauge extends ConsumerWidget {
       serverEval: params.serverEval,
     );
 
-    return GestureDetector(
-      onTap: onTap,
-      child: _EvalGauge(
-        displayMode: displayMode,
-        position: params.position,
-        orientation: params.orientation,
-        engineLinesState: engineLinesState,
-        eval: eval,
-      ),
+    return Opacity(
+      // if the local engine is not available and there is no server eval, show the gauge as disabled
+      // this is typically a case where user is on a node not on main line and the game has the server
+      // analysis
+      opacity: !params.isLocalEngineAvailable && params.serverEval == null ? 0.5 : 1.0,
+      child: _EvalGauge(position: params.position, orientation: params.orientation, eval: eval),
     );
   }
 }
 
 class _EvalGauge extends StatefulWidget {
-  const _EvalGauge({
-    required this.position,
-    required this.displayMode,
-    required this.orientation,
-    this.engineLinesState,
-    this.eval,
-  });
+  const _EvalGauge({required this.position, required this.orientation, this.eval});
 
-  final EngineGaugeDisplayMode displayMode;
-  final EngineLinesShowState? engineLinesState;
   final Position position;
   final Eval? eval;
   final Side orientation;
@@ -128,17 +110,29 @@ class _EvalGaugeState extends State<_EvalGauge> {
 
   @override
   Widget build(BuildContext context) {
-    final TextDirection textDirection = Directionality.of(context);
-
-    final evalDisplay = widget.position.outcome != null
+    String? evalDisplay = widget.position.outcome != null
         ? widget.position.outcome!.winner == null
-              ? widget.position.isStalemate
-                    ? context.l10n.stalemate
-                    : context.l10n.insufficientMaterial
-              : widget.position.isCheckmate
-              ? context.l10n.checkmate
-              : context.l10n.variantEnding
+              ? ''
+              : '#'
         : widget.eval?.evalString ?? oldEval?.evalString;
+
+    final evalIntegerPart = evalDisplay == null || evalDisplay.startsWith('#')
+        ? null
+        : evalDisplay.split('.').first;
+
+    evalDisplay = evalIntegerPart != null && evalIntegerPart.length > 2
+        ? evalIntegerPart
+        : evalDisplay;
+
+    final evalStyle = TextStyle(
+      color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
+      fontSize: getEvalGaugeFontSize(context),
+      letterSpacing: -0.8,
+      fontWeight: FontWeight.bold,
+      fontFeatures: const [FontFeature.tabularFigures()],
+    );
+
+    final width = getEvalGaugeWidth(context);
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: fromValue, end: toValue),
@@ -150,115 +144,39 @@ class _EvalGaugeState extends State<_EvalGauge> {
           value: evalDisplay ?? context.l10n.loadingEngine,
           child: RepaintBoundary(
             child: Container(
-              constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? const BoxConstraints(minWidth: kEvalGaugeSize, minHeight: double.infinity)
-                  : const BoxConstraints(minWidth: double.infinity, minHeight: kEvalGaugeSize),
-              width: widget.displayMode == EngineGaugeDisplayMode.vertical ? kEvalGaugeSize : null,
-              height: widget.displayMode == EngineGaugeDisplayMode.vertical ? null : kEvalGaugeSize,
+              constraints: BoxConstraints(minWidth: width, minHeight: double.infinity),
+              width: width,
               child: CustomPaint(
-                painter: widget.displayMode == EngineGaugeDisplayMode.vertical
-                    ? _EvalGaugeVerticalPainter(
-                        orientation: widget.orientation,
-                        backgroundColor: EngineGauge.backgroundColor(context),
-                        valueColor: EngineGauge.valueColor(context),
-                        value: value,
-                      )
-                    : _EvalGaugeHorizontalPainter(
-                        backgroundColor: EngineGauge.backgroundColor(context),
-                        valueColor: EngineGauge.valueColor(context),
-                        value: value,
-                        textDirection: textDirection,
-                      ),
-                child: widget.displayMode == EngineGaugeDisplayMode.vertical
-                    ? const SizedBox.shrink()
-                    : Stack(
-                        children: [
-                          Align(
-                            alignment: toValue >= 0.5
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                evalDisplay ?? '',
-                                style: TextStyle(
-                                  color: toValue >= 0.5 ? Colors.black : Colors.white,
-                                  fontSize: kEvalGaugeFontSize,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                painter: _EvalGaugeVerticalPainter(
+                  orientation: widget.orientation,
+                  backgroundColor: EngineGauge.backgroundColor(context),
+                  valueColor: EngineGauge.valueColor(context),
+                  value: value,
+                ),
+                child: toValue != 0.5
+                    ? Align(
+                        alignment: toValue >= 0.5
+                            ? widget.orientation == Side.white
+                                  ? Alignment.bottomCenter
+                                  : Alignment.topCenter
+                            : widget.orientation == Side.white
+                            ? Alignment.topCenter
+                            : Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 3.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [Text(evalDisplay ?? '', style: evalStyle)],
                           ),
-                          if (widget.engineLinesState != null)
-                            Align(
-                              alignment: toValue >= 0.5
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: Icon(
-                                widget.engineLinesState == EngineLinesShowState.expanded
-                                    ? Icons.arrow_drop_up
-                                    : Icons.arrow_drop_down,
-                                color: Colors.grey,
-                                size: 24.0,
-                              ),
-                            ),
-                        ],
-                      ),
+                        ),
+                      )
+                    : null,
               ),
             ),
           ),
         );
       },
     );
-  }
-}
-
-class _EvalGaugeHorizontalPainter extends CustomPainter {
-  const _EvalGaugeHorizontalPainter({
-    required this.backgroundColor,
-    required this.valueColor,
-    required this.value,
-    required this.textDirection,
-  });
-
-  final Color backgroundColor;
-  final Color valueColor;
-  final double value;
-  final TextDirection textDirection;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(Offset.zero & size, paint);
-
-    paint.color = valueColor;
-
-    void drawBar(double x, double width) {
-      if (width <= 0.0) {
-        return;
-      }
-
-      final double left;
-      switch (textDirection) {
-        case TextDirection.rtl:
-          left = size.width - width - x;
-        case TextDirection.ltr:
-          left = x;
-      }
-      canvas.drawRect(Offset(left, 0.0) & Size(width, size.height), paint);
-    }
-
-    drawBar(0.0, clampDouble(value, 0.0, 1.0) * size.width);
-  }
-
-  @override
-  bool shouldRepaint(_EvalGaugeHorizontalPainter oldPainter) {
-    return oldPainter.backgroundColor != backgroundColor ||
-        oldPainter.valueColor != valueColor ||
-        oldPainter.value != value ||
-        oldPainter.textDirection != textDirection;
   }
 }
 
@@ -302,7 +220,8 @@ class _EvalGaugeVerticalPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_EvalGaugeVerticalPainter oldPainter) {
-    return oldPainter.backgroundColor != backgroundColor ||
+    return oldPainter.orientation != orientation ||
+        oldPainter.backgroundColor != backgroundColor ||
         oldPainter.valueColor != valueColor ||
         oldPainter.value != value;
   }

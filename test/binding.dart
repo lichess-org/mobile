@@ -115,8 +115,14 @@ class TestLichessBinding extends LichessBinding {
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
 
+  StockfishFactory _stockfishFactory = const FakeStockfishFactory();
+
   @override
-  StockfishFactory get stockfishFactory => const FakeStockfishFactory();
+  StockfishFactory get stockfishFactory => _stockfishFactory;
+
+  set stockfishFactory(StockfishFactory factory) {
+    _stockfishFactory = factory;
+  }
 }
 
 class FakeSharedPreferences implements SharedPreferencesWithCache {

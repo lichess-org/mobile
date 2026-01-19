@@ -73,7 +73,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du följer inte någon användare.';
+  String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -789,7 +789,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastFederation => 'Förbund';
 
   @override
-  String get broadcastAgeThisYear => 'Ålder i år';
+  String get broadcastAge => 'Age';
 
   @override
   String get broadcastUnrated => 'Ej rankat';
@@ -903,6 +903,14 @@ class AppLocalizationsSv extends AppLocalizations {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String broadcastRoundX(String param) {
+    return 'Rond $param';
+  }
+
+  @override
+  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1375,6 +1383,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringen startar snart';
 
   @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+
+  @override
   String get preferencesNotifyTimeAlarm => 'Korrespondensklockans tid tar slut';
 
   @override
@@ -1394,6 +1405,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get preferencesBlindfold => 'I blindo';
+
+  @override
+  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
   String get puzzlePuzzles => 'Problem';
@@ -1418,6 +1432,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleMates => 'Mattar';
+
+  @override
+  String get puzzleMateThemes => 'Mate themes';
 
   @override
   String get puzzleGoals => 'Mål';
@@ -1721,6 +1738,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Schackmatta kungen på första raden, när den är instängd av sina egna pjäser.';
 
   @override
+  String get puzzleThemeBalestraMate => 'Balestra mate';
+
+  @override
+  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+
+  @override
+  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+
+  @override
+  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+
+  @override
   String get puzzleThemeBishopEndgame => 'Löparslutspel';
 
   @override
@@ -1745,10 +1774,22 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en pjäs som försvarar en annan pjäs, så att du kan ta den nu oförsvarade pjäsen i nästa drag.';
 
   @override
+  String get puzzleThemeCornerMate => 'Corner mate';
+
+  @override
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Krossande';
 
   @override
   String get puzzleThemeCrushingDescription => 'Upptäck motståndares blunder för att få en förkrossande fördel. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDiscoveredCheck => 'Discovered check';
+
+  @override
+  String get puzzleThemeDiscoveredCheckDescription => 'Move a piece to reveal a check from a hidden attacking piece, which often leads to a decisive advantage.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Matt med två löpare';
@@ -1856,6 +1897,24 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ett torn ligger bredvid motståndarens kung och understöds av en dam som också stänger kungens flyktrutor. Tornet och damen fångar fiendens kung i en 3 gånger 3-kvadrat, \"dödsbox\".';
 
   @override
+  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+
+  @override
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+
+  @override
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Triangle mate';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+
+  @override
   String get puzzleThemeVukovicMate => 'Vukovic matt';
 
   @override
@@ -1938,6 +1997,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeOpeningDescription => 'En taktik under spelets första fas.';
+
+  @override
+  String get puzzleThemeOperaMate => 'Opera mate';
+
+  @override
+  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondeslutspel';
@@ -2136,7 +2201,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get strength => 'Styrka';
 
   @override
-  String get toggleTheChat => 'Dölj/visa chatten';
+  String get toggleTheChat => 'Chattruta av/på';
 
   @override
   String get chat => 'Chatta';
@@ -2169,7 +2234,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get createAGame => 'Skapa ett parti';
 
   @override
-  String get createTheGame => 'Skapa ett parti';
+  String get createTheGame => 'Skapa parti';
 
   @override
   String get whiteIsVictorious => 'Vit har vunnit';
@@ -2178,10 +2243,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackIsVictorious => 'Svart har vunnit';
 
   @override
-  String get youPlayTheWhitePieces => 'Du spelar med de vita pjäserna';
+  String get youPlayTheWhitePieces => 'Du spelar med vita pjäser';
 
   @override
-  String get youPlayTheBlackPieces => 'Du spelar med de svarta pjäserna';
+  String get youPlayTheBlackPieces => 'Du spelar med svarta pjäser';
 
   @override
   String get itsYourTurn => 'Det är din tur!';
@@ -2226,7 +2291,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get forceDraw => 'Begär remi';
 
   @override
-  String get talkInChat => 'Vänligen uppträd trevligt i chatten!';
+  String get talkInChat => 'Var snäll i chatten!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Den första som använder den här länken kommer att spela med dig.';
@@ -2238,16 +2303,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackResigned => 'Svart har gett upp';
 
   @override
-  String get whiteLeftTheGame => 'Vit har lämnat partiet';
+  String get whiteLeftTheGame => 'Vit lämnade partiet';
 
   @override
   String get blackLeftTheGame => 'Svart har lämnat partiet';
 
   @override
-  String get whiteDidntMove => 'Vit flyttade inte';
+  String get whiteDidntMove => 'Vit flyttade ingen pjäs';
 
   @override
-  String get blackDidntMove => 'Vit flyttade inte';
+  String get blackDidntMove => 'Svart flyttade ingen pjäs';
 
   @override
   String get requestAComputerAnalysis => 'Begär datoranalys';
@@ -2259,7 +2324,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get computerAnalysisAvailable => 'Datoranalys tillgänglig';
 
   @override
-  String get computerAnalysisDisabled => 'Datoranalys otillgänglig';
+  String get computerAnalysisDisabled => 'Datoranalys avstängd';
 
   @override
   String get analysis => 'Analysbräde';
@@ -2315,7 +2380,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get forceVariation => 'Visa som variant';
 
   @override
-  String get copyVariationPgn => 'Kopiera variations-PGN';
+  String get copyVariationPgn => 'Kopiera variationens PGN';
 
   @override
   String get copyMainLinePgn => 'Kopiera huvudvariantens PGN';
@@ -2444,13 +2509,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get enable => 'Aktivera';
 
   @override
-  String get bestMoveArrow => 'Pil som anger bästa drag';
+  String get bestMoveArrow => 'Bästa drag-pil';
 
   @override
-  String get showVariationArrows => 'Visa variationspilar';
+  String get showVariationArrows => 'Visa variantpilar';
 
   @override
-  String get evaluationGauge => 'Utvärderingsmätare';
+  String get evaluationGauge => 'Evalueringsmätare';
 
   @override
   String get multipleLines => 'Flera linjer';
@@ -2474,7 +2539,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mistake => 'Misstag';
 
   @override
-  String get inaccuracy => 'Felaktighet';
+  String get inaccuracy => 'Småfel';
 
   @override
   String get moveTimes => 'Dragtider';
@@ -2508,7 +2573,7 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Anslöt $param';
   }
 
   @override
@@ -3897,6 +3962,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get togglePositionAnnotations => 'Växla positionsanteckningar';
 
   @override
+  String get toggleObservationAnnotations => 'Analysmarkeringar av/på';
+
+  @override
   String get variationArrowsInfo => 'Variationspilar låter dig navigera utan att använda draglistan.';
 
   @override
@@ -4434,6 +4502,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get edit => 'Redigera';
 
   @override
+  String get ultraBullet => 'UltraBullet';
+
+  @override
   String get bullet => 'Bullet';
 
   @override
@@ -4787,11 +4858,14 @@ class AppLocalizationsSv extends AppLocalizations {
   String get tags => 'Taggar';
 
   @override
+  String get enPassant => 'En passant';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekunder.',
+      other: 'Motståndaren lämnade partiet. Du kan kräva seger om $count sekunder.',
       one: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekund.',
     );
     return '$_temp0';
@@ -4813,7 +4887,7 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blundrar',
+      other: '$count blunders',
       one: '$count blunder',
     );
     return '$_temp0';
@@ -4824,7 +4898,7 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Blundrar',
+      other: '$count Blunders',
       one: '$count Blunder',
     );
     return '$_temp0';
@@ -4857,8 +4931,8 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count felaktigheter',
-      one: '$count felaktighet',
+      other: '$count småfel',
+      one: '$count småfel',
     );
     return '$_temp0';
   }
@@ -4868,8 +4942,8 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Felaktigheter',
-      one: '$count Felaktighet',
+      other: '$count Småfel',
+      one: '$count Småfel',
     );
     return '$_temp0';
   }
@@ -5167,17 +5241,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'följer $count',
       one: 'följer $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mindre än $count minuter',
-      one: 'Mindre än $count minut',
     );
     return '$_temp0';
   }
@@ -6077,6 +6140,28 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Klistra in din PGN-kod här, upp till $count partier',
       one: 'Klistra in din PGN-kod här, upp till $count parti',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamBattleOfNbTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Tävling med $count lag',
+      one: 'Tävling med $count lag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String teamNbLeadersPerTeam(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ledare per lag',
+      one: 'En ledare per lag',
     );
     return '$_temp0';
   }

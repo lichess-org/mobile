@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,21 +68,24 @@ class StreamerListTile extends StatelessWidget {
       }
     }
 
-    final leading = streamer.image != null
-        ? Image.network(
-            streamer.image!,
-            width: thumbnailSize,
-            height: thumbnailSize,
-            fit: BoxFit.cover,
-          )
-        : Image.asset(
-            Theme.of(context).brightness == Brightness.light
-                ? 'assets/images/logo-black.png'
-                : 'assets/images/logo-white.png',
-            width: thumbnailSize,
-            height: thumbnailSize,
-            fit: BoxFit.cover,
-          );
+    final leading = ClipRRect(
+      borderRadius: Styles.thumbnailBorderRadius,
+      child: streamer.image != null
+          ? HttpNetworkImageWidget(
+              streamer.image!,
+              width: thumbnailSize,
+              height: thumbnailSize,
+              fit: BoxFit.cover,
+            )
+          : Image.asset(
+              Theme.of(context).brightness == Brightness.light
+                  ? 'assets/images/logo-black.png'
+                  : 'assets/images/logo-white.png',
+              width: thumbnailSize,
+              height: thumbnailSize,
+              fit: BoxFit.cover,
+            ),
+    );
 
     final title = Row(
       children: [

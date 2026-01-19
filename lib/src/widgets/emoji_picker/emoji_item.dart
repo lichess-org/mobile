@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 
 class EmojiItem extends StatelessWidget {
   const EmojiItem({super.key, required this.onTap, required this.emoji, this.size = 24});
@@ -19,9 +19,9 @@ class EmojiItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       alignment: Alignment.center,
-      icon: CachedNetworkImage(
-        imageUrl: emoji,
-        errorWidget: (_, _, _) => kEmptyWidget,
+      icon: HttpNetworkImageWidget(
+        emoji,
+        errorBuilder: (_, _, _) => kEmptyWidget,
         width: size,
         height: size,
       ),

@@ -16,6 +16,7 @@ analyzer:
     strict-raw-types: true
   exclude:
     - "**/*.g.dart"
+    - "**/*.freezed.dart"
     - lib/src/styles/lichess_icons.dart
     - lib/src/styles/social_icons.dart
     - lib/firebase_options.dart
@@ -24,7 +25,7 @@ analyzer:
   errors:
     invalid_annotation_target: ignore
   plugins:
-    - custom_lint
+    - riverpod_lint
 
 formatter:
   page_width: 100
@@ -38,7 +39,3 @@ linter:
     avoid_redundant_argument_values: false
     sort_pub_dependencies: true
     sort_unnamed_constructors_first: false
-
-custom_lint:
-  rules:
-    - avoid_manual_providers_as_generated_provider_dependency: false

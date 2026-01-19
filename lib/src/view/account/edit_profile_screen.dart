@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -12,6 +11,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
@@ -283,7 +283,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: field.value != null
-                            ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
+                            ? HttpNetworkImageWidget(lichessFlairSrc(field.value!))
                             : Text(context.l10n.setFlair),
                       ),
                     ),

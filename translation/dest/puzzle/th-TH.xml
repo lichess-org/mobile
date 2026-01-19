@@ -8,6 +8,7 @@
   <string name="advanced">ขั้นสูง</string>
   <string name="lengths">จำนวนตาเดิน</string>
   <string name="mates">การรุกจน</string>
+  <string name="mateThemes">รูปแบบการรุกจน</string>
   <string name="goals">เป้าหมาย</string>
   <string name="origin">ต้นกำเนิดเกม</string>
   <string name="specialMoves">การเดินพิเศษ</string>
@@ -87,6 +88,6 @@
   </plurals>
   <string name="percentSolved">%s เล่นผ่าน</string>
   <string name="noPuzzlesToShow">ไม่มีอะไรให้แสดง เล่นปริศนาสักหน่อยสิ!</string>
-  <string name="improvementAreasDescription">ฝึกฝนปริศนาเหล่านี้เพื่อพัฒนาความก้าวหน้าของคุณ!</string>
+  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ฝึกฝนปริศนาเหล่านี้เพื่อพัฒนาความก้าวหน้าของคุณ!</string>
   <string name="strengthDescription">คุณทำได้ดีที่สุดในรูปแบบปริศนาเหล่านี้</string>
 </resources>

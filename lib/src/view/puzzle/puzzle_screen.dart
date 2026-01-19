@@ -8,12 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
@@ -36,7 +34,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
@@ -48,6 +45,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -223,11 +221,11 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final initialPuzzleContext = PuzzleContext(
       angle: const PuzzleTheme(PuzzleThemeKey.mix),
       puzzle: puzzle,
-      userId: session?.user.id,
+      userId: authUser?.user.id,
     );
     return _PuzzleScaffold(
       angle: angle,
@@ -253,13 +251,13 @@ class _LoadPuzzleFromId extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(puzzleProvider(id));
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     switch (puzzle) {
       case AsyncData(value: final data):
         final initialPuzzleContext = PuzzleContext(
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzle: data,
-          userId: session?.user.id,
+          userId: authUser?.user.id,
           casual: openCasual ? true : null,
         );
         return _PuzzleScaffold(
@@ -335,9 +333,6 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
-    final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
     // Clear user shapes when puzzle or position changes.
     ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
@@ -355,11 +350,7 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final generatedShapes = puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-        ? ISet([
-            Arrow(color: const Color(0x66003088), orig: evalBestMove.from, dest: evalBestMove.to),
-          ])
-        : puzzleState.hintSquare != null
+    final generatedShapes = puzzleState.hintSquare != null
         ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
         : null;
     final shapes = userShapes.union(generatedShapes ?? ISet());
@@ -383,16 +374,6 @@ class _BodyState extends ConsumerState<_Body> {
       },
       premovable: null,
     );
-
-    final engineGauge = puzzleState.isEngineAvailable(enginePrefs)
-        ? (
-            isLocalEngineAvailable: true,
-            orientation: puzzleState.pov,
-            position: puzzleState.currentPosition,
-            savedEval: puzzleState.node.eval,
-            serverEval: puzzleState.node.serverEval,
-          )
-        : null;
 
     final content = PopScope(
       canPop:
@@ -441,15 +422,6 @@ class _BodyState extends ConsumerState<_Body> {
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
-                    if (engineGauge != null) ...[
-                      const SizedBox(width: 4.0),
-                      EngineGauge(
-                        params: engineGauge,
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                      ),
-                    ] else ...[
-                      const SizedBox(width: kEvalGaugeSize + 4.0),
-                    ],
                     const SizedBox(width: 16.0),
                     Expanded(
                       child: Column(
@@ -527,18 +499,6 @@ class _BodyState extends ConsumerState<_Body> {
                       ),
                     ),
                   ),
-                  if (engineGauge != null)
-                    Padding(
-                      padding: isTablet
-                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                          : EdgeInsets.zero,
-                      child: EngineGauge(
-                        params: engineGauge,
-                        displayMode: EngineGaugeDisplayMode.horizontal,
-                      ),
-                    )
-                  else
-                    const SizedBox(height: kEvalGaugeSize),
                   Padding(
                     padding: isTablet
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
@@ -645,7 +605,7 @@ class _PuzzleStatus extends ConsumerWidget {
               ),
             ),
           ),
-        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext, ctrlProvider: ctrlProvider),
+        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext),
       ],
     );
   }
@@ -706,7 +666,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   Widget build(BuildContext context) {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -749,30 +708,22 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.menu,
           ),
         if (puzzleState.mode == PuzzleMode.view)
-          Builder(
-            builder: (context) {
-              Future<void>? toggleFuture;
-              return FutureBuilder<void>(
-                future: toggleFuture,
-                builder: (context, snapshot) {
-                  return BottomBarButton(
-                    onTap: snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
-                          }
-                        : null,
-                    label: context.l10n.toggleLocalEvaluation,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: puzzleState.isEngineAvailable(enginePrefs),
-                  );
-                },
+          BottomBarButton(
+            onTap: () {
+              Navigator.of(context).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  puzzleState.makeAnalysisOptions(
+                    ref
+                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                        .makePgn,
+                  ),
+                ),
               );
             },
+
+            label: context.l10n.analysis,
+            icon: Icons.biotech,
           ),
         if (puzzleState.mode == PuzzleMode.view)
           RepeatButton(
@@ -825,42 +776,29 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.analysis),
-          onPressed: () {
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                context,
-                AnalysisOptions.standalone(
-                  orientation: puzzleState.pov,
-                  pgn: ref
-                      .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                      .makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: Variant.standard,
-                  initialMoveCursor: 0,
-                ),
-              ),
-            );
-          },
-        ),
-        BottomSheetAction(
           makeLabel: (context) =>
               Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
-            final game = await ref.read(
-              archivedGameProvider(id: puzzleState.puzzle.game.id).future,
-            );
-            if (context.mounted) {
-              Navigator.of(context).push(
-                AnalysisScreen.buildRoute(
-                  context,
-                  AnalysisOptions.archivedGame(
-                    orientation: puzzleState.pov,
-                    gameId: game.id,
-                    initialMoveCursor: puzzleState.puzzle.puzzle.initialPly + 1,
+            try {
+              final game = await ref
+                  .read(gameRepositoryProvider)
+                  .getGame(puzzleState.puzzle.game.id);
+              if (context.mounted) {
+                Navigator.of(context).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    AnalysisOptions.archivedGame(
+                      orientation: puzzleState.pov,
+                      gameId: game.id,
+                      initialMoveCursor: puzzleState.puzzle.puzzle.initialPly + 1,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
+            } catch (_) {
+              if (context.mounted) {
+                showSnackBar(context, 'Could not load the game', type: SnackBarType.error);
+              }
             }
           },
         ),
@@ -905,13 +843,13 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -965,7 +903,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
-            if (session != null)
+            if (authUser != null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),
                 // ignore: avoid_bool_literals_in_conditional_expressions

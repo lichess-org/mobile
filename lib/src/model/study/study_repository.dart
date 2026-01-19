@@ -9,14 +9,11 @@ import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'study_repository.g.dart';
-
-@Riverpod(keepAlive: true)
-StudyRepository studyRepository(Ref ref) {
-  return StudyRepository(ref, ref.read(lichessClientProvider));
-}
+/// A provider for [StudyRepository].
+final studyRepositoryProvider = Provider<StudyRepository>((Ref ref) {
+  return StudyRepository(ref, ref.watch(lichessClientProvider));
+}, name: 'StudyRepositoryProvider');
 
 class StudyRepository {
   StudyRepository(this.ref, this.client);
@@ -35,8 +32,15 @@ class StudyRepository {
     );
   }
 
-  Future<StudyList> searchStudies({required String query, int page = 1}) {
-    return _requestStudies(path: 'search', queryParameters: {'page': page.toString(), 'q': query});
+  Future<StudyList> searchStudies({
+    required String query,
+    required StudyListOrder order,
+    int page = 1,
+  }) {
+    return _requestStudies(
+      path: 'search',
+      queryParameters: {'page': page.toString(), 'q': query, 'order': order.name},
+    );
   }
 
   Future<StudyList> _requestStudies({

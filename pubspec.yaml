@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.18.2+001802 # See README.md for details about versioning
+version: 0.19.4+001904 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -10,11 +10,10 @@ environment:
   flutter: ^3.38.0
 
 dependencies:
-  app_settings: ^6.1.1
+  app_settings: ^7.0.0
   async: ^2.10.0
   auto_size_text: ^3.0.0
-  cached_network_image: ^3.2.2
-  chessground: ^7.2.0
+  chessground: ^7.3.0
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^7.0.0
@@ -27,11 +26,11 @@ dependencies:
   device_info_plus: ^12.1.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
+  file_picker: ^10.3.8
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
   flutter_appauth: ^11.0.0
-  flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0
   flutter_local_notifications: ^19.0.0
@@ -39,7 +38,7 @@ dependencies:
     sdk: flutter
   flutter_markdown: ^0.7.3+1
   flutter_native_splash: ^2.3.5
-  flutter_riverpod: ^2.3.4
+  flutter_riverpod: ^3.0.3
   flutter_secure_storage: ^10.0.0-beta.4
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
@@ -62,7 +61,6 @@ dependencies:
   pub_semver: ^2.1.4
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  riverpod_annotation: ^2.3.0
   share_plus: ^12.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
@@ -78,7 +76,6 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.3.2
-  custom_lint: ^0.7.0
   fake_async: ^1.3.1
   flutter_test:
     sdk: flutter
@@ -87,9 +84,7 @@ dev_dependencies:
   json_serializable: ^6.5.4
   lint: ^2.0.1
   mocktail: ^1.0.0
-  mocktail_image_network: ^1.2.0
-  riverpod_generator: ^2.1.0
-  riverpod_lint: ^2.3.3
+  riverpod_lint: ^3.0.3
   stream_channel: ^2.1.2
   wakelock_plus_platform_interface: ^1.3.0
 

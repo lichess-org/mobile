@@ -6,11 +6,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
+
+final playersAndTournamentProvider = FutureProvider.autoDispose
+    .family<
+      (IList<BroadcastPlayerWithOverallResult> players, BroadcastTournament tournament),
+      BroadcastTournamentId
+    >((ref, tournamentId) async {
+      final players = await ref.watch(broadcastPlayersProvider(tournamentId).future);
+      final tournament = await ref.watch(broadcastTournamentProvider(tournamentId).future);
+
+      return (players, tournament);
+    });
 
 /// A tab that displays the players participating in a broadcast tournament.
 class BroadcastPlayersTab extends ConsumerWidget {
@@ -20,17 +32,15 @@ class BroadcastPlayersTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final players = ref.watch(broadcastPlayersProvider(tournamentId));
-
-    return switch (players) {
-      AsyncData(value: final players) => BroadcastPlayersList(players, tournamentId),
+    return switch (ref.watch(playersAndTournamentProvider(tournamentId))) {
+      AsyncData(value: final data) => BroadcastPlayersList(data.$1, data.$2),
       AsyncError(:final error) => Center(child: Text('Cannot load players data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
 }
 
-enum _SortingTypes { player, elo, score }
+enum _SortingTypes { elo, score }
 
 typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
 
@@ -43,10 +53,10 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
 class BroadcastPlayersList extends ConsumerStatefulWidget {
-  const BroadcastPlayersList(this.players, this.tournamentId);
+  const BroadcastPlayersList(this.players, this.tournament);
 
   final IList<BroadcastPlayerWithOverallResult> players;
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournament tournament;
 
   @override
   ConsumerState<BroadcastPlayersList> createState() => _BroadcastPlayersListState();
@@ -119,15 +129,17 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   void sort() {
     final compare = switch (currentSort) {
-      _SortingTypes.player => nullableCompare((p) => p.player.name),
       _SortingTypes.elo =>
         (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
             bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
       _SortingTypes.score =>
-        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) => bothCompare(
-          withScores ? (p) => p.score : (p) => p.played,
-          (p) => p.player.rating,
-        )(p2, p1),
+        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
+            p1.rank != null && p2.rank != null
+            ? p1.rank!.compareTo(p2.rank!)
+            : bothCompare(withScores ? (p) => p.score : (p) => p.played, (p) => p.player.rating)(
+                p2,
+                p1,
+              ),
     };
 
     setState(() {
@@ -137,56 +149,65 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final double eloWidth = max(MediaQuery.sizeOf(context).width * 0.2, 100);
     final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
     final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
+    final withRank = players.any((p) => p.rank != null);
 
     return ListView.builder(
       itemCount: players.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return ColoredBox(
-            color: ColorScheme.of(context).surfaceDim,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: _TableTitleCell(
-                    title: Text(context.l10n.player, style: _kHeaderTextStyle),
-                    onTap: () => toggleSort(_SortingTypes.player),
-                    sortIcon: (currentSort == _SortingTypes.player) ? sortIcon : null,
+          return Column(
+            mainAxisSize: .min,
+            children: [
+              if (withRank)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info, size: 16),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Standings are calculated using broadcasted games and may differ from official results.',
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                if (withRating)
+              Row(
+                crossAxisAlignment: .center,
+                children: [
+                  if (withRating)
+                    Expanded(
+                      child: _TableTitleCell(
+                        title: Text('${context.l10n.player} (Elo)', style: _kHeaderTextStyle),
+                        onTap: () => toggleSort(_SortingTypes.elo),
+                        sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                      ),
+                    ),
                   SizedBox(
-                    width: eloWidth,
+                    width: scoreWidth,
                     child: _TableTitleCell(
-                      title: const Text('Elo', style: _kHeaderTextStyle),
-                      onTap: () => toggleSort(_SortingTypes.elo),
-                      sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                      title: Text(
+                        withScores ? context.l10n.broadcastScore : context.l10n.games,
+                        style: _kHeaderTextStyle,
+                      ),
+                      onTap: () => toggleSort(_SortingTypes.score),
+                      sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
                     ),
                   ),
-                SizedBox(
-                  width: scoreWidth,
-                  child: _TableTitleCell(
-                    title: Text(
-                      withScores ? context.l10n.broadcastScore : context.l10n.games,
-                      style: _kHeaderTextStyle,
-                    ),
-                    onTap: () => toggleSort(_SortingTypes.score),
-                    sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           );
         } else {
           return BroadcastPlayerRow(
             playerWithOverallResult: players[index - 1],
-            tournamentId: widget.tournamentId,
+            tournament: widget.tournament,
             index: index,
-            eloWidth: eloWidth,
-            scoreWidth: scoreWidth,
           );
         }
       },
@@ -205,7 +226,7 @@ class _TableTitleCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 44,
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: _kTableRowPadding,
@@ -230,75 +251,113 @@ class _TableTitleCell extends StatelessWidget {
 class BroadcastPlayerRow extends StatelessWidget {
   const BroadcastPlayerRow({
     required this.playerWithOverallResult,
-    required this.tournamentId,
+    required this.tournament,
     required this.index,
-    required this.eloWidth,
-    required this.scoreWidth,
   });
 
   final BroadcastPlayerWithOverallResult playerWithOverallResult;
-  final BroadcastTournamentId tournamentId;
+  final BroadcastTournament tournament;
   final int index;
-  final double eloWidth;
-  final double scoreWidth;
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played) =
+    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played, :rank) =
         playerWithOverallResult;
-    final rating = player.rating;
+    final BroadcastPlayer(:federation, :title, :name, :rating) = player;
+    final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
-    return GestureDetector(
+    return ListTile(
+      tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
       onTap: () {
         if (player.id != null) {
           Navigator.of(context).push(
-            BroadcastPlayerResultsScreen.buildRoute(context, tournamentId, player, player.id!),
+            BroadcastPlayerResultsScreen.buildRoute(
+              context,
+              tournament.data.id,
+              player,
+              player.id!,
+            ),
           );
         }
       },
-      child: ColoredBox(
-        color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: _kTableRowPadding,
-                child: BroadcastPlayerWidget(player: player, showRating: false),
+      leading: ClipRRect(
+        borderRadius: Styles.thumbnailBorderRadius,
+        child: pic != null
+            ? HttpNetworkImageWidget(pic.smallUrl, width: 40, height: 40)
+            : player.isBot
+            ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
+            : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
+      ),
+      title: Row(
+        mainAxisSize: .min,
+        children: [
+          if (rank != null) ...[
+            Text(
+              rank.toString(),
+              style: TextStyle(
+                color: textShade(context, Styles.subtitleOpacity),
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
-            SizedBox(
-              width: eloWidth,
-              child: Padding(
-                padding: _kTableRowPadding,
-                child: Row(
-                  children: [
-                    if (rating != null) ...[
-                      Text(rating.toString()),
-                      const SizedBox(width: 5),
-                      if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 14),
-                    ],
-                  ],
-                ),
+            const SizedBox(width: 5),
+          ],
+          if (title != null) ...[
+            Text(
+              title,
+              style: TextStyle(
+                color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-              width: scoreWidth,
-              child: Padding(
-                padding: _kTableRowPadding,
-                child: (score != null)
-                    ? Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+            const SizedBox(width: 5),
+          ],
+          Flexible(child: Text(name ?? '', overflow: TextOverflow.ellipsis)),
+        ],
+      ),
+      subtitle: federation != null
+          ? Row(
+              mainAxisSize: .min,
+              children: [
+                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                const SizedBox(width: 5),
+                if (rating != null)
+                  Text(
+                    rating.toString(),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                const SizedBox(width: 4),
+                if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
+              ],
+            )
+          : null,
+      trailing: rating != null || score != null
+          ? SizedBox(
+              width: 35,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: score != null
+                    ? Text(
+                        score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFeatures: [FontFeature.tabularFigures()],
                         ),
                       )
-                    : Align(alignment: Alignment.centerRight, child: Text(played.toString())),
+                    : Text(
+                        played.toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null,
     );
   }
 }

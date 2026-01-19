@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_settings_screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -67,9 +67,9 @@ class RetroScreen extends ConsumerWidget {
               maxLines: 2,
             ),
             actions: [
-              if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
-                EngineDepth(
-                  savedEval: asyncState.valueOrNull?.currentNode.eval,
+              if (value.isEngineAvailable(enginePrefs) == true)
+                EngineButton(
+                  savedEval: value.currentNode.eval,
                   goDeeper: () => ref
                       .read(retroControllerProvider(options).notifier)
                       .requestEval(goDeeper: true),
@@ -124,23 +124,8 @@ class _RetroScreen extends ConsumerWidget {
       pov: state.pov,
       boardBuilder: (context, boardSize, borderRadius) =>
           RetroAnalysisBoard(options, boardSize: boardSize, boardRadius: borderRadius),
-      engineGaugeBuilder: (context, orientation) {
-        return orientation == Orientation.portrait
-            ? EngineGauge(
-                displayMode: EngineGaugeDisplayMode.horizontal,
-                params: state.engineGaugeParams,
-                onTap: () {
-                  ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                },
-              )
-            : Container(
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                child: EngineGauge(
-                  displayMode: EngineGaugeDisplayMode.vertical,
-                  params: state.engineGaugeParams,
-                ),
-              );
+      engineGaugeBuilder: (context) {
+        return EngineGauge(params: state.engineGaugeParams);
       },
       bottomBar: _BottomBar(options),
       children: [

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
@@ -29,7 +29,7 @@ class UserProfileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authSession = ref.watch(authSessionProvider);
+    final authSession = ref.watch(authControllerProvider);
     final userFullName = user.profile?.realName != null
         ? Text(user.profile!.realName!, style: _userNameStyle)
         : null;
@@ -163,9 +163,9 @@ class Location extends StatelessWidget {
       children: [
         if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
         if (profile.country != null) ...[
-          CachedNetworkImage(
-            imageUrl: lichessFlagSrc(profile.country!),
-            errorWidget: (_, _, _) => kEmptyWidget,
+          HttpNetworkImageWidget(
+            lichessFlagSrc(profile.country!),
+            errorBuilder: (_, _, _) => kEmptyWidget,
           ),
           const SizedBox(width: 5),
         ],

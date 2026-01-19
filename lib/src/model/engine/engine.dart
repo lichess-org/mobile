@@ -137,6 +137,13 @@ class StockfishEngine implements Engine {
 
         stockfish.state.addListener(onReadyOnce);
 
+        // Check immediately in case the engine is already ready
+        // This prevents a race where the engine becomes ready between
+        // adding _stockfishStateListener and adding onReadyOnce
+        if (stockfish.state.value == StockfishState.ready) {
+          onReadyOnce();
+        }
+
         _protocol.isComputing.addListener(() {
           if (_protocol.isComputing.value) {
             _state.value = EngineState.computing;
@@ -192,9 +199,38 @@ class StockfishEngine implements Engine {
     _stdoutSubscription?.cancel();
     _protocol.dispose();
     if (_stockfish != null) {
-      _stockfish!.dispose();
+      switch (_stockfish!.state.value) {
+        case StockfishState.disposed:
+        case StockfishState.error:
+          if (_exitCompleter.isCompleted == false) {
+            _exitCompleter.complete();
+          }
+        case StockfishState.ready:
+          _stockfish!.dispose();
+        case StockfishState.initial:
+        case StockfishState.starting:
+          // wait to be ready or error, then dispose
+          void onReadyOrErrorOnce() {
+            final currentState = _stockfish!.state.value;
+            if (currentState == StockfishState.ready) {
+              _stockfish!.dispose();
+              _stockfish!.state.removeListener(onReadyOrErrorOnce);
+            } else if (currentState == StockfishState.error ||
+                currentState == StockfishState.disposed) {
+              if (_exitCompleter.isCompleted == false) {
+                _exitCompleter.complete();
+              }
+              _stockfish!.state.removeListener(onReadyOrErrorOnce);
+            }
+          }
+          _stockfish!.state.addListener(onReadyOrErrorOnce);
+          // Check immediately in case state already transitioned
+          onReadyOrErrorOnce();
+      }
     } else {
-      _exitCompleter.complete();
+      if (_exitCompleter.isCompleted == false) {
+        _exitCompleter.complete();
+      }
     }
     return exited;
   }

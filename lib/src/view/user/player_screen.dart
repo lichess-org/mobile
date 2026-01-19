@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -44,7 +44,7 @@ class PlayerScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
+    final authUser = ref.watch(authControllerProvider);
     final onlineFriends = ref.watch(onlineFriendsProvider);
     final onlineBots = ref.watch(onlineBotsProvider);
     final top1 = ref.watch(top1Provider);
@@ -66,7 +66,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        if (session != null) OnlineFriendsWidget(onlineFriends: onlineFriends),
+        if (authUser != null) OnlineFriendsWidget(onlineFriends: onlineFriends),
         OnlineBotsWidget(onlineBots: onlineBots),
         RatingPrefAware(child: LeaderboardWidget(top1: top1)),
       ],

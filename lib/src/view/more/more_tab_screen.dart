@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -54,8 +54,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final session = ref.watch(authSessionProvider);
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
@@ -152,7 +152,7 @@ class _Body extends ConsumerWidget {
                   Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
                 },
               ),
-              if (session != null)
+              if (authUser != null)
                 ListTile(
                   leading: const Icon(Icons.people_outline),
                   title: Text(context.l10n.friends),

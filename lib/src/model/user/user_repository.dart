@@ -15,8 +15,8 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 /// A provider for the [UserRepository].
 final userRepositoryProvider = Provider<UserRepository>((ref) {
-  final client = ref.read(lichessClientProvider);
-  final aggregator = ref.read(aggregatorProvider);
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
   return UserRepository(client, aggregator);
 }, name: 'UserRepositoryProvider');
 

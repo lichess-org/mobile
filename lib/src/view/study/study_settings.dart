@@ -41,13 +41,6 @@ class StudySettingsScreen extends ConsumerWidget {
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Smaller board'),
-                value: studyPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
                 onTap: () => showModalBottomSheet<void>(
@@ -83,7 +76,6 @@ class StudySettingsScreen extends ConsumerWidget {
           ),
           if (isComputerAnalysisAllowed)
             EngineSettingsWidget(
-              onToggleLocalEvaluation: () => ref.read(studyController.notifier).toggleEngine(),
               onSetEngineSearchTime: (value) =>
                   ref.read(studyController.notifier).setEngineSearchTime(value),
               onSetNumEvalLines: (value) =>

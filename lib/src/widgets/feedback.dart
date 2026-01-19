@@ -23,7 +23,7 @@ class SocketPingRatingIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ping = ref.watch(socketPingProvider(route: socketUri));
+    final ping = ref.watch(socketPingProvider(socketUri));
 
     return SemanticIconButton(
       semanticsLabel: 'PING: ${ping.averageLag.inMilliseconds}ms',
@@ -34,7 +34,7 @@ class SocketPingRatingIcon extends ConsumerWidget {
           bodyBuilder: (_) {
             return Consumer(
               builder: (_, ref, _) {
-                final p = ref.watch(socketPingProvider(route: socketUri));
+                final p = ref.watch(socketPingProvider(socketUri));
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Text.rich(
@@ -77,7 +77,7 @@ class SocketPingRatingListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ping = ref.watch(socketPingProvider(route: socketUri));
+    final ping = ref.watch(socketPingProvider(socketUri));
 
     return ListTile(
       leading: LagIndicator(lagRating: ping.rating),
