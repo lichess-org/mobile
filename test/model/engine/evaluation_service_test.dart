@@ -116,6 +116,62 @@ void main() {
       expect(states, [EngineState.computing, EngineState.idle]);
     });
 
+    test('new work while computing: stream1 receives results before work2, not after', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // Initialize engine
+      final initWork = makeWork();
+      final initStream = service.evaluate(initWork);
+      await initStream!.first;
+
+      while (service.engineState.value != EngineState.idle) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      // Track stream1 results
+      final stream1ResultsBeforeWork2 = <Work>[];
+      final stream1ResultsAfterWork2 = <Work>[];
+      var work2Started = false;
+
+      final work1 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final stream1 = service.evaluate(work1);
+
+      stream1!.listen((result) {
+        if (work2Started) {
+          stream1ResultsAfterWork2.add(result.$1);
+        } else {
+          stream1ResultsBeforeWork2.add(result.$1);
+        }
+      });
+
+      // Wait for stream1 to receive at least one result
+      while (stream1ResultsBeforeWork2.isEmpty) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      expect(stream1ResultsBeforeWork2, isNotEmpty);
+      expect(stream1ResultsBeforeWork2.first, work1);
+
+      // Start work2 while work1 is still computing
+      work2Started = true;
+      final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('d2d4')));
+      final stream2 = service.evaluate(work2);
+
+      expect(service.currentWork, work2);
+
+      // Wait for work2 to complete
+      final (resultWork2, _) = await stream2!.first;
+      expect(resultWork2, work2);
+
+      while (service.engineState.value != EngineState.idle) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+
+      // stream1 should not receive any results after work2 started
+      expect(stream1ResultsAfterWork2, isEmpty);
+    });
+
     test('evaluate() after quit() restarts engine', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;

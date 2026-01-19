@@ -153,6 +153,8 @@ class EvaluationService {
       }
     }
 
+    _logger.info('Starting evaluation: $work');
+
     // Determine flavor based on options
     final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
@@ -433,12 +435,6 @@ class EvaluationService {
 
 /// Engine state.
 enum EngineState { initial, loading, idle, computing, error }
-
-/// A provider that holds the current engine state.
-final engineStateProvider = NotifierProvider.autoDispose<EngineStateNotifier, EngineState>(
-  EngineStateNotifier.new,
-  name: 'EngineStateProvider',
-);
 
 /// A record type holding the current engine evaluation state.
 typedef EngineEvaluationState = ({
