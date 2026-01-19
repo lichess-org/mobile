@@ -174,22 +174,25 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
     return CustomScrollView(
       slivers: [
         if (showSearchBar)
-          SliverPadding(
-            padding: Styles.bodyPadding.copyWith(bottom: 0.0),
-            sliver: SliverToBoxAdapter(
-              child: PlatformSearchBar(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-                onClear: () {
-                  _searchController.clear();
-                  setState(() {
-                    _searchQuery = '';
-                  });
-                },
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverPadding(
+              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              sliver: SliverToBoxAdapter(
+                child: PlatformSearchBar(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  onClear: () {
+                    _searchController.clear();
+                    setState(() {
+                      _searchQuery = '';
+                    });
+                  },
+                ),
               ),
             ),
           ),
