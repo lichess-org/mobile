@@ -6145,6 +6145,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Código incorreto.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -12483,6 +12486,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Código de entrada incorreto.';
 
   @override
   String teamBattleOfNbTeams(int count) {

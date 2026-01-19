@@ -1739,6 +1739,7 @@
   "studyNbGames": "{count, plural, =1{{count} Partida} other{{count} Partidas}}",
   "studyNbMembers": "{count, plural, =1{{count} Membro} other{{count} Membros}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Pega o teu texto PGN aquí, ata {count} partida} other{Pega aquí o PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata {count} capítulos.}}",
+  "teamIncorrectEntryCode": "Código de entrada incorrecto.",
   "teamBattleOfNbTeams": "{count, plural, =1{Batalla de {count} equipo} other{Batalla de {count} equipos}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Un líder por equipo} other{{count} líderes por equipo}}",
   "timeagoJustNow": "axiña",

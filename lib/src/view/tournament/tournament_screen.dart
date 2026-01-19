@@ -1155,8 +1155,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                               widget.state.tournament.private &&
                               !widget.state.hasJoined) {
                             // Joining a private tournament
-                            final password = await _showPasswordDialog(context);
-                            if (password == null || password.isEmpty) {
+                            final entryCode = await _showEntryCodeDialog(context);
+                            if (entryCode == null || entryCode.isEmpty) {
                               return;
                             }
 
@@ -1167,17 +1167,17 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             try {
                               await ref
                                   .read(tournamentControllerProvider(widget.state.id).notifier)
-                                  .joinOrPause(password: password);
+                                  .joinOrPause(entryCode: entryCode);
                             } catch (e) {
                               setState(() {
                                 joinOrLeaveInProgress = false;
                               });
                               if (e is ServerException && e.statusCode == 400) {
-                                // Invalid passcode
+                                // Invalid entry code
                                 if (!context.mounted) return;
                                 showSnackBar(
                                   context,
-                                  context.l10n.incorrectPassword,
+                                  context.l10n.teamIncorrectEntryCode,
                                   type: SnackBarType.error,
                                 );
                               } else {
@@ -1756,7 +1756,7 @@ Future<TeamId?> _showTeamSelectionDialog(BuildContext context, TeamBattleData te
   );
 }
 
-Future<String?> _showPasswordDialog(BuildContext context) {
+Future<String?> _showEntryCodeDialog(BuildContext context) {
   final TextEditingController controller = TextEditingController();
 
   return showDialog<String>(
@@ -1764,11 +1764,7 @@ Future<String?> _showPasswordDialog(BuildContext context) {
     builder: (context) {
       return AlertDialog.adaptive(
         title: Text(context.l10n.tournamentEntryCode),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(hintText: context.l10n.password),
-        ),
+        content: TextField(controller: controller, autofocus: true),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

@@ -1551,6 +1551,7 @@
   "studyNbGames": "{count, plural, =1{{count} Wedstryd} other{{count} Wedstryde}}",
   "studyNbMembers": "{count, plural, =1{{count} Lid} other{{count} Lede}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Plak jou PGN teks hier, tot by {count} spel} other{Plak jou PGN teks hier, tot by {count} spelle}}",
+  "teamIncorrectEntryCode": "Verkeerde insluitings kode.",
   "timeagoJustNow": "sopas",
   "timeagoRightNow": "nou",
   "timeagoCompleted": "voltooi",

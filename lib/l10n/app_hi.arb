@@ -1489,6 +1489,7 @@
   "studyNbGames": "{count, plural, =1{{count} खेल} other{{count} खेल}}",
   "studyNbMembers": "{count, plural, =1{{count} सदस्य} other{{count} सदस्य}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{यहां अपना PGN टेक्स्ट डाले,{count} खेल तक} other{यहां अपना PGN टेक्स्ट डाले,{count} खेल तक}}",
+  "teamIncorrectEntryCode": "अवैध प्रवेश कूट",
   "timeagoJustNow": "अभी",
   "timeagoRightNow": "अभी",
   "timeagoCompleted": "पूर्ण",

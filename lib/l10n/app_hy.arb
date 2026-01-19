@@ -1439,6 +1439,7 @@
   "studyNbGames": "{count, plural, =1{{count} պարտիա} other{{count} պարտիա}}",
   "studyNbMembers": "{count, plural, =1{{count} մասնակից} other{{count} մասնակից}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի} other{Տեղադրեք տեսքտը PGN ձևաչափով, {count} պարտիայից ոչ ավելի}}",
+  "teamIncorrectEntryCode": "Մուտքի սխալ կոդ։",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} թիմով մրցաշար} other{{count} թիմով մրցաշար}}",
   "timeagoJustNow": "հենց հիմա",
   "timeagoRightNow": "հենց հիմա",

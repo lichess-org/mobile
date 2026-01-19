@@ -1735,6 +1735,7 @@
   "studyNbGames": "{count, plural, =1{{count} partia} few{{count} partie} many{{count} partii} other{{count} partii}}",
   "studyNbMembers": "{count, plural, =1{{count} uczestnik} few{{count} uczestników} many{{count} uczestników} other{{count} uczestników}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Wklej tutaj swój PGN, max {count} partię} few{Wklej tutaj swój PGN, max {count} partie} many{Wklej tutaj swój PGN, max {count} partii} other{Wklej tutaj swój PGN, max {count} partii}}",
+  "teamIncorrectEntryCode": "Niepoprawny kod dostępu.",
   "teamBattleOfNbTeams": "{count, plural, =1{Bitwa {count} drużyny} few{Bitwa {count} drużyn} many{Bitwa {count} drużyn} other{Bitwa {count} drużyn}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Lider na drużynę} few{{count} liderów na drużynę} many{{count} liderów na drużynę} other{{count} liderów na drużynę}}",
   "timeagoJustNow": "właśnie teraz",

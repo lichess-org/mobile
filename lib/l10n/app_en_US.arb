@@ -1737,6 +1737,7 @@
   "studyNbGames": "{count, plural, =1{{count} Game} other{{count} Games}}",
   "studyNbMembers": "{count, plural, =1{{count} Member} other{{count} Members}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste your PGN text here, up to {count} games}}",
+  "teamIncorrectEntryCode": "Incorrect entry code.",
   "teamBattleOfNbTeams": "{count, plural, =1{Battle of {count} team} other{Battle of {count} teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{One leader per team} other{{count} leaders per team}}",
   "timeagoJustNow": "just now",

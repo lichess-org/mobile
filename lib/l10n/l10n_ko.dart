@@ -6067,6 +6067,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => '코드가 잘못되었습니다.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

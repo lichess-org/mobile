@@ -6143,6 +6143,9 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'अवैध प्रवेश कूट';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

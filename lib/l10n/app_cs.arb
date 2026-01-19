@@ -1710,6 +1710,7 @@
   "studyNbGames": "{count, plural, =1{{count} hra} few{{count} hry} many{{count} her} other{{count} her}}",
   "studyNbMembers": "{count, plural, =1{{count} člen} few{{count} členi} many{{count} členů} other{{count} členů}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Vložte obsah vašeho PGN souboru (až {count} hra)} few{Vložte obsah vašeho PGN souboru (až {count} hry)} many{Vložte obsah vašeho PGN souboru (až {count} her)} other{Vložte obsah vašeho PGN souboru (až {count} her)}}",
+  "teamIncorrectEntryCode": "Špatné heslo.",
   "teamBattleOfNbTeams": "{count, plural, =1{Bitva {count} týmu} few{Bitva {count} týmů} many{Bitva {count} týmů} other{Bitva {count} týmů}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Jeden vedoucí na tým} few{{count} vedoucí na tým} many{{count} vedoucích na tým} other{{count} vedoucí na tým}}",
   "timeagoJustNow": "právě teď",

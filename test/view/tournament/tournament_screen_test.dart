@@ -1232,7 +1232,7 @@ void main() {
     });
   });
   group('Joining Private Tournament', () {
-    testWidgets('shows password dialog when joining private tournament', (
+    testWidgets('shows entry code dialog when joining private tournament', (
       WidgetTester tester,
     ) async {
       final mockClient = MockClient((request) {
@@ -1277,12 +1277,11 @@ void main() {
       await tester.tap(find.text('Join'));
       await tester.pump();
 
-      // Verify password dialog appears
+      // Verify entry code dialog appears
       expect(find.text('Tournament entry code'), findsOneWidget);
-      expect(find.text('Password'), findsOneWidget);
     });
 
-    testWidgets('successfully joins with correct password', (WidgetTester tester) async {
+    testWidgets('successfully joins with correct entry code', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
           return mockResponse(
@@ -1301,10 +1300,10 @@ void main() {
           );
         }
         if (request.url.path == '/api/tournament/82QbxlJb/join') {
-          if (request.body == 'password=correctpassword') {
+          if (request.body == 'password=correctEntryCode') {
             return mockResponse('{}', 200);
           } else {
-            return mockResponse('{"error": "Wrong password"}', 400);
+            return mockResponse('{"error": "Wrong entry code"}', 400);
           }
         }
         if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
@@ -1345,8 +1344,8 @@ void main() {
       await tester.tap(find.text('Join'));
       await tester.pump();
 
-      // Enter correct password
-      await tester.enterText(find.byType(TextField), 'correctpassword');
+      // Enter correct entry code
+      await tester.enterText(find.byType(TextField), 'correctEntryCode');
       await tester.pump();
 
       // Tap Join in dialog
@@ -1362,7 +1361,7 @@ void main() {
       expect(find.text('Join'), findsNothing);
     });
 
-    testWidgets('shows error for incorrect password', (WidgetTester tester) async {
+    testWidgets('shows error for incorrect entry code', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
           return mockResponse(
@@ -1381,10 +1380,10 @@ void main() {
           );
         }
         if (request.url.path == '/api/tournament/82QbxlJb/join') {
-          if (request.body == 'password=correctpassword') {
+          if (request.body == 'password=correctEntryCode') {
             return mockResponse('{}', 200);
           } else {
-            return mockResponse('{"error": "Wrong password"}', 400);
+            return mockResponse('{"error": "Wrong entry code"}', 400);
           }
         }
         return mockResponse('', 404);
@@ -1412,8 +1411,8 @@ void main() {
       await tester.tap(find.text('Join'));
       await tester.pump();
 
-      // Enter incorrect password
-      await tester.enterText(find.byType(TextField), 'wrongpassword');
+      // Enter incorrect entry code
+      await tester.enterText(find.byType(TextField), 'wrongEntryCode');
       await tester.pump();
 
       // Tap Join in dialog
@@ -1421,7 +1420,7 @@ void main() {
       await tester.pump();
 
       // Verify error message appears
-      expect(find.text('Incorrect password'), findsOneWidget);
+      expect(find.text('Incorrect entry code'), findsOneWidget);
 
       // Verify still not joined
       expect(find.text('Join'), findsOneWidget);

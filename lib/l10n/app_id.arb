@@ -1509,6 +1509,7 @@
   "studyNbGames": "{count, plural, other{{count} Permainan}}",
   "studyNbMembers": "{count, plural, other{{count} Anggota}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{Tempelkan PGN kamu disini, lebih dari {count} permainan}}",
+  "teamIncorrectEntryCode": "Kode masuk salah.",
   "timeagoJustNow": "baru saja",
   "timeagoRightNow": "sekarang",
   "timeagoCompleted": "telah selesai",

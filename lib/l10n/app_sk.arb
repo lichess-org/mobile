@@ -1735,6 +1735,7 @@
   "studyNbGames": "{count, plural, =1{{count} Partia} few{{count} Partie} many{{count} Partií} other{{count} Partií}}",
   "studyNbMembers": "{count, plural, =1{{count} Člen} few{{count} Členovia} many{{count} Členov} other{{count} Členov}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Váš PGN text vložte sem, maximálne {count} partiu} few{Váš PGN text vložte sem, maximálne {count} partie} many{Váš PGN text vložte sem, maximálne {count} partií} other{Váš PGN text vložte sem, maximálne {count} partií}}",
+  "teamIncorrectEntryCode": "Nesprávny vstupný kód.",
   "teamBattleOfNbTeams": "{count, plural, =1{Turnaj {count} tímu} few{Turnaj {count} tímov} many{Turnaj {count} tímov} other{Turnaj {count} tímov}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Jeden líder na tím} few{{count} lídri na tím} many{{count} lídrov na tím} other{{count} lídrov na tím}}",
   "timeagoJustNow": "práve teraz",

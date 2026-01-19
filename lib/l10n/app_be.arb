@@ -1462,6 +1462,7 @@
   "studyNbGames": "{count, plural, =1{{count} партыя} few{{count} партыі} many{{count} партый} other{{count} партый}}",
   "studyNbMembers": "{count, plural, =1{{count} удзельнік} few{{count} удзельніка} many{{count} удзельнікаў} other{{count} удзельнікаў}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Устаўце сюды ваш PGN тэкст, не больш за {count} гульню} few{Устаўце сюды ваш PGN тэкст, не больш за {count} гульні} many{Устаўце сюды ваш PGN тэкст, не больш за {count} гульняў} other{Устаўце сюды ваш PGN тэкст, не больш за {count} гульняў}}",
+  "teamIncorrectEntryCode": "Няправільны код далучэння.",
   "timeagoJustNow": "зараз",
   "timeagoRightNow": "прама зараз",
   "timeagoCompleted": "завершана",

@@ -1728,6 +1728,7 @@
   "studyNbGames": "{count, plural, =1{{count} parti} other{{count} partier}}",
   "studyNbMembers": "{count, plural, =1{{count} medlem} other{{count} medlemmer}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Sett inn PGN-teksten din her, maksimum {count} parti} other{Sett inn PGN-teksten din her, maksimum {count} partier}}",
+  "teamIncorrectEntryCode": "Feil adgangskode.",
   "teamBattleOfNbTeams": "{count, plural, =1{Kamp mellom {count} lag} other{Kamp mellom {count} lag}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Én leder per lag} other{{count} ledere per lag}}",
   "timeagoJustNow": "om litt",

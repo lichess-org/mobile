@@ -6071,6 +6071,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Kode masuk salah.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

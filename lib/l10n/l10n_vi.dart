@@ -6067,6 +6067,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Mã không chính xác.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

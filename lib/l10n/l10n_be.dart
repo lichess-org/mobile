@@ -6289,6 +6289,9 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Няправільны код далучэння.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

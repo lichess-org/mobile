@@ -1735,6 +1735,7 @@
   "studyNbGames": "{count, plural, =1{{count} peli} other{{count} peliä}}",
   "studyNbMembers": "{count, plural, =1{{count} jäsen} other{{count} jäsentä}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Liitä PGN tähän, enintään {count} peli} other{Liitä PGN tähän, enintään {count} peliä}}",
+  "teamIncorrectEntryCode": "Virheellinen sisäänpääsykoodi.",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} joukkueen välinen taisto} other{{count} joukkueen välinen taisto}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Yksi johtaja per joukkue} other{{count} johtajaa per joukkue}}",
   "timeagoJustNow": "juuri äsken",
