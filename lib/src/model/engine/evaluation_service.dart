@@ -59,7 +59,15 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService(Ref ref, {required this.maxMemory}) : _ref = ref;
+  EvaluationService(Ref ref, {required this.maxMemory}) : _ref = ref {
+    _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
+    _stockfish.state.addListener(_onStockfishStateChange);
+    _protocol.isComputing.addListener(_onComputingChange);
+    _evalSubscription = _protocol.evalStream.listen((result) {
+      _currentEval.value = result.$2;
+      _evalController.add(result);
+    });
+  }
 
   final Ref _ref;
   final int maxMemory;
@@ -68,8 +76,8 @@ class EvaluationService {
 
   final UCIProtocol _protocol = UCIProtocol();
 
-  StreamSubscription<String>? _stdoutSubscription;
-  StreamSubscription<EvalResult>? _evalSubscription;
+  late final StreamSubscription<String> _stdoutSubscription;
+  late final StreamSubscription<EvalResult> _evalSubscription;
 
   /// The current work being evaluated, if any.
   Work? _currentWork;
@@ -101,6 +109,14 @@ class EvaluationService {
 
   final ValueNotifier<EngineState> _engineState = ValueNotifier(EngineState.initial);
   ValueListenable<EngineState> get engineState => _engineState;
+
+  void _setEngineState(EngineState newState) {
+    final oldState = _engineState.value;
+    if (oldState != newState) {
+      _logger.fine('Engine state: ${newState.name}');
+      _engineState.value = newState;
+    }
+  }
 
   /// The current local evaluation, if any.
   final ValueNotifier<LocalEval?> _currentEval = ValueNotifier(null);
@@ -153,7 +169,11 @@ class EvaluationService {
       }
     }
 
-    _logger.info('Starting evaluation: $work');
+    _logger.info(
+      'Starting evaluation at ply ${work.position.ply} with options: '
+      'enginePref=${work.enginePref}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
+    );
 
     // Determine flavor based on options
     final flavor = work.enginePref == ChessEnginePref.sfLatest
@@ -173,7 +193,7 @@ class EvaluationService {
 
     if (needsRestart) {
       _initInProgress = true;
-      _engineState.value = EngineState.loading;
+      _setEngineState(EngineState.loading);
       _initEngine(flavor).then((_) {
         // Compute the current work (might be different from original if another evaluate() came in)
         final currentWork = _currentWork;
@@ -191,9 +211,6 @@ class EvaluationService {
 
   Future<void> _initEngine(StockfishFlavor flavor) async {
     try {
-      _stdoutSubscription?.cancel();
-      _evalSubscription?.cancel();
-
       await _stockfish.quit();
       if (_isDisposed) return;
 
@@ -225,31 +242,19 @@ class EvaluationService {
 
       // Check if stockfish failed to start
       if (_stockfish.state.value == StockfishState.error) {
-        _engineState.value = EngineState.error;
+        _setEngineState(EngineState.error);
         return;
       }
 
       _currentFlavor = actualFlavor;
 
-      _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
-
-      _stockfish.state.addListener(_onStockfishStateChange);
-
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
 
-      _evalSubscription?.cancel();
-      _evalSubscription = _protocol.evalStream.listen((result) {
-        _currentEval.value = result.$2;
-        _evalController.add(result);
-      });
-
-      _protocol.isComputing.addListener(_onComputingChange);
-
-      _engineState.value = EngineState.idle;
+      _setEngineState(EngineState.idle);
     } catch (e, s) {
       _logger.severe('Error initializing engine', e, s);
       if (!_isDisposed) {
-        _engineState.value = EngineState.error;
+        _setEngineState(EngineState.error);
       }
     } finally {
       _initInProgress = false;
@@ -260,10 +265,10 @@ class EvaluationService {
     switch (_stockfish.state.value) {
       case StockfishState.ready:
         if (_engineState.value != EngineState.computing) {
-          _engineState.value = EngineState.idle;
+          _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
-        _engineState.value = EngineState.error;
+        _setEngineState(EngineState.error);
       default:
         break;
     }
@@ -271,9 +276,9 @@ class EvaluationService {
 
   void _onComputingChange() {
     if (_protocol.isComputing.value) {
-      _engineState.value = EngineState.computing;
+      _setEngineState(EngineState.computing);
     } else {
-      _engineState.value = EngineState.idle;
+      _setEngineState(EngineState.idle);
     }
   }
 
@@ -291,10 +296,6 @@ class EvaluationService {
   void quit() {
     _protocol.compute(null);
     _currentWork = null;
-    _stdoutSubscription?.cancel();
-    _evalSubscription?.cancel();
-    _stockfish.state.removeListener(_onStockfishStateChange);
-    _protocol.isComputing.removeListener(_onComputingChange);
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
@@ -302,8 +303,8 @@ class EvaluationService {
 
   void _dispose() {
     _isDisposed = true;
-    _stdoutSubscription?.cancel();
-    _evalSubscription?.cancel();
+    _stdoutSubscription.cancel();
+    _evalSubscription.cancel();
     _stockfish.state.removeListener(_onStockfishStateChange);
     _protocol.isComputing.removeListener(_onComputingChange);
     _protocol.dispose();

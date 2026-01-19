@@ -590,22 +590,13 @@ void main() {
     });
 
     test('Engine name is correctly set after restarting stockfish', () async {
-      testBinding.stockfish = FakeStockfish(engineName: 'Stockfish 16');
+      final fakeStockfish = FakeStockfish(engineName: 'Stockfish 16');
+      testBinding.stockfish = fakeStockfish;
       final container = await makeContainer();
 
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
-        enginePref: ChessEnginePref.sf16,
-        variant: Variant.standard,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: const Duration(seconds: 3),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IList(),
-        threatMode: false,
-      );
+      final work = makeWork();
 
       final stream1 = service.evaluate(work);
       expect(stream1, isNotNull);
@@ -616,7 +607,7 @@ void main() {
 
       service.quit();
 
-      testBinding.stockfish = FakeStockfish(engineName: 'Stockfish 17');
+      fakeStockfish.engineName = 'Stockfish 17';
 
       final stream2 = service.evaluate(work);
       expect(stream2, isNotNull);

@@ -12,7 +12,9 @@ class FakeStockfish implements Stockfish {
   final _stdoutController = StreamController<String>.broadcast();
 
   StockfishFlavor _flavor = StockfishFlavor.sf16;
-  final String? _customEngineName;
+  String? _customEngineName;
+
+  set engineName(String? value) => _customEngineName = value;
   String? _variant;
   String? _smallNetPath;
   String? _bigNetPath;

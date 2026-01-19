@@ -17,7 +17,7 @@ class UCIProtocol {
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
-  StreamController<EvalResult> _evalController = StreamController<EvalResult>.broadcast();
+  final _evalController = StreamController<EvalResult>.broadcast();
   Completer<String> _engineNameCompleter = Completer<String>();
   final _isComputing = ValueNotifier(false);
 
@@ -45,12 +45,6 @@ class UCIProtocol {
 
     // Create new completer for engine name (old one may be completed)
     _engineNameCompleter = Completer<String>();
-
-    // Create new eval controller (old one may have listeners)
-    if (!_evalController.isClosed) {
-      _evalController.close();
-    }
-    _evalController = StreamController<EvalResult>.broadcast();
   }
 
   Work? _work;
