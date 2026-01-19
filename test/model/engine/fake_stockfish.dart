@@ -120,6 +120,136 @@ class FakeStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish with configurable delays for testing race conditions.
+class DelayedFakeStockfish implements Stockfish {
+  DelayedFakeStockfish({
+    this.startDelay = Duration.zero,
+    this.quitDelay = Duration.zero,
+    String? engineName,
+  }) : _customEngineName = engineName;
+
+  final Duration startDelay;
+  final Duration quitDelay;
+  final String? _customEngineName;
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  StockfishFlavor _flavor = StockfishFlavor.sf16;
+  Position? _position;
+
+  int startCallCount = 0;
+  int quitCallCount = 0;
+  final List<String> stdinCommands = [];
+
+  int get stopCallCount => stdinCommands.where((cmd) => cmd.startsWith('stop')).length;
+
+  void _emit(String line) {
+    scheduleMicrotask(() {
+      if (!_stdoutController.isClosed) {
+        _stdoutController.add(line);
+      }
+    });
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    startCallCount++;
+    _flavor = flavor;
+    _state.value = StockfishState.starting;
+    if (startDelay > Duration.zero) {
+      await Future<void>.delayed(startDelay);
+    } else {
+      await Future.microtask(() {});
+    }
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    quitCallCount++;
+    if (quitDelay > Duration.zero) {
+      await Future<void>.delayed(quitDelay);
+    } else {
+      await Future.microtask(() {});
+    }
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    stdinCommands.add(line.trim());
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        final engineName =
+            _customEngineName ??
+            (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 17' : 'Stockfish 16');
+        _emit('id name $engineName\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+          if (movesPartIndex != -1) {
+            for (var i = movesPartIndex + 1; i < parts.length; i++) {
+              final move = Move.parse(parts[i]);
+              if (move != null) {
+                _position = _position!.play(move);
+              }
+            }
+          }
+        }
+      case 'go':
+        if (parts.length > 1 && parts[1] == 'movetime') {
+          if (parts.length > 2) {
+            final moveTime = int.tryParse(parts[2]);
+            if (moveTime != null) {
+              for (var i = 1; i < 3; i++) {
+                _emit(
+                  'info depth ${14 + i} seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 hashfull 0 tbhits 0 time ${100 * (i + 14)} pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6\n',
+                );
+              }
+              _emit('bestmove e2e4 ponder e7e5\n');
+            }
+          }
+        }
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
 class ErrorStockfish implements Stockfish {
