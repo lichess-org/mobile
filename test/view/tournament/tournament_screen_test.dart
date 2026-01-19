@@ -1419,7 +1419,6 @@ void main() {
       // Tap Join in dialog
       await tester.tap(find.text('Join').last);
       await tester.pump();
-      await tester.pumpAndSettle();
 
       // Verify error message appears
       expect(find.text('Incorrect password'), findsOneWidget);

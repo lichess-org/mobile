@@ -1766,6 +1766,7 @@ Future<String?> _showPasswordDialog(BuildContext context) {
         title: Text(context.l10n.tournamentEntryCode),
         content: TextField(
           controller: controller,
+          autofocus: true,
           decoration: InputDecoration(hintText: context.l10n.password),
         ),
         actions: [
