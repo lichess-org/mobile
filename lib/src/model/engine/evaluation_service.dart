@@ -181,7 +181,10 @@ class EvaluationService {
         : StockfishFlavor.sf16;
 
     // Check if we need to restart the engine (different flavor or not running)
-    final needsRestart = _currentFlavor != flavor || _stockfish.state.value != StockfishState.ready;
+    final stockfishState = _stockfish.state.value;
+    final needsRestart = _currentFlavor != flavor ||
+        stockfishState == StockfishState.initial ||
+        stockfishState == StockfishState.error;
 
     _currentWork = work;
 

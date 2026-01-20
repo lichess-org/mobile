@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
@@ -264,6 +265,35 @@ void main() {
 
       // Still only one start call
       expect(delayedStockfish.startCallCount, 1);
+    });
+
+    test('evaluate() does not restart when stockfish is in starting state', () async {
+      final delayedStockfish = DelayedFakeStockfish(startDelay: const Duration(milliseconds: 100));
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork();
+      service.evaluate(work1);
+
+      // Wait for stockfish to be in starting state
+      while (delayedStockfish.state.value != StockfishState.starting) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+      expect(delayedStockfish.state.value, StockfishState.starting);
+
+      // Call evaluate again while stockfish is starting
+      final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final stream2 = service.evaluate(work2);
+
+      // Wait for engine to be ready
+      await stream2!.first;
+
+      // Should only have one start call (no restart when state was starting)
+      expect(delayedStockfish.startCallCount, 1);
+      // quit is only called once during _initEngine before the first start
+      expect(delayedStockfish.quitCallCount, 1);
     });
 
     test('stop() during init clears work but init continues', () async {
