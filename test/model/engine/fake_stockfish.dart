@@ -14,6 +14,7 @@ class FakeStockfish implements Stockfish {
   StockfishFlavor _flavor = StockfishFlavor.sf16;
   String? _customEngineName;
 
+  // ignore: avoid_setters_without_getters
   set engineName(String? value) => _customEngineName = value;
   String? _variant;
   String? _smallNetPath;
