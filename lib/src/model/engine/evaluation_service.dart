@@ -288,7 +288,6 @@ class EvaluationService {
   void stop() {
     _protocol.compute(null);
     _currentWork = null;
-    _currentEval.value = null;
   }
 
   /// Quit the engine entirely.
