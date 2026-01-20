@@ -179,6 +179,10 @@ class EvaluationService {
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
+    // Check if we need to clear engine context (different game/puzzle)
+    final needsNewGame = _currentWork != null &&
+        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
+
     _currentWork = work;
 
     if (_initInProgress) {
@@ -198,7 +202,7 @@ class EvaluationService {
         }
       });
     } else {
-      _protocol.compute(work);
+      _protocol.compute(work, newGame: needsNewGame);
     }
 
     return evalStream.where((result) => result.$1 == work);

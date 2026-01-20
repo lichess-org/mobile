@@ -3,6 +3,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -14,18 +15,21 @@ import '../../test_container.dart';
 import 'fake_stockfish.dart';
 
 Work makeWork({
+  StringId? id,
   UciPath? path,
   ChessEnginePref enginePref = ChessEnginePref.sf16,
   Duration searchTime = const Duration(seconds: 1),
+  Position? initialPosition,
 }) {
   return Work(
+    id: id,
     enginePref: enginePref,
     variant: Variant.standard,
     threads: 1,
     path: path ?? UciPath.empty,
     searchTime: searchTime,
     multiPv: 1,
-    initialPosition: Chess.initial,
+    initialPosition: initialPosition ?? Chess.initial,
     steps: IList(),
     threatMode: false,
   );
@@ -424,6 +428,74 @@ void main() {
 
       final (resultWork, _) = await stream!.first;
       expect(resultWork, work);
+    });
+
+    test('ucinewgame is sent when initialPosition changes', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'));
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      // Clear commands to track only new ones
+      delayedStockfish.stdinCommands.clear();
+
+      // Different initialPosition (after e4)
+      final positionAfterE4 = Chess.initial.play(Move.parse('e2e4')!);
+      final work2 = makeWork(id: const StringId('game2'), initialPosition: positionAfterE4);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when work id changes', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'));
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      // Same initialPosition but different id
+      final work2 = makeWork(id: const StringId('game2'));
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is not sent when work context is the same', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'));
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      // Same id and initialPosition, just different path
+      final work2 = makeWork(
+        id: const StringId('game1'),
+        path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+      );
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, isNot(contains('ucinewgame')));
     });
   });
 
