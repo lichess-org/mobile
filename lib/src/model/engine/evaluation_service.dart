@@ -79,16 +79,9 @@ class EvaluationService {
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
 
-  /// The current work being evaluated, if any.
   Work? _currentWork;
-
-  /// Current engine flavor running.
   StockfishFlavor? _currentFlavor;
-
-  /// Whether engine initialization is in progress.
   bool _initInProgress = false;
-
-  /// Whether the service has been disposed.
   bool _isDisposed = false;
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
@@ -118,8 +111,9 @@ class EvaluationService {
     }
   }
 
-  /// The current local evaluation, if any.
   final ValueNotifier<LocalEval?> _currentEval = ValueNotifier(null);
+
+  /// The current local evaluation, if any.
   ValueListenable<LocalEval?> get currentEval => _currentEval;
 
   /// The current work being evaluated, if any.
@@ -175,14 +169,13 @@ class EvaluationService {
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
-    // Determine flavor based on options
     final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
         : StockfishFlavor.sf16;
 
-    // Check if we need to restart the engine (different flavor or not running)
     final stockfishState = _stockfish.state.value;
-    final needsRestart = _currentFlavor != flavor ||
+    final needsRestart =
+        _currentFlavor != flavor ||
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
@@ -208,7 +201,6 @@ class EvaluationService {
       _protocol.compute(work);
     }
 
-    // Return filtered stream for this work
     return evalStream.where((result) => result.$1 == work);
   }
 
@@ -220,7 +212,6 @@ class EvaluationService {
       // Reset the protocol for the new engine session
       _protocol.reset();
 
-      // Check NNUE files for latest flavor
       String? smallNetPath;
       String? bigNetPath;
       StockfishFlavor actualFlavor = flavor;
@@ -243,7 +234,6 @@ class EvaluationService {
       );
       if (_isDisposed) return;
 
-      // Check if stockfish failed to start
       if (_stockfish.state.value == StockfishState.error) {
         _setEngineState(EngineState.error);
         return;
@@ -466,9 +456,7 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     _service = ref.watch(evaluationServiceProvider);
     _disposed = false;
 
-    // Listen to engine state changes
     _service.engineState.addListener(_onStateChange);
-    // Listen to eval changes
     _service.currentEval.addListener(_onEvalChange);
 
     ref.onDispose(() {
@@ -477,7 +465,6 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
       _service.currentEval.removeListener(_onEvalChange);
     });
 
-    // Get engine name asynchronously
     _service.engineName.then((name) {
       if (!_disposed) {
         _cachedEngineName = name;
