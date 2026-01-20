@@ -36,6 +36,8 @@ Future<void> main() async {
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     final lifecycleState = WidgetsBinding.instance.lifecycleState;
+    // Skip display initialization when the app is in detached state (no active view),
+    // which can happen when a Unified Push distributor forwards a message to the app.
     if (lifecycleState != AppLifecycleState.detached) {
       await androidDisplayInitialization(widgetsBinding);
     }
