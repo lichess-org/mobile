@@ -235,15 +235,12 @@ class EvaluationService {
       if (_isDisposed) return;
 
       if (_stockfish.state.value == StockfishState.error) {
-        _setEngineState(EngineState.error);
         return;
       }
 
       _currentFlavor = actualFlavor;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
-
-      _setEngineState(EngineState.idle);
     } catch (e, s) {
       _logger.severe('Error initializing engine', e, s);
       if (!_isDisposed) {
@@ -257,15 +254,18 @@ class EvaluationService {
   void _onStockfishStateChange() {
     switch (_stockfish.state.value) {
       case StockfishState.initial:
-        _setEngineState(EngineState.initial);
+        // Don't overwrite loading state during engine restart
+        if (_engineState.value != EngineState.loading) {
+          _setEngineState(EngineState.initial);
+        }
+      case StockfishState.starting:
+        _setEngineState(EngineState.loading);
       case StockfishState.ready:
         if (_engineState.value != EngineState.computing) {
           _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
         _setEngineState(EngineState.error);
-      case StockfishState.starting:
-        break;
     }
   }
 
