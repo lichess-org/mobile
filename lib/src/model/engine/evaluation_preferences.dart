@@ -100,13 +100,6 @@ sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implemen
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
     return _$EngineEvaluationPrefStateFromJson(json);
   }
-
-  EvaluationOptions get evaluationOptions => EvaluationOptions(
-    multiPv: numEvalLines,
-    cores: numEngineCores,
-    searchTime: engineSearchTime,
-    enginePref: enginePref,
-  );
 }
 
 Duration _searchTimeDefault() {

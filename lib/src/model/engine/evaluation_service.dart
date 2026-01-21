@@ -180,7 +180,8 @@ class EvaluationService {
         stockfishState == StockfishState.error;
 
     // Check if we need to clear engine context (different game/puzzle)
-    final needsNewGame = _currentWork != null &&
+    final needsNewGame =
+        _currentWork != null &&
         (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
 
     _currentWork = work;
@@ -506,46 +507,10 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
   }
 }
 
-class EngineStateNotifier extends Notifier<EngineState> {
-  late ValueListenable<EngineState> _listenable;
-  bool _disposed = false;
-
-  @override
-  EngineState build() {
-    _listenable = ref.watch(evaluationServiceProvider).engineState;
-    _disposed = false;
-
-    _listenable.addListener(_listener);
-
-    ref.onDispose(() {
-      _disposed = true;
-      _listenable.removeListener(_listener);
-    });
-
-    return _listenable.value;
-  }
-
-  void _listener() {
-    if (!_disposed) {
-      state = _listenable.value;
-    }
-  }
-}
-
 @freezed
 sealed class EvaluationContext with _$EvaluationContext {
   const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
       _EvaluationContext;
-}
-
-@freezed
-sealed class EvaluationOptions with _$EvaluationOptions {
-  const factory EvaluationOptions({
-    required ChessEnginePref enginePref,
-    required int multiPv,
-    required int cores,
-    required Duration searchTime,
-  }) = _EvaluationOptions;
 }
 
 /// A function to choose the eval that should be displayed.

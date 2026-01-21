@@ -262,17 +262,16 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
 
-    final options = evaluationPrefs.evaluationOptions;
-    final searchTime = goDeeper ? kMaxEngineSearchTime : options.searchTime;
+    final searchTime = goDeeper ? kMaxEngineSearchTime : evaluationPrefs.engineSearchTime;
 
     final work = Work(
-      enginePref: options.enginePref,
+      enginePref: evaluationPrefs.enginePref,
       variant: curState.evaluationContext.variant,
-      threads: options.cores,
+      threads: evaluationPrefs.numEngineCores,
       hashSize: _evaluationService.maxMemory,
       path: curState.currentPath,
       searchTime: searchTime,
-      multiPv: options.multiPv,
+      multiPv: evaluationPrefs.numEvalLines,
       threatMode: curState.engineInThreatMode,
       isDeeper: goDeeper ? true : null,
       initialPosition: curState.evaluationContext.initialPosition,
