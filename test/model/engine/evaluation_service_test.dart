@@ -733,6 +733,287 @@ void main() {
     });
   });
 
+  group('EvaluationService throttle behavior', () {
+    test('first eval event is emitted immediately without throttle delay', () async {
+      final throttleStockfish = ThrottleTestStockfish();
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit one eval event
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+
+        // First event should be emitted immediately (no throttle delay)
+        expect(results.length, 1);
+        expect(results.first.$1, work);
+      });
+    });
+
+    test('events during throttle window are collected, only trailing is emitted', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit first event - should be emitted immediately
+        throttleStockfish.emitEvalEvents(); // depth 11, cp 10
+        async.flushMicrotasks();
+        expect(results.length, 1);
+        expect(results.last.$2.depth, 11);
+
+        // Emit more events within throttle window (200ms)
+        throttleStockfish.emitEvalEvents(); // depth 12, cp 20
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // depth 13, cp 30
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // depth 14, cp 40
+        async.flushMicrotasks();
+
+        // Still only 1 result (first one) - others are pending
+        expect(results.length, 1);
+
+        // Elapse throttle delay (200ms)
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Now trailing event should be emitted (the last one: depth 14)
+        expect(results.length, 2);
+        expect(results.last.$2.depth, 14);
+      });
+    });
+
+    test('multiple throttle windows emit correctly', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // First window: emit events
+        throttleStockfish.emitEvalEvents(); // depth 11 - emitted immediately
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // depth 12 - pending
+        async.flushMicrotasks();
+
+        expect(results.length, 1);
+        expect(results.last.$2.depth, 11);
+
+        // Wait for throttle to expire - trailing event emitted, starts new window
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+        expect(results.length, 2);
+        expect(results.last.$2.depth, 12);
+
+        // Wait for the trailing emission's throttle window to expire
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Second window: emit more events
+        throttleStockfish.emitEvalEvents(); // depth 13 - emitted immediately (new window)
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // depth 14 - pending
+        async.flushMicrotasks();
+
+        expect(results.length, 3);
+        expect(results.last.$2.depth, 13);
+
+        // Wait for second throttle to expire
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+        expect(results.length, 4);
+        expect(results.last.$2.depth, 14);
+      });
+    });
+
+    test('quit() cancels pending throttle timer - no pending timers', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit events to start throttle window
+        throttleStockfish.emitEvalEvents(); // emitted immediately
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // pending
+        async.flushMicrotasks();
+
+        expect(results.length, 1);
+
+        // Quit before throttle expires - should cancel pending timer
+        service.quit();
+        async.flushMicrotasks();
+
+        // Elapse more than throttle delay
+        async.elapse(kEngineEvalEmissionThrottleDelay * 2);
+
+        // Pending event should NOT have been emitted (timer was cancelled)
+        expect(results.length, 1);
+
+        // No pending timers assertion is implicit - fakeAsync would fail if timer was still pending
+      });
+    });
+
+    test('stop() does not cancel throttle timer - pending event still emits', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit events to start throttle window
+        throttleStockfish.emitEvalEvents(); // emitted immediately
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // pending
+        async.flushMicrotasks();
+
+        expect(results.length, 1);
+
+        // stop() clears work but doesn't cancel throttle timer
+        service.stop();
+        async.flushMicrotasks();
+
+        // Elapse throttle delay
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Pending event should still be emitted (throttle timer not cancelled by stop)
+        expect(results.length, 2);
+      });
+    });
+
+    test('evaluationState.eval is updated with throttled events', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        expect(service.evaluationState.value.eval, isNull);
+
+        // Emit first event - updates state immediately
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+
+        expect(service.evaluationState.value.eval, isNotNull);
+        expect(service.evaluationState.value.eval!.depth, 11);
+
+        // Emit more events within throttle window
+        throttleStockfish.emitEvalEvents(); // depth 12 - pending
+        async.flushMicrotasks();
+        throttleStockfish.emitEvalEvents(); // depth 13 - pending (overwrites)
+        async.flushMicrotasks();
+
+        // State still shows first event (throttled)
+        expect(service.evaluationState.value.eval!.depth, 11);
+
+        // Wait for throttle to expire
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Now state shows the trailing event
+        expect(service.evaluationState.value.eval!.depth, 13);
+      });
+    });
+
+    test('rapid events only result in first + trailing emissions', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+        final results = <EvalResult>[];
+
+        service.evalStream.listen(results.add);
+
+        final work = makeWork();
+        service.evaluate(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit 10 rapid events
+        for (var i = 0; i < 10; i++) {
+          throttleStockfish.emitEvalEvents();
+          async.flushMicrotasks();
+        }
+
+        // Only first event emitted so far
+        expect(results.length, 1);
+        expect(results.first.$2.depth, 11); // first event
+
+        // Wait for throttle
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Now trailing (last) event is also emitted
+        expect(results.length, 2);
+        expect(results.last.$2.depth, 20); // 10th event (11 + 9)
+      });
+    });
+  });
+
   group('EngineEvaluationNotifier', () {
     test('updates engineName after engine restart', () async {
       final fakeStockfish = FakeStockfish();

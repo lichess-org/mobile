@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 part 'evaluation_service.freezed.dart';
 
@@ -55,10 +54,7 @@ class EvaluationService {
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
     _protocol.engineName.addListener(_onEngineNameChange);
-    _evalSubscription = _protocol.evalStream.listen((result) {
-      _setEval(result.$2);
-      _evalController.add(result);
-    });
+    _evalSubscription = _protocol.evalStream.listen(_onEvalResult);
   }
 
   final int maxMemory;
@@ -75,6 +71,10 @@ class EvaluationService {
   bool _initInProgress = false;
   bool _isDisposed = false;
 
+  // Throttling state for eval emissions
+  Timer? _evalThrottleTimer;
+  EvalResult? _pendingEvalResult;
+
   /// Expose NNUE download progress from the nnue service.
   ValueListenable<double> get nnueDownloadProgress => _nnueService.nnueDownloadProgress;
 
@@ -87,8 +87,9 @@ class EvaluationService {
   ///
   /// Listeners should filter results by comparing the Work to their own request
   /// to determine if the result is relevant to them.
-  Stream<EvalResult> get evalStream =>
-      _evalController.stream.throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
+  ///
+  /// This stream is throttled to avoid excessive UI updates.
+  Stream<EvalResult> get evalStream => _evalController.stream;
 
   final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
     engineName: null,
@@ -295,6 +296,37 @@ class EvaluationService {
     _setState();
   }
 
+  /// Handles incoming eval results with throttling.
+  ///
+  /// Implements trailing throttle: emits immediately if no throttle is active,
+  /// otherwise stores the result to emit when the throttle window expires.
+  void _onEvalResult(EvalResult result) {
+    if (_evalThrottleTimer == null) {
+      // No active throttle - emit immediately and start throttle window
+      _emitEval(result);
+      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
+    } else {
+      // Within throttle window - store for trailing emission
+      _pendingEvalResult = result;
+    }
+  }
+
+  void _onThrottleExpired() {
+    _evalThrottleTimer = null;
+    final pending = _pendingEvalResult;
+    if (pending != null) {
+      _pendingEvalResult = null;
+      _emitEval(pending);
+      // Start new throttle window for trailing emission
+      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
+    }
+  }
+
+  void _emitEval(EvalResult result) {
+    _setEval(result.$2);
+    _evalController.add(result);
+  }
+
   /// Stop the current evaluation.
   void stop() {
     _protocol.compute(null);
@@ -308,6 +340,9 @@ class EvaluationService {
   void quit() {
     _protocol.compute(null);
     _setWork(null);
+    _evalThrottleTimer?.cancel();
+    _evalThrottleTimer = null;
+    _pendingEvalResult = null;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
@@ -315,6 +350,9 @@ class EvaluationService {
 
   void _dispose() {
     _isDisposed = true;
+    _evalThrottleTimer?.cancel();
+    _evalThrottleTimer = null;
+    _pendingEvalResult = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();
     _stockfish.state.removeListener(_onStockfishStateChange);

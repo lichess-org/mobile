@@ -250,6 +250,115 @@ class DelayedFakeStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish that emits multiple eval events with controllable timing.
+/// Used for testing throttle behavior.
+class ThrottleTestStockfish implements Stockfish {
+  ThrottleTestStockfish({this.evalEventCount = 5, this.evalEventInterval = Duration.zero});
+
+  /// Number of eval events to emit per `go` command.
+  final int evalEventCount;
+
+  /// Interval between each eval event emission.
+  final Duration evalEventInterval;
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  Position? _position;
+
+  /// Tracks how many eval info lines have been emitted.
+  int emittedEvalCount = 0;
+
+  void _emit(String line) {
+    scheduleMicrotask(() {
+      if (!_stdoutController.isClosed) {
+        _stdoutController.add(line);
+      }
+    });
+  }
+
+  /// Emits eval events. Call this from tests to control timing.
+  void emitEvalEvents() {
+    for (var i = 0; i < evalEventCount; i++) {
+      emittedEvalCount++;
+      final depth = 10 + emittedEvalCount;
+      final time = 100 * emittedEvalCount;
+      _emit(
+        'info depth $depth seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}${emittedEvalCount * 10} nodes ${359 * depth} nps 359000 hashfull 0 tbhits 0 time $time pv e2e4 e7e5 g1f3\n',
+      );
+    }
+  }
+
+  /// Emits bestmove to signal evaluation complete.
+  void emitBestMove() {
+    _emit('bestmove e2e4 ponder e7e5\n');
+  }
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+    emittedEvalCount = 0;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        _emit('id name Stockfish 16\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+        }
+      case 'go':
+        // Don't emit automatically - tests will call emitEvalEvents() manually
+        break;
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
 class ErrorStockfish implements Stockfish {
