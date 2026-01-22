@@ -98,7 +98,7 @@ class UCIProtocol {
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
-    print('*********** >>> $line');
+    _log.fine('>>> $line');
     final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
@@ -190,8 +190,6 @@ class UCIProtocol {
           _stop();
         }
       }
-    } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts.first)) {
-      _log.info(line);
     }
   }
 

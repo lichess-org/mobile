@@ -1,28 +1,19 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:math';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:crypto/crypto.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -39,12 +30,11 @@ final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngi
 /// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
-typedef NNUEFiles = ({File bigNet, File smallNet});
-
 /// A provider for [EvaluationService].
 final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-  final service = EvaluationService(ref, maxMemory: maxMemory);
+  final nnueService = ref.read(nnueServiceProvider);
+  final service = EvaluationService(maxMemory: maxMemory, nnueService: nnueService);
 
   ref.onDispose(() {
     service._dispose();
@@ -59,7 +49,8 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService(Ref ref, {required this.maxMemory}) : _ref = ref {
+  EvaluationService({required this.maxMemory, required NnueService nnueService})
+    : _nnueService = nnueService {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
@@ -69,8 +60,8 @@ class EvaluationService {
     });
   }
 
-  final Ref _ref;
   final int maxMemory;
+  final NnueService _nnueService;
 
   Stockfish get _stockfish => LichessBinding.instance.stockfish;
 
@@ -84,12 +75,11 @@ class EvaluationService {
   bool _initInProgress = false;
   bool _isDisposed = false;
 
-  final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
-  bool _nnueOperationInProgress = false;
+  /// Expose NNUE download progress from the nnue service.
+  ValueListenable<double> get nnueDownloadProgress => _nnueService.nnueDownloadProgress;
 
-  ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
-  bool get isDownloadingNNUEFiles =>
-      nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
+  /// Whether NNUE files are currently being downloaded.
+  bool get isDownloadingNNUEFiles => _nnueService.isDownloadingNNUEFiles;
 
   final _evalController = StreamController<EvalResult>.broadcast();
 
@@ -121,19 +111,6 @@ class EvaluationService {
 
   /// The name of the engine.
   ValueListenable<String?> get engineName => _protocol.engineName;
-
-  /// Get the NNUE files paths.
-  NNUEFiles get nnueFiles {
-    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
-    if (appSupportDirectory == null) {
-      throw Exception('App support directory is null.');
-    }
-
-    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.latestBigNNUE}');
-    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.latestSmallNNUE}');
-
-    return (bigNet: bigNetFile, smallNet: smallNetFile);
-  }
 
   /// Start evaluating the given [work].
   ///
@@ -230,7 +207,8 @@ class EvaluationService {
       StockfishFlavor actualFlavor = flavor;
 
       if (flavor == StockfishFlavor.latestNoNNUE) {
-        if (await checkNNUEFiles()) {
+        if (await _nnueService.checkNNUEFiles()) {
+          final nnueFiles = _nnueService.nnueFiles;
           smallNetPath = nnueFiles.smallNet.path;
           bigNetPath = nnueFiles.bigNet.path;
         } else {
@@ -323,124 +301,21 @@ class EvaluationService {
     _currentEval.dispose();
   }
 
-  /// Cache the result of the NNUE checksum verification.
-  bool? _nnueSumCheckResult;
-
   /// Check the presence and integrity of the NNUE files.
-  Future<bool> checkNNUEFiles() async {
-    final (:bigNet, :smallNet) = nnueFiles;
+  ///
+  /// Delegates to [NnueService.checkNNUEFiles].
+  Future<bool> checkNNUEFiles() => _nnueService.checkNNUEFiles();
 
-    try {
-      final found = await bigNet.exists() && await smallNet.exists();
-      if (found) {
-        _nnueSumCheckResult ??= await Isolate.run(() {
-          return _checksumMatches(bigNet.path, bigNetHash) &&
-              _checksumMatches(smallNet.path, smallNetHash);
-        });
+  /// Download the NNUE files.
+  ///
+  /// Delegates to [NnueService.downloadNNUEFiles].
+  Future<bool> downloadNNUEFiles({bool inBackground = true}) =>
+      _nnueService.downloadNNUEFiles(inBackground: inBackground);
 
-        if (_nnueSumCheckResult == true) {
-          return true;
-        } else {
-          _logger.warning('NNUE files are corrupted.');
-        }
-      }
-
-      return false;
-    } catch (e) {
-      _logger.warning('Error checking NNUE files: $e');
-      return false;
-    }
-  }
-
-  Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
-    if (_nnueOperationInProgress) {
-      _logger.warning('NNUE download already in progress, ignoring request');
-      return false;
-    }
-
-    _nnueOperationInProgress = true;
-
-    try {
-      final (:bigNet, :smallNet) = nnueFiles;
-
-      // delete any existing nnue files before downloading
-      await deleteNNUEFiles();
-
-      Future<bool> doDownload() {
-        final client = _ref.read(defaultClientProvider);
-        return downloadFiles(
-          client,
-          [bigNetUrl, smallNetUrl],
-          [bigNet, smallNet],
-          onProgress: (received, length) {
-            _nnueDownloadProgress.value = received / length;
-          },
-        );
-      }
-
-      final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
-      final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
-      if (onWifi == false) {
-        if (inBackground) {
-          throw Exception('Cannot download in background on mobile data.');
-        } else {
-          final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-          if (context == null || !context.mounted) return false;
-          final isOk = await showAdaptiveDialog<bool>(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) {
-              return AlertDialog.adaptive(
-                content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
-                actions: [
-                  PlatformDialogAction(
-                    child: const Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
-                  PlatformDialogAction(
-                    child: Text(context.l10n.cancel),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-          if (isOk == true) {
-            await doDownload();
-            return checkNNUEFiles();
-          } else {
-            return Future.value(false);
-          }
-        }
-      } else {
-        return doDownload();
-      }
-    } finally {
-      _nnueOperationInProgress = false;
-      _nnueDownloadProgress.value = 0.0;
-    }
-  }
-
-  Future<void> deleteNNUEFiles() async {
-    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
-    if (appSupportDirectory == null) {
-      throw Exception('App support directory is null.');
-    }
-
-    _nnueSumCheckResult = null;
-
-    // delete any existing nnue files before downloading
-    await for (final entity in appSupportDirectory.list(followLinks: false)) {
-      if (entity is File && entity.path.endsWith('.nnue')) {
-        _logger.info('Deleting existing nnue ${entity.path}');
-        await entity.delete();
-      }
-    }
-  }
+  /// Delete the NNUE files.
+  ///
+  /// Delegates to [NnueService.deleteNNUEFiles].
+  Future<void> deleteNNUEFiles() => _nnueService.deleteNNUEFiles();
 }
 
 /// Engine state.
@@ -551,10 +426,4 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
-}
-
-bool _checksumMatches(String filePath, String expectedHash) {
-  final bytes = File(filePath).readAsBytesSync();
-  final hash = sha256.convert(bytes).toString().substring(0, 12);
-  return hash == expectedHash;
 }
