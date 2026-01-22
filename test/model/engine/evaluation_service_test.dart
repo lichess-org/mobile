@@ -698,7 +698,7 @@ void main() {
     });
 
     test('Engine name is correctly set after restarting stockfish', () async {
-      final fakeStockfish = FakeStockfish(engineName: 'Stockfish 16');
+      final fakeStockfish = FakeStockfish();
       testBinding.stockfish = fakeStockfish;
       final container = await makeContainer();
 
@@ -710,19 +710,57 @@ void main() {
       expect(stream1, isNotNull);
       await stream1!.first;
 
-      final firstName = await service.engineName;
-      expect(firstName, 'Stockfish 16');
+      expect(service.engineName.value, 'Stockfish 16');
 
       service.quit();
+      await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      fakeStockfish.engineName = 'Stockfish 17';
-
-      final stream2 = service.evaluate(work);
+      final stream2 = service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
       expect(stream2, isNotNull);
       await stream2!.first;
 
-      final secondName = await service.engineName;
-      expect(secondName, 'Stockfish 17');
+      expect(service.engineName.value, 'Stockfish 17');
+    });
+  });
+
+  group('EngineEvaluationNotifier', () {
+    test('updates engineName after engine restart', () async {
+      final fakeStockfish = FakeStockfish();
+      testBinding.stockfish = fakeStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? latestState;
+        container.listen(engineEvaluationProvider, (_, next) {
+          latestState = next;
+        }, fireImmediately: true);
+
+        final work = makeWork();
+
+        // Start engine and let all async operations complete
+        service.evaluate(work);
+        async.elapse(const Duration(seconds: 2));
+
+        // Notifier should have the first engine name
+        expect(latestState?.engineName, 'Stockfish 16');
+
+        // Quit engine
+        service.quit();
+        async.elapse(const Duration(seconds: 1));
+
+        // Restart with different engine name
+        service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+        async.elapse(const Duration(seconds: 2));
+
+        // Notifier should have the updated engine name
+        expect(
+          latestState?.engineName,
+          'Stockfish 17',
+          reason: 'EngineEvaluationNotifier should update engineName when engine restarts',
+        );
+      });
     });
   });
 }

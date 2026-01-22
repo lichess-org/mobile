@@ -31,8 +31,9 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
-        .watch(engineEvaluationProvider);
+    final (engineName: _, eval: localEval, state: engineState, currentWork: work) = ref.watch(
+      engineEvaluationProvider,
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled

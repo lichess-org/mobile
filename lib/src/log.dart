@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +46,9 @@ class AppLogService {
           stackTrace: record.stackTrace,
         );
 
-        if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
+        if (_loggersToShowInTerminal.contains(record.loggerName) &&
+            record.level >= Level.FINE &&
+            !Platform.environment.containsKey('FLUTTER_TEST')) {
           debugPrint('[${record.loggerName}] ${record.message}');
         }
       } else {

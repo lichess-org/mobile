@@ -6,16 +6,13 @@ import 'package:multistockfish/multistockfish.dart';
 
 /// A fake implementation of [Stockfish] for testing.
 class FakeStockfish implements Stockfish {
-  FakeStockfish({String? engineName}) : _customEngineName = engineName;
+  FakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
   final _stdoutController = StreamController<String>.broadcast();
 
   StockfishFlavor _flavor = StockfishFlavor.sf16;
-  String? _customEngineName;
 
-  // ignore: avoid_setters_without_getters
-  set engineName(String? value) => _customEngineName = value;
   String? _variant;
   String? _smallNetPath;
   String? _bigNetPath;
@@ -67,9 +64,9 @@ class FakeStockfish implements Stockfish {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
       case 'uci':
-        final engineName =
-            _customEngineName ??
-            (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 17' : 'Stockfish 16');
+        final engineName = (_flavor == StockfishFlavor.latestNoNNUE
+            ? 'Stockfish 17'
+            : 'Stockfish 16');
         _emit('id name $engineName\n');
         _emit('uciok\n');
       case 'isready':

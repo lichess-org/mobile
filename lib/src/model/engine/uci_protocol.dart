@@ -18,12 +18,17 @@ class UCIProtocol {
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
   final _evalController = StreamController<EvalResult>.broadcast();
-  Completer<String> _engineNameCompleter = Completer<String>();
+  final _engineName = ValueNotifier<String?>(null);
   final _isComputing = ValueNotifier(false);
 
+  /// Stream of evaluation results from the engine.
   Stream<EvalResult> get evalStream => _evalController.stream;
 
-  Future<String> get engineName => _engineNameCompleter.future;
+  /// The name of the connected engine, or null if not yet known.
+  ValueListenable<String?> get engineName => _engineName;
+
+  /// Whether the engine is currently computing.
+  ValueListenable<bool> get isComputing => _isComputing;
 
   /// Resets the protocol state for a new engine session.
   ///
@@ -37,14 +42,12 @@ class UCIProtocol {
     _currentEval = null;
     _expectedPvs = 1;
 
-    // Reset options to defaults so they get sent to the new engine instance
     _options.clear();
     _options['Threads'] = '1';
     _options['Hash'] = '16';
     _options['MultiPV'] = '1';
 
-    // Create new completer for engine name (old one may be completed)
-    _engineNameCompleter = Completer<String>();
+    _engineName.value = null;
   }
 
   Work? _work;
@@ -53,8 +56,6 @@ class UCIProtocol {
   void Function(String command)? _send;
   LocalEval? _currentEval;
   int _expectedPvs = 1;
-
-  ValueListenable<bool> get isComputing => _isComputing;
 
   void connected(void Function(String command) send) {
     _send = send;
@@ -70,6 +71,7 @@ class UCIProtocol {
     _send = null;
     _evalController.close();
     _isComputing.dispose();
+    _engineName.dispose();
   }
 
   void _sendAndLog(String command) {
@@ -96,6 +98,7 @@ class UCIProtocol {
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
+    print('*********** >>> $line');
     final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
@@ -107,9 +110,7 @@ class UCIProtocol {
     } else if (parts.first == 'readyok') {
       _swapWork();
     } else if (parts.first == 'id' && parts[1] == 'name') {
-      if (!_engineNameCompleter.isCompleted) {
-        _engineNameCompleter.complete(parts.sublist(2).join(' '));
-      }
+      _engineName.value = parts.sublist(2).join(' ');
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
         _evalController.sink.add((_work!, _currentEval!));

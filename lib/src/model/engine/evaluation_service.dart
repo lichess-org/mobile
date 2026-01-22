@@ -120,7 +120,7 @@ class EvaluationService {
   Work? get currentWork => _currentWork;
 
   /// The name of the engine.
-  Future<String> get engineName => _protocol.engineName;
+  ValueListenable<String?> get engineName => _protocol.engineName;
 
   /// Get the NNUE files paths.
   NNUEFiles get nnueFiles {
@@ -184,9 +184,15 @@ class EvaluationService {
         _currentWork != null &&
         (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
 
+    _logger.fine(
+      'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
+    );
+
     _currentWork = work;
 
     if (_initInProgress) {
+      _logger.fine('Evaluate called while engine initialization is in progress, queuing work');
+
       // Init in progress, work will be computed when init finishes
       // (the _initEngine callback checks _currentWork)
       return evalStream.where((result) => result.$1 == work);
@@ -211,6 +217,8 @@ class EvaluationService {
 
   Future<void> _initEngine(StockfishFlavor flavor) async {
     try {
+      _logger.fine('Initializing engine with flavor: $flavor');
+
       await _stockfish.quit();
       if (_isDisposed) return;
 
@@ -242,6 +250,8 @@ class EvaluationService {
       if (_stockfish.state.value == StockfishState.error) {
         return;
       }
+
+      _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
       _currentFlavor = actualFlavor;
 
@@ -453,7 +463,6 @@ final engineEvaluationProvider =
 
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
   late EvaluationService _service;
-  String? _cachedEngineName;
   bool _disposed = false;
 
   @override
@@ -463,22 +472,17 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
     _service.engineState.addListener(_onStateChange);
     _service.currentEval.addListener(_onEvalChange);
+    _service.engineName.addListener(_onStateChange);
 
     ref.onDispose(() {
       _disposed = true;
       _service.engineState.removeListener(_onStateChange);
       _service.currentEval.removeListener(_onEvalChange);
-    });
-
-    _service.engineName.then((name) {
-      if (!_disposed) {
-        _cachedEngineName = name;
-        _updateState();
-      }
+      _service.engineName.removeListener(_onStateChange);
     });
 
     return (
-      engineName: _cachedEngineName,
+      engineName: _service.engineName.value,
       eval: _service.currentEval.value,
       state: _service.engineState.value,
       currentWork: _service.currentWork,
@@ -499,7 +503,7 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
   void _updateState() {
     state = (
-      engineName: _cachedEngineName,
+      engineName: _service.engineName.value,
       eval: _service.currentEval.value,
       state: _service.engineState.value,
       currentWork: _service.currentWork,
