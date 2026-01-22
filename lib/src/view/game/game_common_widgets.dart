@@ -136,7 +136,8 @@ List<Widget> makeFinishedGameShareContextMenuActions(
     ContextMenuAction(
       icon: Icons.gif_outlined,
       label: context.l10n.gameAsGIF,
-      onPressed: () => Navigator.of(context).push(GifExportScreen.buildRoute(context)),
+      onPressed: () =>
+          showModalBottomSheet<void>(context: context, builder: (_) => const GifExport()),
       // () async {
       //   try {
       //     final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
