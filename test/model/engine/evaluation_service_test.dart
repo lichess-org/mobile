@@ -47,18 +47,22 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      expect(service.engineState.value, EngineState.initial);
-      expect(service.currentWork, isNull);
-      expect(service.currentEval.value, isNull);
+      expect(service.evaluationState.value.state, EngineState.initial);
+      expect(service.evaluationState.value.currentWork, isNull);
+      expect(service.evaluationState.value.eval, isNull);
     });
 
     test('evaluate() transitions state from initial to loading to idle', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
+      // Track state transitions (filter out consecutive duplicates)
       final states = <EngineState>[];
-      service.engineState.addListener(() {
-        states.add(service.engineState.value);
+      service.evaluationState.addListener(() {
+        final newState = service.evaluationState.value.state;
+        if (states.isEmpty || states.last != newState) {
+          states.add(newState);
+        }
       });
 
       final work = makeWork();
@@ -82,12 +86,12 @@ void main() {
       service.quit();
 
       // Wait for async stockfish.quit() to complete and trigger state change
-      while (service.engineState.value != EngineState.initial) {
+      while (service.evaluationState.value.state != EngineState.initial) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
-      expect(service.engineState.value, EngineState.initial);
-      expect(service.currentWork, isNull);
+      expect(service.evaluationState.value.state, EngineState.initial);
+      expect(service.evaluationState.value.currentWork, isNull);
     });
 
     test('state transitions idle -> computing -> idle when work completes', () async {
@@ -100,15 +104,21 @@ void main() {
       await initStream!.first;
 
       // Wait for state to settle to idle
-      while (service.engineState.value != EngineState.idle) {
+      while (service.evaluationState.value.state != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
-      expect(service.engineState.value, EngineState.idle);
+      expect(service.evaluationState.value.state, EngineState.idle);
 
-      // Track state transitions for the next evaluation
+      // Track state transitions for the next evaluation (filter out consecutive duplicates)
+      // Initialize with current state to only capture actual transitions
+      var lastState = service.evaluationState.value.state;
       final states = <EngineState>[];
-      service.engineState.addListener(() {
-        states.add(service.engineState.value);
+      service.evaluationState.addListener(() {
+        final newState = service.evaluationState.value.state;
+        if (newState != lastState) {
+          states.add(newState);
+          lastState = newState;
+        }
       });
 
       // Start new evaluation - should transition to computing
@@ -120,7 +130,7 @@ void main() {
       await stream!.first;
 
       // Wait for state to settle back to idle
-      while (service.engineState.value != EngineState.idle) {
+      while (service.evaluationState.value.state != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -136,7 +146,7 @@ void main() {
       final initStream = service.evaluate(initWork);
       await initStream!.first;
 
-      while (service.engineState.value != EngineState.idle) {
+      while (service.evaluationState.value.state != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -169,13 +179,13 @@ void main() {
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('d2d4')));
       final stream2 = service.evaluate(work2);
 
-      expect(service.currentWork, work2);
+      expect(service.evaluationState.value.currentWork, work2);
 
       // Wait for work2 to complete
       final (resultWork2, _) = await stream2!.first;
       expect(resultWork2, work2);
 
-      while (service.engineState.value != EngineState.idle) {
+      while (service.evaluationState.value.state != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -225,7 +235,7 @@ void main() {
       service.evaluate(work2);
       final stream3 = service.evaluate(work3);
 
-      expect(service.currentWork, work3);
+      expect(service.evaluationState.value.currentWork, work3);
 
       // Wait for evaluation to complete
       final (resultWork, _) = await stream3!.first;
@@ -259,10 +269,10 @@ void main() {
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
 
       service.evaluate(work1);
-      expect(service.engineState.value, EngineState.loading);
+      expect(service.evaluationState.value.state, EngineState.loading);
 
       final stream2 = service.evaluate(work2);
-      expect(service.currentWork, work2);
+      expect(service.evaluationState.value.currentWork, work2);
 
       // Wait for init to complete
       await stream2!.first;
@@ -310,12 +320,12 @@ void main() {
       final work = makeWork();
       service.evaluate(work);
 
-      expect(service.engineState.value, EngineState.loading);
+      expect(service.evaluationState.value.state, EngineState.loading);
 
       service.stop();
 
-      expect(service.currentWork, isNull);
-      expect(service.currentEval.value, isNull);
+      expect(service.evaluationState.value.currentWork, isNull);
+      expect(service.evaluationState.value.eval, isNull);
     });
 
     test('rapid quit/evaluate cycles are handled correctly', () async {
@@ -362,7 +372,7 @@ void main() {
       service.quit();
       service.quit();
 
-      expect(service.currentWork, isNull);
+      expect(service.evaluationState.value.currentWork, isNull);
 
       // Should still be able to evaluate after multiple quits
       final stream2 = service.evaluate(work);
@@ -379,12 +389,12 @@ void main() {
       final work = makeWork();
       service.evaluate(work);
 
-      expect(service.currentWork, work);
+      expect(service.evaluationState.value.currentWork, work);
 
       service.stop();
 
-      expect(service.currentWork, isNull);
-      expect(service.currentEval.value, isNull);
+      expect(service.evaluationState.value.currentWork, isNull);
+      expect(service.evaluationState.value.eval, isNull);
     });
 
     test('evaluate() returns null for unsupported variants', () async {
@@ -405,7 +415,7 @@ void main() {
 
       final stream = service.evaluate(work);
       expect(stream, isNull);
-      expect(service.currentWork, isNull);
+      expect(service.evaluationState.value.currentWork, isNull);
     });
 
     test('currentWork is updated immediately on evaluate()', () async {
@@ -415,7 +425,7 @@ void main() {
       final work = makeWork();
       service.evaluate(work);
 
-      expect(service.currentWork, work);
+      expect(service.evaluationState.value.currentWork, work);
     });
 
     test('evalStream emits results tagged with correct work', () async {
@@ -588,7 +598,7 @@ void main() {
       final stream2 = service.evaluate(work2);
 
       // The second evaluation should be the current one
-      expect(service.currentWork, work2);
+      expect(service.evaluationState.value.currentWork, work2);
 
       // Results from stream2 should have work2
       if (stream2 != null) {
@@ -614,10 +624,10 @@ void main() {
       );
 
       service.evaluate(work);
-      expect(service.currentWork, work);
+      expect(service.evaluationState.value.currentWork, work);
 
       service.stop();
-      expect(service.currentWork, isNull);
+      expect(service.evaluationState.value.currentWork, isNull);
     });
 
     test('Stop evaluation sets engine state to not computing', () async {
@@ -640,7 +650,7 @@ void main() {
       service.evaluate(work);
       service.stop();
 
-      expect(service.engineState.value, isNot(EngineState.computing));
+      expect(service.evaluationState.value.state, isNot(EngineState.computing));
     });
 
     test('Engine evaluation with fake stockfish', () async {
@@ -693,7 +703,7 @@ void main() {
 
         async.flushMicrotasks();
 
-        expect(service.engineState.value, EngineState.error);
+        expect(service.evaluationState.value.state, EngineState.error);
       });
     });
 
@@ -710,7 +720,7 @@ void main() {
       expect(stream1, isNotNull);
       await stream1!.first;
 
-      expect(service.engineName.value, 'Stockfish 16');
+      expect(service.evaluationState.value.engineName, 'Stockfish 16');
 
       service.quit();
       await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -719,7 +729,7 @@ void main() {
       expect(stream2, isNotNull);
       await stream2!.first;
 
-      expect(service.engineName.value, 'Stockfish 17');
+      expect(service.evaluationState.value.engineName, 'Stockfish 17');
     });
   });
 

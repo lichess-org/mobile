@@ -54,9 +54,11 @@ class EvaluationService {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
+    _protocol.engineName.addListener(_onEngineNameChange);
     _evalSubscription = _protocol.evalStream.listen((result) {
       _currentEval.value = result.$2;
       _evalController.add(result);
+      _updateEvaluationState();
     });
   }
 
@@ -91,26 +93,36 @@ class EvaluationService {
       _evalController.stream.throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
 
   final ValueNotifier<EngineState> _engineState = ValueNotifier(EngineState.initial);
-  ValueListenable<EngineState> get engineState => _engineState;
+
+  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(
+    (engineName: null, eval: null, state: EngineState.initial, currentWork: null),
+  );
+
+  /// The current engine evaluation state, combining engine name, eval, state, and current work.
+  ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
 
   void _setEngineState(EngineState newState) {
     final oldState = _engineState.value;
     if (oldState != newState) {
       _logger.fine('Engine state: ${newState.name}');
       _engineState.value = newState;
+      _updateEvaluationState();
+    }
+  }
+
+  void _updateEvaluationState() {
+    final newState = (
+      engineName: _protocol.engineName.value,
+      eval: _currentEval.value,
+      state: _engineState.value,
+      currentWork: _currentWork,
+    );
+    if (_evaluationState.value != newState) {
+      _evaluationState.value = newState;
     }
   }
 
   final ValueNotifier<LocalEval?> _currentEval = ValueNotifier(null);
-
-  /// The current local evaluation, if any.
-  ValueListenable<LocalEval?> get currentEval => _currentEval;
-
-  /// The current work being evaluated, if any.
-  Work? get currentWork => _currentWork;
-
-  /// The name of the engine.
-  ValueListenable<String?> get engineName => _protocol.engineName;
 
   /// Start evaluating the given [work].
   ///
@@ -166,6 +178,7 @@ class EvaluationService {
     );
 
     _currentWork = work;
+    _updateEvaluationState();
 
     if (_initInProgress) {
       _logger.fine('Evaluate called while engine initialization is in progress, queuing work');
@@ -270,10 +283,15 @@ class EvaluationService {
     }
   }
 
+  void _onEngineNameChange() {
+    _updateEvaluationState();
+  }
+
   /// Stop the current evaluation.
   void stop() {
     _protocol.compute(null);
     _currentWork = null;
+    _updateEvaluationState();
   }
 
   /// Quit the engine entirely.
@@ -286,6 +304,7 @@ class EvaluationService {
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
+    _updateEvaluationState();
   }
 
   void _dispose() {
@@ -294,11 +313,13 @@ class EvaluationService {
     _evalSubscription.cancel();
     _stockfish.state.removeListener(_onStockfishStateChange);
     _protocol.isComputing.removeListener(_onComputingChange);
+    _protocol.engineName.removeListener(_onEngineNameChange);
     _protocol.dispose();
     _stockfish.quit();
     _evalController.close();
     _engineState.dispose();
     _currentEval.dispose();
+    _evaluationState.dispose();
   }
 
   /// Check the presence and integrity of the NNUE files.
@@ -338,51 +359,22 @@ final engineEvaluationProvider =
 
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
   late EvaluationService _service;
-  bool _disposed = false;
 
   @override
   EngineEvaluationState build() {
     _service = ref.watch(evaluationServiceProvider);
-    _disposed = false;
 
-    _service.engineState.addListener(_onStateChange);
-    _service.currentEval.addListener(_onEvalChange);
-    _service.engineName.addListener(_onStateChange);
+    _service.evaluationState.addListener(_onStateChange);
 
     ref.onDispose(() {
-      _disposed = true;
-      _service.engineState.removeListener(_onStateChange);
-      _service.currentEval.removeListener(_onEvalChange);
-      _service.engineName.removeListener(_onStateChange);
+      _service.evaluationState.removeListener(_onStateChange);
     });
 
-    return (
-      engineName: _service.engineName.value,
-      eval: _service.currentEval.value,
-      state: _service.engineState.value,
-      currentWork: _service.currentWork,
-    );
+    return _service.evaluationState.value;
   }
 
   void _onStateChange() {
-    if (!_disposed) {
-      _updateState();
-    }
-  }
-
-  void _onEvalChange() {
-    if (!_disposed) {
-      _updateState();
-    }
-  }
-
-  void _updateState() {
-    state = (
-      engineName: _service.engineName.value,
-      eval: _service.currentEval.value,
-      state: _service.engineState.value,
-      currentWork: _service.currentWork,
-    );
+    state = _service.evaluationState.value;
   }
 }
 
