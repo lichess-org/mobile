@@ -362,32 +362,26 @@ final engineEvaluationProvider =
     );
 
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
-  late ValueListenable<EngineEvaluationState> _listenable;
-  bool _disposed = false;
-
   @override
   EngineEvaluationState build() {
-    _disposed = false;
-    _listenable = ref.watch(evaluationServiceProvider).evaluationState;
+    final listenable = ref.watch(evaluationServiceProvider).evaluationState;
 
-    _listenable.addListener(_listener);
+    listenable.addListener(_listener);
 
     ref.onDispose(() {
-      _disposed = true;
-      _listenable.removeListener(_listener);
+      listenable.removeListener(_listener);
     });
 
-    return _listenable.value;
+    return listenable.value;
   }
 
   void _listener() {
-    if (_disposed) return;
     // Defer state update to run outside Riverpod's callback stack
     // This is needed because notifications can be triggered during disposal
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
-      if (!_disposed) {
-        state = _listenable.value;
+      if (ref.mounted) {
+        state = ref.read(evaluationServiceProvider).evaluationState.value;
       }
     });
   }
