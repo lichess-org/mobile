@@ -134,6 +134,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       lastMove: lastMove,
       pov: Side.white,
       evaluationContext: EvaluationContext(
+        id: params.gameId,
         variant: Variant.standard,
         initialPosition: _root.position,
       ),

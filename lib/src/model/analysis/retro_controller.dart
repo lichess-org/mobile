@@ -144,6 +144,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
         variant: _game.meta.variant,
         currentPath: UciPath.empty,
         evaluationContext: EvaluationContext(
+          id: options.id,
           variant: _game.meta.variant,
           initialPosition: _root.position,
         ),

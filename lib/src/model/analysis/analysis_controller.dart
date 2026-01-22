@@ -341,7 +341,11 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
-      evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
+      evaluationContext: EvaluationContext(
+        id: options.gameId,
+        variant: _variant,
+        initialPosition: _root.position,
+      ),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,

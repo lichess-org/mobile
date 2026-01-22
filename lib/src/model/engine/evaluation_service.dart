@@ -9,6 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
@@ -427,8 +428,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
 @freezed
 sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
-      _EvaluationContext;
+  const factory EvaluationContext({
+    /// Optional identifier to associate the evaluation with a game, puzzle, study, etc.
+    StringId? id,
+    required Variant variant,
+    required Position initialPosition,
+  }) = _EvaluationContext;
 }
 
 /// A function to choose the eval that should be displayed.
