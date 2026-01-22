@@ -182,7 +182,7 @@ class EvaluationService {
     final needsNewGame =
         _work != null && (_work!.id != work.id || _work!.initialPosition != work.initialPosition);
 
-    _logger.fine(
+    _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
 
