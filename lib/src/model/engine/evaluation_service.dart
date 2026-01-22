@@ -56,9 +56,8 @@ class EvaluationService {
     _protocol.isComputing.addListener(_onComputingChange);
     _protocol.engineName.addListener(_onEngineNameChange);
     _evalSubscription = _protocol.evalStream.listen((result) {
-      _currentEval.value = result.$2;
+      _setEval(result.$2);
       _evalController.add(result);
-      _updateEvaluationState();
     });
   }
 
@@ -72,7 +71,6 @@ class EvaluationService {
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
 
-  Work? _currentWork;
   StockfishFlavor? _currentFlavor;
   bool _initInProgress = false;
   bool _isDisposed = false;
@@ -92,37 +90,47 @@ class EvaluationService {
   Stream<EvalResult> get evalStream =>
       _evalController.stream.throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
 
-  final ValueNotifier<EngineState> _engineState = ValueNotifier(EngineState.initial);
-
-  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(
-    (engineName: null, eval: null, state: EngineState.initial, currentWork: null),
-  );
+  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
+    engineName: null,
+    eval: null,
+    state: EngineState.initial,
+    currentWork: null,
+  ));
 
   /// The current engine evaluation state, combining engine name, eval, state, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
 
+  // Helper getters for internal use (read from combined state)
+  EngineState get _engineState => _evaluationState.value.state;
+  Work? get _work => _evaluationState.value.currentWork;
+
   void _setEngineState(EngineState newState) {
-    final oldState = _engineState.value;
-    if (oldState != newState) {
+    if (_engineState != newState) {
       _logger.fine('Engine state: ${newState.name}');
-      _engineState.value = newState;
-      _updateEvaluationState();
+      _setState(state: newState);
     }
   }
 
-  void _updateEvaluationState() {
+  void _setEval(LocalEval? eval) {
+    _setState(evalFn: () => eval);
+  }
+
+  void _setWork(Work? work) {
+    _setState(workFn: () => work);
+  }
+
+  void _setState({EngineState? state, LocalEval? Function()? evalFn, Work? Function()? workFn}) {
+    final current = _evaluationState.value;
     final newState = (
       engineName: _protocol.engineName.value,
-      eval: _currentEval.value,
-      state: _engineState.value,
-      currentWork: _currentWork,
+      eval: evalFn != null ? evalFn() : current.eval,
+      state: state ?? current.state,
+      currentWork: workFn != null ? workFn() : current.currentWork,
     );
-    if (_evaluationState.value != newState) {
+    if (current != newState) {
       _evaluationState.value = newState;
     }
   }
-
-  final ValueNotifier<LocalEval?> _currentEval = ValueNotifier(null);
 
   /// Start evaluating the given [work].
   ///
@@ -170,15 +178,13 @@ class EvaluationService {
 
     // Check if we need to clear engine context (different game/puzzle)
     final needsNewGame =
-        _currentWork != null &&
-        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
+        _work != null && (_work!.id != work.id || _work!.initialPosition != work.initialPosition);
 
     _logger.fine(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
 
-    _currentWork = work;
-    _updateEvaluationState();
+    _setWork(work);
 
     if (_initInProgress) {
       _logger.fine('Evaluate called while engine initialization is in progress, queuing work');
@@ -193,7 +199,7 @@ class EvaluationService {
       _setEngineState(EngineState.loading);
       _initEngine(flavor).then((_) {
         // Compute the current work (might be different from original if another evaluate() came in)
-        final currentWork = _currentWork;
+        final currentWork = _work;
         if (currentWork != null) {
           _protocol.compute(currentWork);
         }
@@ -261,13 +267,13 @@ class EvaluationService {
     switch (_stockfish.state.value) {
       case StockfishState.initial:
         // Don't overwrite loading state during engine restart
-        if (_engineState.value != EngineState.loading) {
+        if (_engineState != EngineState.loading) {
           _setEngineState(EngineState.initial);
         }
       case StockfishState.starting:
         _setEngineState(EngineState.loading);
       case StockfishState.ready:
-        if (_engineState.value != EngineState.computing) {
+        if (_engineState != EngineState.computing) {
           _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
@@ -284,14 +290,15 @@ class EvaluationService {
   }
 
   void _onEngineNameChange() {
-    _updateEvaluationState();
+    // engineName is always read from _protocol.engineName.value in _setState,
+    // so we just need to trigger a state update
+    _setState();
   }
 
   /// Stop the current evaluation.
   void stop() {
     _protocol.compute(null);
-    _currentWork = null;
-    _updateEvaluationState();
+    _setWork(null);
   }
 
   /// Quit the engine entirely.
@@ -300,11 +307,10 @@ class EvaluationService {
   /// The service can be reused after calling this method.
   void quit() {
     _protocol.compute(null);
-    _currentWork = null;
+    _setWork(null);
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
-    _updateEvaluationState();
   }
 
   void _dispose() {
@@ -317,8 +323,6 @@ class EvaluationService {
     _protocol.dispose();
     _stockfish.quit();
     _evalController.close();
-    _engineState.dispose();
-    _currentEval.dispose();
     _evaluationState.dispose();
   }
 
@@ -358,23 +362,34 @@ final engineEvaluationProvider =
     );
 
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
-  late EvaluationService _service;
+  late ValueListenable<EngineEvaluationState> _listenable;
+  bool _disposed = false;
 
   @override
   EngineEvaluationState build() {
-    _service = ref.watch(evaluationServiceProvider);
+    _disposed = false;
+    _listenable = ref.watch(evaluationServiceProvider).evaluationState;
 
-    _service.evaluationState.addListener(_onStateChange);
+    _listenable.addListener(_listener);
 
     ref.onDispose(() {
-      _service.evaluationState.removeListener(_onStateChange);
+      _disposed = true;
+      _listenable.removeListener(_listener);
     });
 
-    return _service.evaluationState.value;
+    return _listenable.value;
   }
 
-  void _onStateChange() {
-    state = _service.evaluationState.value;
+  void _listener() {
+    if (_disposed) return;
+    // Defer state update to run outside Riverpod's callback stack
+    // This is needed because notifications can be triggered during disposal
+    // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
+    Future.microtask(() {
+      if (!_disposed) {
+        state = _listenable.value;
+      }
+    });
   }
 }
 
