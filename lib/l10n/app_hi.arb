@@ -785,7 +785,6 @@
   "pasteTheFenStringHere": "FEN को यहा रखें (paste)",
   "pasteThePgnStringHere": "PGN को यहा रखें (paste)",
   "orUploadPgnFile": "या PGN अपलोड करे|",
-  "fromPosition": "स्थिति से",
   "continueFromHere": "यहा से जारी करें",
   "toStudy": "पढ़े",
   "importGame": "खेल आयात (इम्पोर्ट) करे",

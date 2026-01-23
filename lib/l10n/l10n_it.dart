@@ -2169,9 +2169,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createLobbyGame => 'Crea una partita nella lobby';
 
   @override
-  String get youPlayAs => 'Giochi come';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per invitare qualcuno a giocare, dagli questo URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get evaluationGauge => 'Indicatore di valutazione del vantaggio';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Varianti multiple';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get variants => 'Varianti';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Cadenza di gioco';
@@ -2865,6 +2877,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get unlimited => 'Illimitato';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Modalità';
@@ -3115,9 +3130,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'O carica un file PGN';
-
-  @override
-  String get fromPosition => 'Da una posizione';
 
   @override
   String get continueFromHere => 'Continua da qui';

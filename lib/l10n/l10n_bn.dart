@@ -2169,9 +2169,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsBn extends AppLocalizations {
   String get evaluationGauge => 'পরিমাপ মূল্যায়ন';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'বহু রেখা';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get variants => 'বিভিন্ন';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'সময় নিয়ন্ত্রণ';
@@ -2865,6 +2877,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get unlimited => 'সীমাহীন সময়';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'ধরন';
@@ -3115,9 +3130,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'অথবা PGN আপলোড করুন';
-
-  @override
-  String get fromPosition => 'অবস্থা থেকে';
 
   @override
   String get continueFromHere => 'এখান থেকে আবার শুরু করুন';

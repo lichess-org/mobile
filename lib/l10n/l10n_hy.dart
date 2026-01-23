@@ -2169,9 +2169,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Որևէ մեկին խաղի հրավիրելու համար ուղարկեք ստորև տրված հղումը';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsHy extends AppLocalizations {
   String get evaluationGauge => 'Գնահատման սանդղակ';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Մի քանի շարունակություն';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get variants => 'Տարբերակներ';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Ժամակարգ';
@@ -2865,6 +2877,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get unlimited => 'Անսահմանափակ';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Տեսակը';
@@ -3115,9 +3130,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Կամ վերբեռնեք PGN ֆայլը';
-
-  @override
-  String get fromPosition => 'Դիրքից';
 
   @override
   String get continueFromHere => 'Շարունակել այստեղից';

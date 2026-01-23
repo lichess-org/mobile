@@ -2169,9 +2169,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get createLobbyGame => 'Sortu egongelako partida';
 
   @override
-  String get youPlayAs => 'Kolore hau izango duzu';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norbait jokatzera gonbidatzeko, URL hau bidali iezaiozu';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get evaluationGauge => 'Ebaluazio langa';
 
   @override
+  String get visualMotifs => 'Ikurrak';
+
+  @override
+  String get undefendedPieces => 'Defentsarik ez duten piezak';
+
+  @override
+  String get pinnedPieces => 'Iltzatutako piezak';
+
+  @override
+  String get checkableKing => 'Xake egin dakiokeen erregea';
+
+  @override
   String get multipleLines => 'Linea anitz';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get variants => 'Aldaerak';
+
+  @override
+  String get variantsDescription => 'Jokatzeko modu gehiago';
 
   @override
   String get timeControl => 'Denbora kontrola';
@@ -2865,6 +2877,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get unlimited => 'Mugagabea';
+
+  @override
+  String get unlimitedDescription => 'Hartu behar duzun denbora';
 
   @override
   String get mode => 'Modua';
@@ -3115,9 +3130,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Edo kargatu PGN fitxategi bat';
-
-  @override
-  String get fromPosition => 'Posizio jakin batetik';
 
   @override
   String get continueFromHere => 'Hemendik jarraitu';

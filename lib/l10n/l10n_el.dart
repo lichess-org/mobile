@@ -2169,9 +2169,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get createLobbyGame => 'Νέα παρτίδα';
 
   @override
-  String get youPlayAs => 'Παίζετε με τα';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Για να προσκαλέσετε κάποιον σε ένα παιχνίδι, στείλτε του αυτήν τη διεύθυνση';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get evaluationGauge => 'Δείκτης αξιολόγησης';
 
   @override
+  String get visualMotifs => 'Οπτικά μοτίβα';
+
+  @override
+  String get undefendedPieces => 'Ανυπεράσπιστα κομμάτια';
+
+  @override
+  String get pinnedPieces => 'Καρφωμένα κομμάτια';
+
+  @override
+  String get checkableKing => 'Βασιλιάς που μπορεί να δεχθεί σαχ';
+
+  @override
   String get multipleLines => 'Πολλαπλές γραμμές';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get variants => 'Εκδοχές';
+
+  @override
+  String get variantsDescription => 'Περισσότεροι τρόποι για να παίξετε';
 
   @override
   String get timeControl => 'Χρονόμετρο';
@@ -2865,6 +2877,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get unlimited => 'Απεριόριστου χρόνου';
+
+  @override
+  String get unlimitedDescription => 'Χρησιμοποιήστε όσο χρόνο χρειάζεστε';
 
   @override
   String get mode => 'Τύπος παιχνιδιού';
@@ -3115,9 +3130,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
-
-  @override
-  String get fromPosition => 'Από συγκεκριμένη θέση';
 
   @override
   String get continueFromHere => 'Συνέχεια από εδώ';

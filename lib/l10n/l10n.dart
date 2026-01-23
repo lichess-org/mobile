@@ -3914,12 +3914,6 @@ abstract class AppLocalizations {
   /// **'Create lobby game'**
   String get createLobbyGame;
 
-  /// No description provided for @youPlayAs.
-  ///
-  /// In en, this message translates to:
-  /// **'You play as'**
-  String get youPlayAs;
-
   /// No description provided for @toInviteSomeoneToPlayGiveThisUrl.
   ///
   /// In en, this message translates to:
@@ -4592,6 +4586,30 @@ abstract class AppLocalizations {
   /// **'Evaluation gauge'**
   String get evaluationGauge;
 
+  /// No description provided for @visualMotifs.
+  ///
+  /// In en, this message translates to:
+  /// **'Visual motifs'**
+  String get visualMotifs;
+
+  /// No description provided for @undefendedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Undefended pieces'**
+  String get undefendedPieces;
+
+  /// No description provided for @pinnedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned pieces'**
+  String get pinnedPieces;
+
+  /// No description provided for @checkableKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkable king'**
+  String get checkableKing;
+
   /// No description provided for @multipleLines.
   ///
   /// In en, this message translates to:
@@ -4825,6 +4843,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Variants'**
   String get variants;
+
+  /// No description provided for @variantsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'More ways to play'**
+  String get variantsDescription;
 
   /// No description provided for @timeControl.
   ///
@@ -5245,6 +5269,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlimited'**
   String get unlimited;
+
+  /// No description provided for @unlimitedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Take all the time you need'**
+  String get unlimitedDescription;
 
   /// No description provided for @mode.
   ///
@@ -5701,12 +5731,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Or upload a PGN file'**
   String get orUploadPgnFile;
-
-  /// No description provided for @fromPosition.
-  ///
-  /// In en, this message translates to:
-  /// **'From position'**
-  String get fromPosition;
 
   /// No description provided for @continueFromHere.
   ///

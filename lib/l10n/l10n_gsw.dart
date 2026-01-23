@@ -1407,7 +1407,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesBlindfold => 'Blind schpille';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Uf mobile Grät, limks azeige';
+  String get preferencesShowClockOnTheLeft => 'Uf mobile Grät, links azeige';
 
   @override
   String get puzzlePuzzles => 'Ufgabe';
@@ -2169,9 +2169,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get createLobbyGame => 'Es Schpiel erschtelle';
 
   @override
-  String get youPlayAs => 'Du schpillsch mit';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Wottsch öpper zum Schpille ilade - schick die URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get evaluationGauge => 'Bewertigs-Massschtab';
 
   @override
+  String get visualMotifs => 'Visuelli Motif';
+
+  @override
+  String get undefendedPieces => 'Ung\'schützti Figure';
+
+  @override
+  String get pinnedPieces => 'G\'fessleti Figure';
+
+  @override
+  String get checkableKing => 'Agrifbare König';
+
+  @override
   String get multipleLines => 'Mehreri Variantä';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get variants => 'Variante';
+
+  @override
+  String get variantsDescription => 'Meh Schpielvariante';
 
   @override
   String get timeControl => 'Bedänkzit';
@@ -2865,6 +2877,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get unlimited => 'Unbegränzt';
+
+  @override
+  String get unlimitedDescription => 'Nimm dir sovill Zit, wie du bruchsch';
 
   @override
   String get mode => 'Modus';
@@ -3115,9 +3130,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Oder lad e PGN-Datei ufe';
-
-  @override
-  String get fromPosition => 'Ab Schtellig';
 
   @override
   String get continueFromHere => 'Vu da us witer schpille';

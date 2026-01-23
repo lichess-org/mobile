@@ -2169,9 +2169,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Et kutsuda kedagi mängima, anna talle see URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsEt extends AppLocalizations {
   String get evaluationGauge => 'Hinnangunäidik';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Mitu liini';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get variants => 'variandid';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Aja kontroll';
@@ -2865,6 +2877,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get unlimited => 'Piiramatu';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Variant';
@@ -3115,9 +3130,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Või lae üles PGN fail';
-
-  @override
-  String get fromPosition => 'Positsioonilt';
 
   @override
   String get continueFromHere => 'Jätka siit';

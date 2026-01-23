@@ -2141,9 +2141,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get createLobbyGame => '로비 게임 만들기';
 
   @override
-  String get youPlayAs => '당신은 다음 색으로 플레이합니다:';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '이 URL로 친구를 초대하세요';
 
   @override
@@ -2490,6 +2487,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get evaluationGauge => '평가 게이지';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => '다중 라인 수';
 
   @override
@@ -2609,6 +2618,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get variants => '변형';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => '시간 제한';
@@ -2837,6 +2849,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get unlimited => '무제한';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => '모드';
@@ -3087,9 +3102,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => '또는 PGN 파일을 업로드하세요';
-
-  @override
-  String get fromPosition => '정해진 보드판에서 시작';
 
   @override
   String get continueFromHere => '여기서부터 시작';

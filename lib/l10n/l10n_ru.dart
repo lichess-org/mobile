@@ -1427,7 +1427,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнир скоро начнётся';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Трансляции, на которые вы подписаны';
 
   @override
   String get preferencesNotifyTimeAlarm => 'В игре по переписке скоро упадёт флажок';
@@ -1451,7 +1451,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesBlindfold => 'Игра вслепую';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Показывать слева на мобильных устройствах';
 
   @override
   String get puzzlePuzzles => 'Задачи';
@@ -1953,16 +1953,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ладья ставится рядом с королём противника под защитой ферзя, который одновременно препятствует побегу короля. Ладья и ферзь ловят вражеского короля в «смертельную коробку» 3×3.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Мат Пиллсбери';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Ладья ставит мат, в то время как слон контролирует угловое поле.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Мат Морфи';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Слон ставит мат, в то время как ладья контролирует соседнюю вертикаль.';
 
   @override
   String get puzzleThemeTriangleMate => 'Треугольный мат';
@@ -2055,10 +2055,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Тактика в первой стадии игры.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Оперный мат';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Ладья ставит мат под защитой слона.';
 
   @override
   String get puzzleThemePawnEndgame => 'Пешечный эндшпиль';
@@ -2223,9 +2223,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get createLobbyGame => 'Создать запрос на игру';
-
-  @override
-  String get youPlayAs => 'Вы играете за';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Чтобы пригласить друга, отправьте ему эту ссылку';
@@ -2574,6 +2571,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get evaluationGauge => 'Шкала оценки';
 
   @override
+  String get visualMotifs => 'Шахматные мотивы';
+
+  @override
+  String get undefendedPieces => 'Незащищённые фигуры';
+
+  @override
+  String get pinnedPieces => 'Связанные фигуры';
+
+  @override
+  String get checkableKing => 'Возможность дать шах королю';
+
+  @override
   String get multipleLines => 'Множество вариантов';
 
   @override
@@ -2693,6 +2702,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get variants => 'Варианты';
+
+  @override
+  String get variantsDescription => 'Больше способов сыграть';
 
   @override
   String get timeControl => 'Контроль времени';
@@ -2921,6 +2933,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unlimited => 'Отсутствует';
+
+  @override
+  String get unlimitedDescription => 'Возьмите столько времени, сколько вам нужно';
 
   @override
   String get mode => 'Режим';
@@ -3171,9 +3186,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Или загрузите PGN-файл';
-
-  @override
-  String get fromPosition => 'С позиции';
 
   @override
   String get continueFromHere => 'Продолжить с этой позиции';
@@ -4914,7 +4926,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tags => 'Теги';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Взятие на проходе';
 
   @override
   String opponentLeftCounter(int count) {

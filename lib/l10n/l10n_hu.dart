@@ -906,7 +906,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return '$param. forduló';
   }
 
   @override
@@ -2169,9 +2169,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get createLobbyGame => 'Játék létrehozása';
 
   @override
-  String get youPlayAs => 'Úgy játszol, mint';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Küldd el ezt a linket annak, akivel játszani szeretnél';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsHu extends AppLocalizations {
   String get evaluationGauge => 'Állásértékelő oldaljelzés';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Védtelen bábuk';
+
+  @override
+  String get pinnedPieces => 'Kötött bábuk';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Több változat';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get variants => 'Variánsok';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Játékidő';
@@ -2865,6 +2877,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get unlimited => 'Végtelen';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Mód';
@@ -3115,9 +3130,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Vagy tölts fel egy PGN fájlt';
-
-  @override
-  String get fromPosition => 'Adott állásból';
 
   @override
   String get continueFromHere => 'Folytatás innen';

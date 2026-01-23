@@ -2141,9 +2141,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createLobbyGame => '创建对局';
 
   @override
-  String get youPlayAs => '执棋';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '请分享此链接以邀请好友对弈：';
 
   @override
@@ -2490,6 +2487,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get evaluationGauge => '显示局面评估';
 
   @override
+  String get visualMotifs => '可视化模式';
+
+  @override
+  String get undefendedPieces => '无保护的棋子';
+
+  @override
+  String get pinnedPieces => '被牵制的棋子';
+
+  @override
+  String get checkableKing => '可将军的王';
+
+  @override
   String get multipleLines => '多线分析';
 
   @override
@@ -2609,6 +2618,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get variants => '变体';
+
+  @override
+  String get variantsDescription => '更多玩法';
 
   @override
   String get timeControl => '时间限制';
@@ -2837,6 +2849,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get unlimited => '无限制';
+
+  @override
+  String get unlimitedDescription => '请随意安排时间';
 
   @override
   String get mode => '模式';
@@ -3087,9 +3102,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => '或上传 PGN 文件';
-
-  @override
-  String get fromPosition => '自定义局面';
 
   @override
   String get continueFromHere => '从此处继续';
@@ -9225,9 +9237,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get orUploadPgnFile => '或者上傳一個PGN文件';
-
-  @override
-  String get fromPosition => '自定義局面';
 
   @override
   String get continueFromHere => '從此處繼續';

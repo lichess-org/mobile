@@ -2193,9 +2193,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Lai uzaicinātu kādu spēlēt, iedod šo saiti';
 
   @override
@@ -2542,6 +2539,18 @@ class AppLocalizationsLv extends AppLocalizations {
   String get evaluationGauge => 'Novērtējuma rādītājs';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Vairāki varianti';
 
   @override
@@ -2661,6 +2670,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get variants => 'Varianti';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Laika kontrole';
@@ -2889,6 +2901,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get unlimited => 'Neierobežots';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Veids';
@@ -3139,9 +3154,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Augšuplādēt PGN datni';
-
-  @override
-  String get fromPosition => 'No pozīcijas';
 
   @override
   String get continueFromHere => 'Turpināt no šejienes';

@@ -1383,7 +1383,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'El torneo empieza pronto';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmisiones a las que te has suscrito';
+  String get preferencesNotifyBroadcasts => 'Transmisiones suscritas';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Poco tiempo restante en la partida por correspondencia';
@@ -1407,7 +1407,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesBlindfold => 'A ciegas';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Mostrar a la izquierda en dispositivos móviles';
+  String get preferencesShowClockOnTheLeft => 'Aparece a la izquierda en dispositivos móviles';
 
   @override
   String get puzzlePuzzles => 'Ejercicios';
@@ -2169,9 +2169,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createLobbyGame => 'Crear partida en la sala de espera';
 
   @override
-  String get youPlayAs => 'Juegas con';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Para invitar a alguien a jugar, comparte este enlace';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get evaluationGauge => 'Indicador de evaluación';
 
   @override
+  String get visualMotifs => 'Complementos visuales';
+
+  @override
+  String get undefendedPieces => 'Piezas no defendidas';
+
+  @override
+  String get pinnedPieces => 'Piezas clavadas';
+
+  @override
+  String get checkableKing => 'Rey en peligro';
+
+  @override
   String get multipleLines => 'Múltiples líneas';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get variants => 'Variantes';
+
+  @override
+  String get variantsDescription => 'Más formas de jugar';
 
   @override
   String get timeControl => 'Control de tiempo';
@@ -2865,6 +2877,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unlimited => 'Ilimitado';
+
+  @override
+  String get unlimitedDescription => 'Tómate tu tiempo';
 
   @override
   String get mode => 'Modo';
@@ -3115,9 +3130,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'o sube un archivo PGN';
-
-  @override
-  String get fromPosition => 'Desde posición';
 
   @override
   String get continueFromHere => 'Continuar desde aquí';
@@ -4858,7 +4870,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tags => 'Etiquetas';
 
   @override
-  String get enPassant => 'Captura al paso';
+  String get enPassant => 'Al paso';
 
   @override
   String opponentLeftCounter(int count) {

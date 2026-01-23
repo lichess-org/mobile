@@ -858,7 +858,6 @@
   "pasteTheFenStringHere": "Klistra in FEN-koden här",
   "pasteThePgnStringHere": "Klistra in PGN-koden här",
   "orUploadPgnFile": "Eller ladda upp en PGN-fil",
-  "fromPosition": "Från position",
   "continueFromHere": "Fortsätt härifrån",
   "toStudy": "Studera",
   "importGame": "Importera parti",

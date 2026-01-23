@@ -1383,7 +1383,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Transmetime te të cilat jeni pajtuar';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
@@ -1407,7 +1407,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesBlindfold => 'Me sytë lidhur';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Shfaqe në të majtë të pajisjesh celulare';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -2169,9 +2169,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get createLobbyGame => 'Krijoni lojë holli';
 
   @override
-  String get youPlayAs => 'Ju luani si';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Për të ftuar dikë të luajë, jepni këtë URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get evaluationGauge => 'Matësi i vlerësimit';
 
   @override
+  String get visualMotifs => 'Motive pamore';
+
+  @override
+  String get undefendedPieces => 'Gurë të pambrojtur';
+
+  @override
+  String get pinnedPieces => 'Gurë të fiksuar';
+
+  @override
+  String get checkableKing => 'Mbret të cilit mund t’i jepet shah';
+
+  @override
   String get multipleLines => 'Linja të shumta';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get variants => 'Variante';
+
+  @override
+  String get variantsDescription => 'Më tepër mënyra për luajtje';
 
   @override
   String get timeControl => 'Kontroll kohe';
@@ -2865,6 +2877,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get unlimited => 'E pakufizuar';
+
+  @override
+  String get unlimitedDescription => 'Mendohuni aq kohë sa ju duhet';
 
   @override
   String get mode => 'Lloji';
@@ -3115,9 +3130,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ose ngarkoni një kartelë PGN';
-
-  @override
-  String get fromPosition => 'Nga pozicioni';
 
   @override
   String get continueFromHere => 'Vazhdoni nga këtu';

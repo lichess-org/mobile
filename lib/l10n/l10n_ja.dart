@@ -2141,9 +2141,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get createLobbyGame => 'ロビー対局を作成';
 
   @override
-  String get youPlayAs => '色（白/黒）';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
 
   @override
@@ -2490,6 +2487,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get evaluationGauge => '評価値を表示';
 
   @override
+  String get visualMotifs => '形のパターン';
+
+  @override
+  String get undefendedPieces => '浮き駒';
+
+  @override
+  String get pinnedPieces => 'ピンされた駒';
+
+  @override
+  String get checkableKing => 'チェックできるキング';
+
+  @override
   String get multipleLines => '解析ライン数';
 
   @override
@@ -2609,6 +2618,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get variants => '変則チェス';
+
+  @override
+  String get variantsDescription => 'さまざまな遊び方';
 
   @override
   String get timeControl => '持時間';
@@ -2837,6 +2849,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get unlimited => '無制限';
+
+  @override
+  String get unlimitedDescription => 'しっかり時間をかけて';
 
   @override
   String get mode => 'モード';
@@ -3087,9 +3102,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'または PGN ファイルをアップロード';
-
-  @override
-  String get fromPosition => '特定の局面から';
 
   @override
   String get continueFromHere => 'この局面から対局';

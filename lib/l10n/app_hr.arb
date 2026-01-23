@@ -830,7 +830,6 @@
   "pasteTheFenStringHere": "Zalijepi FEN niz ovdje",
   "pasteThePgnStringHere": "Zalijepi PGN tekst ovdje",
   "orUploadPgnFile": "Ili učitaj PGN datoteku",
-  "fromPosition": "Od pozicije",
   "continueFromHere": "Nastavi odavde",
   "toStudy": "Prouči",
   "importGame": "Uvezi partiju",

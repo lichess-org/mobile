@@ -1723,7 +1723,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeAttackingF2F7 => 'Saldırı: f2 ve f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description => 'Kızarmış karaciğer açılışında olduğu gibi f2 veya f7 karesindeki piyonları hedef alan saldırılar.';
+  String get puzzleThemeAttackingF2F7Description => 'Kızarmış ciğer saldırısında olduğu gibi f2 veya f7 karesindeki piyonları hedef alan saldırılar.';
 
   @override
   String get puzzleThemeAttraction => 'Cezbetme';
@@ -1735,19 +1735,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBackRankMate => 'Koridor matı';
 
   @override
-  String get puzzleThemeBackRankMateDescription => 'Kendi taşları arkasında sıkışıp kalmış şaha koridorun kapısını göster.';
+  String get puzzleThemeBackRankMateDescription => 'Kendi taşları arkasında sıkışıp kalmış şahı, kendi sırasında mat edin.';
 
   @override
   String get puzzleThemeBalestraMate => 'Balestra matı';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder';
+  String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder.';
 
   @override
   String get puzzleThemeBlindSwineMate => 'Blind Swine matı';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2 ye 2 bir alanda işbirliği yapıyorlar.';
+  String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2x2 bir alanda işbirliği yapıyorlar.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Fil oyunsonu';
@@ -2157,19 +2157,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gameSetup => 'Oyun ayarları';
 
   @override
-  String get challengeAFriend => 'Arkadaşına Oyun Teklif Et';
+  String get challengeAFriend => 'Bir arkadaşınıza meydan okuyun';
 
   @override
-  String get playAgainstComputer => 'Bilgisayara karşı oyna';
+  String get playAgainstComputer => 'Bilgisayara Karşı Oyna';
 
   @override
   String get gameMode => 'Oyun modu';
 
   @override
   String get createLobbyGame => 'Lobi oyunu oluştur';
-
-  @override
-  String get youPlayAs => 'Oynadığın renk';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Oyuna davet etmek için, bu linki gönderin';
@@ -2518,6 +2515,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get evaluationGauge => 'Değerlendirme çubuğu';
 
   @override
+  String get visualMotifs => 'Görsel motifler';
+
+  @override
+  String get undefendedPieces => 'Korumasız taşlar';
+
+  @override
+  String get pinnedPieces => 'Açmazdaki taşlar';
+
+  @override
+  String get checkableKing => 'Çekilebilir şah';
+
+  @override
   String get multipleLines => 'Çoklu varyantlar';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get variants => 'Varyantlar';
+
+  @override
+  String get variantsDescription => 'Oynamanın daha fazla yolu';
 
   @override
   String get timeControl => 'Süre ayarı';
@@ -2865,6 +2877,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get unlimited => 'Sınırsız';
+
+  @override
+  String get unlimitedDescription => 'İhtiyacınız olan tüm zamanı alın';
 
   @override
   String get mode => 'Mod';
@@ -3115,9 +3130,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Veya bir PGN dosyası yükle';
-
-  @override
-  String get fromPosition => 'Özel pozisyondan';
 
   @override
   String get continueFromHere => 'Bu pozisyondan devam et';

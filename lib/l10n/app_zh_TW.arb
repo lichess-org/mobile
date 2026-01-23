@@ -885,7 +885,6 @@
   "pasteTheFenStringHere": "在此處貼上 FEN 棋譜",
   "pasteThePgnStringHere": "在此處貼上 PGN 棋譜",
   "orUploadPgnFile": "或者上傳一個PGN文件",
-  "fromPosition": "自定義局面",
   "continueFromHere": "從此處繼續",
   "toStudy": "研究",
   "importGame": "導入棋局",

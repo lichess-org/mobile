@@ -1383,7 +1383,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Uitzendingen waarop je bent geabonneerd';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
@@ -1407,7 +1407,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesBlindfold => 'Geblinddoekt';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Toon links op mobiele apparaten';
 
   @override
   String get puzzlePuzzles => 'Puzzels';
@@ -2169,9 +2169,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get createLobbyGame => 'Maak een lobby spel aan';
 
   @override
-  String get youPlayAs => 'Je speelt als';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Deel deze link als u iemand wil uitnodigen om met u te spelen';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsNl extends AppLocalizations {
   String get evaluationGauge => 'Evaluatiemeter';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Meerdere varianten';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get variants => 'Varianten';
+
+  @override
+  String get variantsDescription => 'Meer manieren om te spelen';
 
   @override
   String get timeControl => 'Speeltempo';
@@ -2865,6 +2877,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get unlimited => 'Onbeperkt';
+
+  @override
+  String get unlimitedDescription => 'Neem alle tijd die je nodig hebt';
 
   @override
   String get mode => 'Instelling';
@@ -3115,9 +3130,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Of upload een PGN-bestand';
-
-  @override
-  String get fromPosition => 'Vanuit een stelling';
 
   @override
   String get continueFromHere => 'Ga vanaf hier verder';

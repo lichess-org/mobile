@@ -76,7 +76,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'Du følger ingen brukere.';
 
   @override
-  String get mobileOkButton => 'Ok';
+  String get mobileOkButton => 'OK';
 
   @override
   String get mobileOverTheBoard => 'Over brettet';
@@ -789,7 +789,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastFederation => 'Forbund';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Alder';
 
   @override
   String get broadcastUnrated => 'Uratet';
@@ -1897,13 +1897,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Et tårn står ved siden av motstanderens konge og er støttet av en dronning som også blokkerer kongens fluktfelter. Tårnet og dronningen fanger motstanderens konge i en 3x3 «kasse».';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Pillsburys matt';
 
   @override
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphys matt';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
@@ -1999,7 +1999,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'En taktikk i den første fasen av partiet.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Operamatt';
 
   @override
   String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
@@ -2167,9 +2167,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get createLobbyGame => 'Opprett lobbyparti';
-
-  @override
-  String get youPlayAs => 'Dine brikker';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'For å invitere noen til å spille, gi dem denne lenken';
@@ -2518,6 +2515,18 @@ class AppLocalizationsNb extends AppLocalizations {
   String get evaluationGauge => 'Evalueringsmåler';
 
   @override
+  String get visualMotifs => 'Visuelle motiver';
+
+  @override
+  String get undefendedPieces => 'Ubeskyttede brikker';
+
+  @override
+  String get pinnedPieces => 'Bundne brikker';
+
+  @override
+  String get checkableKing => 'Sjakkbar konge';
+
+  @override
   String get multipleLines => 'Flere varianter';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get variants => 'Varianter';
+
+  @override
+  String get variantsDescription => 'Flere måter å spille på';
 
   @override
   String get timeControl => 'Tidskontroll';
@@ -2865,6 +2877,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get unlimited => 'Ubegrenset';
+
+  @override
+  String get unlimitedDescription => 'Ta den tiden du trenger';
 
   @override
   String get mode => 'Modus';
@@ -3115,9 +3130,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Eller last opp en PGN-fil';
-
-  @override
-  String get fromPosition => 'Fra stilling';
 
   @override
   String get continueFromHere => 'Fortsett herfra';

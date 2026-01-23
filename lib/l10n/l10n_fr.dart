@@ -2169,9 +2169,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createLobbyGame => 'Créer une partie dans le salon';
 
   @override
-  String get youPlayAs => 'Couleur';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pour inviter quelqu\'un à jouer, donnez-lui ce lien';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get evaluationGauge => 'Jauge d\'évaluation';
 
   @override
+  String get visualMotifs => 'Motifs visuels';
+
+  @override
+  String get undefendedPieces => 'Pièces non défendues';
+
+  @override
+  String get pinnedPieces => 'Pièces clouées';
+
+  @override
+  String get checkableKing => 'Roi pouvant être mis en échec';
+
+  @override
   String get multipleLines => 'Lignes d\'analyse';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get variants => 'Variantes';
+
+  @override
+  String get variantsDescription => 'Autres façons de jouer';
 
   @override
   String get timeControl => 'Cadence';
@@ -2865,6 +2877,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get unlimited => 'Illimité';
+
+  @override
+  String get unlimitedDescription => 'Prenez tout le temps dont vous avez besoin.';
 
   @override
   String get mode => 'Mode';
@@ -3115,9 +3130,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ou téléverser un fichier PGN';
-
-  @override
-  String get fromPosition => 'Depuis une position';
 
   @override
   String get continueFromHere => 'Continuer depuis cette position';

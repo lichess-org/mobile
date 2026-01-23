@@ -2169,9 +2169,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get createLobbyGame => 'Crea una sala de joc';
 
   @override
-  String get youPlayAs => 'Juga com a';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get evaluationGauge => 'Indicador d\'avaluació';
 
   @override
+  String get visualMotifs => 'Motius visuals';
+
+  @override
+  String get undefendedPieces => 'Peces indefenses';
+
+  @override
+  String get pinnedPieces => 'Peces clavades';
+
+  @override
+  String get checkableKing => 'Rei exposat a escac';
+
+  @override
   String get multipleLines => 'Múltiples línies';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get variants => 'Variants';
+
+  @override
+  String get variantsDescription => 'Més formes de jugar';
 
   @override
   String get timeControl => 'Control de temps';
@@ -2865,6 +2877,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get unlimited => 'Il·limitat';
+
+  @override
+  String get unlimitedDescription => 'Preneu-se tot el temps que necessiteu';
 
   @override
   String get mode => 'Mode';
@@ -3115,9 +3130,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'O penja un arxiu PGN';
-
-  @override
-  String get fromPosition => 'Des d\'una posició';
 
   @override
   String get continueFromHere => 'Continua des d\'aquí';

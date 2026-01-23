@@ -2167,9 +2167,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'इस खेल में किसी को आमंत्रित करने के लिए उन्हें ये पता दें';
 
   @override
@@ -2516,6 +2513,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get evaluationGauge => 'मूल्यांकन गेज';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'एकाधिक पंक्तियाँ';
 
   @override
@@ -2635,6 +2644,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get variants => 'प्रकार';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'समय नियंत्रण';
@@ -2863,6 +2875,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get unlimited => 'असीमित';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'प्रणाली';
@@ -3113,9 +3128,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'या PGN अपलोड करे|';
-
-  @override
-  String get fromPosition => 'स्थिति से';
 
   @override
   String get continueFromHere => 'यहा से जारी करें';

@@ -2169,9 +2169,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Nooi iemand vir \'n spel, gebruik hierdie URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsAf extends AppLocalizations {
   String get evaluationGauge => 'Evaluering meter';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Aantal lyne';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get variants => 'Variante';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Tydkontrole';
@@ -2865,6 +2877,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get unlimited => 'Oneindig';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Modus';
@@ -3115,9 +3130,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Of laai ‘n PGN-lêer op';
-
-  @override
-  String get fromPosition => 'Van posisie';
 
   @override
   String get continueFromHere => 'Gaan voort van hier af';

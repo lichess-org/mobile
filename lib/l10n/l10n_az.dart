@@ -2167,9 +2167,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Kimisə oyuna dəvət etmək üçün, bu URL-i göndərin';
 
   @override
@@ -2516,6 +2513,18 @@ class AppLocalizationsAz extends AppLocalizations {
   String get evaluationGauge => 'Dəyərləndirmə çubuğu';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Oxların sayı';
 
   @override
@@ -2635,6 +2644,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get variants => 'Variantlar';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Vaxta nəzarət';
@@ -2863,6 +2875,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get unlimited => 'Limitsiz';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Növ';
@@ -3113,9 +3128,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Və ya PGN faylı yükləyin';
-
-  @override
-  String get fromPosition => 'Pozisiyadan';
 
   @override
   String get continueFromHere => 'Buradan davam edin';

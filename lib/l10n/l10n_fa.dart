@@ -2169,9 +2169,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createLobbyGame => 'ایجاد بازی در سَرسَرا';
 
   @override
-  String get youPlayAs => 'رنگِ مُهرهٔ شما';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت کسی به بازی، این وب‌نشانی را دهید';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsFa extends AppLocalizations {
   String get evaluationGauge => 'میله ارزیابی';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'شاخه های متعدد';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get variants => 'وَرتا';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'زمان';
@@ -2865,6 +2877,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get unlimited => 'نامحدود';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'حالت';
@@ -3115,9 +3130,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'یا یک فایل PGN بارگذاری کنید';
-
-  @override
-  String get fromPosition => 'از وضعیت';
 
   @override
   String get continueFromHere => 'از اینجا ادامه دهید';

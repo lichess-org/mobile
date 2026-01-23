@@ -2221,9 +2221,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get createLobbyGame => 'יצירת משחק במבואה';
 
   @override
-  String get youPlayAs => 'לשחק בתור';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'כדי להזמין מישהו לשחק, שתפו את הכתובת הזאת';
 
   @override
@@ -2570,6 +2567,18 @@ class AppLocalizationsHe extends AppLocalizations {
   String get evaluationGauge => 'מד הערכה';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'המשכים מקבילים';
 
   @override
@@ -2689,6 +2698,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get variants => 'נגזרות שחמט';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'קטגוריית זמן';
@@ -2917,6 +2929,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get unlimited => 'בלתי מוגבל';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'מצב';
@@ -3167,9 +3182,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'או העלו קובץ PGN';
-
-  @override
-  String get fromPosition => 'מעמדה מסוימת';
 
   @override
   String get continueFromHere => 'המשיכו מכאן';

@@ -2223,9 +2223,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'Hrajete jako';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pro pozvání někoho ke hře využijte tento odkaz';
 
   @override
@@ -2572,6 +2569,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get evaluationGauge => 'Měřítko hodnocení';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Počet variant';
 
   @override
@@ -2691,6 +2700,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get variants => 'Varianty';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Tempo hry';
@@ -2919,6 +2931,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get unlimited => 'Bez hodin';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Režim hry';
@@ -3169,9 +3184,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Nebo nahrajte soubor PGN';
-
-  @override
-  String get fromPosition => 'Z pozice';
 
   @override
   String get continueFromHere => 'Pokračovat zde';

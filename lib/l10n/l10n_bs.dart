@@ -2197,9 +2197,6 @@ class AppLocalizationsBs extends AppLocalizations {
   String get createLobbyGame => 'Kreiraj igru u lobiju';
 
   @override
-  String get youPlayAs => 'Igrate kao';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Da bi ste pozvali nekoga na partiju, pošaljite ovaj link';
 
   @override
@@ -2546,6 +2543,18 @@ class AppLocalizationsBs extends AppLocalizations {
   String get evaluationGauge => 'Mjerilo evaluacije';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Više varijacija';
 
   @override
@@ -2665,6 +2674,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get variants => 'Varijante';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Vremenska kontrola';
@@ -2893,6 +2905,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get unlimited => 'Neograničeno';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Tip';
@@ -3143,9 +3158,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ili postavite PGN datoteku';
-
-  @override
-  String get fromPosition => 'Od pozicije';
 
   @override
   String get continueFromHere => 'Nastavite odavde';

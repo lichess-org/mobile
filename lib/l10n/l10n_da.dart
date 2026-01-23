@@ -2169,9 +2169,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get createLobbyGame => 'Opret lobbyparti';
 
   @override
-  String get youPlayAs => 'Du spiller som';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Invitér nogen til at spille ved at give dem denne URL';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get evaluationGauge => 'Evalueringsindikator';
 
   @override
+  String get visualMotifs => 'Visuelle motiver';
+
+  @override
+  String get undefendedPieces => 'Uforsvarede brikker';
+
+  @override
+  String get pinnedPieces => 'Bundne brikker';
+
+  @override
+  String get checkableKing => 'Konge der kan sættes i skak';
+
+  @override
   String get multipleLines => 'Flere linjer';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get variants => 'Varianter';
+
+  @override
+  String get variantsDescription => 'Flere måder at spille på';
 
   @override
   String get timeControl => 'Tidskontrol';
@@ -2865,6 +2877,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get unlimited => 'Ubegrænset';
+
+  @override
+  String get unlimitedDescription => 'Tag al den tid, du har brug for';
 
   @override
   String get mode => 'Variant';
@@ -3115,9 +3130,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Eller upload en PGN-fil';
-
-  @override
-  String get fromPosition => 'Fra stilling';
 
   @override
   String get continueFromHere => 'Fortsæt herfra';

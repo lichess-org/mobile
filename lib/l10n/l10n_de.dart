@@ -2169,9 +2169,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get createLobbyGame => 'Neue Partie erstellen';
 
   @override
-  String get youPlayAs => 'Du spielst als';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Versende diese URL, um jemanden zum Spiel einzuladen';
 
   @override
@@ -2518,6 +2515,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get evaluationGauge => 'Bewertungsanzeige';
 
   @override
+  String get visualMotifs => 'Visuelle Motive';
+
+  @override
+  String get undefendedPieces => 'Nicht verteidigte Figuren';
+
+  @override
+  String get pinnedPieces => 'Gefesselte Figuren';
+
+  @override
+  String get checkableKing => 'König, dem Schach geboten werden kann';
+
+  @override
   String get multipleLines => 'Mehrere Varianten';
 
   @override
@@ -2637,6 +2646,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get variants => 'Varianten';
+
+  @override
+  String get variantsDescription => 'Weitere Spielarten';
 
   @override
   String get timeControl => 'Bedenkzeit';
@@ -2865,6 +2877,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unlimited => 'Unbegrenzt';
+
+  @override
+  String get unlimitedDescription => 'Nimm dir so viel Zeit, wie du brauchst';
 
   @override
   String get mode => 'Modus';
@@ -3115,9 +3130,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Oder lade eine PGN-Datei hoch';
-
-  @override
-  String get fromPosition => 'Von Stellung';
 
   @override
   String get continueFromHere => 'Von hier aus weiterspielen';
