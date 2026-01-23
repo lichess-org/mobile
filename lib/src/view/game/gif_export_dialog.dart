@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -32,7 +31,7 @@ class _GifExportState extends State<GifExport> {
         ListSection(
           children: [
             SwitchSettingTile(
-              title: Text("Player names"),
+              title: const Text(),
               value: playerNames,
               onChanged: (bool value) {
                 setState(() {
@@ -41,7 +40,7 @@ class _GifExportState extends State<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: Text("Show player ratings"),
+              title: const Text('Show player ratings'),
               value: showPlayerRatings,
               onChanged: (bool value) {
                 setState(() {
@@ -50,7 +49,7 @@ class _GifExportState extends State<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: Text("Move annotations"),
+              title: const Text('Move annotations'),
               value: moveAnnotations,
               onChanged: (bool value) {
                 setState(() {
@@ -59,7 +58,7 @@ class _GifExportState extends State<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: Text("Chess clock"),
+              title: const Text('Chess clock'),
               value: chessClock,
               onChanged: (bool value) {
                 setState(() {
