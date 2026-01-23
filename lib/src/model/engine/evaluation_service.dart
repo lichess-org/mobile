@@ -247,6 +247,9 @@ class EvaluationService {
       if (_isDisposed) return;
 
       if (_stockfish.state.value == StockfishState.error) {
+        if (!_isDisposed) {
+          _setEngineState(EngineState.error);
+        }
         return;
       }
 
@@ -329,6 +332,9 @@ class EvaluationService {
   }
 
   /// Stop the current evaluation.
+  ///
+  /// This method stops the engine from computing further but does not clear the evaluation state.
+  /// The engine can still emit eval results for the current work until it fully stops.
   void stop() {
     _protocol.compute(null);
     _setWork(null);

@@ -48,6 +48,7 @@ class UCIProtocol {
     _options['MultiPV'] = '1';
 
     _engineName.value = null;
+    _isComputing.value = false;
   }
 
   Work? _work;
