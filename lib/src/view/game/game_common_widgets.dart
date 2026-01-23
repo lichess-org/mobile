@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -137,27 +138,23 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       icon: Icons.gif_outlined,
       label: context.l10n.gameAsGIF,
       onPressed: () =>
-          showModalBottomSheet<void>(context: context, builder: (_) => const GifExport()),
-      // () async {
-      //   try {
-      //     final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
-      //     if (context.mounted) {
-      //       launchShareDialog(
-      //         context,
-      //         ShareParams(
-      //           fileNameOverrides: ['$gameId.gif'],
-      //           files: [gif],
-      //           subject: game.shareTitle(context.l10n),
-      //         ),
-      //       );
-      //     }
-      //   } catch (e) {
-      //     debugPrint(e.toString());
-      //     if (context.mounted) {
-      //       showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-      //     }
-      //   }
-      // },
+          showModalBottomSheet<GifExportOptions>(
+            context: context,
+            builder: (_) => const GifExport(),
+          ).then(
+            (options) => {
+              if (options == null)
+                {
+                  options = const GifExportOptions(
+                    playerNames: true,
+                    showPlayerRatings: true,
+                    moveAnnotations: false,
+                    chessClock: false,
+                  ),
+                },
+              if (context.mounted) {_shareGameGif(context, ref, gameId, orientation, options)},
+            },
+          ),
     ),
     ContextMenuAction(
       icon: Icons.text_snippet_outlined,
@@ -192,4 +189,40 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       },
     ),
   ];
+}
+
+Future<void> _shareGameGif(
+  BuildContext context,
+  WidgetRef ref,
+  GameId gameId,
+  Side orientation,
+  GifExportOptions options,
+) async {
+  try {
+    final (gif, game) = await ref
+        .read(gameShareServiceProvider)
+        .gameGif(
+          gameId,
+          orientation,
+          options.playerNames,
+          options.showPlayerRatings,
+          options.moveAnnotations,
+          options.chessClock,
+        );
+    if (context.mounted) {
+      launchShareDialog(
+        context,
+        ShareParams(
+          fileNameOverrides: ['$gameId.gif'],
+          files: [gif],
+          subject: game.shareTitle(context.l10n),
+        ),
+      );
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+    if (context.mounted) {
+      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+    }
+  }
 }

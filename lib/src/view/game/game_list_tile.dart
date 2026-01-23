@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -18,6 +20,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/game/gif_export_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -262,29 +265,25 @@ class GameContextMenu extends ConsumerWidget {
               BottomSheetContextMenuAction(
                 icon: Icons.gif,
                 child: Text(context.l10n.gameAsGIF),
-                onPressed: () async {
-                  try {
-                    final (gif, _) = await ref
-                        .read(gameShareServiceProvider)
-                        .gameGif(game.id, orientation);
-                    if (context.mounted) {
-                      launchShareDialog(
-                        context,
-                        ShareParams(
-                          files: [gif],
-                          fileNameOverrides: ['${game.id}.gif'],
-                          subject:
-                              '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    debugPrint(e.toString());
-                    if (context.mounted) {
-                      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                    }
-                  }
-                },
+                onPressed: () =>
+                    showModalBottomSheet<GifExportOptions>(
+                      context: context,
+                      builder: (_) => const GifExport(),
+                    ).then(
+                      (options) => {
+                        if (options == null)
+                          {
+                            options = const GifExportOptions(
+                              playerNames: true,
+                              showPlayerRatings: true,
+                              moveAnnotations: false,
+                              chessClock: false,
+                            ),
+                          },
+                        if (context.mounted)
+                          {_shareGameGif(context, ref, game.id, orientation, options)},
+                      },
+                    ),
               ),
               BottomSheetContextMenuAction(
                 icon: Icons.text_snippet,
@@ -324,5 +323,41 @@ class GameContextMenu extends ConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+Future<void> _shareGameGif(
+  BuildContext context,
+  WidgetRef ref,
+  GameId gameId,
+  Side orientation,
+  GifExportOptions options,
+) async {
+  try {
+    final (gif, game) = await ref
+        .read(gameShareServiceProvider)
+        .gameGif(
+          gameId,
+          orientation,
+          options.playerNames,
+          options.showPlayerRatings,
+          options.moveAnnotations,
+          options.chessClock,
+        );
+    if (context.mounted) {
+      launchShareDialog(
+        context,
+        ShareParams(
+          fileNameOverrides: ['$gameId.gif'],
+          files: [gif],
+          subject: game.shareTitle(context.l10n),
+        ),
+      );
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+    if (context.mounted) {
+      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+    }
   }
 }
