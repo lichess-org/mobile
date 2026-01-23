@@ -26,9 +26,11 @@ class _GifExportState extends State<GifExport> {
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
+          header: const Text('GIF Export Options'),
+          materialFilledCard: true,
           children: [
             SwitchSettingTile(
               title: const Text('Player names'),
@@ -68,19 +70,23 @@ class _GifExportState extends State<GifExport> {
             ),
           ],
         ),
-        FilledButton.tonal(
-          onPressed: () => {
-            Navigator.pop(
-              context,
-              GifExportOptions(
-                playerNames: playerNames,
-                showPlayerRatings: showPlayerRatings,
-                moveAnnotations: moveAnnotations,
-                chessClock: chessClock,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: FilledButton(
+            onPressed: () => {
+              Navigator.pop(
+                context,
+                GifExportOptions(
+                  playerNames: playerNames,
+                  showPlayerRatings: showPlayerRatings,
+                  moveAnnotations: moveAnnotations,
+                  chessClock: chessClock,
+                  userSubmit: true,
+                ),
               ),
-            ),
-          },
-          child: Text(context.l10n.next, textAlign: TextAlign.center),
+            },
+            child: Text(context.l10n.next, textAlign: TextAlign.center),
+          ),
         ),
       ],
     );
