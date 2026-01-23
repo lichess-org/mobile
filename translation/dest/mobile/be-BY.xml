@@ -1,34 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Налады ўліковага запісу</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Гэтыя налады звязаны з уліковым запісам Lichess і будуць выкарыстаны на ўсіх дэвайсах.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Усе гульні</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Вы ўпэўнены?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Наладкі дошкі</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Скасаваць прапанову аб вяртанні хода</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Ачысціць</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Ачысціць захаваны ход</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Далучыцца да гульні</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Водгук</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры вечар, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры вечар</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры дзень, %s</string>
-  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добры дзень</string>
+  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Добры дзень, %s</string>
+  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Добры дзень</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Схаваць варыянт</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Галоўная</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стрымеры ў эфіры</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Вам патрэбна ўвайсці ў уліковы запіс каб паглядзець гэтую старонку.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма вынікаў</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Калі ласка звярніце ўвагу, што не ўсе функцыі з старога дадатку або вэб-сайту на дадзены момант даступныя, але мы дадаем іх увесь час.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Вы не адсочваеце ні за якім карыстальнікам.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Добра</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">За дошкай</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Гульцы з «%s»</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Злева</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Справа</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Павялічваць фігуру пры перацягванні</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Жадаеце скончыць гэтую серыю?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Няма што паказаць, калі ласка змяніце фільтры</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Няма што паказаць. Сыграйце ў Puzzle Storm.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Вырашыце як мага больш задач за 3 хвіліны.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Вы згубіце вашу серыю, ды ваш рахунак будзе захованы.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Рашайце задачу з вашага любімага дэбюта, або выберыце тэму.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачы</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Нядаўнія пошукі</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Выдаліць закладку</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Аналіз серверам</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Размяшчэнне гадзінніка</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Шаблоны</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Круг</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Квадрат</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Дамашнія віджеты</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Поўнаэкранны рэжым</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Хавае сістэмны UI пад час гульні. Карыстайцеся гэтым калі вас турбуюць жэсты навігацыі сістэмы па краях экрана. Прымяняецца да экранаў гульні і задач.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Збітыя фігуры</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Выбраць малюнак</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Размыць малюнак</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Схаваць дошку</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Паказаць дошку</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Правядзіце каб паказаць іншыя фоны</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Націск, або перацягванне</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Націскам на дзве клеткі</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Маляванне фігур</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Паказаць мяжу</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Кранальны водгук</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Калі актыўна, ваш дэвайс будзе крыху вібраваць калі вы паходзіце або пры ўзяцці фігуры.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Налады</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Падзяліцца PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Падзяліцца спасылкай на гульню</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Падзяліцца пазіцыяй як FEN</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Падзяліцца гэтай задачай</string>
   <string name="showComments" comment="Shown in the analysis screen.">Паказаць каментары</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Паказаць вынік</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Паказаць варыянты</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Нешта пайшло не так.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Сістэмныя колеры</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Дошка</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Сродкі</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варыянт %s не падтрымліваецца гэтай версіяй.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Чакаем пакуль апанент далучыцца...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Назіраць</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Вітаем у Lichess!</string>
 </resources>
