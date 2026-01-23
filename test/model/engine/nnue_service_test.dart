@@ -26,8 +26,7 @@ class ConfigurableFakeConnectivity implements Connectivity {
   }
 
   @override
-  Stream<List<ConnectivityResult>> get onConnectivityChanged =>
-      Stream.value([result]);
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => Stream.value([result]);
 }
 
 Future<ProviderContainer> makeNnueTestContainer({
@@ -65,8 +64,7 @@ Future<ProviderContainer> makeNnueTestContainer({
         httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => mockClient);
         }),
-      if (connectivity != null)
-        connectivityPluginProvider.overrideWith((_) => connectivity),
+      if (connectivity != null) connectivityPluginProvider.overrideWith((_) => connectivity),
     ],
   );
 
@@ -159,7 +157,6 @@ void main() {
 
         expect(result, isFalse);
       });
-
     });
 
     group('deleteNNUEFiles', () {
@@ -250,10 +247,7 @@ void main() {
 
         final service = container.read(nnueServiceProvider);
 
-        expect(
-          () => service.downloadNNUEFiles(inBackground: true),
-          throwsException,
-        );
+        expect(() => service.downloadNNUEFiles(inBackground: true), throwsException);
       });
 
       test('allows sequential downloads after previous one completes', () async {
