@@ -346,13 +346,20 @@ class EvaluationService {
   /// The service can be reused after calling this method.
   void quit() {
     _protocol.compute(null);
-    _setWork(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
+
+    // Reset evaluationState to initial state
+    _evaluationState.value = (
+      engineName: null,
+      eval: null,
+      state: EngineState.initial,
+      currentWork: null,
+    );
   }
 
   void _dispose() {

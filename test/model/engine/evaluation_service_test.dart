@@ -75,7 +75,7 @@ void main() {
       expect(states.last, anyOf(EngineState.idle, EngineState.computing));
     });
 
-    test('quit() resets engine state to initial', () async {
+    test('quit() resets evaluationState to initial state immediately', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -83,15 +83,19 @@ void main() {
       final stream = service.evaluate(work);
       await stream!.first;
 
+      // Verify we have non-initial state before quit
+      expect(service.evaluationState.value.state, isNot(EngineState.initial));
+      expect(service.evaluationState.value.currentWork, isNotNull);
+      expect(service.evaluationState.value.eval, isNotNull);
+      expect(service.evaluationState.value.engineName, isNotNull);
+
       service.quit();
 
-      // Wait for async stockfish.quit() to complete and trigger state change
-      while (service.evaluationState.value.state != EngineState.initial) {
-        await Future<void>.delayed(const Duration(milliseconds: 10));
-      }
-
+      // quit() should immediately reset all fields to initial state
       expect(service.evaluationState.value.state, EngineState.initial);
       expect(service.evaluationState.value.currentWork, isNull);
+      expect(service.evaluationState.value.eval, isNull);
+      expect(service.evaluationState.value.engineName, isNull);
     });
 
     test('state transitions idle -> computing -> idle when work completes', () async {
