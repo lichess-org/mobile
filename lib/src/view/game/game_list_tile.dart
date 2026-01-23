@@ -278,10 +278,14 @@ class GameContextMenu extends ConsumerWidget {
                               showPlayerRatings: true,
                               moveAnnotations: false,
                               chessClock: false,
+                              userSubmit: false,
                             ),
                           },
                         if (context.mounted)
-                          {_shareGameGif(context, ref, game.id, orientation, options)},
+                          {
+                            if (options.userSubmit)
+                              {_shareGameGif(context, ref, game.id, orientation, options)},
+                          },
                       },
                     ),
               ),

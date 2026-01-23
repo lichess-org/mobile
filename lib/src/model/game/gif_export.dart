@@ -9,5 +9,6 @@ sealed class GifExportOptions with _$GifExportOptions {
     required bool showPlayerRatings,
     required bool moveAnnotations,
     required bool chessClock,
+    required bool userSubmit,
   }) = _GifExportOptions;
 }

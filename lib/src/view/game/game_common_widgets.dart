@@ -150,9 +150,14 @@ List<Widget> makeFinishedGameShareContextMenuActions(
                     showPlayerRatings: true,
                     moveAnnotations: false,
                     chessClock: false,
+                    userSubmit: false,
                   ),
                 },
-              if (context.mounted) {_shareGameGif(context, ref, gameId, orientation, options)},
+              if (context.mounted)
+                {
+                  if (options.userSubmit)
+                    {_shareGameGif(context, ref, gameId, orientation, options)},
+                },
             },
           ),
     ),
