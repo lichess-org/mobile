@@ -1057,5 +1057,64 @@ void main() {
         );
       });
     });
+
+    test('discards eval results that arrive after quit()', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? latestState;
+        container.listen(engineEvaluationProvider, (_, next) {
+          latestState = next;
+        }, fireImmediately: true);
+
+        final work = makeWork();
+
+        // Start evaluation
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit some eval events to build up state
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        throttleStockfish.emitEvalEvents(); // depth 12
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Verify we have an eval with depth 12
+        expect(latestState?.eval, isNotNull);
+        expect(latestState?.eval?.depth, 12);
+
+        // Call quit() - this should reset state and discard future results
+        service.quit();
+        // Flush microtasks twice: once for the service state change, once for the notifier listener
+        async.flushMicrotasks();
+        async.flushMicrotasks();
+
+        // State should be reset
+        expect(latestState?.state, EngineState.initial);
+        expect(latestState?.eval, isNull);
+        expect(latestState?.currentWork, isNull);
+
+        // Now simulate bestmove arriving after quit (this would normally emit the old eval)
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // State should still be reset - the bestmove result should be discarded
+        expect(
+          latestState?.eval,
+          isNull,
+          reason: 'Eval results arriving after quit() should be discarded',
+        );
+        expect(latestState?.state, EngineState.initial);
+      });
+    });
   });
 }

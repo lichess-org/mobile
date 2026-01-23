@@ -71,6 +71,7 @@ class EvaluationService {
   StockfishFlavor? _currentFlavor;
   bool _initInProgress = false;
   bool _isDisposed = false;
+  bool _discardEvalResults = false;
 
   // Throttling state for eval emissions
   Timer? _evalThrottleTimer;
@@ -187,6 +188,7 @@ class EvaluationService {
     );
 
     _setWork(work);
+    _discardEvalResults = false;
 
     if (_initInProgress) {
       _logger.fine('Evaluate called while engine initialization is in progress, queuing work');
@@ -287,6 +289,8 @@ class EvaluationService {
   }
 
   void _onComputingChange() {
+    if (_discardEvalResults) return;
+
     if (_protocol.isComputing.value) {
       _setEngineState(EngineState.computing);
     } else {
@@ -305,6 +309,8 @@ class EvaluationService {
   /// Implements trailing throttle: emits immediately if no throttle is active,
   /// otherwise stores the result to emit when the throttle window expires.
   void _onEvalResult(EvalResult result) {
+    if (_discardEvalResults) return;
+
     if (_evalThrottleTimer == null) {
       // No active throttle - emit immediately and start throttle window
       _emitEval(result);
@@ -349,6 +355,7 @@ class EvaluationService {
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
+    _discardEvalResults = true;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
