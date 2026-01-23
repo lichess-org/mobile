@@ -1001,9 +1001,11 @@ packages:
   multistockfish:
     dependency: "direct main"
     description:
-      path: "../dart-multistockfish/pkgs/multistockfish"
-      relative: true
-    source: path
+      path: "pkgs/multistockfish"
+      ref: defer_start
+      resolved-ref: d081525e677d16d6a7dd5cd5495f38ff1eca1fe2
+      url: "https://github.com/lichess-org/dart-multistockfish.git"
+    source: git
     version: "0.4.0"
   multistockfish_chess:
     dependency: transitive
