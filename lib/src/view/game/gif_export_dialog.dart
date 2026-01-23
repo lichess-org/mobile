@@ -31,7 +31,7 @@ class _GifExportState extends State<GifExport> {
         ListSection(
           children: [
             SwitchSettingTile(
-              title: const Text(),
+              title: const Text('Player names'),
               value: playerNames,
               onChanged: (bool value) {
                 setState(() {
@@ -40,7 +40,7 @@ class _GifExportState extends State<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Show player ratings'),
+              title: Text(context.l10n.preferencesShowPlayerRatings),
               value: showPlayerRatings,
               onChanged: (bool value) {
                 setState(() {
