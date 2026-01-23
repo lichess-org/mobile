@@ -171,84 +171,94 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
               )
               .toIList();
 
+    final mediaQueryPadding = MediaQuery.paddingOf(context);
+
     return CustomScrollView(
       slivers: [
-        if (showSearchBar)
-          SliverSafeArea(
-            bottom: false,
-            sliver: SliverPadding(
-              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
-              sliver: SliverToBoxAdapter(
-                child: PlatformSearchBar(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    setState(() {
-                      _searchQuery = value;
-                    });
-                  },
-                  onClear: () {
-                    _searchController.clear();
-                    setState(() {
-                      _searchQuery = '';
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
-        if (withRank)
-          const SliverPadding(
-            padding: EdgeInsets.all(8.0),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  Icon(Icons.info, size: 16),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Standings are calculated using broadcasted games and may differ from official results.',
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 13),
+        SliverSafeArea(
+          bottom: false,
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              mainAxisSize: .min,
+              children: [
+                if (showSearchBar)
+                  Padding(
+                    padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+                    child: PlatformSearchBar(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                        });
+                      },
+                      onClear: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                        });
+                      },
                     ),
                   ),
-                ],
-              ),
+                if (withRank)
+                  Padding(
+                    padding: Styles.bodyPadding.copyWith(top: 8.0, bottom: 0.0),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.info, size: 16),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Standings are calculated using broadcasted games and may differ from official results.',
+                            maxLines: 2,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Row(
+                  crossAxisAlignment: .center,
+                  children: [
+                    if (withRating)
+                      Expanded(
+                        child: _TableTitleCell(
+                          title: Text('${context.l10n.player} (Elo)', style: _kHeaderTextStyle),
+                          onTap: () => toggleSort(_SortingTypes.elo),
+                          sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
+                        ),
+                      ),
+                    SizedBox(
+                      width: scoreWidth,
+                      child: _TableTitleCell(
+                        title: Text(
+                          withScores ? context.l10n.broadcastScore : context.l10n.games,
+                          style: _kHeaderTextStyle,
+                        ),
+                        onTap: () => toggleSort(_SortingTypes.score),
+                        sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        SliverToBoxAdapter(
-          child: Row(
-            crossAxisAlignment: .center,
-            children: [
-              if (withRating)
-                Expanded(
-                  child: _TableTitleCell(
-                    title: Text('${context.l10n.player} (Elo)', style: _kHeaderTextStyle),
-                    onTap: () => toggleSort(_SortingTypes.elo),
-                    sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
-                  ),
-                ),
-              SizedBox(
-                width: scoreWidth,
-                child: _TableTitleCell(
-                  title: Text(
-                    withScores ? context.l10n.broadcastScore : context.l10n.games,
-                    style: _kHeaderTextStyle,
-                  ),
-                  onTap: () => toggleSort(_SortingTypes.score),
-                  sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
-                ),
-              ),
-            ],
-          ),
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return BroadcastPlayerRow(
-              playerWithOverallResult: filteredPlayers[index],
-              tournament: widget.tournament,
-              index: index + 1,
-            );
-          }, childCount: filteredPlayers.length),
+        SliverPadding(
+          padding: EdgeInsetsGeometry.only(
+            // top media query padding is already included in the SliverSafeArea above
+            top: 0.0,
+            bottom: mediaQueryPadding.bottom,
+          ),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return BroadcastPlayerRow(
+                playerWithOverallResult: filteredPlayers[index],
+                tournament: widget.tournament,
+                index: index + 1,
+              );
+            }, childCount: filteredPlayers.length),
+          ),
         ),
       ],
     );
