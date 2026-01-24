@@ -778,8 +778,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) =>
-              Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
+          makeLabel: (context) => Text(context.l10n.mobileViewGame),
           onPressed: () async {
             try {
               final game = await ref

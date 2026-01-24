@@ -102,6 +102,7 @@
   "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
   "mobileWatchTab": "Watch",
   "mobileWelcomeToLichessApp": "Welcome to Lichess app!",
+  "mobileViewGame": "View Game",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",

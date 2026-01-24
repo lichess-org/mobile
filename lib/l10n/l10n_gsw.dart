@@ -242,6 +242,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Willkomme bi de Lichess-App!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Aktivitäte';
 
   @override

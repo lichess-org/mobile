@@ -242,6 +242,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Vítejte v aplikaci Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override

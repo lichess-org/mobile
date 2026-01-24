@@ -242,6 +242,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Добродошли у Lichess апликацију!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Активност';
 
   @override
