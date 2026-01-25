@@ -227,7 +227,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
         if (shouldShowWelcomeScreen) {
           final welcomeWidgets = [
-            const _GreetingWidget(),
+            const _EditableWidget(
+              widget: HomeEditableWidget.hello,
+              shouldShow: true,
+              child: _GreetingWidget(),
+            ),
             Padding(
               padding: Styles.bodySectionPadding,
               child: LichessMessage(style: TextTheme.of(context).bodyLarge),
