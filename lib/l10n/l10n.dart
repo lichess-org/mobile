@@ -644,6 +644,12 @@ abstract class AppLocalizations {
   /// **'Welcome to Lichess app!'**
   String get mobileWelcomeToLichessApp;
 
+  /// No description provided for @mobileViewGame.
+  ///
+  /// In en, this message translates to:
+  /// **'View Game'**
+  String get mobileViewGame;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:

@@ -242,6 +242,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Lichess 앱에 오신 것을 환영합니다!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => '활동';
 
   @override

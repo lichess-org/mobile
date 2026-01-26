@@ -242,6 +242,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Chào mừng đến với ứng dụng Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Hoạt động';
 
   @override

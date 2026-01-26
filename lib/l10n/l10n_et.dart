@@ -242,6 +242,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Aktiivsus';
 
   @override

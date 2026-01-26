@@ -242,6 +242,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWelcomeToLichessApp => '欢迎使用 Lichess 应用！';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => '动态';
 
   @override

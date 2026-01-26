@@ -242,6 +242,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Üdvözlünk a Lichess-alkalmazásban!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'Aktivitás';
 
   @override

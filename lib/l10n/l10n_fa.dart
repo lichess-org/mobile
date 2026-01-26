@@ -242,6 +242,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'به نرم‌افزار lichess خوش آمدید';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
   String get activityActivity => 'فعالیت';
 
   @override
