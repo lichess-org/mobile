@@ -20,9 +20,7 @@ class FakeStockfish implements Stockfish {
   Position? _position;
 
   void _emit(String line) {
-    scheduleMicrotask(() {
-      _stdoutController.add(line);
-    });
+    _stdoutController.add(line);
   }
 
   @override
@@ -145,11 +143,9 @@ class DelayedFakeStockfish implements Stockfish {
   int get stopCallCount => stdinCommands.where((cmd) => cmd.startsWith('stop')).length;
 
   void _emit(String line) {
-    scheduleMicrotask(() {
-      if (!_stdoutController.isClosed) {
-        _stdoutController.add(line);
-      }
-    });
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
   }
 
   @override
@@ -270,11 +266,9 @@ class ThrottleTestStockfish implements Stockfish {
   int emittedEvalCount = 0;
 
   void _emit(String line) {
-    scheduleMicrotask(() {
-      if (!_stdoutController.isClosed) {
-        _stdoutController.add(line);
-      }
-    });
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
   }
 
   /// Emits eval events. Call this from tests to control timing.
@@ -349,6 +343,174 @@ class ThrottleTestStockfish implements Stockfish {
       case 'go':
         // Don't emit automatically - tests will call emitEvalEvents() manually
         break;
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
+/// Minimum depth for eval to be accepted by UCIProtocol.
+const kMinEngineDepth = 6;
+
+/// A fake Stockfish for testing analysis scenarios with controllable eval emission.
+///
+/// Key features:
+/// - Progressive depth emission (depth increases with each eval event, starting from minDepth=6)
+/// - Position-dependent cp values (different positions get different, but deterministic, evals)
+/// - Manual control over when evals are emitted
+/// - Tracks all 'go' commands to verify debouncing
+class AnalysisTestStockfish implements Stockfish {
+  AnalysisTestStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  Position? _position;
+
+  /// Tracks positions requested for evaluation (for verifying debouncing).
+  final List<String> requestedPositions = [];
+
+  /// Current depth being emitted for the active position.
+  /// Starts at kMinEngineDepth - 1 so first emitNextDepth() returns kMinEngineDepth.
+  int _currentDepth = kMinEngineDepth - 1;
+
+  void _emit(String line) {
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
+  }
+
+  /// Computes a deterministic cp value based on position ply.
+  /// Different positions get different evals, but the same position always gets the same eval.
+  /// Always returns positive values (white advantage) for simplicity in tests.
+  int _cpForPosition(Position position) {
+    // Use ply to generate different evals: starting position = 15, after e4 = 20, etc.
+    // This gives us predictable evals: +0.15, +0.2, +0.3, +0.1, +0.25, etc.
+    final baseValues = [15, 20, 30, 10, 25, 15, 35, 5, 40, 22, 33, 11];
+    final index = position.ply % baseValues.length;
+    return baseValues[index];
+  }
+
+  /// Emits a single eval event at the next depth level.
+  /// The first call emits depth [kMinEngineDepth] (6), subsequent calls increment by 1.
+  /// Returns the depth that was emitted.
+  int emitNextDepth() {
+    if (_position == null) return 0;
+
+    _currentDepth++;
+    final cp = _cpForPosition(_position!);
+    final signedCp = _position!.turn == Side.white ? cp : -cp;
+    final time = 100 * _currentDepth;
+    final nodes = 1000 * _currentDepth;
+
+    _emit(
+      'info depth $_currentDepth seldepth ${_currentDepth + 2} multipv 1 score cp $signedCp '
+      'nodes $nodes nps 100000 hashfull 0 tbhits 0 time $time '
+      'pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6\n',
+    );
+
+    return _currentDepth;
+  }
+
+  /// Emits multiple depth levels up to [toDepth].
+  /// Useful for simulating a complete evaluation cycle.
+  void emitDepthRange({required int toDepth}) {
+    while (_currentDepth < toDepth) {
+      emitNextDepth();
+    }
+  }
+
+  /// Resets the internal state for a new test.
+  void resetTracking() {
+    requestedPositions.clear();
+    _currentDepth = kMinEngineDepth - 1;
+  }
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+    _currentDepth = kMinEngineDepth - 1;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        _emit('id name Stockfish 16\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+          if (movesPartIndex != -1) {
+            for (var i = movesPartIndex + 1; i < parts.length; i++) {
+              final move = Move.parse(parts[i]);
+              if (move != null) {
+                _position = _position!.play(move);
+              }
+            }
+          }
+        }
+        // Reset depth counter when position changes
+        _currentDepth = kMinEngineDepth - 1;
+      case 'go':
+        // Track the position being evaluated
+        if (_position != null) {
+          requestedPositions.add(_position!.fen);
+        }
+      // Don't emit automatically - tests will call emitNextDepth() or emitDepthRange()
+      case 'stop':
+        // Emit bestmove (first available move) to signal evaluation is complete
+        if (_position != null) {
+          final bestMove = makeLegalMoves(
+            _position!,
+          ).entries.map((e) => NormalMove(from: e.key, to: e.value.first)).first;
+          final afterBestMove = _position!.play(bestMove);
+          final ponderMove = makeLegalMoves(
+            afterBestMove,
+          ).entries.map((e) => NormalMove(from: e.key, to: e.value.first)).firstOrNull;
+          final ponderPart = ponderMove != null ? ' ponder ${ponderMove.uci}' : '';
+          _emit('bestmove ${bestMove.uci}$ponderPart\n');
+        }
     }
   }
 

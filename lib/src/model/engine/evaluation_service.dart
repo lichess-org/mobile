@@ -222,7 +222,6 @@ class EvaluationService {
       await _stockfish.quit();
       if (_isDisposed) return;
 
-      // Reset the protocol for the new engine session
       _protocol.reset();
 
       String? smallNetPath;
