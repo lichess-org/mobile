@@ -1587,6 +1587,7 @@
   "studyNbGames": "{count, plural, =1{{count} Partija} few{{count} Partije} other{{count} Partije}}",
   "studyNbMembers": "{count, plural, =1{{count} Član} few{{count} Član} other{{count} Članova}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Ovdje zalijepite svoj PGN tekst, do {count} igre} few{Ovdje zalijepite svoj PGN tekst, do {count} igri} other{Ovdje zalijepite svoj PGN tekst, do {count} igara}}",
+  "teamIncorrectEntryCode": "Netočan ulazni kod.",
   "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} ekipe} few{BItka {count} ekipe} other{Bitka {count} ekipa}}",
   "timeagoJustNow": "upravo sada",
   "timeagoRightNow": "upravo sada",

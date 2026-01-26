@@ -1743,6 +1743,7 @@
   "studyNbGames": "{count, plural, other{{count} 个对局}}",
   "studyNbMembers": "{count, plural, other{{count} 位成员}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{在此处以 PGN 文本格式粘贴对局。每个对局将创建一个新章节。研习最多可包含 {count} 个章节。}}",
+  "teamIncorrectEntryCode": "准入码不正确。",
   "teamBattleOfNbTeams": "{count, plural, other{{count} 个团队的对战}}",
   "teamNbLeadersPerTeam": "{count, plural, other{每个团队 {count} 名领导}}",
   "timeagoJustNow": "即将开始",

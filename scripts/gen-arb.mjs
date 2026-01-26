@@ -48,7 +48,7 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'team': ['nbLeadersPerTeam','battleOfNbTeams'],
+  'team': ['nbLeadersPerTeam','battleOfNbTeams','incorrectEntryCode'],
   'tfa': ['twoFactorAuth']
 }
 

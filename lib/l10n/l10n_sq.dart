@@ -6157,6 +6157,9 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Kod hyrjeje i pasaktë.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

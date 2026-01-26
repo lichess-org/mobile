@@ -1743,6 +1743,7 @@
   "studyNbGames": "{count, plural, other{{count} Ván cờ}}",
   "studyNbMembers": "{count, plural, other{{count} Thành viên}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{Dán PGN ở đây, tối đa {count} ván}}",
+  "teamIncorrectEntryCode": "Mã không chính xác.",
   "teamBattleOfNbTeams": "{count, plural, other{Trận chiến giữa {count} đội}}",
   "teamNbLeadersPerTeam": "{count, plural, other{mỗi đội lấy {count} người dẫn đầu}}",
   "timeagoJustNow": "vừa mới đây",

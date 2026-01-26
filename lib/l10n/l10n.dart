@@ -10658,6 +10658,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
 
+  /// No description provided for @teamIncorrectEntryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect entry code.'**
+  String get teamIncorrectEntryCode;
+
   /// No description provided for @teamBattleOfNbTeams.
   ///
   /// In en, this message translates to:

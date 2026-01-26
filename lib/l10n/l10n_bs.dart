@@ -6235,6 +6235,9 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Netačna ulazna koda.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

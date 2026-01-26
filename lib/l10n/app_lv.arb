@@ -1475,6 +1475,7 @@
   "studyNbGames": "{count, plural, =0{{count} Spēles} =1{{count} Spēle} other{{count} Spēles}}",
   "studyNbMembers": "{count, plural, =0{{count} Dalībnieki} =1{{count} Dalībnieks} other{{count} Dalībnieki}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =0{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles} =1{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēli} other{Ielīmējiet PGN tekstu šeit, ne vairāk kā {count} spēles}}",
+  "teamIncorrectEntryCode": "Nepareizs pievienošanās kods.",
   "timeagoJustNow": "tikko",
   "timeagoRightNow": "tieši tagad",
   "timeagoInNbSeconds": "{count, plural, =0{pēc {count} sekundēm} =1{pēc {count} sekundes} other{pēc {count} sekundēm}}",

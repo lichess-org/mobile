@@ -1671,6 +1671,7 @@
   "studyNbGames": "{count, plural, =1{{count} partier} other{{count} partier}}",
   "studyNbMembers": "{count, plural, =1{{count} Medlem} other{{count} Medlemmar}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Klistra in din PGN-kod här, upp till {count} parti} other{Klistra in din PGN-kod här, upp till {count} partier}}",
+  "teamIncorrectEntryCode": "Felaktig kod.",
   "teamBattleOfNbTeams": "{count, plural, =1{Tävling med {count} lag} other{Tävling med {count} lag}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{En ledare per lag} other{{count} ledare per lag}}",
   "timeagoJustNow": "just nu",

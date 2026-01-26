@@ -3473,6 +3473,7 @@
       }
     }
   },
+  "teamIncorrectEntryCode": "Incorrect entry code.",
   "teamBattleOfNbTeams": "{count, plural, =1{Battle of {count} teams} other{Battle of {count} teams}}",
   "@teamBattleOfNbTeams": {
     "placeholders": {

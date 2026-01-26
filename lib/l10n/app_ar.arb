@@ -1706,6 +1706,7 @@
   "studyNbGames": "{count, plural, =0{{count} مباراة} =1{{count} مباراة} =2{مبارتان} few{{count} مبارايات} many{{count} مباراة} other{{count} مباراة}}",
   "studyNbMembers": "{count, plural, =0{{count} عضو} =1{{count} عضو} =2{{count} عضو} few{{count} عضو} many{{count} عضو} other{{count} أعضاء}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =0{ألصق نص PGN هنا، حتى {count} مباراة} =1{الصق نص الPGN هنا، حتى {count} لعبة واحدة} =2{ألصق نص PGN هنا، حتى {count} مباراة} few{ألصق نص PGN هنا، حتى {count} مباراة} many{ألصق نص PGN هنا، حتى {count} مباراة} other{الصق الPGN هنا، حتى {count} العاب}}",
+  "teamIncorrectEntryCode": "رمز خاطئ.",
   "teamBattleOfNbTeams": "{count, plural, =0{معركة {count} فريق} =1{معركة فريق واحد} =2{معركة فريقين} few{معركة {count} أفرقة} many{معركة {count} فريقا} other{معركة {count} فريقا}}",
   "teamNbLeadersPerTeam": "{count, plural, =0{{count} قائدا لكل فريق} =1{قائد واحد لكل فريق} =2{قائدين للفريق} few{{count} قادة للفريق الواحد} many{{count} قائد للفريق الواحد} other{{count} قائد للفريق الواحد}}",
   "timeagoJustNow": "الآن",

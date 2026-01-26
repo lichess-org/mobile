@@ -1725,6 +1725,7 @@
   "studyNbGames": "{count, plural, =1{{count} partita} other{{count} partite}}",
   "studyNbMembers": "{count, plural, =1{{count} membro} other{{count} membri}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Incolla qui il testo PGN, massimo {count} partita} other{Incolla qui i testi PGN, massimo {count} partite}}",
+  "teamIncorrectEntryCode": "Codice di accesso errato.",
   "teamBattleOfNbTeams": "{count, plural, =1{Battaglia ad {count} squadra} other{Battaglia a {count} squadre}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Un leader per squadra} other{{count} leader per squadra}}",
   "timeagoJustNow": "adesso",

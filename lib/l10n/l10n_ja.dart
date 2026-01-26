@@ -6079,6 +6079,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => '参加コードが違います。';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

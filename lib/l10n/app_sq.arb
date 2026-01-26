@@ -1709,6 +1709,7 @@
   "studyNbGames": "{count, plural, =1{{count} Lojë} other{{count} Lojëra}}",
   "studyNbMembers": "{count, plural, =1{{count} Anëtar} other{{count} Anëtarë}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Hidhni këtu tekstin e PGN-s tuaj, deri në {count} lojë} other{Hidhni këtu tekstin e PGN-s tuaj, deri në {count} lojëra}}",
+  "teamIncorrectEntryCode": "Kod hyrjeje i pasaktë.",
   "teamBattleOfNbTeams": "{count, plural, =1{Ndeshje e {count} ekipeve} other{Ndeshje e {count} ekipeve}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Një drejtues për ekip} other{{count} drejtues për ekip}}",
   "timeagoJustNow": "tani",

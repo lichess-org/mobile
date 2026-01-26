@@ -6079,6 +6079,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => '准入码不正确。';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -12057,6 +12060,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => '輸入代碼不正確。';
 
   @override
   String teamBattleOfNbTeams(int count) {

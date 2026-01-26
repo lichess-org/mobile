@@ -6157,6 +6157,9 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Érvénytelen belépési kód.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

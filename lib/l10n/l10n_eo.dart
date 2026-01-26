@@ -6157,6 +6157,9 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Malĝusta enirkodo.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

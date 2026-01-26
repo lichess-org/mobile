@@ -1739,6 +1739,7 @@
   "studyNbGames": "{count, plural, =1{{count} Partij} other{{count} Partijen}}",
   "studyNbMembers": "{count, plural, =1{{count} Deelnemer} other{{count} Deelnemers}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Plak je PGN tekst hier, tot {count} spel mogelijk} other{Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal {count} hoofdstukken hebben.}}",
+  "teamIncorrectEntryCode": "Onjuiste toegangscode.",
   "teamBattleOfNbTeams": "{count, plural, =1{Wedstrijd met {count} teams} other{Wedstrijd met {count} teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Eén leider per team} other{{count} leiders per team}}",
   "timeagoJustNow": "zojuist",

@@ -1743,6 +1743,7 @@
   "studyNbGames": "{count, plural, =1{{count} παρτίδα} other{{count} Παρτίδες}}",
   "studyNbMembers": "{count, plural, =1{{count} Μέλος} other{{count} Μέλη}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Επικολλήστε το αρχείο PGN εδώ (μέχρι {count} παρτίδα επιτρέπεται)} other{Επικολλήστε το PGN εδώ. Για κάθε παρτίδα θα δημιουργηθεί νέο κεφάλαιο. Μια μελέτη μπορεί να έχει μέχρι {count} κεφάλαια.}}",
+  "teamIncorrectEntryCode": "Ο κωδικός εισόδου είναι λανθασμένος.",
   "teamBattleOfNbTeams": "{count, plural, =1{Μάχη {count} ομάδας} other{Μάχη {count} ομάδων}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Ένας αρχηγός ανά ομάδα} other{{count} αρχηγοί ανά ομάδα}}",
   "timeagoJustNow": "μόλις τώρα",

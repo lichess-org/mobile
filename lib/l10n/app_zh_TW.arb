@@ -1659,6 +1659,7 @@
   "studyNbGames": "{count, plural, other{{count}對局}}",
   "studyNbMembers": "{count, plural, other{{count}位成員}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{在此貼上PGN文本，最多可導入{count}個棋局}}",
+  "teamIncorrectEntryCode": "輸入代碼不正確。",
   "teamBattleOfNbTeams": "{count, plural, other{{count} 隊之間的戰鬥}}",
   "teamNbLeadersPerTeam": "{count, plural, other{每隊 {count} 個隊長}}",
   "timeagoJustNow": "剛剛",

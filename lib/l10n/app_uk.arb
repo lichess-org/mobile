@@ -1740,6 +1740,7 @@
   "studyNbGames": "{count, plural, =1{{count} Партія} few{{count} Партії} many{{count} Партій} other{{count} Партій}}",
   "studyNbMembers": "{count, plural, =1{{count} учасник} few{{count} учасники} many{{count} учасників} other{{count} учасників}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Вставте ваш PGN текст тут, до {count} гри} few{Вставте ваш PGN текст тут, до {count} ігор} many{Вставте ваш PGN текст тут, до {count} ігор} other{Вставте ваш PGN текст тут, до {count} ігор}}",
+  "teamIncorrectEntryCode": "Невірний вхідний код.",
   "teamBattleOfNbTeams": "{count, plural, =1{Битва {count} команд} few{Битва {count} команд} many{Битва {count} команд} other{Битва {count} команд}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Один лідер на команду} few{{count} лідери на команду} many{{count} лідерів на команду} other{{count} лідерів на команду}}",
   "timeagoJustNow": "щойно",
