@@ -75,7 +75,7 @@ class TestLichessBinding extends LichessBinding {
   FakeSharedPreferences? _sharedPreferences;
 
   @override
-  int get numAppStarts => 0;
+  int numAppStarts = 1;
 
   @override
   FakeSharedPreferences get sharedPreferences {
@@ -88,6 +88,7 @@ class TestLichessBinding extends LichessBinding {
   void reset() {
     _firebaseMessaging = null;
     _sharedPreferences = null;
+    numAppStarts = 1;
   }
 
   FirebaseCrashlytics? _firebaseCrashlytics;
