@@ -36,7 +36,7 @@ dependencies:
   flutter_appauth: ^11.0.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^19.0.0
+  flutter_local_notifications: ^20.0.0
   flutter_localizations:
     sdk: flutter
   flutter_markdown: ^0.7.3+1
