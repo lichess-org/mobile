@@ -18,12 +18,38 @@ class UCIProtocol {
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
   final _evalController = StreamController<EvalResult>.broadcast();
-  final _engineNameCompleter = Completer<String>();
+  final _engineName = ValueNotifier<String?>(null);
   final _isComputing = ValueNotifier(false);
 
+  /// Stream of evaluation results from the engine.
   Stream<EvalResult> get evalStream => _evalController.stream;
 
-  Future<String> get engineName => _engineNameCompleter.future;
+  /// The name of the connected engine, or null if not yet known.
+  ValueListenable<String?> get engineName => _engineName;
+
+  /// Whether the engine is currently computing.
+  ValueListenable<bool> get isComputing => _isComputing;
+
+  /// Resets the protocol state for a new engine session.
+  ///
+  /// This should be called when the engine is restarted to ensure
+  /// the protocol can capture the new engine's name and state.
+  void reset() {
+    _work = null;
+    _nextWork = null;
+    _stopRequested = false;
+    _send = null;
+    _currentEval = null;
+    _expectedPvs = 1;
+
+    _options.clear();
+    _options['Threads'] = '1';
+    _options['Hash'] = '16';
+    _options['MultiPV'] = '1';
+
+    _engineName.value = null;
+    _isComputing.value = false;
+  }
 
   Work? _work;
   Work? _nextWork;
@@ -31,8 +57,6 @@ class UCIProtocol {
   void Function(String command)? _send;
   LocalEval? _currentEval;
   int _expectedPvs = 1;
-
-  ValueListenable<bool> get isComputing => _isComputing;
 
   void connected(void Function(String command) send) {
     _send = send;
@@ -48,6 +72,7 @@ class UCIProtocol {
     _send = null;
     _evalController.close();
     _isComputing.dispose();
+    _engineName.dispose();
   }
 
   void _sendAndLog(String command) {
@@ -62,15 +87,20 @@ class UCIProtocol {
     }
   }
 
-  void compute(Work? nextWork) {
+  void compute(Work? nextWork, {bool newGame = false}) {
     _nextWork = nextWork;
     _stop();
+    if (_nextWork == null) return;
+    if (newGame) {
+      _sendAndLog('ucinewgame');
+    }
     _sendAndLog('isready');
   }
 
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
+    _log.fine('>>> $line');
     final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
@@ -82,9 +112,7 @@ class UCIProtocol {
     } else if (parts.first == 'readyok') {
       _swapWork();
     } else if (parts.first == 'id' && parts[1] == 'name') {
-      if (!_engineNameCompleter.isCompleted) {
-        _engineNameCompleter.complete(parts.sublist(2).join(' '));
-      }
+      _engineName.value = parts.sublist(2).join(' ');
     } else if (parts.first == 'bestmove') {
       if (_work != null && _currentEval != null) {
         _evalController.sink.add((_work!, _currentEval!));
@@ -164,8 +192,6 @@ class UCIProtocol {
           _stop();
         }
       }
-    } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts.first)) {
-      _log.info(line);
     }
   }
 

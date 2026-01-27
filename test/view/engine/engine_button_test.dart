@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
@@ -27,11 +26,8 @@ void main() {
     expect(find.byType(Chessboard), findsOne);
     expect(find.byType(EngineButton), findsOne);
 
-    // engine not yet started, so it still displays loading indicator
-    expect(
-      find.descendant(of: find.byType(EngineButton), matching: find.byType(SpinKitFadingFour)),
-      findsOne,
-    );
+    // engine not yet started, so it still displays initial state
+    expect(find.widgetWithText(EngineButton, '-'), findsOne);
 
     // wait for engine
     await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
