@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -142,6 +143,21 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
       systemNavigationBarContrastEnforced: true,
     ),
   );
+
+  /// Enables high refresh rate for devices where it was previously disabled
+  final List<DisplayMode> supported = await FlutterDisplayMode.supported;
+  final DisplayMode active = await FlutterDisplayMode.active;
+
+  final List<DisplayMode> sameResolution =
+      supported
+          .where((DisplayMode m) => m.width == active.width && m.height == active.height)
+          .toList()
+        ..sort((DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate));
+
+  final DisplayMode mostOptimalMode = sameResolution.isNotEmpty ? sameResolution.first : active;
+
+  // This setting is per session.
+  await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
 }
 
 // Adjusts some settings for small screens based on the MediaQuery data.
