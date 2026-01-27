@@ -215,24 +215,6 @@ void main() {
     });
 
     group('Local engine is delayed:', () {
-      // testWidgets('displays a CLOUD label if cloud eval is available', (tester) async {
-      //   await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
-
-      //   // displays loading indicator
-      //   expect(
-      //     find.descendant(of: find.byType(EngineButton), matching: find.byType(SpinKitFadingFour)),
-      //     findsOne,
-      //   );
-      //   await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
-      //   expect(isCloudEvalDisplayed(), isTrue);
-      //   expect(find.widgetWithText(EngineButton, '36'), findsOne);
-
-      //   // Wait for local engine delay
-      //   await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
-      //   // Local engine has not even started
-      //   expect(find.widgetWithText(EngineButton, '36'), findsOne);
-      // });
-
       testWidgets('starts local engine if cloud eval is not available', (tester) async {
         await makeEngineTestApp(
           tester,
@@ -240,18 +222,12 @@ void main() {
           isCloudEvalEnabled: false,
         );
         expect(find.byType(EngineButton), findsOne);
-        // displays loading indicator
-        expect(
-          find.descendant(of: find.byType(EngineButton), matching: find.byType(SpinKitFadingFour)),
-          findsOne,
-        );
+        // displays initial state
+        expect(find.widgetWithText(EngineButton, '-'), findsOne);
 
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
-        // cloud eval is not available, so it still displays loading indicator
-        expect(
-          find.descendant(of: find.byType(EngineButton), matching: find.byType(SpinKitFadingFour)),
-          findsOne,
-        );
+        // cloud eval is not available, so it still display initial state
+        expect(find.widgetWithText(EngineButton, '-'), findsOne);
         expect(isCloudEvalDisplayed(), isFalse);
 
         // Now wait for local engine
@@ -259,55 +235,55 @@ void main() {
         expect(find.widgetWithText(EngineButton, '16'), findsOne);
       });
 
-      // testWidgets('Cloud eval will override local engine eval', (tester) async {
-      //   // Simulates a connection lag that will make the cloud eval come 300ms after the local engine
-      //   final connectionLag =
-      //       kLocalEngineAfterCloudEvalDelay -
-      //       kRequestEvalDebounceDelay +
-      //       const Duration(milliseconds: 300);
-      //   await makeEngineTestApp(
-      //     tester,
-      //     broadcastGame: (_tournamentId, _roundId, _gameId),
-      //     connectionLag: connectionLag,
-      //   );
+      testWidgets('Cloud eval will override local engine eval', (tester) async {
+        // Simulates a connection lag that will make the cloud eval come 300ms after the local engine
+        final connectionLag =
+            kLocalEngineAfterCloudEvalDelay -
+            kRequestEvalDebounceDelay +
+            const Duration(milliseconds: 300);
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          connectionLag: connectionLag,
+        );
 
-      //   // Wait for local engine eval
-      //   await tester.pump(kLocalEngineAfterCloudEvalDelay);
-      //   expect(find.widgetWithText(EngineButton, '15'), findsOne);
+        // Wait for local engine eval
+        await tester.pump(kLocalEngineAfterCloudEvalDelay);
+        expect(find.widgetWithText(EngineButton, '15'), findsOne);
 
-      //   // cloud eval will be available 300ms after the local engine eval
-      //   await tester.pump(const Duration(milliseconds: 300));
-      //   expect(isCloudEvalDisplayed(), isTrue);
-      //   expect(find.widgetWithText(EngineButton, '36'), findsOne);
-      // });
+        // cloud eval will be available 300ms after the local engine eval
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(isCloudEvalDisplayed(), isTrue);
+        expect(find.widgetWithText(EngineButton, '36'), findsOne);
+      });
 
-      // testWidgets('Local engine will not override cloud eval with greater depth', (tester) async {
-      //   // Simulates a connection lag that will make the local engine come 100ms after the cloud eval
-      //   final connectionLag =
-      //       kLocalEngineAfterCloudEvalDelay -
-      //       kRequestEvalDebounceDelay +
-      //       const Duration(milliseconds: 100);
-      //   await makeEngineTestApp(
-      //     tester,
-      //     broadcastGame: (_tournamentId, _roundId, _gameId),
-      //     connectionLag: connectionLag,
-      //   );
+      testWidgets('Local engine will not override cloud eval with greater depth', (tester) async {
+        // Simulates a connection lag that will make the local engine come 100ms after the cloud eval
+        final connectionLag =
+            kLocalEngineAfterCloudEvalDelay -
+            kRequestEvalDebounceDelay +
+            const Duration(milliseconds: 100);
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          connectionLag: connectionLag,
+        );
 
-      //   // Wait for local engine eval
-      //   await tester.pump(kLocalEngineAfterCloudEvalDelay);
-      //   expect(find.widgetWithText(EngineButton, '15'), findsOne);
+        // Wait for local engine eval
+        await tester.pump(kLocalEngineAfterCloudEvalDelay);
+        expect(find.widgetWithText(EngineButton, '15'), findsOne);
 
-      //   // Cloud eval will be available 100ms after the first local engine eval emission
-      //   await tester.pump(const Duration(milliseconds: 100));
-      //   expect(isCloudEvalDisplayed(), isTrue);
-      //   expect(find.widgetWithText(EngineButton, '36'), findsOne);
+        // Cloud eval will be available 100ms after the first local engine eval emission
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(isCloudEvalDisplayed(), isTrue);
+        expect(find.widgetWithText(EngineButton, '36'), findsOne);
 
-      //   // local engine is still running, but it will not override the cloud eval
-      //   // wait for the next local engine eval emission (after throttle delay minus the 100ms already waited)
-      //   await tester.pump(kEngineEvalEmissionThrottleDelay - const Duration(milliseconds: 100));
-      //   expect(isCloudEvalDisplayed(), isTrue);
-      //   expect(find.widgetWithText(EngineButton, '36'), findsOne);
-      // });
+        // local engine is still running, but it will not override the cloud eval
+        // wait for the next local engine eval emission (after throttle delay minus the 100ms already waited)
+        await tester.pump(kEngineEvalEmissionThrottleDelay - const Duration(milliseconds: 100));
+        expect(isCloudEvalDisplayed(), isTrue);
+        expect(find.widgetWithText(EngineButton, '36'), findsOne);
+      });
     });
   });
 }

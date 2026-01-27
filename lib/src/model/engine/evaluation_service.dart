@@ -108,8 +108,8 @@ class EvaluationService {
   Work? get _work => _evaluationState.value.currentWork;
 
   void _setEngineState(EngineState newState) {
+    _logger.fine('Engine state: ${newState.name}');
     if (_engineState != newState) {
-      _logger.fine('Engine state: ${newState.name}');
       _setState(state: newState);
     }
   }
@@ -350,6 +350,7 @@ class EvaluationService {
   /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
   /// The service can be reused after calling this method.
   void quit() {
+    _logger.info('Quitting engine');
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
@@ -359,7 +360,6 @@ class EvaluationService {
     _currentFlavor = null;
     _initInProgress = false;
 
-    // Reset evaluationState to initial state
     _evaluationState.value = (
       engineName: null,
       eval: null,

@@ -112,8 +112,9 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
                                   eval?.depth != null
                                       ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
                                       : loadingIndicator,
-                                EngineState.initial || EngineState.loading => loadingIndicator,
-                                _ => const SizedBox.shrink(),
+                                EngineState.loading => loadingIndicator,
+                                EngineState.initial => Text('-', style: iconTextStyle),
+                                EngineState.error => Text('!', style: iconTextStyle),
                               }
                       : const SizedBox.shrink(),
                 ),
