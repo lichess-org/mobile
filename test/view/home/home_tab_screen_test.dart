@@ -8,8 +8,10 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import '../../binding.dart';
 import '../../example_data.dart';
@@ -355,7 +357,7 @@ void main() {
       const customizeTip =
           "Tip: You can add more widgets to the Home Screen or remove those you don't need!";
       testWidgets('shown when logged out', (tester) async {
-        final app = await makeOfflineTestProviderScope(tester, child: const Application());
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -367,10 +369,10 @@ void main() {
       });
 
       testWidgets('shown when logged in', (tester) async {
-        final app = await makeOfflineTestProviderScope(
+        final app = await makeTestProviderScope(
           tester,
-          authUser: fakeAuthUser,
           child: const Application(),
+          authUser: fakeAuthUser,
         );
 
         await tester.pumpWidget(app);
@@ -383,7 +385,11 @@ void main() {
       });
 
       testWidgets('Can be dismissed via button', (tester) async {
-        final app = await makeOfflineTestProviderScope(tester, child: const Application());
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          defaultPreferences: {kWelcomeMessageShownKey: true},
+        );
 
         await tester.pumpWidget(app);
 
@@ -398,7 +404,7 @@ void main() {
       });
 
       testWidgets('Not shown if already dismissed', (tester) async {
-        final app = await makeOfflineTestProviderScope(tester, child: const Application());
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         TestLichessBinding.instance.sharedPreferences.setBool(
           'app_hide_home_widget_customization_tip',
@@ -415,7 +421,11 @@ void main() {
       });
 
       testWidgets('Can be dismissed via going to settings', (tester) async {
-        final app = await makeOfflineTestProviderScope(tester, child: const Application());
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          defaultPreferences: {kWelcomeMessageShownKey: true},
+        );
 
         await tester.pumpWidget(app);
 
@@ -424,19 +434,26 @@ void main() {
         await tester.pump();
 
         expect(find.text(customizeTip), findsOneWidget);
+
         await tester.tap(find.text('Customize'));
         await tester.pumpAndSettle(); // wait for settings screen to open
 
-        await tester.pageBack();
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+
+        await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle(); // wait for home screen to re-appear
+
+        expect(find.byIcon(LichessIcons.logo_lichess), findsOneWidget); // we're back on home
 
         expect(find.text(customizeTip), findsNothing);
       });
 
-      testWidgets('Not shown when >3 app starts', (tester) async {
-        final app = await makeOfflineTestProviderScope(tester, child: const Application());
+      testWidgets('Not shown when > $kColdAppStartsHideCustomizationTipThreshold app starts', (
+        tester,
+      ) async {
+        final app = await makeTestProviderScope(tester, child: const Application());
 
-        TestLichessBinding.instance.numAppStarts = 4;
+        TestLichessBinding.instance.numAppStarts = kColdAppStartsHideCustomizationTipThreshold + 1;
 
         await tester.pumpWidget(app);
 

@@ -60,6 +60,9 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Number of cold app starts before hiding the home customization tip.
+const kColdAppStartsHideCustomizationTipThreshold = 5;
+
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key, this.editModeEnabled = false});
 
@@ -464,7 +467,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text('OK'),
+                            child: Text(context.l10n.ok),
                           ),
                         ],
                       ),
@@ -1014,7 +1017,7 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
     final prefs = LichessBinding.instance.sharedPreferences;
 
     return prefs.getBool(kHideHomeWidgetCustomizationTip) != true &&
-        LichessBinding.instance.numAppStarts <= 3;
+        LichessBinding.instance.numAppStarts <= kColdAppStartsHideCustomizationTipThreshold;
   }
 
   void _setHideHomeWidgetCustomizationTip(BuildContext context) {
