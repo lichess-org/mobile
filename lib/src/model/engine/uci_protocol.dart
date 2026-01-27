@@ -90,6 +90,7 @@ class UCIProtocol {
   void compute(Work? nextWork, {bool newGame = false}) {
     _nextWork = nextWork;
     _stop();
+    if (_nextWork == null) return;
     if (newGame) {
       _sendAndLog('ucinewgame');
     }
