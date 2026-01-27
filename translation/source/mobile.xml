@@ -76,4 +76,7 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Watch</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Welcome to Lichess app!</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">View Game</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: You can add more widgets to the Home Screen or remove those you don't need!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Customize</string>
 </resources>
