@@ -29,11 +29,15 @@ class AppLogService {
   Iterable<LogRecord> get logs => _logs.values;
 
   void start() {
-    ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
-      if (next != prev) {
-        Logger.root.level = next;
-      }
-    }, fireImmediately: true);
+    if (kDebugMode) {
+      Logger.root.level = Level.ALL;
+    } else {
+      ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
+        if (next != prev) {
+          Logger.root.level = next;
+        }
+      }, fireImmediately: true);
+    }
 
     Logger.root.onRecord.listen((record) {
       if (kDebugMode) {

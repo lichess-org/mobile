@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,15 +15,13 @@ TestLichessBinding get testBinding => TestLichessBinding.instance;
 /// Lichess binding for testing.
 class TestLichessBinding extends LichessBinding {
   TestLichessBinding() {
-    Logger.root.level = Level.FINE;
-    Logger.root.onRecord.listen((record) {
-      if (record.level >= Level.WARNING) {
-        // ignore: avoid_print
-        print(
-          '${DateFormat('H:m:s.S').format(record.time)} [${record.level}] ${record.loggerName}: ${record.message}',
-        );
-      }
-    });
+    // Logger.root.level = Level.ALL;
+    // Logger.root.onRecord.listen((record) {
+    //   // ignore: avoid_print
+    //   print(
+    //     '${DateFormat('H:m:s.S').format(record.time)} [${record.level}] ${record.loggerName}: ${record.message}',
+    //   );
+    // });
   }
 
   /// Initialize the binding if necessary, and ensure it is a [TestLichessBinding].
