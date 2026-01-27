@@ -1,4 +1,7 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -6,18 +9,28 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class GifExport extends StatefulWidget {
-  const GifExport({super.key});
+class GifExport extends ConsumerStatefulWidget {
+  const GifExport({super.key, required this.gameId, required this.orientation});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const GifExport());
+  final GameId gameId;
+  final Side orientation;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required GameId gameId,
+    required Side orientation,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: GifExport(gameId: gameId, orientation: orientation),
+    );
   }
 
   @override
-  State<GifExport> createState() => _GifExportState();
+  ConsumerState<GifExport> createState() => _GifExportState();
 }
 
-class _GifExportState extends State<GifExport> {
+class _GifExportState extends ConsumerState<GifExport> {
   bool playerNames = true;
   bool showPlayerRatings = true;
   bool moveAnnotations = false;
@@ -74,14 +87,17 @@ class _GifExportState extends State<GifExport> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: FilledButton(
             onPressed: () => {
-              Navigator.pop(
+              Navigator.pop(context),
+              shareGameGif(
                 context,
+                ref,
+                widget.gameId,
+                widget.orientation,
                 GifExportOptions(
                   playerNames: playerNames,
                   showPlayerRatings: showPlayerRatings,
                   moveAnnotations: moveAnnotations,
                   chessClock: chessClock,
-                  userSubmit: true,
                 ),
               ),
             },

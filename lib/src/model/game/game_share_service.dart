@@ -68,12 +68,12 @@ class GameShareService {
   /// Fetches the GIF animation of a game.
   Future<(XFile, ExportedGame)> gameGif(
     GameId id,
-    Side orientation,
-    bool playerNames,
-    bool showPlayerRatings,
-    bool moveAnnotations,
-    bool chessClock,
-  ) async {
+    Side orientation, {
+    bool playerNames = true,
+    bool showPlayerRatings = true,
+    bool moveAnnotations = false,
+    bool chessClock = false,
+  }) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
     final boardTheme = boardPreferences.boardTheme == BoardTheme.system
         ? BoardTheme.brown

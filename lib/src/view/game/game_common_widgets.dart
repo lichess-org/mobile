@@ -137,29 +137,10 @@ List<Widget> makeFinishedGameShareContextMenuActions(
     ContextMenuAction(
       icon: Icons.gif_outlined,
       label: context.l10n.gameAsGIF,
-      onPressed: () =>
-          showModalBottomSheet<GifExportOptions>(
-            context: context,
-            builder: (_) => const GifExport(),
-          ).then(
-            (options) => {
-              if (options == null)
-                {
-                  options = const GifExportOptions(
-                    playerNames: true,
-                    showPlayerRatings: true,
-                    moveAnnotations: false,
-                    chessClock: false,
-                    userSubmit: false,
-                  ),
-                },
-              if (context.mounted)
-                {
-                  if (options.userSubmit)
-                    {_shareGameGif(context, ref, gameId, orientation, options)},
-                },
-            },
-          ),
+      onPressed: () => showModalBottomSheet<GifExportOptions>(
+        context: context,
+        builder: (_) => GifExport(gameId: gameId, orientation: orientation),
+      ),
     ),
     ContextMenuAction(
       icon: Icons.text_snippet_outlined,
@@ -194,40 +175,4 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       },
     ),
   ];
-}
-
-Future<void> _shareGameGif(
-  BuildContext context,
-  WidgetRef ref,
-  GameId gameId,
-  Side orientation,
-  GifExportOptions options,
-) async {
-  try {
-    final (gif, game) = await ref
-        .read(gameShareServiceProvider)
-        .gameGif(
-          gameId,
-          orientation,
-          options.playerNames,
-          options.showPlayerRatings,
-          options.moveAnnotations,
-          options.chessClock,
-        );
-    if (context.mounted) {
-      launchShareDialog(
-        context,
-        ShareParams(
-          fileNameOverrides: ['$gameId.gif'],
-          files: [gif],
-          subject: game.shareTitle(context.l10n),
-        ),
-      );
-    }
-  } catch (e) {
-    debugPrint(e.toString());
-    if (context.mounted) {
-      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-    }
-  }
 }
