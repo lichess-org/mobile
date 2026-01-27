@@ -132,7 +132,7 @@ class _BodyState extends State<_Body> {
 
   Future<void> _pickPgnFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pgn'],
         withData: true,
