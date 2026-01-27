@@ -242,6 +242,18 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Aktiveco';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get createLobbyGame => 'Krei ludon en atendejo';
 
   @override
-  String get youPlayAs => 'Koloro de viaj pecoj';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Por inviti iun al ludo, donu ĉi tiun ligilon';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsEo extends AppLocalizations {
   String get evaluationGauge => 'Gaŭĝo de rangado';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Nedefenditaj pecoj';
+
+  @override
+  String get pinnedPieces => 'Fiksitaj pecoj';
+
+  @override
+  String get checkableKing => 'Ŝakigebla reĝo';
+
+  @override
   String get multipleLines => 'Pluraj linioj';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get variants => 'Variaĵoj';
+
+  @override
+  String get variantsDescription => 'Aliaj manieroj ludi';
 
   @override
   String get timeControl => 'Temporegado';
@@ -2865,6 +2889,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get unlimited => 'Senlime';
+
+  @override
+  String get unlimitedDescription => 'Tiel longe, kiel vi bezonas';
 
   @override
   String get mode => 'Modo';
@@ -3115,9 +3142,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Aŭ alŝuti PGN-dosieron';
-
-  @override
-  String get fromPosition => 'De pozicio';
 
   @override
   String get continueFromHere => 'Daŭrigi de ĉi tie';
@@ -4096,7 +4120,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get analysisShapesHowTo => 'Premu shift+click aŭ rekt-klaki por desegni cirklojn kaj sagojn sur la tabulo.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl aŭ Maj = ruĝa; Ordono, Alt aŭ Meta = blua; unu klavo el ĉiu grupo = flava.';
 
   @override
   String get letOtherPlayersMessageYou => 'Lasu aliajn ludantojn mesaĝi vin';
@@ -4858,7 +4882,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get tags => 'Etikedoj';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Preterpasa kapto';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6002,7 +6026,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Dividita kaj konservita';
 
   @override
   String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
@@ -6041,7 +6065,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Dankon pro via tempo';
 
   @override
   String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
@@ -6053,13 +6077,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Ekde komenca pozicio';
 
   @override
   String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Personecigita pozicio';
 
   @override
   String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
@@ -6077,7 +6101,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'El ludo en PNG';
 
   @override
   String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
@@ -6143,6 +6167,9 @@ class AppLocalizationsEo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Malĝusta enirkodo.';
 
   @override
   String teamBattleOfNbTeams(int count) {

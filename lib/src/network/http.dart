@@ -198,7 +198,7 @@ Future<bool> downloadFile(
   File file, {
   void Function(int received, int length)? onProgress,
 }) async {
-  debugPrint('Downloading $url to ${file.path}');
+  _logger.fine('Downloading $url to ${file.path}');
 
   final response = await client.send(Request('GET', url));
   final sink = file.openWrite();
@@ -214,13 +214,13 @@ Future<bool> downloadFile(
         })
         .pipe(sink);
   } catch (e) {
-    debugPrint('Failed to download file: $e');
+    _logger.warning('Failed to download file: $e');
   } finally {
     try {
       await sink.flush();
       await sink.close();
     } on FileSystemException catch (e) {
-      debugPrint('Failed to save file: $e');
+      _logger.warning('Failed to save file: $e');
     }
   }
 

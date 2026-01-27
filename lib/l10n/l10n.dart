@@ -644,6 +644,30 @@ abstract class AppLocalizations {
   /// **'Welcome to Lichess app!'**
   String get mobileWelcomeToLichessApp;
 
+  /// No description provided for @mobileViewGame.
+  ///
+  /// In en, this message translates to:
+  /// **'View Game'**
+  String get mobileViewGame;
+
+  /// No description provided for @mobileCustomizeHomeTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!'**
+  String get mobileCustomizeHomeTip;
+
+  /// No description provided for @mobileCustomizeHomeTipDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get mobileCustomizeHomeTipDismiss;
+
+  /// No description provided for @mobileCustomizeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize'**
+  String get mobileCustomizeButton;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:
@@ -3914,12 +3938,6 @@ abstract class AppLocalizations {
   /// **'Create lobby game'**
   String get createLobbyGame;
 
-  /// No description provided for @youPlayAs.
-  ///
-  /// In en, this message translates to:
-  /// **'You play as'**
-  String get youPlayAs;
-
   /// No description provided for @toInviteSomeoneToPlayGiveThisUrl.
   ///
   /// In en, this message translates to:
@@ -4592,6 +4610,30 @@ abstract class AppLocalizations {
   /// **'Evaluation gauge'**
   String get evaluationGauge;
 
+  /// No description provided for @visualMotifs.
+  ///
+  /// In en, this message translates to:
+  /// **'Visual motifs'**
+  String get visualMotifs;
+
+  /// No description provided for @undefendedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Undefended pieces'**
+  String get undefendedPieces;
+
+  /// No description provided for @pinnedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned pieces'**
+  String get pinnedPieces;
+
+  /// No description provided for @checkableKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkable king'**
+  String get checkableKing;
+
   /// No description provided for @multipleLines.
   ///
   /// In en, this message translates to:
@@ -4825,6 +4867,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Variants'**
   String get variants;
+
+  /// No description provided for @variantsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'More ways to play'**
+  String get variantsDescription;
 
   /// No description provided for @timeControl.
   ///
@@ -5245,6 +5293,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlimited'**
   String get unlimited;
+
+  /// No description provided for @unlimitedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Take all the time you need'**
+  String get unlimitedDescription;
 
   /// No description provided for @mode.
   ///
@@ -5701,12 +5755,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Or upload a PGN file'**
   String get orUploadPgnFile;
-
-  /// No description provided for @fromPosition.
-  ///
-  /// In en, this message translates to:
-  /// **'From position'**
-  String get fromPosition;
 
   /// No description provided for @continueFromHere.
   ///
@@ -10633,6 +10681,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
+
+  /// No description provided for @teamIncorrectEntryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect entry code.'**
+  String get teamIncorrectEntryCode;
 
   /// No description provided for @teamBattleOfNbTeams.
   ///

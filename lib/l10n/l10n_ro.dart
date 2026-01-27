@@ -242,6 +242,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bine ai venit în aplicația Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Activitate';
 
   @override
@@ -2197,9 +2209,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get createLobbyGame => 'Creează un joc nou';
 
   @override
-  String get youPlayAs => 'Tu joci ca';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pentru a invita pe cineva să joace, folosiți acest URL';
 
   @override
@@ -2546,6 +2555,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get evaluationGauge => 'Indicator de evaluare';
 
   @override
+  String get visualMotifs => 'Motive vizuale';
+
+  @override
+  String get undefendedPieces => 'Piese neapărate';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Mutări multiple';
 
   @override
@@ -2665,6 +2686,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get variants => 'Variante';
+
+  @override
+  String get variantsDescription => 'Mai multe moduri de a juca';
 
   @override
   String get timeControl => 'Controlul de timp';
@@ -2893,6 +2917,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get unlimited => 'Nelimitat';
+
+  @override
+  String get unlimitedDescription => 'Ia tot timpul de care ai nevoie';
 
   @override
   String get mode => 'Mod';
@@ -3143,9 +3170,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Sau încarcă un fișier PGN';
-
-  @override
-  String get fromPosition => 'De la poziția';
 
   @override
   String get continueFromHere => 'Continuați de aici';
@@ -6221,6 +6245,9 @@ class AppLocalizationsRo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Cod de intrare incorect.';
 
   @override
   String teamBattleOfNbTeams(int count) {

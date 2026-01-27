@@ -242,6 +242,18 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Добре дошли в Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Дейност';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get createLobbyGame => 'Създаване на игра';
 
   @override
-  String get youPlayAs => 'Играете с';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'За да поканите някого на игра, дайте му този адрес';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsBg extends AppLocalizations {
   String get evaluationGauge => 'Показване на оценка';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Множество ходове';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get variants => 'Варианти';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Времева контрола';
@@ -2865,6 +2889,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get unlimited => 'Неограничено';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Начин';
@@ -3115,9 +3142,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Или качете PGN файл';
-
-  @override
-  String get fromPosition => 'От позиция';
 
   @override
   String get continueFromHere => 'Продължаване от тук';
@@ -6143,6 +6167,9 @@ class AppLocalizationsBg extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Грешен код за включване.';
 
   @override
   String teamBattleOfNbTeams(int count) {

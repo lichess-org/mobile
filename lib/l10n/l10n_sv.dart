@@ -242,6 +242,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get createLobbyGame => 'Create lobby game';
 
   @override
-  String get youPlayAs => 'You play as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'För att bjuda in någon att spela, ge dem den här länken';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get evaluationGauge => 'Evalueringsmätare';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Flera linjer';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get variants => 'Varianter';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Tidskontroll';
@@ -2865,6 +2889,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get unlimited => 'Obegränsad';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Läge';
@@ -3115,9 +3142,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Eller ladda upp en PGN-fil';
-
-  @override
-  String get fromPosition => 'Från position';
 
   @override
   String get continueFromHere => 'Fortsätt härifrån';
@@ -6143,6 +6167,9 @@ class AppLocalizationsSv extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Felaktig kod.';
 
   @override
   String teamBattleOfNbTeams(int count) {

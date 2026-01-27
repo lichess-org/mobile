@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -32,8 +31,9 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
-        .watch(engineEvaluationProvider);
+    final (engineName: _, eval: localEval, state: engineState, currentWork: work) = ref.watch(
+      engineEvaluationProvider,
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled
@@ -112,8 +112,9 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
                                   eval?.depth != null
                                       ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
                                       : loadingIndicator,
-                                EngineState.initial || EngineState.loading => loadingIndicator,
-                                _ => const SizedBox.shrink(),
+                                EngineState.loading => loadingIndicator,
+                                EngineState.initial => Text('-', style: iconTextStyle),
+                                EngineState.error => Text('!', style: iconTextStyle),
                               }
                       : const SizedBox.shrink(),
                 ),
@@ -289,9 +290,9 @@ class _EnginePopup extends ConsumerWidget {
     final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
 
     // remove Fairy-Stockfish version from engine name
-    final fixedEngineName = engineName.startsWith('Fairy-Stockfish')
+    final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
         ? 'Fairy-Stockfish'
-        : engineName;
+        : engineName ?? 'Stockfish';
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),

@@ -37,8 +37,13 @@ void main() {
 
   test('FCM game data message will update the game', () async {
     when(
-      () =>
-          notificationDisplayMock.show(any(), any(), any(), any(), payload: any(named: 'payload')),
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
     ).thenAnswer((_) => Future.value());
 
     when(() => correspondenceGameStorageMock.save(any())).thenAnswer((_) => Future.value());
@@ -82,10 +87,10 @@ void main() {
 
       verify(
         () => notificationDisplayMock.show(
-          any(),
-          any(),
-          any(),
-          any(),
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       ).called(1);
@@ -143,10 +148,10 @@ void main() {
 
       verifyNever(
         () => notificationDisplayMock.show(
-          any(),
-          any(),
-          any(),
-          any(),
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       );

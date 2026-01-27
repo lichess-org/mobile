@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -1150,6 +1151,39 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             ref
                                 .read(tournamentControllerProvider(widget.state.id).notifier)
                                 .joinOrPause(teamId: selectedTeamId);
+                          } else if (!widget.state.joined &&
+                              widget.state.tournament.private &&
+                              !widget.state.hasJoined) {
+                            // Joining a private tournament
+                            final entryCode = await _showEntryCodeDialog(context);
+                            if (entryCode == null || entryCode.isEmpty) {
+                              return;
+                            }
+
+                            setState(() {
+                              joinOrLeaveInProgress = true;
+                            });
+
+                            try {
+                              await ref
+                                  .read(tournamentControllerProvider(widget.state.id).notifier)
+                                  .joinOrPause(entryCode: entryCode);
+                            } catch (e) {
+                              setState(() {
+                                joinOrLeaveInProgress = false;
+                              });
+                              if (e is ServerException && e.statusCode == 400) {
+                                // Invalid entry code
+                                if (!context.mounted) return;
+                                showSnackBar(
+                                  context,
+                                  context.l10n.teamIncorrectEntryCode,
+                                  type: SnackBarType.error,
+                                );
+                              } else {
+                                rethrow;
+                              }
+                            }
                           } else {
                             // Normal join/pause flow
                             setState(() {
@@ -1715,6 +1749,30 @@ Future<TeamId?> _showTeamSelectionDialog(BuildContext context, TeamBattleData te
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(context.l10n.cancel),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<String?> _showEntryCodeDialog(BuildContext context) {
+  final TextEditingController controller = TextEditingController();
+
+  return showDialog<String>(
+    context: context,
+    builder: (context) {
+      return AlertDialog.adaptive(
+        title: Text(context.l10n.tournamentEntryCode),
+        content: TextField(controller: controller, autofocus: true),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(controller.text),
+            child: Text(context.l10n.join),
           ),
         ],
       );

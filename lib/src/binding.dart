@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/firebase_options.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
@@ -54,6 +54,9 @@ abstract class LichessBinding {
     return instance!;
   }
 
+  /// Counts how many times the app has been (cold) started.
+  int get numAppStarts;
+
   /// The shared preferences instance. Must be preloaded before use.
   ///
   /// This is a synchronous getter that throws an error if shared preferences
@@ -82,8 +85,8 @@ abstract class LichessBinding {
   /// Wraps [FirebaseMessaging.onBackgroundMessage].
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
 
-  /// The factory to create Stockfish
-  StockfishFactory get stockfishFactory;
+  /// The Stockfish singleton instance.
+  Stockfish get stockfish;
 }
 
 /// A concrete implementation of [LichessBinding] for the app.
@@ -122,6 +125,11 @@ class AppLichessBinding extends LichessBinding {
     return _syncSharedPreferencesWithCache!;
   }
 
+  static const String _kNumAppStartsKey = 'app_starts';
+
+  @override
+  int get numAppStarts => sharedPreferences.getInt(_kNumAppStartsKey) ?? 0;
+
   /// Preload shared preferences.
   ///
   /// This should be called only once before the app starts. Must be called before
@@ -131,6 +139,9 @@ class AppLichessBinding extends LichessBinding {
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     );
     _syncSharedPreferencesWithCache = await _sharedPreferencesWithCache;
+
+    final appStarts = sharedPreferences.getInt(_kNumAppStartsKey) ?? 0;
+    sharedPreferences.setInt(_kNumAppStartsKey, appStarts + 1);
   }
 
   @override
@@ -169,5 +180,5 @@ class AppLichessBinding extends LichessBinding {
       FirebaseMessaging.onMessageOpenedApp;
 
   @override
-  StockfishFactory get stockfishFactory => const StockfishFactory();
+  Stockfish get stockfish => Stockfish.instance;
 }

@@ -242,6 +242,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Velkommen til Lichess-appen!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get createLobbyGame => 'Opret lobbyparti';
 
   @override
-  String get youPlayAs => 'Du spiller som';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Invitér nogen til at spille ved at give dem denne URL';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get evaluationGauge => 'Evalueringsindikator';
 
   @override
+  String get visualMotifs => 'Visuelle motiver';
+
+  @override
+  String get undefendedPieces => 'Uforsvarede brikker';
+
+  @override
+  String get pinnedPieces => 'Bundne brikker';
+
+  @override
+  String get checkableKing => 'Konge der kan sættes i skak';
+
+  @override
   String get multipleLines => 'Flere linjer';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get variants => 'Varianter';
+
+  @override
+  String get variantsDescription => 'Flere måder at spille på';
 
   @override
   String get timeControl => 'Tidskontrol';
@@ -2865,6 +2889,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get unlimited => 'Ubegrænset';
+
+  @override
+  String get unlimitedDescription => 'Tag al den tid, du har brug for';
 
   @override
   String get mode => 'Variant';
@@ -3115,9 +3142,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Eller upload en PGN-fil';
-
-  @override
-  String get fromPosition => 'Fra stilling';
 
   @override
   String get continueFromHere => 'Fortsæt herfra';
@@ -6143,6 +6167,9 @@ class AppLocalizationsDa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Forkert adgangskode.';
 
   @override
   String teamBattleOfNbTeams(int count) {

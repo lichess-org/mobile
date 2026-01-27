@@ -5,11 +5,11 @@ class FakeNotificationDisplay extends Fake implements FlutterLocalNotificationsP
   final Map<int, ActiveNotification> _activeNotifications = {};
 
   @override
-  Future<void> show(
-    int id,
+  Future<void> show({
+    required int id,
     String? title,
     String? body,
-    NotificationDetails? notificationDetails, {
+    NotificationDetails? notificationDetails,
     String? payload,
   }) {
     _activeNotifications[id] = ActiveNotification(
@@ -22,7 +22,7 @@ class FakeNotificationDisplay extends Fake implements FlutterLocalNotificationsP
   }
 
   @override
-  Future<void> cancel(int id, {String? tag}) {
+  Future<void> cancel({required int id, String? tag}) {
     _activeNotifications.remove(id);
     return Future.value();
   }

@@ -242,6 +242,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Atividade';
 
   @override
@@ -1383,7 +1395,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'O torneio começará em breve';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Transmissões que você se inscreveu';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Está a acabar o tempo no jogo por correspondência';
@@ -1407,7 +1419,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesBlindfold => 'De olhos vendados';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Exiba à esquerda nos dispositivos móveis';
 
   @override
   String get puzzlePuzzles => 'Problemas';
@@ -1999,10 +2011,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Uma tática durante a primeira fase do jogo.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Mate da ópera';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Xeque o rei com a torre e use o bispo para defender a torre.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final de peões';
@@ -2167,9 +2179,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get createLobbyGame => 'Criar jogo no lobby';
-
-  @override
-  String get youPlayAs => 'Jogas com';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidar alguém para jogar, envia este URL';
@@ -2518,6 +2527,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get evaluationGauge => 'Medidor da avaliação';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Múltiplas continuações';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get variants => 'Variantes';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Ritmo de jogo';
@@ -2865,6 +2889,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get unlimited => 'Ilimitado';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Modo';
@@ -3115,9 +3142,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ou enviar um ficheiro PGN';
-
-  @override
-  String get fromPosition => 'A partir de uma posição';
 
   @override
   String get continueFromHere => 'Continuar a partir daqui';
@@ -6145,6 +6169,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get teamIncorrectEntryCode => 'Código incorreto.';
+
+  @override
   String teamBattleOfNbTeams(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -8509,9 +8536,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get createLobbyGame => 'Criar partida na sala de espera';
 
   @override
-  String get youPlayAs => 'Você joga com as';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidar alguém para jogar, envie este URL';
 
   @override
@@ -8858,6 +8882,18 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get evaluationGauge => 'Escala de avaliação';
 
   @override
+  String get visualMotifs => 'Temas visuais';
+
+  @override
+  String get undefendedPieces => 'Peças indefesas';
+
+  @override
+  String get pinnedPieces => 'Peças cravadas';
+
+  @override
+  String get checkableKing => 'Rei possível de xeque';
+
+  @override
   String get multipleLines => 'Linhas de análise';
 
   @override
@@ -8977,6 +9013,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get variants => 'Variantes';
+
+  @override
+  String get variantsDescription => 'Mais formas de jogar';
 
   @override
   String get timeControl => 'Ritmo';
@@ -9205,6 +9244,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get unlimited => 'Ilimitado';
+
+  @override
+  String get unlimitedDescription => 'Leve o tempo que precisar';
 
   @override
   String get mode => 'Modo';
@@ -9455,9 +9497,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get orUploadPgnFile => 'Ou carregue um arquivo PGN';
-
-  @override
-  String get fromPosition => 'A partir da posição';
 
   @override
   String get continueFromHere => 'Continuar daqui';
@@ -12483,6 +12522,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Código de entrada incorreto.';
 
   @override
   String teamBattleOfNbTeams(int count) {

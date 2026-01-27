@@ -242,6 +242,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Benvenuto nell\'app Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Attività';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createLobbyGame => 'Crea una partita nella lobby';
 
   @override
-  String get youPlayAs => 'Giochi come';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per invitare qualcuno a giocare, dagli questo URL';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get evaluationGauge => 'Indicatore di valutazione del vantaggio';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Varianti multiple';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get variants => 'Varianti';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Cadenza di gioco';
@@ -2865,6 +2889,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get unlimited => 'Illimitato';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Modalità';
@@ -3115,9 +3142,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'O carica un file PGN';
-
-  @override
-  String get fromPosition => 'Da una posizione';
 
   @override
   String get continueFromHere => 'Continua da qui';
@@ -6143,6 +6167,9 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Codice di accesso errato.';
 
   @override
   String teamBattleOfNbTeams(int count) {

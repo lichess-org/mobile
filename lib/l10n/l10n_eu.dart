@@ -242,6 +242,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Ongi etorri Lichess aplikaziora!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Jarduera';
 
   @override
@@ -2169,9 +2181,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get createLobbyGame => 'Sortu egongelako partida';
 
   @override
-  String get youPlayAs => 'Kolore hau izango duzu';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norbait jokatzera gonbidatzeko, URL hau bidali iezaiozu';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsEu extends AppLocalizations {
   String get evaluationGauge => 'Ebaluazio langa';
 
   @override
+  String get visualMotifs => 'Ikurrak';
+
+  @override
+  String get undefendedPieces => 'Defentsarik ez duten piezak';
+
+  @override
+  String get pinnedPieces => 'Iltzatutako piezak';
+
+  @override
+  String get checkableKing => 'Xake egin dakiokeen erregea';
+
+  @override
   String get multipleLines => 'Linea anitz';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get variants => 'Aldaerak';
+
+  @override
+  String get variantsDescription => 'Jokatzeko modu gehiago';
 
   @override
   String get timeControl => 'Denbora kontrola';
@@ -2865,6 +2889,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get unlimited => 'Mugagabea';
+
+  @override
+  String get unlimitedDescription => 'Hartu behar duzun denbora';
 
   @override
   String get mode => 'Modua';
@@ -3115,9 +3142,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Edo kargatu PGN fitxategi bat';
-
-  @override
-  String get fromPosition => 'Posizio jakin batetik';
 
   @override
   String get continueFromHere => 'Hemendik jarraitu';
@@ -6143,6 +6167,9 @@ class AppLocalizationsEu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Sarrera-kode okerra.';
 
   @override
   String teamBattleOfNbTeams(int count) {

@@ -242,6 +242,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Tervetuloa Lichess-sovellukseen!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Toiminta';
 
   @override
@@ -1383,7 +1395,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Lähetykset, jotka olet tilannut';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Kirjeshakkipelin aika loppumassa';
@@ -1407,7 +1419,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesBlindfold => 'Sokko';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Näytä mobiililaitteilla kello vasemmalla puolella';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -2169,9 +2181,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createLobbyGame => 'Luo peli';
 
   @override
-  String get youPlayAs => 'Nappuloidesi väri';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Lähetä tämä linkki kaverillesi, jonka haluat kutsua pelaamaan';
 
   @override
@@ -2518,6 +2527,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get evaluationGauge => 'Arviomittari';
 
   @override
+  String get visualMotifs => 'Visuaaliset motiivit';
+
+  @override
+  String get undefendedPieces => 'Suojaamattomat nappulat';
+
+  @override
+  String get pinnedPieces => 'Kiinnitetyt nappulat';
+
+  @override
+  String get checkableKing => 'Kuningas, jota voi shakata';
+
+  @override
   String get multipleLines => 'Muunnelmien määrä';
 
   @override
@@ -2637,6 +2658,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get variants => 'Variantit';
+
+  @override
+  String get variantsDescription => 'Lisää pelitapoja';
 
   @override
   String get timeControl => 'Aikajärjestelmä';
@@ -2865,6 +2889,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get unlimited => 'Rajaton';
+
+  @override
+  String get unlimitedDescription => 'Käytä niin paljon aikaa kuin tarvitset';
 
   @override
   String get mode => 'Tyyppi';
@@ -3115,9 +3142,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Tai lataa PGN-tiedosto';
-
-  @override
-  String get fromPosition => 'Asemasta';
 
   @override
   String get continueFromHere => 'Jatka tästä';
@@ -4858,7 +4882,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get tags => 'Tunnisteet';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Ohestalyönti';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6143,6 +6167,9 @@ class AppLocalizationsFi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Virheellinen sisäänpääsykoodi.';
 
   @override
   String teamBattleOfNbTeams(int count) {

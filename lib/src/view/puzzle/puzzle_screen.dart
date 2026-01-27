@@ -414,6 +414,7 @@ class _BodyState extends ConsumerState<_Body> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     BoardWidget(
+                      boardKey: widget.boardKey,
                       size: boardSize,
                       fen: puzzleState.currentPosition.fen,
                       orientation: puzzleState.pov,
@@ -504,6 +505,7 @@ class _BodyState extends ConsumerState<_Body> {
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                         : EdgeInsets.zero,
                     child: BoardWidget(
+                      boardKey: widget.boardKey,
                       size: boardSize,
                       fen: puzzleState.currentPosition.fen,
                       orientation: puzzleState.pov,
@@ -776,8 +778,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) =>
-              Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
+          makeLabel: (context) => Text(context.l10n.mobileViewGame),
           onPressed: () async {
             try {
               final game = await ref

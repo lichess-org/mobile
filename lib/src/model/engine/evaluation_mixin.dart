@@ -94,7 +94,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
       _socketSubscription?.cancel();
-      _evaluationService.disposeEngine();
+      _evaluationService.quit();
     });
 
     super.runBuild();
@@ -110,7 +110,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval(forceRestart: true);
     } else {
-      await _evaluationService.disposeEngine();
+      _evaluationService.quit();
     }
   }
 
@@ -122,8 +122,6 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
     requestEval(forceRestart: true);
   }
 
@@ -131,16 +129,12 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   void setEngineCores(int numEngineCores) {
     _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
     requestEval(forceRestart: true);
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
     _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
-
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
 
     requestEval(forceRestart: true);
   }
@@ -264,65 +258,66 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     });
   }
 
-  Future<void> _startEngineEval({bool goDeeper = false, bool forceRestart = false}) async {
+  void _startEngineEval({bool goDeeper = false, bool forceRestart = false}) {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
-    await _evaluationService.ensureEngineInitialized(
-      state.requireValue.evaluationContext,
-      initOptions: evaluationPrefs.evaluationOptions,
+
+    final searchTime = goDeeper ? kMaxEngineSearchTime : evaluationPrefs.engineSearchTime;
+
+    final work = Work(
+      id: curState.evaluationContext.id,
+      enginePref: evaluationPrefs.enginePref,
+      variant: curState.evaluationContext.variant,
+      threads: evaluationPrefs.numEngineCores,
+      hashSize: _evaluationService.maxMemory,
+      path: curState.currentPath,
+      searchTime: searchTime,
+      multiPv: evaluationPrefs.numEvalLines,
+      threatMode: curState.engineInThreatMode,
+      isDeeper: goDeeper ? true : null,
+      initialPosition: curState.evaluationContext.initialPosition,
+      steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
-    _evaluationService
-        .start(
-          curState.currentPath,
-          positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: positionTree.eval,
-          shouldEmit: _shouldEmit,
-          goDeeper: goDeeper,
-          forceRestart: forceRestart,
-          threatMode: curState.engineInThreatMode,
-        )
-        ?.forEach((event) {
-          if (curState.engineInThreatMode) {
+
+    _evaluationService.evaluate(work, goDeeper: goDeeper, forceRestart: forceRestart)?.forEach((
+      event,
+    ) {
+      if (curState.engineInThreatMode) {
+        return;
+      }
+      final (evalWork, eval) = event;
+      bool isSameEvalString = true;
+      positionTree.updateAt(evalWork.path, (node) {
+        final nodeEval = node.eval;
+        if (nodeEval is CloudEval) {
+          if (nodeEval.depth >= eval.depth &&
+              evalWork.isDeeper != true &&
+              evalWork.searchTime != kMaxEngineSearchTime) {
+            final targetTime = evalWork.searchTime;
+            final evalSearchTime = eval.searchTime;
+            final likelyNodes =
+                ((targetTime.inMilliseconds * eval.nodes) / evalSearchTime.inMilliseconds).round();
+            // if the cloud eval is likely better, stop the local engine
+            // nps varies with positional complexity so this is rough, but save planet earth
+            if (likelyNodes < nodeEval.nodes) {
+              _evaluationService.stop();
+            }
             return;
           }
-          final (work, eval) = event;
-          bool isSameEvalString = true;
-          positionTree.updateAt(work.path, (node) {
-            final nodeEval = node.eval;
-            if (nodeEval is CloudEval) {
-              if (nodeEval.depth >= eval.depth &&
-                  work.isDeeper != true &&
-                  work.searchTime != kMaxEngineSearchTime) {
-                final targetTime = work.searchTime;
-                final searchTime = eval.searchTime;
-                final likelyNodes =
-                    ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
-                // if the cloud eval is likely better, stop the local engine
-                // nps varies with positional complexity so this is rough, but save planet earth
-                if (likelyNodes < nodeEval.nodes) {
-                  _evaluationService.stop();
-                }
-                return;
-              }
-            } else if (nodeEval is LocalEval) {
-              if (nodeEval.isBetter(eval)) {
-                return;
-              }
-            }
-            isSameEvalString = eval.evalString == nodeEval?.evalString;
-            node.eval = eval;
-          });
-
-          if (!ref.mounted) return;
-
-          if (work.path == state.requireValue.currentPath) {
-            onCurrentPathEvalChanged(isSameEvalString);
+        } else if (nodeEval is LocalEval) {
+          if (nodeEval.isBetter(eval)) {
+            return;
           }
-        });
-  }
+        }
+        isSameEvalString = eval.evalString == nodeEval?.evalString;
+        node.eval = eval;
+      });
 
-  bool _shouldEmit(Work work) {
-    if (!ref.mounted) return false;
-    return work.path == state.requireValue.currentPath;
+      if (!ref.mounted) return;
+
+      if (evalWork.path == state.requireValue.currentPath) {
+        onCurrentPathEvalChanged(isSameEvalString);
+      }
+    });
   }
 }

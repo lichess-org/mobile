@@ -242,6 +242,18 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Dobrodošli v Lichess aplikaciji!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override
@@ -2225,9 +2237,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get createLobbyGame => 'Ustvari igro v preddverju';
 
   @override
-  String get youPlayAs => 'Igraš kot';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Kopiraj URL in povabi prijatelja k igri';
 
   @override
@@ -2574,6 +2583,18 @@ class AppLocalizationsSl extends AppLocalizations {
   String get evaluationGauge => 'Kazalnik ocene';
 
   @override
+  String get visualMotifs => 'Vizualni motivi';
+
+  @override
+  String get undefendedPieces => 'Nebranjene figure';
+
+  @override
+  String get pinnedPieces => 'Pripete figure';
+
+  @override
+  String get checkableKing => 'Kralj, ki ga je mogoče šahirati';
+
+  @override
   String get multipleLines => 'Več variant';
 
   @override
@@ -2693,6 +2714,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get variants => 'Različice';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Ura';
@@ -2921,6 +2945,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get unlimited => 'Neomejeno';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Način';
@@ -3171,9 +3198,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ali pa naložite datoteko PGN';
-
-  @override
-  String get fromPosition => 'Nastavljena pozicija';
 
   @override
   String get continueFromHere => 'Nadaljuj od tukaj';
@@ -6299,6 +6323,9 @@ class AppLocalizationsSl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Nepravilna vstopna koda.';
 
   @override
   String teamBattleOfNbTeams(int count) {

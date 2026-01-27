@@ -242,6 +242,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Vitajte v Lichess aplikácii!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override
@@ -2225,9 +2237,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createLobbyGame => 'Vytvoriť výzvu';
 
   @override
-  String get youPlayAs => 'Hráte ako';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Zdieľaním tejto adresy môžete niekoho pozvať k partii';
 
   @override
@@ -2574,6 +2583,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get evaluationGauge => 'Ukazovateľ hodnotenia';
 
   @override
+  String get visualMotifs => 'Vizuálne motívy';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Počet variantov';
 
   @override
@@ -2693,6 +2714,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get variants => 'Varianty';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Čas';
@@ -2921,6 +2945,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get unlimited => 'Bez času';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Režim partie';
@@ -3171,9 +3198,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Alebo nahrajte súbor PGN';
-
-  @override
-  String get fromPosition => 'Z pozície';
 
   @override
   String get continueFromHere => 'Pokračujte odtiaľto';
@@ -6299,6 +6323,9 @@ class AppLocalizationsSk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Nesprávny vstupný kód.';
 
   @override
   String teamBattleOfNbTeams(int count) {

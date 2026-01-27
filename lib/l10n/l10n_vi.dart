@@ -70,7 +70,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNoSearchResults => 'Không có kết quả';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi luôn bổ sung thêm các tính năng.';
+  String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi đang bổ sung thêm các tính năng mới.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Bạn không theo dõi bất kỳ người dùng nào.';
@@ -240,6 +240,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileWelcomeToLichessApp => 'Chào mừng đến với ứng dụng Lichess!';
+
+  @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -1719,7 +1731,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeBlindSwineMate => 'Chiếu hết kiểu Chú lợn mù';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Hai quân xe cùng nhau chiếu hết vua trong một vùng có kích thước 2 x 2 ô vuông.';
+  String get puzzleThemeBlindSwineMateDescription => 'Hai quân xe cùng nhau chiếu hết vua trong một vùng có kích thước 2 x 2.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Cờ tàn tượng';
@@ -2141,9 +2153,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createLobbyGame => 'Tạo ván đấu tại sảnh';
 
   @override
-  String get youPlayAs => 'Bạn cầm quân';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Để mời ai đó chơi, hãy gửi đường dẫn này';
 
   @override
@@ -2490,6 +2499,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get evaluationGauge => 'Thang đo lợi thế';
 
   @override
+  String get visualMotifs => 'Họa tiết thị giác';
+
+  @override
+  String get undefendedPieces => 'Các quân cờ không được bảo vệ';
+
+  @override
+  String get pinnedPieces => 'Quân cờ bị ghim';
+
+  @override
+  String get checkableKing => 'Có thể chiếu tướng';
+
+  @override
   String get multipleLines => 'Số hàng phân tích';
 
   @override
@@ -2609,6 +2630,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get variants => 'Biến thể';
+
+  @override
+  String get variantsDescription => 'Nhiều cách chơi hơn';
 
   @override
   String get timeControl => 'Kiểu thời gian';
@@ -2837,6 +2861,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get unlimited => 'Vô hạn';
+
+  @override
+  String get unlimitedDescription => 'Hãy dành tất cả thời gian bạn cần';
 
   @override
   String get mode => 'Chế độ';
@@ -3087,9 +3114,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Hoặc tải lên tệp PGN';
-
-  @override
-  String get fromPosition => 'Từ thế cờ';
 
   @override
   String get continueFromHere => 'Tiếp tục từ đây';
@@ -6065,6 +6089,9 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Mã không chính xác.';
 
   @override
   String teamBattleOfNbTeams(int count) {

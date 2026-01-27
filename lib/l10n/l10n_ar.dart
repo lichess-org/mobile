@@ -242,6 +242,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'مرحباً بكم في تطبيق Lichess!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'الأنشطة';
 
   @override
@@ -2281,9 +2293,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get createLobbyGame => 'إنشاء ساحة لعب';
 
   @override
-  String get youPlayAs => 'لعب ك';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'لدعوة شخص ما للعب، أرسل له هذا الرابط';
 
   @override
@@ -2630,6 +2639,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get evaluationGauge => 'مقياس التقييم';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'عدد الخطوط';
 
   @override
@@ -2749,6 +2770,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get variants => 'الأنواع';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'التوقيت';
@@ -2977,6 +3001,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unlimited => 'غير محدود';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'مقيمة أو غير مقيمة';
@@ -3227,9 +3254,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'أو حمل مِلف PGN';
-
-  @override
-  String get fromPosition => 'من وضع';
 
   @override
   String get continueFromHere => 'تابع من هنا';
@@ -6455,6 +6479,9 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'رمز خاطئ.';
 
   @override
   String teamBattleOfNbTeams(int count) {

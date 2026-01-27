@@ -73,7 +73,7 @@ Future<void> initializeApp() async {
 Future<void> initializeLocalNotifications(Locale locale) async {
   final l10n = await AppLocalizations.delegate.load(locale);
   await FlutterLocalNotificationsPlugin().initialize(
-    InitializationSettings(
+    settings: InitializationSettings(
       android: const AndroidInitializationSettings('logo_black'),
       iOS: DarwinInitializationSettings(
         requestBadgePermission: false,

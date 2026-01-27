@@ -157,10 +157,10 @@ class NotificationService {
     final payload = jsonEncode(notification.payload);
 
     await _notificationDisplay.show(
-      id,
-      notification.title(_l10n),
-      notification.body(_l10n),
-      notification.details(_l10n),
+      id: id,
+      title: notification.title(_l10n),
+      body: notification.body(_l10n),
+      notificationDetails: notification.details(_l10n),
       payload: payload,
     );
     _logger.info(
@@ -173,7 +173,7 @@ class NotificationService {
   /// Cancels/removes a notification.
   Future<void> cancel(int id) {
     _logger.info('canceled notification id: [$id]');
-    return _notificationDisplay.cancel(id);
+    return _notificationDisplay.cancel(id: id);
   }
 
   void _dispose() {

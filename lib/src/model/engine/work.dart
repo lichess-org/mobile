@@ -3,8 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 part 'work.freezed.dart';
 
@@ -16,6 +18,11 @@ sealed class Work with _$Work {
   const Work._();
 
   const factory Work({
+    /// Optional identifier to associate this work with a game, puzzle, etc.
+    StringId? id,
+
+    /// The engine preference to use (only relevant for Standard and Chess960 variants).
+    required ChessEnginePref enginePref,
     required Variant variant,
     required int threads,
     int? hashSize,

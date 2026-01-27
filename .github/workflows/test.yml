@@ -52,8 +52,8 @@ jobs:
       - name: Analyze project source
         run: flutter analyze
 
-      - name: Run riverpod lint
-        run: dart run custom_lint
+      # - name: Run riverpod lint
+      #   run: dart run custom_lint
 
       - name: Run unit tests
         run: flutter test

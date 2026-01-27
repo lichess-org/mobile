@@ -21,12 +21,15 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:multistockfish/multistockfish.dart';
 
+import '../../model/engine/fake_stockfish.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -622,6 +625,111 @@ void main() {
           expect(find.text('13. dxe6'), findsNothing);
         },
       );
+
+      testWidgets('eval is updated in move tree when it corresponds to current path', (
+        tester,
+      ) async {
+        await makeEngineTestApp(tester, isCloudEvalEnabled: false);
+
+        // Make a move (1. e4)
+        await playMove(tester, 'e2', 'e4');
+        expect(find.byType(InlineMove), findsOne);
+
+        // Before any eval is emitted, no eval should be displayed
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsNothing);
+
+        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+      });
+
+      testWidgets('different positions show different evals in move tree', (tester) async {
+        final stockfish = AnalysisTestStockfish();
+        await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
+
+        await playMove(tester, 'e2', 'e4');
+        await tester.pump(kRequestEvalDebounceDelay);
+
+        // check engine is started
+        expect(stockfish.state.value, StockfishState.ready);
+
+        stockfish.emitNextDepth();
+        await tester.pump(kEngineEvalEmissionThrottleDelay);
+
+        expect(stockfish.requestedPositions.length, 1);
+
+        // should see depth 6
+        expect(find.widgetWithText(EngineButton, '6'), findsOne);
+
+        // e4 should show +0.2 (ply 1 -> cp 20)
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+
+        await playMove(tester, 'e7', 'e5');
+        expect(find.byType(InlineMove), findsNWidgets(2));
+
+        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+        expect(stockfish.requestedPositions.length, 2);
+
+        stockfish.emitDepthRange(toDepth: 10);
+        await tester.pump(kEngineEvalEmissionThrottleDelay);
+
+        expect(find.widgetWithText(EngineButton, '10'), findsOne);
+
+        // After e5, position has ply=2, so cp=30 which displays as +0.3
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+        expect(find.widgetWithText(InlineMove, '+0.3'), findsOne);
+      });
+    });
+
+    group('Engine analysis on move navigation', () {
+      testWidgets('evaluation is debounced when jumping quickly between moves', (tester) async {
+        final stockfish = AnalysisTestStockfish();
+        await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
+
+        // Make several moves
+        await playMove(tester, 'e2', 'e4');
+        await playMove(tester, 'e7', 'e5');
+        await playMove(tester, 'g1', 'f3');
+        await playMove(tester, 'b8', 'c6');
+
+        // Wait for initial eval request
+        await tester.pump(kRequestEvalDebounceDelay);
+
+        // Clear the tracking to start fresh for navigation test
+        stockfish.resetTracking();
+
+        // Rapidly navigate through moves (faster than debounce delay of 250ms)
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // Due to debouncing, no eval requests should have been sent yet
+        expect(stockfish.requestedPositions, isEmpty);
+
+        // Wait for the debounce delay to elapse
+        await tester.pump(kRequestEvalDebounceDelay);
+
+        // Only ONE eval request should have been sent (for the final position)
+        expect(stockfish.requestedPositions.length, 1);
+
+        // Verify it's for the correct position (after 1. e4)
+        expect(stockfish.requestedPositions.first, contains('4P3'));
+
+        // Emit eval for this position
+        stockfish.emitNextDepth();
+        await tester.pump();
+
+        // Eval should be displayed (depth 6) with arrow
+        expect(find.widgetWithText(EngineButton, '$kMinEngineDepth'), findsOne);
+        expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
+        expect(find.byType(BoardShapeWidget), findsOne);
+      });
     });
 
     group('Engine lines', () {

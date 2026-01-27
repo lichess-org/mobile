@@ -242,6 +242,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
   String get activityActivity => 'Veikla';
 
   @override
@@ -2223,9 +2235,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get createLobbyGame => 'Sukurti žaidimą laukimo salėje';
 
   @override
-  String get youPlayAs => 'Jūs žaidžiate kaip';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norėdami pakviesti varžovą, pasidalinkite šiuo adresu';
 
   @override
@@ -2572,6 +2581,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get evaluationGauge => 'Vertinimo matuoklis';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Undefended pieces';
+
+  @override
+  String get pinnedPieces => 'Pinned pieces';
+
+  @override
+  String get checkableKing => 'Checkable king';
+
+  @override
   String get multipleLines => 'Keletas linijų';
 
   @override
@@ -2691,6 +2712,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get variants => 'Variantai';
+
+  @override
+  String get variantsDescription => 'More ways to play';
 
   @override
   String get timeControl => 'Laiko kontrolė';
@@ -2919,6 +2943,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get unlimited => 'Neribota';
+
+  @override
+  String get unlimitedDescription => 'Take all the time you need';
 
   @override
   String get mode => 'Tipas';
@@ -3169,9 +3196,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Arba įkelkite PGN failą';
-
-  @override
-  String get fromPosition => 'Nuo pozicijos';
 
   @override
   String get continueFromHere => 'Tęsti nuo čia';
@@ -6297,6 +6321,9 @@ class AppLocalizationsLt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Netinkamas kodas.';
 
   @override
   String teamBattleOfNbTeams(int count) {
