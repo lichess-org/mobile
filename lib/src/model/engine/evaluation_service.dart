@@ -80,6 +80,9 @@ class EvaluationService {
   Timer? _evalThrottleTimer;
   EvalResult? _pendingEvalResult;
 
+  /// Pending move request state.
+  (Completer<UCIMove?>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
+
   /// Expose NNUE download progress from the nnue service.
   ValueListenable<double> get nnueDownloadProgress => _nnueService.nnueDownloadProgress;
 
@@ -208,19 +211,33 @@ class EvaluationService {
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
-    final completer = Completer<UCIMove?>();
-    late final StreamSubscription<MoveResult> subscription;
+    // Cancel any previous pending move request
+    _cancelPendingMoveRequest();
 
-    subscription = moveStream.where((result) => result.$1 == work).listen((result) {
+    final completer = Completer<UCIMove?>();
+    final subscription = moveStream.where((result) => result.$1 == work).listen((result) {
       if (!completer.isCompleted) {
         completer.complete(result.$2);
       }
-      subscription.cancel();
+      _pendingMoveRequest?.$2.cancel();
+      _pendingMoveRequest = null;
     });
+
+    _pendingMoveRequest = (completer, subscription);
 
     _startWork(work, null);
 
     return completer.future;
+  }
+
+  void _cancelPendingMoveRequest() {
+    if (_pendingMoveRequest case (final completer, final subscription)) {
+      subscription.cancel();
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+      _pendingMoveRequest = null;
+    }
   }
 
   /// Start the given [work], restarting the engine if necessary.
@@ -425,6 +442,7 @@ class EvaluationService {
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
+    _cancelPendingMoveRequest();
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentWork = null;
@@ -445,6 +463,7 @@ class EvaluationService {
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
+    _cancelPendingMoveRequest();
     _currentWork = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();

@@ -1302,5 +1302,62 @@ void main() {
         expect(receivedMove, isNull);
       });
     });
+
+    test('findMove future completes with null when quit() is called', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        // Start findMove and capture the future
+        final moveFuture = service.findMove(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Quit before bestmove is emitted
+        service.quit();
+        async.flushMicrotasks();
+
+        // The future should complete with null
+        final move = await moveFuture;
+        expect(move, isNull);
+      });
+    });
+
+    test('second findMove cancels the first one', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeMoveWork(elo: 1500);
+        final work2 = makeMoveWork(elo: 1800);
+
+        // Start first findMove
+        final future1 = service.findMove(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Start second findMove before first completes
+        final future2 = service.findMove(work2);
+        async.flushMicrotasks();
+
+        // First future should complete with null (cancelled)
+        final move1 = await future1;
+        expect(move1, isNull);
+
+        // Emit bestmove for second request
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // Second future should complete with the move
+        final move2 = await future2;
+        expect(move2, equals('e2e4'));
+      });
+    });
   });
 }
