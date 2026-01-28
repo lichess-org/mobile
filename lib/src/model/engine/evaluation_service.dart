@@ -56,6 +56,7 @@ class EvaluationService {
     _protocol.isComputing.addListener(_onComputingChange);
     _protocol.engineName.addListener(_onEngineNameChange);
     _evalSubscription = _protocol.evalStream.listen(_onEvalResult);
+    _moveSubscription = _protocol.moveStream.listen(_onMoveResult);
   }
 
   final int maxMemory;
@@ -67,11 +68,13 @@ class EvaluationService {
 
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
+  late final StreamSubscription<MoveResult> _moveSubscription;
 
   StockfishFlavor? _currentFlavor;
   bool _initInProgress = false;
   bool _isDisposed = false;
   bool _discardEvalResults = false;
+  bool _discardMoveResults = false;
 
   // Throttling state for eval emissions
   Timer? _evalThrottleTimer;
@@ -84,14 +87,18 @@ class EvaluationService {
   bool get isDownloadingNNUEFiles => _nnueService.isDownloadingNNUEFiles;
 
   final _evalController = StreamController<EvalResult>.broadcast();
+  final _moveController = StreamController<MoveResult>.broadcast();
 
-  /// Stream of evaluation results tagged with their [Work].
+  /// Stream of evaluation results tagged with their [EvalWork].
   ///
   /// Listeners should filter results by comparing the Work to their own request
   /// to determine if the result is relevant to them.
   ///
   /// This stream is throttled to avoid excessive UI updates.
   Stream<EvalResult> get evalStream => _evalController.stream;
+
+  /// Stream of move results tagged with their [MoveWork].
+  Stream<MoveResult> get moveStream => _moveController.stream;
 
   final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
     engineName: null,
@@ -105,7 +112,9 @@ class EvaluationService {
 
   // Helper getters for internal use (read from combined state)
   EngineState get _engineState => _evaluationState.value.state;
-  Work? get _work => _evaluationState.value.currentWork;
+
+  // Track current work (either EvalWork or MoveWork)
+  Work? _currentWork;
 
   void _setEngineState(EngineState newState) {
     _logger.fine('Engine state: ${newState.name}');
@@ -118,11 +127,21 @@ class EvaluationService {
     _setState(evalFn: () => eval);
   }
 
-  void _setWork(Work? work) {
+  void _setEvalWork(EvalWork? work) {
+    _currentWork = work;
     _setState(workFn: () => work);
   }
 
-  void _setState({EngineState? state, LocalEval? Function()? evalFn, Work? Function()? workFn}) {
+  // ignore: use_setters_to_change_properties
+  void _setMoveWork(MoveWork? work) {
+    _currentWork = work;
+  }
+
+  void _setState({
+    EngineState? state,
+    LocalEval? Function()? evalFn,
+    EvalWork? Function()? workFn,
+  }) {
     final current = _evaluationState.value;
     final newState = (
       engineName: _protocol.engineName.value,
@@ -146,7 +165,7 @@ class EvaluationService {
   /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
   /// Returns `null` if the variant is not supported or if a cached eval is sufficient.
-  Stream<EvalResult>? evaluate(Work work, {bool goDeeper = false, bool forceRestart = false}) {
+  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false, bool forceRestart = false}) {
     if (!engineSupportedVariants.contains(work.variant)) {
       return null;
     }
@@ -169,6 +188,44 @@ class EvaluationService {
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
+    return _startWork(work, evalStream.where((result) => result.$1 == work));
+  }
+
+  /// Find the best move for the given [work] at the specified engine strength level.
+  ///
+  /// This will stop any current work and start a new move search. Last caller wins.
+  ///
+  /// Returns a [Future] that completes with the best move found by the engine.
+  ///
+  /// Returns `null` if the variant is not supported.
+  Future<UCIMove?> findMove(MoveWork work) {
+    if (!engineSupportedVariants.contains(work.variant)) {
+      return Future.value(null);
+    }
+
+    _logger.info(
+      'Finding move at ply ${work.position.ply} with options: '
+      'enginePref=${work.enginePref}, elo=${work.elo}, cores=${work.threads}, '
+      'searchTime=${work.searchTime.inMilliseconds}ms',
+    );
+
+    final completer = Completer<UCIMove?>();
+    late final StreamSubscription<MoveResult> subscription;
+
+    subscription = moveStream.where((result) => result.$1 == work).listen((result) {
+      if (!completer.isCompleted) {
+        completer.complete(result.$2);
+      }
+      subscription.cancel();
+    });
+
+    _startWork(work, null);
+
+    return completer.future;
+  }
+
+  /// Internal method to start any type of work.
+  T? _startWork<T>(Work work, T? resultStream) {
     final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
         : StockfishFlavor.sf16;
@@ -181,29 +238,36 @@ class EvaluationService {
 
     // Check if we need to clear engine context (different game/puzzle)
     final needsNewGame =
-        _work != null && (_work!.id != work.id || _work!.initialPosition != work.initialPosition);
+        _currentWork != null &&
+        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
 
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
 
-    _setWork(work);
-    _discardEvalResults = false;
+    switch (work) {
+      case final EvalWork evalWork:
+        _setEvalWork(evalWork);
+        _discardEvalResults = false;
+      case final MoveWork moveWork:
+        _setMoveWork(moveWork);
+        _discardMoveResults = false;
+    }
 
     if (_initInProgress) {
-      _logger.fine('Evaluate called while engine initialization is in progress, queuing work');
+      _logger.fine('Work requested while engine initialization is in progress, queuing work');
 
       // Init in progress, work will be computed when init finishes
       // (the _initEngine callback checks _currentWork)
-      return evalStream.where((result) => result.$1 == work);
+      return resultStream;
     }
 
     if (needsRestart) {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
       _initEngine(flavor).then((_) {
-        // Compute the current work (might be different from original if another evaluate() came in)
-        final currentWork = _work;
+        // Compute the current work (might be different from original if another request came in)
+        final currentWork = _currentWork;
         if (currentWork != null) {
           _protocol.compute(currentWork);
         }
@@ -212,7 +276,7 @@ class EvaluationService {
       _protocol.compute(work, newGame: needsNewGame);
     }
 
-    return evalStream.where((result) => result.$1 == work);
+    return resultStream;
   }
 
   Future<void> _initEngine(StockfishFlavor flavor) async {
@@ -288,7 +352,7 @@ class EvaluationService {
   }
 
   void _onComputingChange() {
-    if (_discardEvalResults) return;
+    if (_discardEvalResults && _discardMoveResults) return;
 
     if (_protocol.isComputing.value) {
       _setEngineState(EngineState.computing);
@@ -336,13 +400,19 @@ class EvaluationService {
     _evalController.add(result);
   }
 
-  /// Stop the current evaluation.
+  void _onMoveResult(MoveResult result) {
+    if (_discardMoveResults) return;
+    _moveController.add(result);
+  }
+
+  /// Stop the current work (evaluation or move search).
   ///
   /// This method stops the engine from computing further but does not clear the evaluation state.
-  /// The engine can still emit eval results for the current work until it fully stops.
+  /// The engine can still emit results for the current work until it fully stops.
   void stop() {
     _protocol.compute(null);
-    _setWork(null);
+    _currentWork = null;
+    _setEvalWork(null);
   }
 
   /// Quit the engine entirely.
@@ -356,6 +426,8 @@ class EvaluationService {
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
     _discardEvalResults = true;
+    _discardMoveResults = true;
+    _currentWork = null;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
@@ -373,14 +445,17 @@ class EvaluationService {
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
+    _currentWork = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();
+    _moveSubscription.cancel();
     _stockfish.state.removeListener(_onStockfishStateChange);
     _protocol.isComputing.removeListener(_onComputingChange);
     _protocol.engineName.removeListener(_onEngineNameChange);
     _protocol.dispose();
     _stockfish.quit();
     _evalController.close();
+    _moveController.close();
     _evaluationState.dispose();
   }
 
@@ -409,7 +484,7 @@ typedef EngineEvaluationState = ({
   String? engineName,
   LocalEval? eval,
   EngineState state,
-  Work? currentWork,
+  EvalWork? currentWork,
 });
 
 /// A provider that exposes the current engine evaluation state to the UI.
