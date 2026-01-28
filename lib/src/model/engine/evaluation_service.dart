@@ -351,6 +351,7 @@ class EvaluationService {
   }
 
   void _onComputingChange() {
+    // When both discard flags are set, a quit is in progress; ignore computing state changes.
     if (_discardEvalResults && _discardMoveResults) return;
 
     if (_protocol.isComputing.value) {
