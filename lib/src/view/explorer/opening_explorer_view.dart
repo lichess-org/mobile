@@ -156,10 +156,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       case AsyncError(:final error):
         debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
-        // TODO l10n
         final message = connectivity.whenIs(
           online: () => 'Could not load opening explorer data.',
-          offline: () => 'Opening Explorer is not available offline.',
+          offline: () => context.l10n.mobileOpeningExplorerNotAvailableOffline,
         );
         return Center(
           child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
