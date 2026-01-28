@@ -110,10 +110,9 @@ class EvaluationService {
   /// The current engine evaluation state, combining engine name, eval, state, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
 
-  // Helper getters for internal use (read from combined state)
+  /// The current engine state.
   EngineState get _engineState => _evaluationState.value.state;
 
-  // Track current work (either EvalWork or MoveWork)
   Work? _currentWork;
 
   void _setEngineState(EngineState newState) {
@@ -224,7 +223,7 @@ class EvaluationService {
     return completer.future;
   }
 
-  /// Internal method to start any type of work.
+  /// Start the given [work], restarting the engine if necessary.
   T? _startWork<T>(Work work, T? resultStream) {
     final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
