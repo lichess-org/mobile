@@ -30,6 +30,29 @@ final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngi
 /// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
+/// Exception thrown when [EvaluationService.findMove] is called with a variant
+/// not supported by the engine.
+class EngineUnsupportedVariantException implements Exception {
+  const EngineUnsupportedVariantException(this.variant);
+
+  final Variant variant;
+
+  @override
+  String toString() =>
+      'EngineUnsupportedVariantException: variant $variant is not supported by the engine';
+}
+
+/// Exception thrown when a [EvaluationService.findMove] request is cancelled.
+///
+/// This can happen when [EvaluationService.quit] is called, or when a new
+/// [EvaluationService.findMove] request supersedes the current one.
+class MoveRequestCancelledException implements Exception {
+  const MoveRequestCancelledException();
+
+  @override
+  String toString() => 'MoveRequestCancelledException: the move request was cancelled';
+}
+
 /// A provider for [EvaluationService].
 final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
@@ -81,7 +104,7 @@ class EvaluationService {
   EvalResult? _pendingEvalResult;
 
   /// Pending move request state.
-  (Completer<UCIMove?>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
+  (Completer<UCIMove>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
 
   /// Expose NNUE download progress from the nnue service.
   ValueListenable<double> get nnueDownloadProgress => _nnueService.nnueDownloadProgress;
@@ -166,10 +189,11 @@ class EvaluationService {
   /// If [goDeeper] is true, the engine will use the maximum search time.
   /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
-  /// Returns `null` if the variant is not supported or if a cached eval is sufficient.
+  /// Returns `null` if a cached eval is sufficient.
+  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false, bool forceRestart = false}) {
     if (!engineSupportedVariants.contains(work.variant)) {
-      return null;
+      throw EngineUnsupportedVariantException(work.variant);
     }
 
     // Check if cached eval is sufficient
@@ -199,10 +223,12 @@ class EvaluationService {
   ///
   /// Returns a [Future] that completes with the best move found by the engine.
   ///
-  /// Returns `null` if the variant is not supported.
-  Future<UCIMove?> findMove(MoveWork work) {
+  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
+  /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
+  /// superseded by another [findMove] call.
+  Future<UCIMove> findMove(MoveWork work) {
     if (!engineSupportedVariants.contains(work.variant)) {
-      return Future.value(null);
+      return Future.error(EngineUnsupportedVariantException(work.variant));
     }
 
     _logger.info(
@@ -214,7 +240,7 @@ class EvaluationService {
     // Cancel any previous pending move request
     _cancelPendingMoveRequest();
 
-    final completer = Completer<UCIMove?>();
+    final completer = Completer<UCIMove>();
     final subscription = moveStream.where((result) => result.$1 == work).listen((result) {
       if (!completer.isCompleted) {
         completer.complete(result.$2);
@@ -234,7 +260,7 @@ class EvaluationService {
     if (_pendingMoveRequest case (final completer, final subscription)) {
       subscription.cancel();
       if (!completer.isCompleted) {
-        completer.complete(null);
+        completer.completeError(const MoveRequestCancelledException());
       }
       _pendingMoveRequest = null;
     }
