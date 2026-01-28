@@ -419,24 +419,23 @@ void main() {
       expect(service.evaluationState.value.eval, isNull);
     });
 
-    test('evaluate() returns null for unsupported variants', () async {
+    test('evaluate() throws EngineUnsupportedVariantException for unsupported variants', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = EvalWork(
+      const work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.antichess,
         threads: 1,
         path: UciPath.empty,
-        searchTime: const Duration(seconds: 1),
+        searchTime: Duration(seconds: 1),
         multiPv: 1,
         initialPosition: Chess.initial,
-        steps: IList(),
+        steps: IListConst<Step>([]),
         threatMode: false,
       );
 
-      final stream = service.evaluate(work);
-      expect(stream, isNull);
+      expect(() => service.evaluate(work), throwsA(isA<EngineUnsupportedVariantException>()));
       expect(service.evaluationState.value.currentWork, isNull);
     });
 
@@ -1148,14 +1147,13 @@ void main() {
       expect(move, equals('e2e4'));
     });
 
-    test('findMove returns null for unsupported variants', () async {
+    test('findMove throws EngineUnsupportedVariantException for unsupported variants', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
       final work = makeMoveWork(variant: Variant.antichess);
-      final move = await service.findMove(work);
 
-      expect(move, isNull);
+      expect(() => service.findMove(work), throwsA(isA<EngineUnsupportedVariantException>()));
     });
 
     test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
@@ -1303,7 +1301,7 @@ void main() {
       });
     });
 
-    test('findMove future completes with null when quit() is called', () {
+    test('findMove throws MoveRequestCancelledException when quit() is called', () {
       fakeAsync((async) async {
         final throttleStockfish = ThrottleTestStockfish();
         testBinding.stockfish = throttleStockfish;
@@ -1321,13 +1319,12 @@ void main() {
         service.quit();
         async.flushMicrotasks();
 
-        // The future should complete with null
-        final move = await moveFuture;
-        expect(move, isNull);
+        // The future should throw MoveRequestCancelledException
+        expect(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
       });
     });
 
-    test('second findMove cancels the first one', () {
+    test('second findMove cancels the first one with MoveRequestCancelledException', () {
       fakeAsync((async) async {
         final throttleStockfish = ThrottleTestStockfish();
         testBinding.stockfish = throttleStockfish;
@@ -1346,9 +1343,8 @@ void main() {
         final future2 = service.findMove(work2);
         async.flushMicrotasks();
 
-        // First future should complete with null (cancelled)
-        final move1 = await future1;
-        expect(move1, isNull);
+        // First future should throw MoveRequestCancelledException
+        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
 
         // Emit bestmove for second request
         throttleStockfish.emitBestMove();
