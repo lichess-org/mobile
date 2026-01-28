@@ -35,6 +35,24 @@ EvalWork makeWork({
   );
 }
 
+MoveWork makeMoveWork({
+  StringId? id,
+  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  int elo = 1500,
+  Position? initialPosition,
+  Variant variant = Variant.standard,
+}) {
+  return MoveWork(
+    id: id,
+    enginePref: enginePref,
+    variant: variant,
+    threads: 1,
+    initialPosition: initialPosition ?? Chess.initial,
+    steps: const IListConst<Step>([]),
+    elo: elo,
+  );
+}
+
 void main() {
   TestLichessBinding.ensureInitialized();
 
@@ -1114,6 +1132,174 @@ void main() {
           reason: 'Eval results arriving after quit() should be discarded',
         );
         expect(latestState?.state, EngineState.initial);
+      });
+    });
+  });
+
+  group('EvaluationService.findMove', () {
+    test('findMove returns a move for supported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      final move = await service.findMove(work);
+
+      expect(move, isNotNull);
+      expect(move, equals('e2e4'));
+    });
+
+    test('findMove returns null for unsupported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(variant: Variant.antichess);
+      final move = await service.findMove(work);
+
+      expect(move, isNull);
+    });
+
+    test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(elo: 1800);
+      await service.findMove(work);
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+    });
+
+    test('findMove uses multiPv=4', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      expect(delayedStockfish.options['MultiPV'], equals('4'));
+    });
+
+    test('MoveWork.searchTime scales with elo', () {
+      final lowElo = makeMoveWork(elo: 1000);
+      final midElo = makeMoveWork(elo: 1750);
+      final highElo = makeMoveWork(elo: 2500);
+
+      // At elo 1000, searchTime should be 500ms
+      expect(lowElo.searchTime.inMilliseconds, equals(500));
+      // At elo 1750, searchTime should be 1250ms
+      expect(midElo.searchTime.inMilliseconds, equals(1250));
+      // At elo 2500, searchTime should be 2000ms
+      expect(highElo.searchTime.inMilliseconds, equals(2000));
+    });
+
+    test('findMove transitions state from initial to loading to idle', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final states = <EngineState>[];
+      service.evaluationState.addListener(() {
+        final newState = service.evaluationState.value.state;
+        if (states.isEmpty || states.last != newState) {
+          states.add(newState);
+        }
+      });
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      expect(states, contains(EngineState.loading));
+      expect(states.last, anyOf(EngineState.idle, EngineState.computing));
+    });
+
+    test('evaluate after findMove resets UCI_LimitStrength to false', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // First do a findMove
+      final moveWork = makeMoveWork(elo: 1800);
+      await service.findMove(moveWork);
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+
+      // Now do an evaluate
+      final evalWork = makeWork();
+      final stream = service.evaluate(evalWork);
+      await stream!.first;
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('false'));
+    });
+
+    test('findMove does not affect evaluationState.currentWork', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      // currentWork in evaluationState is specifically for EvalWork, not MoveWork
+      expect(service.evaluationState.value.currentWork, isNull);
+    });
+
+    test('moveStream emits results for findMove', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+
+      // Listen to moveStream before calling findMove
+      final moveResults = <MoveResult>[];
+      final subscription = service.moveStream.listen((result) {
+        moveResults.add(result);
+      });
+
+      await service.findMove(work);
+
+      expect(moveResults, hasLength(1));
+      expect(moveResults.first.$1, equals(work));
+      expect(moveResults.first.$2, equals('e2e4'));
+
+      await subscription.cancel();
+    });
+
+    test('quit discards pending move results', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        String? receivedMove;
+        service.moveStream.listen((result) {
+          receivedMove = result.$2;
+        });
+
+        // Start findMove (don't await)
+        service.findMove(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Quit before bestmove is emitted
+        service.quit();
+        async.flushMicrotasks();
+
+        // Now emit bestmove
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // The move should have been discarded
+        expect(receivedMove, isNull);
       });
     });
   });
