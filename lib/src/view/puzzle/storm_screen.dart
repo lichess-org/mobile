@@ -346,7 +346,7 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: () =>
+            shouldExcludeGesturesOnFocusGained:
                 stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
             shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
