@@ -264,7 +264,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     final searchTime = goDeeper ? kMaxEngineSearchTime : evaluationPrefs.engineSearchTime;
 
-    final work = Work(
+    final work = EvalWork(
       id: curState.evaluationContext.id,
       enginePref: evaluationPrefs.enginePref,
       variant: curState.evaluationContext.variant,
