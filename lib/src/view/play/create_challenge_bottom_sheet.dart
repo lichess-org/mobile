@@ -385,12 +385,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          // TODO l10n
-                                          'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
-                                        ),
-                                      ),
+                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
                                     );
                                   }
                                 } catch (e) {

@@ -681,8 +681,7 @@ class _StandingControls extends ConsumerWidget {
           onLongPress: state.hasPreviousPage
               ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
               : null,
-          // TODO l10n
-          semanticsLabel: 'Previous',
+          semanticsLabel: context.l10n.mobilePreviousPage,
           icon: const Icon(Icons.chevron_left),
         ),
         Expanded(
@@ -706,8 +705,7 @@ class _StandingControls extends ConsumerWidget {
           SemanticIconButton(
             onPressed: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
             icon: const Icon(Icons.person_pin_circle_outlined),
-            // TODO l10n
-            semanticsLabel: 'Jump to my page',
+            semanticsLabel: context.l10n.mobileTournamentJumpToMyPage,
           ),
       ],
     );

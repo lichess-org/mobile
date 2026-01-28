@@ -668,6 +668,54 @@ abstract class AppLocalizations {
   /// **'Customize'**
   String get mobileCustomizeButton;
 
+  /// No description provided for @mobileStopShowingThreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop showing threat'**
+  String get mobileStopShowingThreat;
+
+  /// No description provided for @mobileTournamentCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get mobileTournamentCompleted;
+
+  /// No description provided for @mobileTournamentJumpToMyPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to my page'**
+  String get mobileTournamentJumpToMyPage;
+
+  /// No description provided for @mobileDisplayModeCompact.
+  ///
+  /// In en, this message translates to:
+  /// **'Compact'**
+  String get mobileDisplayModeCompact;
+
+  /// No description provided for @mobileDisplayModeDetailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed'**
+  String get mobileDisplayModeDetailed;
+
+  /// No description provided for @mobileOpeningExplorerNotAvailableOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Explorer is not available offline.'**
+  String get mobileOpeningExplorerNotAvailableOffline;
+
+  /// No description provided for @mobileChallengeCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.'**
+  String get mobileChallengeCreated;
+
+  /// No description provided for @mobilePreviousPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get mobilePreviousPage;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:

@@ -564,7 +564,7 @@ class _BottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(
               analysisState.engineInThreatMode
-                  ? 'Stop showing threat' // TODO l10n
+                  ? context.l10n.mobileStopShowingThreat
                   : context.l10n.showThreat,
             ),
             onPressed: () =>
