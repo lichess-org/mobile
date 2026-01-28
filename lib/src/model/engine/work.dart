@@ -10,14 +10,39 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = (Work, LocalEval);
+typedef EvalResult = (EvalWork, LocalEval);
+typedef MoveResult = (MoveWork, UCIMove);
 
-/// A work item for the engine.
+/// Base sealed class for engine work items.
+sealed class Work {
+  const Work();
+
+  /// Optional identifier to associate this work with a game, puzzle, etc.
+  StringId? get id;
+
+  /// The engine preference to use (only relevant for Standard and Chess960 variants).
+  ChessEnginePref get enginePref;
+  Variant get variant;
+  int get threads;
+  int? get hashSize;
+  Position get initialPosition;
+  IList<Step> get steps;
+
+  /// The search time for this work.
+  Duration get searchTime;
+
+  /// The number of principal variations to compute.
+  int get multiPv;
+
+  Position get position => steps.lastOrNull?.position ?? initialPosition;
+}
+
+/// A work item for position evaluation.
 @freezed
-sealed class Work with _$Work {
-  const Work._();
+sealed class EvalWork extends Work with _$EvalWork {
+  const EvalWork._() : super();
 
-  const factory Work({
+  const factory EvalWork({
     /// Optional identifier to associate this work with a game, puzzle, etc.
     StringId? id,
 
@@ -33,8 +58,9 @@ sealed class Work with _$Work {
     bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,
-  }) = _Work;
+  }) = _EvalWork;
 
+  @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// The (fake) position to use in threat mode searches.
@@ -48,6 +74,44 @@ sealed class Work with _$Work {
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
+}
+
+/// A work item for finding the best move at a given engine strength level.
+@freezed
+sealed class MoveWork extends Work with _$MoveWork {
+  const MoveWork._() : super();
+
+  const factory MoveWork({
+    /// Optional identifier to associate this work with a game, puzzle, etc.
+    StringId? id,
+
+    /// The engine preference to use (only relevant for Standard and Chess960 variants).
+    required ChessEnginePref enginePref,
+    required Variant variant,
+    required int threads,
+    int? hashSize,
+    required Position initialPosition,
+    required IList<Step> steps,
+
+    /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
+    required int elo,
+  }) = _MoveWork;
+
+  @override
+  Position get position => steps.lastOrNull?.position ?? initialPosition;
+
+  /// Number of principal variations to compute for move selection.
+  @override
+  int get multiPv => 4;
+
+  /// Search time based on Elo rating.
+  /// Higher Elo gets more search time for better move quality.
+  @override
+  Duration get searchTime {
+    // Scale search time based on elo: 500ms at 1000 elo, up to 2000ms at 2500 elo
+    final ms = ((elo - 1000) / 1500 * 1500 + 500).clamp(500, 2000).toInt();
+    return Duration(milliseconds: ms);
+  }
 }
 
 @freezed

@@ -14,14 +14,14 @@ import '../../binding.dart';
 import '../../test_container.dart';
 import 'fake_stockfish.dart';
 
-Work makeWork({
+EvalWork makeWork({
   StringId? id,
   UciPath? path,
   ChessEnginePref enginePref = ChessEnginePref.sf16,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
-  return Work(
+  return EvalWork(
     id: id,
     enginePref: enginePref,
     variant: Variant.standard,
@@ -30,7 +30,7 @@ Work makeWork({
     searchTime: searchTime,
     multiPv: 1,
     initialPosition: initialPosition ?? Chess.initial,
-    steps: IList(),
+    steps: const IListConst<Step>([]),
     threatMode: false,
   );
 }
@@ -405,7 +405,7 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.antichess,
         threads: 1,
@@ -571,7 +571,7 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work1 = Work(
+      final work1 = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -583,7 +583,7 @@ void main() {
         threatMode: false,
       );
 
-      final work2 = Work(
+      final work2 = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -615,7 +615,7 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -639,7 +639,7 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -662,7 +662,7 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -691,7 +691,7 @@ void main() {
       fakeAsync((async) {
         final service = container.read(evaluationServiceProvider);
 
-        final work = Work(
+        final work = EvalWork(
           enginePref: ChessEnginePref.sf16,
           variant: Variant.standard,
           threads: 1,
