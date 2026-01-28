@@ -255,13 +255,13 @@ class UCIProtocol {
         final EvalWork evalWork when evalWork.threatMode =>
           'position fen ${evalWork.threatModePosition.fen}',
         _ => [
-            'position fen',
-            _work!.initialPosition.fen,
-            'moves',
-            ..._work!.steps.map(
-              (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-            ),
-          ].join(' '),
+          'position fen',
+          _work!.initialPosition.fen,
+          'moves',
+          ..._work!.steps.map(
+            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
+          ),
+        ].join(' '),
       };
 
       _sendAndLog(positionCommand);
