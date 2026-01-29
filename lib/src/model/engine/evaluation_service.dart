@@ -94,7 +94,6 @@ class EvaluationService {
 
   StockfishFlavor? _currentFlavor;
   bool _initInProgress = false;
-  bool _isDisposed = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
 
@@ -319,7 +318,6 @@ class EvaluationService {
       _logger.fine('Initializing engine with flavor: $flavor');
 
       await _stockfish.quit();
-      if (_isDisposed) return;
 
       _protocol.reset();
 
@@ -336,7 +334,6 @@ class EvaluationService {
           _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
           actualFlavor = StockfishFlavor.sf16;
         }
-        if (_isDisposed) return;
       }
 
       await _stockfish.start(
@@ -344,12 +341,9 @@ class EvaluationService {
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
       );
-      if (_isDisposed) return;
 
       if (_stockfish.state.value == StockfishState.error) {
-        if (!_isDisposed) {
-          _setEngineState(EngineState.error);
-        }
+        _setEngineState(EngineState.error);
         return;
       }
 
@@ -360,9 +354,7 @@ class EvaluationService {
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
     } catch (e, s) {
       _logger.severe('Error initializing engine', e, s);
-      if (!_isDisposed) {
-        _setEngineState(EngineState.error);
-      }
+      _setEngineState(EngineState.error);
     } finally {
       _initInProgress = false;
     }
@@ -478,7 +470,6 @@ class EvaluationService {
   }
 
   void _dispose() {
-    _isDisposed = true;
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;

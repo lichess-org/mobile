@@ -88,7 +88,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
   @override
   void runBuild() {
-    _evaluationService = ref.read(evaluationServiceProvider);
+    _evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
