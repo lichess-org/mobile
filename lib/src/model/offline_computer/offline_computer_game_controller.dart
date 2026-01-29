@@ -26,7 +26,7 @@ final offlineComputerGameControllerProvider =
 class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   @override
   OfflineComputerGameState build() {
-    final evaluationService = ref.read(evaluationServiceProvider);
+    final evaluationService = ref.watch(evaluationServiceProvider);
     ref.onDispose(() {
       evaluationService.quit();
     });
