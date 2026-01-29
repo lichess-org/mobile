@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -16,6 +19,8 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
+
+final _random = Random();
 
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
@@ -37,7 +42,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   void startNewGame({required StockfishLevel stockfishLevel, required Side playerSide}) {
-    ref.read(evaluationServiceProvider).quit();
     state = OfflineComputerGameState.initial(stockfishLevel: stockfishLevel, playerSide: playerSide);
 
     // If computer plays first (player is black), trigger engine move
@@ -130,6 +134,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .toIList();
 
       final work = MoveWork(
+        id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         threads: enginePrefs.numEngineCores,
@@ -218,6 +223,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
 
   const factory OfflineComputerGameState({
     required OfflineComputerGame game,
+    required StringId gameSessionId,
     @Default(0) int stepCursor,
     @Default(null) NormalMove? promotionMove,
     @Default(false) bool isEngineThinking,
@@ -228,6 +234,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     required Side playerSide,
   }) {
     const position = Chess.initial;
+    final sessionId = StringId(
+      'ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}',
+    );
     return OfflineComputerGameState(
       game: OfflineComputerGame(
         steps: [const GameStep(position: position)].lock,
@@ -245,6 +254,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
         humanPlayer: const Player(onGame: true),
         enginePlayer: stockfishPlayer(),
       ),
+      gameSessionId: sessionId,
     );
   }
 
