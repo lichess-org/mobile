@@ -14,14 +14,14 @@ import '../../binding.dart';
 import '../../test_container.dart';
 import 'fake_stockfish.dart';
 
-Work makeWork({
+EvalWork makeWork({
   StringId? id,
   UciPath? path,
   ChessEnginePref enginePref = ChessEnginePref.sf16,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
-  return Work(
+  return EvalWork(
     id: id,
     enginePref: enginePref,
     variant: Variant.standard,
@@ -30,8 +30,26 @@ Work makeWork({
     searchTime: searchTime,
     multiPv: 1,
     initialPosition: initialPosition ?? Chess.initial,
-    steps: IList(),
+    steps: const IListConst<Step>([]),
     threatMode: false,
+  );
+}
+
+MoveWork makeMoveWork({
+  StringId? id,
+  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  int elo = 1500,
+  Position? initialPosition,
+  Variant variant = Variant.standard,
+}) {
+  return MoveWork(
+    id: id,
+    enginePref: enginePref,
+    variant: variant,
+    threads: 1,
+    initialPosition: initialPosition ?? Chess.initial,
+    steps: const IListConst<Step>([]),
+    elo: elo,
   );
 }
 
@@ -401,24 +419,23 @@ void main() {
       expect(service.evaluationState.value.eval, isNull);
     });
 
-    test('evaluate() returns null for unsupported variants', () async {
+    test('evaluate() throws EngineUnsupportedVariantException for unsupported variants', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      const work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.antichess,
         threads: 1,
         path: UciPath.empty,
-        searchTime: const Duration(seconds: 1),
+        searchTime: Duration(seconds: 1),
         multiPv: 1,
         initialPosition: Chess.initial,
-        steps: IList(),
+        steps: IListConst<Step>([]),
         threatMode: false,
       );
 
-      final stream = service.evaluate(work);
-      expect(stream, isNull);
+      expect(() => service.evaluate(work), throwsA(isA<EngineUnsupportedVariantException>()));
       expect(service.evaluationState.value.currentWork, isNull);
     });
 
@@ -514,64 +531,11 @@ void main() {
   });
 
   group('EvaluationService', () {
-    test('Concurrent NNUE download operations are prevented', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      bool secondCallReturned = false;
-      bool secondCallResult = true;
-
-      // Start first download (will fail due to missing connectivity/files, but that's ok)
-      final firstDownload = service.downloadNNUEFiles(inBackground: true).catchError((_) {
-        return false;
-      });
-
-      // Immediately start second download while first is in progress
-      final secondDownload = service
-          .downloadNNUEFiles(inBackground: true)
-          .then((result) {
-            secondCallReturned = true;
-            secondCallResult = result;
-            return result;
-          })
-          .catchError((_) {
-            secondCallReturned = true;
-            secondCallResult = false;
-            return false;
-          });
-
-      await Future.wait([firstDownload, secondDownload]);
-
-      expect(secondCallReturned, isTrue);
-      expect(
-        secondCallResult,
-        isFalse,
-        reason: 'Second concurrent download call should be rejected',
-      );
-    });
-
-    test('Sequential NNUE downloads are allowed', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      // First download
-      await service.downloadNNUEFiles(inBackground: true).catchError((_) => false);
-
-      // Wait for first to complete, then start second
-      final secondResult = await service
-          .downloadNNUEFiles(inBackground: true)
-          .catchError((_) => false);
-
-      // Second call should be allowed since first completed
-      // (will still fail due to missing files, but won't be rejected by the flag)
-      expect(secondResult, isA<bool>());
-    });
-
     test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work1 = Work(
+      final work1 = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -583,7 +547,7 @@ void main() {
         threatMode: false,
       );
 
-      final work2 = Work(
+      final work2 = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -615,7 +579,7 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -639,7 +603,7 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -662,7 +626,7 @@ void main() {
 
       final service = container.read(evaluationServiceProvider);
 
-      final work = Work(
+      final work = EvalWork(
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -691,7 +655,7 @@ void main() {
       fakeAsync((async) {
         final service = container.read(evaluationServiceProvider);
 
-        final work = Work(
+        final work = EvalWork(
           enginePref: ChessEnginePref.sf16,
           variant: Variant.standard,
           threads: 1,
@@ -1114,6 +1078,228 @@ void main() {
           reason: 'Eval results arriving after quit() should be discarded',
         );
         expect(latestState?.state, EngineState.initial);
+      });
+    });
+  });
+
+  group('EvaluationService.findMove', () {
+    test('findMove returns a move for supported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      final move = await service.findMove(work);
+
+      expect(move, isNotNull);
+      expect(move, equals('e2e4'));
+    });
+
+    test('findMove throws EngineUnsupportedVariantException for unsupported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(variant: Variant.antichess);
+
+      expect(() => service.findMove(work), throwsA(isA<EngineUnsupportedVariantException>()));
+    });
+
+    test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(elo: 1800);
+      await service.findMove(work);
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+    });
+
+    test('findMove uses multiPv=4', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      expect(delayedStockfish.options['MultiPV'], equals('4'));
+    });
+
+    test('MoveWork.searchTime scales with elo', () {
+      final lowElo = makeMoveWork(elo: 1000);
+      final midElo = makeMoveWork(elo: 1750);
+      final highElo = makeMoveWork(elo: 2500);
+
+      // At elo 1000, searchTime should be 500ms
+      expect(lowElo.searchTime.inMilliseconds, equals(500));
+      // At elo 1750, searchTime should be 1250ms
+      expect(midElo.searchTime.inMilliseconds, equals(1250));
+      // At elo 2500, searchTime should be 2000ms
+      expect(highElo.searchTime.inMilliseconds, equals(2000));
+    });
+
+    test('findMove transitions state from initial to loading to idle', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final states = <EngineState>[];
+      service.evaluationState.addListener(() {
+        final newState = service.evaluationState.value.state;
+        if (states.isEmpty || states.last != newState) {
+          states.add(newState);
+        }
+      });
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      expect(states, contains(EngineState.loading));
+      expect(states.last, anyOf(EngineState.idle, EngineState.computing));
+    });
+
+    test('evaluate after findMove resets UCI_LimitStrength to false', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // First do a findMove
+      final moveWork = makeMoveWork(elo: 1800);
+      await service.findMove(moveWork);
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+
+      // Now do an evaluate
+      final evalWork = makeWork();
+      final stream = service.evaluate(evalWork);
+      await stream!.first;
+
+      expect(delayedStockfish.options['UCI_LimitStrength'], equals('false'));
+    });
+
+    test('findMove does not affect evaluationState.currentWork', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      await service.findMove(work);
+
+      // currentWork in evaluationState is specifically for EvalWork, not MoveWork
+      expect(service.evaluationState.value.currentWork, isNull);
+    });
+
+    test('moveStream emits results for findMove', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+
+      // Listen to moveStream before calling findMove
+      final moveResults = <MoveResult>[];
+      final subscription = service.moveStream.listen((result) {
+        moveResults.add(result);
+      });
+
+      await service.findMove(work);
+
+      expect(moveResults, hasLength(1));
+      expect(moveResults.first.$1, equals(work));
+      expect(moveResults.first.$2, equals('e2e4'));
+
+      await subscription.cancel();
+    });
+
+    test('quit discards pending move results', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        String? receivedMove;
+        service.moveStream.listen((result) {
+          receivedMove = result.$2;
+        });
+
+        // Start findMove (don't await)
+        service.findMove(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Quit before bestmove is emitted
+        service.quit();
+        async.flushMicrotasks();
+
+        // Now emit bestmove
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // The move should have been discarded
+        expect(receivedMove, isNull);
+      });
+    });
+
+    test('findMove throws MoveRequestCancelledException when quit() is called', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        // Start findMove and capture the future
+        final moveFuture = service.findMove(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Quit before bestmove is emitted
+        service.quit();
+        async.flushMicrotasks();
+
+        // The future should throw MoveRequestCancelledException
+        expect(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
+      });
+    });
+
+    test('second findMove cancels the first one with MoveRequestCancelledException', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeMoveWork(elo: 1500);
+        final work2 = makeMoveWork(elo: 1800);
+
+        // Start first findMove
+        final future1 = service.findMove(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Start second findMove before first completes
+        final future2 = service.findMove(work2);
+        async.flushMicrotasks();
+
+        // First future should throw MoveRequestCancelledException
+        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
+
+        // Emit bestmove for second request
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // Second future should complete with the move
+        final move2 = await future2;
+        expect(move2, equals('e2e4'));
       });
     });
   });

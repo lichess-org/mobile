@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
@@ -34,7 +34,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
 
   @override
   void initState() {
-    ref.read(evaluationServiceProvider).checkNNUEFiles().then((good) {
+    ref.read(nnueServiceProvider).checkNNUEFiles().then((good) {
       if (mounted) {
         setState(() {
           _hasVerifiedNNUEFiles = good;
@@ -42,7 +42,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       }
     });
 
-    _downloadProgress = ref.read(evaluationServiceProvider).nnueDownloadProgress;
+    _downloadProgress = ref.read(nnueServiceProvider).nnueDownloadProgress;
     _downloadProgress.addListener(_onDownloadProgressChanged);
 
     super.initState();
@@ -96,7 +96,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == true) {
                           setState(() {
                             _downloadNNUEFilesFuture = ref
-                                .read(evaluationServiceProvider)
+                                .read(nnueServiceProvider)
                                 .downloadNNUEFiles(inBackground: false);
                           });
                         }
@@ -108,7 +108,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   LoadingButtonBuilder(
                     initialFuture: _downloadNNUEFilesFuture,
                     fetchData: () =>
-                        ref.read(evaluationServiceProvider).downloadNNUEFiles(inBackground: false),
+                        ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false),
                     builder: (context, isLoading, fetchData) {
                       return ListTile(
                         trailing: isLoading
@@ -164,7 +164,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         },
                       );
                       if (isOk == true) {
-                        await ref.read(evaluationServiceProvider).deleteNNUEFiles();
+                        await ref.read(nnueServiceProvider).deleteNNUEFiles();
                         setState(() {
                           _hasVerifiedNNUEFiles = false;
                         });

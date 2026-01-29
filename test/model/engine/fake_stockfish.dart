@@ -140,6 +140,9 @@ class DelayedFakeStockfish implements Stockfish {
   int quitCallCount = 0;
   final List<String> stdinCommands = [];
 
+  /// Tracks UCI options that have been set.
+  final Map<String, String> options = {};
+
   int get stopCallCount => stdinCommands.where((cmd) => cmd.startsWith('stop')).length;
 
   void _emit(String line) {
@@ -221,6 +224,15 @@ class DelayedFakeStockfish implements Stockfish {
               }
             }
           }
+        }
+      case 'setoption':
+        // Parse "setoption name <name> value <value>"
+        final nameIndex = parts.indexOf('name');
+        final valueIndex = parts.indexOf('value');
+        if (nameIndex != -1 && valueIndex != -1 && valueIndex > nameIndex) {
+          final name = parts.sublist(nameIndex + 1, valueIndex).join(' ');
+          final value = parts.sublist(valueIndex + 1).join(' ');
+          options[name] = value;
         }
       case 'go':
         if (parts.length > 1 && parts[1] == 'movetime') {
