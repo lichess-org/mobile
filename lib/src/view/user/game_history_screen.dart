@@ -27,13 +27,12 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-// TODO l10n
 String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
   switch (mode) {
     case GameHistoryDisplayMode.compact:
-      return 'Compact';
+      return context.l10n.mobileDisplayModeCompact;
     case GameHistoryDisplayMode.detail:
-      return 'Detailed';
+      return context.l10n.mobileDisplayModeDetailed;
   }
 }
 
@@ -304,7 +303,6 @@ class _BodyState extends ConsumerState<_Body> {
                                 icon: game.isBookmarked
                                     ? Icons.bookmark_remove_outlined
                                     : Icons.bookmark_add_outlined,
-                                // TODO l10n
                                 label: game.isBookmarked
                                     ? context.l10n.mobileRemoveBookmark
                                     : context.l10n.bookmarkThisGame,

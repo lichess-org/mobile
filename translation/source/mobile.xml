@@ -79,4 +79,12 @@
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: You can add more widgets to the Home Screen or remove those you don't need!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">Customize</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Stop showing threat</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Completed</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Jump to my page</string>
+  <string name="displayModeCompact" comment="">Compact</string>
+  <string name="displayModeDetailed" comment="">Detailed</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Opening Explorer is not available offline.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Previous</string>
 </resources>
