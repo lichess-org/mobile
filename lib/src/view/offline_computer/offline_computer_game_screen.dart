@@ -294,9 +294,15 @@ class _Player extends ConsumerWidget {
     }
 
     // Human player - just show captured pieces
-    return MaterialDifferenceDisplay(
-      materialDiff: materialDiff,
-      materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+    return Row(
+      mainAxisSize: .max,
+      mainAxisAlignment: .start,
+      children: [
+        MaterialDifferenceDisplay(
+          materialDiff: materialDiff,
+          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+        ),
+      ],
     );
   }
 }
