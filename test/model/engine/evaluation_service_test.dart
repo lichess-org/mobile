@@ -531,59 +531,6 @@ void main() {
   });
 
   group('EvaluationService', () {
-    test('Concurrent NNUE download operations are prevented', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      bool secondCallReturned = false;
-      bool secondCallResult = true;
-
-      // Start first download (will fail due to missing connectivity/files, but that's ok)
-      final firstDownload = service.downloadNNUEFiles(inBackground: true).catchError((_) {
-        return false;
-      });
-
-      // Immediately start second download while first is in progress
-      final secondDownload = service
-          .downloadNNUEFiles(inBackground: true)
-          .then((result) {
-            secondCallReturned = true;
-            secondCallResult = result;
-            return result;
-          })
-          .catchError((_) {
-            secondCallReturned = true;
-            secondCallResult = false;
-            return false;
-          });
-
-      await Future.wait([firstDownload, secondDownload]);
-
-      expect(secondCallReturned, isTrue);
-      expect(
-        secondCallResult,
-        isFalse,
-        reason: 'Second concurrent download call should be rejected',
-      );
-    });
-
-    test('Sequential NNUE downloads are allowed', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      // First download
-      await service.downloadNNUEFiles(inBackground: true).catchError((_) => false);
-
-      // Wait for first to complete, then start second
-      final secondResult = await service
-          .downloadNNUEFiles(inBackground: true)
-          .catchError((_) => false);
-
-      // Second call should be allowed since first completed
-      // (will still fail due to missing files, but won't be rejected by the flag)
-      expect(secondResult, isA<bool>());
-    });
-
     test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);

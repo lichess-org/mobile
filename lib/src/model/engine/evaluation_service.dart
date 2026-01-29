@@ -30,8 +30,7 @@ final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngi
 /// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
-/// Exception thrown when [EvaluationService.findMove] is called with a variant
-/// not supported by the engine.
+/// Exception thrown when the engine does not support the requested variant.
 class EngineUnsupportedVariantException implements Exception {
   const EngineUnsupportedVariantException(this.variant);
 
@@ -105,12 +104,6 @@ class EvaluationService {
 
   /// Pending move request state.
   (Completer<UCIMove>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
-
-  /// Expose NNUE download progress from the nnue service.
-  ValueListenable<double> get nnueDownloadProgress => _nnueService.nnueDownloadProgress;
-
-  /// Whether NNUE files are currently being downloaded.
-  bool get isDownloadingNNUEFiles => _nnueService.isDownloadingNNUEFiles;
 
   final _evalController = StreamController<EvalResult>.broadcast();
   final _moveController = StreamController<MoveResult>.broadcast();
@@ -503,22 +496,6 @@ class EvaluationService {
     _moveController.close();
     _evaluationState.dispose();
   }
-
-  /// Check the presence and integrity of the NNUE files.
-  ///
-  /// Delegates to [NnueService.checkNNUEFiles].
-  Future<bool> checkNNUEFiles() => _nnueService.checkNNUEFiles();
-
-  /// Download the NNUE files.
-  ///
-  /// Delegates to [NnueService.downloadNNUEFiles].
-  Future<bool> downloadNNUEFiles({bool inBackground = true}) =>
-      _nnueService.downloadNNUEFiles(inBackground: inBackground);
-
-  /// Delete the NNUE files.
-  ///
-  /// Delegates to [NnueService.deleteNNUEFiles].
-  Future<void> deleteNNUEFiles() => _nnueService.deleteNNUEFiles();
 }
 
 /// Engine state.
