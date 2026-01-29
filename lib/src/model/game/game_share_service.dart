@@ -66,7 +66,14 @@ class GameShareService {
   }
 
   /// Fetches the GIF animation of a game.
-  Future<(XFile, ExportedGame)> gameGif(GameId id, Side orientation) async {
+  Future<(XFile, ExportedGame)> gameGif(
+    GameId id,
+    Side orientation, {
+    bool playerNames = true,
+    bool showPlayerRatings = true,
+    bool moveAnnotations = false,
+    bool chessClock = false,
+  }) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
     final boardTheme = boardPreferences.boardTheme == BoardTheme.system
         ? BoardTheme.brown
@@ -77,7 +84,7 @@ class GameShareService {
           .read(defaultClientProvider)
           .get(
             Uri.parse(
-              '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
+              '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}&players=$playerNames&ratings=$showPlayerRatings&glyphs=$moveAnnotations&clocks=$chessClock',
             ),
           ),
       _ref.read(gameRepositoryProvider).getGame(id),
