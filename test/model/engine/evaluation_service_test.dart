@@ -1117,30 +1117,40 @@ void main() {
       expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
     });
 
-    test('findMove uses multiPv=4', () async {
+    test('findMove uses multiPv scaled by elo', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = makeMoveWork();
+      // At elo 1500, multiPv = (10 - ((1500-1320)/(2500-1320)*7)).toInt() = 8
+      final work = makeMoveWork(elo: 1500);
       await service.findMove(work);
 
-      expect(delayedStockfish.options['MultiPV'], equals('4'));
+      expect(delayedStockfish.options['MultiPV'], equals('8'));
     });
 
     test('MoveWork.searchTime scales with elo', () {
-      final lowElo = makeMoveWork(elo: 1000);
-      final midElo = makeMoveWork(elo: 1750);
+      final lowElo = makeMoveWork(elo: 1320);
+      final midElo = makeMoveWork(elo: 1800);
       final highElo = makeMoveWork(elo: 2500);
 
-      // At elo 1000, searchTime should be 500ms
-      expect(lowElo.searchTime.inMilliseconds, equals(500));
-      // At elo 1750, searchTime should be 1250ms
-      expect(midElo.searchTime.inMilliseconds, equals(1250));
-      // At elo 2500, searchTime should be 2000ms
-      expect(highElo.searchTime.inMilliseconds, equals(2000));
+      // searchTime = (150 + ((elo - 1320) / (2500 - 1320) * 1350)).clamp(150, 1500)
+      expect(lowElo.searchTime.inMilliseconds, equals(150));
+      expect(midElo.searchTime.inMilliseconds, equals(699));
+      expect(highElo.searchTime.inMilliseconds, equals(1500));
+    });
+
+    test('MoveWork.multiPv scales inversely with elo', () {
+      final lowElo = makeMoveWork(elo: 1320);
+      final midElo = makeMoveWork(elo: 1800);
+      final highElo = makeMoveWork(elo: 2500);
+
+      // multiPv = (10 - ((elo - 1320) / (2500 - 1320) * 7)).clamp(3, 10)
+      expect(lowElo.multiPv, equals(10));
+      expect(midElo.multiPv, equals(7));
+      expect(highElo.multiPv, equals(3));
     });
 
     test('findMove transitions state from initial to loading to idle', () async {

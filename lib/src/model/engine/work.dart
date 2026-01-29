@@ -101,15 +101,31 @@ sealed class MoveWork extends Work with _$MoveWork {
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// Number of principal variations to compute for move selection.
+  ///
+  /// Stockfish's strength limiting works by applying a randomized bias to scores
+  /// of slightly worse moves among at least 4 candidates. MultiPV increases
+  /// this candidate pool, giving more suboptimal moves to choose from at lower Elos.
   @override
-  int get multiPv => 4;
+  int get multiPv {
+    // Scale MultiPV inversely with Elo:
+    // - At 1320 Elo: MultiPV = 10 (larger candidate pool)
+    // - At 2500 Elo: MultiPV = 3 (smaller candidate pool)
+    final pv = (10 - ((elo - 1320) / (2500 - 1320) * 7)).clamp(3, 10).toInt();
+    return pv;
+  }
 
   /// Search time based on Elo rating.
-  /// Higher Elo gets more search time for better move quality.
+  ///
+  /// Lower Elos get shorter search times since the strength limiting mechanism
+  /// (randomized bias on move scores) selects the move early in the search
+  /// at depth = 1 + Skill Level.
   @override
   Duration get searchTime {
-    // Scale search time based on elo: 500ms at 1000 elo, up to 2000ms at 2500 elo
-    final ms = ((elo - 1000) / 1500 * 1500 + 500).clamp(500, 2000).toInt();
+    // Scale search time based on Elo:
+    // - At 1320 Elo: ~150ms
+    // - At 1800 Elo: ~500ms
+    // - At 2500 Elo: ~1500ms
+    final ms = (150 + ((elo - 1320) / (2500 - 1320) * 1350)).clamp(150, 1500).toInt();
     return Duration(milliseconds: ms);
   }
 }
