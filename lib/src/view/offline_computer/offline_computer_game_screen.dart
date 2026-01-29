@@ -265,7 +265,10 @@ class _Player extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      'Stockfish (${game.engineElo})',
+                      context.l10n.aiNameLevelAiLevel(
+                        'Stockfish',
+                        game.stockfishLevel.level.toString(),
+                      ),
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -306,7 +309,7 @@ class _NewGameDialog extends ConsumerStatefulWidget {
 }
 
 class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
-  int _selectedElo = kStockfishDefaultElo;
+  StockfishLevel _selectedLevel = StockfishLevel.defaultLevel;
   Side? _selectedSide;
 
   @override
@@ -319,13 +322,13 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 16),
-            Text('Stockfish Elo: $_selectedElo'),
+            Text('${context.l10n.level}: ${_selectedLevel.level}'),
             NonLinearSlider(
-              value: _selectedElo,
-              values: kStockfishEloChoices,
+              value: _selectedLevel.level,
+              values: StockfishLevel.values.map((l) => l.level).toList(),
               onChangeEnd: (value) {
                 setState(() {
-                  _selectedElo = value.toInt();
+                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
                 });
               },
             ),
@@ -334,7 +337,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
-              alignment: .center,
+              alignment: WrapAlignment.center,
               children: [
                 ChoiceChip(
                   label: const Text('White'),
@@ -363,7 +366,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
             final side = _selectedSide ?? Side.values[Random().nextInt(2)];
             ref
                 .read(offlineComputerGameControllerProvider.notifier)
-                .startNewGame(engineElo: _selectedElo, playerSide: side);
+                .startNewGame(stockfishLevel: _selectedLevel, playerSide: side);
             Navigator.pop(context);
           },
           child: Text(context.l10n.play),

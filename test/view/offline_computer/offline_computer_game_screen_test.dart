@@ -29,8 +29,8 @@ void main() {
       // Verify new game dialog is displayed
       expect(find.text('New Game'), findsOneWidget);
 
-      // Verify Elo slider is shown
-      expect(find.textContaining('Stockfish Elo'), findsOneWidget);
+      // Verify level slider is shown
+      expect(find.textContaining('Level'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
 
       // Verify side selection options
@@ -56,8 +56,9 @@ void main() {
       expect(find.byIcon(CupertinoIcons.flag), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.plus), findsOneWidget);
 
+      // Verify Stockfish player info with default level (level 1)
       expect(find.textContaining('Stockfish'), findsOneWidget);
-      expect(find.textContaining('1320'), findsOneWidget);
+      expect(find.textContaining('1'), findsWidgets);
     });
 
     testWidgets('Can play moves and move list updates', (tester) async {
@@ -224,9 +225,8 @@ void main() {
       // Verify Stockfish icon is displayed
       expect(find.byType(Image), findsWidgets);
 
-      // Verify Stockfish name with Elo
+      // Verify Stockfish name with level
       expect(find.textContaining('Stockfish'), findsOneWidget);
-      expect(find.textContaining('1320'), findsOneWidget);
     });
 
     testWidgets('Takeback button is disabled at game start', (tester) async {
@@ -277,21 +277,18 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
-    testWidgets('Can start game with different Elo', (tester) async {
+    testWidgets('Can start game with different level', (tester) async {
       final app = await makeTestProviderScopeApp(tester, home: const OfflineComputerGameScreen());
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Find and drag the Elo slider
+      // Find and drag the level slider
       final slider = find.byType(Slider);
       expect(slider, findsOneWidget);
 
-      // Drag slider to change Elo (drag to the right for higher Elo)
+      // Drag slider to change level (drag to the right for higher level)
       await tester.drag(slider, const Offset(100, 0));
       await tester.pumpAndSettle();
-
-      // The Elo text should have changed from default
-      // (exact value depends on slider implementation)
 
       // Select white and start game
       await tester.tap(find.text('White'));

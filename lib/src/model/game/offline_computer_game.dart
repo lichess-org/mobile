@@ -10,24 +10,32 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'offline_computer_game.freezed.dart';
 
-/// Available Stockfish Elo ratings for game creation.
-/// Distribution favors lower Elos with more granularity.
-const kStockfishEloChoices = [
-  1320,
-  1450,
-  1550,
-  1650,
-  1750,
-  1850,
-  1950,
-  2100,
-  2300,
-  2550,
-  2850,
-  3190,
-];
+/// Stockfish strength levels. Level 1 is the easiest, level 12 is the hardest.
+enum StockfishLevel {
+  level1(1320),
+  level2(1450),
+  level3(1550),
+  level4(1650),
+  level5(1750),
+  level6(1850),
+  level7(1950),
+  level8(2100),
+  level9(2300),
+  level10(2550),
+  level11(2850),
+  level12(3190);
 
-const kStockfishDefaultElo = 1320;
+  const StockfishLevel(this.elo);
+
+  /// The internal Elo rating used to limit Stockfish strength.
+  final int elo;
+
+  /// The display level number (1-12).
+  int get level => index + 1;
+
+  /// The default level for new games.
+  static const defaultLevel = StockfishLevel.level1;
+}
 
 /// An offline game played against the local Stockfish engine.
 @Freezed(fromJson: false, toJson: false)
@@ -59,8 +67,8 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
     /// The side the human player is playing as.
     required Side playerSide,
 
-    /// The Elo rating of the Stockfish opponent.
-    required int engineElo,
+    /// The Stockfish strength level.
+    required StockfishLevel stockfishLevel,
 
     /// The player's data.
     required Player humanPlayer,
@@ -79,9 +87,8 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
   Player get black => playerSide == Side.black ? humanPlayer : enginePlayer;
 }
 
-/// Returns a Player representing the Stockfish engine at the given Elo.
-Player stockfishPlayer(int elo) => Player(
+/// Returns a Player representing the Stockfish engine.
+Player stockfishPlayer() => const Player(
   onGame: true,
-  rating: elo,
-  user: LightUser(id: const UserId('stockfish'), name: 'Stockfish ($elo)'),
+  user: LightUser(id: UserId('stockfish'), name: 'Stockfish'),
 );

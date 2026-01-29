@@ -31,14 +31,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       evaluationService.quit();
     });
     return OfflineComputerGameState.initial(
-      engineElo: kStockfishDefaultElo,
+      stockfishLevel: StockfishLevel.defaultLevel,
       playerSide: Side.white,
     );
   }
 
-  void startNewGame({required int engineElo, required Side playerSide}) {
+  void startNewGame({required StockfishLevel stockfishLevel, required Side playerSide}) {
     ref.read(evaluationServiceProvider).quit();
-    state = OfflineComputerGameState.initial(engineElo: engineElo, playerSide: playerSide);
+    state = OfflineComputerGameState.initial(stockfishLevel: stockfishLevel, playerSide: playerSide);
 
     // If computer plays first (player is black), trigger engine move
     if (playerSide == Side.black) {
@@ -135,7 +135,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: enginePrefs.numEngineCores,
         initialPosition: state.game.initialPosition,
         steps: steps,
-        elo: state.game.engineElo,
+        elo: state.game.stockfishLevel.elo,
       );
 
       final uciMove = await evaluationService.findMove(work);
@@ -223,7 +223,10 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     @Default(false) bool isEngineThinking,
   }) = _OfflineComputerGameState;
 
-  factory OfflineComputerGameState.initial({required int engineElo, required Side playerSide}) {
+  factory OfflineComputerGameState.initial({
+    required StockfishLevel stockfishLevel,
+    required Side playerSide,
+  }) {
     const position = Chess.initial;
     return OfflineComputerGameState(
       game: OfflineComputerGame(
@@ -238,9 +241,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
           perf: Perf.classical,
         ),
         playerSide: playerSide,
-        engineElo: engineElo,
+        stockfishLevel: stockfishLevel,
         humanPlayer: const Player(onGame: true),
-        enginePlayer: stockfishPlayer(engineElo),
+        enginePlayer: stockfishPlayer(),
       ),
     );
   }
