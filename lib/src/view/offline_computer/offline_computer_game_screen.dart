@@ -480,11 +480,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
         TextButton(
           onPressed: () {
             final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
-            ref.read(offlineComputerGameControllerProvider.notifier).startNewGame(
-              stockfishLevel: _selectedLevel,
-              playerSide: side,
-              casual: _casual,
-            );
+            ref
+                .read(offlineComputerGameControllerProvider.notifier)
+                .startNewGame(stockfishLevel: _selectedLevel, playerSide: side, casual: _casual);
             Navigator.pop(context);
           },
           child: Text(context.l10n.play),
