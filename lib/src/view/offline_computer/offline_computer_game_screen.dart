@@ -82,6 +82,7 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final isBoardFlipped = ref.watch(_isBoardFlippedProvider);
     final orientation = gameState.game.playerSide;
     final isPlayerTurn = gameState.turn == orientation && !gameState.isEngineThinking;
 
@@ -120,9 +121,9 @@ class _BodyState extends ConsumerState<_Body> {
               child: SafeArea(
                 child: GameLayout(
                   key: _boardKey,
-                  topTable: _Player(side: orientation.opposite),
-                  bottomTable: _Player(side: orientation),
-                  orientation: orientation,
+                  topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
+                  bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                  orientation: isBoardFlipped ? orientation.opposite : orientation,
                   fen: gameState.currentPosition.fen,
                   lastMove: gameState.lastMove,
                   interactiveBoardParams: (
@@ -197,6 +198,12 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () {
+            ref.read(_isBoardFlippedProvider.notifier).toggle();
+          },
+        ),
         BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
         if (gameState.game.finished)
           BottomSheetAction(
@@ -235,6 +242,22 @@ class _BottomBar extends ConsumerWidget {
         onNo: () => Navigator.pop(context),
       ),
     );
+  }
+}
+
+final _isBoardFlippedProvider = NotifierProvider.autoDispose<IsBoardFlippedNotifier, bool>(
+  IsBoardFlippedNotifier.new,
+  name: 'IsBoardFlippedProvider',
+);
+
+class IsBoardFlippedNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void toggle() {
+    state = !state;
   }
 }
 
@@ -350,9 +373,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 setState(() {
                   _selectedLevel = StockfishLevel.values[value.toInt() - 1];
                 });
-                ref.read(offlineComputerGamePreferencesProvider.notifier).setStockfishLevel(
-                  _selectedLevel,
-                );
+                ref
+                    .read(offlineComputerGamePreferencesProvider.notifier)
+                    .setStockfishLevel(_selectedLevel);
               },
             ),
             const SizedBox(height: 16),
@@ -367,9 +390,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                   selected: _selectedSideChoice == SideChoice.white,
                   onSelected: (_) {
                     setState(() => _selectedSideChoice = SideChoice.white);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
-                      SideChoice.white,
-                    );
+                    ref
+                        .read(offlineComputerGamePreferencesProvider.notifier)
+                        .setSideChoice(SideChoice.white);
                   },
                 ),
                 ChoiceChip(
@@ -377,9 +400,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                   selected: _selectedSideChoice == SideChoice.random,
                   onSelected: (_) {
                     setState(() => _selectedSideChoice = SideChoice.random);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
-                      SideChoice.random,
-                    );
+                    ref
+                        .read(offlineComputerGamePreferencesProvider.notifier)
+                        .setSideChoice(SideChoice.random);
                   },
                 ),
                 ChoiceChip(
@@ -387,9 +410,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                   selected: _selectedSideChoice == SideChoice.black,
                   onSelected: (_) {
                     setState(() => _selectedSideChoice = SideChoice.black);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
-                      SideChoice.black,
-                    );
+                    ref
+                        .read(offlineComputerGamePreferencesProvider.notifier)
+                        .setSideChoice(SideChoice.black);
                   },
                 ),
               ],

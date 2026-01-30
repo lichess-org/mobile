@@ -167,7 +167,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(status: GameStatus.resign, winner: state.game.playerSide.opposite),
       isEngineThinking: false,
     );
-    ref.read(evaluationServiceProvider).quit();
   }
 
   void takeback() {
