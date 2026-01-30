@@ -63,7 +63,7 @@ class PlayMenu extends ConsumerWidget {
                   rootNavigator: true,
                 ).push(OfflineComputerGameScreen.buildRoute(context));
               },
-              leading: const Icon(LichessIcons.cogs),
+              leading: const Icon(Icons.memory),
               title: Text(context.l10n.playAgainstComputer),
             ),
             ListTile(
