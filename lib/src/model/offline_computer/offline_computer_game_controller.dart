@@ -47,15 +47,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     required StockfishLevel stockfishLevel,
     required Side playerSide,
     required bool casual,
+    String? initialFen,
   }) {
     state = OfflineComputerGameState.initial(
       stockfishLevel: stockfishLevel,
       playerSide: playerSide,
       casual: casual,
+      initialFen: initialFen,
     );
 
-    // If computer plays first (player is black), trigger engine move
-    if (playerSide == Side.black) {
+    // If it's the engine's turn, trigger engine move
+    if (state.turn != playerSide) {
       _playEngineMove();
     } else if (casual) {
       // Player plays first, precompute hints (only in casual mode)
@@ -405,18 +407,21 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     required StockfishLevel stockfishLevel,
     required Side playerSide,
     bool casual = true,
+    String? initialFen,
   }) {
-    const position = Chess.initial;
+    final position = initialFen != null
+        ? Chess.fromSetup(Setup.parseFen(initialFen))
+        : Chess.initial;
     final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OfflineComputerGameState(
       game: OfflineComputerGame(
-        steps: [const GameStep(position: position)].lock,
+        steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: kInitialFEN,
+        initialFen: initialFen ?? kInitialFEN,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
-          variant: Variant.standard,
+          variant: initialFen != null ? Variant.fromPosition : Variant.standard,
           speed: Speed.classical,
           perf: Perf.classical,
         ),

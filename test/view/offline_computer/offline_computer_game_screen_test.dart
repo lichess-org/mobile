@@ -889,6 +889,252 @@ void main() {
       await tester.pumpAndSettle();
     });
   });
+
+  group('Custom starting position', () {
+    setUp(() {
+      testBinding.stockfish = LegalMoveFakeStockfish();
+    });
+
+    testWidgets('New game dialog shows mini board when initialFen is provided', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      // A position after 1.e4 e5
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(initialFen: customFen),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Verify new game dialog is shown
+      expect(find.text('Game setup'), findsOneWidget);
+
+      // Verify that a StaticChessboard is shown (the mini board preview)
+      expect(find.byType(StaticChessboard), findsOneWidget);
+    });
+
+    testWidgets('New game dialog does not show mini board without initialFen', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Verify new game dialog is shown
+      expect(find.text('Game setup'), findsOneWidget);
+
+      // No StaticChessboard should be shown in the dialog
+      expect(find.byType(StaticChessboard), findsNothing);
+    });
+
+    testWidgets('Can start game from custom position as white', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      // A position after 1.e4 e5 - it's white's turn
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(initialFen: customFen),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Select white and start game
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Verify game started with custom position
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      // The position should show e4 and e5 pawns
+      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+
+      // e2 and e7 should be empty
+      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
+      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+    });
+
+    testWidgets('Engine plays first when custom position turn differs from player side', (
+      tester,
+    ) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // A position where it's white's turn, but player chooses black
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Select black (but position has white to move)
+      await tester.tap(find.text('Black'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+
+      // Pump once to start the game
+      await tester.pump();
+
+      // The engine should be thinking (since it's white's turn and player is black)
+      var gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.black);
+
+      // Wait for engine to make its move
+      await tester.pumpAndSettle();
+
+      // After engine move, there should be at least one move in the list
+      gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.steps.length, greaterThan(1));
+    });
+
+    testWidgets('Player plays first when custom position turn matches player side', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // A position where it's black's turn, and player chooses black
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Select black (position has black to move)
+      await tester.tap(find.text('Black'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Player should be able to move (no engine move yet)
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.black);
+      expect(gameState.turn, Side.black);
+      expect(gameState.isEngineThinking, isFalse);
+      // Only the initial position step
+      expect(gameState.game.steps.length, 1);
+    });
+
+    testWidgets('Game uses Variant.fromPosition when started with custom FEN', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.meta.variant, Variant.fromPosition);
+      expect(gameState.game.initialFen, customFen);
+    });
+
+    testWidgets('Game uses Variant.standard when started without custom FEN', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.meta.variant, Variant.standard);
+      expect(gameState.game.initialFen, kInitialFEN);
+    });
+  });
 }
 
 /// Initialize an offline computer game and return the board rect.
