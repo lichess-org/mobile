@@ -131,7 +131,7 @@ sealed class MoveWork extends Work with _$MoveWork {
       // Level 12: 2
       return 2;
     } else if (elo >= 2850) {
-      // Levels 11: 3
+      // Level 11: 3
       return 3;
     } else if (elo >= 2100) {
       // Levels 8-10: 4
