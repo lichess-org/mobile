@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
@@ -56,7 +55,6 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -113,8 +111,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   void initState() {
     super.initState();
     _loadImageWorker();
-
-    showWelcomeMessage();
   }
 
   Future<void> _loadImageWorker() async {
@@ -122,68 +118,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     if (mounted) {
       setState(() {
         _worker = worker;
-      });
-    }
-  }
-
-  Future<bool> shouldDisplayWelcomeMessage() async {
-    if (LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) == true) {
-      return false;
-    }
-
-    if (ref.read(authControllerProvider) != null) {
-      return false;
-    }
-
-    final hasPlayedGames =
-        await (await ref.read(gameStorageProvider.future)).count(userId: null) > 0;
-
-    return !hasPlayedGames;
-  }
-
-  Future<void> showWelcomeMessage() async {
-    final prefs = LichessBinding.instance.sharedPreferences;
-    if (await shouldDisplayWelcomeMessage()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) return;
-        showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog.adaptive(
-            content: Container(
-              color:
-                  DialogTheme.of(context).backgroundColor ??
-                  ColorScheme.of(context).surfaceContainerHigh,
-              padding: const EdgeInsets.all(8.0),
-              child: Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    TextSpan(
-                      text: context.l10n.mobileNotAllFeaturesAreAvailable,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              PlatformDialogAction(
-                child: Text(context.l10n.ok),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        ).then((_) {
-          prefs.setBool(kWelcomeMessageShownKey, true);
-        });
       });
     }
   }
@@ -268,6 +202,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   child: Text(context.l10n.aboutX('Lichess...')),
                 ),
               ),
+              const _WelcomeMessageCard(),
               const _HomeCustomizationTip(),
             ],
           ];
@@ -1002,6 +937,66 @@ class _ChallengeScreenButton extends ConsumerWidget {
         onPressed: null,
       ),
     };
+  }
+}
+
+class _WelcomeMessageCard extends StatefulWidget {
+  const _WelcomeMessageCard();
+
+  @override
+  State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
+}
+
+class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
+  bool _shouldDisplay() {
+    return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
+  }
+
+  void _dismiss() {
+    LichessBinding.instance.sharedPreferences.setBool(kWelcomeMessageShownKey, true);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_shouldDisplay()) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      TextSpan(
+                        text: context.l10n.mobileNotAllFeaturesAreAvailable,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
