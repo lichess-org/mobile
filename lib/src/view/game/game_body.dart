@@ -245,7 +245,7 @@ class GameBody extends ConsumerWidget {
           child: WakelockWidget(
             shouldEnableOnFocusGained: () => gameState.game.playable,
             child: GameLayout(
-              key: boardKey,
+              boardKey: boardKey,
               boardSettingsOverrides: BoardSettingsOverrides(
                 animationDuration: animationDuration,
                 autoQueenPromotion: gameState.canAutoQueen,
