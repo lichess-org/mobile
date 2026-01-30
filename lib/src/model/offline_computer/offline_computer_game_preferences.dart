@@ -38,6 +38,10 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
   Future<void> setSideChoice(SideChoice sideChoice) {
     return save(state.copyWith(sideChoice: sideChoice));
   }
+
+  Future<void> setCasual(bool casual) {
+    return save(state.copyWith(casual: casual));
+  }
 }
 
 /// Represents the player's color choice for offline computer games.
@@ -66,11 +70,13 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   const factory OfflineComputerGamePrefs({
     required StockfishLevel stockfishLevel,
     required SideChoice sideChoice,
+    @Default(true) bool casual,
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
     stockfishLevel: StockfishLevel.defaultLevel,
     sideChoice: SideChoice.random,
+    casual: true,
   );
 
   factory OfflineComputerGamePrefs.fromJson(Map<String, dynamic> json) {

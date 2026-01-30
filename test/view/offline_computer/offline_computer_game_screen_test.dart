@@ -364,6 +364,78 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
+    testWidgets('Casual switch is shown in new game dialog', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Verify casual switch is shown
+      expect(find.text('Casual'), findsOneWidget);
+      expect(find.text('Allow takebacks and hints'), findsOneWidget);
+      expect(find.byType(Switch), findsOneWidget);
+    });
+
+    testWidgets('Takeback and hint buttons are disabled in non-casual mode', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Turn off casual mode
+      await tester.tap(find.byType(Switch));
+      await tester.pump();
+
+      // Start game
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Play a move so takeback would normally be available
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+
+      // Find the takeback button - should be disabled
+      final takebackButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.arrow_uturn_left),
+        matching: find.byType(BottomBarButton),
+      );
+      expect(takebackButton, findsOneWidget);
+      final takebackWidget = tester.widget<BottomBarButton>(takebackButton);
+      expect(takebackWidget.onTap, isNull);
+
+      // Find the hint button - should be disabled
+      final hintButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.lightbulb),
+        matching: find.byType(BottomBarButton),
+      );
+      expect(hintButton, findsOneWidget);
+      final hintWidget = tester.widget<BottomBarButton>(hintButton);
+      expect(hintWidget.onTap, isNull);
+    });
+
     testWidgets('Loading saved game restores position', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
 

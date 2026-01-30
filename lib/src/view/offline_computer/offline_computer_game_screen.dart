@@ -205,7 +205,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         BottomBarButton(
           label: context.l10n.takeback,
-          onTap: gameState.canTakeback
+          onTap: gameState.canTakeback && gameState.game.casual
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
@@ -279,7 +279,8 @@ class _BottomBar extends ConsumerWidget {
   }
 
   bool _canGetHint(OfflineComputerGameState gameState) {
-    return gameState.game.playable &&
+    return gameState.game.casual &&
+        gameState.game.playable &&
         !gameState.isEngineThinking &&
         !gameState.isLoadingHint &&
         gameState.turn == gameState.game.playerSide;
@@ -382,6 +383,7 @@ class _NewGameDialog extends ConsumerStatefulWidget {
 class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
+  late bool _casual;
 
   @override
   void initState() {
@@ -389,6 +391,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
+    _casual = prefs.casual;
   }
 
   @override
@@ -458,6 +461,17 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            SwitchListTile.adaptive(
+              title: Text(context.l10n.casual),
+              subtitle: const Text('Allow takebacks and hints'),
+              value: _casual,
+              onChanged: (value) {
+                setState(() => _casual = value);
+                ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
           ],
         ),
       ),
@@ -466,9 +480,11 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
         TextButton(
           onPressed: () {
             final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
-            ref
-                .read(offlineComputerGameControllerProvider.notifier)
-                .startNewGame(stockfishLevel: _selectedLevel, playerSide: side);
+            ref.read(offlineComputerGameControllerProvider.notifier).startNewGame(
+              stockfishLevel: _selectedLevel,
+              playerSide: side,
+              casual: _casual,
+            );
             Navigator.pop(context);
           },
           child: Text(context.l10n.play),

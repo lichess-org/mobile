@@ -74,6 +74,9 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
     /// The Stockfish strength level.
     required StockfishLevel stockfishLevel,
 
+    /// Whether the game is casual (allows takebacks and hints).
+    @Default(true) bool casual,
+
     /// The player's data.
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(Player(onGame: true))

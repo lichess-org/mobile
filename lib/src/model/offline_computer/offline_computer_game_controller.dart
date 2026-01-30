@@ -43,17 +43,22 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
   }
 
-  void startNewGame({required StockfishLevel stockfishLevel, required Side playerSide}) {
+  void startNewGame({
+    required StockfishLevel stockfishLevel,
+    required Side playerSide,
+    required bool casual,
+  }) {
     state = OfflineComputerGameState.initial(
       stockfishLevel: stockfishLevel,
       playerSide: playerSide,
+      casual: casual,
     );
 
     // If computer plays first (player is black), trigger engine move
     if (playerSide == Side.black) {
       _playEngineMove();
-    } else {
-      // Player plays first, precompute hints
+    } else if (casual) {
+      // Player plays first, precompute hints (only in casual mode)
       _computeHints();
     }
   }
@@ -66,8 +71,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       stepCursor: game.steps.length - 1,
     );
 
-    // If it's the player's turn and game is still playable, precompute hints
-    if (game.playable && state.turn == game.playerSide) {
+    // If it's the player's turn and game is still playable, precompute hints (only in casual mode)
+    if (game.playable && state.turn == game.playerSide && game.casual) {
       _computeHints();
     }
     // If it's the engine's turn and game is still playable, trigger engine move
@@ -200,7 +205,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   void takeback() {
-    if (!state.canTakeback) return;
+    if (!state.canTakeback || !state.game.casual) return;
 
     // Cancel any pending engine move
     ref.read(evaluationServiceProvider).stop();
@@ -222,10 +227,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // If after takeback it's engine's turn, play engine move
-    // Otherwise precompute hints for player's turn
+    // Otherwise precompute hints for player's turn (only in casual mode)
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
-    } else if (state.game.playable) {
+    } else if (state.game.playable && state.game.casual) {
       _computeHints();
     }
   }
@@ -244,9 +249,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Show or cycle through hints.
   ///
-  /// Hints are precomputed when it's the player's turn.
+  /// Hints are precomputed when it's the player's turn (only in casual mode).
   /// This method just cycles through the available hints.
   void hint() {
+    if (!state.game.casual) return;
     if (!state.game.playable || state.isEngineThinking || state.isLoadingHint) return;
     if (state.turn != state.game.playerSide) return;
 
@@ -264,8 +270,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Precompute hints for the current position.
   ///
-  /// Called automatically when it's the player's turn.
+  /// Called automatically when it's the player's turn (only in casual mode).
   Future<void> _computeHints() async {
+    if (!state.game.casual) return;
     if (!state.game.playable || state.turn != state.game.playerSide) return;
 
     state = state.copyWith(isLoadingHint: true, hintMoves: null, hintIndex: null);
@@ -397,6 +404,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   factory OfflineComputerGameState.initial({
     required StockfishLevel stockfishLevel,
     required Side playerSide,
+    bool casual = true,
   }) {
     const position = Chess.initial;
     final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
@@ -414,6 +422,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
         ),
         playerSide: playerSide,
         stockfishLevel: stockfishLevel,
+        casual: casual,
         humanPlayer: const Player(onGame: true),
         enginePlayer: stockfishPlayer(),
       ),
