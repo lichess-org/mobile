@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -315,17 +316,25 @@ class _NewGameDialog extends ConsumerStatefulWidget {
 }
 
 class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
-  StockfishLevel _selectedLevel = StockfishLevel.defaultLevel;
-  Side? _selectedSide;
+  late StockfishLevel _selectedLevel;
+  late SideChoice _selectedSideChoice;
+
+  @override
+  void initState() {
+    super.initState();
+    final prefs = ref.read(offlineComputerGamePreferencesProvider);
+    _selectedLevel = prefs.stockfishLevel;
+    _selectedSideChoice = prefs.sideChoice;
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
       title: Text(context.l10n.gameSetup),
       content: Material(
-        type: .transparency,
+        type: MaterialType.transparency,
         child: Column(
-          mainAxisSize: .min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 16),
             Text('${context.l10n.level}: ${_selectedLevel.level}'),
@@ -341,6 +350,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 setState(() {
                   _selectedLevel = StockfishLevel.values[value.toInt() - 1];
                 });
+                ref.read(offlineComputerGamePreferencesProvider.notifier).setStockfishLevel(
+                  _selectedLevel,
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -348,22 +360,37 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
-              alignment: .center,
+              alignment: WrapAlignment.center,
               children: [
                 ChoiceChip(
                   label: Text(context.l10n.white),
-                  selected: _selectedSide == .white,
-                  onSelected: (_) => setState(() => _selectedSide = .white),
+                  selected: _selectedSideChoice == SideChoice.white,
+                  onSelected: (_) {
+                    setState(() => _selectedSideChoice = SideChoice.white);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
+                      SideChoice.white,
+                    );
+                  },
                 ),
                 ChoiceChip(
                   label: Text(context.l10n.randomColor),
-                  selected: _selectedSide == null,
-                  onSelected: (_) => setState(() => _selectedSide = null),
+                  selected: _selectedSideChoice == SideChoice.random,
+                  onSelected: (_) {
+                    setState(() => _selectedSideChoice = SideChoice.random);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
+                      SideChoice.random,
+                    );
+                  },
                 ),
                 ChoiceChip(
                   label: Text(context.l10n.black),
-                  selected: _selectedSide == .black,
-                  onSelected: (_) => setState(() => _selectedSide = .black),
+                  selected: _selectedSideChoice == SideChoice.black,
+                  onSelected: (_) {
+                    setState(() => _selectedSideChoice = SideChoice.black);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(
+                      SideChoice.black,
+                    );
+                  },
                 ),
               ],
             ),
@@ -374,7 +401,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
         TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.cancel)),
         TextButton(
           onPressed: () {
-            final side = _selectedSide ?? Side.values[Random().nextInt(2)];
+            final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
             ref
                 .read(offlineComputerGameControllerProvider.notifier)
                 .startNewGame(stockfishLevel: _selectedLevel, playerSide: side);

@@ -26,17 +26,17 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Verify new game dialog is displayed
-      expect(find.text('New Game'), findsOneWidget);
+      // Verify new game dialog is displayed (title is "Game setup")
+      expect(find.text('Game setup'), findsOneWidget);
 
       // Verify level slider is shown
       expect(find.textContaining('Level'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
 
-      // Verify side selection options
-      expect(find.text('Play as'), findsOneWidget);
+      // Verify side selection options (label is "Side")
+      expect(find.text('Side'), findsOneWidget);
       expect(find.text('White'), findsOneWidget);
-      expect(find.text('Random'), findsOneWidget);
+      expect(find.text('Random side'), findsOneWidget);
       expect(find.text('Black'), findsOneWidget);
 
       // Verify action buttons
@@ -48,7 +48,7 @@ void main() {
       await initOfflineComputerGame(tester);
 
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.text('Play vs Computer'), findsOneWidget);
+      expect(find.text('Play against computer'), findsOneWidget);
 
       expect(find.byType(BottomBar), findsOneWidget);
       expect(find.byIcon(Icons.menu), findsOneWidget);
@@ -185,8 +185,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify new game dialog is shown with all options
-      expect(find.text('New Game'), findsOneWidget);
-      expect(find.text('Play as'), findsOneWidget);
+      expect(find.text('Game setup'), findsOneWidget);
+      expect(find.text('Side'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
     });
 
@@ -266,14 +266,14 @@ void main() {
       await tester.tap(find.byIcon(CupertinoIcons.plus));
       await tester.pumpAndSettle();
 
-      expect(find.text('New Game'), findsOneWidget);
+      expect(find.text('Game setup'), findsOneWidget);
 
       // Cancel the dialog
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
 
       // Dialog should be closed, game should still be visible
-      expect(find.text('New Game'), findsNothing);
+      expect(find.text('Game setup'), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
 

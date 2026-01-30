@@ -29,7 +29,8 @@ enum PrefCategory {
   gameHistory('preferences.gameHistory'),
   puzzle('preferences.puzzle'),
   broadcast('preferences.broadcast'),
-  engineEvaluation('preferences.engineEvaluation');
+  engineEvaluation('preferences.engineEvaluation'),
+  offlineComputerGame('preferences.offlineComputerGame');
 
   const PrefCategory(this.storageKey);
 
