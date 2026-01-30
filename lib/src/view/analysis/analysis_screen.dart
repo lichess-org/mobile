@@ -31,6 +31,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -610,6 +611,16 @@ class _BottomBar extends ConsumerWidget {
               Navigator.of(
                 context,
               ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
+            },
+          ),
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.continueFromHere),
+            onPressed: () {
+              final boardFen = analysisState.currentPosition.fen;
+              Navigator.of(
+                context,
+              ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)

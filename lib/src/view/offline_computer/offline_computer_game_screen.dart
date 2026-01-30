@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
@@ -28,23 +29,28 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OfflineComputerGameScreen extends StatelessWidget {
-  const OfflineComputerGameScreen({super.key});
+  const OfflineComputerGameScreen({this.initialFen, super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OfflineComputerGameScreen());
+  /// Optional initial FEN to start the game from a custom position.
+  final String? initialFen;
+
+  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
+    return buildScreenRoute(context, screen: OfflineComputerGameScreen(initialFen: initialFen));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.playAgainstComputer)),
-      body: const _Body(),
+      body: _Body(initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body();
+  const _Body({this.initialFen});
+
+  final String? initialFen;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -58,6 +64,13 @@ class _BodyState extends ConsumerState<_Body> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // If we have an initial FEN, always show the new game dialog
+      if (widget.initialFen != null) {
+        if (!mounted) return;
+        _showNewGameDialog();
+        return;
+      }
+
       final ongoingGame = await ref.read(offlineComputerGameStorageProvider).fetchOngoingGame();
       if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
         ref.read(offlineComputerGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
@@ -183,7 +196,10 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog() {
-    showAdaptiveDialog<void>(context: context, builder: (context) => const _NewGameDialog());
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) => _NewGameDialog(initialFen: widget.initialFen),
+    );
   }
 }
 
@@ -374,7 +390,9 @@ class _Player extends ConsumerWidget {
 }
 
 class _NewGameDialog extends ConsumerStatefulWidget {
-  const _NewGameDialog();
+  const _NewGameDialog({this.initialFen});
+
+  final String? initialFen;
 
   @override
   ConsumerState<_NewGameDialog> createState() => _NewGameDialogState();
@@ -384,6 +402,12 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
   late bool _casual;
+
+  String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
+    SideChoice.white => context.l10n.white,
+    SideChoice.random => context.l10n.randomColor,
+    SideChoice.black => context.l10n.black,
+  };
 
   @override
   void initState() {
@@ -396,6 +420,8 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+
     return AlertDialog.adaptive(
       title: Text(context.l10n.gameSetup),
       content: Material(
@@ -403,7 +429,26 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 16),
+            if (widget.initialFen != null) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: 150,
+                height: 150,
+                child: StaticChessboard(
+                  size: 150,
+                  fen: widget.initialFen!,
+                  orientation: _selectedSideChoice.toSide() ?? Side.white,
+                  pieceAssets: boardPrefs.pieceSet.assets,
+                  colorScheme: boardPrefs.boardTheme.colors,
+                  brightness: boardPrefs.brightness,
+                  hue: boardPrefs.hue,
+                  enableCoordinates: false,
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ] else
+              const SizedBox(height: 16),
             Text('${context.l10n.level}: ${_selectedLevel.level}'),
             NonLinearSlider(
               value: _selectedLevel.level,
@@ -422,46 +467,27 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                     .setStockfishLevel(_selectedLevel);
               },
             ),
-            const SizedBox(height: 16),
-            Text(context.l10n.side),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              alignment: WrapAlignment.center,
-              children: [
-                ChoiceChip(
-                  label: Text(context.l10n.white),
-                  selected: _selectedSideChoice == SideChoice.white,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.white);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.white);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.randomColor),
-                  selected: _selectedSideChoice == SideChoice.random,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.random);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.random);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.black),
-                  selected: _selectedSideChoice == SideChoice.black,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.black);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.black);
-                  },
-                ),
-              ],
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(context.l10n.side),
+              trailing: TextButton(
+                onPressed: () {
+                  showChoicePicker(
+                    context,
+                    choices: SideChoice.values,
+                    selectedItem: _selectedSideChoice,
+                    labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                    onSelectedItemChanged: (SideChoice choice) {
+                      setState(() => _selectedSideChoice = choice);
+                      ref
+                          .read(offlineComputerGamePreferencesProvider.notifier)
+                          .setSideChoice(choice);
+                    },
+                  );
+                },
+                child: Text(_sideChoiceLabel(context, _selectedSideChoice)),
+              ),
             ),
-            const SizedBox(height: 16),
             SwitchListTile.adaptive(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),
@@ -482,7 +508,12 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
             final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
             ref
                 .read(offlineComputerGameControllerProvider.notifier)
-                .startNewGame(stockfishLevel: _selectedLevel, playerSide: side, casual: _casual);
+                .startNewGame(
+                  stockfishLevel: _selectedLevel,
+                  playerSide: side,
+                  casual: _casual,
+                  initialFen: widget.initialFen,
+                );
             Navigator.pop(context);
           },
           child: Text(context.l10n.play),
