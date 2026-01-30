@@ -321,11 +321,11 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
-      title: const Text('New Game'),
+      title: Text(context.l10n.gameSetup),
       content: Material(
-        type: MaterialType.transparency,
+        type: .transparency,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             const SizedBox(height: 16),
             Text('${context.l10n.level}: ${_selectedLevel.level}'),
@@ -339,26 +339,26 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
               },
             ),
             const SizedBox(height: 16),
-            const Text('Play as'),
+            Text(context.l10n.side),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
-              alignment: WrapAlignment.center,
+              alignment: .center,
               children: [
                 ChoiceChip(
-                  label: const Text('White'),
-                  selected: _selectedSide == Side.white,
-                  onSelected: (_) => setState(() => _selectedSide = Side.white),
+                  label: Text(context.l10n.white),
+                  selected: _selectedSide == .white,
+                  onSelected: (_) => setState(() => _selectedSide = .white),
                 ),
                 ChoiceChip(
-                  label: const Text('Random'),
+                  label: Text(context.l10n.randomColor),
                   selected: _selectedSide == null,
                   onSelected: (_) => setState(() => _selectedSide = null),
                 ),
                 ChoiceChip(
-                  label: const Text('Black'),
-                  selected: _selectedSide == Side.black,
-                  onSelected: (_) => setState(() => _selectedSide = Side.black),
+                  label: Text(context.l10n.black),
+                  selected: _selectedSide == .black,
+                  onSelected: (_) => setState(() => _selectedSide = .black),
                 ),
               ],
             ),
