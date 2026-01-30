@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:quick_actions/quick_actions.dart';
 
@@ -55,6 +56,11 @@ class QuickActionService {
           context,
           rootNavigator: true,
         ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+      } else if (shortcutType == 'play_computer') {
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(OfflineComputerGameScreen.buildRoute(context));
       }
     });
     setQuickActions(recentSeeks);
@@ -66,6 +72,11 @@ class QuickActionService {
         type: 'play_puzzles',
         localizedTitle: l10n.puzzleDesc,
         icon: platform == TargetPlatform.iOS ? 'ExtensionIcon' : 'extension',
+      ),
+      ShortcutItem(
+        type: 'play_computer',
+        localizedTitle: l10n.playAgainstComputer,
+        icon: platform == TargetPlatform.iOS ? 'ComputerIcon' : 'computer',
       ),
 
       ...recentSeeks.asMap().entries.map((entry) {
