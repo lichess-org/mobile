@@ -615,7 +615,7 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Continue from here'),
+            makeLabel: (context) => Text(context.l10n.continueFromHere),
             onPressed: () {
               final boardFen = analysisState.currentPosition.fen;
               Navigator.of(
