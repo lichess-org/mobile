@@ -103,9 +103,9 @@ void main() {
       expect(find.byIcon(CupertinoIcons.flag), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.lightbulb), findsOneWidget);
 
-      // Verify Stockfish player info with default level (level 1)
+      // Verify Stockfish player info with default level (level 4)
       expect(find.textContaining('Stockfish'), findsOneWidget);
-      expect(find.textContaining('1'), findsWidgets);
+      expect(find.textContaining('4'), findsWidgets);
     });
 
     testWidgets('Can play moves and move list updates', (tester) async {

@@ -35,7 +35,7 @@ enum StockfishLevel {
   int get level => index + 1;
 
   /// The default level for new games.
-  static const defaultLevel = StockfishLevel.level1;
+  static const defaultLevel = StockfishLevel.level4;
 }
 
 /// An offline game played against the local Stockfish engine.
