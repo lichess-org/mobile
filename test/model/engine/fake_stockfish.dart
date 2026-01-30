@@ -533,6 +533,249 @@ class AnalysisTestStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish that returns the first legal move from the current position.
+/// This is useful for tests that need realistic game progression.
+class LegalMoveFakeStockfish implements Stockfish {
+  LegalMoveFakeStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  StockfishFlavor _flavor = StockfishFlavor.sf16;
+  Position? _position;
+
+  void _emit(String line) {
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _flavor = flavor;
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        final engineName = _flavor == StockfishFlavor.latestNoNNUE
+            ? 'Stockfish 17'
+            : 'Stockfish 16';
+        _emit('id name $engineName\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+          if (movesPartIndex != -1) {
+            for (var i = movesPartIndex + 1; i < parts.length; i++) {
+              final move = Move.parse(parts[i]);
+              if (move != null) {
+                _position = _position!.play(move);
+              }
+            }
+          }
+        }
+      case 'go':
+        if (_position != null) {
+          // Find the first legal move from the current position
+          final legalMoves = makeLegalMoves(_position!);
+          if (legalMoves.isNotEmpty) {
+            final from = legalMoves.keys.first;
+            final to = legalMoves[from]!.first;
+            final bestMove = NormalMove(from: from, to: to);
+
+            // Also find a ponder move
+            final afterBestMove = _position!.play(bestMove);
+            final ponderMoves = makeLegalMoves(afterBestMove);
+            String ponderPart = '';
+            if (ponderMoves.isNotEmpty) {
+              final ponderFrom = ponderMoves.keys.first;
+              final ponderTo = ponderMoves[ponderFrom]!.first;
+              final ponderMove = NormalMove(from: ponderFrom, to: ponderTo);
+              ponderPart = ' ponder ${ponderMove.uci}';
+            }
+
+            // Emit info and bestmove
+            final signedCp = _position!.turn == Side.white ? '23' : '-23';
+            _emit(
+              'info depth 15 seldepth 8 multipv 1 score cp $signedCp nodes 5000 nps 359000 hashfull 0 tbhits 0 time 1500 pv ${bestMove.uci}\n',
+            );
+            _emit('bestmove ${bestMove.uci}$ponderPart\n');
+          }
+        }
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
+/// A fake Stockfish that returns multiPv evaluation data for hint testing.
+/// Emits multiple principal variations with decreasing scores.
+class MultiPvFakeStockfish implements Stockfish {
+  MultiPvFakeStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  StockfishFlavor _flavor = StockfishFlavor.sf16;
+  Position? _position;
+
+  void _emit(String line) {
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _flavor = flavor;
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        final engineName = _flavor == StockfishFlavor.latestNoNNUE
+            ? 'Stockfish 17'
+            : 'Stockfish 16';
+        _emit('id name $engineName\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+          if (movesPartIndex != -1) {
+            for (var i = movesPartIndex + 1; i < parts.length; i++) {
+              final move = Move.parse(parts[i]);
+              if (move != null) {
+                _position = _position!.play(move);
+              }
+            }
+          }
+        }
+      case 'go':
+        if (_position != null) {
+          // Find legal moves from the current position
+          final legalMoves = makeLegalMoves(_position!);
+          if (legalMoves.isNotEmpty) {
+            // Get up to 5 different moves for multiPv
+            final moves = <NormalMove>[];
+            for (final entry in legalMoves.entries) {
+              if (moves.length >= 5) break;
+              moves.add(NormalMove(from: entry.key, to: entry.value.first));
+            }
+
+            // Emit multiPv info lines with decreasing scores
+            // Each pv gets 5 cp less than the previous
+            final baseCP = _position!.turn == Side.white ? 30 : -30;
+            for (var i = 0; i < moves.length; i++) {
+              final cp = _position!.turn == Side.white ? baseCP - (i * 5) : baseCP + (i * 5);
+              _emit(
+                'info depth 15 seldepth 8 multipv ${i + 1} score cp $cp nodes 5000 nps 359000 hashfull 0 tbhits 0 time 1500 pv ${moves[i].uci}\n',
+              );
+            }
+
+            // Emit bestmove
+            final afterBestMove = _position!.play(moves.first);
+            final ponderMoves = makeLegalMoves(afterBestMove);
+            String ponderPart = '';
+            if (ponderMoves.isNotEmpty) {
+              final ponderFrom = ponderMoves.keys.first;
+              final ponderTo = ponderMoves[ponderFrom]!.first;
+              final ponderMove = NormalMove(from: ponderFrom, to: ponderTo);
+              ponderPart = ' ponder ${ponderMove.uci}';
+            }
+            _emit('bestmove ${moves.first.uci}$ponderPart\n');
+          }
+        }
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
 class ErrorStockfish implements Stockfish {

@@ -88,7 +88,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
   @override
   void runBuild() {
-    _evaluationService = ref.read(evaluationServiceProvider);
+    _evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
@@ -286,8 +286,11 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
         return;
       }
       final (evalWork, eval) = event;
+      // Path is always set in EvaluationMixin context since we use a node tree.
+      final path = evalWork.path!;
+
       bool isSameEvalString = true;
-      positionTree.updateAt(evalWork.path, (node) {
+      positionTree.updateAt(path, (node) {
         final nodeEval = node.eval;
         if (nodeEval is CloudEval) {
           if (nodeEval.depth >= eval.depth &&
@@ -315,7 +318,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
       if (!ref.mounted) return;
 
-      if (evalWork.path == state.requireValue.currentPath) {
+      if (path == state.requireValue.currentPath) {
         onCurrentPathEvalChanged(isSameEvalString);
       }
     });

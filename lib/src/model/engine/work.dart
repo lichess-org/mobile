@@ -51,7 +51,9 @@ sealed class EvalWork extends Work with _$EvalWork {
     required Variant variant,
     required int threads,
     int? hashSize,
-    required UciPath path,
+
+    /// The path in the position tree. Nullable for contexts without a tree (e.g., offline games).
+    UciPath? path,
     required Duration searchTime,
     required int multiPv,
     required bool threatMode,
@@ -101,16 +103,76 @@ sealed class MoveWork extends Work with _$MoveWork {
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// Number of principal variations to compute for move selection.
+  ///
+  /// Stockfish's strength limiting works by applying a randomized bias to scores
+  /// of slightly worse moves among at least 4 candidates. MultiPV increases
+  /// this candidate pool, giving more suboptimal moves to choose from at lower Elos.
+  ///
+  /// | Level | Elo  | MultiPV |
+  /// |-------|------|---------|
+  /// | 1     | 1320 | 10      |
+  /// | 2     | 1450 | 8       |
+  /// | 3     | 1550 | 7       |
+  /// | 4     | 1650 | 6       |
+  /// | 5     | 1750 | 5       |
+  /// | 6     | 1850 | 5       |
+  /// | 7     | 1950 | 5       |
+  /// | 8     | 2100 | 4       |
+  /// | 9     | 2300 | 4       |
+  /// | 10    | 2550 | 4       |
+  /// | 11    | 2850 | 3       |
+  /// | 12    | 3190 | 2       |
   @override
-  int get multiPv => 4;
+  int get multiPv {
+    if (elo <= 1650) {
+      // Levels 1-4: fast drop from 10 to 6
+      return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
+    } else if (elo >= 3000) {
+      // Level 12: 2
+      return 2;
+    } else if (elo >= 2850) {
+      // Level 11: 3
+      return 3;
+    } else if (elo >= 2100) {
+      // Levels 8-10: 4
+      return 4;
+    } else {
+      // Levels 5-7: 5
+      return 5;
+    }
+  }
 
   /// Search time based on Elo rating.
-  /// Higher Elo gets more search time for better move quality.
+  ///
+  /// Lower Elos get shorter search times since the strength limiting mechanism
+  /// (randomized bias on move scores) selects the move early in the search
+  /// at depth = 1 + Skill Level.
+  ///
+  /// | Level | Elo  | Search Time |
+  /// |-------|------|-------------|
+  /// | 1     | 1320 | 150ms       |
+  /// | 2     | 1450 | 300ms       |
+  /// | 3     | 1550 | 410ms       |
+  /// | 4     | 1650 | 525ms       |
+  /// | 5     | 1750 | 640ms       |
+  /// | 6     | 1850 | 940ms       |
+  /// | 7     | 1950 | 1250ms      |
+  /// | 8     | 2100 | 1700ms      |
+  /// | 9     | 2300 | 2300ms      |
+  /// | 10    | 2550 | 3060ms      |
+  /// | 11    | 2850 | 3970ms      |
+  /// | 12    | 3190 | 5000ms      |
   @override
   Duration get searchTime {
-    // Scale search time based on elo: 500ms at 1000 elo, up to 2000ms at 2500 elo
-    final ms = ((elo - 1000) / 1500 * 1500 + 500).clamp(500, 2000).toInt();
-    return Duration(milliseconds: ms);
+    final int ms;
+    if (elo <= 1750) {
+      // Levels 1-5: linear from 150ms to 640ms
+      ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
+    } else {
+      // Levels 6-12: linear from 640ms to 5000ms
+      ms = (640 + ((elo - 1750) / (3190 - 1750) * 4360)).toInt();
+    }
+    return Duration(milliseconds: ms.clamp(150, 5000));
   }
 }
 
