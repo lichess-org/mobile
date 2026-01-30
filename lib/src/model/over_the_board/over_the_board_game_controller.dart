@@ -32,6 +32,10 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
   }
 
+  void loadOngoingGame(OverTheBoardGame game) {
+    state = OverTheBoardGameState(game: game, stepCursor: game.steps.length - 1);
+  }
+
   void rematch() {
     state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
   }
