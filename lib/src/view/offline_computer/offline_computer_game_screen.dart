@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
@@ -402,6 +403,12 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   late SideChoice _selectedSideChoice;
   late bool _casual;
 
+  String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
+    SideChoice.white => context.l10n.white,
+    SideChoice.random => context.l10n.randomColor,
+    SideChoice.black => context.l10n.black,
+  };
+
   @override
   void initState() {
     super.initState();
@@ -460,46 +467,27 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                     .setStockfishLevel(_selectedLevel);
               },
             ),
-            const SizedBox(height: 16),
-            Text(context.l10n.side),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              alignment: WrapAlignment.center,
-              children: [
-                ChoiceChip(
-                  label: Text(context.l10n.white),
-                  selected: _selectedSideChoice == SideChoice.white,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.white);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.white);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.randomColor),
-                  selected: _selectedSideChoice == SideChoice.random,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.random);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.random);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.black),
-                  selected: _selectedSideChoice == SideChoice.black,
-                  onSelected: (_) {
-                    setState(() => _selectedSideChoice = SideChoice.black);
-                    ref
-                        .read(offlineComputerGamePreferencesProvider.notifier)
-                        .setSideChoice(SideChoice.black);
-                  },
-                ),
-              ],
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(context.l10n.side),
+              trailing: TextButton(
+                onPressed: () {
+                  showChoicePicker(
+                    context,
+                    choices: SideChoice.values,
+                    selectedItem: _selectedSideChoice,
+                    labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                    onSelectedItemChanged: (SideChoice choice) {
+                      setState(() => _selectedSideChoice = choice);
+                      ref
+                          .read(offlineComputerGamePreferencesProvider.notifier)
+                          .setSideChoice(choice);
+                    },
+                  );
+                },
+                child: Text(_sideChoiceLabel(context, _selectedSideChoice)),
+              ),
             ),
-            const SizedBox(height: 16),
             SwitchListTile.adaptive(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),

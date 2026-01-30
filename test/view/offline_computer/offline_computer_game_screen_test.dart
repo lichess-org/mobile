@@ -80,11 +80,9 @@ void main() {
       expect(find.textContaining('Level'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
 
-      // Verify side selection options (label is "Side")
+      // Verify side selection (label is "Side" with a picker button showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
-      expect(find.text('White'), findsOneWidget);
-      expect(find.text('Random side'), findsOneWidget);
-      expect(find.text('Black'), findsOneWidget);
+      expect(find.text('Random side'), findsOneWidget); // Default selection shown on button
 
       // Verify action buttons
       expect(find.text('Cancel'), findsOneWidget);
@@ -355,8 +353,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Select white and start game
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -407,8 +404,7 @@ void main() {
       await tester.pump();
 
       // Start game
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -552,8 +548,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start a new game
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -627,8 +622,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start game as white
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
 
       // Pump once to trigger hint computation but not complete it
@@ -674,8 +668,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start game as white
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -724,8 +717,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start game as white
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -780,8 +772,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start game as white
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -832,8 +823,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Start game as white
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -964,8 +954,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Select white and start game
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -1009,8 +998,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Select black (but position has white to move)
-      await tester.tap(find.text('Black'));
-      await tester.pump();
+      await selectSide(tester, Side.black);
       await tester.tap(find.text('Play'));
 
       // Pump once to start the game
@@ -1054,8 +1042,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Select black (position has black to move)
-      await tester.tap(find.text('Black'));
-      await tester.pump();
+      await selectSide(tester, Side.black);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -1092,8 +1079,7 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -1125,8 +1111,7 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('White'));
-      await tester.pump();
+      await selectSide(tester, Side.white);
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -1135,6 +1120,22 @@ void main() {
       expect(gameState.game.initialFen, kInitialFEN);
     });
   });
+}
+
+/// Helper to select a side in the new game dialog using the picker.
+Future<void> selectSide(WidgetTester tester, Side side) async {
+  // Open the side picker by tapping on the current selection (default is "Random side")
+  await tester.tap(find.byType(TextButton).first);
+  await tester.pumpAndSettle();
+
+  // Select the desired side from the picker
+  switch (side) {
+    case Side.white:
+      await tester.tap(find.text('White'));
+    case Side.black:
+      await tester.tap(find.text('Black'));
+  }
+  await tester.pumpAndSettle();
 }
 
 /// Initialize an offline computer game and return the board rect.
@@ -1156,13 +1157,8 @@ Future<Rect> initOfflineComputerGame(WidgetTester tester, {Side side = Side.whit
   // Wait for new game dialog to show up
   await tester.pumpAndSettle();
 
-  switch (side) {
-    case Side.white:
-      await tester.tap(find.text('White'));
-    case Side.black:
-      await tester.tap(find.text('Black'));
-  }
-  await tester.pump();
+  // Select the side using the picker
+  await selectSide(tester, side);
 
   // Tap Play to start game
   await tester.tap(find.text('Play'));
