@@ -1124,7 +1124,6 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      // At elo 1500, multiPv = (10 - ((1500-1320)/(2500-1320)*7)).toInt() = 8
       final work = makeMoveWork(elo: 1500);
       await service.findMove(work);
 
@@ -1149,10 +1148,10 @@ void main() {
       final midElo = makeMoveWork(elo: 1800);
       final highElo = makeMoveWork(elo: 2500);
 
-      // multiPv = (10 - ((elo - 1320) / (2500 - 1320) * 7)).clamp(3, 10)
+      // See MoveWork.multiPv documentation for full table
       expect(lowElo.multiPv, equals(10));
-      expect(midElo.multiPv, equals(7));
-      expect(highElo.multiPv, equals(3));
+      expect(midElo.multiPv, equals(5));
+      expect(highElo.multiPv, equals(4));
     });
 
     test('findMove transitions state from initial to loading to idle', () async {

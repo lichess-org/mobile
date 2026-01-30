@@ -107,13 +107,39 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// Stockfish's strength limiting works by applying a randomized bias to scores
   /// of slightly worse moves among at least 4 candidates. MultiPV increases
   /// this candidate pool, giving more suboptimal moves to choose from at lower Elos.
+  ///
+  /// | Level | Elo  | MultiPV |
+  /// |-------|------|---------|
+  /// | 1     | 1320 | 10      |
+  /// | 2     | 1450 | 8       |
+  /// | 3     | 1550 | 7       |
+  /// | 4     | 1650 | 6       |
+  /// | 5     | 1750 | 5       |
+  /// | 6     | 1850 | 5       |
+  /// | 7     | 1950 | 5       |
+  /// | 8     | 2100 | 4       |
+  /// | 9     | 2300 | 4       |
+  /// | 10    | 2550 | 4       |
+  /// | 11    | 2850 | 3       |
+  /// | 12    | 3190 | 2       |
   @override
   int get multiPv {
-    // Scale MultiPV inversely with Elo:
-    // - At 1320 Elo: MultiPV = 10 (larger candidate pool)
-    // - At 2500 Elo: MultiPV = 3 (smaller candidate pool)
-    final pv = (10 - ((elo - 1320) / (2500 - 1320) * 7)).clamp(3, 10).toInt();
-    return pv;
+    if (elo <= 1650) {
+      // Levels 1-4: fast drop from 10 to 6
+      return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
+    } else if (elo >= 3000) {
+      // Level 12: 2
+      return 2;
+    } else if (elo >= 2850) {
+      // Levels 11: 3
+      return 3;
+    } else if (elo >= 2100) {
+      // Levels 8-10: 4
+      return 4;
+    } else {
+      // Levels 5-7: 5
+      return 5;
+    }
   }
 
   /// Search time based on Elo rating.
