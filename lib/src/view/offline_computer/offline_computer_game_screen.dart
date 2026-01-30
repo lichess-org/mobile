@@ -332,6 +332,11 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
             NonLinearSlider(
               value: _selectedLevel.level,
               values: StockfishLevel.values.map((l) => l.level).toList(),
+              onChange: (value) {
+                setState(() {
+                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
+                });
+              },
               onChangeEnd: (value) {
                 setState(() {
                   _selectedLevel = StockfishLevel.values[value.toInt() - 1];
