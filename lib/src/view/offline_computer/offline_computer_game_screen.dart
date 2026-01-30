@@ -33,7 +33,7 @@ class OfflineComputerGameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Play vs Computer')),
+      appBar: AppBar(title: Text(context.l10n.playAgainstComputer)),
       body: const _Body(),
     );
   }

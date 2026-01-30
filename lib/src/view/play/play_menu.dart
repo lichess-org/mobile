@@ -64,7 +64,7 @@ class PlayMenu extends ConsumerWidget {
                 ).push(OfflineComputerGameScreen.buildRoute(context));
               },
               leading: const Icon(LichessIcons.cogs),
-              title: const Text('Play vs Computer'),
+              title: Text(context.l10n.playAgainstComputer),
             ),
             ListTile(
               onTap: () {
