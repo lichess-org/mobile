@@ -1043,9 +1043,18 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(context.l10n.mobileCustomizeHomeTip),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_circle_outlined,
+                      size: 25.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Flexible(child: Text(context.l10n.mobileCustomizeHomeTip)),
+                  ],
+                ),
               ),
-
               Row(
                 children: [
                   TextButton(
