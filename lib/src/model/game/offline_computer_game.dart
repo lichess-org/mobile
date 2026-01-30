@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'offline_computer_game.freezed.dart';
+part 'offline_computer_game.g.dart';
 
 /// Stockfish strength levels. Level 1 is the easiest, level 12 is the hardest.
 enum StockfishLevel {
@@ -38,9 +39,12 @@ enum StockfishLevel {
 }
 
 /// An offline game played against the local Stockfish engine.
-@Freezed(fromJson: false, toJson: false)
+@Freezed(fromJson: true, toJson: true)
 abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, IndexableSteps {
   const OfflineComputerGame._();
+
+  factory OfflineComputerGame.fromJson(Map<String, dynamic> json) =>
+      _$OfflineComputerGameFromJson(json);
 
   @override
   Side? get youAre => playerSide;
@@ -59,7 +63,7 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
 
   @Assert('steps.isNotEmpty')
   factory OfflineComputerGame({
-    required IList<GameStep> steps,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     required GameMeta meta,
     required String? initialFen,
     required GameStatus status,
@@ -71,10 +75,14 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
     required StockfishLevel stockfishLevel,
 
     /// The player's data.
-    required Player humanPlayer,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(Player(onGame: true))
+    Player humanPlayer,
 
     /// The engine player's data.
-    required Player enginePlayer,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(Player(onGame: true))
+    Player enginePlayer,
 
     Side? winner,
     bool? isThreefoldRepetition,

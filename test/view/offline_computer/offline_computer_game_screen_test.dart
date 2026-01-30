@@ -1,21 +1,55 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_stockfish.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+class MockOfflineComputerGameStorage extends Mock implements OfflineComputerGameStorage {}
+
 void main() {
   TestLichessBinding.ensureInitialized();
+
+  setUpAll(() {
+    registerFallbackValue(
+      OfflineComputerGame(
+        steps: [const GameStep(position: Chess.initial)].lock,
+        meta: GameMeta(
+          createdAt: DateTime.now(),
+          rated: false,
+          variant: Variant.standard,
+          speed: Speed.classical,
+          perf: Perf.classical,
+        ),
+        initialFen: null,
+        status: GameStatus.started,
+        playerSide: Side.white,
+        stockfishLevel: StockfishLevel.level1,
+        humanPlayer: const Player(onGame: true),
+        enginePlayer: stockfishPlayer(),
+      ),
+    );
+  });
 
   group('Offline computer game', () {
     setUp(() {
@@ -24,7 +58,18 @@ void main() {
     });
 
     testWidgets('New game dialog is shown on startup with all options', (tester) async {
-      final app = await makeTestProviderScopeApp(tester, home: const OfflineComputerGameScreen());
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
@@ -286,7 +331,18 @@ void main() {
     });
 
     testWidgets('Can start game with different level', (tester) async {
-      final app = await makeTestProviderScopeApp(tester, home: const OfflineComputerGameScreen());
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
@@ -306,6 +362,153 @@ void main() {
 
       // Verify game started
       expect(find.byType(Chessboard), findsOneWidget);
+    });
+
+    testWidgets('Loading saved game restores position', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+
+      // Return a saved game with moves already played (e4, e5)
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+        (_) async => SavedOfflineComputerGame(
+          game: OfflineComputerGame(
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
+                ),
+                sanMove: SanMove('e5', Move.parse('e7e5')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.classical,
+              perf: Perf.classical,
+            ),
+            initialFen: kInitialFEN,
+            status: GameStatus.started,
+            playerSide: Side.white,
+            stockfishLevel: StockfishLevel.level1,
+            humanPlayer: const Player(onGame: true),
+            enginePlayer: stockfishPlayer(),
+          ),
+        ),
+      );
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Screen')),
+            body: FilledButton(
+              child: const Text('Go to game'),
+              onPressed: () => Navigator.of(
+                context,
+              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Go to game'));
+
+      // Wait for saved game to be loaded
+      await tester.pumpAndSettle();
+
+      verify(() => gameStorage.fetchOngoingGame()).called(1);
+
+      // Should not show new game dialog if we loaded a saved game
+      expect(find.text('Game setup'), findsNothing);
+
+      // Should load the game's current position, i.e. e4 and e5 were played
+      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
+      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+
+      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+
+      // Move list should show the played moves
+      expect(find.text('e4'), findsOneWidget);
+      expect(find.text('e5'), findsOneWidget);
+    });
+
+    testWidgets('Game is saved when exiting with confirmation', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Screen')),
+            body: FilledButton(
+              child: const Text('Go to game'),
+              onPressed: () => Navigator.of(
+                context,
+              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Go to game'));
+      await tester.pumpAndSettle();
+
+      // Start a new game
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Play a move so the game is not abortable
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+
+      // Play another move to ensure game is resignable (fullmoves > 1)
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+
+      // Try to go back - should show confirmation dialog
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      // Confirmation dialog should be shown
+      expect(find.text('Are you sure?'), findsOneWidget);
+      expect(find.text('No worries, your game will be saved.'), findsOneWidget);
+
+      // Confirm exit
+      await tester.tap(find.text('Yes'));
+      await tester.pumpAndSettle();
+
+      // Verify save was called
+      verify(() => gameStorage.save(any())).called(1);
     });
   });
 
@@ -330,6 +533,9 @@ void main() {
     });
 
     testWidgets('Hint button is disabled while hints are loading', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
         tester,
@@ -339,6 +545,11 @@ void main() {
             return const OfflineComputerGameScreen();
           },
         ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -369,6 +580,9 @@ void main() {
     });
 
     testWidgets('Hint button shows circle on board when pressed', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
         tester,
@@ -378,6 +592,11 @@ void main() {
             return const OfflineComputerGameScreen();
           },
         ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -411,6 +630,9 @@ void main() {
     });
 
     testWidgets('Hint button cycles through hints on subsequent presses', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
         tester,
@@ -420,6 +642,11 @@ void main() {
             return const OfflineComputerGameScreen();
           },
         ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -459,6 +686,9 @@ void main() {
     });
 
     testWidgets('Hints are cleared when a move is made', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
         tester,
@@ -468,6 +698,11 @@ void main() {
             return const OfflineComputerGameScreen();
           },
         ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -503,6 +738,9 @@ void main() {
     });
 
     testWidgets('Hint button is highlighted when hint is showing', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
         tester,
@@ -512,6 +750,11 @@ void main() {
             return const OfflineComputerGameScreen();
           },
         ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -578,7 +821,18 @@ void main() {
 
 /// Initialize an offline computer game and return the board rect.
 Future<Rect> initOfflineComputerGame(WidgetTester tester, {Side side = Side.white}) async {
-  final app = await makeTestProviderScopeApp(tester, home: const OfflineComputerGameScreen());
+  final gameStorage = MockOfflineComputerGameStorage();
+  when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+  final app = await makeTestProviderScopeApp(
+    tester,
+    home: const OfflineComputerGameScreen(),
+    overrides: {
+      offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+        (_) => gameStorage,
+      ),
+    },
+  );
   await tester.pumpWidget(app);
 
   // Wait for new game dialog to show up

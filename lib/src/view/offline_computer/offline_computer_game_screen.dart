@@ -13,7 +13,9 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -54,9 +56,22 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showNewGameDialog();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final ongoingGame = await ref.read(offlineComputerGameStorageProvider).fetchOngoingGame();
+      if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
+        ref.read(offlineComputerGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+      } else {
+        if (!mounted) return;
+        _showNewGameDialog();
+      }
     });
+  }
+
+  void _saveGameState() {
+    if (!context.mounted) return;
+    final gameState = ref.read(offlineComputerGameControllerProvider);
+    ref.read(offlineComputerGameStorageProvider).save(gameState.game);
   }
 
   @override
@@ -95,7 +110,7 @@ class _BodyState extends ConsumerState<_Body> {
 
           final navigator = Navigator.of(context);
           final game = gameState.game;
-          if (game.abortable) {
+          if (game.abortable || game.finished) {
             return navigator.pop();
           }
 
@@ -104,9 +119,12 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => YesNoDialog(
                 title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('Your game will be lost.'),
+                content: const Text('No worries, your game will be saved.'),
                 onNo: () => Navigator.of(context).pop(false),
-                onYes: () => Navigator.of(context).pop(true),
+                onYes: () {
+                  _saveGameState();
+                  Navigator.of(context).pop(true);
+                },
               ),
             );
             if (shouldPop == true) {
@@ -116,44 +134,49 @@ class _BodyState extends ConsumerState<_Body> {
             navigator.pop();
           }
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: SafeArea(
-                child: GameLayout(
-                  key: _boardKey,
-                  topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
-                  bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
-                  orientation: isBoardFlipped ? orientation.opposite : orientation,
-                  fen: gameState.currentPosition.fen,
-                  lastMove: gameState.lastMove,
-                  shapes: gameState.hintSquare != null
-                      ? ISet({Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!)})
-                      : null,
-                  interactiveBoardParams: (
-                    variant: Variant.standard,
-                    position: gameState.currentPosition,
-                    playerSide: gameState.game.finished
-                        ? PlayerSide.none
-                        : isPlayerTurn
-                        ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
-                        : PlayerSide.none,
-                    onPromotionSelection: ref
-                        .read(offlineComputerGameControllerProvider.notifier)
-                        .onPromotionSelection,
-                    promotionMove: gameState.promotionMove,
-                    onMove: (move, {isDrop}) {
-                      ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
-                    },
-                    premovable: null,
+        child: FocusDetector(
+          onForegroundLost: _saveGameState,
+          child: Column(
+            children: [
+              Expanded(
+                child: SafeArea(
+                  child: GameLayout(
+                    key: _boardKey,
+                    topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
+                    bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                    orientation: isBoardFlipped ? orientation.opposite : orientation,
+                    fen: gameState.currentPosition.fen,
+                    lastMove: gameState.lastMove,
+                    shapes: gameState.hintSquare != null
+                        ? ISet({
+                            Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!),
+                          })
+                        : null,
+                    interactiveBoardParams: (
+                      variant: Variant.standard,
+                      position: gameState.currentPosition,
+                      playerSide: gameState.game.finished
+                          ? PlayerSide.none
+                          : isPlayerTurn
+                          ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
+                          : PlayerSide.none,
+                      onPromotionSelection: ref
+                          .read(offlineComputerGameControllerProvider.notifier)
+                          .onPromotionSelection,
+                      promotionMove: gameState.promotionMove,
+                      onMove: (move, {isDrop}) {
+                        ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
+                      },
+                      premovable: null,
+                    ),
+                    moves: gameState.moves,
+                    currentMoveIndex: gameState.stepCursor,
+                    userActionsBar: _BottomBar(onNewGame: _showNewGameDialog),
                   ),
-                  moves: gameState.moves,
-                  currentMoveIndex: gameState.stepCursor,
-                  userActionsBar: _BottomBar(onNewGame: _showNewGameDialog),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

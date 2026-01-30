@@ -58,6 +58,24 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
+  /// Load an ongoing game from storage.
+  void loadOngoingGame(OfflineComputerGame game) {
+    state = OfflineComputerGameState(
+      game: game,
+      gameSessionId: StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}'),
+      stepCursor: game.steps.length - 1,
+    );
+
+    // If it's the player's turn and game is still playable, precompute hints
+    if (game.playable && state.turn == game.playerSide) {
+      _computeHints();
+    }
+    // If it's the engine's turn and game is still playable, trigger engine move
+    else if (game.playable && state.turn != game.playerSide) {
+      _playEngineMove();
+    }
+  }
+
   void makeMove(NormalMove move) {
     if (state.isEngineThinking || !state.game.playable) return;
 
