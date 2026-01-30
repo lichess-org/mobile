@@ -42,7 +42,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   void startNewGame({required StockfishLevel stockfishLevel, required Side playerSide}) {
-    state = OfflineComputerGameState.initial(stockfishLevel: stockfishLevel, playerSide: playerSide);
+    state = OfflineComputerGameState.initial(
+      stockfishLevel: stockfishLevel,
+      playerSide: playerSide,
+    );
 
     // If computer plays first (player is black), trigger engine move
     if (playerSide == Side.black) {
@@ -234,9 +237,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     required Side playerSide,
   }) {
     const position = Chess.initial;
-    final sessionId = StringId(
-      'ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}',
-    );
+    final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OfflineComputerGameState(
       game: OfflineComputerGame(
         steps: [const GameStep(position: position)].lock,
