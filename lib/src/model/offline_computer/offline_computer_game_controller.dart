@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
@@ -5,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -50,6 +52,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // If computer plays first (player is black), trigger engine move
     if (playerSide == Side.black) {
       _playEngineMove();
+    } else {
+      // Player plays first, precompute hints
+      _computeHints();
     }
   }
 
@@ -96,6 +101,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       diff: MaterialDiff.fromBoard(newPos.board),
     );
 
+    _clearHints();
+
     state = state.copyWith(
       game: state.game.copyWith(steps: state.game.steps.add(newStep)),
       stepCursor: state.stepCursor + 1,
@@ -141,6 +148,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         threads: enginePrefs.numEngineCores,
+        hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: steps,
         elo: state.game.stockfishLevel.elo,
@@ -151,6 +159,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (state.game.playable) {
         _applyMove(move);
+        // After engine move, precompute hints for player's turn
+        if (state.game.playable) {
+          _computeHints();
+        }
       }
     } catch (e) {
       // Engine was stopped or error occurred, ignore
@@ -192,8 +204,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // If after takeback it's engine's turn, play engine move
+    // Otherwise precompute hints for player's turn
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
+    } else if (state.game.playable) {
+      _computeHints();
     }
   }
 
@@ -206,6 +221,129 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void goBack() {
     if (state.canGoBack) {
       state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+    }
+  }
+
+  /// Show or cycle through hints.
+  ///
+  /// Hints are precomputed when it's the player's turn.
+  /// This method just cycles through the available hints.
+  void hint() {
+    if (!state.game.playable || state.isEngineThinking || state.isLoadingHint) return;
+    if (state.turn != state.game.playerSide) return;
+
+    final existingHints = state.hintMoves;
+    if (existingHints == null || existingHints.isEmpty) return;
+
+    final currentIndex = state.hintIndex;
+    // Show the first hint, or cycle to the next one
+    if (currentIndex == null) {
+      state = state.copyWith(hintIndex: 0);
+    } else {
+      state = state.copyWith(hintIndex: (currentIndex + 1) % existingHints.length);
+    }
+  }
+
+  /// Precompute hints for the current position.
+  ///
+  /// Called automatically when it's the player's turn.
+  Future<void> _computeHints() async {
+    if (!state.game.playable || state.turn != state.game.playerSide) return;
+
+    state = state.copyWith(isLoadingHint: true, hintMoves: null, hintIndex: null);
+
+    try {
+      final evaluationService = ref.read(evaluationServiceProvider);
+      final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
+
+      final steps = state.game.steps
+          .skip(1)
+          .map((s) => Step(position: s.position, sanMove: s.sanMove!))
+          .toIList();
+
+      const searchTime = Duration(seconds: 2);
+      final work = EvalWork(
+        id: state.gameSessionId,
+        enginePref: enginePrefs.enginePref,
+        variant: Variant.standard,
+        threads: enginePrefs.numEngineCores,
+        hashSize: evaluationService.maxMemory,
+        searchTime: searchTime,
+        multiPv: 5,
+        threatMode: false,
+        initialPosition: state.game.initialPosition,
+        steps: steps,
+      );
+
+      final stream = evaluationService.evaluate(work, forceRestart: true);
+      if (stream == null) {
+        if (ref.mounted) {
+          state = state.copyWith(isLoadingHint: false);
+        }
+        return;
+      }
+
+      // Listen to the stream and collect the latest eval
+      // The stream doesn't complete on its own, so we use a timeout
+      LocalEval? finalEval;
+      try {
+        await for (final (_, eval) in stream.timeout(
+          searchTime + const Duration(milliseconds: 500),
+        )) {
+          finalEval = eval;
+        }
+      } on TimeoutException {
+        // Expected - the stream times out after searchTime
+        evaluationService.stop();
+      }
+
+      if (!ref.mounted) return;
+
+      if (finalEval == null || !state.game.playable) {
+        state = state.copyWith(isLoadingHint: false);
+        return;
+      }
+
+      // Get best moves and filter out those that significantly drop the eval
+      final bestMoves = finalEval.bestMoves;
+      if (bestMoves.isEmpty) {
+        state = state.copyWith(isLoadingHint: false);
+        return;
+      }
+
+      final topWinningChances = bestMoves.first.winningChances;
+      // Filter moves that don't drop eval by more than 0.1 (10% winning chances)
+      // and keep only one move per origin square so hints cycle through different pieces
+      final seenOrigins = <Square>{};
+      final goodMoves = <Move>[];
+      for (final m in bestMoves) {
+        if (topWinningChances - m.winningChances > 0.1) continue;
+        final origin = switch (m.move) {
+          NormalMove(:final from) => from,
+          DropMove() => null,
+        };
+        if (origin != null && !seenOrigins.contains(origin)) {
+          seenOrigins.add(origin);
+          goodMoves.add(m.move);
+        }
+      }
+
+      // Shuffle to randomize the order, then convert to IList
+      goodMoves.shuffle(_random);
+      final hintMoves = goodMoves.toIList();
+
+      state = state.copyWith(isLoadingHint: false, hintMoves: hintMoves);
+    } catch (e) {
+      if (ref.mounted) {
+        state = state.copyWith(isLoadingHint: false);
+      }
+    }
+  }
+
+  /// Clear the current hints (called when a move is made).
+  void _clearHints() {
+    if (state.hintMoves != null || state.hintIndex != null) {
+      state = state.copyWith(hintMoves: null, hintIndex: null);
     }
   }
 
@@ -229,6 +367,13 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     @Default(0) int stepCursor,
     @Default(null) NormalMove? promotionMove,
     @Default(false) bool isEngineThinking,
+    @Default(false) bool isLoadingHint,
+
+    /// The list of hint moves (up to 5), randomly ordered once computed.
+    @Default(null) IList<Move>? hintMoves,
+
+    /// Current hint index for cycling through hints. Null means no hint is shown yet.
+    @Default(null) int? hintIndex,
   }) = _OfflineComputerGameState;
 
   factory OfflineComputerGameState.initial({
@@ -276,4 +421,16 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
 
   /// Player can take back if it's their turn and there are moves to take back.
   bool get canTakeback => game.playable && game.steps.length > 1 && !isEngineThinking;
+
+  /// The square to highlight for the current hint.
+  Square? get hintSquare {
+    final moves = hintMoves;
+    final index = hintIndex;
+    if (moves == null || moves.isEmpty || index == null) return null;
+    final move = moves[index];
+    return switch (move) {
+      NormalMove(:final from) => from,
+      DropMove() => null,
+    };
+  }
 }

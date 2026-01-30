@@ -2,7 +2,9 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -54,7 +56,7 @@ void main() {
       expect(find.byIcon(Icons.menu), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.arrow_uturn_left), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.flag), findsOneWidget);
-      expect(find.byIcon(CupertinoIcons.plus), findsOneWidget);
+      expect(find.byIcon(CupertinoIcons.lightbulb), findsOneWidget);
 
       // Verify Stockfish player info with default level (level 1)
       expect(find.textContaining('Stockfish'), findsOneWidget);
@@ -177,11 +179,15 @@ void main() {
       expect(find.text('New game'), findsWidgets);
     });
 
-    testWidgets('New game button in bottom bar opens dialog', (tester) async {
+    testWidgets('New game option in menu opens dialog', (tester) async {
       await initOfflineComputerGame(tester);
 
-      // Tap new game button in bottom bar
-      await tester.tap(find.byIcon(CupertinoIcons.plus));
+      // Tap menu button
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+
+      // Tap new game in menu
+      await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
       // Verify new game dialog is shown with all options
@@ -262,8 +268,10 @@ void main() {
     testWidgets('Can cancel new game dialog', (tester) async {
       await initOfflineComputerGame(tester);
 
-      // Open new game dialog
-      await tester.tap(find.byIcon(CupertinoIcons.plus));
+      // Open menu and tap new game
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
       expect(find.text('Game setup'), findsOneWidget);
@@ -298,6 +306,272 @@ void main() {
 
       // Verify game started
       expect(find.byType(Chessboard), findsOneWidget);
+    });
+  });
+
+  group('Hint feature', () {
+    setUp(() {
+      // Use MultiPvFakeStockfish which returns multiPv evaluation data
+      testBinding.stockfish = MultiPvFakeStockfish();
+    });
+
+    testWidgets('Hint button shows lightbulb icon', (tester) async {
+      await initOfflineComputerGame(tester);
+
+      // Verify hint button with lightbulb icon is shown
+      expect(find.byIcon(CupertinoIcons.lightbulb), findsOneWidget);
+
+      // Verify the button has "Get a hint" label
+      final hintButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.lightbulb),
+        matching: find.byType(BottomBarButton),
+      );
+      expect(hintButton, findsOneWidget);
+    });
+
+    testWidgets('Hint button is disabled while hints are loading', (tester) async {
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start game as white
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+
+      // Pump once to trigger hint computation but not complete it
+      await tester.pump();
+
+      // Check if hints are loading
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+
+      // If loading hint, the button should be disabled
+      if (gameState.isLoadingHint) {
+        final hintButton = find.ancestor(
+          of: find.byIcon(CupertinoIcons.lightbulb),
+          matching: find.byType(BottomBarButton),
+        );
+        final button = tester.widget<BottomBarButton>(hintButton);
+        expect(button.onTap, isNull);
+      }
+
+      // Let hints finish computing
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('Hint button shows circle on board when pressed', (tester) async {
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start game as white
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Wait for hints to be computed (timeout after 3 seconds)
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+
+      // If hints are available, pressing hint button should show a circle
+      if (gameState.hintMoves != null && gameState.hintMoves!.isNotEmpty) {
+        // No hint shown initially
+        expect(gameState.hintSquare, isNull);
+
+        // Press hint button
+        await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+        await tester.pump();
+
+        // Hint square should now be set
+        final updatedState = ref.read(offlineComputerGameControllerProvider);
+        expect(updatedState.hintIndex, equals(0));
+        expect(updatedState.hintSquare, isNotNull);
+      }
+    });
+
+    testWidgets('Hint button cycles through hints on subsequent presses', (tester) async {
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start game as white
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Wait for hints to be computed
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+
+      if (gameState.hintMoves != null && gameState.hintMoves!.length > 1) {
+        // Press hint button first time
+        await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+        await tester.pump();
+
+        final firstHintState = ref.read(offlineComputerGameControllerProvider);
+        expect(firstHintState.hintIndex, equals(0));
+        final firstHintSquare = firstHintState.hintSquare;
+
+        // Press hint button second time
+        await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+        await tester.pump();
+
+        final secondHintState = ref.read(offlineComputerGameControllerProvider);
+        expect(secondHintState.hintIndex, equals(1));
+        final secondHintSquare = secondHintState.hintSquare;
+
+        // Hint square should be different (different origin)
+        expect(secondHintSquare, isNot(equals(firstHintSquare)));
+      }
+    });
+
+    testWidgets('Hints are cleared when a move is made', (tester) async {
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start game as white
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Wait for hints to be computed
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+
+      if (gameState.hintMoves != null && gameState.hintMoves!.isNotEmpty) {
+        // Press hint button to show a hint
+        await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+        await tester.pump();
+
+        final hintState = ref.read(offlineComputerGameControllerProvider);
+        expect(hintState.hintSquare, isNotNull);
+
+        // Play a move
+        await playMove(tester, 'e2', 'e4');
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // Hints should be cleared
+        final afterMoveState = ref.read(offlineComputerGameControllerProvider);
+        expect(afterMoveState.hintIndex, isNull);
+      }
+    });
+
+    testWidgets('Hint button is highlighted when hint is showing', (tester) async {
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start game as white
+      await tester.tap(find.text('White'));
+      await tester.pump();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Wait for hints to be computed
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+
+      if (gameState.hintMoves != null && gameState.hintMoves!.isNotEmpty) {
+        // Before pressing hint, button should not be highlighted
+        var hintButton = find.ancestor(
+          of: find.byIcon(CupertinoIcons.lightbulb),
+          matching: find.byType(BottomBarButton),
+        );
+        var button = tester.widget<BottomBarButton>(hintButton);
+        expect(button.highlighted, isFalse);
+
+        // Press hint button
+        await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+        await tester.pump();
+
+        // Button should now be highlighted
+        hintButton = find.ancestor(
+          of: find.byIcon(CupertinoIcons.lightbulb),
+          matching: find.byType(BottomBarButton),
+        );
+        button = tester.widget<BottomBarButton>(hintButton);
+        expect(button.highlighted, isTrue);
+      }
+    });
+
+    testWidgets('Hint button is disabled when not player turn', (tester) async {
+      // Use LegalMoveFakeStockfish for this test as we need engine to play
+      testBinding.stockfish = LegalMoveFakeStockfish();
+      await initOfflineComputerGame(tester, side: Side.black);
+
+      // When playing as black, it's white's turn initially (engine's turn)
+      // Wait briefly for engine to start thinking
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Find the hint button
+      final hintButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.lightbulb),
+        matching: find.byType(BottomBarButton),
+      );
+
+      // During engine's turn, hint button should be disabled
+      final button = tester.widget<BottomBarButton>(hintButton);
+      expect(button.onTap, isNull);
+
+      // Wait for engine move
+      await tester.pumpAndSettle();
     });
   });
 }

@@ -51,7 +51,9 @@ sealed class EvalWork extends Work with _$EvalWork {
     required Variant variant,
     required int threads,
     int? hashSize,
-    required UciPath path,
+
+    /// The path in the position tree. Nullable for contexts without a tree (e.g., offline games).
+    UciPath? path,
     required Duration searchTime,
     required int multiPv,
     required bool threatMode,

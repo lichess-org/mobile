@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -126,6 +127,9 @@ class _BodyState extends ConsumerState<_Body> {
                   orientation: isBoardFlipped ? orientation.opposite : orientation,
                   fen: gameState.currentPosition.fen,
                   lastMove: gameState.lastMove,
+                  shapes: gameState.hintSquare != null
+                      ? ISet({Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!)})
+                      : null,
                   interactiveBoardParams: (
                     variant: Variant.standard,
                     position: gameState.currentPosition,
@@ -188,7 +192,14 @@ class _BottomBar extends ConsumerWidget {
           onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
           icon: CupertinoIcons.flag,
         ),
-        BottomBarButton(label: 'New game', onTap: onNewGame, icon: CupertinoIcons.plus),
+        BottomBarButton(
+          label: context.l10n.getAHint,
+          onTap: _canGetHint(gameState)
+              ? () => ref.read(offlineComputerGameControllerProvider.notifier).hint()
+              : null,
+          icon: CupertinoIcons.lightbulb,
+          highlighted: gameState.hintSquare != null,
+        ),
       ],
     );
   }
@@ -242,6 +253,13 @@ class _BottomBar extends ConsumerWidget {
         onNo: () => Navigator.pop(context),
       ),
     );
+  }
+
+  bool _canGetHint(OfflineComputerGameState gameState) {
+    return gameState.game.playable &&
+        !gameState.isEngineThinking &&
+        !gameState.isLoadingHint &&
+        gameState.turn == gameState.game.playerSide;
   }
 }
 
