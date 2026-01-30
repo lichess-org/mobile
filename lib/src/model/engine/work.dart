@@ -119,14 +119,32 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// Lower Elos get shorter search times since the strength limiting mechanism
   /// (randomized bias on move scores) selects the move early in the search
   /// at depth = 1 + Skill Level.
+  ///
+  /// | Level | Elo  | Search Time |
+  /// |-------|------|-------------|
+  /// | 1     | 1320 | 150ms       |
+  /// | 2     | 1450 | 300ms       |
+  /// | 3     | 1550 | 410ms       |
+  /// | 4     | 1650 | 525ms       |
+  /// | 5     | 1750 | 640ms       |
+  /// | 6     | 1850 | 940ms       |
+  /// | 7     | 1950 | 1250ms      |
+  /// | 8     | 2100 | 1700ms      |
+  /// | 9     | 2300 | 2300ms      |
+  /// | 10    | 2550 | 3060ms      |
+  /// | 11    | 2850 | 3970ms      |
+  /// | 12    | 3190 | 5000ms      |
   @override
   Duration get searchTime {
-    // Scale search time based on Elo:
-    // - At 1320 Elo: ~150ms
-    // - At 1800 Elo: ~500ms
-    // - At 2500 Elo: ~1500ms
-    final ms = (150 + ((elo - 1320) / (2500 - 1320) * 1350)).clamp(150, 1500).toInt();
-    return Duration(milliseconds: ms);
+    final int ms;
+    if (elo <= 1750) {
+      // Levels 1-5: linear from 150ms to 640ms
+      ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
+    } else {
+      // Levels 6-12: linear from 640ms to 5000ms
+      ms = (640 + ((elo - 1750) / (3190 - 1750) * 4360)).toInt();
+    }
+    return Duration(milliseconds: ms.clamp(150, 5000));
   }
 }
 
