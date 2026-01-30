@@ -88,6 +88,20 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
+  void _saveGameState() {
+    if (!context.mounted) return;
+    final clockState = ref.read(overTheBoardClockProvider);
+    final gameState = ref.read(overTheBoardGameControllerProvider);
+    ref
+        .read(overTheBoardGameStorageProvider)
+        .save(
+          gameState.game,
+          timeIncrement: clockState.timeIncrement,
+          whiteTimeLeft: clockState.whiteTimeLeft,
+          blackTimeLeft: clockState.blackTimeLeft,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
@@ -148,19 +162,6 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    void saveGameState() {
-      if (!context.mounted) return;
-      final clockState = ref.read(overTheBoardClockProvider);
-      ref
-          .read(overTheBoardGameStorageProvider)
-          .save(
-            gameState.game,
-            timeIncrement: clockState.timeIncrement,
-            whiteTimeLeft: clockState.whiteTimeLeft,
-            blackTimeLeft: clockState.blackTimeLeft,
-          );
-    }
-
     return WakelockWidget(
       child: PopScope(
         canPop: false,
@@ -187,7 +188,7 @@ class _BodyState extends ConsumerState<_Body> {
                 content: const Text('No worries, your game will be saved.'),
                 onNo: () => Navigator.of(context).pop(false),
                 onYes: () {
-                  saveGameState();
+                  _saveGameState();
                   Navigator.of(context).pop(true);
                 },
               );
@@ -200,7 +201,7 @@ class _BodyState extends ConsumerState<_Body> {
           }
         },
         child: FocusDetector(
-          onForegroundLost: saveGameState,
+          onForegroundLost: _saveGameState,
           child: Column(
             children: [
               Expanded(
