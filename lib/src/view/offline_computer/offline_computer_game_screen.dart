@@ -165,11 +165,7 @@ class _BodyState extends ConsumerState<_Body> {
                     orientation: isBoardFlipped ? orientation.opposite : orientation,
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
-                    shapes: gameState.hintSquare != null
-                        ? ISet({
-                            Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!),
-                          })
-                        : null,
+                    shapes: _buildBoardShapes(gameState),
                     interactiveBoardParams: (
                       variant: Variant.standard,
                       position: gameState.currentPosition,
@@ -205,6 +201,24 @@ class _BodyState extends ConsumerState<_Body> {
       context: context,
       builder: (context) => _NewGameDialog(initialFen: widget.initialFen),
     );
+  }
+
+  ISet<Shape>? _buildBoardShapes(OfflineComputerGameState gameState) {
+    final shapes = <Shape>{};
+
+    // Add hint circle if showing
+    if (gameState.hintSquare != null) {
+      shapes.add(Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!));
+    }
+
+    // Add suggested move arrow if showing
+    final suggestedMove = gameState.showingSuggestedMove;
+    if (suggestedMove != null) {
+      final color = gameState.practiceComment?.verdict.color ?? Colors.blue;
+      shapes.add(Arrow(color: color.withValues(alpha: 0.8), orig: suggestedMove.from, dest: suggestedMove.to));
+    }
+
+    return shapes.isNotEmpty ? ISet(shapes) : null;
   }
 }
 
@@ -404,16 +418,17 @@ class _Player extends ConsumerWidget {
   }
 }
 
-class _PracticeCommentCard extends StatelessWidget {
+class _PracticeCommentCard extends ConsumerWidget {
   const _PracticeCommentCard({required this.gameState});
 
   final OfflineComputerGameState gameState;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isEngineThinking = gameState.isEngineThinking;
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
+    final showingSuggestedMove = gameState.showingSuggestedMove;
 
     // Determine what to show in the card
     Widget content;
@@ -461,15 +476,45 @@ class _PracticeCommentCard extends StatelessWidget {
       };
 
       // Format the suggested move if any
-      String? suggestedMoveText;
+      Widget? suggestedMoveWidget;
       if (practiceComment.hasSuggestedMove) {
         final suggestedMove = practiceComment.suggestedMove;
         if (suggestedMove != null) {
-          final san = _formatMoveAsSan(gameState, suggestedMove, practiceComment);
-          if (verdict == MoveVerdict.goodMove) {
-            suggestedMoveText = san != null ? context.l10n.anotherWasX(san) : null;
-          } else {
-            suggestedMoveText = san != null ? context.l10n.bestWasX(san) : null;
+          final sanMove = _formatMoveAsSan(gameState, suggestedMove);
+          if (sanMove != null) {
+            final moveText = sanMove.san;
+            final labelText = verdict == MoveVerdict.goodMove
+                ? context.l10n.anotherWasX('')
+                : context.l10n.bestWasX('');
+            // Remove the placeholder from the label
+            final label = labelText.replaceAll(' ', '').isEmpty ? '' : labelText.substring(0, labelText.length - 1);
+            final isShowing = showingSuggestedMove == sanMove.move;
+
+            suggestedMoveWidget = GestureDetector(
+              onTap: () {
+                final move = sanMove.move;
+                if (move is NormalMove) {
+                  ref.read(offlineComputerGameControllerProvider.notifier).toggleSuggestedMove(move);
+                }
+              },
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: label),
+                    TextSpan(
+                      text: moveText,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: isShowing ? iconColor : null,
+                        decoration: TextDecoration.underline,
+                        decorationStyle: TextDecorationStyle.dotted,
+                      ),
+                    ),
+                  ],
+                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+            );
           }
         }
       }
@@ -488,8 +533,7 @@ class _PracticeCommentCard extends StatelessWidget {
                   verdictText,
                   style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
                 ),
-                if (suggestedMoveText != null)
-                  Text(suggestedMoveText, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                if (suggestedMoveWidget != null) suggestedMoveWidget,
               ],
             ),
           ),
@@ -512,10 +556,9 @@ class _PracticeCommentCard extends StatelessWidget {
   }
 
   /// Formats a move as SAN notation using the position before the player's move.
-  String? _formatMoveAsSan(
+  SanMove? _formatMoveAsSan(
     OfflineComputerGameState gameState,
     Move suggestedMove,
-    PracticeComment comment,
   ) {
     try {
       // The suggested move is from the position before the last move was made
@@ -527,12 +570,12 @@ class _PracticeCommentCard extends StatelessWidget {
       final move = Move.parse(suggestedMove.uci);
       if (move != null && position.isLegal(move)) {
         final (_, san) = position.makeSan(move);
-        return san;
+        return SanMove(san, move);
       }
     } catch (_) {
-      // Fallback to UCI if we can't format as SAN
+      // Return null if we can't format as SAN
     }
-    return suggestedMove.uci;
+    return null;
   }
 }
 
