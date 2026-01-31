@@ -53,6 +53,7 @@
                 <data android:pathPattern="/......../black" />
                 <data android:pathPattern="/......../white" />
             </intent-filter>
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
         <receiver android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>

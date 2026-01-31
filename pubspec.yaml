@@ -10,6 +10,7 @@ environment:
   flutter: ^3.38.0
 
 dependencies:
+  app_links: ^7.0.0
   app_settings: ^7.0.0
   async: ^2.10.0
   auto_size_text: ^3.0.0
