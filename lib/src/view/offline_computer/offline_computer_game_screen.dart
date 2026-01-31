@@ -535,7 +535,16 @@ class _PracticeCommentCard extends ConsumerWidget {
       );
     } else {
       // Default state when waiting for player's move
-      content = Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic));
+      final cachedEval = gameState.cachedEvalString;
+      content = Row(
+        children: [
+          Expanded(
+            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic)),
+          ),
+          if (cachedEval != null)
+            Text(cachedEval, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+        ],
+      );
     }
 
     return Container(
