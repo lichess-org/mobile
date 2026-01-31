@@ -1,6 +1,6 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'practice_comment.freezed.dart';
@@ -69,17 +69,20 @@ sealed class PracticeComment with _$PracticeComment {
     /// The verdict for the move.
     required MoveVerdict verdict,
 
-    /// The best move that was available (shown if verdict is not goodMove).
-    Move? bestMove,
+    /// The best move that was available in SAN format (shown if verdict is not goodMove).
+    SanMove? bestMove,
 
-    /// An alternative good move (shown if verdict is goodMove and there was another good option).
-    Move? alternativeGoodMove,
+    /// An alternative good move in SAN format (shown if verdict is goodMove and there was another good option).
+    SanMove? alternativeGoodMove,
 
     /// The winning chances before the move was made.
     required double winningChancesBefore,
 
     /// The winning chances after the move was made.
     required double winningChancesAfter,
+
+    /// The evaluation string after the move (e.g., "+0.5", "-1.2", "#3").
+    String? evalAfter,
   }) = _PracticeComment;
 
   /// The shift in winning chances (how much the position deteriorated).
@@ -90,5 +93,5 @@ sealed class PracticeComment with _$PracticeComment {
       verdict != .goodMove ? bestMove != null : alternativeGoodMove != null;
 
   /// The move to show as suggestion.
-  Move? get suggestedMove => verdict != .goodMove ? bestMove : alternativeGoodMove;
+  SanMove? get suggestedMove => verdict != .goodMove ? bestMove : alternativeGoodMove;
 }

@@ -215,7 +215,13 @@ class _BodyState extends ConsumerState<_Body> {
     final suggestedMove = gameState.showingSuggestedMove;
     if (suggestedMove != null) {
       final color = gameState.practiceComment?.verdict.color ?? Colors.blue;
-      shapes.add(Arrow(color: color.withValues(alpha: 0.8), orig: suggestedMove.from, dest: suggestedMove.to));
+      shapes.add(
+        Arrow(
+          color: color.withValues(alpha: 0.8),
+          orig: suggestedMove.from,
+          dest: suggestedMove.to,
+        ),
+      );
     }
 
     return shapes.isNotEmpty ? ISet(shapes) : null;
@@ -477,54 +483,51 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       // Format the suggested move if any
       Widget? suggestedMoveWidget;
-      if (practiceComment.hasSuggestedMove) {
-        final suggestedMove = practiceComment.suggestedMove;
-        if (suggestedMove != null) {
-          final sanMove = _formatMoveAsSan(gameState, suggestedMove);
-          if (sanMove != null) {
-            final moveText = sanMove.san;
-            final labelText = verdict == MoveVerdict.goodMove
-                ? context.l10n.anotherWasX('')
-                : context.l10n.bestWasX('');
-            // Remove the placeholder from the label
-            final label = labelText.replaceAll(' ', '').isEmpty ? '' : labelText.substring(0, labelText.length - 1);
-            final isShowing = showingSuggestedMove == sanMove.move;
+      final suggestedMove = practiceComment.suggestedMove;
+      if (suggestedMove != null) {
+        final moveText = suggestedMove.san;
+        final labelText = verdict == MoveVerdict.goodMove
+            ? context.l10n.anotherWasX('')
+            : context.l10n.bestWasX('');
+        // Remove the placeholder from the label
+        final label = labelText.replaceAll(' ', '').isEmpty
+            ? ''
+            : labelText.substring(0, labelText.length - 1);
+        final isShowing = showingSuggestedMove == suggestedMove.move;
 
-            suggestedMoveWidget = GestureDetector(
-              onTap: () {
-                final move = sanMove.move;
-                if (move is NormalMove) {
-                  ref.read(offlineComputerGameControllerProvider.notifier).toggleSuggestedMove(move);
-                }
-              },
-              child: Text.rich(
+        suggestedMoveWidget = GestureDetector(
+          onTap: () {
+            final move = suggestedMove.move;
+            if (move is NormalMove) {
+              ref.read(offlineComputerGameControllerProvider.notifier).toggleSuggestedMove(move);
+            }
+          },
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: label),
+                const TextSpan(text: ' '),
                 TextSpan(
-                  children: [
-                    TextSpan(text: label),
-                    TextSpan(
-                      text: moveText,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isShowing ? iconColor : null,
-                        decoration: TextDecoration.underline,
-                        decorationStyle: TextDecorationStyle.dotted,
-                      ),
-                    ),
-                  ],
+                  text: moveText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isShowing ? iconColor : null,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
+                  ),
                 ),
-                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-              ),
-            );
-          }
-        }
+              ],
+            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          ),
+        );
       }
 
       content = Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: iconColor, size: 20),
           const SizedBox(width: 8),
-          Flexible(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -537,6 +540,11 @@ class _PracticeCommentCard extends ConsumerWidget {
               ],
             ),
           ),
+          if (practiceComment.evalAfter != null)
+            Text(
+              practiceComment.evalAfter!,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            ),
         ],
       );
     } else {
@@ -553,29 +561,6 @@ class _PracticeCommentCard extends ConsumerWidget {
       ),
       child: content,
     );
-  }
-
-  /// Formats a move as SAN notation using the position before the player's move.
-  SanMove? _formatMoveAsSan(
-    OfflineComputerGameState gameState,
-    Move suggestedMove,
-  ) {
-    try {
-      // The suggested move is from the position before the last move was made
-      // So we need to use stepCursor - 1 if available
-      final stepIndex = gameState.stepCursor > 0 ? gameState.stepCursor - 1 : 0;
-      final position = gameState.game.stepAt(stepIndex).position;
-
-      // Parse the UCI move and make it as SAN
-      final move = Move.parse(suggestedMove.uci);
-      if (move != null && position.isLegal(move)) {
-        final (_, san) = position.makeSan(move);
-        return SanMove(san, move);
-      }
-    } catch (_) {
-      // Return null if we can't format as SAN
-    }
-    return null;
   }
 }
 

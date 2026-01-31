@@ -272,12 +272,37 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
         final verdict = MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
 
+        // Get the position BEFORE the player's move to format the suggested moves as SAN
+        // The stepCursor was incremented by _applyMove, so we need to go back 1 step
+        final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
+
+        // Format best move as SAN
+        SanMove? bestMoveSan;
+        if (!playedMoveIsBest && bestMove != null) {
+          final parsed = Move.parse(bestMove.uci);
+          if (parsed != null && positionBeforeMove.isLegal(parsed)) {
+            final (_, san) = positionBeforeMove.makeSan(parsed);
+            bestMoveSan = SanMove(san, parsed);
+          }
+        }
+
+        // Format alternative good move as SAN
+        SanMove? alternativeGoodMoveSan;
+        if (alternativeGoodMove != null) {
+          final parsed = Move.parse(alternativeGoodMove.uci);
+          if (parsed != null && positionBeforeMove.isLegal(parsed)) {
+            final (_, san) = positionBeforeMove.makeSan(parsed);
+            alternativeGoodMoveSan = SanMove(san, parsed);
+          }
+        }
+
         comment = PracticeComment(
           verdict: verdict,
-          bestMove: playedMoveIsBest ? null : bestMove,
-          alternativeGoodMove: alternativeGoodMove,
+          bestMove: bestMoveSan,
+          alternativeGoodMove: alternativeGoodMoveSan,
           winningChancesBefore: winningChancesBefore,
           winningChancesAfter: winningChancesAfter,
+          evalAfter: evalAfter.evalString,
         );
       }
 
