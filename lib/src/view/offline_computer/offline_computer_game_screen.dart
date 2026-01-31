@@ -342,8 +342,9 @@ class _Player extends ConsumerWidget {
 
     if (isStockfish) {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: .stretch,
+        mainAxisAlignment: .center,
+        mainAxisSize: .min,
         children: [
           // Practice comment card (only in practice mode)
           if (game.practiceMode) _PracticeCommentCard(gameState: gameState),
@@ -421,29 +422,29 @@ class _PracticeCommentCard extends StatelessWidget {
     IconData? icon;
 
     if (isEvaluatingMove) {
-      content = const Row(
+      content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator.adaptive(strokeWidth: 2),
           ),
-          SizedBox(width: 8),
-          Text('Evaluating your move...'),
+          const SizedBox(width: 8),
+          Text(context.l10n.evaluatingYourMove),
         ],
       );
     } else if (isEngineThinking) {
-      content = const Row(
+      content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator.adaptive(strokeWidth: 2),
           ),
-          SizedBox(width: 8),
-          Text('Computer is thinking...'),
+          const SizedBox(width: 8),
+          Text(context.l10n.computerThinking),
         ],
       );
     } else if (practiceComment != null) {
@@ -453,10 +454,10 @@ class _PracticeCommentCard extends StatelessWidget {
       backgroundColor = verdict.color.withValues(alpha: 0.1);
 
       final verdictText = switch (verdict) {
-        MoveVerdict.goodMove => 'Good move!',
-        MoveVerdict.inaccuracy => 'Inaccuracy',
-        MoveVerdict.mistake => 'Mistake',
-        MoveVerdict.blunder => 'Blunder',
+        MoveVerdict.goodMove => context.l10n.studyGoodMove,
+        MoveVerdict.inaccuracy => context.l10n.inaccuracy,
+        MoveVerdict.mistake => context.l10n.mistake,
+        MoveVerdict.blunder => context.l10n.blunder,
       };
 
       // Format the suggested move if any
@@ -466,9 +467,9 @@ class _PracticeCommentCard extends StatelessWidget {
         if (suggestedMove != null) {
           final san = _formatMoveAsSan(gameState, suggestedMove, practiceComment);
           if (verdict == MoveVerdict.goodMove) {
-            suggestedMoveText = san != null ? 'Another good option: $san' : null;
+            suggestedMoveText = san != null ? context.l10n.anotherWasX(san) : null;
           } else {
-            suggestedMoveText = san != null ? 'Best was: $san' : null;
+            suggestedMoveText = san != null ? context.l10n.bestWasX(san) : null;
           }
         }
       }
@@ -496,7 +497,7 @@ class _PracticeCommentCard extends StatelessWidget {
       );
     } else {
       // Default state when waiting for player's move
-      content = const Text('Your turn', style: TextStyle(fontStyle: FontStyle.italic));
+      content = Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic));
     }
 
     return Container(
