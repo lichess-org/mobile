@@ -285,7 +285,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
   void _sendEvalMultiGet() {
     final round = state.requireValue;
     final prefs = ref.read(broadcastPreferencesProvider);
-    if (prefs.showEvaluationGauge == false || round.observedGames.isEmpty) return;
+    if (prefs.showRoundEvaluationGauges == false || round.observedGames.isEmpty) return;
 
     _socketClient.send('evalGetMulti', {
       'fens': [for (final id in round.observedGames) round.games[id]!.fen],
