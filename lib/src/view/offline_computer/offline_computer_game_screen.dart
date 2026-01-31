@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -158,6 +159,9 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                    // In practice mode, give more space to the top table for the comment card
+                    topTableFlex: gameState.game.practiceMode ? 2 : 1,
+                    bottomTableFlex: 1,
                     orientation: isBoardFlipped ? orientation.opposite : orientation,
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
@@ -171,7 +175,7 @@ class _BodyState extends ConsumerState<_Body> {
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
                           ? PlayerSide.none
-                          : isPlayerTurn
+                          : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
                       onPromotionSelection: ref
@@ -222,7 +226,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         BottomBarButton(
           label: context.l10n.takeback,
-          onTap: gameState.canTakeback && gameState.game.casual
+          onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
@@ -296,10 +300,11 @@ class _BottomBar extends ConsumerWidget {
   }
 
   bool _canGetHint(OfflineComputerGameState gameState) {
-    return gameState.game.casual &&
+    return (gameState.game.casual || gameState.game.practiceMode) &&
         gameState.game.playable &&
         !gameState.isEngineThinking &&
         !gameState.isLoadingHint &&
+        !gameState.isEvaluatingMove &&
         gameState.turn == gameState.game.playerSide;
   }
 }
@@ -336,41 +341,49 @@ class _Player extends ConsumerWidget {
         : null;
 
     if (isStockfish) {
-      return Row(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
+          // Practice comment card (only in practice mode)
+          if (game.practiceMode) _PracticeCommentCard(gameState: gameState),
+          Row(
+            children: [
+              Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      context.l10n.aiNameLevelAiLevel(
-                        'Stockfish',
-                        game.stockfishLevel.level.toString(),
-                      ),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Text(
+                          context.l10n.aiNameLevelAiLevel(
+                            'Stockfish',
+                            game.stockfishLevel.level.toString(),
+                          ),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (gameState.isEngineThinking && !game.practiceMode) ...[
+                          const SizedBox(width: 8),
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                          ),
+                        ],
+                      ],
                     ),
-                    if (gameState.isEngineThinking) ...[
-                      const SizedBox(width: 8),
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                      ),
-                    ],
+                    MaterialDifferenceDisplay(
+                      materialDiff: materialDiff,
+                      materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+                    ),
                   ],
                 ),
-                MaterialDifferenceDisplay(
-                  materialDiff: materialDiff,
-                  materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       );
@@ -390,6 +403,138 @@ class _Player extends ConsumerWidget {
   }
 }
 
+class _PracticeCommentCard extends StatelessWidget {
+  const _PracticeCommentCard({required this.gameState});
+
+  final OfflineComputerGameState gameState;
+
+  @override
+  Widget build(BuildContext context) {
+    final isEngineThinking = gameState.isEngineThinking;
+    final isEvaluatingMove = gameState.isEvaluatingMove;
+    final practiceComment = gameState.practiceComment;
+
+    // Determine what to show in the card
+    Widget content;
+    Color? backgroundColor;
+    Color? iconColor;
+    IconData? icon;
+
+    if (isEvaluatingMove) {
+      content = const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+          ),
+          SizedBox(width: 8),
+          Text('Evaluating your move...'),
+        ],
+      );
+    } else if (isEngineThinking) {
+      content = const Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+          ),
+          SizedBox(width: 8),
+          Text('Computer is thinking...'),
+        ],
+      );
+    } else if (practiceComment != null) {
+      final verdict = practiceComment.verdict;
+      icon = verdict.icon;
+      iconColor = verdict.color;
+      backgroundColor = verdict.color.withValues(alpha: 0.1);
+
+      final verdictText = switch (verdict) {
+        MoveVerdict.goodMove => 'Good move!',
+        MoveVerdict.inaccuracy => 'Inaccuracy',
+        MoveVerdict.mistake => 'Mistake',
+        MoveVerdict.blunder => 'Blunder',
+      };
+
+      // Format the suggested move if any
+      String? suggestedMoveText;
+      if (practiceComment.hasSuggestedMove) {
+        final suggestedMove = practiceComment.suggestedMove;
+        if (suggestedMove != null) {
+          final san = _formatMoveAsSan(gameState, suggestedMove, practiceComment);
+          if (verdict == MoveVerdict.goodMove) {
+            suggestedMoveText = san != null ? 'Another good option: $san' : null;
+          } else {
+            suggestedMoveText = san != null ? 'Best was: $san' : null;
+          }
+        }
+      }
+
+      content = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: iconColor, size: 20),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  verdictText,
+                  style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                ),
+                if (suggestedMoveText != null)
+                  Text(suggestedMoveText, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      // Default state when waiting for player's move
+      content = const Text('Your turn', style: TextStyle(fontStyle: FontStyle.italic));
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: content,
+    );
+  }
+
+  /// Formats a move as SAN notation using the position before the player's move.
+  String? _formatMoveAsSan(
+    OfflineComputerGameState gameState,
+    Move suggestedMove,
+    PracticeComment comment,
+  ) {
+    try {
+      // The suggested move is from the position before the last move was made
+      // So we need to use stepCursor - 1 if available
+      final stepIndex = gameState.stepCursor > 0 ? gameState.stepCursor - 1 : 0;
+      final position = gameState.game.stepAt(stepIndex).position;
+
+      // Parse the UCI move and make it as SAN
+      final move = Move.parse(suggestedMove.uci);
+      if (move != null && position.isLegal(move)) {
+        final (_, san) = position.makeSan(move);
+        return san;
+      }
+    } catch (_) {
+      // Fallback to UCI if we can't format as SAN
+    }
+    return suggestedMove.uci;
+  }
+}
+
 class _NewGameDialog extends ConsumerStatefulWidget {
   const _NewGameDialog({this.initialFen});
 
@@ -403,6 +548,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
   late bool _casual;
+  late bool _practiceMode;
 
   String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
     SideChoice.white => context.l10n.white,
@@ -417,6 +563,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
     _casual = prefs.casual;
+    _practiceMode = prefs.practiceMode;
   }
 
   @override
@@ -490,13 +637,25 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
               ),
             ),
             SwitchListTile.adaptive(
+              title: const Text('Practice mode'),
+              subtitle: const Text('Get feedback on your moves'),
+              value: _practiceMode,
+              onChanged: (value) {
+                setState(() => _practiceMode = value);
+                ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
+            SwitchListTile.adaptive(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),
-              value: _casual,
-              onChanged: (value) {
-                setState(() => _casual = value);
-                ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
-              },
+              value: _practiceMode || _casual,
+              onChanged: _practiceMode
+                  ? null
+                  : (value) {
+                      setState(() => _casual = value);
+                      ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
+                    },
               contentPadding: EdgeInsets.zero,
             ),
           ],
@@ -512,7 +671,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 .startNewGame(
                   stockfishLevel: _selectedLevel,
                   playerSide: side,
-                  casual: _casual,
+                  // In practice mode, casual is always true
+                  casual: _practiceMode || _casual,
+                  practiceMode: _practiceMode,
                   initialFen: widget.initialFen,
                 );
             Navigator.pop(context);

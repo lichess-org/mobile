@@ -377,10 +377,12 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Verify casual switch is shown
+      // Verify casual switch is shown (there are now 2 switches: practice mode and casual)
       expect(find.text('Casual'), findsOneWidget);
       expect(find.text('Allow takebacks and hints'), findsOneWidget);
-      expect(find.byType(Switch), findsOneWidget);
+      expect(find.text('Practice mode'), findsOneWidget);
+      expect(find.text('Get feedback on your moves'), findsOneWidget);
+      expect(find.byType(Switch), findsNWidgets(2));
     });
 
     testWidgets('Takeback and hint buttons are disabled in non-casual mode', (tester) async {
@@ -399,8 +401,12 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Turn off casual mode
-      await tester.tap(find.byType(Switch));
+      // Turn off casual mode (find the switch that's part of the Casual list tile)
+      final casualSwitch = find.descendant(
+        of: find.ancestor(of: find.text('Casual'), matching: find.byType(SwitchListTile)),
+        matching: find.byType(Switch),
+      );
+      await tester.tap(casualSwitch);
       await tester.pump();
 
       // Start game
