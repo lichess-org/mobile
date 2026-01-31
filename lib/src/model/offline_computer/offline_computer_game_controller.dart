@@ -37,6 +37,9 @@ final numberOfCoresForEvaluation = max(1, maxEngineCores ~/ 2);
 /// Minimum depth required for a quality move evaluation in practice mode.
 const _kMinEvalDepth = 16;
 
+/// Number of multi-PV lines to request for evaluation.
+const _kEvaluationMultivpv = 4;
+
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -227,7 +230,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
-        multiPv: 3,
+        multiPv: _kEvaluationMultivpv,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: stepsAfter,
@@ -488,7 +491,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
-        multiPv: 3,
+        multiPv: _kEvaluationMultivpv,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: steps,
@@ -503,13 +506,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       }
 
       // Listen to the stream and collect the latest eval
-      // The stream doesn't complete on its own, so we use a timeout
+      // Stop early if we reach sufficient depth for a quality evaluation
       LocalEval? finalEval;
       try {
         await for (final (_, eval) in stream.timeout(
           searchTime + const Duration(milliseconds: 500),
         )) {
           finalEval = eval;
+          // Stop early if we have sufficient depth for a quality evaluation
+          if (eval.depth >= _kMinEvalDepth) {
+            evaluationService.stop();
+            break;
+          }
         }
       } on TimeoutException {
         // Expected - the stream times out after searchTime
