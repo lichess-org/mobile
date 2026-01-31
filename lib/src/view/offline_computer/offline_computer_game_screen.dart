@@ -82,9 +82,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _saveGameState() {
-    if (!context.mounted) return;
-    final gameState = ref.read(offlineComputerGameControllerProvider);
-    ref.read(offlineComputerGameStorageProvider).save(gameState.game);
+    if (!mounted) return;
+    ref.read(offlineComputerGameControllerProvider.notifier).saveState();
   }
 
   @override
@@ -144,6 +143,8 @@ class _BodyState extends ConsumerState<_Body> {
               navigator.pop();
             }
           } else {
+            // Save state even if the game is finished, we might want to analyse it later
+            _saveGameState();
             navigator.pop();
           }
         },

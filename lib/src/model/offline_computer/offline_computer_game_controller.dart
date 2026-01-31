@@ -19,10 +19,14 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:logging/logging.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
 
 final _random = Random();
+
+final _logger = Logger('OfflineComputerGameController');
 
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
@@ -65,6 +69,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
+  void saveState() {
+    if (!ref.mounted) return;
+    _logger.info('Saving ongoing game');
+    ref.read(offlineComputerGameStorageProvider).save(state.game);
+  }
+
   /// Load an ongoing game from storage.
   void loadOngoingGame(OfflineComputerGame game) {
     state = OfflineComputerGameState(
@@ -93,7 +103,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     _applyMove(move);
 
-    // If game is still playable, trigger engine response
     if (state.game.playable) {
       _playEngineMove();
     }
@@ -110,7 +119,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(promotionMove: null);
       _applyMove(move);
 
-      // If game is still playable, trigger engine response
       if (state.game.playable) {
         _playEngineMove();
       }
@@ -133,14 +141,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       stepCursor: state.stepCursor + 1,
     );
 
-    // Check for threefold repetition
     if (state.game.steps.count((p) => p.position.board == newStep.position.board) == 3) {
       state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: true));
     } else {
       state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: false));
     }
 
-    // Check for game end conditions
     if (state.currentPosition.isCheckmate) {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
