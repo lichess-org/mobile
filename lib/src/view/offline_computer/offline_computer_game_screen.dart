@@ -536,6 +536,9 @@ class _PracticeCommentCard extends ConsumerWidget {
             ),
         ],
       );
+    } else if (gameState.finished) {
+      // Game is over
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: FontStyle.italic));
     } else {
       // Default state when waiting for player's move
       final cachedEval = gameState.cachedEvalString;
