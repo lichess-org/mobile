@@ -89,9 +89,18 @@ sealed class PracticeComment with _$PracticeComment {
   double get shift => winningChancesBefore - winningChancesAfter;
 
   /// Whether to show a suggested move.
-  bool get hasSuggestedMove =>
-      verdict != .goodMove ? bestMove != null : alternativeGoodMove != null;
+  bool get hasSuggestedMove => bestMove != null || alternativeGoodMove != null;
 
   /// The move to show as suggestion.
-  SanMove? get suggestedMove => verdict != .goodMove ? bestMove : alternativeGoodMove;
+  ///
+  /// For good moves, prefer showing an alternative good move if available,
+  /// otherwise fall back to the best move.
+  SanMove? get suggestedMove =>
+      verdict == .goodMove ? (alternativeGoodMove ?? bestMove) : bestMove;
+
+  /// Whether the suggested move is an alternative (vs the best move).
+  ///
+  /// Used to determine which label to show ("Another was" vs "Best was").
+  bool get isShowingAlternative =>
+      verdict == .goodMove && alternativeGoodMove != null;
 }
