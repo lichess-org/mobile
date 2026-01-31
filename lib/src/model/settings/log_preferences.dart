@@ -15,7 +15,7 @@ final logPreferencesProvider = NotifierProvider<LogPreferencesNotifier, LogPrefs
 class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<LogPrefs> {
   @override
   @protected
-  PrefCategory get prefCategory => PrefCategory.overTheBoard;
+  PrefCategory get prefCategory => PrefCategory.log;
 
   @override
   @protected
