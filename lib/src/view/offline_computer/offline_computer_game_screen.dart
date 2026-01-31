@@ -387,7 +387,7 @@ class _Player extends ConsumerWidget {
                           style: const TextStyle(fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (gameState.isEngineThinking && !game.practiceMode) ...[
+                        if (gameState.isEngineThinking) ...[
                           const SizedBox(width: 8),
                           const SizedBox(
                             width: 16,
@@ -431,7 +431,6 @@ class _PracticeCommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isEngineThinking = gameState.isEngineThinking;
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
@@ -453,19 +452,6 @@ class _PracticeCommentCard extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(context.l10n.evaluatingYourMove),
-        ],
-      );
-    } else if (isEngineThinking) {
-      content = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          Text(context.l10n.computerThinking),
         ],
       );
     } else if (practiceComment != null) {

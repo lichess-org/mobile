@@ -95,12 +95,10 @@ sealed class PracticeComment with _$PracticeComment {
   ///
   /// For good moves, prefer showing an alternative good move if available,
   /// otherwise fall back to the best move.
-  SanMove? get suggestedMove =>
-      verdict == .goodMove ? (alternativeGoodMove ?? bestMove) : bestMove;
+  SanMove? get suggestedMove => verdict == .goodMove ? (alternativeGoodMove ?? bestMove) : bestMove;
 
   /// Whether the suggested move is an alternative (vs the best move).
   ///
   /// Used to determine which label to show ("Another was" vs "Best was").
-  bool get isShowingAlternative =>
-      verdict == .goodMove && alternativeGoodMove != null;
+  bool get isShowingAlternative => verdict == .goodMove && alternativeGoodMove != null;
 }
