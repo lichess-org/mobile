@@ -29,7 +29,7 @@ import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
-class OfflineComputerGameScreen extends StatelessWidget {
+class OfflineComputerGameScreen extends ConsumerWidget {
   const OfflineComputerGameScreen({this.initialFen, super.key});
 
   /// Optional initial FEN to start the game from a custom position.
@@ -40,9 +40,16 @@ class OfflineComputerGameScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final practiceMode = ref.watch(
+      offlineComputerGameControllerProvider.select((s) => s.game.practiceMode),
+    );
+    final title = practiceMode
+        ? context.l10n.practiceWithComputer
+        : context.l10n.playAgainstComputer;
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.playAgainstComputer)),
+      appBar: AppBar(title: Text(title)),
       body: _Body(initialFen: initialFen),
     );
   }
