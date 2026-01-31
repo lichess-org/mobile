@@ -77,6 +77,9 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
     /// Whether the game is casual (allows takebacks and hints).
     @Default(true) bool casual,
 
+    /// Whether the game is in practice mode (evaluates player moves and gives feedback).
+    @Default(false) bool practiceMode,
+
     /// The player's data.
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(Player(onGame: true))
