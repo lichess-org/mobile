@@ -29,6 +29,11 @@ final _random = Random();
 
 final _logger = Logger('OfflineComputerGameController');
 
+/// The number of CPU cores to use for engine evaluation.
+///
+/// Defaults to half of available cores, minimum 1.
+final numberOfCoresForEvaluation = max(1, maxEngineCores ~/ 2);
+
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -216,7 +221,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
-        threads: enginePrefs.numEngineCores,
+        threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
         multiPv: 3,
@@ -342,7 +347,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
-        threads: enginePrefs.numEngineCores,
+        threads: 1,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: steps,
@@ -472,7 +477,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
-        threads: enginePrefs.numEngineCores,
+        threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
         multiPv: 3,
@@ -547,6 +552,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           hintMoves: hintMoves,
           cachedBestMoves: bestMoves,
           cachedWinningChances: winningChances,
+          cachedEvalString: finalEval.evalString,
         );
       } else {
         state = state.copyWith(isLoadingHint: false, hintMoves: hintMoves);
@@ -573,12 +579,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         state.hintIndex != null ||
         state.cachedBestMoves != null ||
         state.cachedWinningChances != null ||
+        state.cachedEvalString != null ||
         state.showingSuggestedMove != null) {
       state = state.copyWith(
         hintMoves: null,
         hintIndex: null,
         cachedBestMoves: null,
         cachedWinningChances: null,
+        cachedEvalString: null,
         showingSuggestedMove: null,
       );
     }
@@ -627,6 +635,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
 
     /// The winning chances before the player's move (from player's perspective).
     @Default(null) double? cachedWinningChances,
+
+    /// The cached evaluation string for the current position (e.g., "+0.5", "-1.2", "#3").
+    @Default(null) String? cachedEvalString,
   }) = _OfflineComputerGameState;
 
   factory OfflineComputerGameState.initial({
