@@ -123,7 +123,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
   @override
   Widget build(BuildContext context) {
     final showEvaluationBar = ref.watch(
-      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+      broadcastPreferencesProvider.select((value) => value.showRoundEvaluationGauges),
     );
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;

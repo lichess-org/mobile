@@ -567,7 +567,7 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
           children: [
             SwitchSettingTile(
               title: Text(context.l10n.evaluationGauge),
-              value: broadcastPreferences.showEvaluationBar,
+              value: broadcastPreferences.showRoundEvaluationGauges,
               onChanged: (value) {
                 ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
               },

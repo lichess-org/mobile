@@ -31,7 +31,7 @@ class BroadcastPreferences extends Notifier<BroadcastPrefs>
   }
 
   Future<void> toggleEvaluationBar() {
-    return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
+    return save(state.copyWith(showRoundEvaluationGauges: !state.showRoundEvaluationGauges));
   }
 
   Future<void> toggleServerAnalysis() {
@@ -66,7 +66,7 @@ class BroadcastPreferences extends Notifier<BroadcastPrefs>
 @Freezed(fromJson: true, toJson: true)
 sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, CommonAnalysisPrefs {
   const factory BroadcastPrefs({
-    required bool showEvaluationBar,
+    @JsonKey(defaultValue: true) required bool showRoundEvaluationGauges,
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
@@ -77,7 +77,7 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
   }) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(
-    showEvaluationBar: true,
+    showRoundEvaluationGauges: true,
     enableServerAnalysis: true,
     showEvaluationGauge: true,
     showEngineLines: true,

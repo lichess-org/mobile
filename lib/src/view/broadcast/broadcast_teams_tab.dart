@@ -67,7 +67,7 @@ class BroadcastTeamsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
     final showEvaluationBar = ref.watch(
-      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+      broadcastPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
 
     return switch (round) {
