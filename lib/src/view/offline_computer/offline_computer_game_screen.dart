@@ -367,7 +367,10 @@ class _Player extends ConsumerWidget {
         mainAxisSize: .min,
         children: [
           // Practice comment card (only in practice mode)
-          if (game.practiceMode) _PracticeCommentCard(gameState: gameState),
+          if (game.practiceMode) ...[
+            _PracticeCommentCard(gameState: gameState),
+            const SizedBox(height: 8),
+          ],
           Row(
             children: [
               Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
