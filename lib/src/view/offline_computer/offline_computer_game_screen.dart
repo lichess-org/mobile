@@ -166,9 +166,8 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
-                    // In practice mode, give more space to the top table for the comment card
-                    topTableFlex: gameState.game.practiceMode ? 2 : 1,
-                    bottomTableFlex: 1,
+                    topTableFlex: 1,
+                    bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
                     orientation: isBoardFlipped ? orientation.opposite : orientation,
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
@@ -368,66 +367,65 @@ class _Player extends ConsumerWidget {
         : null;
 
     if (isStockfish) {
-      return Column(
-        crossAxisAlignment: .stretch,
-        mainAxisAlignment: .center,
-        mainAxisSize: .min,
+      return Row(
         children: [
-          // Practice comment card (only in practice mode)
-          if (game.practiceMode) ...[
-            _PracticeCommentCard(gameState: gameState),
-            const SizedBox(height: 8),
-          ],
-          Row(
-            children: [
-              Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          context.l10n.aiNameLevelAiLevel(
-                            'Stockfish',
-                            game.stockfishLevel.level.toString(),
-                          ),
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (gameState.isEngineThinking) ...[
-                          const SizedBox(width: 8),
-                          const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                          ),
-                        ],
-                      ],
+                    Text(
+                      context.l10n.aiNameLevelAiLevel(
+                        'Stockfish',
+                        game.stockfishLevel.level.toString(),
+                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    MaterialDifferenceDisplay(
-                      materialDiff: materialDiff,
-                      materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-                    ),
+                    if (gameState.isEngineThinking) ...[
+                      const SizedBox(width: 8),
+                      const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                      ),
+                    ],
                   ],
                 ),
-              ),
-            ],
+                MaterialDifferenceDisplay(
+                  materialDiff: materialDiff,
+                  materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+                ),
+              ],
+            ),
           ),
         ],
       );
     }
 
-    // Human player - just show captured pieces
-    return Row(
-      mainAxisSize: .max,
-      mainAxisAlignment: .start,
+    // Human player - just show captured pieces and practice comment
+    return Column(
+      crossAxisAlignment: .stretch,
+      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
-        MaterialDifferenceDisplay(
-          materialDiff: materialDiff,
-          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+        if (game.practiceMode) ...[
+          _PracticeCommentCard(gameState: gameState),
+          const SizedBox(height: 8),
+        ],
+        Row(
+          mainAxisSize: .max,
+          mainAxisAlignment: .start,
+          children: [
+            MaterialDifferenceDisplay(
+              materialDiff: materialDiff,
+              materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+            ),
+          ],
         ),
       ],
     );
@@ -439,13 +437,14 @@ class _PracticeCommentCard extends ConsumerWidget {
 
   final OfflineComputerGameState gameState;
 
+  static const _evalTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
 
-    // Determine what to show in the card
     Widget content;
     Color? backgroundColor;
     Color? iconColor;
@@ -477,7 +476,6 @@ class _PracticeCommentCard extends ConsumerWidget {
         MoveVerdict.blunder => context.l10n.blunder,
       };
 
-      // Format the suggested move if any
       Widget? suggestedMoveWidget;
       final suggestedMove = practiceComment.suggestedMove;
       if (suggestedMove != null) {
@@ -485,7 +483,6 @@ class _PracticeCommentCard extends ConsumerWidget {
         final labelText = practiceComment.isShowingAlternative
             ? context.l10n.anotherWasX('')
             : context.l10n.bestWasX('');
-        // Remove the placeholder from the label
         final label = labelText.replaceAll(' ', '').isEmpty
             ? ''
             : labelText.substring(0, labelText.length - 1);
@@ -537,17 +534,13 @@ class _PracticeCommentCard extends ConsumerWidget {
             ),
           ),
           if (practiceComment.evalAfter != null)
-            Text(
-              practiceComment.evalAfter!,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
+            Text(practiceComment.evalAfter!, style: _evalTextStyle),
         ],
       );
     } else if (gameState.finished) {
       // Game is over
       content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: FontStyle.italic));
     } else {
-      // Default state when waiting for player's move
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
@@ -555,7 +548,9 @@ class _PracticeCommentCard extends ConsumerWidget {
             child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic)),
           ),
           if (cachedEval != null)
-            Text(cachedEval, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            Text(cachedEval, style: _evalTextStyle)
+          else
+            const CircularProgressIndicator.adaptive(strokeWidth: 2),
         ],
       );
     }
