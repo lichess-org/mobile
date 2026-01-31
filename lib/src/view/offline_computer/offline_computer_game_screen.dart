@@ -486,7 +486,7 @@ class _PracticeCommentCard extends ConsumerWidget {
       final suggestedMove = practiceComment.suggestedMove;
       if (suggestedMove != null) {
         final moveText = suggestedMove.san;
-        final labelText = verdict == MoveVerdict.goodMove
+        final labelText = practiceComment.isShowingAlternative
             ? context.l10n.anotherWasX('')
             : context.l10n.bestWasX('');
         // Remove the placeholder from the label
