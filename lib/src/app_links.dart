@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AppLinks');
 
-/// Resolves an app link [Uri] to a corresponding [Route].
+/// Resolves an app link [Uri] to one or more corresponding [Route]s.
 List<Route<dynamic>>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
   _logger.info('Resolving app link: $appLinkUri');
