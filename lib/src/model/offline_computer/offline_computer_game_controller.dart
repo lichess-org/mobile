@@ -219,7 +219,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: enginePrefs.numEngineCores,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
-        multiPv: 1,
+        multiPv: 3,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: stepsAfter,
@@ -450,7 +450,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: enginePrefs.numEngineCores,
         hashSize: evaluationService.maxMemory,
         searchTime: searchTime,
-        multiPv: 5,
+        multiPv: 3,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: steps,
@@ -533,17 +533,28 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
+  /// Toggle showing a suggested move on the board.
+  void toggleSuggestedMove(NormalMove? move) {
+    if (state.showingSuggestedMove == move) {
+      state = state.copyWith(showingSuggestedMove: null);
+    } else {
+      state = state.copyWith(showingSuggestedMove: move);
+    }
+  }
+
   /// Clear the current hints and cached evaluation (called when a move is made).
   void _clearHints() {
     if (state.hintMoves != null ||
         state.hintIndex != null ||
         state.cachedBestMoves != null ||
-        state.cachedWinningChances != null) {
+        state.cachedWinningChances != null ||
+        state.showingSuggestedMove != null) {
       state = state.copyWith(
         hintMoves: null,
         hintIndex: null,
         cachedBestMoves: null,
         cachedWinningChances: null,
+        showingSuggestedMove: null,
       );
     }
   }
@@ -585,6 +596,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     /// The cached evaluation before the player's move (computed with hints in practice mode).
     /// Contains the best moves and winning chances from the player's perspective.
     @Default(null) IList<MoveWithWinningChances>? cachedBestMoves,
+
+    /// The suggested move to show on the board (when user taps on "Best was X" in practice mode).
+    @Default(null) NormalMove? showingSuggestedMove,
 
     /// The winning chances before the player's move (from player's perspective).
     @Default(null) double? cachedWinningChances,
