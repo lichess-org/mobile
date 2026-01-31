@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:logging/logging.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
@@ -51,20 +52,22 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     required StockfishLevel stockfishLevel,
     required Side playerSide,
     required bool casual,
+    required bool practiceMode,
     String? initialFen,
   }) {
     state = OfflineComputerGameState.initial(
       stockfishLevel: stockfishLevel,
       playerSide: playerSide,
       casual: casual,
+      practiceMode: practiceMode,
       initialFen: initialFen,
     );
 
     // If it's the engine's turn, trigger engine move
     if (state.turn != playerSide) {
       _playEngineMove();
-    } else if (casual) {
-      // Player plays first, precompute hints (only in casual mode)
+    } else if (casual || practiceMode) {
+      // Player plays first, precompute hints (only in casual or practice mode)
       _computeHints();
     }
   }
@@ -94,17 +97,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   void makeMove(NormalMove move) {
-    if (state.isEngineThinking || !state.game.playable) return;
+    if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) return;
 
     if (isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
 
-    _applyMove(move);
-
-    if (state.game.playable) {
-      _playEngineMove();
+    if (state.game.practiceMode) {
+      _makeMoveWithEvaluation(move);
+    } else {
+      _applyMove(move);
+      if (state.game.playable) {
+        _playEngineMove();
+      }
     }
   }
 
@@ -117,10 +123,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (promotionMove != null) {
       final move = promotionMove.withPromotion(role);
       state = state.copyWith(promotionMove: null);
-      _applyMove(move);
 
-      if (state.game.playable) {
-        _playEngineMove();
+      if (state.game.practiceMode) {
+        _makeMoveWithEvaluation(move);
+      } else {
+        _applyMove(move);
+        if (state.game.playable) {
+          _playEngineMove();
+        }
       }
     }
   }
@@ -160,6 +170,135 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _moveFeedback(sanMove);
   }
 
+  /// Make a player move with practice mode evaluation.
+  ///
+  /// Uses the cached evaluation from _computeHints as the "before" state,
+  /// then evaluates the position after the move to determine how good the move was.
+  Future<void> _makeMoveWithEvaluation(NormalMove move) async {
+    if (!state.game.practiceMode || !state.game.playable) return;
+
+    // Store the cached evaluation before clearing hints
+    final cachedBestMoves = state.cachedBestMoves;
+    final cachedWinningChances = state.cachedWinningChances;
+
+    // Clear previous practice comment and set evaluating state
+    state = state.copyWith(isEvaluatingMove: true, practiceComment: null);
+
+    // Apply the move immediately for responsive UI
+    _applyMove(move);
+
+    if (!state.game.playable) {
+      // Game ended (checkmate, stalemate, etc.) - no need to evaluate further
+      state = state.copyWith(isEvaluatingMove: false);
+      return;
+    }
+
+    // If we don't have cached evaluation, just proceed without practice comment
+    if (cachedBestMoves == null || cachedWinningChances == null || cachedBestMoves.isEmpty) {
+      state = state.copyWith(isEvaluatingMove: false);
+      _playEngineMove();
+      return;
+    }
+
+    try {
+      final evaluationService = ref.read(evaluationServiceProvider);
+      final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
+      final playerSide = state.game.playerSide;
+
+      // Evaluate position AFTER the move to get winning chances
+      final stepsAfter = state.game.steps
+          .skip(1)
+          .map((s) => Step(position: s.position, sanMove: s.sanMove!))
+          .toIList();
+
+      const searchTime = Duration(seconds: 2);
+      final workAfter = EvalWork(
+        id: state.gameSessionId,
+        enginePref: enginePrefs.enginePref,
+        variant: Variant.standard,
+        threads: enginePrefs.numEngineCores,
+        hashSize: evaluationService.maxMemory,
+        searchTime: searchTime,
+        multiPv: 1,
+        threatMode: false,
+        initialPosition: state.game.initialPosition,
+        steps: stepsAfter,
+      );
+
+      LocalEval? evalAfter;
+      final streamAfter = evaluationService.evaluate(workAfter, forceRestart: true);
+      if (streamAfter != null) {
+        try {
+          await for (final (_, eval) in streamAfter.timeout(
+            searchTime + const Duration(milliseconds: 500),
+          )) {
+            evalAfter = eval;
+          }
+        } on TimeoutException {
+          evaluationService.stop();
+        }
+      }
+
+      if (!ref.mounted) return;
+
+      // Create practice comment if we have the after evaluation
+      PracticeComment? comment;
+      if (evalAfter != null) {
+        final winningChancesBefore = cachedWinningChances;
+        // After the move, it's opponent's turn, so we need to flip the perspective
+        final winningChancesAfter = -evalAfter.winningChances(playerSide.opposite);
+
+        // Calculate shift (how much the position deteriorated)
+        final shift = winningChancesBefore - winningChancesAfter;
+
+        // Get best move from cached evaluation
+        final bestMoveData = cachedBestMoves.firstOrNull;
+        final bestMove = bestMoveData?.move;
+
+        // Check if the played move was the best move
+        final playedMoveIsBest = bestMove != null && bestMove.uci == move.uci;
+
+        // Find alternative good move if the played move was good
+        Move? alternativeGoodMove;
+        if (shift < 0.025 && cachedBestMoves.length > 1) {
+          // Find another good move that's not the one played
+          for (final m in cachedBestMoves.skip(1)) {
+            if (winningChancesBefore - m.winningChances < 0.025 && m.move.uci != move.uci) {
+              alternativeGoodMove = m.move;
+              break;
+            }
+          }
+        }
+
+        final verdict = MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
+
+        comment = PracticeComment(
+          verdict: verdict,
+          bestMove: playedMoveIsBest ? null : bestMove,
+          alternativeGoodMove: alternativeGoodMove,
+          winningChancesBefore: winningChancesBefore,
+          winningChancesAfter: winningChancesAfter,
+        );
+      }
+
+      state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
+
+      // Play engine move
+      if (state.game.playable) {
+        _playEngineMove();
+      }
+    } catch (e) {
+      _logger.warning('Error evaluating move: $e');
+      if (ref.mounted) {
+        state = state.copyWith(isEvaluatingMove: false);
+        // Still play engine move even if evaluation failed
+        if (state.game.playable) {
+          _playEngineMove();
+        }
+      }
+    }
+  }
+
   Future<void> _playEngineMove() async {
     if (!state.game.playable) return;
 
@@ -190,8 +329,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (state.game.playable) {
         _applyMove(move);
-        // After engine move, precompute hints for player's turn
-        if (state.game.playable) {
+        // After engine move, precompute hints for player's turn (in casual or practice mode)
+        if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
           _computeHints();
         }
       }
@@ -213,7 +352,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   void takeback() {
-    if (!state.canTakeback || !state.game.casual) return;
+    if (!state.canTakeback) return;
+    if (!state.game.casual && !state.game.practiceMode) return;
 
     // Cancel any pending engine move
     ref.read(evaluationServiceProvider).stop();
@@ -232,13 +372,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(steps: finalSteps, isThreefoldRepetition: false),
       stepCursor: finalSteps.length - 1,
       isEngineThinking: false,
+      practiceComment: null,
     );
 
     // If after takeback it's engine's turn, play engine move
-    // Otherwise precompute hints for player's turn (only in casual mode)
+    // Otherwise precompute hints for player's turn (in casual or practice mode)
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
-    } else if (state.game.playable && state.game.casual) {
+    } else if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
       _computeHints();
     }
   }
@@ -257,10 +398,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Show or cycle through hints.
   ///
-  /// Hints are precomputed when it's the player's turn (only in casual mode).
+  /// Hints are precomputed when it's the player's turn (in casual or practice mode).
   /// This method just cycles through the available hints.
   void hint() {
-    if (!state.game.casual) return;
+    if (!state.game.casual && !state.game.practiceMode) return;
     if (!state.game.playable || state.isEngineThinking || state.isLoadingHint) return;
     if (state.turn != state.game.playerSide) return;
 
@@ -278,12 +419,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Precompute hints for the current position.
   ///
-  /// Called automatically when it's the player's turn (only in casual mode).
+  /// Called automatically when it's the player's turn (in casual or practice mode).
+  /// In practice mode, also caches the evaluation for later comparison.
   Future<void> _computeHints() async {
-    if (!state.game.casual) return;
+    if (!state.game.casual && !state.game.practiceMode) return;
     if (!state.game.playable || state.turn != state.game.playerSide) return;
 
-    state = state.copyWith(isLoadingHint: true, hintMoves: null, hintIndex: null);
+    state = state.copyWith(
+      isLoadingHint: true,
+      hintMoves: null,
+      hintIndex: null,
+      cachedBestMoves: null,
+      cachedWinningChances: null,
+    );
 
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
@@ -365,7 +513,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       goodMoves.shuffle(_random);
       final hintMoves = goodMoves.toIList();
 
-      state = state.copyWith(isLoadingHint: false, hintMoves: hintMoves);
+      // In practice mode, also cache the evaluation for later comparison
+      if (state.game.practiceMode) {
+        final playerSide = state.game.playerSide;
+        final winningChances = finalEval.winningChances(playerSide);
+        state = state.copyWith(
+          isLoadingHint: false,
+          hintMoves: hintMoves,
+          cachedBestMoves: bestMoves,
+          cachedWinningChances: winningChances,
+        );
+      } else {
+        state = state.copyWith(isLoadingHint: false, hintMoves: hintMoves);
+      }
     } catch (e) {
       if (ref.mounted) {
         state = state.copyWith(isLoadingHint: false);
@@ -373,10 +533,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  /// Clear the current hints (called when a move is made).
+  /// Clear the current hints and cached evaluation (called when a move is made).
   void _clearHints() {
-    if (state.hintMoves != null || state.hintIndex != null) {
-      state = state.copyWith(hintMoves: null, hintIndex: null);
+    if (state.hintMoves != null ||
+        state.hintIndex != null ||
+        state.cachedBestMoves != null ||
+        state.cachedWinningChances != null) {
+      state = state.copyWith(
+        hintMoves: null,
+        hintIndex: null,
+        cachedBestMoves: null,
+        cachedWinningChances: null,
+      );
     }
   }
 
@@ -407,12 +575,26 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
 
     /// Current hint index for cycling through hints. Null means no hint is shown yet.
     @Default(null) int? hintIndex,
+
+    /// Whether the engine is evaluating the player's move in practice mode.
+    @Default(false) bool isEvaluatingMove,
+
+    /// The practice comment for the last player move (only in practice mode).
+    @Default(null) PracticeComment? practiceComment,
+
+    /// The cached evaluation before the player's move (computed with hints in practice mode).
+    /// Contains the best moves and winning chances from the player's perspective.
+    @Default(null) IList<MoveWithWinningChances>? cachedBestMoves,
+
+    /// The winning chances before the player's move (from player's perspective).
+    @Default(null) double? cachedWinningChances,
   }) = _OfflineComputerGameState;
 
   factory OfflineComputerGameState.initial({
     required StockfishLevel stockfishLevel,
     required Side playerSide,
     bool casual = true,
+    bool practiceMode = false,
     String? initialFen,
   }) {
     final position = initialFen != null
@@ -434,6 +616,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
         playerSide: playerSide,
         stockfishLevel: stockfishLevel,
         casual: casual,
+        practiceMode: practiceMode,
         humanPlayer: const Player(onGame: true),
         enginePlayer: stockfishPlayer(),
       ),

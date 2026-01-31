@@ -42,6 +42,8 @@ class GameLayout extends ConsumerStatefulWidget {
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.topTableFlex = 1,
+    this.bottomTableFlex = 1,
     this.shapes,
     this.moves,
     this.currentMoveIndex = 0,
@@ -66,6 +68,8 @@ class GameLayout extends ConsumerStatefulWidget {
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
+      topTableFlex = 1,
+      bottomTableFlex = 1,
       shapes = null,
       currentMoveIndex = 0,
       onSelectMove = null,
@@ -96,6 +100,12 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
+
+  /// Flex factor for the top table in portrait mode (default: 1).
+  final int topTableFlex;
+
+  /// Flex factor for the bottom table in portrait mode (default: 1).
+  final int bottomTableFlex;
 
   /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
@@ -255,6 +265,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     onSelectMove: widget.onSelectMove,
                   ),
               Expanded(
+                flex: widget.topTableFlex,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
@@ -280,6 +291,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 ),
               ),
               Expanded(
+                flex: widget.bottomTableFlex,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
