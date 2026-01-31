@@ -34,6 +34,9 @@ final _logger = Logger('OfflineComputerGameController');
 /// Defaults to half of available cores, minimum 1.
 final numberOfCoresForEvaluation = max(1, maxEngineCores ~/ 2);
 
+/// Minimum depth required for a quality move evaluation in practice mode.
+const _kMinEvalDepth = 16;
+
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -238,6 +241,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
             searchTime + const Duration(milliseconds: 500),
           )) {
             evalAfter = eval;
+            // Stop early if we have sufficient depth for a quality evaluation
+            if (eval.depth >= _kMinEvalDepth) {
+              evaluationService.stop();
+              break;
+            }
           }
         } on TimeoutException {
           evaluationService.stop();

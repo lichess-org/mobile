@@ -532,7 +532,7 @@ class _PracticeCommentCard extends ConsumerWidget {
           if (practiceComment.evalAfter != null)
             Text(
               practiceComment.evalAfter!,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
         ],
       );
@@ -545,7 +545,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic)),
           ),
           if (cachedEval != null)
-            Text(cachedEval, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+            Text(cachedEval, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
         ],
       );
     }
