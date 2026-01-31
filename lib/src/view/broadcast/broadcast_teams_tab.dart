@@ -66,7 +66,7 @@ class BroadcastTeamsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
-    final showEvaluationBar = ref.watch(
+    final showEvaluationGauges = ref.watch(
       broadcastPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
 
@@ -83,7 +83,7 @@ class BroadcastTeamsList extends ConsumerWidget {
             tournamentSlug: tournamentSlug,
             roundSlug: value.round.slug,
             title: value.round.name,
-            showEvaluationBar: showEvaluationBar,
+            showEvaluationGauge: showEvaluationGauges,
           );
         },
       ),
@@ -102,7 +102,7 @@ class _TeamMatchCard extends StatelessWidget {
     required this.tournamentSlug,
     required this.roundSlug,
     required this.title,
-    required this.showEvaluationBar,
+    required this.showEvaluationGauge,
   });
 
   final BroadcastTeamMatch match;
@@ -112,7 +112,7 @@ class _TeamMatchCard extends StatelessWidget {
   final String tournamentSlug;
   final String roundSlug;
   final String title;
-  final bool showEvaluationBar;
+  final bool showEvaluationGauge;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +172,7 @@ class _TeamMatchCard extends StatelessWidget {
               tournamentSlug: tournamentSlug,
               roundSlug: roundSlug,
               title: title,
-              showEvaluationBar: showEvaluationBar,
+              showEvaluationGauge: showEvaluationGauge,
             );
           }),
         ],
@@ -191,7 +191,7 @@ class _GameRow extends ConsumerStatefulWidget {
     required this.tournamentSlug,
     required this.roundSlug,
     required this.title,
-    required this.showEvaluationBar,
+    required this.showEvaluationGauge,
   });
 
   final BroadcastGame game;
@@ -202,7 +202,7 @@ class _GameRow extends ConsumerStatefulWidget {
   final String tournamentSlug;
   final String roundSlug;
   final String title;
-  final bool showEvaluationBar;
+  final bool showEvaluationGauge;
   @override
   ConsumerState<_GameRow> createState() => _GameRowState();
 }
@@ -279,7 +279,7 @@ class _GameRowState extends ConsumerState<_GameRow> {
                 SizedBox(width: isTablet ? _kTabletSpacing : _kPhoneSpacing),
                 SizedBox(
                   width: _kEvalBarWidth,
-                  child: widget.game.isOngoing && widget.showEvaluationBar
+                  child: widget.game.isOngoing && widget.showEvaluationGauge
                       ? whiteWinningChances != null
                             ? _MiniEvalBar(
                                 whiteWinningChances: whiteWinningChances,
