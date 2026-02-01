@@ -79,9 +79,9 @@ class _BodyState extends ConsumerState<_Body> {
         return;
       }
 
-      final ongoingGame = await ref.read(offlineComputerGameStorageProvider).fetchOngoingGame();
-      if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
-        ref.read(offlineComputerGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+      final savedGame = await ref.read(offlineComputerGameStorageProvider).fetchGame();
+      if (savedGame != null && savedGame.game.steps.length > 1 && !savedGame.game.finished) {
+        ref.read(offlineComputerGameControllerProvider.notifier).loadGame(savedGame);
       } else {
         if (!mounted) return;
         _showNewGameDialog();
@@ -91,8 +91,17 @@ class _BodyState extends ConsumerState<_Body> {
 
   Future<void> _saveGameState() async {
     if (!mounted) return;
-    final game = ref.read(offlineComputerGameControllerProvider).game;
-    await ref.read(offlineComputerGameStorageProvider).save(game);
+    final state = ref.read(offlineComputerGameControllerProvider);
+    await ref
+        .read(offlineComputerGameStorageProvider)
+        .save(
+          SavedOfflineComputerGame(
+            game: state.game,
+            gameSessionId: state.gameSessionId.value,
+            lastPracticeComment: state.practiceComment,
+            lastEvalString: state.cachedEvalString,
+          ),
+        );
   }
 
   @override

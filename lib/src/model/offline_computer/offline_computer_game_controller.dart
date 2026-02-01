@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:logging/logging.dart';
 
@@ -82,16 +83,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  /// Load an ongoing game from storage.
-  void loadOngoingGame(OfflineComputerGame game) {
+  /// Load a game from storage.
+  void loadGame(SavedOfflineComputerGame savedGame) {
+    final game = savedGame.game;
     state = OfflineComputerGameState(
       game: game,
-      gameSessionId: StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}'),
+      gameSessionId: StringId(savedGame.gameSessionId),
       stepCursor: game.steps.length - 1,
+      practiceComment: savedGame.lastPracticeComment,
+      cachedEvalString: savedGame.lastEvalString,
     );
 
-    // If it's the player's turn and game is still playable, precompute hints (only in casual mode)
-    if (game.playable && state.turn == game.playerSide && game.casual) {
+    // If it's the player's turn and game is still playable, precompute hints (only in casual or practice mode)
+    if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
       _computeHints();
     }
     // If it's the engine's turn and game is still playable, trigger engine move
