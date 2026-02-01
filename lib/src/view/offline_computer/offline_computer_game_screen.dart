@@ -89,9 +89,10 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
-  void _saveGameState() {
+  Future<void> _saveGameState() async {
     if (!mounted) return;
-    ref.read(offlineComputerGameControllerProvider.notifier).saveState();
+    final game = ref.read(offlineComputerGameControllerProvider).game;
+    await ref.read(offlineComputerGameStorageProvider).save(game);
   }
 
   @override
@@ -130,7 +131,7 @@ class _BodyState extends ConsumerState<_Body> {
 
           final navigator = Navigator.of(context);
           final game = gameState.game;
-          if (game.abortable || game.finished) {
+          if (game.abortable) {
             return navigator.pop();
           }
 
@@ -141,18 +142,16 @@ class _BodyState extends ConsumerState<_Body> {
                 title: Text(context.l10n.mobileAreYouSure),
                 content: const Text('No worries, your game will be saved.'),
                 onNo: () => Navigator.of(context).pop(false),
-                onYes: () {
-                  _saveGameState();
-                  Navigator.of(context).pop(true);
-                },
+                onYes: () => Navigator.of(context).pop(true),
               ),
             );
             if (shouldPop == true) {
+              await _saveGameState();
               navigator.pop();
             }
           } else {
             // Save state even if the game is finished, we might want to analyse it later
-            _saveGameState();
+            await _saveGameState();
             navigator.pop();
           }
         },
@@ -437,6 +436,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
   final OfflineComputerGameState gameState;
 
+  static const _cardHeight = 54.0;
   static const _evalTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
 
   @override
@@ -452,7 +452,6 @@ class _PracticeCommentCard extends ConsumerWidget {
 
     if (isEvaluatingMove) {
       content = Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(
             width: 16,
@@ -539,30 +538,35 @@ class _PracticeCommentCard extends ConsumerWidget {
       );
     } else if (gameState.finished) {
       // Game is over
-      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: FontStyle.italic));
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
     } else {
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
           Expanded(
-            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: FontStyle.italic)),
+            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
           ),
           if (cachedEval != null)
             Text(cachedEval, style: _evalTextStyle)
           else
-            const CircularProgressIndicator.adaptive(strokeWidth: 2),
+            const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+            ),
         ],
       );
     }
 
     return Container(
+      height: _cardHeight,
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: content,
+      child: Align(alignment: Alignment.centerLeft, child: content),
     );
   }
 }
