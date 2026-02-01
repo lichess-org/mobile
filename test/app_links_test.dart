@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBuildContext extends Mock implements BuildContext {}
@@ -46,6 +47,18 @@ void main() {
             (r) => r.screen,
             'screen',
             isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
+          ),
+        );
+    });
+
+    test('resolves /tournament/{id} to TournamentScreen route', () {
+      final uri = Uri.parse('https://lichess.org/tournament/61044');
+      expect(
+          resolveAppLinkUri(mockContext, uri)!.first,
+          isA<MaterialScreenRoute>().having(
+            (r) => r.screen,
+            'screen',
+            isA<TournamentScreen>().having((s) => s.id, 'tournament id', '61044'),
           ),
         );
     });
