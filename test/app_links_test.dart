@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -76,10 +77,16 @@ void main() {
     test('resolves /gameid analysis link with ply fragment', () {
       // lichess.org/gameid#20 -> Opens analysis at move 20
       final uri = Uri.parse('https://lichess.org/qwertyui#20');
-      final routes = resolveAppLinkUri(mockContext, uri);
-
-      expect(routes, isNotNull);
-      expect(routes!.length, 1);
+      expect(
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<AnalysisScreen>()
+              .having((s) => s.options.gameId, 'id', 'qwertyui')
+              .having((s) => s.options.initialMoveCursor, 'move number', 20),
+        ),
+      );
     });
 
     test('resolves /gameid/black analysis link', () {
