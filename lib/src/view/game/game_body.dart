@@ -224,12 +224,12 @@ class GameBody extends ConsumerWidget {
             youAre == Side.white && !isBoardTurned || youAre == Side.black && isBoardTurned;
         final topPlayer = topPlayerIsBlack ? black : white;
         final bottomPlayer = topPlayerIsBlack ? white : black;
-
+        final pieceAnimationDuration = ref.read(effectivePieceAnimationDurationProvider);
         final animationDuration =
             gameState.game.meta.speed == Speed.ultraBullet ||
                 gameState.game.meta.speed == Speed.bullet
             ? Duration.zero
-            : boardPreferences.pieceAnimationDuration;
+            : pieceAnimationDuration;
 
         return FocusDetector(
           onFocusRegained: () {

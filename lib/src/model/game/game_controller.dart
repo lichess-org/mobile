@@ -504,7 +504,7 @@ class GameController extends AsyncNotifier<GameState> {
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
-    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
+    final animationDuration = ref.read(effectivePieceAnimationDurationProvider);
 
     final delay = animationDuration ~/ 2;
 
