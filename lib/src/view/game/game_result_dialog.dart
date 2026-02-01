@@ -164,7 +164,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     : null,
                 child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
               ),
-            if (value.tournament?.isOngoing == true) ...[
+            if (value.tournament != null) ...[
               FilledButton.icon(
                 icon: const Icon(Icons.play_arrow),
                 onPressed: () {
@@ -177,22 +177,24 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                 },
                 label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
               ),
-              FilledButton.tonalIcon(
-                icon: const Icon(Icons.pause),
-                onPressed: () {
-                  // Pause the tournament
-                  ref
-                      .read(tournamentControllerProvider(value.tournament!.id).notifier)
-                      .joinOrPause();
-                  // Close the dialog
-                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                  // Close the game screen
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop(); // Pop the screen after frame
-                  });
-                },
-                label: Text(context.l10n.pause, textAlign: TextAlign.center),
-              ),
+              // Only show Pause if the tournament is actually ongoing
+              if (value.tournament!.isOngoing)
+                FilledButton.tonalIcon(
+                  icon: const Icon(Icons.pause),
+                  onPressed: () {
+                    // Pause the tournament
+                    ref
+                        .read(tournamentControllerProvider(value.tournament!.id).notifier)
+                        .joinOrPause();
+                    // Close the dialog
+                    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+                    // Close the game screen
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.of(context).pop(); // Pop the screen after frame
+                    });
+                  },
+                  label: Text(context.l10n.pause, textAlign: TextAlign.center),
+                ),
             ],
             if (value.game.userAnalysable)
               FilledButton.tonal(
