@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/app_links.dart';
@@ -91,10 +92,16 @@ void main() {
 
     test('resolves /gameid/black analysis link', () {
       final uri = Uri.parse('https://lichess.org/qwertyui/black');
-      final routes = resolveAppLinkUri(mockContext, uri);
-
-      expect(routes, isNotNull);
-      expect(routes!.length, 1);
+      expect(
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<AnalysisScreen>()
+              .having((s) => s.options.gameId, 'id', 'qwertyui')
+              .having((s) => s.options.orientation, 'player color', Side.black),
+        ),
+      );
     });
   });
 
