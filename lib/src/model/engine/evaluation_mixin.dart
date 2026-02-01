@@ -108,7 +108,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     await _evaluationPreferencesNotifier.toggle();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      requestEval(forceRestart: true);
+      requestEval();
     } else {
       _evaluationService.quit();
     }
@@ -122,21 +122,21 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineCores(int numEngineCores) {
     _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
     _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   /// Requests an engine evaluation if available.
@@ -155,7 +155,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval({bool goDeeper = false, bool forceRestart = false}) {
+  void requestEval({bool goDeeper = false}) {
     if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
 
     final delayLocalEngine =
@@ -166,13 +166,13 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       _sendEvalGetEvent();
 
       if (!delayLocalEngine) {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       }
     });
 
     if (delayLocalEngine) {
       _localEngineAfterDelayDebounce(() {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       });
     }
   }
@@ -258,7 +258,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     });
   }
 
-  void _startEngineEval({bool goDeeper = false, bool forceRestart = false}) {
+  void _startEngineEval({bool goDeeper = false}) {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
 
@@ -279,9 +279,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
-    _evaluationService.evaluate(work, goDeeper: goDeeper, forceRestart: forceRestart)?.forEach((
-      event,
-    ) {
+    _evaluationService.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
       if (curState.engineInThreatMode) {
         return;
       }

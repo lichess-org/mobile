@@ -178,17 +178,16 @@ class EvaluationService {
   /// when the evaluation finishes or is replaced by another request.
   ///
   /// If [goDeeper] is true, the engine will use the maximum search time.
-  /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
   /// Returns `null` if a cached eval is sufficient.
   /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false, bool forceRestart = false}) {
+  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
     if (!engineSupportedVariants.contains(work.variant)) {
       throw EngineUnsupportedVariantException(work.variant);
     }
 
     // Check if cached eval is sufficient
-    if (!work.threatMode && !forceRestart) {
+    if (!work.threatMode) {
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
         case CloudEval _ when goDeeper == false:
