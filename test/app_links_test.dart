@@ -23,11 +23,14 @@ void main() {
 
     test('resolves /study/{id} to StudyScreen route', () {
       final uri = Uri.parse('https://lichess.org/study/p9uY0321');
-      final route = resolveAppLinkUri(mockContext, uri)!.first as MaterialScreenRoute;
-
-      expect(route.screen, isA<StudyScreen>());
-      final screen = route.screen as StudyScreen;
-      expect(screen.id, equals('p9uY0321'));
+      expect(
+          resolveAppLinkUri(mockContext, uri)!.first,
+          isA<MaterialScreenRoute>().having(
+            (r) => r.screen,
+            'screen',
+            isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
+          ),
+        );
     });
 
     test('resolves /training/{id} to PuzzleScreen route', () {
