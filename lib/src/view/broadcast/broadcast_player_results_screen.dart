@@ -440,22 +440,7 @@ class _GameResultListTile extends StatelessWidget {
             ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
             : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
       ),
-      title: Row(
-        mainAxisSize: .min,
-        children: [
-          if (title != null) ...[
-            Text(
-              title,
-              style: TextStyle(
-                color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Flexible(child: Text(name ?? '', overflow: TextOverflow.ellipsis)),
-        ],
-      ),
+      title: BroadcastPlayerWidget(player: opponent, showFederation: false, showRating: false),
       subtitle: federation != null
           ? Row(
               mainAxisSize: .min,
