@@ -182,25 +182,15 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<void> _makeMoveWithEvaluation(NormalMove move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
 
+    // Try to get cached values before applying move (they might be available already)
+    var cachedBestMoves = state.cachedBestMoves;
+    var cachedWinningChances = state.cachedWinningChances;
+    final wasLoadingHint = state.isLoadingHint;
+
     // Clear previous practice comment and set evaluating state
     state = state.copyWith(isEvaluatingMove: true, practiceComment: null);
 
-    // Wait for hint computation to complete if it's still in progress
-    // This ensures we have the "before" evaluation for comparison
-    // Timeout after 3 seconds to prevent infinite waiting
-    const maxWaitTime = Duration(seconds: 3);
-    final deadline = DateTime.now().add(maxWaitTime);
-    while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    }
-
-    if (!ref.mounted) return;
-
-    // Get the cached evaluation BEFORE applying the move (since _applyMove clears hints)
-    final cachedBestMoves = state.cachedBestMoves;
-    final cachedWinningChances = state.cachedWinningChances;
-
-    // Apply the move for responsive UI
+    // Apply the move immediately for responsive UI
     _applyMove(move);
 
     if (!state.game.playable) {
@@ -209,7 +199,23 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    // If we don't have cached evaluation, proceed without practice comment
+    // If hints were still loading when we made the move, wait for them to complete
+    // so we can get the "before" evaluation for comparison
+    if (wasLoadingHint || cachedBestMoves == null || cachedWinningChances == null) {
+      const maxWaitTime = Duration(seconds: 3);
+      final deadline = DateTime.now().add(maxWaitTime);
+      while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+      }
+
+      if (!ref.mounted) return;
+
+      // Now get the cached values (should be available after hints complete)
+      cachedBestMoves = state.cachedBestMoves;
+      cachedWinningChances = state.cachedWinningChances;
+    }
+
+    // If we still don't have cached evaluation, proceed without practice comment
     if (cachedBestMoves == null || cachedWinningChances == null || cachedBestMoves.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
       _playEngineMove();
