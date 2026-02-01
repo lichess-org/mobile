@@ -473,9 +473,9 @@ class _PracticeCommentCard extends ConsumerWidget {
       );
     } else if (practiceComment != null) {
       final verdict = practiceComment.verdict;
-      icon = verdict.icon;
-      iconColor = verdict.color;
-      backgroundColor = verdict.color.withValues(alpha: 0.1);
+      icon = practiceComment.icon;
+      iconColor = practiceComment.color;
+      backgroundColor = practiceComment.color.withValues(alpha: 0.1);
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,

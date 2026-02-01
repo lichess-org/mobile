@@ -107,4 +107,12 @@ sealed class PracticeComment with _$PracticeComment {
   ///
   /// Used to determine which label to show ("Another was" vs "Best was").
   bool get isShowingAlternative => verdict == .goodMove && alternativeGoodMove != null;
+
+  /// The icon to display for this comment.
+  ///
+  /// Shows a book icon for book moves, otherwise the verdict icon.
+  IconData get icon => isBookMove ? Icons.menu_book : verdict.icon;
+
+  /// The color to display for this comment.
+  Color get color => verdict.color;
 }
