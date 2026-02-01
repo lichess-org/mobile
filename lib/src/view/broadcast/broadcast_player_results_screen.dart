@@ -467,31 +467,59 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: 40,
-        child: Column(
+        width: 60,
+        child: Row(
           mainAxisSize: .min,
-          crossAxisAlignment: .end,
+          mainAxisAlignment: .center,
           children: [
-            Row(
-              mainAxisSize: .min,
-              children: [
-                Text(
-                  switch (points) {
-                    BroadcastPoints.one => '1',
-                    BroadcastPoints.half => '½',
-                    BroadcastPoints.zero => '0',
-                    _ => '*',
-                  },
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            SizedBox(
+              width: 30,
+              child: Center(
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    border:
+                        (Theme.of(context).brightness == .light && color == .white ||
+                            Theme.of(context).brightness == .dark && color == .black)
+                        ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
+                        : null,
+                    shape: .circle,
+                    color: switch (color) {
+                      .white => Colors.white.withValues(alpha: 0.9),
+                      .black => Colors.black.withValues(alpha: 0.9),
+                    },
+                  ),
                 ),
-              ],
+              ),
             ),
-            if (showRatingDiff &&
-                playerGameResult.ratingDiff != null &&
-                playerGameResult.ratingDiff != 0)
-              ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 12),
+            SizedBox(
+              width: 30,
+              child: Column(
+                mainAxisSize: .min,
+                crossAxisAlignment: .end,
+                children: [
+                  Row(
+                    mainAxisSize: .min,
+                    children: [
+                      Text(
+                        switch (points) {
+                          .one => '1',
+                          .half => '½',
+                          .zero => '0',
+                          _ => '*',
+                        },
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
+                      ),
+                    ],
+                  ),
+                  if (showRatingDiff &&
+                      playerGameResult.ratingDiff != null &&
+                      playerGameResult.ratingDiff != 0)
+                    ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 12),
+                ],
+              ),
+            ),
           ],
         ),
       ),
