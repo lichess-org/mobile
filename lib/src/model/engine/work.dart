@@ -115,8 +115,8 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// | 3     | 1550 | 7       |
   /// | 4     | 1650 | 6       |
   /// | 5     | 1750 | 5       |
-  /// | 6     | 1850 | 5       |
-  /// | 7     | 1950 | 5       |
+  /// | 6     | 1850 | 4       |
+  /// | 7     | 1950 | 4       |
   /// | 8     | 2100 | 4       |
   /// | 9     | 2300 | 4       |
   /// | 10    | 2550 | 4       |
@@ -133,11 +133,11 @@ sealed class MoveWork extends Work with _$MoveWork {
     } else if (elo >= 2850) {
       // Level 11: 3
       return 3;
-    } else if (elo >= 2100) {
-      // Levels 8-10: 4
+    } else if (elo >= 1850) {
+      // Levels 6-10: 4
       return 4;
     } else {
-      // Levels 5-7: 5
+      // Level 5: 5
       return 5;
     }
   }
@@ -155,13 +155,13 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// | 3     | 1550 | 410ms       |
   /// | 4     | 1650 | 525ms       |
   /// | 5     | 1750 | 640ms       |
-  /// | 6     | 1850 | 940ms       |
-  /// | 7     | 1950 | 1250ms      |
-  /// | 8     | 2100 | 1700ms      |
-  /// | 9     | 2300 | 2300ms      |
-  /// | 10    | 2550 | 3060ms      |
-  /// | 11    | 2850 | 3970ms      |
-  /// | 12    | 3190 | 5000ms      |
+  /// | 6     | 1850 | 1500ms      |
+  /// | 7     | 1950 | 1985ms      |
+  /// | 8     | 2100 | 2715ms      |
+  /// | 9     | 2300 | 3685ms      |
+  /// | 10    | 2550 | 4895ms      |
+  /// | 11    | 2850 | 6350ms      |
+  /// | 12    | 3190 | 8000ms      |
   @override
   Duration get searchTime {
     final int ms;
@@ -169,10 +169,10 @@ sealed class MoveWork extends Work with _$MoveWork {
       // Levels 1-5: linear from 150ms to 640ms
       ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
     } else {
-      // Levels 6-12: linear from 640ms to 5000ms
-      ms = (640 + ((elo - 1750) / (3190 - 1750) * 4360)).toInt();
+      // Levels 6-12: linear from 1500ms to 8000ms
+      ms = (1500 + ((elo - 1850) / (3190 - 1850) * 6500)).toInt();
     }
-    return Duration(milliseconds: ms.clamp(150, 5000));
+    return Duration(milliseconds: ms.clamp(150, 8000));
   }
 }
 

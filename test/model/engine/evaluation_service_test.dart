@@ -1139,18 +1139,18 @@ void main() {
       // See MoveWork.searchTime documentation for full table
       expect(level1.searchTime.inMilliseconds, equals(150));
       expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(1699));
-      expect(level12.searchTime.inMilliseconds, equals(5000));
+      expect(level8.searchTime.inMilliseconds, equals(2712));
+      expect(level12.searchTime.inMilliseconds, equals(8000));
     });
 
     test('MoveWork.multiPv scales inversely with elo', () {
       final lowElo = makeMoveWork(elo: 1320);
-      final midElo = makeMoveWork(elo: 1800);
+      final midElo = makeMoveWork(elo: 1850);
       final highElo = makeMoveWork(elo: 2500);
 
       // See MoveWork.multiPv documentation for full table
       expect(lowElo.multiPv, equals(10));
-      expect(midElo.multiPv, equals(5));
+      expect(midElo.multiPv, equals(4));
       expect(highElo.multiPv, equals(4));
     });
 
