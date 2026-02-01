@@ -253,6 +253,12 @@ class EvaluationService {
       stop();
     }
 
+    _logger.info(
+      'Final eval at ply ${work.position.ply}: '
+      'depth=${finalEval?.depth}, cp=${finalEval?.cp}, mate=${finalEval?.mate}, '
+      'nodes=${finalEval?.nodes}, time=${finalEval?.searchTime.inMilliseconds}ms',
+    );
+
     return finalEval;
   }
 
