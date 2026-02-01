@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -35,9 +36,14 @@ void main() {
 
     test('resolves /training/{id} to PuzzleScreen route', () {
       final uri = Uri.parse('https://lichess.org/training/61044');
-      final routes = resolveAppLinkUri(mockContext, uri);
-
-      expect(routes!.length, 1);
+      expect(
+          resolveAppLinkUri(mockContext, uri)!.first,
+          isA<MaterialScreenRoute>().having(
+            (r) => r.screen,
+            'screen',
+            isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
+          ),
+        );
     });
 
     test('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', () {
