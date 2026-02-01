@@ -930,6 +930,7 @@ class PracticeModeStockfish implements Stockfish {
               if (moves.length >= 4) break;
               moves.add(NormalMove(from: entry.key, to: entry.value.first));
             }
+            _lastMoves = moves;
 
             // Determine the base cp value
             // First go call is for hints (before move), subsequent calls are for after move eval
@@ -948,19 +949,30 @@ class PracticeModeStockfish implements Stockfish {
             }
 
             // Emit bestmove
-            final afterBestMove = _position!.play(moves.first);
-            final ponderMoves = makeLegalMoves(afterBestMove);
-            String ponderPart = '';
-            if (ponderMoves.isNotEmpty) {
-              final ponderFrom = ponderMoves.keys.first;
-              final ponderTo = ponderMoves[ponderFrom]!.first;
-              final ponderMove = NormalMove(from: ponderFrom, to: ponderTo);
-              ponderPart = ' ponder ${ponderMove.uci}';
-            }
-            _emit('bestmove ${moves.first.uci}$ponderPart\n');
+            _emitBestMove(moves);
           }
         }
+      case 'stop':
+        // When stopped, emit bestmove if we have moves
+        if (_lastMoves != null && _lastMoves!.isNotEmpty) {
+          _emitBestMove(_lastMoves!);
+        }
     }
+  }
+
+  List<NormalMove>? _lastMoves;
+
+  void _emitBestMove(List<NormalMove> moves) {
+    final afterBestMove = _position!.play(moves.first);
+    final ponderMoves = makeLegalMoves(afterBestMove);
+    String ponderPart = '';
+    if (ponderMoves.isNotEmpty) {
+      final ponderFrom = ponderMoves.keys.first;
+      final ponderTo = ponderMoves[ponderFrom]!.first;
+      final ponderMove = NormalMove(from: ponderFrom, to: ponderTo);
+      ponderPart = ' ponder ${ponderMove.uci}';
+    }
+    _emit('bestmove ${moves.first.uci}$ponderPart\n');
   }
 
   @override
