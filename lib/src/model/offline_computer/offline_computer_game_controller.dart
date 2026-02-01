@@ -44,7 +44,9 @@ const _kMinEvalDepth = 16;
 const _kSearchTime = Duration(seconds: 2);
 
 /// Number of multi-PV lines to request for evaluation.
-const _kEvaluationMultivpv = 4;
+///
+/// It should be balanced to provide enough alternatives while having the quickest search.
+const _kEvaluationMultivpv = 3;
 
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
