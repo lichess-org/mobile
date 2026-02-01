@@ -33,9 +33,7 @@ final _random = Random();
 final _logger = Logger('OfflineComputerGameController');
 
 /// The number of CPU cores to use for engine evaluation.
-///
-/// Defaults to half of available cores, minimum 1.
-final numberOfCoresForEvaluation = max(1, maxEngineCores ~/ 2);
+final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
 /// Minimum depth required for a move evaluation in practice mode.
 const _kMinEvalDepth = 14;
@@ -44,9 +42,7 @@ const _kMinEvalDepth = 14;
 const _kSearchTime = Duration(seconds: 2);
 
 /// Number of multi-PV lines to request for evaluation.
-///
-/// Balanced to provide one alternative while having the quickest search.
-const _kEvaluationMultivpv = 2;
+const _kEvaluationMultivpv = 3;
 
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
