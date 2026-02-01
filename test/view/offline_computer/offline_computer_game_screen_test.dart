@@ -1132,7 +1132,7 @@ void main() {
   });
 
   group('Practice mode', () {
-    testWidgets('Practice mode switch is shown in new game dialog', (tester) async {
+    testWidgets('switch is shown in new game dialog', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
@@ -1153,7 +1153,7 @@ void main() {
       expect(find.text('Get feedback on your moves'), findsOneWidget);
     });
 
-    testWidgets('Practice mode title is shown when practice mode is enabled', (tester) async {
+    testWidgets('title is shown when practice mode is enabled', (tester) async {
       testBinding.stockfish = PracticeModeStockfish();
       await initPracticeModeGame(tester);
 
@@ -1161,7 +1161,7 @@ void main() {
       expect(find.text('Practice with computer'), findsOneWidget);
     });
 
-    testWidgets('Practice mode game is started with practiceMode flag set', (tester) async {
+    testWidgets('game is started with practiceMode flag set', (tester) async {
       testBinding.stockfish = PracticeModeStockfish();
 
       late WidgetRef ref;
@@ -1235,7 +1235,7 @@ void main() {
     });
 
     testWidgets('PracticeComment uses book icon for book moves', (tester) async {
-      final comment = PracticeComment(
+      const comment = PracticeComment(
         verdict: MoveVerdict.goodMove,
         winningChancesBefore: 0.5,
         winningChancesAfter: 0.5,
@@ -1243,7 +1243,7 @@ void main() {
       );
       expect(comment.icon, Icons.menu_book);
 
-      final normalComment = PracticeComment(
+      const normalComment = PracticeComment(
         verdict: MoveVerdict.goodMove,
         winningChancesBefore: 0.5,
         winningChancesAfter: 0.5,
@@ -1251,6 +1251,90 @@ void main() {
       );
       expect(normalComment.icon, Icons.check_circle);
     });
+
+    // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
+    //   // Use a fake stockfish that returns an inaccuracy (-60cp shift)
+    //   testBinding.stockfish = PracticeModeStockfish(initialEvalCp: 50, evalShiftCp: -60);
+
+    //   late WidgetRef ref;
+    //   final gameStorage = MockOfflineComputerGameStorage();
+    //   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+    //   final app = await makeTestProviderScopeApp(
+    //     tester,
+    //     home: Consumer(
+    //       builder: (context, r, _) {
+    //         ref = r;
+    //         return const OfflineComputerGameScreen();
+    //       },
+    //     ),
+    //     overrides: {
+    //       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+    //         (_) => gameStorage,
+    //       ),
+    //     },
+    //   );
+    //   await tester.pumpWidget(app);
+    //   await tester.pump(const Duration(milliseconds: 50));
+
+    //   // Enable practice mode
+    //   final practiceSwitch = find.descendant(
+    //     of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchListTile)),
+    //     matching: find.byType(Switch),
+    //   );
+    //   await tester.tap(practiceSwitch);
+    //   await tester.pump();
+
+    //   // Start game as white
+    //   await selectSide(tester, Side.white);
+    //   await tester.tap(find.text('Play'));
+    //   await tester.pump();
+    //   await tester.pump(const Duration(milliseconds: 100));
+
+    //   // Verify the game started
+    //   expect(find.text('Practice with computer'), findsOneWidget);
+    //   expect(find.byType(Chessboard), findsOneWidget);
+
+    //   // Check initial state
+    //   var state = ref.read(offlineComputerGameControllerProvider);
+    //   expect(state.game.practiceMode, isTrue);
+
+    //   // Play a move (e2-e4)
+    //   await playMove(tester, 'e2', 'e4');
+    //   await tester.pump(const Duration(seconds: 3));
+
+    //   // After playing a move in practice mode, either:
+    //   // 1. Still evaluating (shows spinner), OR
+    //   // 2. Evaluation completed (shows verdict icon)
+    //   state = ref.read(offlineComputerGameControllerProvider);
+
+    //   // Print debug info
+    //   debugPrint('isEvaluatingMove: ${state.isEvaluatingMove}');
+    //   debugPrint('practiceComment: ${state.practiceComment}');
+    //   debugPrint('cachedWinningChances: ${state.cachedWinningChances}');
+
+    //   // The evaluation might complete instantly with fake stockfish
+    //   // Check that either evaluating state or verdict is shown
+    //   // Note: The localized text is "Evaluating your move ..." with spaces and ellipsis
+    //   final evaluatingText = find.textContaining('Evaluating your move');
+    //   final helpIcon = find.byIcon(Icons.help);
+    //   final errorIcon = find.byIcon(Icons.error);
+    //   final checkIcon = find.byIcon(Icons.check_circle);
+    //   final cancelIcon = find.byIcon(Icons.cancel);
+
+    //   final isEvaluating = evaluatingText.evaluate().isNotEmpty;
+    //   final hasVerdictIcon =
+    //       helpIcon.evaluate().isNotEmpty ||
+    //       errorIcon.evaluate().isNotEmpty ||
+    //       checkIcon.evaluate().isNotEmpty ||
+    //       cancelIcon.evaluate().isNotEmpty;
+
+    //   expect(
+    //     isEvaluating || hasVerdictIcon,
+    //     isTrue,
+    //     reason: 'Should show either evaluating state or verdict icon',
+    //   );
+    // });
   });
 }
 
