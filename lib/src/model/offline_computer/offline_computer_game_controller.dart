@@ -220,7 +220,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // If hints were still loading when we made the move, wait for them to complete
     // so we can get the "before" evaluation for comparison
     if (wasLoadingHint || cachedBestMoves == null || cachedWinningChances == null) {
-      const maxWaitTime = Duration(seconds: 3);
+      const maxWaitTime = Duration(seconds: 2);
       final deadline = DateTime.now().add(maxWaitTime);
       while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
@@ -377,7 +377,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     Duration searchTime,
   ) async {
     LocalEval? evalAfter;
-    final streamAfter = evaluationService.evaluate(work, forceRestart: true);
+    final streamAfter = evaluationService.evaluate(work);
     if (streamAfter != null) {
       try {
         await for (final (_, eval) in streamAfter.timeout(
@@ -568,7 +568,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: steps,
       );
 
-      final stream = evaluationService.evaluate(work, forceRestart: true);
+      final stream = evaluationService.evaluate(work);
       if (stream == null) {
         if (ref.mounted) {
           state = state.copyWith(isLoadingHint: false);
