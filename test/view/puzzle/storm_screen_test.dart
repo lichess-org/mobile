@@ -154,10 +154,40 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
     });
+
+    testWidgets('play again starts new run', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(seconds: 1));
+
+      await playMove(tester, 'h5', 'h7', orientation: Side.white);
+      await tester.pump(const Duration(milliseconds: 500));
+      await playMove(tester, 'e3', 'g1', orientation: Side.white);
+      await tester.pump(const Duration(milliseconds: 500));
+
+      await tester.tap(find.text('End run'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play again'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.textContaining('You play the'), findsWidgets);
+    });
   });
 }
 
-final mockStromRun = PuzzleStormResponse(
+PuzzleStormResponse get mockStromRun => PuzzleStormResponse(
   puzzles: IList([
     LitePuzzle(
       id: const PuzzleId('5ech9'),
