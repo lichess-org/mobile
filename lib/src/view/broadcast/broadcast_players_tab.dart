@@ -314,7 +314,7 @@ class BroadcastPlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played, :rank) =
         playerWithOverallResult;
-    final BroadcastPlayer(:federation, :title, :name, :rating) = player;
+    final BroadcastPlayer(:federation, :rating) = player;
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
     return ListTile(

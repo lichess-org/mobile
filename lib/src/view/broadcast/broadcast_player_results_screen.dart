@@ -417,7 +417,7 @@ class _GameResultListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
         playerGameResult;
-    final BroadcastPlayer(:federation, :title, :name, :rating) = opponent;
+    final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
 
     return ListTile(
@@ -447,7 +447,7 @@ class _GameResultListTile extends StatelessWidget {
               children: [
                 Image.asset('assets/images/fide-fed/$federation.png', height: 12),
                 const SizedBox(width: 5),
-                if (opponent.rating != null) Text(opponent.rating.toString()),
+                if (rating != null) Text(rating.toString()),
               ],
             )
           : null,

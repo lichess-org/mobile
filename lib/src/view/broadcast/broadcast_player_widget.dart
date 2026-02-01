@@ -25,7 +25,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
         if (federation != null && showFederation) ...[
           Image.asset(
             'assets/images/fide-fed/$federation.png',
-            height: (textStyle?.fontSize ?? 14) - 2,
+            height: ((textStyle ?? DefaultTextStyle.of(context).style).fontSize ?? 14) - 2,
           ),
           const SizedBox(width: 5),
         ],
