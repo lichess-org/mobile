@@ -14,6 +14,9 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -39,6 +42,10 @@ const _kMinEvalDepth = 16;
 
 /// Number of multi-PV lines to request for evaluation.
 const _kEvaluationMultivpv = 4;
+
+/// Ply threshold for opening phase. Below this, we check the master database
+/// to consider book moves as good regardless of engine evaluation.
+const _kOpeningPlyThreshold = 30;
 
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
@@ -183,6 +190,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// Uses the cached evaluation from _computeHints as the "before" state,
   /// then evaluates the position after the move to determine how good the move was.
   /// If hint computation is still in progress, waits for it to complete first.
+  ///
+  /// In the opening phase (before [_kOpeningPlyThreshold]), also fetches the master
+  /// database to consider book moves as good regardless of engine evaluation.
   Future<void> _makeMoveWithEvaluation(NormalMove move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
 
@@ -190,6 +200,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     var cachedBestMoves = state.cachedBestMoves;
     var cachedWinningChances = state.cachedWinningChances;
     final wasLoadingHint = state.isLoadingHint;
+
+    // Get position FEN before applying the move for opening database lookup
+    final positionBeforeFen = state.currentPosition.fen;
+    final plyBeforeMove = state.currentPosition.ply;
 
     // Clear previous practice comment and set evaluating state
     state = state.copyWith(isEvaluatingMove: true, practiceComment: null);
@@ -251,26 +265,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: stepsAfter,
       );
 
-      LocalEval? evalAfter;
-      final streamAfter = evaluationService.evaluate(workAfter, forceRestart: true);
-      if (streamAfter != null) {
-        try {
-          await for (final (_, eval) in streamAfter.timeout(
-            searchTime + const Duration(milliseconds: 500),
-          )) {
-            evalAfter = eval;
-            // Stop early if we have sufficient depth for a quality evaluation
-            if (eval.depth >= _kMinEvalDepth) {
-              evaluationService.stop();
-              break;
-            }
-          }
-        } on TimeoutException {
-          evaluationService.stop();
-        }
-      }
+      // Start evaluation and opening database fetch in parallel
+      final evalFuture = _runEvaluation(evaluationService, workAfter, searchTime);
+      final masterDbFuture = plyBeforeMove < _kOpeningPlyThreshold
+          ? _fetchMasterDatabase(positionBeforeFen)
+          : Future.value(null);
+
+      // Wait for both to complete in parallel
+      final (evalAfter, masterEntry) = await (evalFuture, masterDbFuture).wait;
 
       if (!ref.mounted) return;
+
+      // Check if the played move is in the master database (played more than once)
+      final isBookMove =
+          masterEntry != null && masterEntry.moves.any((m) => m.uci == move.uci && m.games > 1);
 
       // Create practice comment if we have the after evaluation
       PracticeComment? comment;
@@ -289,9 +297,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         // Check if the played move was the best move
         final playedMoveIsBest = bestMove != null && bestMove.uci == move.uci;
 
+        // If the move is a book move, consider it a good move regardless of eval
+        final isGoodMove = isBookMove || shift < 0.025;
+
         // Find alternative good move if the played move was good
         Move? alternativeGoodMove;
-        if (shift < 0.025 && cachedBestMoves.length > 1) {
+        if (isGoodMove && cachedBestMoves.length > 1) {
           // Find another good move that's not the one played
           for (final m in cachedBestMoves.skip(1)) {
             if (winningChancesBefore - m.winningChances < 0.025 && m.move.uci != move.uci) {
@@ -301,15 +312,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           }
         }
 
-        final verdict = MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
+        // If it's a book move, force good move verdict
+        final verdict = isBookMove
+            ? MoveVerdict.goodMove
+            : MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
 
         // Get the position BEFORE the player's move to format the suggested moves as SAN
         // The stepCursor was incremented by _applyMove, so we need to go back 1 step
         final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
 
-        // Format best move as SAN
+        // Format best move as SAN (only if not a good move and there was a better move)
         SanMove? bestMoveSan;
-        if (!playedMoveIsBest && bestMove != null) {
+        if (!isGoodMove && !playedMoveIsBest && bestMove != null) {
           final parsed = Move.parse(bestMove.uci);
           if (parsed != null && positionBeforeMove.isLegal(parsed)) {
             final (_, san) = positionBeforeMove.makeSan(parsed);
@@ -334,6 +348,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           winningChancesBefore: winningChancesBefore,
           winningChancesAfter: winningChancesAfter,
           evalAfter: evalAfter.evalString,
+          isBookMove: isBookMove,
         );
       }
 
@@ -352,6 +367,47 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           _playEngineMove();
         }
       }
+    }
+  }
+
+  /// Run the engine evaluation and return the final eval.
+  Future<LocalEval?> _runEvaluation(
+    EvaluationService evaluationService,
+    EvalWork work,
+    Duration searchTime,
+  ) async {
+    LocalEval? evalAfter;
+    final streamAfter = evaluationService.evaluate(work, forceRestart: true);
+    if (streamAfter != null) {
+      try {
+        await for (final (_, eval) in streamAfter.timeout(
+          searchTime + const Duration(milliseconds: 500),
+        )) {
+          evalAfter = eval;
+          // Stop early if we have sufficient depth for a quality evaluation
+          if (eval.depth >= _kMinEvalDepth) {
+            evaluationService.stop();
+            break;
+          }
+        }
+      } on TimeoutException {
+        evaluationService.stop();
+      }
+    }
+    return evalAfter;
+  }
+
+  /// Fetch the master database for the given FEN.
+  /// Returns null if the request fails (e.g., no connectivity) or times out.
+  Future<OpeningExplorerEntry?> _fetchMasterDatabase(String fen) async {
+    try {
+      final repository = ref.read(openingExplorerRepositoryProvider);
+      return await repository
+          .getMasterDatabase(fen, since: MasterDb.kEarliestYear)
+          .timeout(const Duration(seconds: 2));
+    } catch (e) {
+      _logger.fine('Failed to fetch master database: $e');
+      return null;
     }
   }
 

@@ -86,6 +86,9 @@ sealed class PracticeComment with _$PracticeComment {
 
     /// The evaluation string after the move (e.g., "+0.5", "-1.2", "#3").
     String? evalAfter,
+
+    /// Whether the move is a book move (found in the master database).
+    @Default(false) bool isBookMove,
   }) = _PracticeComment;
 
   /// The shift in winning chances (how much the position deteriorated).
