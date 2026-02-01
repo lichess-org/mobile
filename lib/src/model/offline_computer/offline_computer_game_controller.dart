@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:logging/logging.dart';
 
@@ -81,12 +80,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       // Player plays first, precompute hints (only in casual or practice mode)
       _computeHints();
     }
-  }
-
-  void saveState() {
-    if (!ref.mounted) return;
-    _logger.info('Saving ongoing game');
-    ref.read(offlineComputerGameStorageProvider).save(state.game);
   }
 
   /// Load an ongoing game from storage.

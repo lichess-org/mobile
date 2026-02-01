@@ -51,14 +51,12 @@ class OfflineComputerGameStorage {
       final json = jsonDecode(contents);
 
       if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[OfflineComputerGameStorage] cannot fetch game: expected an object',
-        );
+        throw const FormatException('Cannot fetch game: expected an object');
       }
 
       return SavedOfflineComputerGame.fromJson(json);
     } catch (e) {
-      _logger.warning('[OfflineComputerGameStorage] failed to fetch game: $e');
+      _logger.warning('Failed to fetch game: $e');
       return null;
     }
   }
@@ -67,9 +65,10 @@ class OfflineComputerGameStorage {
   Future<void> save(OfflineComputerGame game) async {
     try {
       final file = await _getFile();
+      _logger.info('Saving game to ${file.path}');
       await file.writeAsString(jsonEncode(SavedOfflineComputerGame(game: game).toJson()));
     } catch (e) {
-      _logger.warning('[OfflineComputerGameStorage] failed to save game: $e');
+      _logger.warning('Failed to save game: $e');
     }
   }
 }
