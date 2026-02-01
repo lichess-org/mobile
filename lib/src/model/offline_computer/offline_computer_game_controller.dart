@@ -185,17 +185,29 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   ///
   /// Uses the cached evaluation from _computeHints as the "before" state,
   /// then evaluates the position after the move to determine how good the move was.
+  /// If hint computation is still in progress, waits for it to complete first.
   Future<void> _makeMoveWithEvaluation(NormalMove move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
-
-    // Store the cached evaluation before clearing hints
-    final cachedBestMoves = state.cachedBestMoves;
-    final cachedWinningChances = state.cachedWinningChances;
 
     // Clear previous practice comment and set evaluating state
     state = state.copyWith(isEvaluatingMove: true, practiceComment: null);
 
-    // Apply the move immediately for responsive UI
+    // Wait for hint computation to complete if it's still in progress
+    // This ensures we have the "before" evaluation for comparison
+    // Timeout after 3 seconds to prevent infinite waiting
+    const maxWaitTime = Duration(seconds: 3);
+    final deadline = DateTime.now().add(maxWaitTime);
+    while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    }
+
+    if (!ref.mounted) return;
+
+    // Get the cached evaluation BEFORE applying the move (since _applyMove clears hints)
+    final cachedBestMoves = state.cachedBestMoves;
+    final cachedWinningChances = state.cachedWinningChances;
+
+    // Apply the move for responsive UI
     _applyMove(move);
 
     if (!state.game.playable) {
@@ -204,7 +216,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    // If we don't have cached evaluation, just proceed without practice comment
+    // If we don't have cached evaluation, proceed without practice comment
     if (cachedBestMoves == null || cachedWinningChances == null || cachedBestMoves.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
       _playEngineMove();
