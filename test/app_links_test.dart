@@ -104,15 +104,4 @@ void main() {
       );
     });
   });
-
-  group('onLinkifyOpen', () {
-    // Note: To test actual navigation, you would need to wrap the app in a
-    // MaterialApp with a MockNavigatorObserver.
-
-    test('handles user mentions (@username)', () {
-      // The logic extracts the username after '@' and pushes UserOrProfileScreen
-      // This is primarily verified via integration tests or by checking
-      // if UserOrProfileScreen.buildRoute is invoked.
-    });
-  });
 }
