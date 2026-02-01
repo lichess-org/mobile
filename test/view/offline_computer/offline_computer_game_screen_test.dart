@@ -31,23 +31,25 @@ void main() {
   TestLichessBinding.ensureInitialized();
 
   setUpAll(() {
-    registerFallbackValue(
-      OfflineComputerGame(
-        steps: [const GameStep(position: Chess.initial)].lock,
-        meta: GameMeta(
-          createdAt: DateTime.now(),
-          rated: false,
-          variant: Variant.standard,
-          speed: Speed.classical,
-          perf: Perf.classical,
-        ),
-        initialFen: null,
-        status: GameStatus.started,
-        playerSide: Side.white,
-        stockfishLevel: StockfishLevel.level1,
-        humanPlayer: const Player(onGame: true),
-        enginePlayer: stockfishPlayer(),
+    final game = OfflineComputerGame(
+      steps: [const GameStep(position: Chess.initial)].lock,
+      meta: GameMeta(
+        createdAt: DateTime.now(),
+        rated: false,
+        variant: Variant.standard,
+        speed: Speed.classical,
+        perf: Perf.classical,
       ),
+      initialFen: null,
+      status: GameStatus.started,
+      playerSide: Side.white,
+      stockfishLevel: StockfishLevel.level1,
+      humanPlayer: const Player(onGame: true),
+      enginePlayer: stockfishPlayer(),
+    );
+    registerFallbackValue(game);
+    registerFallbackValue(
+      SavedOfflineComputerGame(game: game, gameSessionId: 'fallback-session-id'),
     );
   });
 
@@ -59,7 +61,7 @@ void main() {
 
     testWidgets('New game dialog is shown on startup with all options', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -330,7 +332,7 @@ void main() {
 
     testWidgets('Can start game with different level', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -363,7 +365,7 @@ void main() {
 
     testWidgets('Casual switch is shown in new game dialog', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -387,7 +389,7 @@ void main() {
 
     testWidgets('Takeback and hint buttons are disabled in non-casual mode', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -442,8 +444,9 @@ void main() {
       final gameStorage = MockOfflineComputerGameStorage();
 
       // Return a saved game with moves already played (e4, e5)
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+      when(() => gameStorage.fetchGame()).thenAnswer(
         (_) async => SavedOfflineComputerGame(
+          gameSessionId: 'test-session-id',
           game: OfflineComputerGame(
             steps: [
               const GameStep(position: Chess.initial),
@@ -506,7 +509,7 @@ void main() {
       // Wait for saved game to be loaded
       await tester.pumpAndSettle();
 
-      verify(() => gameStorage.fetchOngoingGame()).called(1);
+      verify(() => gameStorage.fetchGame()).called(1);
 
       // Should not show new game dialog if we loaded a saved game
       expect(find.text('Game setup'), findsNothing);
@@ -526,7 +529,7 @@ void main() {
     testWidgets('Game is saved when exiting with confirmation', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
 
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
       when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
       final app = await makeTestProviderScopeApp(
@@ -607,7 +610,7 @@ void main() {
 
     testWidgets('Hint button is disabled while hints are loading', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
@@ -653,7 +656,7 @@ void main() {
 
     testWidgets('Hint button shows circle on board when pressed', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
@@ -702,7 +705,7 @@ void main() {
 
     testWidgets('Hint button cycles through hints on subsequent presses', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
@@ -757,7 +760,7 @@ void main() {
 
     testWidgets('Hints are cleared when a move is made', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
@@ -808,7 +811,7 @@ void main() {
 
     testWidgets('Hint button is highlighted when hint is showing', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       final app = await makeTestProviderScopeApp(
@@ -893,7 +896,7 @@ void main() {
 
     testWidgets('New game dialog shows mini board when initialFen is provided', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       // A position after 1.e4 e5
       const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
@@ -919,7 +922,7 @@ void main() {
 
     testWidgets('New game dialog does not show mini board without initialFen', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -942,7 +945,7 @@ void main() {
 
     testWidgets('Can start game from custom position as white', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       // A position after 1.e4 e5 - it's white's turn
       const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
@@ -980,7 +983,7 @@ void main() {
       tester,
     ) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       // A position where it's white's turn, but player chooses black
@@ -1024,7 +1027,7 @@ void main() {
 
     testWidgets('Player plays first when custom position turn matches player side', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       // A position where it's black's turn, and player chooses black
@@ -1063,7 +1066,7 @@ void main() {
 
     testWidgets('Game uses Variant.fromPosition when started with custom FEN', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
       const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
@@ -1096,7 +1099,7 @@ void main() {
 
     testWidgets('Game uses Variant.standard when started without custom FEN', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
       late WidgetRef ref;
 
@@ -1147,7 +1150,7 @@ Future<void> selectSide(WidgetTester tester, Side side) async {
 /// Initialize an offline computer game and return the board rect.
 Future<Rect> initOfflineComputerGame(WidgetTester tester, {Side side = Side.white}) async {
   final gameStorage = MockOfflineComputerGameStorage();
-  when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+  when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
   final app = await makeTestProviderScopeApp(
     tester,

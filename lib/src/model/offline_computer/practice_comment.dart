@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'practice_comment.freezed.dart';
+part 'practice_comment.g.dart';
 
 /// The verdict for a player's move in practice mode.
 ///
@@ -61,9 +62,11 @@ enum MoveVerdict {
 }
 
 /// A comment about a player's move in practice mode.
-@freezed
+@Freezed(fromJson: true, toJson: true)
 sealed class PracticeComment with _$PracticeComment {
   const PracticeComment._();
+
+  factory PracticeComment.fromJson(Map<String, dynamic> json) => _$PracticeCommentFromJson(json);
 
   const factory PracticeComment({
     /// The verdict for the move.
