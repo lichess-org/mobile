@@ -40,6 +40,9 @@ final numberOfCoresForEvaluation = max(1, maxEngineCores ~/ 2);
 /// Minimum depth required for a quality move evaluation in practice mode.
 const _kMinEvalDepth = 16;
 
+/// Search time for evaluations in practice mode.
+const _kSearchTime = Duration(seconds: 2);
+
 /// Number of multi-PV lines to request for evaluation.
 const _kEvaluationMultivpv = 4;
 
@@ -251,14 +254,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      const searchTime = Duration(seconds: 2);
       final workAfter = EvalWork(
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: searchTime,
+        searchTime: _kSearchTime,
         multiPv: _kEvaluationMultivpv,
         threatMode: false,
         initialPosition: state.game.initialPosition,
@@ -266,7 +268,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       );
 
       // Start evaluation and opening database fetch in parallel
-      final evalFuture = _runEvaluation(evaluationService, workAfter, searchTime);
+      final evalFuture = evaluationService.findEval(workAfter, minDepth: _kMinEvalDepth);
       final masterDbFuture = plyBeforeMove < _kOpeningPlyThreshold
           ? _fetchMasterDatabase(positionBeforeFen)
           : Future.value(null);
@@ -368,33 +370,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         }
       }
     }
-  }
-
-  /// Run the engine evaluation and return the final eval.
-  Future<LocalEval?> _runEvaluation(
-    EvaluationService evaluationService,
-    EvalWork work,
-    Duration searchTime,
-  ) async {
-    LocalEval? evalAfter;
-    final streamAfter = evaluationService.evaluate(work);
-    if (streamAfter != null) {
-      try {
-        await for (final (_, eval) in streamAfter.timeout(
-          searchTime + const Duration(milliseconds: 500),
-        )) {
-          evalAfter = eval;
-          // Stop early if we have sufficient depth for a quality evaluation
-          if (eval.depth >= _kMinEvalDepth) {
-            evaluationService.stop();
-            break;
-          }
-        }
-      } on TimeoutException {
-        evaluationService.stop();
-      }
-    }
-    return evalAfter;
   }
 
   /// Fetch the master database for the given FEN.
@@ -554,46 +529,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      const searchTime = Duration(seconds: 2);
       final work = EvalWork(
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: searchTime,
+        searchTime: _kSearchTime,
         multiPv: _kEvaluationMultivpv,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: steps,
       );
 
-      final stream = evaluationService.evaluate(work);
-      if (stream == null) {
-        if (ref.mounted) {
-          state = state.copyWith(isLoadingHint: false);
-        }
-        return;
-      }
-
-      // Listen to the stream and collect the latest eval
-      // Stop early if we reach sufficient depth for a quality evaluation
-      LocalEval? finalEval;
-      try {
-        await for (final (_, eval) in stream.timeout(
-          searchTime + const Duration(milliseconds: 500),
-        )) {
-          finalEval = eval;
-          // Stop early if we have sufficient depth for a quality evaluation
-          if (eval.depth >= _kMinEvalDepth) {
-            evaluationService.stop();
-            break;
-          }
-        }
-      } on TimeoutException {
-        // Expected - the stream times out after searchTime
-        evaluationService.stop();
-      }
+      final finalEval = await evaluationService.findEval(work, minDepth: _kMinEvalDepth);
 
       if (!ref.mounted) return;
 
