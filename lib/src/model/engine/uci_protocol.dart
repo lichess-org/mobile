@@ -114,7 +114,8 @@ class UCIProtocol {
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
-    _log.fine('>>> $line');
+    // no need to log lines as it is already logged by Stockfish plugin (finer)
+    // _log.fine('>>> $line');
     final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
