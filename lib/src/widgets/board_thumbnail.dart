@@ -13,7 +13,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     required this.size,
     required this.orientation,
     required this.fen,
-    this.showEvaluationBar = false,
+    this.showEvaluationGauge = false,
     this.whiteWinningChances,
     this.header,
     this.footer,
@@ -26,7 +26,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     required this.size,
     this.header,
     this.footer,
-    this.showEvaluationBar = false,
+    this.showEvaluationGauge = false,
   }) : whiteWinningChances = null,
        orientation = Side.white,
        fen = kInitialFEN,
@@ -43,8 +43,8 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   /// FEN string describing the position of the board.
   final String fen;
 
-  /// Whether the evaluation bar should be shown.
-  final bool showEvaluationBar;
+  /// Whether the evaluation gauge should be shown.
+  final bool showEvaluationGauge;
 
   /// Winning chances from the white pov for the given fen.
   final double? whiteWinningChances;
@@ -90,10 +90,10 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       orientation: widget.orientation,
       lastMove: widget.lastMove as NormalMove?,
       enableCoordinates: false,
-      borderRadius: (widget.showEvaluationBar)
+      borderRadius: (widget.showEvaluationGauge)
           ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
           : Styles.boardBorderRadius,
-      boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
+      boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
       pieceAssets: boardPrefs.pieceSet.assets,
       colorScheme: boardPrefs.boardTheme.colors,
       animationDuration: widget.animationDuration,
@@ -101,7 +101,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       brightness: boardPrefs.brightness,
     );
 
-    final boardWithMaybeEvalBar = widget.showEvaluationBar
+    final boardWithMaybeEvalBar = widget.showEvaluationGauge
         ? DecoratedBox(
             decoration: BoxDecoration(boxShadow: boardShadows),
             child: Row(
