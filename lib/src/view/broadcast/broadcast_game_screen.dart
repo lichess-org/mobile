@@ -177,21 +177,22 @@ class _BroadcastGameMenu extends ConsumerWidget {
             ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
           },
         ),
-        if (tournamentSlug != null && roundSlug != null)
-          ContextMenuAction(
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? Icons.ios_share_outlined
-                : Icons.share_outlined,
-            label: context.l10n.mobileShareGameURL,
-            onPressed: () {
-              launchShareDialog(
-                context,
-                ShareParams(
-                  uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+        ContextMenuAction(
+          icon: Theme.of(context).platform == TargetPlatform.iOS
+              ? Icons.ios_share_outlined
+              : Icons.share_outlined,
+          label: context.l10n.mobileShareGameURL,
+          onPressed: () {
+            launchShareDialog(
+              context,
+              ShareParams(
+                uri: lichessUri(
+                  '/broadcast/${tournamentSlug ?? '-'}/${roundSlug ?? '-'}/$roundId/$gameId',
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
+        ),
         ContextMenuAction(
           icon: Icons.description_outlined,
           label: context.l10n.mobileShareGamePGN,
