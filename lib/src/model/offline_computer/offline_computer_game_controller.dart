@@ -32,6 +32,18 @@ final _random = Random();
 
 final _logger = Logger('OfflineComputerGameController');
 
+/// Converts king-takes-rook castling notation (from UCI_Chess960 mode) back to standard notation.
+/// E.g., 'e1h1' -> 'e1g1' for white kingside castling.
+const _castleMovesToStandard = {
+  'e1a1': 'e1c1',
+  'e1h1': 'e1g1',
+  'e8a8': 'e8c8',
+  'e8h8': 'e8g8',
+};
+
+/// Normalizes a UCI move string by converting king-takes-rook castling to standard notation.
+String _normalizeUci(String uci) => _castleMovesToStandard[uci] ?? uci;
+
 /// The number of CPU cores to use for engine evaluation.
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
@@ -281,6 +293,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       // Wait for both to complete in parallel
       final ((evalAfter, engineMoveUci), masterEntry) = await (evalMoveFuture, masterDbFuture).wait;
 
+      _logger.info(
+        'Practice mode: found engine move $engineMoveUci with eval '
+        'depth=${evalAfter?.depth}, score=${evalAfter?.evalString}',
+      );
+
       if (!ref.mounted) return;
 
       // Check if the played move is in the master database (played more than once)
@@ -301,8 +318,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         final bestMoveData = cachedBestMoves.firstOrNull;
         final bestMove = bestMoveData?.move;
 
-        // Check if the played move was the best move
-        final playedMoveIsBest = bestMove != null && bestMove.uci == move.uci;
+        // Check if the played move was the best move.
+        // Normalize UCI to handle castling notation differences (UCI_Chess960 uses king-takes-rook).
+        final playedMoveIsBest =
+            bestMove != null && _normalizeUci(bestMove.uci) == move.uci;
 
         // If the move is a book move, consider it a good move regardless of eval
         final isGoodMove = isBookMove || shift < 0.025;
@@ -312,7 +331,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         if (isGoodMove && cachedBestMoves.length > 1) {
           // Find another good move that's not the one played
           for (final m in cachedBestMoves.skip(1)) {
-            if (winningChancesBefore - m.winningChances < 0.025 && m.move.uci != move.uci) {
+            if (winningChancesBefore - m.winningChances < 0.025 &&
+                _normalizeUci(m.move.uci) != move.uci) {
               alternativeGoodMove = m.move;
               break;
             }
@@ -539,20 +559,45 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      final work = EvalWork(
-        id: state.gameSessionId,
-        enginePref: enginePrefs.enginePref,
-        variant: Variant.standard,
-        threads: numberOfCoresForEvaluation,
-        hashSize: evaluationService.maxMemory,
-        searchTime: _kSearchTime,
-        multiPv: _kEvaluationMultivpv,
-        threatMode: false,
-        initialPosition: state.game.initialPosition,
-        steps: steps,
-      );
+      // In practice mode, use MoveWork to ensure the same parameters (multiPv, searchTime)
+      // are used for both hint computation and after-move evaluation comparison.
+      // The bestmove result is ignored; we only use the eval.
+      final LocalEval? finalEval;
+      if (state.game.practiceMode) {
+        final elo = state.game.stockfishLevel.elo;
+        final defaultWork = MoveWork(
+          id: state.gameSessionId,
+          enginePref: enginePrefs.enginePref,
+          variant: Variant.standard,
+          threads: numberOfCoresForEvaluation,
+          hashSize: evaluationService.maxMemory,
+          initialPosition: state.game.initialPosition,
+          steps: steps,
+          elo: elo,
+        );
+        final work = defaultWork.searchTime < _kSearchTime
+            ? defaultWork.copyWith(searchTimeOverride: _kSearchTime)
+            : defaultWork;
 
-      final finalEval = await evaluationService.findEval(work, minDepth: _kMinEvalDepth);
+        final (eval, _) = await evaluationService.findMoveWithEval(work);
+        finalEval = eval;
+      } else {
+        // In casual mode, use EvalWork for hints only (no comparison needed)
+        final work = EvalWork(
+          id: state.gameSessionId,
+          enginePref: enginePrefs.enginePref,
+          variant: Variant.standard,
+          threads: numberOfCoresForEvaluation,
+          hashSize: evaluationService.maxMemory,
+          searchTime: _kSearchTime,
+          multiPv: _kEvaluationMultivpv,
+          threatMode: false,
+          initialPosition: state.game.initialPosition,
+          steps: steps,
+        );
+
+        finalEval = await evaluationService.findEval(work, minDepth: _kMinEvalDepth);
+      }
 
       if (!ref.mounted) return;
 
@@ -588,6 +633,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       // Shuffle to randomize the order, then convert to IList
       goodMoves.shuffle(_random);
       final hintMoves = goodMoves.toIList();
+
+      _logger.info(
+        'Found ${hintMoves.length} hints with eval '
+        'depth=${finalEval.depth}, score=${finalEval.evalString}',
+      );
 
       // In practice mode, also cache the evaluation for later comparison
       if (state.game.practiceMode) {
