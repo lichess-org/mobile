@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -56,8 +58,52 @@ class BroadcastRepository {
     );
   }
 
-  Future<String> getGamePgn(BroadcastRoundId roundId, BroadcastGameId gameId) {
-    return client.read(Uri(path: 'api/study/$roundId/$gameId.pgn'));
+  ///https://github.com/lichess-org/lila/commit/babed07950fd2028be66128ff33ff3d34a0f291f
+  Future<BroadcastGamePgnWithAnalysisSummary> getGamePgn(
+    BroadcastRoundId roundId,
+    BroadcastGameId gameId, {
+    bool withAnalysisSummary = true,
+  }) async {
+    final queryParams = withAnalysisSummary ? {'analysisHeader': '1'} : null;
+    final response = await client.get(
+      Uri(path: 'api/study/$roundId/$gameId.pgn', queryParameters: queryParams),
+    );
+    final pgn = response.body;
+    BroadcastAnalysisSummary? analysisSummary;
+
+    final analysisHeader = response.headers['x-lichess-analysis'];
+    if (analysisHeader != null) {
+      final json = jsonDecode(analysisHeader) as Map<String, dynamic>;
+      analysisSummary = _analysisSummaryFromPick(json);
+    }
+
+    return (pgn: pgn, analysisSummary: analysisSummary);
+  }
+
+  BroadcastAnalysisSummary _analysisSummaryFromPick(Map<String, dynamic> json) {
+    final summary = pick(json, 'summary').required();
+    return (
+      division: pick(json, 'division').letOrNull(_divisionFromPick),
+      white: _playerAnalysisSummaryFromPick(summary('white').required()),
+      black: _playerAnalysisSummaryFromPick(summary('black').required()),
+    );
+  }
+
+  BroadcastPlayerAnalysisSummary _playerAnalysisSummaryFromPick(RequiredPick pick) {
+    return (
+      inaccuracies: pick('inaccuracy').asIntOrThrow(),
+      mistakes: pick('mistake').asIntOrThrow(),
+      blunders: pick('blunder').asIntOrThrow(),
+      acpl: pick('acpl').asIntOrThrow(),
+      accuracy: pick('accuracy').asIntOrThrow(),
+    );
+  }
+
+  Division _divisionFromPick(RequiredPick pick) {
+    return Division(
+      middlegame: pick('middle').asDoubleOrNull(),
+      endgame: pick('end').asDoubleOrNull(),
+    );
   }
 
   Future<IList<BroadcastPlayerWithOverallResult>> getPlayers(BroadcastTournamentId tournamentId) {

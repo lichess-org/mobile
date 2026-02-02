@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,9 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -105,11 +108,11 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       },
     );
 
-    final pgn = await ref
+    final pgnWithAnalysisSummary = await ref
         .read(broadcastRepositoryProvider)
         .getGamePgn(params.roundId, params.gameId);
 
-    final game = PgnGame.parsePgn(pgn);
+    final game = PgnGame.parsePgn(pgnWithAnalysisSummary.pgn);
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
@@ -140,6 +143,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       ),
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
+      analysisSummary: pgnWithAnalysisSummary.analysisSummary,
+      acplChartData: _makeAcplChartData(),
     );
 
     // We need to define the state value in the build method because `sendEvalGetEvent` and
@@ -157,7 +162,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref
+    final BroadcastGamePgnWithAnalysisSummary pgnWithAnalysisSummary = await ref
         .read(broadcastRepositoryProvider)
         .getGamePgn(params.roundId, params.gameId);
 
@@ -165,7 +170,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (key == _key) {
       final curState = state.requireValue;
       final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
-      final game = PgnGame.parsePgn(pgn);
+      final game = PgnGame.parsePgn(pgnWithAnalysisSummary.pgn);
       final pgnHeaders = IMap(game.headers);
       final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
@@ -195,6 +200,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           root: _root.view,
           lastMove: lastMove,
           clocks: _getClocks(newCurrentPath),
+          analysisSummary: pgnWithAnalysisSummary.analysisSummary,
+          acplChartData: _makeAcplChartData(),
         ),
       );
     }
@@ -507,6 +514,40 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       clock: (node is Branch) ? node.clock : null,
     );
   }
+
+  IList<ExternalEval>? _makeAcplChartData() {
+    if (!_root.mainline.any((node) => node.lichessAnalysisComments != null)) {
+      return null;
+    }
+    final list = _root.mainline
+        .map(
+          (node) => (
+            node.position.isCheckmate,
+            node.position.turn,
+            node.lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+          ),
+        )
+        .map((el) {
+          final (isCheckmate, side, eval) = el;
+          return eval != null
+              ? ExternalEval(
+                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                  mate: eval.mate,
+                  depth: eval.depth,
+                )
+              : ExternalEval(
+                  cp: null,
+                  // hack to display checkmate as the max eval
+                  mate: isCheckmate
+                      ? side == Side.white
+                            ? -1
+                            : 1
+                      : null,
+                );
+        })
+        .toList(growable: false);
+    return list.isEmpty ? null : IList(list);
+  }
 }
 
 @freezed
@@ -562,6 +603,13 @@ sealed class BroadcastAnalysisState
     ///
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
+
+    /// Optional ACPL chart data of the game, coming from lichess server analysis.
+    IList<ExternalEval>? acplChartData,
+
+    /// The analysis summary sent by the server.
+    /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
+    BroadcastAnalysisSummary? analysisSummary,
 
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;
