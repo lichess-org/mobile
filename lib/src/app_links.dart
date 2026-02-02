@@ -73,6 +73,18 @@ List<Route<dynamic>>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   return null;
 }
 
+/// Handles an app link [Uri] by navigating to the corresponding screen(s).
+void handleAppLink(BuildContext context, Uri uri) {
+  final routes = resolveAppLinkUri(context, uri);
+  if (routes != null) {
+    for (final route in routes) {
+      Navigator.of(context).push(route);
+    }
+  } else {
+    launchUrl(uri);
+  }
+}
+
 const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
 /// Handles link clicks in Linkify widgets throughout the app.
@@ -80,15 +92,7 @@ void onLinkifyOpen(BuildContext context, LinkableElement link) {
   if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
     // Handle Lichess links specifically
     final appLinkUri = Uri.parse(link.url);
-    final routes = resolveAppLinkUri(context, appLinkUri);
-    if (routes != null) {
-      for (final route in routes) {
-        Navigator.of(context).push(route);
-      }
-    } else {
-      // If the link is not recognized, open it in a browser
-      launchUrl(appLinkUri);
-    }
+    handleAppLink(context, appLinkUri);
   } else if (link.originText.startsWith('@')) {
     final username = link.originText.substring(1);
     Navigator.of(context).push(

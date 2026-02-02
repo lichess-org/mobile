@@ -151,12 +151,7 @@ class _AppState extends ConsumerState<Application> {
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       final context = _navigatorKey.currentContext;
       if (context != null && context.mounted) {
-        final routes = resolveAppLinkUri(context, uri);
-        if (routes != null) {
-          for (final route in routes) {
-            Navigator.of(context).push(route);
-          }
-        }
+        handleAppLink(context, uri);
       }
     });
   }
