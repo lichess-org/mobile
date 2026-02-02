@@ -48,6 +48,14 @@ const _kEvaluationMultivpv = 3;
 /// to consider book moves as good regardless of engine evaluation.
 const _kOpeningPlyThreshold = 30;
 
+/// Normalizes a UCI move string for comparison by converting alternate castling
+/// notations to standard notation.
+///
+/// This handles the case where moves may use either:
+/// - Standard notation: e1g1 (king moves to destination)
+/// - Alternate notation: e1h1 (king captures rook, used by engines)
+String _normalizeUci(String uci) => altCastles[uci] ?? uci;
+
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -277,8 +285,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (!ref.mounted) return;
 
       // Check if the played move is in the master database (played more than once)
+      // Normalize UCIs to handle alternate castling notations (e.g., e1h1 vs e1g1)
+      final normalizedMoveUci = _normalizeUci(move.uci);
       final isBookMove =
-          masterEntry != null && masterEntry.moves.any((m) => m.uci == move.uci && m.games > 1);
+          masterEntry != null &&
+          masterEntry.moves.any((m) => _normalizeUci(m.uci) == normalizedMoveUci && m.games > 1);
 
       // Create practice comment if we have the after evaluation
       PracticeComment? comment;
@@ -295,7 +306,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         final bestMove = bestMoveData?.move;
 
         // Check if the played move was the best move
-        final playedMoveIsBest = bestMove != null && bestMove.uci == move.uci;
+        final playedMoveIsBest =
+            bestMove != null && _normalizeUci(bestMove.uci) == normalizedMoveUci;
 
         // If the move is a book move, consider it a good move regardless of eval
         final isGoodMove = isBookMove || shift < 0.025;
@@ -305,7 +317,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         if (isGoodMove && cachedBestMoves.length > 1) {
           // Find another good move that's not the one played
           for (final m in cachedBestMoves.skip(1)) {
-            if (winningChancesBefore - m.winningChances < 0.025 && m.move.uci != move.uci) {
+            if (winningChancesBefore - m.winningChances < 0.025 &&
+                _normalizeUci(m.move.uci) != normalizedMoveUci) {
               alternativeGoodMove = m.move;
               break;
             }

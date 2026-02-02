@@ -121,17 +121,14 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// | 9     | 2300 | 4       |
   /// | 10    | 2550 | 4       |
   /// | 11    | 2850 | 3       |
-  /// | 12    | 3190 | 2       |
+  /// | 12    | 3190 | 3       |
   @override
   int get multiPv {
     if (elo <= 1650) {
       // Levels 1-4: fast drop from 10 to 6
       return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
-    } else if (elo >= 3000) {
-      // Level 12: 2
-      return 2;
     } else if (elo >= 2850) {
-      // Level 11: 3
+      // Level 11-12: 3
       return 3;
     } else if (elo >= 1850) {
       // Levels 6-10: 4
