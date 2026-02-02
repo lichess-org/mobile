@@ -696,10 +696,7 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.delete,
           label: context.l10n.stormNewRun.split('(').first.trimRight(),
           showLabel: true,
-          onTap: () {
-            stormState.clock.reset();
-            ref.invalidate(stormProvider);
-          },
+          onTap: () => ref.invalidate(stormProvider),
         ),
         if (stormState.mode == StormMode.running)
           BottomBarButton(
@@ -820,8 +817,10 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
             padding: Styles.horizontalBodyPadding,
             child: FilledButton(
               onPressed: () {
-                ref.invalidate(stormProvider);
                 Navigator.of(context).pop();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref.invalidate(stormProvider);
+                });
               },
               child: Text(context.l10n.stormPlayAgain),
             ),
