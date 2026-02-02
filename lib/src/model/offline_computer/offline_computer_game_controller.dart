@@ -34,15 +34,36 @@ final _logger = Logger('OfflineComputerGameController');
 
 /// Converts king-takes-rook castling notation (from UCI_Chess960 mode) back to standard notation.
 /// E.g., 'e1h1' -> 'e1g1' for white kingside castling.
-const _castleMovesToStandard = {
-  'e1a1': 'e1c1',
-  'e1h1': 'e1g1',
-  'e8a8': 'e8c8',
-  'e8h8': 'e8g8',
-};
+const _castleMovesToStandard = {'e1a1': 'e1c1', 'e1h1': 'e1g1', 'e8a8': 'e8c8', 'e8h8': 'e8g8'};
 
 /// Normalizes a UCI move string by converting king-takes-rook castling to standard notation.
 String _normalizeUci(String uci) => _castleMovesToStandard[uci] ?? uci;
+
+/// Computes the multiPv value for a given elo, matching MoveWork.multiPv logic.
+int _multiPvForElo(int elo) {
+  if (elo <= 1650) {
+    return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
+  } else if (elo >= 2850) {
+    return 3;
+  } else if (elo >= 1850) {
+    return 4;
+  } else {
+    return 5;
+  }
+}
+
+/// Computes the search time for a given elo, matching MoveWork.searchTime logic.
+Duration _searchTimeForElo(int elo) {
+  final int ms;
+  if (elo <= 1750) {
+    // Levels 1-5: linear from 150ms to 640ms
+    ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
+  } else {
+    // Levels 6-12: linear from 1500ms to 8000ms
+    ms = (1500 + ((elo - 1850) / (3190 - 1850) * 6500)).toInt();
+  }
+  return Duration(milliseconds: ms.clamp(150, 8000));
+}
 
 /// The number of CPU cores to use for engine evaluation.
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
@@ -264,39 +285,91 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      // Use MoveWork to get both evaluation and engine move in a single search.
-      // The eval info lines are accurate even with UCI_LimitStrength,
-      // while the bestmove is strength-limited.
-      // Only override search time if the default (elo-based) is less than eval search time.
-      // For higher levels, let the engine search longer for stronger moves.
       final elo = state.game.stockfishLevel.elo;
-      final defaultWork = MoveWork(
+
+      // Create reference MoveWork to get elo-based parameters
+      final moveWorkForEngine = MoveWork(
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
-        threads: numberOfCoresForEvaluation,
+        threads: 1,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: stepsAfter,
         elo: elo,
       );
-      final work = defaultWork.searchTime < _kSearchTime
-          ? defaultWork.copyWith(searchTimeOverride: _kSearchTime)
-          : defaultWork;
 
-      // Start combined eval+move search and opening database fetch in parallel
-      final evalMoveFuture = evaluationService.findMoveWithEval(work);
+      // Check if this is a lower level (search time < 2s, i.e., elo ≤ 1750)
+      final isLowerLevel = moveWorkForEngine.searchTime < _kSearchTime;
+
+      // Start master DB fetch (same for both paths)
       final masterDbFuture = plyBeforeMove < _kOpeningPlyThreshold
           ? _fetchMasterDatabase(positionBeforeFen)
           : Future.value(null);
 
-      // Wait for both to complete in parallel
-      final ((evalAfter, engineMoveUci), masterEntry) = await (evalMoveFuture, masterDbFuture).wait;
+      LocalEval? evalAfter;
+      String engineMoveUci;
+      OpeningExplorerEntry? masterEntry;
 
-      _logger.info(
-        'Practice mode: found engine move $engineMoveUci with eval '
-        'depth=${evalAfter?.depth}, score=${evalAfter?.evalString}',
-      );
+      if (isLowerLevel) {
+        // Lower levels: separate eval and move searches.
+        // This ensures weak engine play while still getting accurate evaluations.
+        // 1. Accurate eval with multiple cores
+        final evalWork = EvalWork(
+          id: state.gameSessionId,
+          enginePref: enginePrefs.enginePref,
+          variant: Variant.standard,
+          threads: numberOfCoresForEvaluation,
+          hashSize: evaluationService.maxMemory,
+          searchTime: _kSearchTime,
+          multiPv: _multiPvForElo(elo),
+          threatMode: false,
+          initialPosition: state.game.initialPosition,
+          steps: stepsAfter,
+        );
+
+        // Eval search and master DB can run in parallel
+        (evalAfter, masterEntry) = await (
+          evaluationService.findEval(evalWork, minDepth: _kMinEvalDepth),
+          masterDbFuture,
+        ).wait;
+
+        if (!ref.mounted) return;
+
+        // 2. Weak move search with 1 core (sequential, after eval)
+        engineMoveUci = await evaluationService.findMove(moveWorkForEngine);
+
+        _logger.info(
+          'Practice mode (lower level): eval depth=${evalAfter?.depth}, '
+          'score=${evalAfter?.evalString}, engine move=$engineMoveUci',
+        );
+      } else {
+        // Higher levels: combined search (engine is strong enough anyway).
+        // Use MoveWork to get both evaluation and engine move in a single search.
+        final work = MoveWork(
+          id: state.gameSessionId,
+          enginePref: enginePrefs.enginePref,
+          variant: Variant.standard,
+          threads: numberOfCoresForEvaluation,
+          hashSize: evaluationService.maxMemory,
+          initialPosition: state.game.initialPosition,
+          steps: stepsAfter,
+          elo: elo,
+        );
+
+        final ((eval, move), entry) = await (
+          evaluationService.findMoveWithEval(work),
+          masterDbFuture,
+        ).wait;
+        evalAfter = eval;
+        engineMoveUci = move;
+        masterEntry = entry;
+
+        _logger.info(
+          'Practice mode (higher level): eval depth=${evalAfter?.depth}, '
+          'score=${evalAfter?.evalString}, engine move=$engineMoveUci',
+        );
+      }
 
       if (!ref.mounted) return;
 
@@ -320,8 +393,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
         // Check if the played move was the best move.
         // Normalize UCI to handle castling notation differences (UCI_Chess960 uses king-takes-rook).
-        final playedMoveIsBest =
-            bestMove != null && _normalizeUci(bestMove.uci) == move.uci;
+        final playedMoveIsBest = bestMove != null && _normalizeUci(bestMove.uci) == move.uci;
 
         // If the move is a book move, consider it a good move regardless of eval
         final isGoodMove = isBookMove || shift < 0.025;
@@ -559,28 +631,28 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      // In practice mode, use MoveWork to ensure the same parameters (multiPv, searchTime)
-      // are used for both hint computation and after-move evaluation comparison.
-      // The bestmove result is ignored; we only use the eval.
+      // Use EvalWork for hints. Parameters match those used in _makeMoveWithEvaluation
+      // for consistent evaluation comparison in practice mode.
       final LocalEval? finalEval;
       if (state.game.practiceMode) {
         final elo = state.game.stockfishLevel.elo;
-        final defaultWork = MoveWork(
+        // Use elo-based search time for higher levels, minimum 2s for lower levels.
+        // This matches the search time used in _makeMoveWithEvaluation.
+        final eloBasedSearchTime = _searchTimeForElo(elo);
+        final searchTime = eloBasedSearchTime < _kSearchTime ? _kSearchTime : eloBasedSearchTime;
+        final work = EvalWork(
           id: state.gameSessionId,
           enginePref: enginePrefs.enginePref,
           variant: Variant.standard,
           threads: numberOfCoresForEvaluation,
           hashSize: evaluationService.maxMemory,
+          searchTime: searchTime,
+          multiPv: _multiPvForElo(elo),
+          threatMode: false,
           initialPosition: state.game.initialPosition,
           steps: steps,
-          elo: elo,
         );
-        final work = defaultWork.searchTime < _kSearchTime
-            ? defaultWork.copyWith(searchTimeOverride: _kSearchTime)
-            : defaultWork;
-
-        final (eval, _) = await evaluationService.findMoveWithEval(work);
-        finalEval = eval;
+        finalEval = await evaluationService.findEval(work, minDepth: _kMinEvalDepth);
       } else {
         // In casual mode, use EvalWork for hints only (no comparison needed)
         final work = EvalWork(
