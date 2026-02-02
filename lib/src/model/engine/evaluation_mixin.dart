@@ -283,18 +283,20 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       if (curState.engineInThreatMode) {
         return;
       }
-      final (evalWork, eval) = event;
+      final (work, eval) = event;
+      // In EvaluationMixin context, work is always EvalWork
+      if (work is! EvalWork) return;
       // Path is always set in EvaluationMixin context since we use a node tree.
-      final path = evalWork.path!;
+      final path = work.path!;
 
       bool isSameEvalString = true;
       positionTree.updateAt(path, (node) {
         final nodeEval = node.eval;
         if (nodeEval is CloudEval) {
           if (nodeEval.depth >= eval.depth &&
-              evalWork.isDeeper != true &&
-              evalWork.searchTime != kMaxEngineSearchTime) {
-            final targetTime = evalWork.searchTime;
+              work.isDeeper != true &&
+              work.searchTime != kMaxEngineSearchTime) {
+            final targetTime = work.searchTime;
             final evalSearchTime = eval.searchTime;
             final likelyNodes =
                 ((targetTime.inMilliseconds * eval.nodes) / evalSearchTime.inMilliseconds).round();

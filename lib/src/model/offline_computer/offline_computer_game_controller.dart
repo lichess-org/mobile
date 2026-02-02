@@ -246,33 +246,40 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
       final playerSide = state.game.playerSide;
 
-      // Evaluate position AFTER the move to get winning chances
+      // Build steps for the position AFTER the player's move
       final stepsAfter = state.game.steps
           .skip(1)
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      final workAfter = EvalWork(
+      // Use MoveWork to get both evaluation and engine move in a single search.
+      // The eval info lines are accurate even with UCI_LimitStrength,
+      // while the bestmove is strength-limited.
+      // Only override search time if the default (elo-based) is less than eval search time.
+      // For higher levels, let the engine search longer for stronger moves.
+      final elo = state.game.stockfishLevel.elo;
+      final defaultWork = MoveWork(
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: _kSearchTime,
-        multiPv: _kEvaluationMultivpv,
-        threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: stepsAfter,
+        elo: elo,
       );
+      final work = defaultWork.searchTime < _kSearchTime
+          ? defaultWork.copyWith(searchTimeOverride: _kSearchTime)
+          : defaultWork;
 
-      // Start evaluation and opening database fetch in parallel
-      final evalFuture = evaluationService.findEval(workAfter, minDepth: _kMinEvalDepth);
+      // Start combined eval+move search and opening database fetch in parallel
+      final evalMoveFuture = evaluationService.findMoveWithEval(work);
       final masterDbFuture = plyBeforeMove < _kOpeningPlyThreshold
           ? _fetchMasterDatabase(positionBeforeFen)
           : Future.value(null);
 
       // Wait for both to complete in parallel
-      final (evalAfter, masterEntry) = await (evalFuture, masterDbFuture).wait;
+      final ((evalAfter, engineMoveUci), masterEntry) = await (evalMoveFuture, masterDbFuture).wait;
 
       if (!ref.mounted) return;
 
@@ -354,9 +361,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
 
-      // Play engine move
+      // Apply engine move directly (we already have it from the combined search)
       if (state.game.playable) {
-        _playEngineMove();
+        final engineMove = NormalMove.fromUci(engineMoveUci);
+        _applyMove(engineMove);
+        // After engine move, precompute hints for player's turn
+        if (state.game.playable) {
+          _computeHints();
+        }
       }
     } catch (e) {
       _logger.warning('Error evaluating move: $e');

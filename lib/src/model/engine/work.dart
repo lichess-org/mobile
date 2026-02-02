@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = (EvalWork, LocalEval);
+typedef EvalResult = (Work, LocalEval);
 typedef MoveResult = (MoveWork, UCIMove);
 
 /// Base sealed class for engine work items.
@@ -97,6 +97,10 @@ sealed class MoveWork extends Work with _$MoveWork {
 
     /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
     required int elo,
+
+    /// Optional override for the default search time computed from [elo].
+    /// Use this when you need a longer search time (e.g., to get accurate evaluation).
+    Duration? searchTimeOverride,
   }) = _MoveWork;
 
   @override
@@ -142,7 +146,7 @@ sealed class MoveWork extends Work with _$MoveWork {
     }
   }
 
-  /// Search time based on Elo rating.
+  /// Search time based on Elo rating, or [searchTimeOverride] if provided.
   ///
   /// Lower Elos get shorter search times since the strength limiting mechanism
   /// (randomized bias on move scores) selects the move early in the search
@@ -164,6 +168,7 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// | 12    | 3190 | 8000ms      |
   @override
   Duration get searchTime {
+    if (searchTimeOverride != null) return searchTimeOverride!;
     final int ms;
     if (elo <= 1750) {
       // Levels 1-5: linear from 150ms to 640ms

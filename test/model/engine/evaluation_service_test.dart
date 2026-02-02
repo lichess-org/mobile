@@ -1479,4 +1479,223 @@ void main() {
       });
     });
   });
+
+  group('EvaluationService.findMoveWithEval', () {
+    test('findMoveWithEval returns both eval and move', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork();
+      final (eval, move) = await service.findMoveWithEval(work);
+
+      expect(move, equals('e2e4'));
+      expect(eval, isNotNull);
+      expect(eval!.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
+    });
+
+    test('findMoveWithEval returns null eval if no eval events received', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        // Start findMoveWithEval
+        final future = service.findMoveWithEval(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit bestmove without any eval events
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final (eval, move) = await future;
+        expect(move, equals('e2e4'));
+        expect(eval, isNull);
+      });
+    });
+
+    test('findMoveWithEval collects eval from info lines', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        // Start findMoveWithEval
+        final future = service.findMoveWithEval(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit eval events
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        throttleStockfish.emitEvalEvents(); // depth 12
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Emit bestmove
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final (eval, move) = await future;
+        expect(move, equals('e2e4'));
+        expect(eval, isNotNull);
+        expect(eval!.depth, equals(12));
+      });
+    });
+
+    test('findMoveWithEval throws MoveRequestCancelledException when quit() is called', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeMoveWork();
+
+        // Start findMoveWithEval
+        final future = service.findMoveWithEval(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Quit before bestmove is emitted
+        service.quit();
+        async.flushMicrotasks();
+
+        // The future should throw MoveRequestCancelledException
+        expect(future, throwsA(isA<MoveRequestCancelledException>()));
+      });
+    });
+
+    test('second findMoveWithEval cancels the first one', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeMoveWork(elo: 1500);
+        final work2 = makeMoveWork(elo: 1800);
+
+        // Start first findMoveWithEval
+        final future1 = service.findMoveWithEval(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Start second findMoveWithEval before first completes
+        final future2 = service.findMoveWithEval(work2);
+        async.flushMicrotasks();
+
+        // First future should throw MoveRequestCancelledException
+        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
+
+        // Emit bestmove for second request
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // Second future should complete
+        final (eval, move) = await future2;
+        expect(move, equals('e2e4'));
+      });
+    });
+
+    test('findMove cancels pending findMoveWithEval', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeMoveWork(elo: 1500);
+        final work2 = makeMoveWork(elo: 1800);
+
+        // Start findMoveWithEval
+        final future1 = service.findMoveWithEval(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Start findMove before findMoveWithEval completes
+        final future2 = service.findMove(work2);
+        async.flushMicrotasks();
+
+        // First future should throw MoveRequestCancelledException
+        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
+
+        // Emit bestmove for second request
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // Second future should complete
+        final move = await future2;
+        expect(move, equals('e2e4'));
+      });
+    });
+
+    test('findMoveWithEval cancels pending findMove', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish();
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeMoveWork(elo: 1500);
+        final work2 = makeMoveWork(elo: 1800);
+
+        // Start findMove
+        final future1 = service.findMove(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Start findMoveWithEval before findMove completes
+        final future2 = service.findMoveWithEval(work2);
+        async.flushMicrotasks();
+
+        // First future should throw MoveRequestCancelledException
+        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
+
+        // Emit bestmove for second request
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        // Second future should complete
+        final (eval, move) = await future2;
+        expect(move, equals('e2e4'));
+      });
+    });
+
+    test('findMoveWithEval throws for unsupported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(variant: Variant.antichess);
+
+      expect(
+        () => service.findMoveWithEval(work),
+        throwsA(isA<EngineUnsupportedVariantException>()),
+      );
+    });
+
+    test('findMoveWithEval with searchTimeOverride uses override', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeMoveWork(elo: 1320).copyWith(searchTimeOverride: const Duration(seconds: 5));
+
+      // The work should use the override searchTime
+      expect(work.searchTime, equals(const Duration(seconds: 5)));
+
+      final (eval, move) = await service.findMoveWithEval(work);
+      expect(move, equals('e2e4'));
+    });
+  });
 }

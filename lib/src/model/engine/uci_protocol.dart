@@ -134,6 +134,10 @@ class UCIProtocol {
           _evalController.sink.add((evalWork, _currentEval!));
         case final MoveWork moveWork:
           final bestMove = parts[1];
+          // Emit final eval if available (for combined eval+move searches)
+          if (_currentEval != null) {
+            _evalController.sink.add((moveWork, _currentEval!));
+          }
           _moveController.sink.add((moveWork, bestMove));
         case _:
           break;
@@ -141,13 +145,12 @@ class UCIProtocol {
       _work = null;
       _swapWork();
       return;
-    } else if (_work case final EvalWork evalWork
-        when _stopRequested != true && parts.first == 'info') {
-      _processEvalInfo(evalWork, parts);
+    } else if (_work case final Work work when _stopRequested != true && parts.first == 'info') {
+      _processEvalInfo(work, parts);
     }
   }
 
-  void _processEvalInfo(EvalWork work, List<String> parts) {
+  void _processEvalInfo(Work work, List<String> parts) {
     int depth = 0;
     int nodes = 0;
     int multiPv = 1;
@@ -184,7 +187,9 @@ class UCIProtocol {
 
     if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-    final pivot = work.threatMode ? Side.black : Side.white;
+    // threatMode is only available for EvalWork
+    final threatMode = work is EvalWork && work.threatMode;
+    final pivot = threatMode ? Side.black : Side.white;
     final ev = work.position.turn == pivot ? povEv : -povEv;
 
     // For now, ignore most upperbound/lowerbound messages.
@@ -195,7 +200,7 @@ class UCIProtocol {
 
     if (multiPv == 1) {
       _currentEval = LocalEval(
-        position: work.threatMode ? work.threatModePosition : work.position,
+        position: threatMode ? work.threatModePosition : work.position,
         searchTime: Duration(milliseconds: elapsedMs),
         depth: depth,
         nodes: nodes,
@@ -203,7 +208,7 @@ class UCIProtocol {
         mate: isMate ? ev : null,
         pvs: IList([pvData]),
         millis: elapsedMs,
-        threatMode: work.threatMode,
+        threatMode: threatMode,
       );
     } else if (_currentEval != null) {
       _currentEval = _currentEval!.copyWith(

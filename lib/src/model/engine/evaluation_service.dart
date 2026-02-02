@@ -101,7 +101,9 @@ class EvaluationService {
   EvalResult? _pendingEvalResult;
 
   /// Pending move request state.
-  (Completer<UCIMove>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
+  /// - onCancel: completes the completer with MoveRequestCancelledException
+  /// - cleanup: cancels all subscriptions
+  ({void Function() onCancel, void Function() cleanup})? _pendingMoveRequest;
 
   final _evalController = StreamController<EvalResult>.broadcast();
   final _moveController = StreamController<MoveResult>.broadcast();
@@ -290,11 +292,18 @@ class EvaluationService {
       if (!completer.isCompleted) {
         completer.complete(result.$2);
       }
-      _pendingMoveRequest?.$2.cancel();
+      _pendingMoveRequest?.cleanup();
       _pendingMoveRequest = null;
     });
 
-    _pendingMoveRequest = (completer, subscription);
+    _pendingMoveRequest = (
+      onCancel: () {
+        if (!completer.isCompleted) {
+          completer.completeError(const MoveRequestCancelledException());
+        }
+      },
+      cleanup: subscription.cancel,
+    );
 
     _startWork(work);
 
@@ -302,13 +311,73 @@ class EvaluationService {
   }
 
   void _cancelPendingMoveRequest() {
-    if (_pendingMoveRequest case (final completer, final subscription)) {
-      subscription.cancel();
-      if (!completer.isCompleted) {
-        completer.completeError(const MoveRequestCancelledException());
-      }
+    if (_pendingMoveRequest case (:final onCancel, :final cleanup)) {
+      onCancel();
+      cleanup();
       _pendingMoveRequest = null;
     }
+  }
+
+  /// Find the best move and evaluation for the given [work] in a single search.
+  ///
+  /// This combines move finding with evaluation collection. The engine runs with
+  /// UCI_LimitStrength enabled (so the returned move is strength-limited), but
+  /// the evaluation info lines are still accurate.
+  ///
+  /// Use [MoveWork.searchTimeOverride] to ensure sufficient search time for
+  /// accurate evaluation when using lower strength levels.
+  ///
+  /// Returns a [Future] that completes with both the evaluation and the move.
+  /// The evaluation may be null if no eval info was received during the search.
+  ///
+  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
+  /// Throws [MoveRequestCancelledException] if the request is cancelled.
+  Future<(LocalEval?, UCIMove)> findMoveWithEval(MoveWork work) {
+    if (!engineSupportedVariants.contains(work.variant)) {
+      return Future.error(EngineUnsupportedVariantException(work.variant));
+    }
+
+    _logger.info(
+      'Finding move with eval at ply ${work.position.ply} with options: '
+      'enginePref=${work.enginePref}, elo=${work.elo}, cores=${work.threads}, '
+      'searchTime=${work.searchTime.inMilliseconds}ms',
+    );
+
+    // Cancel any previous pending move request
+    _cancelPendingMoveRequest();
+
+    final completer = Completer<(LocalEval?, UCIMove)>();
+    LocalEval? lastEval;
+
+    // Listen to eval stream to collect the latest eval
+    final evalSubscription = evalStream.where((result) => result.$1 == work).listen((result) {
+      lastEval = result.$2;
+    });
+
+    // Listen to move stream to complete when bestmove is received
+    final moveSubscription = moveStream.where((result) => result.$1 == work).listen((result) {
+      if (!completer.isCompleted) {
+        completer.complete((lastEval, result.$2));
+      }
+      _pendingMoveRequest?.cleanup();
+      _pendingMoveRequest = null;
+    });
+
+    _pendingMoveRequest = (
+      onCancel: () {
+        if (!completer.isCompleted) {
+          completer.completeError(const MoveRequestCancelledException());
+        }
+      },
+      cleanup: () {
+        evalSubscription.cancel();
+        moveSubscription.cancel();
+      },
+    );
+
+    _startWork(work);
+
+    return completer.future;
   }
 
   /// Start the given [work], restarting the engine if necessary.
