@@ -129,14 +129,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.12.3"
-  chalkdart:
-    dependency: transitive
-    description:
-      name: chalkdart
-      sha256: "7ffc6bd39c81453fb9ba8dbce042a9c960219b75ea1c07196a7fa41c2fab9e86"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.5"
   characters:
     dependency: transitive
     description:
@@ -978,10 +970,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_symbols_icons
-      sha256: "02555a48e1ec02b16e532dfd4ef13c4f6bf7ec7c20230e58e56641a393433dc3"
+      sha256: c62b15f2b3de98d72cbff0148812f5ef5159f05e61fc9f9a089ec2bb234df082
       url: "https://pub.dev"
     source: hosted
-    version: "4.2892.0"
+    version: "4.2906.0"
   meta:
     dependency: "direct main"
     description:
@@ -1790,4 +1782,4 @@ packages:
     version: "3.1.3"
 sdks:
   dart: ">=3.10.3 <4.0.0"
-  flutter: ">=3.38.4 <4.0.0"
+  flutter: ">=3.38.4"
