@@ -5,7 +5,6 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:resizeableActivity="false"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules">
 
@@ -26,7 +25,6 @@
             android:theme="@style/SplashTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:resizeableActivity="false"
             android:supportsPictureInPicture="false"
             android:windowSoftInputMode="adjustResize">
 
