@@ -284,6 +284,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (!ref.mounted) return;
 
+      if (evalAfter != null) {
+        _logger.info('Move eval: depth=${evalAfter.depth}, score=${evalAfter.evalString}');
+      }
+
       // Check if the played move is in the master database (played more than once)
       // Normalize UCIs to handle alternate castling notations (e.g., e1h1 vs e1g1)
       final normalizedMoveUci = _normalizeUci(move.uci);
@@ -594,6 +598,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.practiceMode) {
         final playerSide = state.game.playerSide;
         final winningChances = finalEval.winningChances(playerSide);
+        _logger.info(
+          'Hints computed: depth=${finalEval.depth}, score=${finalEval.evalString}, '
+          'hints=${hintMoves.map((m) => m.uci).join(', ')}',
+        );
         state = state.copyWith(
           isLoadingHint: false,
           hintMoves: hintMoves,
