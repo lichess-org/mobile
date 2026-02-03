@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
@@ -313,7 +314,7 @@ class BroadcastPlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played, :rank) =
         playerWithOverallResult;
-    final BroadcastPlayer(:federation, :title, :name, :rating) = player;
+    final BroadcastPlayer(:federation, :rating) = player;
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
     return ListTile(
@@ -351,17 +352,9 @@ class BroadcastPlayerRow extends StatelessWidget {
             ),
             const SizedBox(width: 5),
           ],
-          if (title != null) ...[
-            Text(
-              title,
-              style: TextStyle(
-                color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Flexible(child: Text(name ?? '', overflow: TextOverflow.ellipsis)),
+          Expanded(
+            child: BroadcastPlayerWidget(player: player, showRating: false, showFederation: false),
+          ),
         ],
       ),
       subtitle: federation != null
