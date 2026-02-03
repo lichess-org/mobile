@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +22,6 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/quick_actions.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// Application initialization and main entry point.
@@ -61,6 +63,9 @@ class Application extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
+  final _appLinks = AppLinks();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
@@ -103,6 +108,13 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
+    _initAppLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -114,6 +126,7 @@ class _AppState extends ConsumerState<Application> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         MaterialLocalizationsEo.delegate,
@@ -129,16 +142,17 @@ class _AppState extends ConsumerState<Application> {
                 context,
               ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
-      onGenerateRoute: (settings) =>
-          settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
-      onGenerateInitialRoutes: (initialRoute) {
-        final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
-        return <Route<dynamic>?>[
-          homeRoute,
-          resolveAppLinkUri(context, Uri.parse(initialRoute)),
-        ].nonNulls.toList(growable: false);
-      },
+      home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver],
     );
+  }
+
+  Future<void> _initAppLinks() async {
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      final context = _navigatorKey.currentContext;
+      if (context != null && context.mounted) {
+        handleAppLink(context, uri);
+      }
+    });
   }
 }
