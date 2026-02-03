@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -331,8 +332,7 @@ class _OverallStatPlayer extends StatelessWidget {
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.broadcastScore,
-                      value:
-                          '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                      value: '${NumberFormat('0.#').format(score)} / $played',
                     ),
                   ),
                 if (performance != null)
@@ -385,9 +385,7 @@ class _TieBreaksSection extends StatelessWidget {
                   dense: true,
                   title: Text(tieBreak.description),
                   trailing: Text(
-                    tieBreak.points.toStringAsFixed(
-                      (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
-                    ),
+                    NumberFormat('0.##').format(tieBreak.points),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

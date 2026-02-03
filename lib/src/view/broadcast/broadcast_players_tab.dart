@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
@@ -309,13 +311,70 @@ class BroadcastPlayerRow extends StatelessWidget {
   final BroadcastPlayerWithOverallResult playerWithOverallResult;
   final BroadcastTournament tournament;
   final int index;
+  void _showTieBreaksBottomSheet(BuildContext context) {
+    final tieBreaks = playerWithOverallResult.tieBreaks;
+    if (tieBreaks == null || tieBreaks.isEmpty) return;
+
+    final BroadcastPlayerWithOverallResult(:player, :score, :played) = playerWithOverallResult;
+
+    showModalBottomSheet<void>(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return BottomSheetScrollableContainer(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  Expanded(
+                    child: BroadcastPlayerWidget(
+                      player: player,
+                      textStyle: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    score != null
+                        ? '${NumberFormat('0.#').format(score)} / $played'
+                        : '$played ${context.l10n.games.toLowerCase()}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('Tie-breaking', style: Theme.of(context).textTheme.titleSmall),
+            ),
+            ...tieBreaks.map(
+              (tieBreak) => ListTile(
+                title: Text(tieBreak.description),
+                trailing: Text(NumberFormat('0.##').format(tieBreak.points)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerWithOverallResult(:player, :ratingDiff, :score, :played, :rank) =
-        playerWithOverallResult;
+    final BroadcastPlayerWithOverallResult(
+      :player,
+      :ratingDiff,
+      :score,
+      :played,
+      :rank,
+      :tieBreaks,
+    ) = playerWithOverallResult;
     final BroadcastPlayer(:federation, :rating) = player;
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
+    final hasTieBreaks = tieBreaks != null && tieBreaks.isNotEmpty;
 
     return ListTile(
       tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
@@ -331,6 +390,7 @@ class BroadcastPlayerRow extends StatelessWidget {
           );
         }
       },
+      onLongPress: hasTieBreaks ? () => _showTieBreaksBottomSheet(context) : null,
       leading: ClipRRect(
         borderRadius: Styles.thumbnailBorderRadius,
         child: pic != null
