@@ -791,6 +791,23 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       content: Text(subtitle),
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.close)),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions.standalone(
+                  orientation: game.playerSide,
+                  pgn: game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: Variant.standard,
+                ),
+              ),
+            );
+          },
+          child: Text(context.l10n.analysis),
+        ),
         TextButton(onPressed: onNewGame, child: const Text('New game')),
       ],
     );
