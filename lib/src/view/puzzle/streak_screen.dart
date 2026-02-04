@@ -35,8 +35,8 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -77,25 +77,19 @@ class _StreakLoader extends ConsumerWidget {
         );
         return _StreakScaffold(
           initialPuzzleContext: initialPuzzleContext,
-          body: _Body(
-            initialPuzzleContext: initialPuzzleContext,
-            streak: value.streak,
-          ),
+          body: _Body(initialPuzzleContext: initialPuzzleContext, streak: value.streak),
         );
       case _:
-        return _StreakScaffold(
+        return const _StreakScaffold(
           initialPuzzleContext: null,
-          body: const Center(child: CircularProgressIndicator.adaptive()),
+          body: Center(child: CircularProgressIndicator.adaptive()),
         );
     }
   }
 }
 
 class _StreakScaffold extends StatelessWidget {
-  const _StreakScaffold({
-    required this.initialPuzzleContext,
-    required this.body,
-  });
+  const _StreakScaffold({required this.initialPuzzleContext, required this.body});
 
   final PuzzleContext? initialPuzzleContext;
   final Widget body;
@@ -508,8 +502,8 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
 
-    final bool isInReviewMode = streak.finished || 
-        (!autoNext && puzzleState.result == PuzzleResult.win);
+    final bool isInReviewMode =
+        streak.finished || (!autoNext && puzzleState.result == PuzzleResult.win);
 
     return BottomBar(
       children: [
@@ -590,7 +584,7 @@ class _BottomBar extends ConsumerWidget {
                   }
                 : null,
             highlighted: true,
-            label: streak.finished 
+            label: streak.finished
                 ? context.l10n.puzzleNewStreak
                 : context.l10n.puzzleContinueTraining,
             icon: CupertinoIcons.play_arrow_solid,
@@ -645,7 +639,7 @@ class _StreakSettingsBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
-    
+
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -658,6 +652,14 @@ class _StreakSettingsBottomSheet extends ConsumerWidget {
               value: autoNext,
               onChanged: (value) {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+
+                // Smart auto-advance: if enabling autoNext while puzzle is already won
+                if (value &&
+                    ref.read(puzzleControllerProvider(initialPuzzleContext)).result ==
+                        PuzzleResult.win) {
+                  ref.read(puzzleStreakControllerProvider.notifier).next();
+                  Navigator.of(context).pop();
+                }
               },
             ),
             ListTile(
