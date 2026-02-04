@@ -126,6 +126,27 @@ class _BodyState extends ConsumerState<_Body> {
           }
         });
       }
+
+      // Check for threefold repetition
+      if (previous?.game.isThreefoldRepetition == false &&
+          newGameState.game.isThreefoldRepetition == true) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => YesNoDialog(
+                title: Text(context.l10n.threefoldRepetition),
+                content: Text(context.l10n.claimADraw),
+                onYes: () {
+                  Navigator.pop(context);
+                  ref.read(offlineComputerGameControllerProvider.notifier).claimThreefoldDraw();
+                },
+                onNo: () => Navigator.pop(context),
+              ),
+            );
+          }
+        });
+      }
     });
 
     final isBoardFlipped = ref.watch(_isBoardFlippedProvider);

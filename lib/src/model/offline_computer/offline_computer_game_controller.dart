@@ -453,6 +453,16 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
   }
 
+  /// Claim a draw due to threefold repetition.
+  void claimThreefoldDraw() {
+    if (!state.game.playable || state.game.isThreefoldRepetition != true) return;
+    ref.read(evaluationServiceProvider).stop();
+    state = state.copyWith(
+      game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
+      isEngineThinking: false,
+    );
+  }
+
   void takeback() {
     if (!state.canTakeback) return;
     if (!state.game.casual && !state.game.practiceMode) return;
