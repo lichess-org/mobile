@@ -569,7 +569,8 @@ class _PracticeCommentCard extends ConsumerWidget {
     } else if (gameState.finished) {
       // Game is over
       content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
-    } else {
+    } else if (gameState.turn == gameState.game.playerSide) {
+      // Player's turn
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
@@ -586,6 +587,8 @@ class _PracticeCommentCard extends ConsumerWidget {
             ),
         ],
       );
+    } else {
+      content = const SizedBox.shrink();
     }
 
     return Container(
