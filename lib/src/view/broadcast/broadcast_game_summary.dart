@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -9,16 +8,10 @@ import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 
 class BroadcastGameSummary extends ConsumerWidget {
-  const BroadcastGameSummary({
-    required this.roundId,
-    required this.gameId,
-    this.analysisSummary,
-    super.key,
-  });
+  const BroadcastGameSummary({required this.roundId, required this.gameId, super.key});
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final BroadcastAnalysisSummary? analysisSummary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

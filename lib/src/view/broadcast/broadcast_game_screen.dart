@@ -317,11 +317,7 @@ class _Body extends ConsumerWidget {
           children: [
             _OpeningExplorerTab(roundId, gameId),
             _BroadcastGameTreeView(roundId, gameId),
-            BroadcastGameSummary(
-              roundId: roundId,
-              gameId: gameId,
-              analysisSummary: state.analysisSummary,
-            ),
+            BroadcastGameSummary(roundId: roundId, gameId: gameId),
           ],
         );
       case AsyncValue(:final error?):
