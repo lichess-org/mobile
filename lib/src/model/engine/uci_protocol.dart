@@ -75,7 +75,12 @@ class UCIProtocol {
   void connected(void Function(String command) send) {
     _send = send;
 
-    _sendAndLog('uci');
+    // Affects notation only. Life would be easier if everyone would always
+    // unconditionally use this mode.
+    setOption('UCI_Chess960', 'true');
+
+    _sendAndLog('ucinewgame');
+    _sendAndLog('isready');
   }
 
   void dispose() {
@@ -118,14 +123,7 @@ class UCIProtocol {
     // no need to log lines as it is already logged by Stockfish plugin (finer)
     // _log.fine('>>> $line');
     final parts = line.trim().split(spaceRegex);
-    if (parts.first == 'uciok') {
-      // Affects notation only. Life would be easier if everyone would always
-      // unconditionally use this mode.
-      setOption('UCI_Chess960', 'true');
-
-      _sendAndLog('ucinewgame');
-      _sendAndLog('isready');
-    } else if (parts.first == 'readyok') {
+    if (parts.first == 'readyok') {
       _swapWork();
     } else if (parts.first == 'id' && parts[1] == 'name') {
       _engineName.value = parts.sublist(2).join(' ');
