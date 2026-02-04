@@ -421,7 +421,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         id: state.gameSessionId,
         enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
-        threads: 1,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: steps,

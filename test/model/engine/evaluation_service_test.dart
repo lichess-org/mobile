@@ -46,7 +46,6 @@ MoveWork makeMoveWork({
     id: id,
     enginePref: enginePref,
     variant: variant,
-    threads: 1,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
     elo: elo,
@@ -1139,8 +1138,21 @@ void main() {
       // See MoveWork.searchTime documentation for full table
       expect(level1.searchTime.inMilliseconds, equals(150));
       expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(2712));
-      expect(level12.searchTime.inMilliseconds, equals(8000));
+      expect(level8.searchTime.inMilliseconds, equals(1583));
+      expect(level12.searchTime.inMilliseconds, equals(5000));
+    });
+
+    test('MoveWork.threads scales with elo', () {
+      final level1 = makeMoveWork(elo: 1320);
+      final level5 = makeMoveWork(elo: 1750);
+      final level6 = makeMoveWork(elo: 1850);
+      final level12 = makeMoveWork(elo: 3190);
+
+      // Levels 1-5 use 1 thread, levels 6-12 use 2 threads
+      expect(level1.threads, equals(1));
+      expect(level5.threads, equals(1));
+      expect(level6.threads, equals(2));
+      expect(level12.threads, equals(2));
     });
 
     test('MoveWork.multiPv scales inversely with elo', () {

@@ -90,7 +90,6 @@ sealed class MoveWork extends Work with _$MoveWork {
     /// The engine preference to use (only relevant for Standard and Chess960 variants).
     required ChessEnginePref enginePref,
     required Variant variant,
-    required int threads,
     int? hashSize,
     required Position initialPosition,
     required IList<Step> steps,
@@ -101,6 +100,17 @@ sealed class MoveWork extends Work with _$MoveWork {
 
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
+
+  /// Number of threads to use for move computation.
+  ///
+  /// Lower levels use 1 thread, higher levels use 2 threads for better move quality.
+  ///
+  /// | Level | Elo  | Threads |
+  /// |-------|------|---------|
+  /// | 1-5   | ≤1750| 1       |
+  /// | 6-12  | >1750| 2       |
+  @override
+  int get threads => elo > 1750 ? 2 : 1;
 
   /// Number of principal variations to compute for move selection.
   ///
@@ -152,13 +162,13 @@ sealed class MoveWork extends Work with _$MoveWork {
   /// | 3     | 1550 | 410ms       |
   /// | 4     | 1650 | 525ms       |
   /// | 5     | 1750 | 640ms       |
-  /// | 6     | 1850 | 1500ms      |
-  /// | 7     | 1950 | 1985ms      |
-  /// | 8     | 2100 | 2715ms      |
-  /// | 9     | 2300 | 3685ms      |
-  /// | 10    | 2550 | 4895ms      |
-  /// | 11    | 2850 | 6350ms      |
-  /// | 12    | 3190 | 8000ms      |
+  /// | 6     | 1850 | 800ms       |
+  /// | 7     | 1950 | 1115ms      |
+  /// | 8     | 2100 | 1585ms      |
+  /// | 9     | 2300 | 2210ms      |
+  /// | 10    | 2550 | 2995ms      |
+  /// | 11    | 2850 | 3935ms      |
+  /// | 12    | 3190 | 5000ms      |
   @override
   Duration get searchTime {
     final int ms;
@@ -166,10 +176,10 @@ sealed class MoveWork extends Work with _$MoveWork {
       // Levels 1-5: linear from 150ms to 640ms
       ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
     } else {
-      // Levels 6-12: linear from 1500ms to 8000ms
-      ms = (1500 + ((elo - 1850) / (3190 - 1850) * 6500)).toInt();
+      // Levels 6-12: linear from 800ms to 5000ms
+      ms = (800 + ((elo - 1850) / (3190 - 1850) * 4200)).toInt();
     }
-    return Duration(milliseconds: ms.clamp(150, 8000));
+    return Duration(milliseconds: ms.clamp(150, 5000));
   }
 }
 
