@@ -36,7 +36,7 @@ final _logger = Logger('OfflineComputerGameController');
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
 /// Minimum depth required for a move evaluation in practice mode.
-const _kMinEvalDepth = 14;
+const _kMinEvalDepth = 15;
 
 /// Search time for evaluations in practice mode.
 const _kSearchTime = Duration(seconds: 2);
