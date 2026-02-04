@@ -245,7 +245,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // If we still don't have cached evaluation, proceed without practice comment
     if (cachedBestMoves == null || cachedWinningChances == null || cachedBestMoves.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
-      _playEngineMove();
+      if (state.turn != state.game.playerSide) {
+        _playEngineMove();
+      }
       return;
     }
 
@@ -371,16 +373,16 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
 
-      // Play engine move
-      if (state.game.playable) {
+      // Play engine move if it's the engine's turn
+      if (state.game.playable && state.turn != state.game.playerSide) {
         _playEngineMove();
       }
     } catch (e) {
       _logger.warning('Error evaluating move: $e');
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
-        // Still play engine move even if evaluation failed
-        if (state.game.playable) {
+        // Still play engine move even if evaluation failed (and it's engine's turn)
+        if (state.game.playable && state.turn != state.game.playerSide) {
           _playEngineMove();
         }
       }
@@ -756,7 +758,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   bool get canGoBack => stepCursor > 0;
 
   /// Player can take back if it's their turn and there are moves to take back.
-  bool get canTakeback => game.playable && game.steps.length > 1 && !isEngineThinking;
+  bool get canTakeback =>
+      game.playable && game.steps.length > 1 && !isEngineThinking && !isEvaluatingMove;
 
   /// The square to highlight for the current hint.
   Square? get hintSquare {
