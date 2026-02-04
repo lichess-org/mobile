@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -522,19 +523,20 @@ class _StudyAnalysisBoardState
         analysisState.currentNode.children.length > 1;
 
     final pgnShapes = ISet(analysisState.pgnShapes.map((shape) => shape.chessground));
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final variationArrows = ISet<Shape>(
       showVariationArrows
           ? analysisState.currentNode.children
-                .mapIndexed((i, move) {
-                  final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
-                  return switch (move) {
-                    NormalMove() => Arrow(color: color, orig: move.from, dest: move.to),
-                    // TODO support drop moves: draw piece shape (like for promotion moves) and a circle shape
-                    DropMove() => null,
-                  };
-                })
-                .nonNulls
+                .mapIndexed(
+                  (i, move) => moveShapes(
+                    move: move,
+                    color: Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5),
+                    sideToMove: analysisState.currentPosition!.turn,
+                    pieceAssets: boardPrefs.pieceSet.assets,
+                  ),
+                )
+                .flattened
                 .toList()
           : [],
     );
