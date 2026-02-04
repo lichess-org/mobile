@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -251,12 +252,52 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
+    final playerSide = state.game.playerSide;
+    final normalizedMoveUci = _normalizeUci(move.uci);
+
+    // Check if the player's move is in the cached best moves list.
+    // If so, we can use the cached winning chances and skip the expensive evaluation.
+    final cachedMoveData = cachedBestMoves.firstWhereOrNull(
+      (m) => _normalizeUci(m.move.uci) == normalizedMoveUci,
+    );
+
+    // Fast path: move was in the analysis, use cached winning chances
+    if (cachedMoveData != null) {
+      _logger.info('Using cached eval for move: ${move.uci}');
+
+      // Fetch master database in parallel (only in opening phase)
+      final masterEntry = plyBeforeMove < _kOpeningPlyThreshold
+          ? await _fetchMasterDatabase(positionBeforeFen)
+          : null;
+
+      if (!ref.mounted) return;
+
+      final comment = _createPracticeComment(
+        move: move,
+        normalizedMoveUci: normalizedMoveUci,
+        cachedBestMoves: cachedBestMoves,
+        winningChancesBefore: cachedWinningChances,
+        winningChancesAfter: cachedMoveData.winningChances,
+        evalAfterString: null, // We don't have an eval string from cache
+        masterEntry: masterEntry,
+        playerSide: playerSide,
+      );
+
+      state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
+
+      if (state.game.playable && state.turn != state.game.playerSide) {
+        _playEngineMove();
+      }
+      return;
+    }
+
+    // Slow path: move was not in the precomputed analysis
+    _logger.info('Move not in cache, evaluating: ${move.uci}');
+
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
       final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
-      final playerSide = state.game.playerSide;
 
-      // Evaluate position AFTER the move to get winning chances
       final stepsAfter = state.game.steps
           .skip(1)
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
@@ -281,7 +322,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           ? _fetchMasterDatabase(positionBeforeFen)
           : Future.value(null);
 
-      // Wait for both to complete in parallel
       final (evalAfter, masterEntry) = await (evalFuture, masterDbFuture).wait;
 
       if (!ref.mounted) return;
@@ -290,90 +330,25 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _logger.info('Move eval: depth=${evalAfter.depth}, score=${evalAfter.evalString}');
       }
 
-      // Check if the played move is in the master database (played more than once)
-      // Normalize UCIs to handle alternate castling notations (e.g., e1h1 vs e1g1)
-      final normalizedMoveUci = _normalizeUci(move.uci);
-      final isBookMove =
-          masterEntry != null &&
-          masterEntry.moves.any((m) => _normalizeUci(m.uci) == normalizedMoveUci && m.games > 1);
-
-      // Create practice comment if we have the after evaluation
       PracticeComment? comment;
       if (evalAfter != null) {
-        final winningChancesBefore = cachedWinningChances;
         // After the move, it's opponent's turn, so we need to flip the perspective
         final winningChancesAfter = -evalAfter.winningChances(playerSide.opposite);
 
-        // Calculate shift (how much the position deteriorated)
-        final shift = winningChancesBefore - winningChancesAfter;
-
-        // Get best move from cached evaluation
-        final bestMoveData = cachedBestMoves.firstOrNull;
-        final bestMove = bestMoveData?.move;
-
-        // Check if the played move was the best move
-        final playedMoveIsBest =
-            bestMove != null && _normalizeUci(bestMove.uci) == normalizedMoveUci;
-
-        // If the move is a book move, consider it a good move regardless of eval
-        final isGoodMove = isBookMove || shift < 0.025;
-
-        // Find alternative good move if the played move was good
-        Move? alternativeGoodMove;
-        if (isGoodMove && cachedBestMoves.length > 1) {
-          // Find another good move that's not the one played
-          for (final m in cachedBestMoves.skip(1)) {
-            if (winningChancesBefore - m.winningChances < 0.025 &&
-                _normalizeUci(m.move.uci) != normalizedMoveUci) {
-              alternativeGoodMove = m.move;
-              break;
-            }
-          }
-        }
-
-        // If it's a book move, force good move verdict
-        final verdict = isBookMove
-            ? MoveVerdict.goodMove
-            : MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
-
-        // Get the position BEFORE the player's move to format the suggested moves as SAN
-        // The stepCursor was incremented by _applyMove, so we need to go back 1 step
-        final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
-
-        // Format best move as SAN (only if not a good move and there was a better move)
-        SanMove? bestMoveSan;
-        if (!isGoodMove && !playedMoveIsBest && bestMove != null) {
-          final parsed = Move.parse(bestMove.uci);
-          if (parsed != null && positionBeforeMove.isLegal(parsed)) {
-            final (_, san) = positionBeforeMove.makeSan(parsed);
-            bestMoveSan = SanMove(san, parsed);
-          }
-        }
-
-        // Format alternative good move as SAN
-        SanMove? alternativeGoodMoveSan;
-        if (alternativeGoodMove != null) {
-          final parsed = Move.parse(alternativeGoodMove.uci);
-          if (parsed != null && positionBeforeMove.isLegal(parsed)) {
-            final (_, san) = positionBeforeMove.makeSan(parsed);
-            alternativeGoodMoveSan = SanMove(san, parsed);
-          }
-        }
-
-        comment = PracticeComment(
-          verdict: verdict,
-          bestMove: bestMoveSan,
-          alternativeGoodMove: alternativeGoodMoveSan,
-          winningChancesBefore: winningChancesBefore,
+        comment = _createPracticeComment(
+          move: move,
+          normalizedMoveUci: normalizedMoveUci,
+          cachedBestMoves: cachedBestMoves,
+          winningChancesBefore: cachedWinningChances,
           winningChancesAfter: winningChancesAfter,
-          evalAfter: evalAfter.evalString,
-          isBookMove: isBookMove,
+          evalAfterString: evalAfter.evalString,
+          masterEntry: masterEntry,
+          playerSide: playerSide,
         );
       }
 
       state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
 
-      // Play engine move if it's the engine's turn
       if (state.game.playable && state.turn != state.game.playerSide) {
         _playEngineMove();
       }
@@ -381,12 +356,84 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.warning('Error evaluating move: $e');
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
-        // Still play engine move even if evaluation failed (and it's engine's turn)
         if (state.game.playable && state.turn != state.game.playerSide) {
           _playEngineMove();
         }
       }
     }
+  }
+
+  /// Creates a practice comment based on evaluation data.
+  PracticeComment _createPracticeComment({
+    required NormalMove move,
+    required String normalizedMoveUci,
+    required IList<MoveWithWinningChances> cachedBestMoves,
+    required double winningChancesBefore,
+    required double winningChancesAfter,
+    required String? evalAfterString,
+    required OpeningExplorerEntry? masterEntry,
+    required Side playerSide,
+  }) {
+    final isBookMove =
+        masterEntry != null &&
+        masterEntry.moves.any((m) => _normalizeUci(m.uci) == normalizedMoveUci && m.games > 1);
+
+    final shift = winningChancesBefore - winningChancesAfter;
+
+    final bestMoveData = cachedBestMoves.firstOrNull;
+    final bestMove = bestMoveData?.move;
+    final playedMoveIsBest = bestMove != null && _normalizeUci(bestMove.uci) == normalizedMoveUci;
+
+    final isGoodMove = isBookMove || shift < 0.025;
+
+    // Find alternative good move if the played move was good
+    Move? alternativeGoodMove;
+    if (isGoodMove && cachedBestMoves.length > 1) {
+      for (final m in cachedBestMoves.skip(1)) {
+        if (winningChancesBefore - m.winningChances < 0.025 &&
+            _normalizeUci(m.move.uci) != normalizedMoveUci) {
+          alternativeGoodMove = m.move;
+          break;
+        }
+      }
+    }
+
+    final verdict = isBookMove
+        ? MoveVerdict.goodMove
+        : MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
+
+    // Get the position BEFORE the player's move to format the suggested moves as SAN
+    final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
+
+    // Format best move as SAN (only if not a good move and there was a better move)
+    SanMove? bestMoveSan;
+    if (!isGoodMove && !playedMoveIsBest && bestMove != null) {
+      final parsed = Move.parse(bestMove.uci);
+      if (parsed != null && positionBeforeMove.isLegal(parsed)) {
+        final (_, san) = positionBeforeMove.makeSan(parsed);
+        bestMoveSan = SanMove(san, parsed);
+      }
+    }
+
+    // Format alternative good move as SAN
+    SanMove? alternativeGoodMoveSan;
+    if (alternativeGoodMove != null) {
+      final parsed = Move.parse(alternativeGoodMove.uci);
+      if (parsed != null && positionBeforeMove.isLegal(parsed)) {
+        final (_, san) = positionBeforeMove.makeSan(parsed);
+        alternativeGoodMoveSan = SanMove(san, parsed);
+      }
+    }
+
+    return PracticeComment(
+      verdict: verdict,
+      bestMove: bestMoveSan,
+      alternativeGoodMove: alternativeGoodMoveSan,
+      winningChancesBefore: winningChancesBefore,
+      winningChancesAfter: winningChancesAfter,
+      evalAfter: evalAfterString,
+      isBookMove: isBookMove,
+    );
   }
 
   /// Fetch the master database for the given FEN.
