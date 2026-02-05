@@ -228,9 +228,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
 
     // If hints were still loading when we made the move, wait for them to complete
-    // so we can get the "before" evaluation for comparison
+    // so we can get the "before" evaluation for comparison.
+    // Wait time must be longer than _kSearchTime to account for engine startup overhead.
     if (wasLoadingHint || cachedBestMoves == null || cachedWinningChances == null) {
-      const maxWaitTime = Duration(seconds: 2);
+      const maxWaitTime = Duration(seconds: 3);
       final deadline = DateTime.now().add(maxWaitTime);
       while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
