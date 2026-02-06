@@ -229,12 +229,19 @@ class UserActivityEntry extends ConsumerWidget {
 }
 
 class _UserActivityListTile extends StatelessWidget {
-  const _UserActivityListTile({required this.title, this.subtitle, this.trailing, this.leading});
+  const _UserActivityListTile({
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.leading,
+    this.onTap,
+  });
 
   final String title;
   final Widget? subtitle;
   final Widget? trailing;
   final Widget? leading;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +250,7 @@ class _UserActivityListTile extends StatelessWidget {
       title: Text(title, maxLines: 2),
       subtitle: subtitle,
       trailing: trailing,
+      onTap: onTap    
     );
   }
 }
