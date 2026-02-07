@@ -44,6 +44,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _logger = Logger('AnalysisScreen');
 
@@ -165,10 +166,12 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     ];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
+    WakelockPlus.disable();
     _tabController.dispose();
     super.dispose();
   }

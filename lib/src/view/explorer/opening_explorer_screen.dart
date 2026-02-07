@@ -18,9 +18,10 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
-class OpeningExplorerScreen extends ConsumerWidget {
-  const OpeningExplorerScreen({required this.options});
+class OpeningExplorerScreen extends ConsumerStatefulWidget {
+  const OpeningExplorerScreen({required this.options, super.key});
 
   final AnalysisOptions options;
 
@@ -29,11 +30,28 @@ class OpeningExplorerScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+  ConsumerState<OpeningExplorerScreen> createState() => _OpeningExplorerScreenState();
+}
+
+class _OpeningExplorerScreenState extends ConsumerState<OpeningExplorerScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WakelockPlus.enable();
+  }
+
+  @override
+  void dispose() {
+    WakelockPlus.disable();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.options);
 
     final body = switch (ref.watch(ctrlProvider)) {
-      AsyncData(value: final state) => _Body(options: options, state: state),
+      AsyncData(value: final state) => _Body(options: widget.options, state: state),
       AsyncError(:final error) => Center(
         child: Padding(padding: const EdgeInsets.all(16.0), child: Text(error.toString())),
       ),
@@ -43,7 +61,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
       body: body,
       appBar: AppBar(
         title: Text(context.l10n.openingExplorer),
-        bottom: _MoveList(options: options),
+        bottom: _MoveList(options: widget.options),
       ),
     );
   }
