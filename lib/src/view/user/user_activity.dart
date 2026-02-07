@@ -122,12 +122,8 @@ class UserActivityEntry extends ConsumerWidget {
                 loss: gameEntry.value.loss,
               ),
               onTap: () => Navigator.of(context).push(
-                    GameHistoryScreen.buildRoute(
-                      context,
-                      user: user,
-                      isOnline: user.isOnline == true,
-                    ),
-                  ),
+                GameHistoryScreen.buildRoute(context, user: user, isOnline: user.isOnline == true),
+              ),
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
