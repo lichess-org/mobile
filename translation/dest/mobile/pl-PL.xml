@@ -12,8 +12,8 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Opinie</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobry wieczór, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobry wieczór</string>
-  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Miłego dnia, %s</string>
-  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Miłego dnia</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Miłego dnia, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Miłego dnia</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Ukryj wariant</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Start</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Aktywni streamerzy</string>
@@ -75,4 +75,16 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Oczekiwanie na dołączenie przeciwnika...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Oglądaj</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Witaj w aplikacji Lichess!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Zobacz partię</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Wskazówka: Możesz dodać więcej widżetów do ekranu głównego lub usunąć te, których nie potrzebujesz!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Wyłącz</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Dostosuj</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Przestań pokazywać zagrożenie</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Zakończone</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Przejdź do mojej strony</string>
+  <string name="displayModeCompact" comment="">Kompaktowy</string>
+  <string name="displayModeDetailed" comment="">Szczegółowy</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Biblioteka debiutów nie jest dostępna w trybie offline.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Wróć</string>
 </resources>

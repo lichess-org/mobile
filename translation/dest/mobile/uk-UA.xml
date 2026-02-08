@@ -12,13 +12,13 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Відгук</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрий вечір, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрий вечір</string>
-  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Добрий день, %s</string>
-  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Добрий день</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрий день, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрий день</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Сховати варіанти</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Головна</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стримери в прямому етері</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ви повинні ввійти, аби переглянути цю сторінку.</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Немає результатів </string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Немає результатів</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Зверніть увагу, що не всі функції зі старого додатку або сайту наразі доступні, але ми додаємо функції постійно.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ви не слідкуєте за користувачами.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Гаразд</string>
@@ -75,4 +75,16 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Очікування на суперника...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Дивитися</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Вітаємо в додатку Lichess!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Переглянути гру</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Порада: Можна додавати більше віджетів на головний екран або прибирати непотрібні!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Прибрати</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Змінити</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Не показувати загрози</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Завершені</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">До моєї сторінки</string>
+  <string name="displayModeCompact" comment="">Стислий</string>
+  <string name="displayModeDetailed" comment="">Детальний</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Довідник дебютів недоступний в режимі офлайн.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Попередня</string>
 </resources>
