@@ -80,7 +80,7 @@ class _BodyState extends ConsumerState<_Body> {
       }
 
       final savedGame = await ref.read(offlineComputerGameStorageProvider).fetchGame();
-      if (savedGame != null && savedGame.game.steps.length > 1 && !savedGame.game.finished) {
+      if (savedGame != null && savedGame.game.steps.length > 1) {
         ref.read(offlineComputerGameControllerProvider.notifier).loadGame(savedGame);
       } else {
         if (!mounted) return;
