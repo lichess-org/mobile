@@ -9,6 +9,8 @@
   <string name="gameOver">Schpiel verbi</string>
   <string name="waitingForOpponent">Uf de Gägner warte</string>
   <string name="orLetYourOpponentScanQrCode">Oder lass din Gägner de QR-Code skänne</string>
+  <string name="reusableChallengeUrl">Wieder verwändbari Forderigs-URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">En permanänte Link, für jedermann - um mit genau dene Istellige z\'fordere.</string>
   <string name="waiting">Am Warte</string>
   <string name="yourTurn">Du bisch dra</string>
   <string name="aiNameLevelAiLevel">%1$s Schtufe %2$s</string>
@@ -125,7 +127,7 @@
   <string name="bestMoveArrow">Pfil für de bescht Zug</string>
   <string name="showVariationArrows">Pfil für Variante azeige</string>
   <string name="evaluationGauge">Bewertigs-Massschtab</string>
-  <string name="visualMotifs">Visuelli Motif</string>
+  <string name="visualMotifs">Visuelli Motiv</string>
   <string name="undefendedPieces">Ung\'schützti Figure</string>
   <string name="pinnedPieces">G\'fessleti Figure</string>
   <string name="checkableKing">Agrifbare König</string>
@@ -430,6 +432,8 @@ Au vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multiko
   <string name="leaderboard">Ranglischte</string>
   <string name="screenshotCurrentPosition">En Screenshot vu de aktuelle Schtellig mache</string>
   <string name="gameAsGIF">Schpiel als GIF</string>
+  <string name="playerNames">Schpiller Näme</string>
+  <string name="moveAnnotations">Zugs-Notatione</string>
   <string name="pasteTheFenStringHere">Füeg de FEN-Tegscht da i</string>
   <string name="pasteThePgnStringHere">Füeg de PGN-Tegscht da i</string>
   <string name="orUploadPgnFile">Oder lad e PGN-Datei ufe</string>
@@ -662,7 +666,7 @@ zum bewise dass du en Mänsch bisch.</string>
   <string name="onlyExistingConversations">Nur bestehendi Underhaltige</string>
   <string name="onlyFriends">Nur Fründe</string>
   <string name="menu">Menü</string>
-  <string name="castling">Rochade</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rochade</string>
   <string name="whiteCastlingKingside">Wiss 0-0</string>
   <string name="blackCastlingKingside">Schwarz 0-0</string>
   <plurals name="nbForumPosts">
@@ -823,6 +827,7 @@ gits nöd und es isch nie g\'wertet.</string>
   <string name="size">Grössi</string>
   <string name="opacity">OpaStadt</string>
   <string name="brightness">Helligkeit</string>
+  <string name="contrast">Kontrascht</string>
   <string name="hue">Farbton</string>
   <string name="boardReset">Farbe zruggstelle</string>
   <string name="pieceSet">Figureart</string>
@@ -1033,5 +1038,5 @@ Alli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur B
   <string name="search">Suechi</string>
   <string name="clearSearch">Suechi lösche</string>
   <string name="tags">Tags</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
 </resources>

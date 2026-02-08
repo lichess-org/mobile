@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="gameSetup">Oyun ayarları</string>
-  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Bir arkadaşınıza meydan okuyun</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Arkadaşa meydan oku</string>
   <string name="playAgainstComputer">Bilgisayara Karşı Oyna</string>
   <string name="gameMode">Oyun modu</string>
   <string name="createLobbyGame">Lobi oyunu oluştur</string>
@@ -9,6 +9,8 @@
   <string name="gameOver">Oyun bitti</string>
   <string name="waitingForOpponent">Rakip bekleniyor</string>
   <string name="orLetYourOpponentScanQrCode">Veya rakibiniz bu QR kodunu tarasın</string>
+  <string name="reusableChallengeUrl">Yeniden kullanılabilir meydan okuma bağlantısı</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Bu ayarlar tam olarak aynı olduğundan, herkesin size meydan okuyabileceği kalıcı bir bağlantı.</string>
   <string name="waiting">Bekleniyor</string>
   <string name="yourTurn">Sıra sizde</string>
   <string name="aiNameLevelAiLevel">%1$s seviye %2$s</string>
@@ -108,7 +110,7 @@
   <string name="openingExplorer">Açılış kâşifi</string>
   <string name="openingEndgameExplorer">Açılış/oyunsonu kâşifi</string>
   <string name="xOpeningExplorer">%s açılış kâşifi</string>
-  <string name="playFirstOpeningEndgameExplorerMove">İlk sıradaki açılış kaşifi/oyun sonu analizi hamlesini oyna</string>
+  <string name="playFirstOpeningEndgameExplorerMove">İlk sıradaki açılış kâşifi/oyun sonu analizi hamlesini oyna</string>
   <string name="winPreventedBy50MoveRule">Galibiyet 50 hamle kuralı yüzünden engellendi</string>
   <string name="lossSavedBy50MoveRule">Mağlubiyet 50 hamle kuralı sayesinde önlendi</string>
   <string name="winOr50MovesByPriorMistake">Galibiyet veya geçmiş hata sebebiyle 50 hamle</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Lider Tablosu</string>
   <string name="screenshotCurrentPosition">Geçerli pozisyonun ekran görüntüsünü al</string>
   <string name="gameAsGIF">Oyunun GIF hali</string>
+  <string name="playerNames">Oyuncu isimleri</string>
+  <string name="moveAnnotations">Hamle açıklamaları</string>
   <string name="pasteTheFenStringHere">FEN kodunu buraya yapıştırın</string>
   <string name="pasteThePgnStringHere">PGN kodunu buraya yapıştırın</string>
   <string name="orUploadPgnFile">Veya bir PGN dosyası yükle</string>
@@ -660,7 +664,7 @@
   <string name="onlyExistingConversations">Sadece mevcut yazışmalar</string>
   <string name="onlyFriends">Sadece arkadaşlar</string>
   <string name="menu">Menü</string>
-  <string name="castling">Rok Atma</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rok Atma</string>
   <string name="whiteCastlingKingside">Beyaz O-O</string>
   <string name="blackCastlingKingside">Siyah O-O</string>
   <plurals name="nbForumPosts">
@@ -814,6 +818,7 @@
   <string name="size">Boyut</string>
   <string name="opacity">Opaklık</string>
   <string name="brightness">Parlaklık</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Ton</string>
   <string name="boardReset">Renkleri varsayılana döndür</string>
   <string name="pieceSet">Taş seti</string>
@@ -1021,5 +1026,5 @@ Başlangıç pozisyonundan oynamak için boş bırakınız.</string>
   <string name="search">Ara</string>
   <string name="clearSearch">Aramayı temizle</string>
   <string name="tags">Etiketler</string>
-  <string name="enPassant">Geçerken alma</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Geçerken alma</string>
 </resources>

@@ -659,7 +659,7 @@
   <string name="onlyExistingConversations">Nur jamestantaj konversacioj</string>
   <string name="onlyFriends">Nur amikoj</string>
   <string name="menu">Menuo</string>
-  <string name="castling">Arokado</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Arokado</string>
   <string name="whiteCastlingKingside">Blanko O-O</string>
   <string name="blackCastlingKingside">Nigro O-O</string>
   <plurals name="nbForumPosts">
@@ -676,7 +676,7 @@
   <string name="webmasters">Retejestroj</string>
   <string name="about">Pri</string>
   <string name="aboutX">Pri %s</string>
-  <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s estas senpaga (%2$s), libera, ne-reklamoj, malferma-kodo ŝaka servilo.</string>
+  <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s estas senpaga (%2$s), libera, senreklama, malfermitkoda ŝaka servilo.</string>
   <string name="really">vere</string>
   <string name="contribute">Kontribui</string>
   <string name="termsOfService">Uzkondiĉojn</string>
@@ -1020,5 +1020,5 @@ Lasi ĝin malplena por komenci ludojn de la norma komenca pozicio.</string>
   <string name="search">Serĉi</string>
   <string name="clearSearch">Viŝi serĉon</string>
   <string name="tags">Etikedoj</string>
-  <string name="enPassant">Preterpasa kapto</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Preterpasa kapto</string>
 </resources>
