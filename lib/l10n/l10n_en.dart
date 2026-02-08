@@ -897,6 +897,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'All teams';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Round $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2215,6 +2288,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
 
   @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+
+  @override
   String get waiting => 'Waiting';
 
   @override
@@ -3157,6 +3236,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameAsGIF => 'Game as GIF';
 
   @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
+
+  @override
   String get pasteTheFenStringHere => 'Paste the FEN text here';
 
   @override
@@ -3806,7 +3891,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menu => 'Menu';
 
   @override
-  String get castling => 'Castling';
+  String get castling => 'Castling rights';
 
   @override
   String get whiteCastlingKingside => 'White O-O';
@@ -4270,6 +4355,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get brightness => 'Brightness';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Hue';
@@ -4904,7 +4992,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tags => 'Tags';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6631,6 +6719,42 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileWelcomeToLichessApp => 'Welcome to the Lichess app!';
 
   @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
+  String get mobileStopShowingThreat => 'Stop showing threat';
+
+  @override
+  String get mobileTournamentCompleted => 'Completed';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compact';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detailed';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+
+  @override
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+
+  @override
+  String get mobilePreviousPage => 'Previous';
+
+  @override
   String get activityActivity => 'Activity';
 
   @override
@@ -7294,12 +7418,67 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Round $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -8570,6 +8749,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
 
   @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link, with these exact settings, for anyone to challenge you.';
+
+  @override
   String get waiting => 'Waiting';
 
   @override
@@ -8902,6 +9087,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get evaluationGauge => 'Evaluation gauge';
+
+  @override
+  String get checkableKing => 'Checkable king';
 
   @override
   String get multipleLines => 'Multiple lines';
@@ -9498,6 +9686,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get gameAsGIF => 'Game as GIF';
+
+  @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
 
   @override
   String get pasteTheFenStringHere => 'Paste the FEN text here';
@@ -10149,7 +10343,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get menu => 'Menu';
 
   @override
-  String get castling => 'Castling';
+  String get castling => 'Castling rights';
 
   @override
   String get whiteCastlingKingside => 'White O-O';
@@ -10613,6 +10807,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get brightness => 'Brightness';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Hue';
@@ -11247,7 +11444,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get tags => 'Tags';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {

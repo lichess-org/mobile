@@ -242,31 +242,31 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bine ai venit în aplicația Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Vezi joc';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Sfat: Puteți adăuga mai multe widget-uri în ecranul principal sau să le eliminați pe cele de care nu aveți nevoie!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Renunță';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Personalizează';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Nu mai arăta amenințarea';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Terminate';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Sari la pagina mea';
 
   @override
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detaliat';
 
   @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
@@ -275,7 +275,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Înapoi';
 
   @override
   String get activityActivity => 'Activitate';
@@ -917,6 +917,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastScore => 'Scor';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Clasamentele sunt calculate folosind jocuri difuzate şi pot fi diferite de rezultatele oficiale.';
+
+  @override
   String get broadcastAllTeams => 'Toate echipele';
 
   @override
@@ -961,12 +964,82 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Puncte de meci';
+
+  @override
+  String get broadcastGamePoints => 'Puncte de joc';
+
+  @override
+  String get broadcastMatches => 'Meciuri';
+
+  @override
+  String get broadcastMatchHistory => 'Istoric meciuri';
+
+  @override
+  String get broadcastTeamResults => 'Rezultate echipă';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Următorii termeni vor fi traduși automat: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Runda $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Păstrarea numelui implicit îl va traduce automat în toate celelalte limbi.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Femei';
+
+  @override
+  String get broadcastMenTournament => 'Bărbaţi';
+
+  @override
+  String get broadcastGirlsTournament => 'Fete';
+
+  @override
+  String get broadcastBoysTournament => 'Băieți';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Fete U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Băieți U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Sferturi de finală';
+
+  @override
+  String get broadcastSemifinals => 'Semifinale';
+
+  @override
+  String get broadcastFinals => 'Finale';
+
+  @override
+  String get broadcastTiebreaks => 'Departajări';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Joc $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Eliminatorii';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2245,6 +2318,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Sau lăsați adversarul să scaneze acest cod QR';
 
   @override
+  String get reusableChallengeUrl => 'URL provocare reutilizabil';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Un link permanent pentru oricine să vă provoace cu aceste setări exacte.';
+
+  @override
   String get waiting => 'Se așteaptă';
 
   @override
@@ -3185,6 +3264,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Salvați jocul ca fișier GIF';
+
+  @override
+  String get playerNames => 'Nume jucători';
+
+  @override
+  String get moveAnnotations => 'Notație mutări';
 
   @override
   String get pasteTheFenStringHere => 'Lipește textul FEN aici';
@@ -4302,6 +4387,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get brightness => 'Luminozitate';
 
   @override
+  String get contrast => 'Contrast';
+
+  @override
   String get hue => 'Nuanță';
 
   @override
@@ -4934,7 +5022,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get tags => 'Etichete';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {

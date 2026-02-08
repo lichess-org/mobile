@@ -242,40 +242,40 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Chào mừng đến với ứng dụng Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Xem Trận Gốc';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Mẹo: Bạn có thể tuỳ chỉnh Trang chính của bạn!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Bỏ qua';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Tùy chỉnh';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Dừng hiện mối nguy';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Hoàn thành';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Đến trang chứa tôi';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Thu gọn';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Mở rộng';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\\nBạn có thể truy cập trận đấu từ trang chủ.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Trang trước';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -877,6 +877,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastScore => 'Điểm số';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Bảng xếp hạng được tính toán dựa trên các trận đấu được phát sóng và có thể khác với kết quả chính thức.';
+
+  @override
   String get broadcastAllTeams => 'Tất cả đội';
 
   @override
@@ -921,12 +924,82 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Điểm trận đấu';
+
+  @override
+  String get broadcastGamePoints => 'Điểm ván đấu';
+
+  @override
+  String get broadcastMatches => 'Trận đấu';
+
+  @override
+  String get broadcastMatchHistory => 'Lịch sử đấu';
+
+  @override
+  String get broadcastTeamResults => 'Kết quả của đội';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Các từ sau sẽ được tự động dịch: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Vòng $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Giữ nguyên tên mặc định sẽ tự động dịch sang mọi ngôn ngữ khác.';
+
+  @override
+  String get broadcastOpenTournament => 'Mở';
+
+  @override
+  String get broadcastWomenTournament => 'Nữ';
+
+  @override
+  String get broadcastMenTournament => 'Nam';
+
+  @override
+  String get broadcastGirlsTournament => 'Nữ trẻ';
+
+  @override
+  String get broadcastBoysTournament => 'Nam trẻ';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Mở U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Nữ U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Nam U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Tứ kết';
+
+  @override
+  String get broadcastSemifinals => 'Bán kết';
+
+  @override
+  String get broadcastFinals => 'Chung kết';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreak';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Trận thứ $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Loại trực tiếp';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2189,6 +2262,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Hoặc để đối thủ của bạn quét mã QR này';
 
   @override
+  String get reusableChallengeUrl => 'URL thách đấu có thể tái sử dụng';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Một liên kết cố định để bất kỳ ai cũng có thể thách đấu bạn với chính xác các theo các thiết lập này.';
+
+  @override
   String get waiting => 'Đang chờ';
 
   @override
@@ -2236,7 +2315,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get randomColor => 'Chọn màu quân ngẫu nhiên';
 
   @override
-  String get createAGame => 'Tạo một ván cờ';
+  String get createAGame => 'Tạo ván cờ mới';
 
   @override
   String get createTheGame => 'Khởi tạo ván cờ';
@@ -3129,6 +3208,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Ván cờ dưới dạng ảnh GIF';
+
+  @override
+  String get playerNames => 'Tên người chơi';
+
+  @override
+  String get moveAnnotations => 'Chú thích nước đi';
 
   @override
   String get pasteTheFenStringHere => 'Dán chuỗi FEN vào đây';
@@ -4244,6 +4329,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get brightness => 'Độ sáng';
+
+  @override
+  String get contrast => 'Độ tương phản';
 
   @override
   String get hue => 'Màu gốc';

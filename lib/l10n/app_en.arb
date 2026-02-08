@@ -494,6 +494,7 @@
   "broadcastRatingDiff": "Rating diff",
   "broadcastGamesThisTournament": "Games in this tournament",
   "broadcastScore": "Score",
+  "broadcastStandingsDisclaimer": "Standings are calculated using broadcasted games and may differ from official results.",
   "broadcastAllTeams": "All teams",
   "broadcastTournamentFormat": "Tournament format",
   "broadcastTournamentLocation": "Tournament Location",
@@ -515,6 +516,19 @@
       }
     }
   },
+  "broadcastMatchPoints": "Match Points",
+  "broadcastGamePoints": "Game Points",
+  "broadcastMatches": "Matches",
+  "broadcastMatchHistory": "Match History",
+  "broadcastTeamResults": "Team Results",
+  "broadcastTermsAutomaticallyTranslated": "The following term(s) will be automatically translated: {param}.",
+  "@broadcastTermsAutomaticallyTranslated": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "broadcastRoundX": "Round {param}",
   "@broadcastRoundX": {
     "placeholders": {
@@ -524,6 +538,48 @@
     }
   },
   "broadcastDefaultRoundNameHelp": "Keeping the default name will automatically translate it to all other languages.",
+  "broadcastOpenTournament": "Open",
+  "broadcastWomenTournament": "Women",
+  "broadcastMenTournament": "Men",
+  "broadcastGirlsTournament": "Girls",
+  "broadcastBoysTournament": "Boys",
+  "broadcastOpenUnderXAgeTournament": "Open U{param}",
+  "@broadcastOpenUnderXAgeTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastGirlsUnderXAgeTournament": "Girls U{param}",
+  "@broadcastGirlsUnderXAgeTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastBoysUnderXAgeTournament": "Boys U{param}",
+  "@broadcastBoysUnderXAgeTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastQuarterfinals": "Quarterfinals",
+  "broadcastSemifinals": "Semifinals",
+  "broadcastFinals": "Finals",
+  "broadcastTiebreaks": "Tiebreaks",
+  "broadcastGameX": "Game {param}",
+  "@broadcastGameX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastKnockouts": "Knockouts",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -1142,6 +1198,8 @@
   "gameOver": "Game Over",
   "waitingForOpponent": "Waiting for opponent",
   "orLetYourOpponentScanQrCode": "Or let your opponent scan this QR code",
+  "reusableChallengeUrl": "Reusable challenge URL",
+  "permanentLinkForAnyoneToChallengeYou": "A permanent link for anyone to challenge you with these exact settings.",
   "waiting": "Waiting",
   "yourTurn": "Your turn",
   "aiNameLevelAiLevel": "{param1} level {param2}",
@@ -1660,6 +1718,8 @@
   "leaderboard": "Leaderboard",
   "screenshotCurrentPosition": "Screenshot current position",
   "gameAsGIF": "Game as GIF",
+  "playerNames": "Player names",
+  "moveAnnotations": "Move annotations",
   "pasteTheFenStringHere": "Paste the FEN text here",
   "pasteThePgnStringHere": "Paste the PGN text here",
   "orUploadPgnFile": "Or upload a PGN file",
@@ -2027,7 +2087,7 @@
   "onlyExistingConversations": "Only existing conversations",
   "onlyFriends": "Only friends",
   "menu": "Menu",
-  "castling": "Castling",
+  "castling": "Castling rights",
   "whiteCastlingKingside": "White O-O",
   "blackCastlingKingside": "Black O-O",
   "tpTimeSpentPlaying": "Time spent playing: {param}",
@@ -2336,6 +2396,7 @@
   "size": "Size",
   "opacity": "Opacity",
   "brightness": "Brightness",
+  "contrast": "Contrast",
   "hue": "Hue",
   "boardReset": "Reset colours to default",
   "pieceSet": "Piece set",
@@ -2736,7 +2797,7 @@
   "search": "Search",
   "clearSearch": "Clear search",
   "tags": "Tags",
-  "enPassant": "En passant",
+  "enPassant": "En passant rights",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {

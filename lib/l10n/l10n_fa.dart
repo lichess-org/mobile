@@ -897,6 +897,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastScore => 'امتیاز';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'همهٔ یَران‌ها';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'دورِ $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'حفظِ نامِ پیش‌فرض، خودکار آن را به همهٔ زبان‌های دیگر می‌تَرجُمد.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2217,6 +2290,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'یا از حریف‌تان بخواهید این کدِ QR را بِپویَد';
 
   @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+
+  @override
   String get waiting => 'در حال انتظار';
 
   @override
@@ -3157,6 +3236,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'بارگیری GIF بازی';
+
+  @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
 
   @override
   String get pasteTheFenStringHere => 'رشته FEN را در این قسمت قرار دهید';
@@ -4274,6 +4359,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get brightness => 'درخشندگی';
 
   @override
+  String get contrast => 'Contrast';
+
+  @override
   String get hue => 'فام';
 
   @override
@@ -4906,7 +4994,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tags => 'برچسب‌ها';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {

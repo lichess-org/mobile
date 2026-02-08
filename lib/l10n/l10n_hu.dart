@@ -897,6 +897,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastScore => 'Pontszám';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Összes csapat';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return '$param. forduló';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
+  String get broadcastOpenTournament => 'Nyílt';
+
+  @override
+  String get broadcastWomenTournament => 'Nők';
+
+  @override
+  String get broadcastMenTournament => 'Férfiak';
+
+  @override
+  String get broadcastGirlsTournament => 'Lányok';
+
+  @override
+  String get broadcastBoysTournament => 'Fiúk';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Nyílt U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Lány U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Fiú U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2217,6 +2290,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Ellenfeled az itt látható QR-kód beolvasásával is csatlakozhat';
 
   @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+
+  @override
   String get waiting => 'Várakozás';
 
   @override
@@ -3157,6 +3236,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Játszma GIF-ként';
+
+  @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
 
   @override
   String get pasteTheFenStringHere => 'Másold ide a FEN szöveget';
@@ -4271,7 +4356,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get opacity => 'Átlátszóság';
 
   @override
-  String get brightness => 'Kontraszt';
+  String get brightness => 'Fényerő';
+
+  @override
+  String get contrast => 'Kontraszt';
 
   @override
   String get hue => 'Árnyalat';

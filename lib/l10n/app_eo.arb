@@ -1059,7 +1059,7 @@
   "webmasters": "Retejestroj",
   "about": "Pri",
   "aboutX": "Pri {param}",
-  "xIsAFreeYLibreOpenSourceChessServer": "{param1} estas senpaga ({param2}), libera, ne-reklamoj, malferma-kodo ŝaka servilo.",
+  "xIsAFreeYLibreOpenSourceChessServer": "{param1} estas senpaga ({param2}), libera, senreklama, malfermitkoda ŝaka servilo.",
   "really": "vere",
   "contribute": "Kontribui",
   "termsOfService": "Uzkondiĉojn",

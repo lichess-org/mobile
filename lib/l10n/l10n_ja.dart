@@ -132,13 +132,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'プリセット';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'ドラッグ移動時の駒の照準';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => '丸';
+  String get mobileSettingsDraggedTargetCircle => '円形';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => '四角';
+  String get mobileSettingsDraggedTargetSquare => '四角形';
 
   @override
   String get mobileSettingsHomeWidgets => 'ホーム画面のウィジェット';
@@ -242,40 +242,40 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Lichess アプリにようこそ！';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => '元のゲームを見る';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'ヒント：ホーム画面でウィジェットの追加、不要なウィジェットの削除ができます！';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => '使わない';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'カスタマイズ';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => '狙いの表示をやめる';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => '終了';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => '自分のページに飛ぶ';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'コンパクト';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => '詳細';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\\nホームタブからアクセスできます。';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => '前';
 
   @override
   String get activityActivity => '活動';
@@ -877,6 +877,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastScore => 'スコア';
 
   @override
+  String get broadcastStandingsDisclaimer => '順位は中継対象のゲームに基づいて計算されるため、公式の結果とは異なる場合があります。';
+
+  @override
   String get broadcastAllTeams => 'すべてのチーム';
 
   @override
@@ -921,12 +924,82 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'マッチポイント';
+
+  @override
+  String get broadcastGamePoints => 'ゲームポイント';
+
+  @override
+  String get broadcastMatches => 'マッチ';
+
+  @override
+  String get broadcastMatchHistory => 'マッチ履歴';
+
+  @override
+  String get broadcastTeamResults => 'チーム成績';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return '以下の用語は自動的に翻訳されます：$param。';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'ラウンド $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'デフォルトの名前のままにしておくと、他の言語に自動で翻訳されます。';
+
+  @override
+  String get broadcastOpenTournament => 'オープン';
+
+  @override
+  String get broadcastWomenTournament => '女子';
+
+  @override
+  String get broadcastMenTournament => '男子';
+
+  @override
+  String get broadcastGirlsTournament => '年少女子';
+
+  @override
+  String get broadcastBoysTournament => '年少男子';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'オープン U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return '女子 U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return '男子 U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => '準々決勝';
+
+  @override
+  String get broadcastSemifinals => '準決勝';
+
+  @override
+  String get broadcastFinals => '決勝';
+
+  @override
+  String get broadcastTiebreaks => 'タイブレーク';
+
+  @override
+  String broadcastGameX(String param) {
+    return '局数 $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'ノックアウト';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2189,6 +2262,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'または相手にこの QR コードをスキャンさせてください';
 
   @override
+  String get reusableChallengeUrl => '再利用可能なチャレンジ URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => '誰でもこのとおりの設定であなたにチャレンジできる恒久的リンク。';
+
+  @override
   String get waiting => '待機中';
 
   @override
@@ -3131,6 +3210,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get gameAsGIF => 'GIF 形式の棋譜';
 
   @override
+  String get playerNames => 'プレイヤー名';
+
+  @override
+  String get moveAnnotations => '移動の注釈';
+
+  @override
   String get pasteTheFenStringHere => 'ここにFEN形式の局面をペースト';
 
   @override
@@ -3982,7 +4067,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get togglePositionAnnotations => 'わからん';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => '注釈の表示切替';
 
   @override
   String get variationArrowsInfo => '変化手順の矢印があれば棋譜記録を使わずにナビゲーションできます。';
@@ -4116,7 +4201,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift + クリックや右クリックで盤上に丸や矢印が描けます。';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl（またはShift）を押しながら描くと赤色に、Alt（またはCommandかMeta）を押しながら描くと青色になります。各色のキーを同時に押しながら描くと黄色になります。';
 
   @override
   String get letOtherPlayersMessageYou => '他のプレイヤーからのメッセージを受け付ける';
@@ -4244,6 +4329,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get brightness => '明るさ';
+
+  @override
+  String get contrast => 'コントラスト';
 
   @override
   String get hue => '色';
@@ -4885,7 +4973,7 @@ class AppLocalizationsJa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '相手がいなくなりました。後 $count 秒で勝ちにできます。',
+      other: '相手がいなくなりました。あと $count 秒で勝ちにできます。',
     );
     return '$_temp0';
   }
@@ -5553,7 +5641,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyAlphabetical => 'アルファベット順';
 
   @override
-  String get studyRelevant => 'Relevant';
+  String get studyRelevant => '関連度順';
 
   @override
   String get studyAddNewChapter => '新たな章を追加';

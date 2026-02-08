@@ -242,40 +242,40 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Benvingut/da l\'aplicació de Lichess.org!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Veure la partida';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Truc: Podeu afegir més ginys a la pantalla d\'inici i eliminar els que no necessiteu!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Descarta';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Personalitza';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'No mostris l\'amenaça';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Finalitzat';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Anar a la meva pàgina';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Compacte';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detallat';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorador d\'obertures no està disponible sense connexió.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\\nPodeu accedir-hi des de la pantalla d\'inici.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Anterior';
 
   @override
   String get activityActivity => 'Activitat';
@@ -897,6 +897,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastScore => 'Puntuació';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Tots els equips';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Els termes següents es traduiran automàticament: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Ronda $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Deixant el nom per defecte el traduirà automàticament a tots els altres llenguatges.';
+
+  @override
+  String get broadcastOpenTournament => 'Obert';
+
+  @override
+  String get broadcastWomenTournament => 'Dones';
+
+  @override
+  String get broadcastMenTournament => 'Home';
+
+  @override
+  String get broadcastGirlsTournament => 'Noies';
+
+  @override
+  String get broadcastBoysTournament => 'Nois';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Obert Sub$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Noies Sub$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Nois Sub$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarts de final';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Desempats';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partida $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Eliminatòria';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2217,6 +2290,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'O deixeu que el vostre oponent escanegi aquest codi QR';
 
   @override
+  String get reusableChallengeUrl => 'URL repte reutilitzable';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Un enllaç permanent perquè qualsevol et pugui reptar amb aquestes configuracions exactes.';
+
+  @override
   String get waiting => 'Esperant';
 
   @override
@@ -3157,6 +3236,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Partida com a GIF';
+
+  @override
+  String get playerNames => 'Noms dels jugadors';
+
+  @override
+  String get moveAnnotations => 'Anotacions de les jugades';
 
   @override
   String get pasteTheFenStringHere => 'Enganxa el text FEN aquí';
@@ -4272,6 +4357,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get brightness => 'Brillantor';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Tonalitat';

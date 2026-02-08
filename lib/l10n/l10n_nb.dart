@@ -242,40 +242,40 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Velkommen til Lichess-appen!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Vis parti';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Tips: Du kan legge til flere widgeter på startskjermen, eller fjerne dem du ikke trenger!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Avvis';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Tilpass';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Slutt å vise trusler';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Fullførte';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Gå til min side';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompakt';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detaljert';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Åpningsutforskeren krever nett.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\\nDu kan åpne det fra Hjem-fanen.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Forrige';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -897,6 +897,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastScore => 'Poengsum';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Alle lag';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Runde $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Å beholde standardnavnet vil automatisk oversette det til alle andre språk.';
+
+  @override
+  String get broadcastOpenTournament => 'Åpen';
+
+  @override
+  String get broadcastWomenTournament => 'Kvinner';
+
+  @override
+  String get broadcastMenTournament => 'Menn';
+
+  @override
+  String get broadcastGirlsTournament => 'Jenter';
+
+  @override
+  String get broadcastBoysTournament => 'Gutter';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Åpen U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Jenter U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Gutter U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Kvartfinaler';
+
+  @override
+  String get broadcastSemifinals => 'Semifinaler';
+
+  @override
+  String get broadcastFinals => 'Finaler';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Parti $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Utslagsrunder';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1419,7 +1492,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnering starter snart';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Overføringer du abonnerer på';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Fjernsjakkur i ferd med å løpe ut';
@@ -1443,7 +1516,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesBlindfold => 'Blindsjakk';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheter';
 
   @override
   String get puzzlePuzzles => 'Sjakknøtter';
@@ -1936,13 +2009,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsburys matt';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Tårnet setter matt, mens løperen sperrer.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphys matt';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Løperen setter matt, mens tårnet sperrer.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmatt';
@@ -2038,7 +2111,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeOperaMate => 'Operamatt';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Tårn matter, dekket av løper.';
 
   @override
   String get puzzleThemePawnEndgame => 'Bondesluttspill';
@@ -2215,6 +2288,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Eller få motstanderen din til å skanne denne QR-koden';
+
+  @override
+  String get reusableChallengeUrl => 'Gjenbrukbar utfordringslenke';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'En permanent lenke som hvem som helst kan bruke til å utfordre deg med disse nøyaktige innstillingene.';
 
   @override
   String get waiting => 'Venter';
@@ -3157,6 +3236,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Parti som gif';
+
+  @override
+  String get playerNames => 'Spillernavn';
+
+  @override
+  String get moveAnnotations => 'Trekk-kommentarer';
 
   @override
   String get pasteTheFenStringHere => 'Lim inn FEN-teksten her';
@@ -4272,6 +4357,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get brightness => 'Lysstyrke';
+
+  @override
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Fargetone';

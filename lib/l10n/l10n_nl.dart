@@ -242,40 +242,40 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welkom bij de Lichess app!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Partij bekijken';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Tip: je kunt meer widgets toevoegen aan het startscherm of widgets verwijderen die je niet nodig hebt!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Aanpassen';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Verberg dreiging';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Afgelopen';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Ga naar mijn pagina';
 
   @override
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Gedetailleerd';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Vorige';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -897,6 +897,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Alle teams';
 
   @override
@@ -941,12 +944,82 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'De volgende termen worden automatisch vertaald: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Ronde $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Laat de standaardnaam intact voor automatische vertaling naar alle andere talen.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Dames';
+
+  @override
+  String get broadcastMenTournament => 'Heren';
+
+  @override
+  String get broadcastGirlsTournament => 'Meiden';
+
+  @override
+  String get broadcastBoysTournament => 'Jongens';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open O$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Meiden O$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Jongens O$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Kwartfinales';
+
+  @override
+  String get broadcastSemifinals => 'Halve finales';
+
+  @override
+  String get broadcastFinals => 'Finale';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partij $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Afvalrondes';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2217,6 +2290,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Of laat je tegenstander deze QR-code scannen';
 
   @override
+  String get reusableChallengeUrl => 'Herbruikbare URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Een permanente link voor iedereen om je uit te dagen met exact deze instellingen.';
+
+  @override
   String get waiting => 'Even geduld a.u.b.';
 
   @override
@@ -2551,16 +2630,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get evaluationGauge => 'Evaluatiemeter';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Visuele motieven';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Onverdedigde stukken';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Gepende stukken';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Schaakbare koning';
 
   @override
   String get multipleLines => 'Meerdere varianten';
@@ -3157,6 +3236,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Download partij als GIF';
+
+  @override
+  String get playerNames => 'Spelersnamen';
+
+  @override
+  String get moveAnnotations => 'Aantekeningen';
 
   @override
   String get pasteTheFenStringHere => 'Plak de FEN-code hier';
@@ -4272,6 +4357,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get brightness => 'Helderheid';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Kleurschakering';

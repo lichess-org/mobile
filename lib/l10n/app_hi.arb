@@ -503,6 +503,8 @@
   "settingsManagedAccountCannotBeClosed": "आपका खाता प्रबंधित है, और बंद नहीं किया जा सकता|",
   "settingsCantOpenSimilarAccount": "आपको इस नाम से कोई नया खाता खोलने की अनुमति नहीं दी जाएगी।",
   "settingsThisAccountIsClosed": "यह ख़ाता बंद है|",
+  "gameSetup": "Khel ka shuruaat",
+  "challengeAFriend": "दोस्त को चुनौती",
   "toInviteSomeoneToPlayGiveThisUrl": "इस खेल में किसी को आमंत्रित करने के लिए उन्हें ये पता दें",
   "gameOver": "खेल समाप्त",
   "waitingForOpponent": "आप प्रतिद्वंदी की प्रतीक्षा कर रहे हैं",
