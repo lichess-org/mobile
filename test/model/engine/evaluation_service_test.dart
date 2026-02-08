@@ -46,7 +46,6 @@ MoveWork makeMoveWork({
     id: id,
     enginePref: enginePref,
     variant: variant,
-    threads: 1,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
     elo: elo,
@@ -1139,18 +1138,31 @@ void main() {
       // See MoveWork.searchTime documentation for full table
       expect(level1.searchTime.inMilliseconds, equals(150));
       expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(1699));
+      expect(level8.searchTime.inMilliseconds, equals(1583));
       expect(level12.searchTime.inMilliseconds, equals(5000));
+    });
+
+    test('MoveWork.threads scales with elo', () {
+      final level1 = makeMoveWork(elo: 1320);
+      final level5 = makeMoveWork(elo: 1750);
+      final level6 = makeMoveWork(elo: 1850);
+      final level12 = makeMoveWork(elo: 3190);
+
+      // Levels 1-5 use 1 thread, levels 6-12 use 2 threads
+      expect(level1.threads, equals(1));
+      expect(level5.threads, equals(1));
+      expect(level6.threads, equals(2));
+      expect(level12.threads, equals(2));
     });
 
     test('MoveWork.multiPv scales inversely with elo', () {
       final lowElo = makeMoveWork(elo: 1320);
-      final midElo = makeMoveWork(elo: 1800);
+      final midElo = makeMoveWork(elo: 1850);
       final highElo = makeMoveWork(elo: 2500);
 
       // See MoveWork.multiPv documentation for full table
       expect(lowElo.multiPv, equals(10));
-      expect(midElo.multiPv, equals(5));
+      expect(midElo.multiPv, equals(4));
       expect(highElo.multiPv, equals(4));
     });
 
@@ -1311,6 +1323,171 @@ void main() {
         // Second future should complete with the move
         final move2 = await future2;
         expect(move2, equals('e2e4'));
+      });
+    });
+  });
+
+  group('EvaluationService.findEval', () {
+    test('findEval returns evaluation result', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeWork(searchTime: const Duration(seconds: 1));
+      final eval = await service.findEval(work);
+
+      expect(eval, isNotNull);
+      expect(eval!.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
+    });
+
+    test('findEval with minDepth stops early when depth is reached', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeWork(searchTime: const Duration(seconds: 5));
+
+        // Start findEval with minDepth of 12
+        final evalFuture = service.findEval(work, minDepth: 12);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit eval at depth 11 (below minDepth)
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Emit eval at depth 12 (reaches minDepth) - should trigger stop
+        throttleStockfish.emitEvalEvents(); // depth 12
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Emit bestmove to complete the stream
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        expect(eval!.depth, 12);
+      });
+    });
+
+    test('findEval returns cached eval when cache has sufficient depth', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // First evaluation to get a real eval
+      final work1 = makeWork(searchTime: const Duration(seconds: 1));
+      final eval1 = await service.findEval(work1);
+      expect(eval1, isNotNull);
+
+      // Create a step with the cached eval
+      final move = Move.parse('e2e4')!;
+      final positionAfterMove = Chess.initial.play(move);
+      final (_, san) = Chess.initial.makeSan(move);
+      final stepWithCache = Step(
+        position: positionAfterMove,
+        sanMove: SanMove(san, move),
+        eval: eval1,
+      );
+
+      // Create work with cached eval that has sufficient searchTime
+      final work2 = makeWork(
+        searchTime: const Duration(seconds: 1),
+      ).copyWith(steps: IList([stepWithCache]));
+
+      // findEval should return the cached eval without starting new evaluation
+      final eval2 = await service.findEval(work2);
+      expect(eval2, isNotNull);
+      expect(eval2, equals(eval1));
+    });
+
+    test('findEval throws for unsupported variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      const work = EvalWork(
+        enginePref: ChessEnginePref.sf16,
+        variant: Variant.antichess,
+        threads: 1,
+        path: UciPath.empty,
+        searchTime: Duration(seconds: 1),
+        multiPv: 1,
+        initialPosition: Chess.initial,
+        steps: IListConst<Step>([]),
+        threatMode: false,
+      );
+
+      expect(() => service.findEval(work), throwsA(isA<EngineUnsupportedVariantException>()));
+    });
+
+    test('findEval times out and returns last eval received', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        // Short search time to trigger timeout
+        final work = makeWork(searchTime: const Duration(milliseconds: 500));
+
+        final evalFuture = service.findEval(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit one eval event
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Elapse past searchTime + buffer (500ms + 500ms)
+        async.elapse(const Duration(seconds: 1));
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        expect(eval!.depth, 11);
+      });
+    });
+
+    test('findEval without minDepth runs for full searchTime', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeWork(searchTime: const Duration(milliseconds: 500));
+
+        final evalFuture = service.findEval(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit multiple eval events at increasing depths
+        for (var i = 0; i < 5; i++) {
+          throttleStockfish.emitEvalEvents();
+          async.flushMicrotasks();
+          async.elapse(const Duration(milliseconds: 50));
+        }
+
+        // Final depth should be 15 (10 + 5 events)
+        // Without minDepth, should continue until timeout
+        async.elapse(const Duration(seconds: 1));
+
+        // Emit bestmove to complete
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        // Should have the last emitted eval
+        expect(eval!.depth, greaterThanOrEqualTo(14));
       });
     });
   });

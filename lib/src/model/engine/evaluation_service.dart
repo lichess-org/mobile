@@ -25,7 +25,6 @@ final _logger = Logger('EvaluationService');
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
-final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
 /// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
@@ -179,17 +178,16 @@ class EvaluationService {
   /// when the evaluation finishes or is replaced by another request.
   ///
   /// If [goDeeper] is true, the engine will use the maximum search time.
-  /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
   /// Returns `null` if a cached eval is sufficient.
   /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false, bool forceRestart = false}) {
+  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
     if (!engineSupportedVariants.contains(work.variant)) {
       throw EngineUnsupportedVariantException(work.variant);
     }
 
     // Check if cached eval is sufficient
-    if (!work.threatMode && !forceRestart) {
+    if (!work.threatMode) {
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
         case CloudEval _ when goDeeper == false:
@@ -206,7 +204,62 @@ class EvaluationService {
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
-    return _startWork(work, evalStream.where((result) => result.$1 == work));
+    _startWork(work);
+
+    return evalStream.where((result) => result.$1 == work);
+  }
+
+  /// Find the evaluation for the given [work].
+  ///
+  /// This will stop any current work and start a new evaluation. Last caller wins.
+  ///
+  /// Returns a [Future] that completes with the evaluation, or `null` if no evaluation
+  /// could be obtained (e.g. the engine fails).
+  ///
+  /// The [work] must have a [EvalWork.searchTime] set.
+  ///
+  /// If [minDepth] is provided, the evaluation will stop early once this depth is reached.
+  /// Otherwise, it will run for the full [EvalWork.searchTime].
+  ///
+  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
+  Future<LocalEval?> findEval(EvalWork work, {int? minDepth}) async {
+    assert(work.searchTime != Duration.zero, 'searchTime must be set for findEval');
+
+    final stream = evaluate(work);
+    if (stream == null) {
+      // do we have a cached eval?
+      switch (work.evalCache) {
+        case final LocalEval localEval:
+          return localEval;
+        case CloudEval _:
+          return null;
+        case _:
+          return null;
+      }
+    }
+
+    LocalEval? finalEval;
+    try {
+      await for (final (_, eval) in stream.timeout(
+        work.searchTime + const Duration(milliseconds: 500),
+      )) {
+        finalEval = eval;
+        if (minDepth != null && eval.depth >= minDepth) {
+          stop();
+          break;
+        }
+      }
+    } on TimeoutException {
+      stop();
+    }
+
+    _logger.info(
+      'Final eval at ply ${work.position.ply}: '
+      'depth=${finalEval?.depth}, cp=${finalEval?.cp}, mate=${finalEval?.mate}, '
+      'nodes=${finalEval?.nodes}, time=${finalEval?.searchTime.inMilliseconds}ms',
+    );
+
+    return finalEval;
   }
 
   /// Find the best move for the given [work] at the specified engine strength level.
@@ -243,7 +296,7 @@ class EvaluationService {
 
     _pendingMoveRequest = (completer, subscription);
 
-    _startWork(work, null);
+    _startWork(work);
 
     return completer.future;
   }
@@ -259,7 +312,7 @@ class EvaluationService {
   }
 
   /// Start the given [work], restarting the engine if necessary.
-  T? _startWork<T>(Work work, T? resultStream) {
+  void _startWork(Work work) {
     final flavor = work.enginePref == ChessEnginePref.sfLatest
         ? StockfishFlavor.latestNoNNUE
         : StockfishFlavor.sf16;
@@ -293,7 +346,7 @@ class EvaluationService {
 
       // Init in progress, work will be computed when init finishes
       // (the _initEngine callback checks _currentWork)
-      return resultStream;
+      return;
     }
 
     if (needsRestart) {
@@ -309,8 +362,6 @@ class EvaluationService {
     } else {
       _protocol.compute(work, newGame: needsNewGame);
     }
-
-    return resultStream;
   }
 
   Future<void> _initEngine(StockfishFlavor flavor) async {

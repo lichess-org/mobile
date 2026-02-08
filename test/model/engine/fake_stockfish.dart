@@ -825,3 +825,159 @@ class ErrorStockfish implements Stockfish {
   @override
   Stream<String> get stdout => _stdoutController.stream;
 }
+
+/// A fake Stockfish for testing practice mode with configurable eval shifts.
+///
+/// This stockfish emits multiPv evaluations and can be configured to simulate
+/// different move quality scenarios (good move, inaccuracy, mistake, blunder).
+class PracticeModeStockfish implements Stockfish {
+  PracticeModeStockfish({this.initialEvalCp = 30, this.evalShiftCp = 0});
+
+  /// The initial evaluation in centipawns (before the player's move).
+  final int initialEvalCp;
+
+  /// The shift in evaluation after the player's move (negative = position got worse).
+  /// For example, -100 would mean the position dropped by 1 pawn.
+  final int evalShiftCp;
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  StockfishFlavor _flavor = StockfishFlavor.sf16;
+  Position? _position;
+
+  /// Tracks if this is evaluating after a player move (to apply the shift).
+  int _goCount = 0;
+
+  void _emit(String line) {
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _flavor = flavor;
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+    _goCount = 0;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'uci':
+        final engineName = _flavor == StockfishFlavor.latestNoNNUE
+            ? 'Stockfish 17'
+            : 'Stockfish 16';
+        _emit('id name $engineName\n');
+        _emit('uciok\n');
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+          if (movesPartIndex != -1) {
+            for (var i = movesPartIndex + 1; i < parts.length; i++) {
+              final move = Move.parse(parts[i]);
+              if (move != null) {
+                _position = _position!.play(move);
+              }
+            }
+          }
+        }
+      case 'go':
+        _goCount++;
+        if (_position != null) {
+          final legalMoves = makeLegalMoves(_position!);
+          if (legalMoves.isNotEmpty) {
+            // Get up to 4 different moves for multiPv
+            final moves = <NormalMove>[];
+            for (final entry in legalMoves.entries) {
+              if (moves.length >= 4) break;
+              moves.add(NormalMove(from: entry.key, to: entry.value.first));
+            }
+            _lastMoves = moves;
+
+            // Determine the base cp value
+            // First go call is for hints (before move), subsequent calls are for after move eval
+            final isAfterMoveEval = _goCount > 1;
+            final baseCp = isAfterMoveEval ? initialEvalCp + evalShiftCp : initialEvalCp;
+
+            // Emit multiPv info lines at high depth (16+) for practice mode
+            for (var depth = 16; depth <= 18; depth++) {
+              for (var i = 0; i < moves.length; i++) {
+                // Each subsequent PV is slightly worse
+                final cp = _position!.turn == Side.white ? baseCp - (i * 5) : -(baseCp - (i * 5));
+                _emit(
+                  'info depth $depth seldepth ${depth + 2} multipv ${i + 1} score cp $cp nodes 50000 nps 500000 hashfull 100 tbhits 0 time ${depth * 100} pv ${moves[i].uci}\n',
+                );
+              }
+            }
+
+            // Emit bestmove
+            _emitBestMove(moves);
+          }
+        }
+      case 'stop':
+        // When stopped, emit bestmove if we have moves
+        if (_lastMoves != null && _lastMoves!.isNotEmpty) {
+          _emitBestMove(_lastMoves!);
+        }
+    }
+  }
+
+  List<NormalMove>? _lastMoves;
+
+  void _emitBestMove(List<NormalMove> moves) {
+    final afterBestMove = _position!.play(moves.first);
+    final ponderMoves = makeLegalMoves(afterBestMove);
+    String ponderPart = '';
+    if (ponderMoves.isNotEmpty) {
+      final ponderFrom = ponderMoves.keys.first;
+      final ponderTo = ponderMoves[ponderFrom]!.first;
+      final ponderMove = NormalMove(from: ponderFrom, to: ponderTo);
+      ponderPart = ' ponder ${ponderMove.uci}';
+    }
+    _emit('bestmove ${moves.first.uci}$ponderPart\n');
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}

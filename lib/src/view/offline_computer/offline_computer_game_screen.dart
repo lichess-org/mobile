@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -28,7 +29,7 @@ import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
-class OfflineComputerGameScreen extends StatelessWidget {
+class OfflineComputerGameScreen extends ConsumerWidget {
   const OfflineComputerGameScreen({this.initialFen, super.key});
 
   /// Optional initial FEN to start the game from a custom position.
@@ -39,9 +40,16 @@ class OfflineComputerGameScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final practiceMode = ref.watch(
+      offlineComputerGameControllerProvider.select((s) => s.game.practiceMode),
+    );
+    final title = practiceMode
+        ? context.l10n.practiceWithComputer
+        : context.l10n.playAgainstComputer;
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.playAgainstComputer)),
+      appBar: AppBar(title: Text(title)),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -71,9 +79,9 @@ class _BodyState extends ConsumerState<_Body> {
         return;
       }
 
-      final ongoingGame = await ref.read(offlineComputerGameStorageProvider).fetchOngoingGame();
-      if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
-        ref.read(offlineComputerGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+      final savedGame = await ref.read(offlineComputerGameStorageProvider).fetchGame();
+      if (savedGame != null && savedGame.game.steps.length > 1 && !savedGame.game.finished) {
+        ref.read(offlineComputerGameControllerProvider.notifier).loadGame(savedGame);
       } else {
         if (!mounted) return;
         _showNewGameDialog();
@@ -81,9 +89,19 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
-  void _saveGameState() {
+  Future<void> _saveGameState() async {
     if (!mounted) return;
-    ref.read(offlineComputerGameControllerProvider.notifier).saveState();
+    final state = ref.read(offlineComputerGameControllerProvider);
+    await ref
+        .read(offlineComputerGameStorageProvider)
+        .save(
+          SavedOfflineComputerGame(
+            game: state.game,
+            gameSessionId: state.gameSessionId.value,
+            lastPracticeComment: state.practiceComment,
+            lastEvalString: state.cachedEvalString,
+          ),
+        );
   }
 
   @override
@@ -108,6 +126,27 @@ class _BodyState extends ConsumerState<_Body> {
           }
         });
       }
+
+      // Check for threefold repetition
+      if (previous?.game.isThreefoldRepetition == false &&
+          newGameState.game.isThreefoldRepetition == true) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => YesNoDialog(
+                title: Text(context.l10n.threefoldRepetition),
+                content: Text(context.l10n.claimADraw),
+                onYes: () {
+                  Navigator.pop(context);
+                  ref.read(offlineComputerGameControllerProvider.notifier).claimThreefoldDraw();
+                },
+                onNo: () => Navigator.pop(context),
+              ),
+            );
+          }
+        });
+      }
     });
 
     final isBoardFlipped = ref.watch(_isBoardFlippedProvider);
@@ -122,7 +161,7 @@ class _BodyState extends ConsumerState<_Body> {
 
           final navigator = Navigator.of(context);
           final game = gameState.game;
-          if (game.abortable || game.finished) {
+          if (game.abortable) {
             return navigator.pop();
           }
 
@@ -133,18 +172,16 @@ class _BodyState extends ConsumerState<_Body> {
                 title: Text(context.l10n.mobileAreYouSure),
                 content: const Text('No worries, your game will be saved.'),
                 onNo: () => Navigator.of(context).pop(false),
-                onYes: () {
-                  _saveGameState();
-                  Navigator.of(context).pop(true);
-                },
+                onYes: () => Navigator.of(context).pop(true),
               ),
             );
             if (shouldPop == true) {
+              await _saveGameState();
               navigator.pop();
             }
           } else {
             // Save state even if the game is finished, we might want to analyse it later
-            _saveGameState();
+            await _saveGameState();
             navigator.pop();
           }
         },
@@ -158,20 +195,18 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                    topTableFlex: 1,
+                    bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
                     orientation: isBoardFlipped ? orientation.opposite : orientation,
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
-                    shapes: gameState.hintSquare != null
-                        ? ISet({
-                            Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!),
-                          })
-                        : null,
+                    shapes: _buildBoardShapes(gameState),
                     interactiveBoardParams: (
                       variant: Variant.standard,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
                           ? PlayerSide.none
-                          : isPlayerTurn
+                          : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
                       onPromotionSelection: ref
@@ -202,6 +237,30 @@ class _BodyState extends ConsumerState<_Body> {
       builder: (context) => _NewGameDialog(initialFen: widget.initialFen),
     );
   }
+
+  ISet<Shape>? _buildBoardShapes(OfflineComputerGameState gameState) {
+    final shapes = <Shape>{};
+
+    // Add hint circle if showing
+    if (gameState.hintSquare != null) {
+      shapes.add(Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!));
+    }
+
+    // Add suggested move arrow if showing
+    final suggestedMove = gameState.showingSuggestedMove;
+    if (suggestedMove != null) {
+      final color = gameState.practiceComment?.verdict.color ?? Colors.blue;
+      shapes.add(
+        Arrow(
+          color: color.withValues(alpha: 0.8),
+          orig: suggestedMove.from,
+          dest: suggestedMove.to,
+        ),
+      );
+    }
+
+    return shapes.isNotEmpty ? ISet(shapes) : null;
+  }
 }
 
 class _BottomBar extends ConsumerWidget {
@@ -222,7 +281,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         BottomBarButton(
           label: context.l10n.takeback,
-          onTap: gameState.canTakeback && gameState.game.casual
+          onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
@@ -296,10 +355,11 @@ class _BottomBar extends ConsumerWidget {
   }
 
   bool _canGetHint(OfflineComputerGameState gameState) {
-    return gameState.game.casual &&
+    return (gameState.game.casual || gameState.game.practiceMode) &&
         gameState.game.playable &&
         !gameState.isEngineThinking &&
         !gameState.isLoadingHint &&
+        !gameState.isEvaluatingMove &&
         gameState.turn == gameState.game.playerSide;
   }
 }
@@ -376,16 +436,170 @@ class _Player extends ConsumerWidget {
       );
     }
 
-    // Human player - just show captured pieces
-    return Row(
-      mainAxisSize: .max,
-      mainAxisAlignment: .start,
+    // Human player - just show captured pieces and practice comment
+    return Column(
+      crossAxisAlignment: .stretch,
+      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
-        MaterialDifferenceDisplay(
-          materialDiff: materialDiff,
-          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+        if (game.practiceMode) ...[
+          _PracticeCommentCard(gameState: gameState),
+          const SizedBox(height: 8),
+        ],
+        Row(
+          mainAxisSize: .max,
+          mainAxisAlignment: .start,
+          children: [
+            MaterialDifferenceDisplay(
+              materialDiff: materialDiff,
+              materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+            ),
+          ],
         ),
       ],
+    );
+  }
+}
+
+class _PracticeCommentCard extends ConsumerWidget {
+  const _PracticeCommentCard({required this.gameState});
+
+  final OfflineComputerGameState gameState;
+
+  static const _cardHeight = 54.0;
+  static const _evalTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isEvaluatingMove = gameState.isEvaluatingMove;
+    final practiceComment = gameState.practiceComment;
+    final showingSuggestedMove = gameState.showingSuggestedMove;
+
+    Widget content;
+    Color? backgroundColor;
+    Color? iconColor;
+    IconData? icon;
+
+    if (isEvaluatingMove) {
+      content = Row(
+        children: [
+          const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+          ),
+          const SizedBox(width: 8),
+          Text(context.l10n.evaluatingYourMove),
+        ],
+      );
+    } else if (practiceComment != null) {
+      final verdict = practiceComment.verdict;
+      icon = practiceComment.icon;
+      iconColor = practiceComment.color;
+      backgroundColor = practiceComment.color.withValues(alpha: 0.1);
+
+      final verdictText = switch (verdict) {
+        MoveVerdict.goodMove => context.l10n.studyGoodMove,
+        MoveVerdict.inaccuracy => context.l10n.inaccuracy,
+        MoveVerdict.mistake => context.l10n.mistake,
+        MoveVerdict.blunder => context.l10n.blunder,
+      };
+
+      Widget? suggestedMoveWidget;
+      final suggestedMove = practiceComment.suggestedMove;
+      if (suggestedMove != null) {
+        final moveText = suggestedMove.san;
+        final labelText = practiceComment.isShowingAlternative
+            ? context.l10n.anotherWasX('')
+            : context.l10n.bestWasX('');
+        final label = labelText.replaceAll(' ', '').isEmpty
+            ? ''
+            : labelText.substring(0, labelText.length - 1);
+        final isShowing = showingSuggestedMove == suggestedMove.move;
+
+        suggestedMoveWidget = GestureDetector(
+          onTap: () {
+            final move = suggestedMove.move;
+            if (move is NormalMove) {
+              ref.read(offlineComputerGameControllerProvider.notifier).toggleSuggestedMove(move);
+            }
+          },
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: label),
+                const TextSpan(text: ' '),
+                TextSpan(
+                  text: moveText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isShowing ? iconColor : null,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
+                  ),
+                ),
+              ],
+            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          ),
+        );
+      }
+
+      content = Row(
+        children: [
+          Icon(icon, color: iconColor, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  verdictText,
+                  style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                ),
+                if (suggestedMoveWidget != null) suggestedMoveWidget,
+              ],
+            ),
+          ),
+          if (practiceComment.evalAfter != null)
+            Text(practiceComment.evalAfter!, style: _evalTextStyle),
+        ],
+      );
+    } else if (gameState.finished) {
+      // Game is over
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
+    } else if (gameState.turn == gameState.game.playerSide) {
+      // Player's turn
+      final cachedEval = gameState.cachedEvalString;
+      content = Row(
+        children: [
+          Expanded(
+            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
+          ),
+          if (cachedEval != null)
+            Text(cachedEval, style: _evalTextStyle)
+          else
+            const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+            ),
+        ],
+      );
+    } else {
+      content = const SizedBox.shrink();
+    }
+
+    return Container(
+      height: _cardHeight,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Align(alignment: Alignment.centerLeft, child: content),
     );
   }
 }
@@ -403,6 +617,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
   late bool _casual;
+  late bool _practiceMode;
 
   String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
     SideChoice.white => context.l10n.white,
@@ -417,6 +632,7 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
     _casual = prefs.casual;
+    _practiceMode = prefs.practiceMode;
   }
 
   @override
@@ -490,13 +706,25 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
               ),
             ),
             SwitchListTile.adaptive(
+              title: const Text('Practice mode'),
+              subtitle: const Text('Get feedback on your moves'),
+              value: _practiceMode,
+              onChanged: (value) {
+                setState(() => _practiceMode = value);
+                ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
+            SwitchListTile.adaptive(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),
-              value: _casual,
-              onChanged: (value) {
-                setState(() => _casual = value);
-                ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
-              },
+              value: _practiceMode || _casual,
+              onChanged: _practiceMode
+                  ? null
+                  : (value) {
+                      setState(() => _casual = value);
+                      ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
+                    },
               contentPadding: EdgeInsets.zero,
             ),
           ],
@@ -512,7 +740,9 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 .startNewGame(
                   stockfishLevel: _selectedLevel,
                   playerSide: side,
-                  casual: _casual,
+                  // In practice mode, casual is always true
+                  casual: _practiceMode || _casual,
+                  practiceMode: _practiceMode,
                   initialFen: widget.initialFen,
                 );
             Navigator.pop(context);
@@ -561,6 +791,23 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       content: Text(subtitle),
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.close)),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions.standalone(
+                  orientation: game.playerSide,
+                  pgn: game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: Variant.standard,
+                ),
+              ),
+            );
+          },
+          child: Text(context.l10n.analysis),
+        ),
         TextButton(onPressed: onNewGame, child: const Text('New game')),
       ],
     );
