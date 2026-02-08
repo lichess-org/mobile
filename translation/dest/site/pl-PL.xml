@@ -9,6 +9,8 @@
   <string name="gameOver">Partia zakończona</string>
   <string name="waitingForOpponent">Oczekiwanie na ruch przeciwnika</string>
   <string name="orLetYourOpponentScanQrCode">Lub pozwól przeciwnikowi zeskanować ten kod QR</string>
+  <string name="reusableChallengeUrl">URL wyzwania wielokrotnego użytku</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Stały link do wyzwania na określonych warunkach, które każdy może Ci rzucić.</string>
   <string name="waiting">Oczekiwanie</string>
   <string name="yourTurn">Twój ruch</string>
   <string name="aiNameLevelAiLevel">%1$s poziom %2$s</string>
@@ -404,7 +406,7 @@
     <item quantity="other">Dodaj %s sekund</item>
   </plurals>
   <string name="thisAccountViolatedTos">Użytkownik tego konta naruszył warunki korzystania z Lichess</string>
-  <string name="openingExplorerAndTablebase">Biblioteka otwarć i końcówek</string>
+  <string name="openingExplorerAndTablebase">Biblioteka debiutów i końcówek</string>
   <string name="takeback">Cofnij ruch</string>
   <string name="proposeATakeback">Poproś o cofnięcie ruchu</string>
   <string name="whiteProposesTakeback">Białe proponują cofnięcie ruchu</string>
@@ -491,6 +493,8 @@
   <string name="leaderboard">Najlepsi gracze</string>
   <string name="screenshotCurrentPosition">Zrzut ekranu aktualnej pozycji</string>
   <string name="gameAsGIF">Zapisz jako GIF</string>
+  <string name="playerNames">Nazwy graczy</string>
+  <string name="moveAnnotations">Adnotacje do posunięcia</string>
   <string name="pasteTheFenStringHere">Wklej tutaj pozycję w formacie FEN</string>
   <string name="pasteThePgnStringHere">Wklej poniżej przebieg partii w formacie PGN</string>
   <string name="orUploadPgnFile">lub wgraj plik PGN</string>
@@ -736,7 +740,7 @@
   <string name="onlyExistingConversations">Tylko istniejące rozmowy</string>
   <string name="onlyFriends">Tylko znajomi</string>
   <string name="menu">Menu</string>
-  <string name="castling">Roszada</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Roszada</string>
   <string name="whiteCastlingKingside">Białe O-O</string>
   <string name="blackCastlingKingside">Czarne O-O</string>
   <plurals name="nbForumPosts">
@@ -896,6 +900,7 @@
   <string name="size">Rozmiar</string>
   <string name="opacity">Przezroczystość</string>
   <string name="brightness">Jasność</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Odcień</string>
   <string name="boardReset">Przywróć domyślne kolory</string>
   <string name="pieceSet">Zestaw bierek</string>
@@ -1111,5 +1116,5 @@ Wszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z dar
   <string name="search">Szukaj</string>
   <string name="clearSearch">Wyczyść wyszukiwanie</string>
   <string name="tags">Tagi</string>
-  <string name="enPassant">Bicie w przelocie</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Bicie w przelocie</string>
 </resources>

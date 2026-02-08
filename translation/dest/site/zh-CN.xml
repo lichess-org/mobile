@@ -9,6 +9,8 @@
   <string name="gameOver">对局结束</string>
   <string name="waitingForOpponent">正在等待对手</string>
   <string name="orLetYourOpponentScanQrCode">或让对方扫描此二维码</string>
+  <string name="reusableChallengeUrl">可重复使用的挑战链接</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">一个永久链接，任何人都可以使用此设定向您发起挑战。</string>
   <string name="waiting">等待中</string>
   <string name="yourTurn">轮到您走棋</string>
   <string name="aiNameLevelAiLevel">%1$s 级别 %2$s</string>
@@ -398,6 +400,8 @@
   <string name="leaderboard">排行榜</string>
   <string name="screenshotCurrentPosition">保存当前局面为图片</string>
   <string name="gameAsGIF">保存对局为 GIF</string>
+  <string name="playerNames">棋手名称</string>
+  <string name="moveAnnotations">着法评注</string>
   <string name="pasteTheFenStringHere">在此处粘贴 FEN 文本</string>
   <string name="pasteThePgnStringHere">在此处粘贴 PGN 文本</string>
   <string name="orUploadPgnFile">或上传 PGN 文件</string>
@@ -622,7 +626,7 @@
   <string name="onlyExistingConversations">仅现有的对话</string>
   <string name="onlyFriends">仅限好友</string>
   <string name="menu">菜单</string>
-  <string name="castling">王车易位</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">王车易位</string>
   <string name="whiteCastlingKingside">白方 O-O</string>
   <string name="blackCastlingKingside">黑方 O-O</string>
   <plurals name="nbForumPosts">
@@ -773,6 +777,7 @@
   <string name="size">尺寸</string>
   <string name="opacity">不透明度</string>
   <string name="brightness">亮度</string>
+  <string name="contrast">对比</string>
   <string name="hue">色调</string>
   <string name="boardReset">恢复默认</string>
   <string name="pieceSet">棋子样式</string>
@@ -978,5 +983,5 @@
   <string name="search">搜索</string>
   <string name="clearSearch">清除搜索</string>
   <string name="tags">标签</string>
-  <string name="enPassant">吃过路兵</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">吃过路兵</string>
 </resources>

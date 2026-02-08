@@ -9,6 +9,8 @@
   <string name="gameOver">Партия окончена</string>
   <string name="waitingForOpponent">Ожидание соперника</string>
   <string name="orLetYourOpponentScanQrCode">Или позвольте вашему сопернику отсканировать этот QR-код</string>
+  <string name="reusableChallengeUrl">Постоянная ссылка на вызов на игру</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Постоянная ссылка на игру с заданными настройками.</string>
   <string name="waiting">Ожидание</string>
   <string name="yourTurn">Ваш ход</string>
   <string name="aiNameLevelAiLevel">%1$s уровня %2$s</string>
@@ -491,6 +493,8 @@
   <string name="leaderboard">Лучшие игроки</string>
   <string name="screenshotCurrentPosition">Сделать снимок этой позиции</string>
   <string name="gameAsGIF">Партия в формате GIF</string>
+  <string name="playerNames">Имена игроков</string>
+  <string name="moveAnnotations">Аннотации ходов</string>
   <string name="pasteTheFenStringHere">Вставьте строку в формате FEN</string>
   <string name="pasteThePgnStringHere">Вставьте текст в формате PGN</string>
   <string name="orUploadPgnFile">Или загрузите PGN-файл</string>
@@ -736,7 +740,7 @@
   <string name="onlyExistingConversations">Только существующие обсуждения</string>
   <string name="onlyFriends">Только друзьям</string>
   <string name="menu">Меню</string>
-  <string name="castling">Рокировка</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Рокировка</string>
   <string name="whiteCastlingKingside">Белые O-O</string>
   <string name="blackCastlingKingside">Чёрные O-O</string>
   <plurals name="nbForumPosts">
@@ -896,6 +900,7 @@
   <string name="size">Размер</string>
   <string name="opacity">Непрозрачность</string>
   <string name="brightness">Яркость</string>
+  <string name="contrast">Контрастность</string>
   <string name="hue">Насыщенность</string>
   <string name="boardReset">Сбросить на цвета по умолчанию</string>
   <string name="pieceSet">Оформление фигур</string>
@@ -1005,11 +1010,11 @@
   <string name="blitz" comment="Probably best left untranslated. Leave it as 'Blitz' unless your language has a better word for it.">Блиц</string>
   <string name="rapid">Рапид</string>
   <string name="classical">Классика</string>
-  <string name="ultraBulletDesc">Безумно быстрые игры: менее 30 секунд</string>
-  <string name="bulletDesc">Очень быстрые игры: менее 3 минут</string>
-  <string name="blitzDesc">Быстрые игры: от 3 до 8 минут</string>
-  <string name="rapidDesc">Быстрые игры: от 8 до 25 минут</string>
-  <string name="classicalDesc">Классические игры: 25 минут и больше</string>
+  <string name="ultraBulletDesc">Невероятно быстрые партии: менее 30 секунд</string>
+  <string name="bulletDesc">Очень быстрые партии: меньше 3 минут</string>
+  <string name="blitzDesc">Быстрые партии: от 3 до 8 минут</string>
+  <string name="rapidDesc">Короткие партии: от 8 до 25 минут</string>
+  <string name="classicalDesc">Классические партии: 25 минут и больше</string>
   <string name="correspondenceDesc">Игры по переписке: один или несколько дней на ход</string>
   <string name="puzzleDesc">Тактический тренажёр</string>
   <string name="important">Важно</string>
@@ -1111,5 +1116,5 @@
   <string name="search">Поиск</string>
   <string name="clearSearch">Очистить поиск</string>
   <string name="tags">Теги</string>
-  <string name="enPassant">Взятие на проходе</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Взятие на проходе</string>
 </resources>

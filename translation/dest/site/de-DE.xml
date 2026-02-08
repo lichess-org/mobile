@@ -9,6 +9,8 @@
   <string name="gameOver">Partie beendet</string>
   <string name="waitingForOpponent">Auf den Gegner warten</string>
   <string name="orLetYourOpponentScanQrCode">Oder lass deinen Gegner diesen QR-Code scannen</string>
+  <string name="reusableChallengeUrl">Wiederverwendbare Herausforderungs-URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Ein permanenter Link für jeden, der dich mit genau diesen Einstellungen herausfordert.</string>
   <string name="waiting">Warten</string>
   <string name="yourTurn">Du bist am Zug</string>
   <string name="aiNameLevelAiLevel">%1$s Stufe %2$s</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Rangliste</string>
   <string name="screenshotCurrentPosition">Eine Bildschirmaufnahme der aktuellen Stellung anfertigen</string>
   <string name="gameAsGIF">Partie als GIF</string>
+  <string name="playerNames">Spielernamen</string>
+  <string name="moveAnnotations">Zugnotation</string>
   <string name="pasteTheFenStringHere">Füge den FEN-Text hier ein</string>
   <string name="pasteThePgnStringHere">Füge den PGN-Text hier ein</string>
   <string name="orUploadPgnFile">Oder lade eine PGN-Datei hoch</string>
@@ -660,7 +664,7 @@
   <string name="onlyExistingConversations">Nur bestehende Konversationen</string>
   <string name="onlyFriends">Nur Freunde</string>
   <string name="menu">Menü</string>
-  <string name="castling">Rochade</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rochade</string>
   <string name="whiteCastlingKingside">Weiß O-O</string>
   <string name="blackCastlingKingside">Schwarz O-O</string>
   <plurals name="nbForumPosts">
@@ -814,6 +818,7 @@
   <string name="size">Größe</string>
   <string name="opacity">Transparenz</string>
   <string name="brightness">Helligkeit</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Farbton</string>
   <string name="boardReset">Farben auf Standardwerte zurücksetzen</string>
   <string name="pieceSet">Figurenstil</string>
@@ -1023,5 +1028,5 @@ Alle Betriebskosten, Entwicklung und Inhalte werden ausschließlich durch Benutz
   <string name="search">Suchen</string>
   <string name="clearSearch">Neue Suche</string>
   <string name="tags">Schlagwörter</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
 </resources>

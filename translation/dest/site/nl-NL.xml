@@ -9,6 +9,8 @@
   <string name="gameOver">Partij afgelopen</string>
   <string name="waitingForOpponent">Wachten op een tegenstander</string>
   <string name="orLetYourOpponentScanQrCode">Of laat je tegenstander deze QR-code scannen</string>
+  <string name="reusableChallengeUrl">Herbruikbare URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Een permanente link voor iedereen om je uit te dagen met exact deze instellingen.</string>
   <string name="waiting">Even geduld a.u.b.</string>
   <string name="yourTurn">U bent aan zet</string>
   <string name="aiNameLevelAiLevel">%1$s niveau %2$s</string>
@@ -125,6 +127,10 @@
   <string name="bestMoveArrow">Beste zet-pijl</string>
   <string name="showVariationArrows">Toon variantpijlen</string>
   <string name="evaluationGauge">Evaluatiemeter</string>
+  <string name="visualMotifs">Visuele motieven</string>
+  <string name="undefendedPieces">Onverdedigde stukken</string>
+  <string name="pinnedPieces">Gepende stukken</string>
+  <string name="checkableKing">Schaakbare koning</string>
   <string name="multipleLines">Meerdere varianten</string>
   <string name="cpus">CPUs</string>
   <string name="memory">Geheugen</string>
@@ -425,6 +431,8 @@
   <string name="leaderboard">Ranglijst</string>
   <string name="screenshotCurrentPosition">Schermafbeelding huidige stelling</string>
   <string name="gameAsGIF">Download partij als GIF</string>
+  <string name="playerNames">Spelersnamen</string>
+  <string name="moveAnnotations">Aantekeningen</string>
   <string name="pasteTheFenStringHere">Plak de FEN-code hier</string>
   <string name="pasteThePgnStringHere">Plak de PGN-code hier</string>
   <string name="orUploadPgnFile">Of upload een PGN-bestand</string>
@@ -656,7 +664,7 @@
   <string name="onlyExistingConversations">Alleen bestaande gesprekken</string>
   <string name="onlyFriends">Alleen vrienden</string>
   <string name="menu">Menu</string>
-  <string name="castling">Rokeren</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rokeren</string>
   <string name="whiteCastlingKingside">Wit O-O</string>
   <string name="blackCastlingKingside">Zwart O-O</string>
   <plurals name="nbForumPosts">
@@ -810,6 +818,7 @@
   <string name="size">Grootte</string>
   <string name="opacity">Transparantie</string>
   <string name="brightness">Helderheid</string>
+  <string name="contrast">Contrast</string>
   <string name="hue">Kleurschakering</string>
   <string name="boardReset">Kleuren terugzetten naar standaard</string>
   <string name="pieceSet">Schaakstukken</string>
@@ -1019,5 +1028,5 @@ Alle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door do
   <string name="search">Zoeken</string>
   <string name="clearSearch">Zoekopdracht wissen</string>
   <string name="tags">Labels</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
 </resources>

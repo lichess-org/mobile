@@ -9,6 +9,8 @@
   <string name="gameOver">Game Over</string>
   <string name="waitingForOpponent">Waiting for opponent</string>
   <string name="orLetYourOpponentScanQrCode">Or let your opponent scan this QR code</string>
+  <string name="reusableChallengeUrl">Reusable challenge URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">A permanent link, with these exact settings, for anyone to challenge you.</string>
   <string name="waiting">Waiting</string>
   <string name="yourTurn">Your turn</string>
   <string name="aiNameLevelAiLevel">%1$s level %2$s</string>
@@ -125,6 +127,7 @@
   <string name="bestMoveArrow">Best move arrow</string>
   <string name="showVariationArrows">Show variation arrows</string>
   <string name="evaluationGauge">Evaluation gauge</string>
+  <string name="checkableKing">Checkable king</string>
   <string name="multipleLines">Multiple lines</string>
   <string name="cpus">CPUs</string>
   <string name="memory">Memory</string>
@@ -425,6 +428,8 @@
   <string name="leaderboard">Leaderboard</string>
   <string name="screenshotCurrentPosition">Screenshot current position</string>
   <string name="gameAsGIF">Game as GIF</string>
+  <string name="playerNames">Player names</string>
+  <string name="moveAnnotations">Move annotations</string>
   <string name="pasteTheFenStringHere">Paste the FEN text here</string>
   <string name="pasteThePgnStringHere">Paste the PGN text here</string>
   <string name="orUploadPgnFile">Or upload a PGN file</string>
@@ -656,7 +661,7 @@
   <string name="onlyExistingConversations">Only existing conversations</string>
   <string name="onlyFriends">Only friends</string>
   <string name="menu">Menu</string>
-  <string name="castling">Castling</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Castling rights</string>
   <string name="whiteCastlingKingside">White O-O</string>
   <string name="blackCastlingKingside">Black O-O</string>
   <plurals name="nbForumPosts">
@@ -810,6 +815,7 @@
   <string name="size">Size</string>
   <string name="opacity">Opacity</string>
   <string name="brightness">Brightness</string>
+  <string name="contrast">Contrast</string>
   <string name="hue">Hue</string>
   <string name="boardReset">Reset colors to default</string>
   <string name="pieceSet">Piece set</string>
@@ -1018,5 +1024,5 @@ All operating costs, development, and content are funded solely by user donation
   <string name="search">Search</string>
   <string name="clearSearch">Clear search</string>
   <string name="tags">Tags</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant rights</string>
 </resources>

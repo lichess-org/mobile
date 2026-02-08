@@ -9,6 +9,8 @@
   <string name="gameOver">Ván cờ kết thúc</string>
   <string name="waitingForOpponent">Đang chờ đối thủ</string>
   <string name="orLetYourOpponentScanQrCode">Hoặc để đối thủ của bạn quét mã QR này</string>
+  <string name="reusableChallengeUrl">URL thách đấu có thể tái sử dụng</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Một liên kết cố định để bất kỳ ai cũng có thể thách đấu bạn với chính xác các theo các thiết lập này.</string>
   <string name="waiting">Đang chờ</string>
   <string name="yourTurn">Đến lượt bạn</string>
   <string name="aiNameLevelAiLevel">%1$s cấp độ %2$s</string>
@@ -24,7 +26,7 @@
   <string name="asWhite">khi chơi quân trắng</string>
   <string name="asBlack">khi chơi quân đen</string>
   <string name="randomColor">Chọn màu quân ngẫu nhiên</string>
-  <string name="createAGame">Tạo một ván cờ</string>
+  <string name="createAGame">Tạo ván cờ mới</string>
   <string name="createTheGame">Khởi tạo ván cờ</string>
   <string name="whiteIsVictorious">Bên Trắng thắng</string>
   <string name="blackIsVictorious">Bên Đen thắng</string>
@@ -398,6 +400,8 @@
   <string name="leaderboard">Bảng dẫn đầu</string>
   <string name="screenshotCurrentPosition">Chụp màn hình thế cờ hiện tại</string>
   <string name="gameAsGIF">Ván cờ dưới dạng ảnh GIF</string>
+  <string name="playerNames">Tên người chơi</string>
+  <string name="moveAnnotations">Chú thích nước đi</string>
   <string name="pasteTheFenStringHere">Dán chuỗi FEN vào đây</string>
   <string name="pasteThePgnStringHere">Dán chuỗi PGN vào đây</string>
   <string name="orUploadPgnFile">Hoặc tải lên tệp PGN</string>
@@ -623,7 +627,7 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="onlyExistingConversations">Chỉ từ các cuộc trò chuyện hiện tại</string>
   <string name="onlyFriends">Chỉ bạn bè</string>
   <string name="menu">Mục lục</string>
-  <string name="castling">Nhập thành</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Nhập thành</string>
   <string name="whiteCastlingKingside">Trắng O-O</string>
   <string name="blackCastlingKingside">Đen O-O</string>
   <plurals name="nbForumPosts">
@@ -774,6 +778,7 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="size">Kích cỡ</string>
   <string name="opacity">Độ trong suốt</string>
   <string name="brightness">Độ sáng</string>
+  <string name="contrast">Độ tương phản</string>
   <string name="hue">Màu gốc</string>
   <string name="boardReset">Đặt lại màu về mặc định</string>
   <string name="pieceSet">Bộ cờ</string>
@@ -979,5 +984,5 @@ Mọi chi phí vận hành, phát triển, và nội dung được tài trợ b�
   <string name="search">Tìm kiếm</string>
   <string name="clearSearch">Xóa nội dung tìm kiếm</string>
   <string name="tags">Thẻ</string>
-  <string name="enPassant">Bắt tốt qua đường</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Bắt tốt qua đường</string>
 </resources>

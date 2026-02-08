@@ -9,6 +9,8 @@
   <string name="gameOver">Spillet er slut</string>
   <string name="waitingForOpponent">Venter på modstander</string>
   <string name="orLetYourOpponentScanQrCode">Eller lad din modstander scanne denne QR-kode</string>
+  <string name="reusableChallengeUrl">Genanvendelig udfordrings-URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Et permanent link, som enhver kan bruge til at udfordre dig med nøjagtig disse indstillinger.</string>
   <string name="waiting">Venter</string>
   <string name="yourTurn">Din tur</string>
   <string name="aiNameLevelAiLevel">%1$s niveau %2$s</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Rangliste</string>
   <string name="screenshotCurrentPosition">Tag et skræmbillede af den aktuelle stilling</string>
   <string name="gameAsGIF">Parti som GIF</string>
+  <string name="playerNames">Spillernavne</string>
+  <string name="moveAnnotations">Trækannotationer</string>
   <string name="pasteTheFenStringHere">Indsæt FEN-teksten her</string>
   <string name="pasteThePgnStringHere">Indsæt PGN-teksten her</string>
   <string name="orUploadPgnFile">Eller upload en PGN-fil</string>
@@ -660,7 +664,7 @@
   <string name="onlyExistingConversations">Kun eksisterende samtaler</string>
   <string name="onlyFriends">Kun venner</string>
   <string name="menu">Menu</string>
-  <string name="castling">Rokade</string>
+  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rokade</string>
   <string name="whiteCastlingKingside">Hvid O-O</string>
   <string name="blackCastlingKingside">Sort O-O</string>
   <plurals name="nbForumPosts">
@@ -814,6 +818,7 @@
   <string name="size">Størrelse</string>
   <string name="opacity">Uigennemsigtighed</string>
   <string name="brightness">Lysstyrke</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Farvetone</string>
   <string name="boardReset">Nulstil farver til standard</string>
   <string name="pieceSet">Brikker</string>
@@ -1023,5 +1028,5 @@ Alle driftsomkostninger, udvikling og indhold finansieres udelukkende af brugerd
   <string name="search">Søg</string>
   <string name="clearSearch">Ryd søgning</string>
   <string name="tags">Etiketter</string>
-  <string name="enPassant">En passant</string>
+  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
 </resources>
