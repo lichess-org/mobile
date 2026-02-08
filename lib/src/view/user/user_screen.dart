@@ -278,7 +278,7 @@ class _UserProfileListView extends ConsumerWidget {
             ],
           ],
         ),
-        UserActivityWidget(activity: AsyncData(activity)),
+        UserActivityWidget(activity: AsyncData(activity), user: user.lightUser),
         RecentGamesWidget(
           recentGames: AsyncData(recentGames),
           nbOfGames: nbOfGames,
