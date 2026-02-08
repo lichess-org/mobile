@@ -917,7 +917,7 @@ sealed class AnalysisState
     Division? division,
 
     /// Optional ACPL chart data of the game, coming from lichess server analysis.
-    IList<Eval>? acplChartData,
+    IList<ExternalEval>? acplChartData,
 
     /// The PGN headers of the game.
     required IMap<String, String> pgnHeaders,

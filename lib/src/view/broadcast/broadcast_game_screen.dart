@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_summary.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
@@ -86,7 +87,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   void initState() {
     super.initState();
 
-    tabs = [AnalysisTab.explorer, AnalysisTab.moves];
+    tabs = [AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
   }
@@ -198,9 +199,11 @@ class _BroadcastGameMenu extends ConsumerWidget {
           label: context.l10n.mobileShareGamePGN,
           onPressed: () async {
             try {
-              final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+              final pgnOnly = await ref
+                  .read(broadcastRepositoryProvider)
+                  .getGamePgn(roundId, gameId, withAnalysisSummary: false);
               if (context.mounted) {
-                launchShareDialog(context, ShareParams(text: pgn));
+                launchShareDialog(context, ShareParams(text: pgnOnly.pgn));
               }
             } catch (e) {
               if (context.mounted) {
@@ -312,7 +315,11 @@ class _Body extends ConsumerWidget {
             tournamentSlug: tournamentSlug,
             roundSlug: roundSlug,
           ),
-          children: [_OpeningExplorerTab(roundId, gameId), _BroadcastGameTreeView(roundId, gameId)],
+          children: [
+            _OpeningExplorerTab(roundId, gameId),
+            _BroadcastGameTreeView(roundId, gameId),
+            BroadcastGameSummary(roundId: roundId, gameId: gameId),
+          ],
         );
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));

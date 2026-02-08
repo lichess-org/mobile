@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:chessground/chessground.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -6,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -31,6 +35,16 @@ final client = MockClient((request) {
     );
   }
   if (request.url.path == '/api/study/$_roundId/$_gameId.pgn') {
+    if (request.url.queryParameters['analysisHeader'] == '1') {
+      return mockResponse(
+        broadcastGamePgnResponses[_gameId]!,
+        200,
+        headers: {
+          'content-type': 'application/x-chess-pgn',
+          'x-lichess-analysis': jsonEncode(analysisSummaryJson),
+        },
+      );
+    }
     return mockResponse(
       broadcastGamePgnResponses[_gameId]!,
       200,
@@ -100,6 +114,45 @@ void main() {
 
     //   expect(find.byKey(const Key('e3-whitebishop')), findsOneWidget);
     // });
+    testWidgets('Broadcast Game Summary available', variant: kPlatformVariant, (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the broadcast analysis controller
+      await tester.pump();
+
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      expect(find.byIcon(LichessIcons.flow_cascade), findsOne);
+      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
+      //allow animation on iOS to complete
+      await tester.pumpAndSettle();
+      expect(find.text('Computer analysis'), findsOne);
+      await tester.tap(find.text('Computer analysis'));
+      //allow switching tabs animation to complete
+      await tester.pumpAndSettle();
+      expect(find.text('61%'), findsOne);
+      expect(find.text('Blunders'), findsOne);
+      // Check that the evaluation chart is displayed
+      expect(find.byType(LineChart), findsOne);
+    });
   });
 
   group('Engine evaluation:', () {
