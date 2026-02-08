@@ -22,7 +22,7 @@ dependencies:
   crypto: ^3.0.3
   cupertino_http: ^2.0.0
   cupertino_icons: ^1.0.2
-  dartchess: ^0.11.0
+  dartchess: ^0.12.0
   deep_pick: ^1.0.0
   device_info_plus: ^12.1.0
   dynamic_system_colors: ^1.8.0

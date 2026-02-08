@@ -181,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: "7f706292af797037f55277e256726c2ad2a271cbbb9760959064dc7a376b6ea5"
+      sha256: e1850845544da37b0fb9d23a94f047bbb8112f437e469237aa187140e1dd53f7
       url: "https://pub.dev"
     source: hosted
-    version: "7.3.0"
+    version: "7.4.0"
   cli_config:
     dependency: transitive
     description:
@@ -317,10 +317,10 @@ packages:
     dependency: "direct main"
     description:
       name: dartchess
-      sha256: ef6d46208ab78af7cd0159bf84b48a5ca8e76c226fc2deebbed5b5f6eccd3729
+      sha256: a41fa4bb8d949599c17927c444c63feb88330cc103dde35c4303ac4b1a351707
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.1"
+    version: "0.12.0"
   dbus:
     dependency: transitive
     description:
