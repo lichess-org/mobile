@@ -21,7 +21,7 @@ const Map<(BroadcastTournamentId, BroadcastRoundId), String> broadcastRoundMockR
       "players": "Yılmaz, Şanal, Daştan, Yılmazyerli",
       "location": "Kemer, Turkey",
       "tc": "90 min + 30 sec / move",
-      "fideTc": "standard",
+      "fideTC": "standard",
       "timeZone": "Turkey",
       "standings": "https://chess-results.com/tnr1080829.aspx?art=1",
       "format": "16-player knockout"

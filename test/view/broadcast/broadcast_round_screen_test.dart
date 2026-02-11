@@ -593,7 +593,7 @@ const _finishedTournamentResponse = '''
       "players": "Carlsen, Firouzja, So, Caruana, Murzin",
       "location": "New York, United States",
       "tc": "3 min + 2 sec / move",
-      "fideTc": "blitz",
+      "fideTC": "blitz",
       "timeZone": "America/New_York",
       "standings": "https://worldrapidandblitz2024.fide.com/blitz-finals-open/",
       "format": "8-player knockout"
@@ -823,7 +823,7 @@ const _finishedRoundResponse = '''
       "players": "Carlsen, Firouzja, So, Caruana, Murzin",
       "location": "New York, United States",
       "tc": "3 min + 2 sec / move",
-      "fideTc": "blitz",
+      "fideTC": "blitz",
       "timeZone": "America/New_York",
       "standings": "https://worldrapidandblitz2024.fide.com/blitz-finals-open/",
       "format": "8-player knockout"
@@ -1025,7 +1025,7 @@ const _upcomingTournamentResponse = r'''
       "players": "Xu, Bonelli, Jacobson",
       "location": "Seville, Spain",
       "tc": "90 min + 30 sec / move",
-      "fideTc": "standard",
+      "fideTC": "standard",
       "timeZone": "Europe/Madrid",
       "standings": "https://chess-results.com/tnr1001542.aspx?lan=1",
       "format": "9-round Swiss"
@@ -1136,7 +1136,7 @@ const _upcomingRoundResponse = r'''
       "players": "Xu, Bonelli, Jacobson",
       "location": "Seville, Spain",
       "tc": "90 min + 30 sec / move",
-      "fideTc": "standard",
+      "fideTC": "standard",
       "timeZone": "Europe/Madrid",
       "standings": "https://chess-results.com/tnr1001542.aspx?lan=1",
       "format": "9-round Swiss"
