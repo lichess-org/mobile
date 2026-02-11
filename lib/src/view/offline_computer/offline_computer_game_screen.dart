@@ -314,7 +314,6 @@ class _BottomBar extends ConsumerWidget {
             ref.read(_isBoardFlippedProvider.notifier).toggle();
           },
         ),
-        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
         if (gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
@@ -335,6 +334,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.resign),
             onPressed: () => _showResignDialog(context, ref),
           ),
+        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
       ],
     );
   }
@@ -415,13 +415,9 @@ class _Player extends ConsumerWidget {
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (gameState.isEngineThinking) ...[
-                      const SizedBox(width: 8),
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                      ),
+                    if (gameState.isEngineThinking) ...const [
+                      SizedBox(width: 8),
+                      Icon(Icons.hourglass_top, size: 16),
                     ],
                   ],
                 ),
