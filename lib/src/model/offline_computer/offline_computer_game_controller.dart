@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -37,7 +38,7 @@ final _logger = Logger('OfflineComputerGameController');
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
 /// Minimum depth required for a move evaluation in practice mode.
-const _kMinEvalDepth = 15;
+const _kMinEvalDepth = kDebugMode ? 12 : 15;
 
 /// Search time for evaluations in practice mode.
 const _kSearchTime = Duration(seconds: 2);
@@ -376,13 +377,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final bestMove = bestMoveData?.move;
     final playedMoveIsBest = bestMove != null && _normalizeUci(bestMove.uci) == normalizedMoveUci;
 
-    final isGoodMove = isBookMove || shift < 0.025;
+    final isGoodMove = isBookMove || shift < kGoodMoveThreshold;
 
     // Find alternative good move if the played move was good
     Move? alternativeGoodMove;
     if (isGoodMove && cachedBestMoves.length > 1) {
       for (final m in cachedBestMoves.skip(1)) {
-        if (winningChancesBefore - m.winningChances < 0.025 &&
+        if (winningChancesBefore - m.winningChances < kGoodMoveThreshold &&
             _normalizeUci(m.move.uci) != normalizedMoveUci) {
           alternativeGoodMove = m.move;
           break;

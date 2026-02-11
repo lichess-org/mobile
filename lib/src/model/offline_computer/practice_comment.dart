@@ -6,30 +6,39 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 part 'practice_comment.freezed.dart';
 part 'practice_comment.g.dart';
 
+/// Maximum winning chances shift for a move to be considered good.
+const kGoodMoveThreshold = 0.04;
+
+/// Maximum winning chances shift for a move to be considered an inaccuracy.
+const kInaccuracyThreshold = 0.08;
+
+/// Maximum winning chances shift for a move to be considered a mistake.
+const kMistakeThreshold = 0.18;
+
+/// Winning chances threshold above which a position is considered winning.
+///
+/// 0.5 corresponds to roughly +200cp (+2.0 pawns advantage).
+const kWinningThreshold = 0.5;
+
 /// The verdict for a player's move in practice mode.
 ///
 /// Based on the winning chances difference between the position before and after the move.
-/// Thresholds from lila: https://github.com/veloce/lila/blob/master/ui/analyse/src/practice/practiceCtrl.ts
+/// Thresholds loosely adapted from lila practice mode.
 enum MoveVerdict {
-  /// The move is good (winning chances shift < 0.025 or no better move exists).
+  /// The move is good (shift < [kGoodMoveThreshold] or no better move exists).
   goodMove,
 
   /// The move is not the best but keeps a winning position.
   notBest,
 
-  /// The move is an inaccuracy (0.025 <= shift < 0.06).
+  /// The move is an inaccuracy ([kGoodMoveThreshold] <= shift < [kInaccuracyThreshold]).
   inaccuracy,
 
-  /// The move is a mistake (0.06 <= shift < 0.14).
+  /// The move is a mistake ([kInaccuracyThreshold] <= shift < [kMistakeThreshold]).
   mistake,
 
-  /// The move is a blunder (shift >= 0.14).
+  /// The move is a blunder (shift >= [kMistakeThreshold]).
   blunder;
-
-  /// The winning chances threshold above which a position is considered winning.
-  ///
-  /// 0.5 corresponds to roughly +200cp (+2.0 pawns advantage).
-  static const _winningThreshold = 0.5;
 
   /// Returns the verdict based on the winning chances shift.
   ///
@@ -45,13 +54,13 @@ enum MoveVerdict {
     required double winningChancesAfter,
   }) {
     if (!hasBetterMove) return .goodMove;
-    if (shift < 0.025) return .goodMove;
+    if (shift < kGoodMoveThreshold) return .goodMove;
     // If the position was winning and is still winning, the move is suboptimal but not a real mistake.
-    if (winningChancesBefore >= _winningThreshold && winningChancesAfter >= _winningThreshold) {
+    if (winningChancesBefore >= kWinningThreshold && winningChancesAfter >= kWinningThreshold) {
       return .notBest;
     }
-    if (shift < 0.06) return .inaccuracy;
-    if (shift < 0.14) return .mistake;
+    if (shift < kInaccuracyThreshold) return .inaccuracy;
+    if (shift < kMistakeThreshold) return .mistake;
     return .blunder;
   }
 
@@ -67,7 +76,7 @@ enum MoveVerdict {
   /// The color for this verdict.
   Color get color => switch (this) {
     .goodMove => Colors.lightGreen,
-    .notBest => Colors.amber,
+    .notBest => Colors.lightGreen,
     .inaccuracy => innacuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,

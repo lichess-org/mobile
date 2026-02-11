@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -53,7 +54,7 @@ class OfflineComputerGameScreen extends ConsumerWidget {
         : context.l10n.playAgainstComputer;
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: AppBarTitleText(title)),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -470,13 +471,17 @@ class _PracticeCommentCard extends ConsumerWidget {
   final OfflineComputerGameState gameState;
 
   static const _cardHeight = 54.0;
-  static const _evalTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
+    final evalTextStyle = TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: textShade(context, 0.6),
+    );
 
     Widget content;
     Color? backgroundColor;
@@ -544,7 +549,7 @@ class _PracticeCommentCard extends ConsumerWidget {
                 ),
               ],
             ),
-            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 12, color: textShade(context, 0.6)),
           ),
         );
       }
@@ -567,7 +572,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             ),
           ),
           if (practiceComment.evalAfter != null)
-            Text(practiceComment.evalAfter!, style: _evalTextStyle),
+            Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
     } else if (gameState.finished) {
@@ -582,7 +587,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
           ),
           if (cachedEval != null)
-            Text(cachedEval, style: _evalTextStyle)
+            Text(cachedEval, style: evalTextStyle)
           else
             const SizedBox(
               width: 16,

@@ -5,73 +5,73 @@ import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart'
 void main() {
   group('MoveVerdict', () {
     test('has correct thresholds', () {
-      // Good move: shift < 0.025
+      // Good move: shift < kGoodMoveThreshold (0.04)
       expect(
         MoveVerdict.fromShift(
-          0.02,
+          0.03,
           hasBetterMove: true,
           winningChancesBefore: 0.0,
-          winningChancesAfter: -0.02,
+          winningChancesAfter: -0.03,
         ),
         MoveVerdict.goodMove,
       );
       expect(
         MoveVerdict.fromShift(
-          0.024,
+          0.039,
           hasBetterMove: true,
           winningChancesBefore: 0.0,
-          winningChancesAfter: -0.024,
+          winningChancesAfter: -0.039,
         ),
         MoveVerdict.goodMove,
       );
 
-      // Inaccuracy: 0.025 <= shift < 0.06 (in non-winning position)
+      // Inaccuracy: kGoodMoveThreshold <= shift < kInaccuracyThreshold (in non-winning position)
       expect(
         MoveVerdict.fromShift(
-          0.025,
+          0.04,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
-          winningChancesAfter: 0.275,
+          winningChancesAfter: 0.26,
         ),
         MoveVerdict.inaccuracy,
       );
       expect(
         MoveVerdict.fromShift(
-          0.05,
+          0.07,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
-          winningChancesAfter: 0.25,
+          winningChancesAfter: 0.23,
         ),
         MoveVerdict.inaccuracy,
       );
 
-      // Mistake: 0.06 <= shift < 0.14 (in non-winning position)
+      // Mistake: kInaccuracyThreshold <= shift < kMistakeThreshold (in non-winning position)
       expect(
         MoveVerdict.fromShift(
-          0.06,
+          0.08,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
-          winningChancesAfter: 0.24,
+          winningChancesAfter: 0.22,
         ),
         MoveVerdict.mistake,
       );
       expect(
         MoveVerdict.fromShift(
-          0.1,
+          0.15,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
-          winningChancesAfter: 0.2,
+          winningChancesAfter: 0.15,
         ),
         MoveVerdict.mistake,
       );
 
-      // Blunder: shift >= 0.14 (in non-winning position)
+      // Blunder: shift >= kMistakeThreshold (in non-winning position)
       expect(
         MoveVerdict.fromShift(
-          0.14,
+          0.18,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
-          winningChancesAfter: 0.16,
+          winningChancesAfter: 0.12,
         ),
         MoveVerdict.blunder,
       );
