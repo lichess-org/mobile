@@ -67,6 +67,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Bu səhifəni görmək üçün daxil olmalısınız.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Nəticə yoxdur';
 
   @override

@@ -67,6 +67,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'لعرض هذه الصفحة، قم بتسجيل الدخول.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'لا توجد نتائج';
 
   @override

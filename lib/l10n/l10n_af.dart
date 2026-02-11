@@ -67,6 +67,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Jy moet ingeteken wees om hierdie bladsy te kan sien.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Geen resultate nie';
 
   @override

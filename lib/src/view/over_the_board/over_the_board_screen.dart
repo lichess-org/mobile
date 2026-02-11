@@ -357,7 +357,7 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (context) => const Text('New game'),
+          makeLabel: (context) => Text(context.l10n.mobileNewGame),
           onPressed: () => showConfigureGameSheet(context, isDismissible: true),
         ),
         if (gameState.game.finished)

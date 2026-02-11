@@ -67,6 +67,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du muesch igloggt si, um die Site z\'gseh.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override

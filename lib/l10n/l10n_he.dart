@@ -67,6 +67,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'יש להתחבר כדי לצפות בדף זה.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'אין תוצאות';
 
   @override

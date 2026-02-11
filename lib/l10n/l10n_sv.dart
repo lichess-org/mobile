@@ -67,6 +67,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du måste vara inloggad för att se denna sida.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Inga resultat';
 
   @override

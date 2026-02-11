@@ -67,6 +67,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Niciun rezultat';
 
   @override

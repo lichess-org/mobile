@@ -67,6 +67,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Geen resultaten';
 
   @override

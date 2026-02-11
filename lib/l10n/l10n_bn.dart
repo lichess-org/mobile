@@ -67,6 +67,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে লগইন করুন।';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'কোনো ফলাফল নেই';
 
   @override

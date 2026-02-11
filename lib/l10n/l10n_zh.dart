@@ -67,6 +67,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => '无结果';
 
   @override

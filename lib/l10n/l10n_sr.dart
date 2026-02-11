@@ -67,6 +67,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Морате се пријавити да бисте видели ову страницу.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Нема резултата';
 
   @override

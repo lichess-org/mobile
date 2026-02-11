@@ -342,7 +342,10 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.resign),
             onPressed: () => _showResignDialog(context, ref),
           ),
-        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileNewGame),
+          onPressed: onNewGame,
+        ),
       ],
     );
   }
@@ -820,7 +823,7 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
           },
           child: Text(context.l10n.analysis),
         ),
-        TextButton(onPressed: onNewGame, child: const Text('New game')),
+        TextButton(onPressed: onNewGame, child: Text(context.l10n.mobileNewGame)),
       ],
     );
   }

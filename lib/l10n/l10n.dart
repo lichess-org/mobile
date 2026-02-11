@@ -302,6 +302,12 @@ abstract class AppLocalizations {
   /// **'You must be logged in to view this page.'**
   String get mobileMustBeLoggedIn;
 
+  /// No description provided for @mobileNewGame.
+  ///
+  /// In en, this message translates to:
+  /// **'New game'**
+  String get mobileNewGame;
+
   /// No description provided for @mobileNoSearchResults.
   ///
   /// In en, this message translates to:

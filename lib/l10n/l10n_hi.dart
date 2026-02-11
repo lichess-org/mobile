@@ -67,6 +67,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको लॉगिन करना होगा।';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'कोई रिजल्ट नहीं मिला';
 
   @override

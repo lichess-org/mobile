@@ -67,6 +67,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Không có kết quả';
 
   @override

@@ -67,6 +67,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Vi devas esti ensalutata por spekti ĉi tiun paĝon.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Neniu rezultoj';
 
   @override

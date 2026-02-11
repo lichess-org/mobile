@@ -67,6 +67,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Мора да сте најавени за да ја видите оваа страница.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Нема резултати';
 
   @override

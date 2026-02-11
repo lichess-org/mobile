@@ -67,6 +67,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => '결과 없음';
 
   @override
