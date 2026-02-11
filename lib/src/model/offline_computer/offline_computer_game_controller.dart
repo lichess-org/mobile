@@ -206,23 +206,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<void> _makeMoveWithEvaluation(NormalMove move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
 
-    // Try to get cached values before applying move (they might be available already)
     var cachedBestMoves = state.cachedBestMoves;
     var cachedWinningChances = state.cachedWinningChances;
     final wasLoadingHint = state.isLoadingHint;
 
-    // Get position FEN before applying the move for opening database lookup
     final positionBeforeFen = state.currentPosition.fen;
     final plyBeforeMove = state.currentPosition.ply;
 
-    // Clear previous practice comment and set evaluating state
     state = state.copyWith(isEvaluatingMove: true, practiceComment: null);
 
-    // Apply the move immediately for responsive UI
     _applyMove(move);
 
     if (!state.game.playable) {
-      // Game ended (checkmate, stalemate, etc.) - no need to evaluate further
       state = state.copyWith(isEvaluatingMove: false);
       return;
     }
@@ -239,7 +234,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (!ref.mounted) return;
 
-      // Now get the cached values (should be available after hints complete)
       cachedBestMoves = state.cachedBestMoves;
       cachedWinningChances = state.cachedWinningChances;
     }
@@ -257,21 +251,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final normalizedMoveUci = _normalizeUci(move.uci);
 
     // Check if the player's move is in the cached best moves list.
-    // If so, we can use the cached winning chances and skip the expensive evaluation.
+    // If so, we can use the cached winning chances to show a comment immediately.
     final cachedMoveData = cachedBestMoves.firstWhereOrNull(
       (m) => _normalizeUci(m.move.uci) == normalizedMoveUci,
     );
 
-    // Fast path: move was in the analysis, use cached winning chances
+    // Fetch master database upfront (only in opening phase) - needed in both paths
+    final masterEntry = plyBeforeMove < _kOpeningPlyThreshold
+        ? await _fetchMasterDatabase(positionBeforeFen)
+        : null;
+
+    if (!ref.mounted) return;
+
+    // Fast path: move was in the analysis, show comment immediately from cached data
     if (cachedMoveData != null) {
       _logger.info('Using cached eval for move: ${move.uci}');
-
-      // Fetch master database in parallel (only in opening phase)
-      final masterEntry = plyBeforeMove < _kOpeningPlyThreshold
-          ? await _fetchMasterDatabase(positionBeforeFen)
-          : null;
-
-      if (!ref.mounted) return;
 
       final comment = _createPracticeComment(
         move: move,
@@ -279,22 +273,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         cachedBestMoves: cachedBestMoves,
         winningChancesBefore: cachedWinningChances,
         winningChancesAfter: cachedMoveData.winningChances,
-        evalAfterString: null, // We don't have an eval string from cache
+        evalAfterString: null, // Will be updated when eval completes
         masterEntry: masterEntry,
         playerSide: playerSide,
       );
 
       state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
-
-      if (state.game.playable && state.turn != state.game.playerSide) {
-        _playEngineMove();
-      }
-      return;
+    } else {
+      _logger.info('Move not in cache, evaluating: ${move.uci}');
     }
 
-    // Slow path: move was not in the precomputed analysis
-    _logger.info('Move not in cache, evaluating: ${move.uci}');
-
+    // Always run the eval to get the eval string (and for the slow path, the full comment)
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
       final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
@@ -317,13 +306,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: stepsAfter,
       );
 
-      // Start evaluation and opening database fetch in parallel
-      final evalFuture = evaluationService.findEval(workAfter, minDepth: _kMinEvalDepth);
-      final masterDbFuture = plyBeforeMove < _kOpeningPlyThreshold
-          ? _fetchMasterDatabase(positionBeforeFen)
-          : Future.value(null);
-
-      final (evalAfter, masterEntry) = await (evalFuture, masterDbFuture).wait;
+      final evalAfter = await evaluationService.findEval(workAfter, minDepth: _kMinEvalDepth);
 
       if (!ref.mounted) return;
 
@@ -331,12 +314,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _logger.info('Move eval: depth=${evalAfter.depth}, score=${evalAfter.evalString}');
       }
 
-      PracticeComment? comment;
-      if (evalAfter != null) {
-        // After the move, it's opponent's turn, so we need to flip the perspective
+      if (state.practiceComment != null) {
+        // Fast path follow-up: update existing comment with eval string
+        if (evalAfter != null) {
+          state = state.copyWith(
+            practiceComment: state.practiceComment!.copyWith(evalAfter: evalAfter.evalString),
+          );
+        }
+      } else if (evalAfter != null) {
+        // Slow path: create full comment with eval
         final winningChancesAfter = -evalAfter.winningChances(playerSide.opposite);
 
-        comment = _createPracticeComment(
+        final comment = _createPracticeComment(
           move: move,
           normalizedMoveUci: normalizedMoveUci,
           cachedBestMoves: cachedBestMoves,
@@ -346,9 +335,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           masterEntry: masterEntry,
           playerSide: playerSide,
         );
-      }
 
-      state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
+        state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
+      } else {
+        state = state.copyWith(isEvaluatingMove: false);
+      }
 
       if (state.game.playable && state.turn != state.game.playerSide) {
         _playEngineMove();
