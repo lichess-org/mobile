@@ -500,6 +500,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,
+        MoveVerdict.notBest => 'Not the best',
         MoveVerdict.inaccuracy => context.l10n.inaccuracy,
         MoveVerdict.mistake => context.l10n.mistake,
         MoveVerdict.blunder => context.l10n.blunder,

@@ -401,12 +401,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     final verdict = isBookMove
         ? MoveVerdict.goodMove
-        : MoveVerdict.fromShift(shift, hasBetterMove: !playedMoveIsBest);
+        : MoveVerdict.fromShift(
+            shift,
+            hasBetterMove: !playedMoveIsBest,
+            winningChancesBefore: winningChancesBefore,
+            winningChancesAfter: winningChancesAfter,
+          );
 
     // Get the position BEFORE the player's move to format the suggested moves as SAN
     final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
 
-    // Format best move as SAN (only if not a good move and there was a better move)
+    // Format best move as SAN (if not a good move and there was a better move)
     SanMove? bestMoveSan;
     if (!isGoodMove && !playedMoveIsBest && bestMove != null) {
       final parsed = Move.parse(bestMove.uci);

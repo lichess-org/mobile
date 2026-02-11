@@ -14,6 +14,9 @@ enum MoveVerdict {
   /// The move is good (winning chances shift < 0.025 or no better move exists).
   goodMove,
 
+  /// The move is not the best but keeps a winning position.
+  notBest,
+
   /// The move is an inaccuracy (0.025 <= shift < 0.06).
   inaccuracy,
 
@@ -23,14 +26,30 @@ enum MoveVerdict {
   /// The move is a blunder (shift >= 0.14).
   blunder;
 
+  /// The winning chances threshold above which a position is considered winning.
+  ///
+  /// 0.5 corresponds to roughly +200cp (+2.0 pawns advantage).
+  static const _winningThreshold = 0.5;
+
   /// Returns the verdict based on the winning chances shift.
   ///
   /// [shift] is the negative difference in winning chances between the played move
   /// and the best move evaluation. A larger shift indicates a greater deterioration.
   /// [hasBetterMove] indicates whether there was a better move available.
-  static MoveVerdict fromShift(double shift, {required bool hasBetterMove}) {
+  /// [winningChancesBefore] and [winningChancesAfter] are the player's POV winning
+  /// chances before and after the move, used to determine if the position stays winning.
+  static MoveVerdict fromShift(
+    double shift, {
+    required bool hasBetterMove,
+    required double winningChancesBefore,
+    required double winningChancesAfter,
+  }) {
     if (!hasBetterMove) return .goodMove;
     if (shift < 0.025) return .goodMove;
+    // If the position was winning and is still winning, the move is suboptimal but not a real mistake.
+    if (winningChancesBefore >= _winningThreshold && winningChancesAfter >= _winningThreshold) {
+      return .notBest;
+    }
     if (shift < 0.06) return .inaccuracy;
     if (shift < 0.14) return .mistake;
     return .blunder;
@@ -39,6 +58,7 @@ enum MoveVerdict {
   /// The icon for this verdict.
   IconData get icon => switch (this) {
     .goodMove => Icons.check_circle,
+    .notBest => Icons.info,
     .inaccuracy => Icons.help,
     .mistake => Icons.error,
     .blunder => Icons.cancel,
@@ -47,6 +67,7 @@ enum MoveVerdict {
   /// The color for this verdict.
   Color get color => switch (this) {
     .goodMove => Colors.lightGreen,
+    .notBest => Colors.amber,
     .inaccuracy => innacuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,
@@ -55,6 +76,7 @@ enum MoveVerdict {
   /// The symbol for this verdict.
   String get symbol => switch (this) {
     .goodMove => '!',
+    .notBest => '!?',
     .inaccuracy => '?!',
     .mistake => '?',
     .blunder => '??',

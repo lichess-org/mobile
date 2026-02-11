@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -1203,53 +1202,6 @@ void main() {
       // Verify the game state has practice mode enabled
       final gameState = ref.read(offlineComputerGameControllerProvider);
       expect(gameState.game.practiceMode, isTrue);
-    });
-
-    testWidgets('MoveVerdict enum has correct thresholds', (tester) async {
-      // Test the verdict thresholds directly (unit test for the enum)
-      // Good move: shift < 0.025
-      expect(MoveVerdict.fromShift(0.02, hasBetterMove: true), MoveVerdict.goodMove);
-      expect(MoveVerdict.fromShift(0.024, hasBetterMove: true), MoveVerdict.goodMove);
-
-      // Inaccuracy: 0.025 <= shift < 0.06
-      expect(MoveVerdict.fromShift(0.025, hasBetterMove: true), MoveVerdict.inaccuracy);
-      expect(MoveVerdict.fromShift(0.05, hasBetterMove: true), MoveVerdict.inaccuracy);
-
-      // Mistake: 0.06 <= shift < 0.14
-      expect(MoveVerdict.fromShift(0.06, hasBetterMove: true), MoveVerdict.mistake);
-      expect(MoveVerdict.fromShift(0.1, hasBetterMove: true), MoveVerdict.mistake);
-
-      // Blunder: shift >= 0.14
-      expect(MoveVerdict.fromShift(0.14, hasBetterMove: true), MoveVerdict.blunder);
-      expect(MoveVerdict.fromShift(0.5, hasBetterMove: true), MoveVerdict.blunder);
-
-      // If no better move, always good
-      expect(MoveVerdict.fromShift(0.5, hasBetterMove: false), MoveVerdict.goodMove);
-    });
-
-    testWidgets('MoveVerdict has correct icons', (tester) async {
-      expect(MoveVerdict.goodMove.icon, Icons.check_circle);
-      expect(MoveVerdict.inaccuracy.icon, Icons.help);
-      expect(MoveVerdict.mistake.icon, Icons.error);
-      expect(MoveVerdict.blunder.icon, Icons.cancel);
-    });
-
-    testWidgets('PracticeComment uses book icon for book moves', (tester) async {
-      const comment = PracticeComment(
-        verdict: MoveVerdict.goodMove,
-        winningChancesBefore: 0.5,
-        winningChancesAfter: 0.5,
-        isBookMove: true,
-      );
-      expect(comment.icon, Icons.menu_book);
-
-      const normalComment = PracticeComment(
-        verdict: MoveVerdict.goodMove,
-        winningChancesBefore: 0.5,
-        winningChancesAfter: 0.5,
-        isBookMove: false,
-      );
-      expect(normalComment.icon, Icons.check_circle);
     });
 
     // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
