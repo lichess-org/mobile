@@ -19,7 +19,6 @@ void showConfigureGameSheet(BuildContext context, {required bool isDismissible})
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
-    showDragHandle: true,
     isDismissible: isDismissible,
     constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
     builder: (BuildContext context) {
