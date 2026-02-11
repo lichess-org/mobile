@@ -16,17 +16,22 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OfflineComputerGameScreen extends ConsumerWidget {
@@ -49,7 +54,7 @@ class OfflineComputerGameScreen extends ConsumerWidget {
         : context.l10n.playAgainstComputer;
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: AppBarTitleText(title)),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -232,9 +237,12 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog() {
-    showAdaptiveDialog<void>(
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    showModalBottomSheet<void>(
       context: context,
-      builder: (context) => _NewGameDialog(initialFen: widget.initialFen),
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+      builder: (context) => _NewGameSheet(initialFen: widget.initialFen),
     );
   }
 
@@ -314,7 +322,6 @@ class _BottomBar extends ConsumerWidget {
             ref.read(_isBoardFlippedProvider.notifier).toggle();
           },
         ),
-        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
         if (gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
@@ -335,6 +342,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.resign),
             onPressed: () => _showResignDialog(context, ref),
           ),
+        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
       ],
     );
   }
@@ -415,13 +423,9 @@ class _Player extends ConsumerWidget {
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (gameState.isEngineThinking) ...[
-                      const SizedBox(width: 8),
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                      ),
+                    if (gameState.isEngineThinking) ...const [
+                      SizedBox(width: 8),
+                      Icon(Icons.hourglass_top, size: 16),
                     ],
                   ],
                 ),
@@ -467,13 +471,17 @@ class _PracticeCommentCard extends ConsumerWidget {
   final OfflineComputerGameState gameState;
 
   static const _cardHeight = 54.0;
-  static const _evalTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 14);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
+    final evalTextStyle = TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: textShade(context, 0.6),
+    );
 
     Widget content;
     Color? backgroundColor;
@@ -500,6 +508,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,
+        MoveVerdict.notBest => 'Not the best',
         MoveVerdict.inaccuracy => context.l10n.inaccuracy,
         MoveVerdict.mistake => context.l10n.mistake,
         MoveVerdict.blunder => context.l10n.blunder,
@@ -540,7 +549,7 @@ class _PracticeCommentCard extends ConsumerWidget {
                 ),
               ],
             ),
-            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 12, color: textShade(context, 0.6)),
           ),
         );
       }
@@ -563,7 +572,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             ),
           ),
           if (practiceComment.evalAfter != null)
-            Text(practiceComment.evalAfter!, style: _evalTextStyle),
+            Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
     } else if (gameState.finished) {
@@ -578,7 +587,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
           ),
           if (cachedEval != null)
-            Text(cachedEval, style: _evalTextStyle)
+            Text(cachedEval, style: evalTextStyle)
           else
             const SizedBox(
               width: 16,
@@ -604,16 +613,16 @@ class _PracticeCommentCard extends ConsumerWidget {
   }
 }
 
-class _NewGameDialog extends ConsumerStatefulWidget {
-  const _NewGameDialog({this.initialFen});
+class _NewGameSheet extends ConsumerStatefulWidget {
+  const _NewGameSheet({this.initialFen});
 
   final String? initialFen;
 
   @override
-  ConsumerState<_NewGameDialog> createState() => _NewGameDialogState();
+  ConsumerState<_NewGameSheet> createState() => _NewGameSheetState();
 }
 
-class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
+class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
   late bool _casual;
@@ -639,16 +648,13 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return AlertDialog.adaptive(
-      title: Text(context.l10n.gameSetup),
-      content: Material(
-        type: MaterialType.transparency,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (widget.initialFen != null) ...[
-              const SizedBox(height: 8),
-              SizedBox(
+    return BottomSheetScrollableContainer(
+      children: [
+        if (widget.initialFen != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Center(
+              child: SizedBox(
                 width: 150,
                 height: 150,
                 child: StaticChessboard(
@@ -663,49 +669,58 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                 ),
               ),
-              const SizedBox(height: 16),
-            ] else
-              const SizedBox(height: 16),
-            Text('${context.l10n.level}: ${_selectedLevel.level}'),
-            NonLinearSlider(
-              value: _selectedLevel.level,
-              values: StockfishLevel.values.map((l) => l.level).toList(),
-              onChange: (value) {
-                setState(() {
-                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                });
-              },
-              onChangeEnd: (value) {
-                setState(() {
-                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                });
-                ref
-                    .read(offlineComputerGamePreferencesProvider.notifier)
-                    .setStockfishLevel(_selectedLevel);
-              },
             ),
+          ),
+        ListSection(
+          materialFilledCard: true,
+          children: [
             ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(context.l10n.side),
-              trailing: TextButton(
-                onPressed: () {
-                  showChoicePicker(
-                    context,
-                    choices: SideChoice.values,
-                    selectedItem: _selectedSideChoice,
-                    labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                    onSelectedItemChanged: (SideChoice choice) {
-                      setState(() => _selectedSideChoice = choice);
-                      ref
-                          .read(offlineComputerGamePreferencesProvider.notifier)
-                          .setSideChoice(choice);
-                    },
-                  );
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.level}: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: '${_selectedLevel.level}',
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _selectedLevel.level,
+                values: StockfishLevel.values.map((l) => l.level).toList(),
+                onChange: (value) {
+                  setState(() {
+                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
+                  });
                 },
-                child: Text(_sideChoiceLabel(context, _selectedSideChoice)),
+                onChangeEnd: (value) {
+                  setState(() {
+                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
+                  });
+                  ref
+                      .read(offlineComputerGamePreferencesProvider.notifier)
+                      .setStockfishLevel(_selectedLevel);
+                },
               ),
             ),
-            SwitchListTile.adaptive(
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: SideChoice.values,
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
+            SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),
               value: _practiceMode,
@@ -713,9 +728,8 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                 setState(() => _practiceMode = value);
                 ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
               },
-              contentPadding: EdgeInsets.zero,
             ),
-            SwitchListTile.adaptive(
+            SwitchSettingTile(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),
               value: _practiceMode || _casual,
@@ -725,29 +739,27 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                       setState(() => _casual = value);
                       ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
                     },
-              contentPadding: EdgeInsets.zero,
             ),
           ],
         ),
-      ),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.cancel)),
-        TextButton(
-          onPressed: () {
-            final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
-            ref
-                .read(offlineComputerGameControllerProvider.notifier)
-                .startNewGame(
-                  stockfishLevel: _selectedLevel,
-                  playerSide: side,
-                  // In practice mode, casual is always true
-                  casual: _practiceMode || _casual,
-                  practiceMode: _practiceMode,
-                  initialFen: widget.initialFen,
-                );
-            Navigator.pop(context);
-          },
-          child: Text(context.l10n.play),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FilledButton(
+            onPressed: () {
+              final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
+              ref
+                  .read(offlineComputerGameControllerProvider.notifier)
+                  .startNewGame(
+                    stockfishLevel: _selectedLevel,
+                    playerSide: side,
+                    casual: _practiceMode || _casual,
+                    practiceMode: _practiceMode,
+                    initialFen: widget.initialFen,
+                  );
+              Navigator.pop(context);
+            },
+            child: Text(context.l10n.play, style: Styles.bold),
+          ),
         ),
       ],
     );

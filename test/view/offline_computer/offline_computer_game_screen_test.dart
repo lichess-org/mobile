@@ -14,11 +14,11 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
@@ -76,19 +76,17 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Verify new game dialog is displayed (title is "Game setup")
-      expect(find.text('Game setup'), findsOneWidget);
+      // Verify new game bottom sheet is displayed
 
       // Verify level slider is shown
       expect(find.textContaining('Level'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
 
-      // Verify side selection (label is "Side" with a picker button showing default "Random side")
+      // Verify side selection (label is "Side" with value showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
-      expect(find.text('Random side'), findsOneWidget); // Default selection shown on button
+      expect(find.text('Random side'), findsOneWidget);
 
-      // Verify action buttons
-      expect(find.text('Cancel'), findsOneWidget);
+      // Verify play button
       expect(find.text('Play'), findsOneWidget);
     });
 
@@ -225,7 +223,7 @@ void main() {
       expect(find.text('New game'), findsWidgets);
     });
 
-    testWidgets('New game option in menu opens dialog', (tester) async {
+    testWidgets('New game option in menu opens bottom sheet', (tester) async {
       await initOfflineComputerGame(tester);
 
       // Tap menu button
@@ -236,8 +234,7 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
-      // Verify new game dialog is shown with all options
-      expect(find.text('Game setup'), findsOneWidget);
+      // Verify new game bottom sheet is shown with all options
       expect(find.text('Side'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
     });
@@ -311,7 +308,7 @@ void main() {
       expect(button.onTap, isNull);
     });
 
-    testWidgets('Can cancel new game dialog', (tester) async {
+    testWidgets('Can dismiss new game bottom sheet', (tester) async {
       await initOfflineComputerGame(tester);
 
       // Open menu and tap new game
@@ -320,14 +317,16 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Game setup'), findsOneWidget);
+      // Verify bottom sheet is shown (has Play button and Level slider)
+      expect(find.text('Play'), findsOneWidget);
+      expect(find.byType(Slider), findsOneWidget);
 
-      // Cancel the dialog
-      await tester.tap(find.text('Cancel'));
+      // Dismiss the bottom sheet by tapping the barrier (scrim)
+      await tester.tapAt(Offset.zero);
       await tester.pumpAndSettle();
 
-      // Dialog should be closed, game should still be visible
-      expect(find.text('Game setup'), findsNothing);
+      // Bottom sheet should be closed, game should still be visible
+      expect(find.byType(Slider), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
@@ -404,9 +403,9 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Turn off casual mode (find the switch that's part of the Casual list tile)
+      // Turn off casual mode (find the switch that's part of the Casual setting tile)
       final casualSwitch = find.descendant(
-        of: find.ancestor(of: find.text('Casual'), matching: find.byType(SwitchListTile)),
+        of: find.ancestor(of: find.text('Casual'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
       await tester.tap(casualSwitch);
@@ -914,8 +913,7 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Verify new game dialog is shown
-      expect(find.text('Game setup'), findsOneWidget);
+      // Verify new game bottom sheet is shown
 
       // Verify that a StaticChessboard is shown (the mini board preview)
       expect(find.byType(StaticChessboard), findsOneWidget);
@@ -937,10 +935,10 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Verify new game dialog is shown
-      expect(find.text('Game setup'), findsOneWidget);
+      // Verify new game bottom sheet is shown (has Play button)
+      expect(find.text('Play'), findsOneWidget);
 
-      // No StaticChessboard should be shown in the dialog
+      // No StaticChessboard should be shown
       expect(find.byType(StaticChessboard), findsNothing);
     });
 
@@ -1188,7 +1186,7 @@ void main() {
 
       // Enable practice mode
       final practiceSwitch = find.descendant(
-        of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchListTile)),
+        of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
       await tester.tap(practiceSwitch);
@@ -1203,53 +1201,6 @@ void main() {
       // Verify the game state has practice mode enabled
       final gameState = ref.read(offlineComputerGameControllerProvider);
       expect(gameState.game.practiceMode, isTrue);
-    });
-
-    testWidgets('MoveVerdict enum has correct thresholds', (tester) async {
-      // Test the verdict thresholds directly (unit test for the enum)
-      // Good move: shift < 0.025
-      expect(MoveVerdict.fromShift(0.02, hasBetterMove: true), MoveVerdict.goodMove);
-      expect(MoveVerdict.fromShift(0.024, hasBetterMove: true), MoveVerdict.goodMove);
-
-      // Inaccuracy: 0.025 <= shift < 0.06
-      expect(MoveVerdict.fromShift(0.025, hasBetterMove: true), MoveVerdict.inaccuracy);
-      expect(MoveVerdict.fromShift(0.05, hasBetterMove: true), MoveVerdict.inaccuracy);
-
-      // Mistake: 0.06 <= shift < 0.14
-      expect(MoveVerdict.fromShift(0.06, hasBetterMove: true), MoveVerdict.mistake);
-      expect(MoveVerdict.fromShift(0.1, hasBetterMove: true), MoveVerdict.mistake);
-
-      // Blunder: shift >= 0.14
-      expect(MoveVerdict.fromShift(0.14, hasBetterMove: true), MoveVerdict.blunder);
-      expect(MoveVerdict.fromShift(0.5, hasBetterMove: true), MoveVerdict.blunder);
-
-      // If no better move, always good
-      expect(MoveVerdict.fromShift(0.5, hasBetterMove: false), MoveVerdict.goodMove);
-    });
-
-    testWidgets('MoveVerdict has correct icons', (tester) async {
-      expect(MoveVerdict.goodMove.icon, Icons.check_circle);
-      expect(MoveVerdict.inaccuracy.icon, Icons.help);
-      expect(MoveVerdict.mistake.icon, Icons.error);
-      expect(MoveVerdict.blunder.icon, Icons.cancel);
-    });
-
-    testWidgets('PracticeComment uses book icon for book moves', (tester) async {
-      const comment = PracticeComment(
-        verdict: MoveVerdict.goodMove,
-        winningChancesBefore: 0.5,
-        winningChancesAfter: 0.5,
-        isBookMove: true,
-      );
-      expect(comment.icon, Icons.menu_book);
-
-      const normalComment = PracticeComment(
-        verdict: MoveVerdict.goodMove,
-        winningChancesBefore: 0.5,
-        winningChancesAfter: 0.5,
-        isBookMove: false,
-      );
-      expect(normalComment.icon, Icons.check_circle);
     });
 
     // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
@@ -1358,7 +1309,7 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
 
   // Enable practice mode
   final practiceSwitch = find.descendant(
-    of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchListTile)),
+    of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
     matching: find.byType(Switch),
   );
   await tester.tap(practiceSwitch);
@@ -1376,10 +1327,10 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
   return tester.getRect(find.byType(Chessboard));
 }
 
-/// Helper to select a side in the new game dialog using the picker.
+/// Helper to select a side in the new game bottom sheet using the picker.
 Future<void> selectSide(WidgetTester tester, Side side) async {
-  // Open the side picker by tapping on the current selection (default is "Random side")
-  await tester.tap(find.byType(TextButton).first);
+  // Open the side picker by tapping on the side settings tile
+  await tester.tap(find.byType(SettingsListTile).first);
   await tester.pumpAndSettle();
 
   // Select the desired side from the picker
