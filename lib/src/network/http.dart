@@ -204,12 +204,15 @@ Future<bool> downloadFile(
   final sink = file.openWrite();
 
   int received = 0;
+  final contentLength = response.contentLength;
 
   try {
     await response.stream
         .map((s) {
           received += s.length;
-          onProgress?.call(received, response.contentLength!);
+          if (contentLength != null && contentLength > 0) {
+            onProgress?.call(received, contentLength);
+          }
           return s;
         })
         .pipe(sink);
