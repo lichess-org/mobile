@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -31,9 +32,8 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engineName: _, eval: localEval, state: engineState, currentWork: work) = ref.watch(
-      engineEvaluationProvider,
-    );
+    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
+        .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled
@@ -60,69 +60,89 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
       fontSize: 11,
     );
 
-    return SemanticIconButton(
-      semanticsLabel: context.l10n.toggleLocalEvaluation,
-      onPressed: widget.onTap,
-      onLongPress: () {
-        showPopover(
-          context: context,
-          bodyBuilder: (_) {
-            return _EnginePopup(goDeeper: widget.goDeeper);
-          },
-          direction: PopoverDirection.top,
-          width: 250,
-          backgroundColor:
-              DialogTheme.of(context).backgroundColor ??
-              ColorScheme.of(context).surfaceContainerHigh,
-          transitionDuration: Duration.zero,
-          popoverTransitionBuilder: (_, child) => child,
-        );
-      },
-      icon: Badge(
-        offset: const Offset(4, -7),
-        backgroundColor: ColorScheme.of(context).tertiaryContainer,
-        textColor: ColorScheme.of(context).onTertiaryContainer,
-        label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
-        textStyle: const TextStyle(fontSize: 8),
-        isLabelVisible: prefs.isEnabled && eval is CloudEval,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            TweenAnimationBuilder<Color?>(
-              curve: Curves.easeInOut,
-              tween: ColorTween(begin: fromChipColor, end: toChipColor),
-              duration: const Duration(milliseconds: 300),
-              builder: (BuildContext context, Color? color, Widget? _) {
-                return CustomPaint(
-                  size: const Size(microChipSize, microChipSize),
-                  painter: MicroChipPainter(color ?? toChipColor!),
-                );
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        SemanticIconButton(
+          semanticsLabel: context.l10n.toggleLocalEvaluation,
+          onPressed: widget.onTap,
+          onLongPress: () {
+            showPopover(
+              context: context,
+              bodyBuilder: (_) {
+                return _EnginePopup(goDeeper: widget.goDeeper);
               },
-            ),
-            SizedBox(
-              width: microChipSize,
-              height: microChipSize,
-              child: RepaintBoundary(
-                child: Center(
-                  child: prefs.isEnabled
-                      ? eval is CloudEval
-                            ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                            : switch (engineState) {
-                                EngineState.computing || EngineState.idle =>
-                                  eval?.depth != null
-                                      ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
-                                      : loadingIndicator,
-                                EngineState.loading => loadingIndicator,
-                                EngineState.initial => Text('-', style: iconTextStyle),
-                                EngineState.error => Text('!', style: iconTextStyle),
-                              }
-                      : const SizedBox.shrink(),
+              direction: PopoverDirection.top,
+              width: 250,
+              backgroundColor:
+                  DialogTheme.of(context).backgroundColor ??
+                  ColorScheme.of(context).surfaceContainerHigh,
+              transitionDuration: Duration.zero,
+              popoverTransitionBuilder: (_, child) => child,
+            );
+          },
+          icon: Badge(
+            offset: const Offset(4, -7),
+            backgroundColor: ColorScheme.of(context).tertiaryContainer,
+            textColor: ColorScheme.of(context).onTertiaryContainer,
+            label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
+            textStyle: const TextStyle(fontSize: 8),
+            isLabelVisible: prefs.isEnabled && eval is CloudEval,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                TweenAnimationBuilder<Color?>(
+                  curve: Curves.easeInOut,
+                  tween: ColorTween(begin: fromChipColor, end: toChipColor),
+                  duration: const Duration(milliseconds: 300),
+                  builder: (BuildContext context, Color? color, Widget? _) {
+                    return CustomPaint(
+                      size: const Size(microChipSize, microChipSize),
+                      painter: MicroChipPainter(color ?? toChipColor!),
+                    );
+                  },
                 ),
-              ),
+                SizedBox(
+                  width: microChipSize,
+                  height: microChipSize,
+                  child: RepaintBoundary(
+                    child: Center(
+                      child: prefs.isEnabled
+                          ? eval is CloudEval
+                                ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                                : switch (engineState) {
+                                    EngineState.computing || EngineState.idle =>
+                                      eval?.depth != null
+                                          ? Text(
+                                              '${math.min(99, eval!.depth)}',
+                                              style: iconTextStyle,
+                                            )
+                                          : loadingIndicator,
+                                    EngineState.loading => loadingIndicator,
+                                    EngineState.initial => Text('-', style: iconTextStyle),
+                                    EngineState.error => Text('!', style: iconTextStyle),
+                                  }
+                          : const SizedBox.shrink(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          bottom: -6,
+          child: Text(
+            engineShortLabel(engineName) ?? prefs.enginePref.shortLabel,
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w800,
+              color: textColor.withValues(alpha: 0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
@@ -420,7 +423,7 @@ class _Player extends ConsumerWidget {
                   children: [
                     Text(
                       context.l10n.aiNameLevelAiLevel(
-                        'Stockfish',
+                        'Stockfish ${engineVersion(ref.watch(engineEvaluationProvider).engineName) ?? ref.watch(engineEvaluationPreferencesProvider).enginePref.version}',
                         game.stockfishLevel.level.toString(),
                       ),
                       style: const TextStyle(fontWeight: FontWeight.w600),

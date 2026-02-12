@@ -68,6 +68,16 @@ enum ChessEnginePref {
     ChessEnginePref.sf16 => 'Stockfish 16',
     ChessEnginePref.sfLatest => 'Stockfish 18 (109MB)',
   };
+
+  String get shortLabel => switch (this) {
+    ChessEnginePref.sf16 => 'SF 16',
+    ChessEnginePref.sfLatest => 'SF 18',
+  };
+
+  String get version => switch (this) {
+    ChessEnginePref.sf16 => '16',
+    ChessEnginePref.sfLatest => '18',
+  };
 }
 
 @Freezed(fromJson: true, toJson: true)

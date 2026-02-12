@@ -24,3 +24,24 @@ const bigNetExpectedSize = 109 * 1024 * 1024;
 ///
 /// Used as fallback for progress reporting when the server omits Content-Length.
 const smallNetExpectedSize = 7 * 512 * 1024;
+
+final _sfVersionPattern = RegExp(r'Stockfish\s+(\d+)');
+
+/// Extracts a short label like "SF 16" from a UCI engine name like "Stockfish 16.1".
+///
+/// Returns null if the engine name is null or doesn't match the expected pattern.
+String? engineShortLabel(String? engineName) {
+  if (engineName == null) return null;
+  final match = _sfVersionPattern.firstMatch(engineName);
+  if (match == null) return null;
+  return 'SF ${match.group(1)}';
+}
+
+/// Extracts the major version like "16" from a UCI engine name like "Stockfish 16.1".
+///
+/// Returns null if the engine name is null or doesn't match the expected pattern.
+String? engineVersion(String? engineName) {
+  if (engineName == null) return null;
+  final match = _sfVersionPattern.firstMatch(engineName);
+  return match?.group(1);
+}
