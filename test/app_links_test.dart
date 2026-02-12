@@ -30,37 +30,37 @@ void main() {
     test('resolves /study/{id} to StudyScreen route', () {
       final uri = Uri.parse('https://lichess.org/study/p9uY0321');
       expect(
-          resolveAppLinkUri(mockContext, uri)!.first,
-          isA<MaterialScreenRoute>().having(
-            (r) => r.screen,
-            'screen',
-            isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
-          ),
-        );
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
+        ),
+      );
     });
 
     test('resolves /training/{id} to PuzzleScreen route', () {
       final uri = Uri.parse('https://lichess.org/training/61044');
       expect(
-          resolveAppLinkUri(mockContext, uri)!.first,
-          isA<MaterialScreenRoute>().having(
-            (r) => r.screen,
-            'screen',
-            isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
-          ),
-        );
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
+        ),
+      );
     });
 
     test('resolves /tournament/{id} to TournamentScreen route', () {
       final uri = Uri.parse('https://lichess.org/tournament/61044');
       expect(
-          resolveAppLinkUri(mockContext, uri)!.first,
-          isA<MaterialScreenRoute>().having(
-            (r) => r.screen,
-            'screen',
-            isA<TournamentScreen>().having((s) => s.id, 'tournament id', '61044'),
-          ),
-        );
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<TournamentScreen>().having((s) => s.id, 'tournament id', '61044'),
+        ),
+      );
     });
 
     test('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', () {
