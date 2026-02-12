@@ -25,6 +25,9 @@ const bigNetExpectedSize = 109 * 1024 * 1024;
 /// Used as fallback for progress reporting when the server omits Content-Length.
 const smallNetExpectedSize = 7 * 512 * 1024;
 
+/// Total expected NNUE download size formatted as a human-readable string (e.g. "113MB").
+const nnueTotalSizeMB = '${(bigNetExpectedSize + smallNetExpectedSize) ~/ (1024 * 1024)}MB';
+
 final _sfVersionPattern = RegExp(r'Stockfish\s+(\d+)');
 
 /// Extracts a short label like "SF 16" from a UCI engine name like "Stockfish 16.1".

@@ -142,7 +142,9 @@ class NnueService {
             barrierDismissible: true,
             builder: (context) {
               return AlertDialog.adaptive(
-                content: const Text('Are you sure you want to download the NNUE files (109MB)?'),
+                content: const Text(
+                  'Are you sure you want to download the NNUE files ($nnueTotalSizeMB)?',
+                ),
                 actions: [
                   PlatformDialogAction(
                     child: const Text('OK'),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -115,7 +116,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                               )
                             : const Icon(Icons.download),
                         title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                        subtitle: const Text('109MB'),
+                        subtitle: const Text(nnueTotalSizeMB),
                         enabled: !isLoading,
                         onTap: () async {
                           final downloaded = await fetchData();
@@ -133,7 +134,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   ListTile(
                     trailing: const Icon(Icons.check),
                     title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('109MB (tap to delete)'),
+                    subtitle: const Text('$nnueTotalSizeMB (tap to delete)'),
                     onTap: () async {
                       final isOk = await showAdaptiveDialog<bool>(
                         context: context,
