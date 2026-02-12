@@ -61,11 +61,7 @@ dependencies:
   material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2811.0
   meta: ^1.8.0
-  multistockfish:
-    git:
-      url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: main
-      path: pkgs/multistockfish
+  multistockfish: ^0.4.0
   package_info_plus: ^9.0.0
   path: ^1.8.2
   path_provider: ^2.1.5
