@@ -25,7 +25,10 @@ dependencies:
   dartchess: ^0.12.0
   deep_pick: ^1.0.0
   device_info_plus: ^12.1.0
-  dynamic_system_colors: ^1.8.0
+  dynamic_system_colors:
+    git:
+      url: https://github.com/veloce/flutter_dynamic_system_colors.git
+      ref: main
   fast_immutable_collections: ^11.0.0
   file_picker: ^10.3.8
   firebase_core: ^4.0.0
@@ -55,10 +58,9 @@ dependencies:
   l10n_esperanto: ^2.0.14
   linkify: ^5.0.0
   logging: ^1.1.0
-  material_color_utilities: ^0.11.1
+  material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2811.0
   meta: ^1.8.0
-  # multistockfish: ^0.3.0
   multistockfish:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
