@@ -28,8 +28,11 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:logging/logging.dart';
 
 part 'broadcast_analysis_controller.freezed.dart';
+
+final _logger = Logger('BroadcastAnalysisController');
 
 typedef BroadcastAnalysisControllerParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
@@ -252,7 +255,15 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final uciMove = pick(event.data, 'n', 'uci').asUciMoveOrThrow();
     final clock = pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
-    final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
+    final (UciPath? newPath, bool isNewNode) result;
+    try {
+      result = _root.addMoveAt(path, uciMove, clock: clock);
+    } on PlayException catch (e) {
+      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+      _reloadPgn();
+      return;
+    }
+    final (newPath, isNewNode) = result;
 
     if (newPath != null && isNewNode == false) {
       _root.updateAt(newPath, (node) {
