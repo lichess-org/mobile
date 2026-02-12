@@ -649,6 +649,10 @@ class GameController extends AsyncNotifier<GameState> {
 
           newState = newState.copyWith(
             game: newState.game.copyWith(steps: newState.game.steps.add(newStep)),
+            // Clear any pending move confirmation or promotion since the position
+            // has changed and these moves are no longer valid.
+            moveToConfirm: null,
+            promotionMove: null,
           );
 
           if (!curState.isReplaying) {
