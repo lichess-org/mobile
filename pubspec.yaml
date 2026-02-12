@@ -64,7 +64,7 @@ dependencies:
   multistockfish:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: defer_start
+      ref: main
       path: pkgs/multistockfish
   package_info_plus: ^9.0.0
   path: ^1.8.2

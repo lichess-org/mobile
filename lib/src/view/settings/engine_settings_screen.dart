@@ -120,7 +120,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                               )
                             : const Icon(Icons.download),
                         title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                        subtitle: const Text('79MB'),
+                        subtitle: const Text('109MB'),
                         enabled: !isLoading,
                         onTap: () async {
                           final downloaded = await fetchData();
@@ -138,7 +138,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   ListTile(
                     trailing: const Icon(Icons.check),
                     title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('79MB (tap to delete)'),
+                    subtitle: const Text('109MB (tap to delete)'),
                     onTap: () async {
                       final isOk = await showAdaptiveDialog<bool>(
                         context: context,

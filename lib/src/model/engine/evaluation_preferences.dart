@@ -66,7 +66,7 @@ enum ChessEnginePref {
 
   String get label => switch (this) {
     ChessEnginePref.sf16 => 'Stockfish 16',
-    ChessEnginePref.sfLatest => 'Stockfish 17.1 (79MB)',
+    ChessEnginePref.sfLatest => 'Stockfish 18 (109MB)',
   };
 }
 

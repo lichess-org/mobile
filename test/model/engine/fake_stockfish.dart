@@ -63,7 +63,7 @@ class FakeStockfish implements Stockfish {
     switch (parts.first) {
       case 'uci':
         final engineName = (_flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 17'
+            ? 'Stockfish 18'
             : 'Stockfish 16');
         _emit('id name $engineName\n');
         _emit('uciok\n');
@@ -200,7 +200,7 @@ class DelayedFakeStockfish implements Stockfish {
       case 'uci':
         final engineName =
             _customEngineName ??
-            (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 17' : 'Stockfish 16');
+            (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
         _emit('id name $engineName\n');
         _emit('uciok\n');
       case 'isready':
@@ -587,7 +587,7 @@ class LegalMoveFakeStockfish implements Stockfish {
     switch (parts.first) {
       case 'uci':
         final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 17'
+            ? 'Stockfish 18'
             : 'Stockfish 16';
         _emit('id name $engineName\n');
         _emit('uciok\n');
@@ -705,7 +705,7 @@ class MultiPvFakeStockfish implements Stockfish {
     switch (parts.first) {
       case 'uci':
         final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 17'
+            ? 'Stockfish 18'
             : 'Stockfish 16';
         _emit('id name $engineName\n');
         _emit('uciok\n');
@@ -893,7 +893,7 @@ class PracticeModeStockfish implements Stockfish {
     switch (parts.first) {
       case 'uci':
         final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 17'
+            ? 'Stockfish 18'
             : 'Stockfish 16';
         _emit('id name $engineName\n');
         _emit('uciok\n');

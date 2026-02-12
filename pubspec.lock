@@ -1043,8 +1043,8 @@ packages:
     dependency: "direct main"
     description:
       path: "pkgs/multistockfish"
-      ref: defer_start
-      resolved-ref: d081525e677d16d6a7dd5cd5495f38ff1eca1fe2
+      ref: main
+      resolved-ref: ca9393f4fcad3172df41e5186094d405d56cf29d
       url: "https://github.com/lichess-org/dart-multistockfish.git"
     source: git
     version: "0.4.0"
@@ -1052,10 +1052,10 @@ packages:
     dependency: transitive
     description:
       name: multistockfish_chess
-      sha256: "963ab3e9d0d85ef5e5e10cef18152aca2b72a4c809c557d81191f9956ab4765c"
+      sha256: d0487def56c742687e21ee6c2730bff069fc216cafdf1c6b5849cff55a939344
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.3.0"
   multistockfish_sf16:
     dependency: transitive
     description:
