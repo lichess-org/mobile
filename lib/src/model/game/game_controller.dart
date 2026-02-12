@@ -184,7 +184,20 @@ class GameController extends AsyncNotifier<GameState> {
       return;
     }
 
-    final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
+    final (Position, String) sanResult;
+    try {
+      sanResult = curState.game.lastPosition.makeSan(move);
+    } on PlayException catch (e) {
+      LichessBinding.instance.firebaseCrashlytics.recordError(
+        'Invalid user move: $e',
+        null,
+        reason: 'PlayException thrown when making SAN of user move',
+        information: ['move: $move', 'position: ${curState.game.lastPosition}'],
+      );
+      _logger.warning('Invalid user move: $e');
+      return;
+    }
+    final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       position: newPos,
@@ -254,7 +267,21 @@ class GameController extends AsyncNotifier<GameState> {
       return;
     }
 
-    final (newPos, newSan) = curState.game.lastPosition.makeSan(moveToConfirm);
+    final (Position, String) sanResult;
+    try {
+      sanResult = curState.game.lastPosition.makeSan(moveToConfirm);
+    } on PlayException catch (e) {
+      LichessBinding.instance.firebaseCrashlytics.recordError(
+        'Invalid confirm move: $e',
+        null,
+        reason: 'PlayException thrown when making SAN of confirm move',
+        information: ['move: $moveToConfirm', 'position: ${curState.game.lastPosition}'],
+      );
+      _logger.warning('Invalid confirm move: $e');
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: null));
+      return;
+    }
+    final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, moveToConfirm);
     final newStep = GameStep(
       position: newPos,
