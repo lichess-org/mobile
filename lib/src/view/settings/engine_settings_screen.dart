@@ -43,26 +43,22 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     });
 
     _downloadProgress = ref.read(nnueServiceProvider).nnueDownloadProgress;
-    _downloadProgress.addListener(_onDownloadProgressChanged);
 
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _downloadProgress.removeListener(_onDownloadProgressChanged);
-    super.dispose();
-  }
-
-  Future<void> _onDownloadProgressChanged() async {
-    if (_downloadProgress.value == 1.0 && _downloadNNUEFilesFuture != null) {
-      final downloaded = await _downloadNNUEFilesFuture!;
+  void _startDownload() {
+    final future = ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false);
+    future.then((downloaded) {
       if (mounted && downloaded) {
         setState(() {
           _hasVerifiedNNUEFiles = true;
         });
       }
-    }
+    });
+    setState(() {
+      _downloadNNUEFilesFuture = future;
+    });
   }
 
   @override
@@ -93,12 +89,8 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         ref
                             .read(engineEvaluationPreferencesProvider.notifier)
                             .setEvaluationFunction(value ?? ChessEnginePref.sf16);
-                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == true) {
-                          setState(() {
-                            _downloadNNUEFilesFuture = ref
-                                .read(nnueServiceProvider)
-                                .downloadNNUEFiles(inBackground: false);
-                          });
+                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false) {
+                          _startDownload();
                         }
                       },
                     );
@@ -115,7 +107,10 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                             ? AnimatedBuilder(
                                 animation: _downloadProgress,
                                 builder: (_, _) {
-                                  return CircularProgressIndicator(value: _downloadProgress.value);
+                                  final progress = _downloadProgress.value;
+                                  return CircularProgressIndicator(
+                                    value: progress > 0.0 ? progress : null,
+                                  );
                                 },
                               )
                             : const Icon(Icons.download),

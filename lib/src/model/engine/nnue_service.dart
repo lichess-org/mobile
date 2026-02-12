@@ -122,6 +122,7 @@ class NnueService {
           client,
           [bigNetUrl, smallNetUrl],
           [bigNet, smallNet],
+          expectedLengths: [bigNetExpectedSize, smallNetExpectedSize],
           onProgress: (received, length) {
             _nnueDownloadProgress.value = received / length;
           },
