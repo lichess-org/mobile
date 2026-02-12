@@ -696,7 +696,7 @@ void main() {
       expect(stream2, isNotNull);
       await stream2!.first;
 
-      expect(service.evaluationState.value.engineName, 'Stockfish 17');
+      expect(service.evaluationState.value.engineName, 'Stockfish 18');
     });
   });
 
@@ -1015,7 +1015,7 @@ void main() {
         // Notifier should have the updated engine name
         expect(
           latestState?.engineName,
-          'Stockfish 17',
+          'Stockfish 18',
           reason: 'EngineEvaluationNotifier should update engineName when engine restarts',
         );
       });

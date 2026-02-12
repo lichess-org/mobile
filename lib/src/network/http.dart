@@ -196,6 +196,7 @@ Future<bool> downloadFile(
   Client client,
   Uri url,
   File file, {
+  int? expectedLength,
   void Function(int received, int length)? onProgress,
 }) async {
   _logger.fine('Downloading $url to ${file.path}');
@@ -204,12 +205,15 @@ Future<bool> downloadFile(
   final sink = file.openWrite();
 
   int received = 0;
+  final totalLength = response.contentLength ?? expectedLength;
 
   try {
     await response.stream
         .map((s) {
           received += s.length;
-          onProgress?.call(received, response.contentLength!);
+          if (totalLength != null && totalLength > 0) {
+            onProgress?.call(received, totalLength);
+          }
           return s;
         })
         .pipe(sink);
@@ -235,10 +239,14 @@ Future<bool> downloadFiles(
   Client client,
   List<Uri> urls,
   List<File> files, {
+  List<int>? expectedLengths,
   void Function(int received, int length)? onProgress,
 }) async {
   if (urls.length != files.length) {
     throw ArgumentError('Urls and files must have the same length.');
+  }
+  if (expectedLengths != null && expectedLengths.length != urls.length) {
+    throw ArgumentError('expectedLengths must have the same length as urls.');
   }
 
   // aggregrate progress of all files
@@ -254,6 +262,7 @@ Future<bool> downloadFiles(
         client,
         url,
         file,
+        expectedLength: expectedLengths?[index],
         onProgress: (received, length) {
           fileReceived[url] = received;
           fileLengths[url] = length;
