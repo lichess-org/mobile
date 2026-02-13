@@ -67,7 +67,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Νέα παρτίδα';
 
   @override
   String get mobileNoSearchResults => 'Δε βρέθηκαν αποτελέσματα';

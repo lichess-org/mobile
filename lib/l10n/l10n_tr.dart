@@ -67,7 +67,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Bu sayfayı görüntülemek için giriş yapmalısınız.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Yeni oyun';
 
   @override
   String get mobileNoSearchResults => 'Sonuç bulunamadı';

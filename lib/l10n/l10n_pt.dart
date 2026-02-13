@@ -6549,6 +6549,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileMustBeLoggedIn => 'Você precisa estar logado para ver essa pagina.';
 
   @override
+  String get mobileNewGame => 'Nova partida';
+
+  @override
   String get mobileNoSearchResults => 'Sem Resultados';
 
   @override

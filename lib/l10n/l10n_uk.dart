@@ -67,7 +67,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Ви повинні ввійти, аби переглянути цю сторінку.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Нова гра';
 
   @override
   String get mobileNoSearchResults => 'Немає результатів';

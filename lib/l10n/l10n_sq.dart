@@ -67,7 +67,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Lojë e re';
 
   @override
   String get mobileNoSearchResults => 'Nuk ka rezultate';

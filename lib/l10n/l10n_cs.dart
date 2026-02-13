@@ -67,7 +67,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Nová hra';
 
   @override
   String get mobileNoSearchResults => 'Žádné výsledky';
@@ -245,7 +245,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Vítejte v aplikaci Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Zobrazit hru';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -266,7 +266,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Jump to my page';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompaktní';
 
   @override
   String get mobileDisplayModeDetailed => 'Detailed';
@@ -278,7 +278,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Předchozí';
 
   @override
   String get activityActivity => 'Aktivita';

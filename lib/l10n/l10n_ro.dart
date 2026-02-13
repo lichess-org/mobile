@@ -67,7 +67,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Joc nou';
 
   @override
   String get mobileNoSearchResults => 'Niciun rezultat';
@@ -272,10 +272,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detaliat';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Exploratorul nu se poate deschide deconectat.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Provocare creată: Vei fi notificat când începe jocul.\\nO poți accesa din pagina principală.';
 
   @override
   String get mobilePreviousPage => 'Înapoi';

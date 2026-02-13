@@ -67,7 +67,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Partida berria';
 
   @override
   String get mobileNoSearchResults => 'Emaitzarik ez';
