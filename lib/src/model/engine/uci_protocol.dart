@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 
@@ -239,7 +240,7 @@ class UCIProtocol {
       _currentEval = null;
       _expectedPvs = 1;
 
-      setOption('Threads', _work!.threads.toString());
+      setOption('Threads', math.min(_work!.threads, maxEngineCores).toString());
       setOption('Hash', (_work!.hashSize ?? 16).toString());
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:flutter/foundation.dart';
@@ -23,8 +21,6 @@ part 'evaluation_service.freezed.dart';
 final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
-
-final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 
 /// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
