@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en directo</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Debes iniciar sesión para ver esta páxina.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Nova partida</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sen resultados</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ten en conta que neste intre non están dispoñibles todas as funcións da aplicación vella ou do sitio web; porén, seguimos a engadilas día a día.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Non estás a seguir a ningún usuario.</string>

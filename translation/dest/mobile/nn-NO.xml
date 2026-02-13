@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startside</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Direkte strøymarar</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du må vera innlogga for å sjå denne sida.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Nytt parti</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ingen resultat</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Vær merksam på at ikkje alle funksjonar frå den gamle appen eller nettstaden er tilgjengelege for øyeblikket, men vi legg stadig til funksjonar.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du følgjer ingen brukarar.</string>

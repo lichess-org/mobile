@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">首页</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">主播</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">您需要登录才能浏览此页面</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">新的对局</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">无结果</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">请注意，旧版应用或网站中的部分功能目前暂未提供，但我们正在持续添加新功能。</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">您尚未关注任何用户</string>
