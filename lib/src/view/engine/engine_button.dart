@@ -136,9 +136,9 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
           child: Text(
             engineShortLabel(engineName) ?? prefs.enginePref.shortLabel,
             style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-              color: textColor.withValues(alpha: 0.7),
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: textColor.withValues(alpha: 0.8),
             ),
           ),
         ),
