@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Início</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers do Lichess</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Você precisa estar logado para ver essa pagina.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Nova partida</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sem Resultados</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Nem todos os recursos do aplicativo antigo ou do site estão disponíveis no momento, mas estamos sempre adicionando recursos.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Você não está seguindo nenhum usuário.</string>

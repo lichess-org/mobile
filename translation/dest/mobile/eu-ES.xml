@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hasiera</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Zuzeneko esatariak</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Sartu egin behar zara orri hau ikusteko.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Partida berria</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Emaitzarik ez</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Kontuan izan aplikazio zaharraren eta webgune berriaren ezaugarri guztiak ez daudela prest, baina poliki-poliki gehituko ditugu.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ez zaude erabiltzailerik jarraitzen.</string>

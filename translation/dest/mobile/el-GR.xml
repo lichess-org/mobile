@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Αρχική</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers ζωντανά αυτή τη στιγμή</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Νέα παρτίδα</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Δε βρέθηκαν αποτελέσματα</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Προς το παρόν δεν είναι διαθέσιμα όλα τα χαρακτηριστικά της ιστοσελίδας ή της παλιάς εφαρμογής, ωστόσο προσθέτουμε συνεχώς νέες λειτουργίες.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Δεν ακολουθείτε κανέναν χρήστη.</string>
