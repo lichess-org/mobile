@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
@@ -18,6 +19,8 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:share_plus/share_plus.dart';
 
 class OpeningExplorerScreen extends ConsumerWidget {
   const OpeningExplorerScreen({required this.options});
@@ -31,6 +34,10 @@ class OpeningExplorerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
+    final boardState = switch (ref.watch(ctrlProvider)) {
+      AsyncData(value: final state) => state.currentPosition,
+      _ => null,
+    };
 
     final body = switch (ref.watch(ctrlProvider)) {
       AsyncData(value: final state) => _Body(options: options, state: state),
@@ -43,6 +50,14 @@ class OpeningExplorerScreen extends ConsumerWidget {
       body: body,
       appBar: AppBar(
         title: Text(context.l10n.openingExplorer),
+        actions: [
+          if (boardState != null)
+            SemanticIconButton(
+              semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+              onPressed: () => launchShareDialog(context, ShareParams(text: boardState.fen)),
+              icon: const PlatformShareIcon(),
+            ),
+        ],
         bottom: _MoveList(options: options),
       ),
     );
