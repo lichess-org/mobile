@@ -746,6 +746,8 @@ class GameController extends AsyncNotifier<GameState> {
             final postMovePosition = state.value?.game.lastPosition;
             if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
               userMove(postMovePremove, isPremove: true);
+            } else if (postMovePremove != null) {
+              state = AsyncValue.data(state.requireValue.copyWith(premove: null));
             }
           });
         }
