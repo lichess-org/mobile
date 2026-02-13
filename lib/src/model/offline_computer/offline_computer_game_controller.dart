@@ -469,7 +469,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: steps,
-        elo: state.game.stockfishLevel.elo,
+        level: state.game.stockfishLevel,
       );
 
       final uciMove = await evaluationService.findMove(work);

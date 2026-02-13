@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 
 part 'work.freezed.dart';
 
@@ -94,93 +95,24 @@ sealed class MoveWork extends Work with _$MoveWork {
     required Position initialPosition,
     required IList<Step> steps,
 
-    /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
-    required int elo,
+    /// The Stockfish strength level.
+    required StockfishLevel level,
   }) = _MoveWork;
 
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// Number of threads to use for move computation.
-  ///
-  /// Lower levels use 1 thread, higher levels use 2 threads for better move quality.
-  ///
-  /// | Level | Elo  | Threads |
-  /// |-------|------|---------|
-  /// | 1-5   | ≤1750| 1       |
-  /// | 6-12  | >1750| 2       |
-  @override
-  int get threads => elo > 1750 ? 2 : 1;
+  /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
+  int get elo => level.elo;
 
-  /// Number of principal variations to compute for move selection.
-  ///
-  /// Stockfish's strength limiting works by applying a randomized bias to scores
-  /// of slightly worse moves among at least 4 candidates. MultiPV increases
-  /// this candidate pool, giving more suboptimal moves to choose from at lower Elos.
-  ///
-  /// | Level | Elo  | MultiPV |
-  /// |-------|------|---------|
-  /// | 1     | 1320 | 10      |
-  /// | 2     | 1450 | 8       |
-  /// | 3     | 1550 | 7       |
-  /// | 4     | 1650 | 6       |
-  /// | 5     | 1750 | 5       |
-  /// | 6     | 1850 | 4       |
-  /// | 7     | 1950 | 4       |
-  /// | 8     | 2100 | 4       |
-  /// | 9     | 2300 | 4       |
-  /// | 10    | 2550 | 4       |
-  /// | 11    | 2850 | 3       |
-  /// | 12    | 3190 | 3       |
   @override
-  int get multiPv {
-    if (elo <= 1650) {
-      // Levels 1-4: fast drop from 10 to 6
-      return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
-    } else if (elo >= 2850) {
-      // Level 11-12: 3
-      return 3;
-    } else if (elo >= 1850) {
-      // Levels 6-10: 4
-      return 4;
-    } else {
-      // Level 5: 5
-      return 5;
-    }
-  }
+  int get threads => level.threads;
 
-  /// Search time based on Elo rating.
-  ///
-  /// Lower Elos get shorter search times since the strength limiting mechanism
-  /// (randomized bias on move scores) selects the move early in the search
-  /// at depth = 1 + Skill Level.
-  ///
-  /// | Level | Elo  | Search Time |
-  /// |-------|------|-------------|
-  /// | 1     | 1320 | 150ms       |
-  /// | 2     | 1450 | 300ms       |
-  /// | 3     | 1550 | 410ms       |
-  /// | 4     | 1650 | 525ms       |
-  /// | 5     | 1750 | 640ms       |
-  /// | 6     | 1850 | 800ms       |
-  /// | 7     | 1950 | 1115ms      |
-  /// | 8     | 2100 | 1585ms      |
-  /// | 9     | 2300 | 2210ms      |
-  /// | 10    | 2550 | 2995ms      |
-  /// | 11    | 2850 | 3935ms      |
-  /// | 12    | 3190 | 5000ms      |
   @override
-  Duration get searchTime {
-    final int ms;
-    if (elo <= 1750) {
-      // Levels 1-5: linear from 150ms to 640ms
-      ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
-    } else {
-      // Levels 6-12: linear from 800ms to 5000ms
-      ms = (800 + ((elo - 1850) / (3190 - 1850) * 4200)).toInt();
-    }
-    return Duration(milliseconds: ms.clamp(150, 5000));
-  }
+  int get multiPv => level.multiPv;
+
+  @override
+  Duration get searchTime => level.searchTime;
 }
 
 @freezed

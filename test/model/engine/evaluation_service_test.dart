@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -38,7 +39,7 @@ EvalWork makeWork({
 MoveWork makeMoveWork({
   StringId? id,
   ChessEnginePref enginePref = ChessEnginePref.sf16,
-  int elo = 1500,
+  StockfishLevel level = StockfishLevel.level3,
   Position? initialPosition,
   Variant variant = Variant.standard,
 }) {
@@ -48,7 +49,7 @@ MoveWork makeMoveWork({
     variant: variant,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
-    elo: elo,
+    level: level,
   );
 }
 
@@ -1109,11 +1110,11 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = makeMoveWork(elo: 1800);
+      final work = makeMoveWork(level: .level6);
       await service.findMove(work);
 
       expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
     });
 
     test('findMove uses multiPv scaled by elo', () async {
@@ -1123,30 +1124,29 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = makeMoveWork(elo: 1500);
+      final work = makeMoveWork(level: .level2);
       await service.findMove(work);
 
       expect(delayedStockfish.options['MultiPV'], equals('8'));
     });
 
-    test('MoveWork.searchTime scales with elo', () {
-      final level1 = makeMoveWork(elo: 1320);
-      final level5 = makeMoveWork(elo: 1750);
-      final level8 = makeMoveWork(elo: 2100);
-      final level12 = makeMoveWork(elo: 3190);
+    test('MoveWork delegates searchTime to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level5 = makeMoveWork(level: .level5);
+      final level8 = makeMoveWork(level: .level8);
+      final level12 = makeMoveWork(level: .level12);
 
-      // See MoveWork.searchTime documentation for full table
       expect(level1.searchTime.inMilliseconds, equals(150));
       expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(1583));
+      expect(level8.searchTime.inMilliseconds, equals(1585));
       expect(level12.searchTime.inMilliseconds, equals(5000));
     });
 
-    test('MoveWork.threads scales with elo', () {
-      final level1 = makeMoveWork(elo: 1320);
-      final level5 = makeMoveWork(elo: 1750);
-      final level6 = makeMoveWork(elo: 1850);
-      final level12 = makeMoveWork(elo: 3190);
+    test('MoveWork delegates threads to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level5 = makeMoveWork(level: .level5);
+      final level6 = makeMoveWork(level: .level6);
+      final level12 = makeMoveWork(level: .level12);
 
       // Levels 1-5 use 1 thread, levels 6-12 use 2 threads
       expect(level1.threads, equals(1));
@@ -1155,15 +1155,14 @@ void main() {
       expect(level12.threads, equals(2));
     });
 
-    test('MoveWork.multiPv scales inversely with elo', () {
-      final lowElo = makeMoveWork(elo: 1320);
-      final midElo = makeMoveWork(elo: 1850);
-      final highElo = makeMoveWork(elo: 2500);
+    test('MoveWork delegates multiPv to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level6 = makeMoveWork(level: .level6);
+      final level10 = makeMoveWork(level: .level10);
 
-      // See MoveWork.multiPv documentation for full table
-      expect(lowElo.multiPv, equals(10));
-      expect(midElo.multiPv, equals(4));
-      expect(highElo.multiPv, equals(4));
+      expect(level1.multiPv, equals(10));
+      expect(level6.multiPv, equals(4));
+      expect(level10.multiPv, equals(4));
     });
 
     test('findMove transitions state from initial to loading to idle', () async {
@@ -1193,11 +1192,11 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       // First do a findMove
-      final moveWork = makeMoveWork(elo: 1800);
+      final moveWork = makeMoveWork(level: .level6);
       await service.findMove(moveWork);
 
       expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
 
       // Now do an evaluate
       final evalWork = makeWork();
@@ -1302,8 +1301,8 @@ void main() {
         final container = await makeContainer();
         final service = container.read(evaluationServiceProvider);
 
-        final work1 = makeMoveWork(elo: 1500);
-        final work2 = makeMoveWork(elo: 1800);
+        final work1 = makeMoveWork(level: .level3);
+        final work2 = makeMoveWork(level: .level6);
 
         // Start first findMove
         final future1 = service.findMove(work1);
