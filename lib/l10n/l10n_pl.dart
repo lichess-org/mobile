@@ -67,7 +67,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Musisz być zalogowany, aby wyświetlić tę stronę.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Nowa partia';
 
   @override
   String get mobileNoSearchResults => 'Brak wyników';
