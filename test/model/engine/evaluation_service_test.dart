@@ -1136,10 +1136,10 @@ void main() {
       final level8 = makeMoveWork(level: .level8);
       final level12 = makeMoveWork(level: .level12);
 
-      expect(level1.searchTime.inMilliseconds, equals(150));
-      expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(1585));
-      expect(level12.searchTime.inMilliseconds, equals(5000));
+      expect(level1.searchTime.inMilliseconds, equals(500));
+      expect(level5.searchTime.inMilliseconds, equals(920));
+      expect(level8.searchTime.inMilliseconds, equals(1380));
+      expect(level12.searchTime.inMilliseconds, equals(2000));
     });
 
     test('MoveWork delegates threads to StockfishLevel', () {
