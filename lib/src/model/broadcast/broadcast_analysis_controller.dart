@@ -139,11 +139,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
-      evaluationContext: EvaluationContext(
-        id: params.gameId,
-        variant: Variant.standard,
-        initialPosition: _root.position,
-      ),
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
       analysisSummary: pgnWithAnalysisSummary.analysisSummary,
@@ -596,8 +591,6 @@ sealed class BroadcastAnalysisState
     /// Whether the user has enabled server analysis.
     required bool isServerAnalysisEnabled,
 
-    required EvaluationContext evaluationContext,
-
     /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
 
@@ -637,11 +630,18 @@ sealed class BroadcastAnalysisState
   @override
   bool get alwaysRequestCloudEval => true;
 
-  /// We currently assume that all broadcast games are standard but this is incorrect as there are
-  /// Chess960 tournaments broadcasted on Lichess.
-  /// TODO: use the correct variant for broadcast game.
+  /// We currently assume that all broadcast games are either standard or chess960
+  ///
+  /// If the starting FEN is different from the standard one we assume it's a chess960 game, otherwise it's a standard game.
+  // TODO: get the variant from the server when it's supported
   @override
-  Variant get variant => Variant.standard;
+  Variant get variant => pgnHeaders['FEN'] != null && pgnHeaders['FEN'] != kInitialFEN
+      ? Variant.chess960
+      : Variant.standard;
+
+  @override
+  EvaluationContext get evaluationContext =>
+      EvaluationContext(id: id, variant: variant, initialPosition: root.position);
 
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => root.mainline.any((node) => node.serverEval != null);

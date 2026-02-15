@@ -186,22 +186,25 @@ sealed class PvData with _$PvData {
     final List<String> res = [];
     for (final uciMove in moves.sublist(0, math.min(12, moves.length))) {
       final move = Move.parse(uciMove);
+      final movesString = moves.join(' ');
       if (move == null) {
         LichessBinding.instance.firebaseCrashlytics.recordError(
-          'Invalid UCI move: "$uciMove" in PV: $moves for position: ${pos.fen}',
-          StackTrace.current,
+          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen}',
+          null,
           reason: 'Failed to parse UCI move from PV',
         );
-        _logger.warning('Invalid UCI move: "$uciMove" in PV: $moves for position: ${pos.fen}');
+        _logger.warning(
+          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen}',
+        );
         break;
       }
       if (!pos.isLegal(move)) {
         LichessBinding.instance.firebaseCrashlytics.recordError(
-          'Illegal move: $uciMove in PV: $moves for position: ${pos.fen}',
-          StackTrace.current,
+          'Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}',
+          null,
           reason: 'Move from PV is not legal in the given position',
         );
-        _logger.warning('Illegal move: $uciMove in PV: $moves for position: ${pos.fen}');
+        _logger.warning('Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}');
         break;
       }
       final (newPos, san) = pos.makeSanUnchecked(move);
