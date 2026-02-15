@@ -664,7 +664,7 @@
   <string name="onlyExistingConversations">Existitzen diren elkarrizketak bakarrik</string>
   <string name="onlyFriends">Lagunak soilik</string>
   <string name="menu">Menua</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Endrokea</string>
+  <string name="castling">Endrokea</string>
   <string name="whiteCastlingKingside">Zuriak O-O</string>
   <string name="blackCastlingKingside">Beltzak O-O</string>
   <plurals name="nbForumPosts">
@@ -722,7 +722,6 @@
   <string name="keyShowOrHideComments">Iruzkinak erakutsi/ezkutatu</string>
   <string name="keyEnterOrExitVariation">Aldaerara sartu/atera</string>
   <string name="keyRequestComputerAnalysis">Ordenagailuaren analisia eskatu. Ikasi zure akatsak aztertuz</string>
-  <string name="keyNextLearnFromYourMistakes">Hurrengoa (ikasi zure akatsak aztertuz)</string>
   <string name="keyNextBlunder">Hurrengo hanka-sartzea</string>
   <string name="keyNextMistake">Hurrengo akatsa</string>
   <string name="keyNextInaccuracy">Hurrengo akats arina</string>
@@ -1027,5 +1026,5 @@ Garapen eta mantentze-kostu guztiak erabiltzaileen dohaintzekin ordaintzen dira.
   <string name="search">Bilatu</string>
   <string name="clearSearch">Garbitu bilaketa</string>
   <string name="tags">Etiketak</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Igarotzean harrapatzea</string>
+  <string name="enPassant">Igarotzean harrapatzea</string>
 </resources>

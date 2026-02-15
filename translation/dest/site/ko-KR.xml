@@ -626,7 +626,7 @@
   <string name="onlyExistingConversations">기존에 대화한 경우만</string>
   <string name="onlyFriends">친구만</string>
   <string name="menu">메뉴</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">캐슬링</string>
+  <string name="castling">캐슬링</string>
   <string name="whiteCastlingKingside">백 O-O</string>
   <string name="blackCastlingKingside">흑 O-O</string>
   <plurals name="nbForumPosts">
@@ -683,7 +683,6 @@
   <string name="keyShowOrHideComments">댓글 표시/숨기기</string>
   <string name="keyEnterOrExitVariation">라인 들어가기/나오기</string>
   <string name="keyRequestComputerAnalysis">컴퓨터 분석 요청, 실수에서 배우기</string>
-  <string name="keyNextLearnFromYourMistakes">다음 (실수에서 배우기)</string>
   <string name="keyNextBlunder">다음 블런더</string>
   <string name="keyNextMistake">다음 실수</string>
   <string name="keyNextInaccuracy">다음 부정확한 수</string>
@@ -983,5 +982,5 @@ FEN 포지션을 생성하기 위해 %s를 사용할 수 있습니다.
   <string name="search">검색</string>
   <string name="clearSearch">검색 초기화</string>
   <string name="tags">태그</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">앙파상</string>
+  <string name="enPassant">앙파상</string>
 </resources>

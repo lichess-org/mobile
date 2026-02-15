@@ -666,7 +666,7 @@ zum bewise dass du en Mänsch bisch.</string>
   <string name="onlyExistingConversations">Nur bestehendi Underhaltige</string>
   <string name="onlyFriends">Nur Fründe</string>
   <string name="menu">Menü</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rochade</string>
+  <string name="castling">Rochade</string>
   <string name="whiteCastlingKingside">Wiss 0-0</string>
   <string name="blackCastlingKingside">Schwarz 0-0</string>
   <plurals name="nbForumPosts">
@@ -731,7 +731,6 @@ gits nöd und es isch nie g\'wertet.</string>
   <string name="keyShowOrHideComments">zeig/verschteck d\'Kommentär</string>
   <string name="keyEnterOrExitVariation">Variante ischtige/verlah</string>
   <string name="keyRequestComputerAnalysis">Computeranalyse afordere, Lern us dine Fähler</string>
-  <string name="keyNextLearnFromYourMistakes">Nächschts (Lern vu dine Fähler)</string>
   <string name="keyNextBlunder">Nächschte Patzer</string>
   <string name="keyNextMistake">Nächschte Fähler</string>
   <string name="keyNextInaccuracy">Nächschti Ungnauigkeit</string>
@@ -1038,5 +1037,5 @@ Alli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur B
   <string name="search">Suechi</string>
   <string name="clearSearch">Suechi lösche</string>
   <string name="tags">Tags</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
+  <string name="enPassant">En passant</string>
 </resources>

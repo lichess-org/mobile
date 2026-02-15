@@ -664,7 +664,7 @@
   <string name="onlyExistingConversations">Bare eksisterende samtaler</string>
   <string name="onlyFriends">Bare venner</string>
   <string name="menu">Meny</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rokade</string>
+  <string name="castling">Rokade</string>
   <string name="whiteCastlingKingside">Hvit 0-0</string>
   <string name="blackCastlingKingside">Svart O-O</string>
   <plurals name="nbForumPosts">
@@ -722,7 +722,6 @@
   <string name="keyShowOrHideComments">Vis/skjul kommentarer</string>
   <string name="keyEnterOrExitVariation">Gå inn i/ut av variant</string>
   <string name="keyRequestComputerAnalysis">Be om maskinanalyse, lær av feilene dine</string>
-  <string name="keyNextLearnFromYourMistakes">Neste (lær av feilene dine)</string>
   <string name="keyNextBlunder">Neste bukk</string>
   <string name="keyNextMistake">Neste feil</string>
   <string name="keyNextInaccuracy">Neste unøyaktighet</string>
@@ -1027,5 +1026,5 @@ Alle kostnader for drift, utvikling og innhold finansieres utelukkende av bruker
   <string name="search">Søk</string>
   <string name="clearSearch">Tøm søk</string>
   <string name="tags">Merkelapper</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
+  <string name="enPassant">En passant</string>
 </resources>
