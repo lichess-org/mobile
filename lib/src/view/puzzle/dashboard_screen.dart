@@ -222,34 +222,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (showDaysSelector) const DaysSelector(),
             ],
           ),
         ],
       ),
       children: [
-        StatCardRow([
-          StatCard(
-            context.l10n.performance,
-            value: dashboard.global.performance.toString(),
-            elevation: 0,
-          ),
-          StatCard(
-            context.l10n
-                .puzzleNbPlayed(dashboard.global.nb)
-                .replaceAll(RegExp(r'\d+'), '')
-                .trim()
-                .capitalize(),
-            value: dashboard.global.nb.toString().localizeNumbers(),
-            elevation: 0,
-          ),
-          StatCard(
-            context.l10n.puzzleSolved.capitalize(),
-            value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-            elevation: 0,
-          ),
-        ]),
-        if (themes.length >= 3) PuzzleChart(themes),
+        for ( final item in themes ) Text(item.theme.name)
       ],
     );
   }
