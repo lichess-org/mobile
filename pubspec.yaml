@@ -14,7 +14,7 @@ dependencies:
   app_settings: ^7.0.0
   async: ^2.10.0
   auto_size_text: ^3.0.0
-  chessground: ^7.3.0
+  chessground: ^8.0.1
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^7.0.0
