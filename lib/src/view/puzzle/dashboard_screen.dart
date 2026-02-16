@@ -57,58 +57,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         if (dashboard == null) {
           return const SizedBox.shrink();
         }
-        final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
-        return ListSection(
-          header: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(context.l10n.puzzlePuzzleDashboard),
-                        Text(
-                          context.l10n.puzzlePuzzleDashboardDescription,
-                          style: Styles.subtitle.copyWith(
-                            color: textShade(context, Styles.subtitleOpacity),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (showDaysSelector) const DaysSelector(),
-                ],
-              ),
-            ],
-          ),
-          children: [
-            StatCardRow([
-              StatCard(
-                context.l10n.performance,
-                value: dashboard.global.performance.toString(),
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n
-                    .puzzleNbPlayed(dashboard.global.nb)
-                    .replaceAll(RegExp(r'\d+'), '')
-                    .trim()
-                    .capitalize(),
-                value: dashboard.global.nb.toString().localizeNumbers(),
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n.puzzleSolved.capitalize(),
-                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                elevation: 0,
-              ),
-            ]),
-            if (chartData.length >= 3) PuzzleChart(chartData),
-          ],
-        );
+        return buildChartSection(context, ref, dashboard);
       },
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s');
@@ -166,6 +115,61 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Widget buildChartSection(BuildContext context, WidgetRef ref, PuzzleDashboard dashboard) {
+    final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+    return ListSection(
+          header: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(context.l10n.puzzlePuzzleDashboard),
+                        Text(
+                          context.l10n.puzzlePuzzleDashboardDescription,
+                          style: Styles.subtitle.copyWith(
+                            color: textShade(context, Styles.subtitleOpacity),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (showDaysSelector) const DaysSelector(),
+                ],
+              ),
+            ],
+          ),
+          children: [
+            StatCardRow([
+              StatCard(
+                context.l10n.performance,
+                value: dashboard.global.performance.toString(),
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(dashboard.global.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
+                elevation: 0,
+              ),
+              StatCard(
+                context.l10n.puzzleSolved.capitalize(),
+                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                elevation: 0,
+              ),
+            ]),
+            if (chartData.length >= 3) PuzzleChart(chartData),
+          ],
+        );
   }
 }
 
