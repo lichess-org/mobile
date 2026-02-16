@@ -186,12 +186,19 @@ class PuzzleDashboardWidget extends ConsumerWidget {
     Metric metric,
   ) {
     List<PuzzleDashboardData> themes = [];
+    String title = "";
+    String subtitle = "";
 
     switch (metric) {
       case .strength:
         themes = dashboard.themes.sortedBy((e) => e.performance).reversed.take(5).toList();
+        title = context.l10n.puzzleStrengths;
+        subtitle = context.l10n.puzzleStrengthDescription;
+
       case .improvementArea:
         themes = dashboard.themes.sortedBy((e) => e.performance).take(5).toList();
+        title = context.l10n.puzzleImprovementAreas;
+        subtitle = context.l10n.puzzleImprovementAreasDescription;
     }
 
     return ListSection(
@@ -205,9 +212,9 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(context.l10n.puzzleStrengths),
+                    Text(title),
                     Text(
-                      context.l10n.puzzleStrengthDescription,
+                      subtitle,
                       style: Styles.subtitle.copyWith(
                         color: textShade(context, Styles.subtitleOpacity),
                       ),
