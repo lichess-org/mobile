@@ -191,12 +191,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
     switch (metric) {
       case .strength:
-        themes = dashboard.themes.sortedBy((e) => e.performance).reversed.take(5).toList();
+        themes = dashboard.themes.sortedBy((e) => e.performance).reversed.take(3).toList();
         title = context.l10n.puzzleStrengths;
         subtitle = context.l10n.puzzleStrengthDescription;
 
       case .improvementArea:
-        themes = dashboard.themes.sortedBy((e) => e.performance).take(5).toList();
+        themes = dashboard.themes.sortedBy((e) => e.performance).take(3).toList();
         title = context.l10n.puzzleImprovementAreas;
         subtitle = context.l10n.puzzleImprovementAreasDescription;
     }
@@ -226,9 +226,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           ),
         ],
       ),
-      children: [
-        for ( final item in themes ) Text(item.theme.name)
-      ],
+      children: [for (final item in themes) PuzzleThemeRow(data: item)],
     );
   }
 }
@@ -329,5 +327,85 @@ String _daysL10n(BuildContext context, Days day) {
       return context.l10n.nbDays(60);
     case Days.threemonths:
       return context.l10n.nbDays(90);
+  }
+}
+
+class PuzzleThemeRow extends StatelessWidget {
+  final PuzzleDashboardData data;
+
+  const PuzzleThemeRow({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeInfo = data.theme.l10n(context.l10n);
+    final solvePercentage = data.nb > 0 ? (data.firstWins / data.nb * 100).toInt() : 0;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(themeInfo.name, style: Styles.subtitle),
+          const SizedBox(height: 2),
+          Text(
+            themeInfo.description,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+            style: Styles.formDescription,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _SimplifiedMetric(label: 'PLAYED', value: '${data.nb}'),
+              _SimplifiedMetric(
+                label: context.l10n.performance.toUpperCase(),
+                value: '${data.performance}',
+                isAccent: true,
+              ),
+              _SimplifiedMetric(
+                label: context.l10n.puzzleSolved.toUpperCase(),
+                value: '$solvePercentage%',
+              ),
+              _SimplifiedMetric(label: 'TO REPLAY', value: '${data.replayWins}'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SimplifiedMetric extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool isAccent;
+
+  const _SimplifiedMetric({required this.label, required this.value, this.isAccent = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF7A7875),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isAccent ? ColorScheme.of(context).secondary : Styles.formLabel.color,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
