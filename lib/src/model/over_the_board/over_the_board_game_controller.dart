@@ -89,6 +89,19 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       );
     } else if (state.currentPosition.isStalemate) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.variantOutcome != null) {
+      switch (state.currentPosition.variantOutcome!.winner) {
+        case Side.white:
+          state = state.copyWith(
+            game: state.game.copyWith(status: GameStatus.variantEnd, winner: Side.white),
+          );
+        case Side.black:
+          state = state.copyWith(
+            game: state.game.copyWith(status: GameStatus.variantEnd, winner: Side.black),
+          );
+        case null:
+          state = state.copyWith(game: state.game.copyWith(status: GameStatus.variantEnd));
+      }
     }
 
     _moveFeedback(sanMove);
@@ -168,8 +181,8 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   Position get currentPosition => game.stepAt(stepCursor).position;
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
-  NormalMove? get lastMove =>
-      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
+  Move? get lastMove =>
+      stepCursor > 0 ? Move.parse(game.steps[stepCursor].sanMove!.move.uci) : null;
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);
