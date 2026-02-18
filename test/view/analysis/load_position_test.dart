@@ -10,6 +10,14 @@ import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
+  tearDown(() {
+    // Clean up clipboard mock after each test
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      null,
+    );
+  });
+
   testWidgets('Open Analysis Board with PGN Headers', (tester) async {
     const pgn = '''
 [Event "Test Game"]
@@ -65,12 +73,6 @@ void main() {
     expect(find.text('2850'), findsOneWidget);
     expect(find.text('2800'), findsOneWidget);
     expect(find.textContaining('e5'), findsOneWidget);
-
-    // Clean up
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      SystemChannels.platform,
-      null,
-    );
   });
 
   testWidgets('Open Board Editor with FEN', (tester) async {
@@ -115,10 +117,5 @@ void main() {
     expect(find.byKey(const ValueKey('d1-whitequeen')), findsOneWidget);
     expect(find.byKey(const ValueKey('f1-whitebishop')), findsNothing);
     expect(find.byKey(const ValueKey('c4-whitebishop')), findsOneWidget);
-    // Clean up
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      SystemChannels.platform,
-      null,
-    );
   });
 }
