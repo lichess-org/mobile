@@ -114,7 +114,8 @@ enum LinkSite {
   vkontakte('VKontakte', IListConst(['vk.com'])),
   chessCom('Chess.com', IListConst(['chess.com'])),
   chessMonitor('ChessMonitor', IListConst(['chessmonitor.com'])),
-  chessTempo('ChessTempo', IListConst(['chesstempo.com']));
+  chessTempo('ChessTempo', IListConst(['chesstempo.com'])),
+  telegram('telegram.me', IListConst(['t.me', 'telegram.me']));
 
   const LinkSite(this.title, this.domains);
 
