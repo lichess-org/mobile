@@ -332,7 +332,7 @@ class _BodyState extends ConsumerState<_Body> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     setState(() {

@@ -207,7 +207,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
         GameStep(
           sanMove: SanMove(san, move),
           position: position,
-          diff: MaterialDiff.fromBoard(position.board),
+          diff: MaterialDiff.fromPosition(position),
         ),
       );
     }

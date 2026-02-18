@@ -10,7 +10,13 @@ sealed class MaterialDiffSide with _$MaterialDiffSide {
     required IMap<Role, int> pieces,
     required int score,
     required IMap<Role, int> capturedPieces,
+
+    /// Number of checks given by this side. Only relevant in the 3-check variant, null otherwise.
+    required int? checksGiven,
   }) = _MaterialDiffSide;
+
+  factory MaterialDiffSide.empty() =>
+      MaterialDiffSide(pieces: IMap(), score: 0, capturedPieces: IMap(), checksGiven: null);
 }
 
 const IMap<Role, int> pieceScores = IMapConst({
@@ -29,15 +35,19 @@ sealed class MaterialDiff with _$MaterialDiff {
   const factory MaterialDiff({required MaterialDiffSide black, required MaterialDiffSide white}) =
       _MaterialDiff;
 
-  factory MaterialDiff.fromBoard(Board board, {Board? startingPosition}) {
-    int score = 0;
-    final IMap<Role, int> blackCount = board.materialCount(Side.black);
-    final IMap<Role, int> whiteCount = board.materialCount(Side.white);
+  factory MaterialDiff.fromPosition(Position position) {
+    if (position.rule == Rule.crazyhouse || position.rule == Rule.horde) {
+      return MaterialDiff(black: MaterialDiffSide.empty(), white: MaterialDiffSide.empty());
+    }
 
-    final IMap<Role, int> blackStartingCount =
-        startingPosition?.materialCount(Side.black) ?? Board.standard.materialCount(Side.black);
-    final IMap<Role, int> whiteStartingCount =
-        startingPosition?.materialCount(Side.white) ?? Board.standard.materialCount(Side.white);
+    int score = 0;
+    final IMap<Role, int> blackCount = position.board.materialCount(Side.black);
+    final IMap<Role, int> whiteCount = position.board.materialCount(Side.white);
+
+    final startingPosition = Position.initialPosition(position.rule);
+
+    final IMap<Role, int> blackStartingCount = startingPosition.board.materialCount(Side.black);
+    final IMap<Role, int> whiteStartingCount = startingPosition.board.materialCount(Side.white);
 
     IMap<Role, int> subtractPieceCounts(
       IMap<Role, int> startingCount,
@@ -95,16 +105,24 @@ sealed class MaterialDiff with _$MaterialDiff {
       }
     });
 
+    int? checksGiven(Side side) => switch (position) {
+      ThreeCheck(remainingChecks: (final white, final black)) =>
+        3 - (side == Side.white ? white : black),
+      _ => null,
+    };
+
     return MaterialDiff(
       black: MaterialDiffSide(
         pieces: black.toIMap(),
         score: -score,
         capturedPieces: blackCapturedPieces,
+        checksGiven: checksGiven(Side.black),
       ),
       white: MaterialDiffSide(
         pieces: white.toIMap(),
         score: score,
         capturedPieces: whiteCapturedPieces,
+        checksGiven: checksGiven(Side.white),
       ),
     );
   }

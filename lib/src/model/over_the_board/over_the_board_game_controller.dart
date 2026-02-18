@@ -61,7 +61,7 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     // In an over-the-board game, we support "implicit takebacks":

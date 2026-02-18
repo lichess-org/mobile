@@ -168,7 +168,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     _clearHints();
