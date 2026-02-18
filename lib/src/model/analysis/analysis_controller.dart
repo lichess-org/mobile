@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/forecast.dart';
@@ -1004,6 +1005,13 @@ sealed class AnalysisState
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
   );
+
+  /// Creates an AnalysisPlayer from PGN headers for the given side.
+  /// Used for standalone analysis to display player names and ratings if provided in the PGN.
+  AnalysisPlayer? playerFromPgnHeaders(Side side) {
+    if (archivedGame != null) return null;
+    return AnalysisPlayer.fromPgnHeaders(pgnHeaders, side);
+  }
 }
 
 @freezed
