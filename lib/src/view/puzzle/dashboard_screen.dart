@@ -156,11 +156,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
       ),
       children: [
         StatCardRow([
-          StatCard(
-            context.l10n.performance,
-            value: dashboard.global.performance.toString(),
-            elevation: 0,
-          ),
+          StatCard(context.l10n.performance, value: dashboard.global.performance.toString()),
           StatCard(
             context.l10n
                 .puzzleNbPlayed(dashboard.global.nb)
@@ -168,12 +164,10 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 .trim()
                 .capitalize(),
             value: dashboard.global.nb.toString().localizeNumbers(),
-            elevation: 0,
           ),
           StatCard(
             context.l10n.puzzleSolved.capitalize(),
             value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-            elevation: 0,
           ),
         ]),
         if (chartData.length >= 3) PuzzleChart(chartData),
@@ -187,18 +181,23 @@ class PuzzleDashboardWidget extends ConsumerWidget {
     PuzzleDashboard dashboard,
     Metric metric,
   ) {
+    const itemsToShow = 3;
     List<PuzzleDashboardData> themes = [];
     String title = "";
     String subtitle = "";
 
     switch (metric) {
       case .strength:
-        themes = dashboard.themes.sortedBy((e) => e.performance).reversed.take(3).toList();
+        themes = dashboard.themes
+            .sortedBy((e) => e.performance)
+            .reversed
+            .take(itemsToShow)
+            .toList();
         title = context.l10n.puzzleStrengths;
         subtitle = context.l10n.puzzleStrengthDescription;
 
       case .improvementArea:
-        themes = dashboard.themes.sortedBy((e) => e.performance).take(3).toList();
+        themes = dashboard.themes.sortedBy((e) => e.performance).take(itemsToShow).toList();
         title = context.l10n.puzzleImprovementAreas;
         subtitle = context.l10n.puzzleImprovementAreasDescription;
     }
@@ -235,7 +234,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
 class PuzzleChart extends StatelessWidget {
   const PuzzleChart(this.puzzleData);
-
   final List<PuzzleDashboardData> puzzleData;
 
   @override
@@ -347,84 +345,35 @@ class PuzzleThemeRow extends StatelessWidget {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(
-          PuzzleScreen.buildRoute(
-            context,
-            angle: PuzzleTheme(data.theme),
-          ),
-        );
+        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(data.theme)));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              themeInfo.name,
-              style: Styles.boardPreviewTitle,
-            ),
-            const SizedBox(height: 2),
+            Text(themeInfo.name, style: Styles.boardPreviewTitle),
+            const SizedBox(height: 4),
             Text(
               themeInfo.description,
               maxLines: 4,
               overflow: TextOverflow.ellipsis,
               style: Styles.formDescription,
             ),
-             const SizedBox(height: 8),
-            Row(
-              children: [
-                _PuzzleStatCard(
-                  label: context.l10n.performance,
-                  value: '${data.performance}',
-                  isAccent: true,
-                ),
-                _PuzzleStatCard(
-                  label: context.l10n.puzzleSolved,
-                  value: '$solvePercentage%',
-                ),
-                _PuzzleStatCard(
-                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim(), 
-                  value: '${data.nb}',
-                ),
-              ],
-            ),
+            StatCardRow([
+              StatCard(context.l10n.performance, value: data.performance.toString()),
+              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(data.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: data.nb.toString().localizeNumbers(),
+              ),
+            ]),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PuzzleStatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isAccent;
-
-  const _PuzzleStatCard({required this.label, required this.value, this.isAccent = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            label.toUpperCase(),
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: .w500,
-              color: ColorScheme.of(context).outline,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: .bold,
-              color: isAccent ? ColorScheme.of(context).secondary : Styles.formLabel.color,
-            ),
-          ),
-        ],
       ),
     );
   }
