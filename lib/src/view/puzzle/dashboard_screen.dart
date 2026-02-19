@@ -6,12 +6,14 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -340,36 +342,58 @@ class PuzzleThemeRow extends StatelessWidget {
     final themeInfo = data.theme.l10n(context.l10n);
     final solvePercentage = data.nb > 0 ? (data.firstWins / data.nb * 100).toInt() : 0;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(themeInfo.name, style: Styles.subtitle),
-          const SizedBox(height: 2),
-          Text(
-            themeInfo.description,
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
-            style: Styles.formDescription,
+    return InkWell(
+      onTap: () {
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(
+          PuzzleScreen.buildRoute(
+            context,
+            angle: PuzzleTheme(data.theme),
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              _SimplifiedMetric(label: 'PLAYED', value: '${data.nb}'),
-              _SimplifiedMetric(
-                label: context.l10n.performance.toUpperCase(),
-                value: '${data.performance}',
-                isAccent: true,
-              ),
-              _SimplifiedMetric(
-                label: context.l10n.puzzleSolved.toUpperCase(),
-                value: '$solvePercentage%',
-              ),
-              _SimplifiedMetric(label: 'TO REPLAY', value: '${data.replayWins}'),
-            ],
-          ),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              themeInfo.name,
+              style: Styles.subtitle,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              themeInfo.description,
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.formDescription,
+            ),
+             const SizedBox(height: 8),
+            Row(
+              children: [
+                _SimplifiedMetric(
+                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim().toUpperCase(), 
+                  value: '${data.nb}',
+                ),
+                _SimplifiedMetric(
+                  label: context.l10n.performance.toUpperCase(),
+                  value: '${data.performance}',
+                  isAccent: true,
+                ),
+                _SimplifiedMetric(
+                  label: context.l10n.puzzleSolved.toUpperCase(),
+                  value: '$solvePercentage%',
+                ),
+                _SimplifiedMetric(
+                  label: 'REPLAY', 
+                  value: '${data.replayWins}',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
