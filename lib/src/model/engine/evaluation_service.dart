@@ -174,7 +174,6 @@ class EvaluationService {
   /// If [goDeeper] is true, the engine will use the maximum search time.
   ///
   /// Returns `null` if a cached eval is sufficient.
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
     // reset eval
     _setEval(null);
@@ -213,8 +212,6 @@ class EvaluationService {
   ///
   /// If [minDepth] is provided, the evaluation will stop early once this depth is reached.
   /// Otherwise, it will run for the full [EvalWork.searchTime].
-  ///
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Future<LocalEval?> findEval(EvalWork work, {int? minDepth}) async {
     assert(work.searchTime != Duration.zero, 'searchTime must be set for findEval');
 
@@ -261,7 +258,6 @@ class EvaluationService {
   ///
   /// Returns a [Future] that completes with the best move found by the engine.
   ///
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
   /// superseded by another [findMove] call.
   Future<UCIMove> findMove(MoveWork work) {
