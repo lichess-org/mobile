@@ -73,6 +73,13 @@ class EvaluationService {
     _moveSubscription = _protocol.moveStream.listen(_onMoveResult);
   }
 
+  static const _defaultState = (
+    engineName: null,
+    eval: null,
+    state: EngineState.initial,
+    currentWork: null,
+  );
+
   final int maxMemory;
   final NnueService _nnueService;
 
@@ -110,12 +117,7 @@ class EvaluationService {
   /// Stream of move results tagged with their [MoveWork].
   Stream<MoveResult> get moveStream => _moveController.stream;
 
-  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
-    engineName: null,
-    eval: null,
-    state: EngineState.initial,
-    currentWork: null,
-  ));
+  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(_defaultState);
 
   /// The current engine evaluation state, combining engine name, eval, state, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
@@ -572,7 +574,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
       listenable.removeListener(_listener);
     });
 
-    return listenable.value;
+    final evalState = listenable.value;
+    if (_filter(evalState)) {
+      return evalState;
+    } else {
+      return EvaluationService._defaultState;
+    }
   }
 
   void _listener() {
@@ -581,14 +588,18 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
       if (ref.mounted) {
-        final (id: id, path: path) = filters;
         final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
-        final work = evaluationState.currentWork;
-        if (work == null || (work.id == id && (path == null || work.path == path))) {
+        if (_filter(evaluationState)) {
           state = evaluationState;
         }
       }
     });
+  }
+
+  bool _filter(EngineEvaluationState state) {
+    final (id: id, path: path) = filters;
+    final work = state.currentWork;
+    return work == null || (work.id == id && (path == null || work.path == path));
   }
 }
 
