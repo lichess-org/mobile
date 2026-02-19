@@ -38,14 +38,12 @@ EvalWork makeWork({
 
 MoveWork makeMoveWork({
   StringId? id,
-  StockfishFlavor flavor = StockfishFlavor.sf16,
   StockfishLevel level = StockfishLevel.level3,
   Position? initialPosition,
   Variant variant = Variant.standard,
 }) {
   return MoveWork(
     id: id ?? const StringId('test'),
-    stockfishFlavor: flavor,
     variant: variant,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
@@ -1414,7 +1412,7 @@ void main() {
       expect(move, equals('e2e4'));
     });
 
-    test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
+    test('findMove sets Skill Level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1424,11 +1422,10 @@ void main() {
       final work = makeMoveWork(level: .level6);
       await service.findMove(work);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
+      expect(delayedStockfish.options['Skill Level'], equals('6'));
     });
 
-    test('findMove uses multiPv scaled by elo', () async {
+    test('findMove uses multiPv scaled by level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1495,7 +1492,7 @@ void main() {
       expect(states.last, anyOf(EngineState.idle, EngineState.computing));
     });
 
-    test('evaluate after findMove resets UCI_LimitStrength to false', () async {
+    test('evaluate after findMove resets Skill Level to 20', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1506,15 +1503,14 @@ void main() {
       final moveWork = makeMoveWork(level: .level6);
       await service.findMove(moveWork);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
+      expect(delayedStockfish.options['Skill Level'], equals('6'));
 
       // Now do an evaluate
       final evalWork = makeWork();
       final stream = service.evaluate(evalWork);
       await stream!.first;
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('false'));
+      expect(delayedStockfish.options['Skill Level'], equals('20'));
     });
 
     test('findMove does not affect evaluationState.currentWork', () async {

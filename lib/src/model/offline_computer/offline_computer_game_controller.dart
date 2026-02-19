@@ -468,7 +468,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final work = MoveWork(
         id: state.gameSessionId,
-        stockfishFlavor: _kComputerStockfishFlavor,
         variant: Variant.standard,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,

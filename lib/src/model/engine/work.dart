@@ -86,8 +86,6 @@ sealed class MoveWork extends Work with _$MoveWork {
   const factory MoveWork({
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
-
-    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     int? hashSize,
     required Position initialPosition,
@@ -97,11 +95,17 @@ sealed class MoveWork extends Work with _$MoveWork {
     required StockfishLevel level,
   }) = _MoveWork;
 
+  /// The Stockfish flavor to use with MoveWork.
+  ///
+  /// It is always set to [StockfishFlavor.variant] since only Fairy-Stockfish supports negative skill levels.
+  @override
+  StockfishFlavor get stockfishFlavor => StockfishFlavor.variant;
+
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
-  int get elo => level.elo;
+  /// The skill level from -20 to 20. For Stockfish option "Skill Level".
+  int get skill => level.skill;
 
   @override
   int get threads => level.threads;

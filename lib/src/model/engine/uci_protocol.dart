@@ -14,14 +14,7 @@ const minDepth = 6;
 const maxPlies = 245;
 
 class UCIProtocol {
-  UCIProtocol()
-    : _options = {
-        'Threads': '1',
-        'Hash': '16',
-        'MultiPV': '1',
-        'UCI_LimitStrength': 'false',
-        'UCI_Elo': '1350',
-      };
+  UCIProtocol() : _options = {'Threads': '1', 'Hash': '16', 'MultiPV': '1'};
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
@@ -58,8 +51,6 @@ class UCIProtocol {
     _options['Threads'] = '1';
     _options['Hash'] = '16';
     _options['MultiPV'] = '1';
-    _options['UCI_LimitStrength'] = 'false';
-    _options['UCI_Elo'] = '1350';
 
     _engineName.value = null;
     _isComputing.value = false;
@@ -245,10 +236,9 @@ class UCIProtocol {
       // Configure strength limitation for MoveWork
       switch (_work!) {
         case final MoveWork moveWork:
-          setOption('UCI_LimitStrength', 'true');
-          setOption('UCI_Elo', moveWork.elo.toString());
+          setOption('Skill Level', moveWork.skill.toString());
         case EvalWork():
-          setOption('UCI_LimitStrength', 'false');
+          setOption('Skill Level', '20');
       }
 
       final positionCommand = switch (_work) {

@@ -267,7 +267,7 @@ class EvaluationService {
   Future<UCIMove> findMove(MoveWork work) {
     _logger.info(
       'Finding move at ply ${work.position.ply} with options: '
-      'flavor=${work.stockfishFlavor}, elo=${work.elo}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, skill=${work.skill}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
