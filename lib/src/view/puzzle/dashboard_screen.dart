@@ -345,12 +345,12 @@ String _daysL10n(BuildContext context, Days day) {
   }
 }
 
-class PuzzleThemeRow extends StatelessWidget {
+class PuzzleThemeRow extends ConsumerWidget {
   final PuzzleDashboardData data;
   const PuzzleThemeRow({super.key, required this.data});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeInfo = data.theme.l10n(context.l10n);
     final solvePercentage = data.nb > 0 ? (data.firstWins / data.nb * 100).toInt() : 0;
 
@@ -360,6 +360,7 @@ class PuzzleThemeRow extends StatelessWidget {
           context,
           rootNavigator: true,
         ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(data.theme)));
+        ref.invalidate(puzzleDashboardProvider);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
