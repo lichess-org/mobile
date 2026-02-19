@@ -450,6 +450,23 @@ void main() {
       expect(service.evaluationState.value.currentWork, work);
     });
 
+    test('eval is reset immediately when evaluate() is called with new work', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // Start first evaluation and wait for an eval result
+      final work1 = makeWork(id: const StringId('game1'));
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+      expect(service.evaluationState.value.eval, isNotNull);
+
+      // Start a new evaluation - eval must be cleared immediately, before any new results arrive
+      final work2 = makeWork(id: const StringId('game2'));
+      service.evaluate(work2);
+
+      expect(service.evaluationState.value.eval, isNull);
+    });
+
     test('evalStream emits results tagged with correct work', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
