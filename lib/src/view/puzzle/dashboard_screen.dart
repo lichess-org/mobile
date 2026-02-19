@@ -373,17 +373,17 @@ class PuzzleThemeRow extends StatelessWidget {
              const SizedBox(height: 8),
             Row(
               children: [
-                _SimplifiedMetric(
-                  label: context.l10n.performance.toUpperCase(),
+                _PuzzleStatCard(
+                  label: context.l10n.performance,
                   value: '${data.performance}',
                   isAccent: true,
                 ),
-                _SimplifiedMetric(
-                  label: context.l10n.puzzleSolved.toUpperCase(),
+                _PuzzleStatCard(
+                  label: context.l10n.puzzleSolved,
                   value: '$solvePercentage%',
                 ),
-                _SimplifiedMetric(
-                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim().toUpperCase(), 
+                _PuzzleStatCard(
+                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim(), 
                   value: '${data.nb}',
                 ),
               ],
@@ -395,12 +395,12 @@ class PuzzleThemeRow extends StatelessWidget {
   }
 }
 
-class _SimplifiedMetric extends StatelessWidget {
+class _PuzzleStatCard extends StatelessWidget {
   final String label;
   final String value;
   final bool isAccent;
 
-  const _SimplifiedMetric({required this.label, required this.value, this.isAccent = false});
+  const _PuzzleStatCard({required this.label, required this.value, this.isAccent = false});
 
   @override
   Widget build(BuildContext context) {
@@ -408,11 +408,11 @@ class _SimplifiedMetric extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            label,
-            style: const TextStyle(
+            label.toUpperCase(),
+            style: TextStyle(
               fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF7A7875),
+              fontWeight: .w500,
+              color: ColorScheme.of(context).outline,
             ),
           ),
           const SizedBox(height: 2),
@@ -420,7 +420,7 @@ class _SimplifiedMetric extends StatelessWidget {
             value,
             style: TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontWeight: .bold,
               color: isAccent ? ColorScheme.of(context).secondary : Styles.formLabel.color,
             ),
           ),
