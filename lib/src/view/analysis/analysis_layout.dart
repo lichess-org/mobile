@@ -290,7 +290,7 @@ class AnalysisLayout extends StatelessWidget {
                   final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
                   final boardSize = isTablet || isSmallScreen
                       ? defaultBoardSize - evalGaugeSize - kTabletBoardTableSidePadding * 2
-                      : defaultBoardSize - evalGaugeSize - kAnalysisPortraitBoardSidePadding * 2;
+                      : defaultBoardSize - evalGaugeSize;
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -301,9 +301,7 @@ class AnalysisLayout extends StatelessWidget {
                       Padding(
                         padding: isTablet
                             ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                            : const EdgeInsets.symmetric(
-                                horizontal: kAnalysisPortraitBoardSidePadding,
-                              ),
+                            : EdgeInsets.zero,
                         child: Column(
                           children: [
                             if (boardHeader != null)
