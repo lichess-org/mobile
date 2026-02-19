@@ -179,7 +179,7 @@ class _RetroAnalysisBoardState
   bool get interactive => analysisState.feedback != RetroFeedback.evalMove;
 
   @override
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     ref.read(retroControllerProvider(widget.options).notifier).onUserMove(move);
   }
 

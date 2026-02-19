@@ -242,6 +242,7 @@ ISet<Shape> moveShapes({
       ),
   }.toISet(),
   DropMove(role: final role, to: _) => {
+    Circle(color: color, orig: move.to, scale: scale),
     PieceShape(
       color: color,
       orig: move.to,

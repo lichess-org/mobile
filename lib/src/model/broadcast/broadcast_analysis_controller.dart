@@ -296,12 +296,12 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.hasValue) return;
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncData(state.requireValue.copyWith(promotionMove: move));
       return;
     }

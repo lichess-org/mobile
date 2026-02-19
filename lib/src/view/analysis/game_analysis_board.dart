@@ -36,7 +36,7 @@ class _GameAnalysisBoardState
       analysisPrefs.showAnnotations;
 
   @override
-  void onUserMove(NormalMove move) => ref
+  void onUserMove(Move move) => ref
       .read(analysisControllerProvider(widget.options).notifier)
       .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove);
 

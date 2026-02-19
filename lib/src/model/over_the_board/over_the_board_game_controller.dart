@@ -50,8 +50,8 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
   }
 
-  void makeMove(NormalMove move) {
-    if (isPromotionPawnMove(state.currentPosition, move)) {
+  void makeMove(Move move) {
+    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }

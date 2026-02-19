@@ -411,7 +411,7 @@ class _BroadcastAnalysisBoardState
       analysisState.isServerAnalysisEnabled && analysisPrefs.showAnnotations;
 
   @override
-  void onUserMove(NormalMove move) => ref
+  void onUserMove(Move move) => ref
       .read(
         broadcastAnalysisControllerProvider((
           roundId: widget.roundId,

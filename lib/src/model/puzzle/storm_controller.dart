@@ -86,11 +86,11 @@ class StormController extends Notifier<StormState> {
     return newState;
   }
 
-  Future<void> onUserMove(NormalMove move) async {
+  Future<void> onUserMove(Move move) async {
     if (state.clock.endAt != null) return;
     state.clock.start();
 
-    if (isPromotionPawnMove(state.position, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.position, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }

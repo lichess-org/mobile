@@ -235,7 +235,7 @@ class _BodyState extends ConsumerState<_Body> {
                           .read(overTheBoardGameControllerProvider.notifier)
                           .onPromotionSelection,
                       promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
+                      onMove: (move, {viaDragAndDrop}) {
                         ref
                             .read(overTheBoardClockProvider.notifier)
                             .onMove(newSideToMove: gameState.turn.opposite);

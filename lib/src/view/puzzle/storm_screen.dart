@@ -124,7 +124,7 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: stormState.promotionMove,
-      onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
+      onMove: (move, {viaDragAndDrop}) => ref.read(ctrlProvider.notifier).onUserMove(move),
       onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       premovable: null,
     );
@@ -197,7 +197,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: stormState.position.fen,
                                 orientation: stormState.pov,
                                 gameData: gameData,
-                                lastMove: stormState.lastMove as NormalMove?,
+                                lastMove: stormState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -316,7 +316,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: stormState.position.fen,
                                 orientation: stormState.pov,
                                 gameData: gameData,
-                                lastMove: stormState.lastMove as NormalMove?,
+                                lastMove: stormState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),

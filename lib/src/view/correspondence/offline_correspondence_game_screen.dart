@@ -184,7 +184,7 @@ class _BodyState extends ConsumerState<_Body> {
           child: SafeArea(
             child: GameLayout(
               orientation: isBoardTurned ? youAre!.opposite : youAre!,
-              lastMove: game.moveAt(stepCursor) as NormalMove?,
+              lastMove: game.moveAt(stepCursor),
               interactiveBoardParams: (
                 variant: game.meta.variant,
                 position: position,
@@ -194,7 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
                           : PlayerSide.black
                     : PlayerSide.none,
                 promotionMove: promotionMove,
-                onMove: (move, {isDrop}) {
+                onMove: (move, {viaDragAndDrop}) {
                   onUserMove(move);
                 },
                 onPromotionSelection: onPromotionSelection,
@@ -318,8 +318,8 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void onUserMove(NormalMove move) {
-    if (isPromotionPawnMove(game.lastPosition, move)) {
+  void onUserMove(Move move) {
+    if (move case NormalMove() when isPromotionPawnMove(game.lastPosition, move)) {
       setState(() {
         promotionMove = move;
       });
