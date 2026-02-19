@@ -960,9 +960,8 @@ sealed class AnalysisState
       isEngineAvailable(prefs) ||
       (isComputerAnalysisAllowed && isServerAnalysisEnabled && hasServerAnalysis);
 
-  /// Whether the engine is allowed for this analysis and variant.
-  bool get isEngineAllowed =>
-      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant);
+  /// Whether the engine is allowed for this analysis.
+  bool get isEngineAllowed => isComputerAnalysisAllowed;
 
   ViewNode? get liveMoveNode => pathToLiveMove != null
       ? pathToLiveMove!.isEmpty

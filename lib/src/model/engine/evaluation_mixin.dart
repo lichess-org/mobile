@@ -279,7 +279,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     final work = EvalWork(
       id: curState.evaluationContext.id,
-      enginePref: evaluationPrefs.enginePref,
+      stockfishFlavor: evaluationPrefs.enginePref.flavor,
       variant: curState.evaluationContext.variant,
       threads: evaluationPrefs.numEngineCores,
       hashSize: _evaluationService.maxMemory,

@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -19,8 +18,8 @@ final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
-/// Variants supported by the local engine.
-const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
+/// Variants supported by the official Stockfish engine.
+const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// Exception thrown when the engine does not support the requested variant.
 class EngineUnsupportedVariantException implements Exception {
@@ -176,10 +175,6 @@ class EvaluationService {
   /// Returns `null` if a cached eval is sufficient.
   /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      throw EngineUnsupportedVariantException(work.variant);
-    }
-
     // reset eval
     _setEval(null);
 
@@ -197,7 +192,7 @@ class EvaluationService {
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
@@ -269,13 +264,9 @@ class EvaluationService {
   /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
   /// superseded by another [findMove] call.
   Future<UCIMove> findMove(MoveWork work) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      return Future.error(EngineUnsupportedVariantException(work.variant));
-    }
-
     _logger.info(
       'Finding move at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, elo=${work.elo}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, elo=${work.elo}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
@@ -310,9 +301,9 @@ class EvaluationService {
 
   /// Start the given [work], restarting the engine if necessary.
   void _startWork(Work work) {
-    final flavor = work.enginePref == ChessEnginePref.sfLatest
-        ? StockfishFlavor.latestNoNNUE
-        : StockfishFlavor.sf16;
+    final flavor = officialStockfishVariants.contains(work.variant)
+        ? work.stockfishFlavor
+        : StockfishFlavor.variant;
 
     final stockfishState = _stockfish.state.value;
     final needsRestart =

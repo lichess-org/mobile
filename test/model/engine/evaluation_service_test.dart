@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -18,13 +17,13 @@ import 'fake_stockfish.dart';
 EvalWork makeWork({
   StringId? id,
   UciPath? path,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  StockfishFlavor flavor = StockfishFlavor.sf16,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
   return EvalWork(
     id: id ?? const StringId('test'),
-    enginePref: enginePref,
+    stockfishFlavor: flavor,
     variant: Variant.standard,
     threads: 1,
     path: path ?? UciPath.empty,
@@ -38,14 +37,14 @@ EvalWork makeWork({
 
 MoveWork makeMoveWork({
   StringId? id,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  StockfishFlavor flavor = StockfishFlavor.sf16,
   StockfishLevel level = StockfishLevel.level3,
   Position? initialPosition,
   Variant variant = Variant.standard,
 }) {
   return MoveWork(
     id: id ?? const StringId('test'),
-    enginePref: enginePref,
+    stockfishFlavor: flavor,
     variant: variant,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
@@ -425,7 +424,7 @@ void main() {
 
       const work = EvalWork(
         id: StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.antichess,
         threads: 1,
         path: UciPath.empty,
@@ -553,7 +552,7 @@ void main() {
 
       final work1 = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -566,7 +565,7 @@ void main() {
 
       final work2 = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
@@ -599,7 +598,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -624,7 +623,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -648,7 +647,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -678,7 +677,7 @@ void main() {
 
         final work = EvalWork(
           id: const StringId('test'),
-          enginePref: ChessEnginePref.sf16,
+          stockfishFlavor: StockfishFlavor.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,
@@ -715,7 +714,9 @@ void main() {
       service.quit();
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      final stream2 = service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+      final stream2 = service.evaluate(
+        work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE),
+      );
       expect(stream2, isNotNull);
       await stream2!.first;
 
@@ -1036,7 +1037,7 @@ void main() {
         async.elapse(const Duration(seconds: 1));
 
         // Restart with different engine name
-        service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+        service.evaluate(work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE));
         async.elapse(const Duration(seconds: 2));
 
         // Notifier should have the updated engine name
@@ -1668,7 +1669,7 @@ void main() {
 
       const work = EvalWork(
         id: StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.antichess,
         threads: 1,
         path: UciPath.empty,

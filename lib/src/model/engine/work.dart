@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'work.freezed.dart';
 
@@ -21,8 +21,8 @@ sealed class Work {
   /// Identifier to associate this work with a game, puzzle, etc.
   StringId get id;
 
-  /// The engine preference to use (only relevant for Standard and Chess960 variants).
-  ChessEnginePref get enginePref;
+  /// The engine to use (if variant is Standard or Chess960, otherwise [StockfishFlavor.variant] will be used).
+  StockfishFlavor get stockfishFlavor;
   Variant get variant;
   int get threads;
   int? get hashSize;
@@ -47,8 +47,7 @@ sealed class EvalWork extends Work with _$EvalWork {
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
+    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     required int threads,
     int? hashSize,
@@ -88,8 +87,7 @@ sealed class MoveWork extends Work with _$MoveWork {
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
+    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     int? hashSize,
     required Position initialPosition,
