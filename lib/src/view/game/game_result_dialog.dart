@@ -252,6 +252,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
               AnalysisScreen.buildRoute(
                 context,
                 AnalysisOptions.standalone(
+                  id: const StringId('standalone'),
                   orientation: Side.white,
                   pgn: game.makePgn(),
                   isComputerAnalysisAllowed: true,

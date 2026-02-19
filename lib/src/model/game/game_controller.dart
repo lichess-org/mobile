@@ -171,10 +171,10 @@ class GameController extends AsyncNotifier<GameState> {
     }
   }
 
-  void userMove(NormalMove move, {bool? isDrop, bool? isPremove}) {
+  void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (isPromotionPawnMove(curState.game.lastPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(curState.game.lastPosition, move)) {
       state = AsyncValue.data(curState.copyWith(promotionMove: move));
       return;
     }
@@ -214,7 +214,7 @@ class GameController extends AsyncNotifier<GameState> {
       ),
     );
 
-    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
+    _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
 
     _sendMoveToSocket(
       move,
@@ -237,7 +237,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
 
     final move = curState.promotionMove!.withPromotion(role);
-    userMove(move, isDrop: true);
+    userMove(move, viaDragAndDrop: true);
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled
@@ -306,7 +306,7 @@ class GameController extends AsyncNotifier<GameState> {
   }
 
   /// Set or unset a premove.
-  void setPremove(NormalMove? move) {
+  void setPremove(Move? move) {
     final curState = state.requireValue;
     state = AsyncValue.data(curState.copyWith(premove: move));
   }
@@ -1046,7 +1046,7 @@ sealed class GameState with _$GameState {
     NormalMove? promotionMove,
 
     /// Premove waiting to be played
-    NormalMove? premove,
+    Move? premove,
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
@@ -1158,6 +1158,7 @@ sealed class GameState with _$GameState {
           gameFullId: gameFullId,
         )
       : AnalysisOptions.standalone(
+          id: gameFullId.gameId,
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
           pgn: game.makePgn(),

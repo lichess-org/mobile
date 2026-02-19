@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/forecast.dart';
@@ -45,6 +46,7 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
 
   const factory AnalysisOptions.standalone({
+    required StringId id,
     required Side orientation,
     int? initialMoveCursor,
     required String pgn,
@@ -69,6 +71,12 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   GameId? get gameId => switch (this) {
     ArchivedGame(:final gameId) => gameId,
     Standalone() => null,
+    ActiveCorrespondenceGame(:final gameFullId) => gameFullId.gameId,
+  };
+
+  StringId get contextId => switch (this) {
+    ArchivedGame(:final gameId) => gameId,
+    Standalone(:final id) => id,
     ActiveCorrespondenceGame(:final gameFullId) => gameFullId.gameId,
   };
 }
@@ -342,7 +350,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       evaluationContext: EvaluationContext(
-        id: options.gameId,
+        id: options.contextId,
         variant: _variant,
         initialPosition: _root.position,
       ),
@@ -451,10 +459,10 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     );
   }
 
-  void onUserMove(NormalMove move, {bool shouldReplace = false}) {
+  void onUserMove(Move move, {bool shouldReplace = false}) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -1003,7 +1011,16 @@ sealed class AnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
+
+  /// Creates an AnalysisPlayer from PGN headers for the given side.
+  ///
+  /// Used for standalone analysis to display player names and ratings if provided in the PGN.
+  AnalysisPlayer? playerFromPgnHeaders(Side side) {
+    if (archivedGame != null) return null;
+    return AnalysisPlayer.fromPgnHeaders(pgnHeaders, side);
+  }
 }
 
 @freezed

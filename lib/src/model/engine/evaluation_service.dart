@@ -1,22 +1,19 @@
 import 'dart:async';
 
-import 'package:dartchess/dartchess.dart' hide File;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-
-part 'evaluation_service.freezed.dart';
 
 final _logger = Logger('EvaluationService');
 
@@ -76,6 +73,13 @@ class EvaluationService {
     _moveSubscription = _protocol.moveStream.listen(_onMoveResult);
   }
 
+  static const _defaultState = (
+    engineName: null,
+    eval: null,
+    state: EngineState.initial,
+    currentWork: null,
+  );
+
   final int maxMemory;
   final NnueService _nnueService;
 
@@ -113,12 +117,7 @@ class EvaluationService {
   /// Stream of move results tagged with their [MoveWork].
   Stream<MoveResult> get moveStream => _moveController.stream;
 
-  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
-    engineName: null,
-    eval: null,
-    state: EngineState.initial,
-    currentWork: null,
-  ));
+  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(_defaultState);
 
   /// The current engine evaluation state, combining engine name, eval, state, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
@@ -126,7 +125,7 @@ class EvaluationService {
   /// The current engine state.
   EngineState get _engineState => _evaluationState.value.state;
 
-  Work? _currentWork;
+  MoveWork? _currentMoveWork;
 
   void _setEngineState(EngineState newState) {
     _logger.fine('Engine state: ${newState.name}');
@@ -140,13 +139,12 @@ class EvaluationService {
   }
 
   void _setEvalWork(EvalWork? work) {
-    _currentWork = work;
     _setState(workFn: () => work);
   }
 
   // ignore: use_setters_to_change_properties
   void _setMoveWork(MoveWork? work) {
-    _currentWork = work;
+    _currentMoveWork = work;
   }
 
   void _setState({
@@ -181,6 +179,9 @@ class EvaluationService {
     if (!engineSupportedVariants.contains(work.variant)) {
       throw EngineUnsupportedVariantException(work.variant);
     }
+
+    // reset eval
+    _setEval(null);
 
     // Check if cached eval is sufficient
     if (!work.threatMode) {
@@ -320,9 +321,10 @@ class EvaluationService {
         stockfishState == StockfishState.error;
 
     // Check if we need to clear engine context (different game/puzzle)
+    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
     final needsNewGame =
-        _currentWork != null &&
-        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
+        previousWork != null &&
+        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
 
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
@@ -341,7 +343,7 @@ class EvaluationService {
       _logger.fine('Work requested while engine initialization is in progress, queuing work');
 
       // Init in progress, work will be computed when init finishes
-      // (the _initEngine callback checks _currentWork)
+      // (the _initEngine callback checks the current work state)
       return;
     }
 
@@ -350,7 +352,7 @@ class EvaluationService {
       _setEngineState(EngineState.loading);
       _initEngine(flavor).then((_) {
         // Compute the current work (might be different from original if another request came in)
-        final currentWork = _currentWork;
+        final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
           _protocol.compute(currentWork);
         }
@@ -486,7 +488,7 @@ class EvaluationService {
   /// The engine can still emit results for the current work until it fully stops.
   void stop() {
     _protocol.compute(null);
-    _currentWork = null;
+    _currentMoveWork = null;
     _setEvalWork(null);
   }
 
@@ -503,7 +505,7 @@ class EvaluationService {
     _cancelPendingMoveRequest();
     _discardEvalResults = true;
     _discardMoveResults = true;
-    _currentWork = null;
+    _currentMoveWork = null;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
@@ -521,7 +523,7 @@ class EvaluationService {
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
     _cancelPendingMoveRequest();
-    _currentWork = null;
+    _currentMoveWork = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();
     _moveSubscription.cancel();
@@ -548,13 +550,20 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that exposes the current engine evaluation state to the UI.
-final engineEvaluationProvider =
-    NotifierProvider.autoDispose<EngineEvaluationNotifier, EngineEvaluationState>(
+final engineEvaluationProvider = NotifierProvider.autoDispose
+    .family<EngineEvaluationNotifier, EngineEvaluationState, EngineEvaluationFilters>(
       EngineEvaluationNotifier.new,
       name: 'EngineEvaluationProvider',
     );
 
+/// A type for filtering engine evaluation notifications.
+typedef EngineEvaluationFilters = ({StringId id, UciPath? path});
+
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
+  EngineEvaluationNotifier(this.filters);
+
+  final EngineEvaluationFilters filters;
+
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).evaluationState;
@@ -565,7 +574,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
       listenable.removeListener(_listener);
     });
 
-    return listenable.value;
+    final evalState = listenable.value;
+    if (_filter(evalState)) {
+      return evalState;
+    } else {
+      return EvaluationService._defaultState;
+    }
   }
 
   void _listener() {
@@ -574,20 +588,19 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
       if (ref.mounted) {
-        state = ref.read(evaluationServiceProvider).evaluationState.value;
+        final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
+        if (_filter(evaluationState)) {
+          state = evaluationState;
+        }
       }
     });
   }
-}
 
-@freezed
-sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    /// Optional identifier to associate the evaluation with a game, puzzle, study, etc.
-    StringId? id,
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
+  bool _filter(EngineEvaluationState state) {
+    final (id: id, path: path) = filters;
+    final work = state.currentWork;
+    return work == null || (work.id == id && (path == null || work.path == path));
+  }
 }
 
 /// A function to choose the eval that should be displayed.

@@ -123,10 +123,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  void makeMove(NormalMove move) {
+  void makeMove(Move move) {
     if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) return;
 
-    if (isPromotionPawnMove(state.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
@@ -162,7 +162,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  void _applyMove(NormalMove move) {
+  void _applyMove(Move move) {
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -205,7 +205,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   ///
   /// In the opening phase (before [_kOpeningPlyThreshold]), also fetches the master
   /// database to consider book moves as good regardless of engine evaluation.
-  Future<void> _makeMoveWithEvaluation(NormalMove move) async {
+  Future<void> _makeMoveWithEvaluation(Move move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
 
     var cachedBestMoves = state.cachedBestMoves;
@@ -359,7 +359,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Creates a practice comment based on evaluation data.
   PracticeComment _createPracticeComment({
-    required NormalMove move,
+    required Move move,
     required String normalizedMoveUci,
     required IList<MoveWithWinningChances> cachedBestMoves,
     required double winningChancesBefore,

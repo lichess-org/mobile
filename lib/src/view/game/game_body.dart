@@ -253,7 +253,7 @@ class GameBody extends ConsumerWidget {
                 blindfoldMode: blindfoldMode,
               ),
               orientation: isBoardTurned ? youAre.opposite : youAre,
-              lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+              lastMove: gameState.game.moveAt(gameState.stepCursor),
               interactiveBoardParams: (
                 variant: gameState.game.meta.variant,
                 position: gameState.currentPosition,
@@ -263,8 +263,8 @@ class GameBody extends ConsumerWidget {
                           : PlayerSide.black
                     : PlayerSide.none,
                 promotionMove: gameState.promotionMove,
-                onMove: (move, {isDrop}) {
-                  ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                onMove: (move, {viaDragAndDrop}) {
+                  ref.read(ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
                 },
                 onPromotionSelection: (role) {
                   ref.read(ctrlProvider.notifier).onPromotionSelection(role);

@@ -18,8 +18,8 @@ typedef MoveResult = (MoveWork, UCIMove);
 sealed class Work {
   const Work();
 
-  /// Optional identifier to associate this work with a game, puzzle, etc.
-  StringId? get id;
+  /// Identifier to associate this work with a game, puzzle, etc.
+  StringId get id;
 
   /// The engine preference to use (only relevant for Standard and Chess960 variants).
   ChessEnginePref get enginePref;
@@ -44,8 +44,8 @@ sealed class EvalWork extends Work with _$EvalWork {
   const EvalWork._() : super();
 
   const factory EvalWork({
-    /// Optional identifier to associate this work with a game, puzzle, etc.
-    StringId? id,
+    /// Identifier to associate this work with a game, puzzle, etc.
+    required StringId id,
 
     /// The engine preference to use (only relevant for Standard and Chess960 variants).
     required ChessEnginePref enginePref,
@@ -85,8 +85,8 @@ sealed class MoveWork extends Work with _$MoveWork {
   const MoveWork._() : super();
 
   const factory MoveWork({
-    /// Optional identifier to associate this work with a game, puzzle, etc.
-    StringId? id,
+    /// Identifier to associate this work with a game, puzzle, etc.
+    required StringId id,
 
     /// The engine preference to use (only relevant for Standard and Chess960 variants).
     required ChessEnginePref enginePref,

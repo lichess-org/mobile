@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -62,8 +61,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
-  Timer? _startEngineEvalTimer;
-
   Object? _key = Object();
 
   @override
@@ -80,7 +77,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       _key = null;
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
-      _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
       _syncDebouncer.cancel();
     });
@@ -296,12 +292,12 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.hasValue) return;
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncData(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -665,5 +661,6 @@ sealed class BroadcastAnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
 }

@@ -230,12 +230,13 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.hasValue || state.requireValue.currentPosition == null) return;
 
     if (!state.requireValue.currentPosition!.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
+    if (move case NormalMove()
+        when isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -278,7 +279,7 @@ class StudyController extends AsyncNotifier<StudyState>
   }
 
   void showGamebookSolution() {
-    onUserMove(state.requireValue.currentNode.children.first as NormalMove);
+    onUserMove(state.requireValue.currentNode.children.first);
   }
 
   void userPrevious() {
@@ -396,15 +397,27 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  void _sendMoveToSocket(NormalMove move) {
+  void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 
-    _recordChange('anaMove', {
-      'orig': move.from.name,
-      'dest': move.to.name,
-      'fen': state.requireValue.currentPosition!.fen,
-      'path': state.requireValue.currentPath.value,
-    });
+    switch (move) {
+      case NormalMove():
+        _recordChange('anaMove', {
+          'orig': move.from.name,
+          'dest': move.to.name,
+          'variant': state.requireValue.variant.name,
+          'fen': state.requireValue.currentPosition!.fen,
+          'path': state.requireValue.currentPath.value,
+        });
+      case DropMove():
+        _recordChange('anaDrop', {
+          'role': move.role.name,
+          'pos': move.to.name,
+          'variant': state.requireValue.variant.name,
+          'fen': state.requireValue.currentPosition!.fen,
+          'path': state.requireValue.currentPath.value,
+        });
+    }
   }
 
   void _recordChange(String socketEvent, Map<String, dynamic> data) {
@@ -575,6 +588,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
           position: currentPosition!,
           savedEval: currentNode.eval,
           serverEval: null,
+          filters: (id: evaluationContext.id, path: currentPath),
         )
       : null;
 

@@ -245,10 +245,10 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     );
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -544,6 +544,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
 
   bool get canGoNext => !isSolving && currentNode.hasChild;
