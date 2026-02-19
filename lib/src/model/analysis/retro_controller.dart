@@ -43,10 +43,10 @@ sealed class Mistake with _$Mistake {
   }) = _Mistake;
 
   ViewBranch get userBranch => branch.children[0];
-  NormalMove get userMove => userBranch.sanMove.move as NormalMove;
+  Move get userMove => userBranch.sanMove.move;
 
   ViewBranch get serverBranch => branch.children[1];
-  NormalMove get serverMove => serverBranch.sanMove.move as NormalMove;
+  Move get serverMove => serverBranch.sanMove.move;
 
   bool isSolution(RetroCurrentNode node) =>
       node.position == serverBranch.position ||
