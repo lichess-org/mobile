@@ -1043,10 +1043,10 @@ packages:
     dependency: "direct main"
     description:
       name: multistockfish
-      sha256: "3cac9ef7e84e6e614ceb4e4da4b4aa28539aea8c16a075a6e2f39c1a897ead06"
+      sha256: "604da8568e8d3d43b3f571885080006461d52243e0b178cbef07f328d7622160"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   multistockfish_chess:
     dependency: transitive
     description:
