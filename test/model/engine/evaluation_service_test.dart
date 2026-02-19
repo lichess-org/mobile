@@ -473,12 +473,11 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      // Clear commands to track only new ones
       delayedStockfish.stdinCommands.clear();
 
       // Different initialPosition (after e4)
       final positionAfterE4 = Chess.initial.play(Move.parse('e2e4')!);
-      final work2 = makeWork(id: const StringId('game2'), initialPosition: positionAfterE4);
+      final work2 = makeWork(id: const StringId('game1'), initialPosition: positionAfterE4);
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
@@ -498,7 +497,6 @@ void main() {
 
       delayedStockfish.stdinCommands.clear();
 
-      // Same initialPosition but different id
       final work2 = makeWork(id: const StringId('game2'));
       final stream2 = service.evaluate(work2);
       await stream2!.first;
@@ -1140,7 +1138,7 @@ void main() {
       });
     });
 
-    test('notifier receives eval results when work has null path (offline game context)', () async {
+    test('notifier does not filter work.path when path filter is null', () async {
       final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
       testBinding.stockfish = throttleStockfish;
       final container = await makeContainer();
@@ -1148,29 +1146,15 @@ void main() {
       fakeAsync((async) {
         final service = container.read(evaluationServiceProvider);
 
-        final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
-
         EngineEvaluationState? latestState;
-        container.listen(engineEvaluationProvider((id: const StringId('test'), path: e4Path)), (
+        container.listen(engineEvaluationProvider((id: const StringId('test'), path: null)), (
           _,
           next,
         ) {
           latestState = next;
         }, fireImmediately: false);
 
-        // Evaluate work with null path: no path context (e.g., offline computer game)
-        const work = EvalWork(
-          id: StringId('test'),
-          enginePref: ChessEnginePref.sf16,
-          variant: Variant.standard,
-          threads: 1,
-          path: null,
-          searchTime: Duration(seconds: 1),
-          multiPv: 1,
-          threatMode: false,
-          initialPosition: Chess.initial,
-          steps: IListConst<Step>([]),
-        );
+        final work = makeWork();
         service.evaluate(work);
         async.elapse(const Duration(milliseconds: 50));
 
@@ -1178,12 +1162,10 @@ void main() {
         async.flushMicrotasks();
         async.elapse(kEngineEvalEmissionThrottleDelay);
 
-        // Notifier should receive updates regardless of its path filter when work.path is null
         expect(
           latestState?.eval,
           isNotNull,
-          reason:
-              'Notifier should receive updates from work with null path regardless of path filter',
+          reason: 'Notifier should receive updates from null path filter regardless of work.path',
         );
       });
     });
@@ -1251,25 +1233,14 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         EngineEvaluationState? game1State;
-        EngineEvaluationState? game2State;
 
-        container.listen(
-          engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
-          (_, next) {
-            game1State = next;
-          },
-          fireImmediately: true,
-        );
+        container.listen(engineEvaluationProvider((id: const StringId('game1'), path: null)), (
+          _,
+          next,
+        ) {
+          game1State = next;
+        }, fireImmediately: true);
 
-        container.listen(
-          engineEvaluationProvider((id: const StringId('game2'), path: UciPath.empty)),
-          (_, next) {
-            game2State = next;
-          },
-          fireImmediately: true,
-        );
-
-        // Evaluate work for both games
         final work1 = makeWork(id: const StringId('game1'));
         service.evaluate(work1);
         async.elapse(const Duration(milliseconds: 50));
@@ -1280,29 +1251,11 @@ void main() {
 
         expect(game1State?.eval, isNotNull);
 
-        final work2 = makeWork(id: const StringId('game2'));
-        service.evaluate(work2);
-        // Reset emittedEvalCount so depth starts fresh
-        throttleStockfish.emittedEvalCount = 0;
-
-        async.flushMicrotasks();
-        async.elapse(const Duration(milliseconds: 50));
-
-        throttleStockfish.emitEvalEvents();
-        async.flushMicrotasks();
-        async.elapse(kEngineEvalEmissionThrottleDelay);
-
-        expect(game2State?.eval, isNotNull);
-
-        // Quit - both notifiers should be reset to initial state
         service.quit();
-        async.flushMicrotasks();
         async.flushMicrotasks();
 
         expect(game1State?.state, EngineState.initial, reason: 'game1 notifier should be reset');
         expect(game1State?.eval, isNull, reason: 'game1 notifier eval should be cleared');
-        expect(game2State?.state, EngineState.initial, reason: 'game2 notifier should be reset');
-        expect(game2State?.eval, isNull, reason: 'game2 notifier eval should be cleared');
       });
     });
 

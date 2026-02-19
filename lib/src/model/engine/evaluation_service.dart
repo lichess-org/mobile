@@ -123,7 +123,7 @@ class EvaluationService {
   /// The current engine state.
   EngineState get _engineState => _evaluationState.value.state;
 
-  Work? _currentWork;
+  MoveWork? _currentMoveWork;
 
   void _setEngineState(EngineState newState) {
     _logger.fine('Engine state: ${newState.name}');
@@ -137,13 +137,12 @@ class EvaluationService {
   }
 
   void _setEvalWork(EvalWork? work) {
-    _currentWork = work;
     _setState(workFn: () => work);
   }
 
   // ignore: use_setters_to_change_properties
   void _setMoveWork(MoveWork? work) {
-    _currentWork = work;
+    _currentMoveWork = work;
   }
 
   void _setState({
@@ -178,6 +177,9 @@ class EvaluationService {
     if (!engineSupportedVariants.contains(work.variant)) {
       throw EngineUnsupportedVariantException(work.variant);
     }
+
+    // reset eval
+    _setEval(null);
 
     // Check if cached eval is sufficient
     if (!work.threatMode) {
@@ -317,9 +319,10 @@ class EvaluationService {
         stockfishState == StockfishState.error;
 
     // Check if we need to clear engine context (different game/puzzle)
+    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
     final needsNewGame =
-        _currentWork != null &&
-        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
+        previousWork != null &&
+        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
 
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
@@ -338,7 +341,7 @@ class EvaluationService {
       _logger.fine('Work requested while engine initialization is in progress, queuing work');
 
       // Init in progress, work will be computed when init finishes
-      // (the _initEngine callback checks _currentWork)
+      // (the _initEngine callback checks the current work state)
       return;
     }
 
@@ -347,7 +350,7 @@ class EvaluationService {
       _setEngineState(EngineState.loading);
       _initEngine(flavor).then((_) {
         // Compute the current work (might be different from original if another request came in)
-        final currentWork = _currentWork;
+        final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
           _protocol.compute(currentWork);
         }
@@ -483,7 +486,7 @@ class EvaluationService {
   /// The engine can still emit results for the current work until it fully stops.
   void stop() {
     _protocol.compute(null);
-    _currentWork = null;
+    _currentMoveWork = null;
     _setEvalWork(null);
   }
 
@@ -500,7 +503,7 @@ class EvaluationService {
     _cancelPendingMoveRequest();
     _discardEvalResults = true;
     _discardMoveResults = true;
-    _currentWork = null;
+    _currentMoveWork = null;
     _stockfish.quit();
     _currentFlavor = null;
     _initInProgress = false;
@@ -518,7 +521,7 @@ class EvaluationService {
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
     _cancelPendingMoveRequest();
-    _currentWork = null;
+    _currentMoveWork = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();
     _moveSubscription.cancel();
@@ -581,8 +584,7 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
         final (id: id, path: path) = filters;
         final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
         final work = evaluationState.currentWork;
-        // Update state if this is a reset (no current work) or if the work matches our filters.
-        if (work == null || (work.id == id && (work.path == null || work.path == path))) {
+        if (work == null || (work.id == id && (path == null || work.path == path))) {
           state = evaluationState;
         }
       }

@@ -61,8 +61,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
-  Timer? _startEngineEvalTimer;
-
   Object? _key = Object();
 
   @override
@@ -79,7 +77,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       _key = null;
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
-      _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
       _syncDebouncer.cancel();
     });
