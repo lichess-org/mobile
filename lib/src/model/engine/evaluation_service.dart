@@ -91,6 +91,7 @@ class EvaluationService {
   late final StreamSubscription<MoveResult> _moveSubscription;
 
   StockfishFlavor? _currentFlavor;
+  Variant? _currentVariant;
   bool _initInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
@@ -308,6 +309,7 @@ class EvaluationService {
     final stockfishState = _stockfish.state.value;
     final needsRestart =
         _currentFlavor != flavor ||
+        _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
@@ -341,7 +343,7 @@ class EvaluationService {
     if (needsRestart) {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
-      _initEngine(flavor).then((_) {
+      _initEngine(flavor, work.variant).then((_) {
         // Compute the current work (might be different from original if another request came in)
         final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
@@ -353,7 +355,7 @@ class EvaluationService {
     }
   }
 
-  Future<void> _initEngine(StockfishFlavor flavor) async {
+  Future<void> _initEngine(StockfishFlavor flavor, Variant variant) async {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
@@ -378,6 +380,7 @@ class EvaluationService {
 
       await _stockfish.start(
         flavor: actualFlavor,
+        variant: variant.fairy,
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
       );
@@ -390,6 +393,7 @@ class EvaluationService {
       _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
       _currentFlavor = actualFlavor;
+      _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
     } catch (e, s) {
@@ -499,6 +503,7 @@ class EvaluationService {
     _currentMoveWork = null;
     _stockfish.quit();
     _currentFlavor = null;
+    _currentVariant = null;
     _initInProgress = false;
 
     _evaluationState.value = (
@@ -628,4 +633,20 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
+}
+
+extension FairyVariantExtension on Variant {
+  /// The Fairy-Stockfish variant name
+  String get fairy => switch (this) {
+    Variant.standard => 'chess',
+    Variant.chess960 => 'chess',
+    Variant.fromPosition => 'chess',
+    Variant.antichess => 'antichess',
+    Variant.kingOfTheHill => 'kingofthehill',
+    Variant.threeCheck => '3check',
+    Variant.atomic => 'atomic',
+    Variant.horde => 'horde',
+    Variant.racingKings => 'racingkings',
+    Variant.crazyhouse => 'crazyhouse',
+  };
 }

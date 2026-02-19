@@ -18,13 +18,14 @@ EvalWork makeWork({
   StringId? id,
   UciPath? path,
   StockfishFlavor flavor = StockfishFlavor.sf16,
+  Variant variant = Variant.standard,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
   return EvalWork(
     id: id ?? const StringId('test'),
     stockfishFlavor: flavor,
-    variant: Variant.standard,
+    variant: variant,
     threads: 1,
     path: path ?? UciPath.empty,
     searchTime: searchTime,
@@ -479,6 +480,46 @@ void main() {
       expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
     });
 
+    test('ucinewgame is sent when variant changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), variant: Variant.standard);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), variant: Variant.atomic);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when flavor changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.sf16);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.latestNoNNUE);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
     test('ucinewgame is sent when work id changes', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
@@ -525,6 +566,47 @@ void main() {
   });
 
   group('EvaluationService', () {
+    test('Can use StockfishFlavor.variant for standard chess and 960', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final workStandard = makeWork(
+        id: const StringId('testStandard'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.standard,
+      );
+      final streamStandard = service.evaluate(workStandard);
+      expect(streamStandard, isNotNull);
+      await streamStandard!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+
+      final work960 = makeWork(
+        id: const StringId('test960'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.chess960,
+      );
+      final stream960 = service.evaluate(work960);
+      expect(stream960, isNotNull);
+      await stream960!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
+    test('Cannot override StockfishFlavor for non standard chess variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeWork(
+        id: const StringId('test'),
+        flavor: StockfishFlavor.sf16,
+        variant: Variant.atomic,
+      );
+      final stream = service.evaluate(work);
+      expect(stream, isNotNull);
+      await stream!.first;
+      // Should ignore the requested sf16 flavor and fall back to variant for non-standard variants
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
     test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
