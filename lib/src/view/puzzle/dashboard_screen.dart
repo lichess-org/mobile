@@ -361,7 +361,7 @@ class PuzzleThemeRow extends StatelessWidget {
           children: [
             Text(
               themeInfo.name,
-              style: Styles.subtitle,
+              style: Styles.boardPreviewTitle,
             ),
             const SizedBox(height: 2),
             Text(
@@ -374,10 +374,6 @@ class PuzzleThemeRow extends StatelessWidget {
             Row(
               children: [
                 _SimplifiedMetric(
-                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim().toUpperCase(), 
-                  value: '${data.nb}',
-                ),
-                _SimplifiedMetric(
                   label: context.l10n.performance.toUpperCase(),
                   value: '${data.performance}',
                   isAccent: true,
@@ -387,8 +383,8 @@ class PuzzleThemeRow extends StatelessWidget {
                   value: '$solvePercentage%',
                 ),
                 _SimplifiedMetric(
-                  label: 'REPLAY', 
-                  value: '${data.replayWins}',
+                  label: context.l10n.puzzleNbPlayed(data.nb).replaceAll(RegExp(r'\d+'), '').trim().toUpperCase(), 
+                  value: '${data.nb}',
                 ),
               ],
             ),
