@@ -49,6 +49,12 @@ class FakeStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    // In the real world, multistockfish sends "uci" to the engine, triggering it to respond with "uciok" and its name.
+    // So here, we simulate that by emitting these lines immediately.
+    final engineName = (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
+    _emit('id name $engineName\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -61,12 +67,6 @@ class FakeStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        final engineName = (_flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 18'
-            : 'Stockfish 16');
-        _emit('id name $engineName\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -179,6 +179,12 @@ class DelayedFakeStockfish implements Stockfish {
       await Future.microtask(() {});
     }
     _state.value = StockfishState.ready;
+
+    final engineName =
+        _customEngineName ??
+        (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
+    _emit('id name $engineName\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -197,12 +203,6 @@ class DelayedFakeStockfish implements Stockfish {
     stdinCommands.add(line.trim());
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        final engineName =
-            _customEngineName ??
-            (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
-        _emit('id name $engineName\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -322,6 +322,9 @@ class ThrottleTestStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    _emit('id name Stockfish 16\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -335,9 +338,6 @@ class ThrottleTestStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        _emit('id name Stockfish 16\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -464,6 +464,9 @@ class AnalysisTestStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    _emit('id name Stockfish 16\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -477,9 +480,6 @@ class AnalysisTestStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        _emit('id name Stockfish 16\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -573,6 +573,10 @@ class LegalMoveFakeStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
+    _emit('id name $engineName\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -585,12 +589,6 @@ class LegalMoveFakeStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 18'
-            : 'Stockfish 16';
-        _emit('id name $engineName\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -691,6 +689,10 @@ class MultiPvFakeStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
+    _emit('id name $engineName\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -703,12 +705,6 @@ class MultiPvFakeStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 18'
-            : 'Stockfish 16';
-        _emit('id name $engineName\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
@@ -878,6 +874,10 @@ class PracticeModeStockfish implements Stockfish {
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
+
+    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
+    _emit('id name $engineName\n');
+    _emit('uciok\n');
   }
 
   @override
@@ -891,12 +891,6 @@ class PracticeModeStockfish implements Stockfish {
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
     switch (parts.first) {
-      case 'uci':
-        final engineName = _flavor == StockfishFlavor.latestNoNNUE
-            ? 'Stockfish 18'
-            : 'Stockfish 16';
-        _emit('id name $engineName\n');
-        _emit('uciok\n');
       case 'isready':
         _emit('readyok\n');
       case 'position':
