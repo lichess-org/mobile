@@ -225,6 +225,7 @@ class _BodyState extends ConsumerState<_Body> {
                         AnalysisScreen.buildRoute(
                           context,
                           AnalysisOptions.standalone(
+                            id: game.id,
                             orientation: game.youAre!,
                             pgn: game.makePgn(),
                             isComputerAnalysisAllowed: false,

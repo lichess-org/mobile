@@ -41,6 +41,7 @@ void main() {
   });
 
   const options = AnalysisOptions.standalone(
+    id: StringId('standalone'),
     orientation: Side.white,
     pgn: '',
     isComputerAnalysisAllowed: false,

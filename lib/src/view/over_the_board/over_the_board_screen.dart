@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
@@ -367,6 +368,7 @@ class _BottomBar extends ConsumerWidget {
               AnalysisScreen.buildRoute(
                 context,
                 AnalysisOptions.standalone(
+                  id: const StringId('standalone'),
                   orientation: Side.white,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,

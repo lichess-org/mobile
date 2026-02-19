@@ -588,6 +588,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
           position: currentPosition!,
           savedEval: currentNode.eval,
           serverEval: null,
+          filters: (id: evaluationContext.id, path: currentPath),
         )
       : null;
 

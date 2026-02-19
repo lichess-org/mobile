@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -124,6 +125,7 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => OfflineComputerGameResultDialog(
                 game: newGameState.game,
+                gameSessionId: newGameState.gameSessionId,
                 onNewGame: () {
                   Navigator.pop(context);
                   _showNewGameDialog();
@@ -332,6 +334,7 @@ class _BottomBar extends ConsumerWidget {
               AnalysisScreen.buildRoute(
                 context,
                 AnalysisOptions.standalone(
+                  id: gameState.gameSessionId,
                   orientation: gameState.game.playerSide,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
@@ -423,7 +426,7 @@ class _Player extends ConsumerWidget {
                   children: [
                     Text(
                       context.l10n.aiNameLevelAiLevel(
-                        'Stockfish ${engineVersion(ref.watch(engineEvaluationProvider).engineName) ?? ref.watch(engineEvaluationPreferencesProvider).enginePref.version}',
+                        'Stockfish ${engineVersion(ref.watch(engineEvaluationProvider((id: gameState.gameSessionId, path: null))).engineName) ?? ref.watch(engineEvaluationPreferencesProvider).enginePref.version}',
                         game.stockfishLevel.level.toString(),
                       ),
                       style: const TextStyle(fontWeight: FontWeight.w600),
@@ -773,9 +776,15 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
 }
 
 class OfflineComputerGameResultDialog extends StatelessWidget {
-  const OfflineComputerGameResultDialog({required this.game, required this.onNewGame, super.key});
+  const OfflineComputerGameResultDialog({
+    required this.game,
+    required this.gameSessionId,
+    required this.onNewGame,
+    super.key,
+  });
 
   final OfflineComputerGame game;
+  final StringId gameSessionId;
   final VoidCallback onNewGame;
 
   @override
@@ -816,6 +825,7 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
               AnalysisScreen.buildRoute(
                 context,
                 AnalysisOptions.standalone(
+                  id: gameSessionId,
                   orientation: game.playerSide,
                   pgn: game.makePgn(),
                   isComputerAnalysisAllowed: true,

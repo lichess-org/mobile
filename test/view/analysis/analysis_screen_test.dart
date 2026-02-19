@@ -49,6 +49,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,
@@ -75,6 +76,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,
@@ -133,6 +135,7 @@ void main() {
           options:
               options ??
               AnalysisOptions.standalone(
+                id: const StringId('standalone'),
                 orientation: Side.white,
                 pgn: pgn,
                 isComputerAnalysisAllowed: false,
@@ -874,6 +877,7 @@ void main() {
           },
           home: const AnalysisScreen(
             options: AnalysisOptions.standalone(
+              id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
               isComputerAnalysisAllowed: false,
@@ -922,6 +926,7 @@ void main() {
           home: AnalysisScreen(
             key: ValueKey(castlingMethod),
             options: const AnalysisOptions.standalone(
+              id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
               isComputerAnalysisAllowed: false,
@@ -1118,6 +1123,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,
