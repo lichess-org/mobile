@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:http/http.dart' show ClientException;
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -56,15 +58,13 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
     return puzzleDashboard.when(
       data: (dashboard) {
-        if (dashboard == null) {
-          return const SizedBox.shrink();
-        }
+        if (dashboard == null) return const SizedBox.shrink();
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            buildChartSection(context, ref, dashboard),
-            buildPerformanceSection(context, ref, dashboard, .improvementArea),
-            buildPerformanceSection(context, ref, dashboard, .strength),
+            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector),
+            _PerformanceSection(dashboard: dashboard, metric: Metric.improvementArea),
+            _PerformanceSection(dashboard: dashboard, metric: Metric.strength),
           ],
         );
       },
@@ -125,8 +125,16 @@ class PuzzleDashboardWidget extends ConsumerWidget {
       },
     );
   }
+}
 
-  Widget buildChartSection(BuildContext context, WidgetRef ref, PuzzleDashboard dashboard) {
+class _ChartSection extends StatelessWidget {
+  const _ChartSection({required this.dashboard, required this.showDaysSelector});
+
+  final PuzzleDashboard dashboard;
+  final bool showDaysSelector;
+
+  @override
+  Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
     return ListSection(
       header: Column(
@@ -174,34 +182,17 @@ class PuzzleDashboardWidget extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Widget buildPerformanceSection(
-    BuildContext context,
-    WidgetRef ref,
-    PuzzleDashboard dashboard,
-    Metric metric,
-  ) {
-    const itemsToShow = 3;
-    List<PuzzleDashboardData> themes = [];
-    String title = "";
-    String subtitle = "";
+class _PerformanceSection extends StatelessWidget {
+  const _PerformanceSection({required this.dashboard, required this.metric});
 
-    switch (metric) {
-      case .strength:
-        themes = dashboard.themes
-            .sortedBy((e) => e.performance)
-            .reversed
-            .take(itemsToShow)
-            .toList();
-        title = context.l10n.puzzleStrengths;
-        subtitle = context.l10n.puzzleStrengthDescription;
+  final PuzzleDashboard dashboard;
+  final Metric metric;
 
-      case .improvementArea:
-        themes = dashboard.themes.sortedBy((e) => e.performance).take(itemsToShow).toList();
-        title = context.l10n.puzzleImprovementAreas;
-        subtitle = context.l10n.puzzleImprovementAreasDescription;
-    }
-
+  @override
+  Widget build(BuildContext context) {
+    final themes = metric.sort(dashboard.themes);
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,9 +204,9 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title),
+                    Text(metric.title(context.l10n)), // #4: logic on enum
                     Text(
-                      subtitle,
+                      metric.subtitle(context.l10n), // #4: logic on enum
                       style: Styles.subtitle.copyWith(
                         color: textShade(context, Styles.subtitleOpacity),
                       ),
@@ -296,7 +287,31 @@ class DaysSelector extends ConsumerWidget {
   }
 }
 
-enum Metric { strength, improvementArea }
+enum Metric {
+  strength,
+  improvementArea;
+
+  static const _itemsToShow = 3;
+
+  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes) => switch (this) {
+    strength =>
+      themes
+          .sortedByCompare((e) => e.performance, (a, b) => b.compareTo(a))
+          .take(_itemsToShow)
+          .toList(),
+    improvementArea => themes.sortedBy((e) => e.performance).take(_itemsToShow).toList(),
+  };
+
+  String title(AppLocalizations l10n) => switch (this) {
+    strength => l10n.puzzleStrengths,
+    improvementArea => l10n.puzzleImprovementAreas,
+  };
+
+  String subtitle(AppLocalizations l10n) => switch (this) {
+    strength => l10n.puzzleStrengthDescription,
+    improvementArea => l10n.puzzleImprovementAreasDescription,
+  };
+}
 
 enum Days {
   oneday(1),
@@ -332,7 +347,6 @@ String _daysL10n(BuildContext context, Days day) {
 
 class PuzzleThemeRow extends StatelessWidget {
   final PuzzleDashboardData data;
-
   const PuzzleThemeRow({super.key, required this.data});
 
   @override
