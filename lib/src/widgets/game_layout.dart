@@ -17,7 +17,7 @@ typedef InteractiveBoardParams = ({
   Position position,
   PlayerSide playerSide,
   NormalMove? promotionMove,
-  void Function(NormalMove, {bool? isDrop}) onMove,
+  void Function(Move, {bool? viaDragAndDrop}) onMove,
   void Function(Role? role) onPromotionSelection,
   Premovable? premovable,
 });

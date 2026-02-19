@@ -47,7 +47,7 @@ abstract class AnalysisBoardState<
   /// Override this to hide the best move arrow in certain states, even if enabled in [analysisPrefs].
   bool get hideBestMoveArrow => false;
 
-  void onUserMove(NormalMove move);
+  void onUserMove(Move move);
 
   void onPromotionSelection(Role? role);
 
@@ -131,7 +131,7 @@ abstract class AnalysisBoardState<
       size: widget.boardSize,
       orientation: analysisState.pov,
       fen: fen,
-      lastMove: analysisState.lastMove as NormalMove?,
+      lastMove: analysisState.lastMove,
       game: (interactive && currentPosition != null)
           ? boardPrefs.toGameData(
               variant: analysisState.variant,
@@ -142,7 +142,7 @@ abstract class AnalysisBoardState<
                   ? PlayerSide.white
                   : PlayerSide.black,
               promotionMove: analysisState.promotionMove,
-              onMove: (move, {isDrop}) => onUserMove(move),
+              onMove: (move, {viaDragAndDrop}) => onUserMove(move),
               onPromotionSelection: onPromotionSelection,
             )
           : null,

@@ -451,10 +451,10 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     );
   }
 
-  void onUserMove(NormalMove move, {bool shouldReplace = false}) {
+  void onUserMove(Move move, {bool shouldReplace = false}) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }

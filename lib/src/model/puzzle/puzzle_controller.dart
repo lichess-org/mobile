@@ -97,8 +97,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     );
   }
 
-  Future<void> onUserMove(NormalMove move) async {
-    if (isPromotionPawnMove(state.currentPosition, move)) {
+  Future<void> onUserMove(Move move) async {
+    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }

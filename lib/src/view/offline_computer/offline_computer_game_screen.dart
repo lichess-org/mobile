@@ -221,7 +221,7 @@ class _BodyState extends ConsumerState<_Body> {
                           .read(offlineComputerGameControllerProvider.notifier)
                           .onPromotionSelection,
                       promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
+                      onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
                       premovable: null,

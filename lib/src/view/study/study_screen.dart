@@ -499,7 +499,7 @@ class _StudyAnalysisBoardState
   bool get showAnnotations => analysisPrefs.showAnnotations;
 
   @override
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);
   }
 
@@ -525,10 +525,17 @@ class _StudyAnalysisBoardState
 
     final variationArrows = ISet<Shape>(
       showVariationArrows
-          ? analysisState.currentNode.children.mapIndexed((i, move) {
-              final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
-              return Arrow(color: color, orig: (move as NormalMove).from, dest: move.to);
-            }).toList()
+          ? analysisState.currentNode.children
+                .mapIndexed((i, move) {
+                  final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
+                  return switch (move) {
+                    NormalMove() => Arrow(color: color, orig: move.from, dest: move.to),
+                    // TODO support drop moves: draw piece shape (like for promotion moves) and a circle shape
+                    DropMove() => null,
+                  };
+                })
+                .nonNulls
+                .toList()
           : [],
     );
 
