@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -360,6 +361,7 @@ class _BottomBar extends ConsumerWidget {
                     AnalysisScreen.buildRoute(
                       context,
                       AnalysisOptions.standalone(
+                        id: const StringId('standalone'),
                         orientation: editorState.orientation,
                         pgn: editorState.pgn!,
                         isComputerAnalysisAllowed: true,

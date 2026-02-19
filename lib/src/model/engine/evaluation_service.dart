@@ -1,22 +1,19 @@
 import 'dart:async';
 
-import 'package:dartchess/dartchess.dart' hide File;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
-
-part 'evaluation_service.freezed.dart';
 
 final _logger = Logger('EvaluationService');
 
@@ -548,13 +545,20 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that exposes the current engine evaluation state to the UI.
-final engineEvaluationProvider =
-    NotifierProvider.autoDispose<EngineEvaluationNotifier, EngineEvaluationState>(
+final engineEvaluationProvider = NotifierProvider.autoDispose
+    .family<EngineEvaluationNotifier, EngineEvaluationState, EngineEvaluationFilters>(
       EngineEvaluationNotifier.new,
       name: 'EngineEvaluationProvider',
     );
 
+/// A type for filtering engine evaluation notifications.
+typedef EngineEvaluationFilters = ({StringId id, UciPath? path});
+
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
+  EngineEvaluationNotifier(this.filters);
+
+  final EngineEvaluationFilters filters;
+
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).evaluationState;
@@ -574,20 +578,16 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
       if (ref.mounted) {
-        state = ref.read(evaluationServiceProvider).evaluationState.value;
+        final (id: id, path: path) = filters;
+        final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
+        final work = evaluationState.currentWork;
+        // Update state if this is a reset (no current work) or if the work matches our filters.
+        if (work == null || (work.id == id && (work.path == null || work.path == path))) {
+          state = evaluationState;
+        }
       }
     });
   }
-}
-
-@freezed
-sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    /// Optional identifier to associate the evaluation with a game, puzzle, study, etc.
-    StringId? id,
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
 }
 
 /// A function to choose the eval that should be displayed.

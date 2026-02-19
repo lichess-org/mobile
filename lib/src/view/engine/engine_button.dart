@@ -13,7 +13,9 @@ import 'package:popover/popover.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
 class EngineButton extends ConsumerStatefulWidget {
-  const EngineButton({this.onTap, this.savedEval, this.goDeeper});
+  const EngineButton({required this.filters, this.onTap, this.savedEval, this.goDeeper});
+
+  final EngineEvaluationFilters filters;
 
   final ClientEval? savedEval;
 
@@ -33,7 +35,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
-        .watch(engineEvaluationProvider);
+        .watch(engineEvaluationProvider(widget.filters));
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled
@@ -71,7 +73,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
             showPopover(
               context: context,
               bodyBuilder: (_) {
-                return _EnginePopup(goDeeper: widget.goDeeper);
+                return _EnginePopup(goDeeper: widget.goDeeper, filters: widget.filters);
               },
               direction: PopoverDirection.top,
               width: 250,
@@ -273,13 +275,14 @@ class MicroChipPainter extends CustomPainter {
 }
 
 class _EnginePopup extends ConsumerWidget {
-  const _EnginePopup({this.goDeeper});
+  const _EnginePopup({this.goDeeper, required this.filters});
 
   final VoidCallback? goDeeper;
+  final EngineEvaluationFilters filters;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final evalState = ref.watch(engineEvaluationProvider);
+    final evalState = ref.watch(engineEvaluationProvider(filters));
     final (state: engineState, currentWork: work, engineName: engineName, eval: evalStateEval) =
         evalState;
     final bool canGoDeeper =

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -173,6 +174,7 @@ class _BodyState extends State<_Body> {
       return (
         fen: pos.fen,
         options: AnalysisOptions.standalone(
+          id: const StringId('standalone'),
           orientation: Side.white,
           pgn: '[FEN "${pos.fen}"]',
           isComputerAnalysisAllowed: true,
@@ -203,6 +205,7 @@ class _BodyState extends State<_Body> {
       return (
         fen: lastPosition.fen,
         options: AnalysisOptions.standalone(
+          id: const StringId('standalone'),
           orientation: Side.white,
           pgn: textInput!,
           isComputerAnalysisAllowed: true,

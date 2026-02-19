@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 
 class GameAnalysisBoard extends AnalysisBoard {
@@ -25,6 +26,10 @@ class _GameAnalysisBoardState
   @override
   AnalysisState get analysisState =>
       ref.watch(analysisControllerProvider(widget.options)).requireValue;
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   AnalysisPrefs get analysisPrefs => ref.watch(analysisPreferencesProvider);

@@ -46,6 +46,7 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
 
   const factory AnalysisOptions.standalone({
+    required StringId id,
     required Side orientation,
     int? initialMoveCursor,
     required String pgn,
@@ -70,6 +71,12 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   GameId? get gameId => switch (this) {
     ArchivedGame(:final gameId) => gameId,
     Standalone() => null,
+    ActiveCorrespondenceGame(:final gameFullId) => gameFullId.gameId,
+  };
+
+  StringId get contextId => switch (this) {
+    ArchivedGame(:final gameId) => gameId,
+    Standalone(:final id) => id,
     ActiveCorrespondenceGame(:final gameFullId) => gameFullId.gameId,
   };
 }
@@ -343,7 +350,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       evaluationContext: EvaluationContext(
-        id: options.gameId,
+        id: options.contextId,
         variant: _variant,
         initialPosition: _root.position,
       ),
@@ -1004,6 +1011,7 @@ sealed class AnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.

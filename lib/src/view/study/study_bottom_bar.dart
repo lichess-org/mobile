@@ -62,6 +62,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
                 future: toggleFuture,
                 builder: (context, snapshot) {
                   return EngineButton(
+                    filters: (id: state.evaluationContext.id, path: state.currentPath),
                     savedEval: state.currentNode.eval,
                     onTap: snapshot.connectionState != ConnectionState.waiting
                         ? () async {
@@ -192,6 +193,7 @@ class _GamebookBottomBar extends ConsumerWidget {
                   AnalysisScreen.buildRoute(
                     context,
                     AnalysisOptions.standalone(
+                      id: id,
                       orientation: state.pov,
                       pgn: state.pgn,
                       isComputerAnalysisAllowed: true,

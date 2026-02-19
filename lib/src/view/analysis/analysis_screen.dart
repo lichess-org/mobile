@@ -387,6 +387,7 @@ class _Body extends ConsumerWidget {
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
             ? EngineLines(
+                filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
                 savedEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
@@ -517,6 +518,10 @@ class _BottomBar extends ConsumerWidget {
                 future: toggleFuture,
                 builder: (context, snapshot) {
                   return EngineButton(
+                    filters: (
+                      id: analysisState.evaluationContext.id,
+                      path: analysisState.currentPath,
+                    ),
                     savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -436,6 +437,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
+              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
               savedEval: currentNode.eval,
               isGameOver: currentNode.position?.isGameOver ?? false,
               onTapMove: ref.read(studyControllerProvider(id).notifier).onUserMove,
@@ -503,6 +505,10 @@ class _StudyAnalysisBoardState
   void onUserMove(Move move) {
     ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);
   }
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   void onPromotionSelection(Role? role) {

@@ -503,6 +503,7 @@ class _BottomBar extends ConsumerWidget {
                 AnalysisScreen.buildRoute(
                   context,
                   AnalysisOptions.standalone(
+                    id: puzzleState.puzzle.puzzle.id,
                     orientation: puzzleState.pov,
                     pgn: ref.read(ctrlProvider.notifier).makePgn(),
                     isComputerAnalysisAllowed: true,

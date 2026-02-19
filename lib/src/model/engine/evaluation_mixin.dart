@@ -4,8 +4,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -15,7 +17,8 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:meta/meta.dart';
+
+part 'evaluation_mixin.freezed.dart';
 
 /// The debounce delay for requesting an eval.
 ///
@@ -29,6 +32,16 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
 const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
+
+@freezed
+sealed class EvaluationContext with _$EvaluationContext {
+  const factory EvaluationContext({
+    /// Identifier to associate the evaluation with a game, puzzle, study, etc.
+    required StringId id,
+    required Variant variant,
+    required Position initialPosition,
+  }) = _EvaluationContext;
+}
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {

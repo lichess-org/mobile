@@ -60,6 +60,9 @@ abstract class AnalysisBoardState<
   /// Can be used to disable interaction with the board in certain states
   bool get interactive => true;
 
+  /// Filters to identify the correct engine evaluation provider instance.
+  EngineEvaluationFilters get engineEvaluationFilters;
+
   /// Set of shapes drawn by the user on the board (arrows, circle).
   ISet<Shape> userShapes = ISet();
 
@@ -76,7 +79,9 @@ abstract class AnalysisBoardState<
       return ISet();
     }
 
-    final localEval = ref.watch(engineEvaluationProvider.select((value) => value.eval));
+    final localEval = ref.watch(
+      engineEvaluationProvider(engineEvaluationFilters).select((value) => value.eval),
+    );
 
     final eval = localEval?.threatMode == true
         ? analysisState.currentNode.eval

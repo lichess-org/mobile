@@ -23,7 +23,7 @@ EvalWork makeWork({
   Position? initialPosition,
 }) {
   return EvalWork(
-    id: id,
+    id: id ?? const StringId('test'),
     enginePref: enginePref,
     variant: Variant.standard,
     threads: 1,
@@ -44,7 +44,7 @@ MoveWork makeMoveWork({
   Variant variant = Variant.standard,
 }) {
   return MoveWork(
-    id: id,
+    id: id ?? const StringId('test'),
     enginePref: enginePref,
     variant: variant,
     initialPosition: initialPosition ?? Chess.initial,
@@ -424,6 +424,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       const work = EvalWork(
+        id: StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.antichess,
         threads: 1,
@@ -536,6 +537,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work1 = EvalWork(
+        id: const StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -548,6 +550,7 @@ void main() {
       );
 
       final work2 = EvalWork(
+        id: const StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -580,6 +583,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
+        id: const StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -604,6 +608,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
+        id: const StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -627,6 +632,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
+        id: const StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.standard,
         threads: 1,
@@ -656,6 +662,7 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         final work = EvalWork(
+          id: const StringId('test'),
           enginePref: ChessEnginePref.sf16,
           variant: Variant.standard,
           threads: 1,
@@ -992,9 +999,13 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         EngineEvaluationState? latestState;
-        container.listen(engineEvaluationProvider, (_, next) {
-          latestState = next;
-        }, fireImmediately: true);
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: true,
+        );
 
         final work = makeWork();
 
@@ -1022,6 +1033,279 @@ void main() {
       });
     });
 
+    test('notifier with id filter ignores eval results from work with different id', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? game1State;
+        container.listen(
+          engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
+          (_, next) {
+            game1State = next;
+          },
+          fireImmediately: true,
+        );
+
+        // Evaluate work for 'game2' - different id than the notifier's filter
+        final work = makeWork(id: const StringId('game2'));
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // The 'game1' notifier should not have received any eval - still in initial state
+        expect(
+          game1State?.eval,
+          isNull,
+          reason: 'Notifier should not receive eval updates from work with a different id',
+        );
+        expect(game1State?.state, EngineState.initial);
+      });
+    });
+
+    test('notifier with path filter ignores eval results from work with different path', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+        final d4Path = UciPath.fromId(UciCharPair.fromUci('d2d4'));
+
+        EngineEvaluationState? e4State;
+        container.listen(engineEvaluationProvider((id: const StringId('test'), path: e4Path)), (
+          _,
+          next,
+        ) {
+          e4State = next;
+        }, fireImmediately: true);
+
+        // Evaluate work with a different path (d4 instead of e4)
+        final work = makeWork(id: const StringId('test'), path: d4Path);
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // The notifier listening for the e4 path should not receive updates for d4 work
+        expect(
+          e4State?.eval,
+          isNull,
+          reason: 'Notifier should not receive eval updates from work with a different path',
+        );
+        expect(e4State?.state, EngineState.initial);
+      });
+    });
+
+    test('notifier receives eval results for matching id and path', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? latestState;
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: false,
+        );
+
+        final work = makeWork(); // id: 'test', path: UciPath.empty
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(
+          latestState?.eval,
+          isNotNull,
+          reason: 'Notifier should receive eval updates from work with matching id and path',
+        );
+      });
+    });
+
+    test('notifier receives eval results when work has null path (offline game context)', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+
+        EngineEvaluationState? latestState;
+        container.listen(engineEvaluationProvider((id: const StringId('test'), path: e4Path)), (
+          _,
+          next,
+        ) {
+          latestState = next;
+        }, fireImmediately: false);
+
+        // Evaluate work with null path: no path context (e.g., offline computer game)
+        const work = EvalWork(
+          id: StringId('test'),
+          enginePref: ChessEnginePref.sf16,
+          variant: Variant.standard,
+          threads: 1,
+          path: null,
+          searchTime: Duration(seconds: 1),
+          multiPv: 1,
+          threatMode: false,
+          initialPosition: Chess.initial,
+          steps: IListConst<Step>([]),
+        );
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Notifier should receive updates regardless of its path filter when work.path is null
+        expect(
+          latestState?.eval,
+          isNotNull,
+          reason:
+              'Notifier should receive updates from work with null path regardless of path filter',
+        );
+      });
+    });
+
+    test(
+      'two notifiers with different ids are isolated: only the matching one receives updates',
+      () async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+        final container = await makeContainer();
+
+        fakeAsync((async) {
+          final service = container.read(evaluationServiceProvider);
+
+          EngineEvaluationState? game1State;
+          EngineEvaluationState? game2State;
+
+          container.listen(
+            engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
+            (_, next) {
+              game1State = next;
+            },
+            fireImmediately: true,
+          );
+
+          container.listen(
+            engineEvaluationProvider((id: const StringId('game2'), path: UciPath.empty)),
+            (_, next) {
+              game2State = next;
+            },
+            fireImmediately: true,
+          );
+
+          // Evaluate work for 'game1'
+          final work1 = makeWork(id: const StringId('game1'));
+          service.evaluate(work1);
+          async.elapse(const Duration(milliseconds: 50));
+
+          throttleStockfish.emitEvalEvents();
+          async.flushMicrotasks();
+          async.elapse(kEngineEvalEmissionThrottleDelay);
+
+          // Only the 'game1' notifier should have received the eval
+          expect(
+            game1State?.eval,
+            isNotNull,
+            reason: 'game1 notifier should receive updates for game1 work',
+          );
+          expect(
+            game2State?.eval,
+            isNull,
+            reason: 'game2 notifier should not receive updates for game1 work',
+          );
+          expect(game2State?.state, EngineState.initial);
+        });
+      },
+    );
+
+    test('all notifiers are reset to initial state when quit() is called', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? game1State;
+        EngineEvaluationState? game2State;
+
+        container.listen(
+          engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
+          (_, next) {
+            game1State = next;
+          },
+          fireImmediately: true,
+        );
+
+        container.listen(
+          engineEvaluationProvider((id: const StringId('game2'), path: UciPath.empty)),
+          (_, next) {
+            game2State = next;
+          },
+          fireImmediately: true,
+        );
+
+        // Evaluate work for both games
+        final work1 = makeWork(id: const StringId('game1'));
+        service.evaluate(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(game1State?.eval, isNotNull);
+
+        final work2 = makeWork(id: const StringId('game2'));
+        service.evaluate(work2);
+        // Reset emittedEvalCount so depth starts fresh
+        throttleStockfish.emittedEvalCount = 0;
+
+        async.flushMicrotasks();
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(game2State?.eval, isNotNull);
+
+        // Quit - both notifiers should be reset to initial state
+        service.quit();
+        async.flushMicrotasks();
+        async.flushMicrotasks();
+
+        expect(game1State?.state, EngineState.initial, reason: 'game1 notifier should be reset');
+        expect(game1State?.eval, isNull, reason: 'game1 notifier eval should be cleared');
+        expect(game2State?.state, EngineState.initial, reason: 'game2 notifier should be reset');
+        expect(game2State?.eval, isNull, reason: 'game2 notifier eval should be cleared');
+      });
+    });
+
     test('discards eval results that arrive after quit()', () async {
       final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
       testBinding.stockfish = throttleStockfish;
@@ -1031,9 +1315,13 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         EngineEvaluationState? latestState;
-        container.listen(engineEvaluationProvider, (_, next) {
-          latestState = next;
-        }, fireImmediately: true);
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: true,
+        );
 
         final work = makeWork();
 
@@ -1409,6 +1697,7 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       const work = EvalWork(
+        id: StringId('test'),
         enginePref: ChessEnginePref.sf16,
         variant: Variant.antichess,
         threads: 1,

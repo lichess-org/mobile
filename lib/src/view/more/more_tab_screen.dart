@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -84,6 +85,7 @@ class _Body extends ConsumerWidget {
                   AnalysisScreen.buildRoute(
                     context,
                     const AnalysisOptions.standalone(
+                      id: StringId('standalone'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: true,
@@ -103,6 +105,7 @@ class _Body extends ConsumerWidget {
                   OpeningExplorerScreen.buildRoute(
                     context,
                     const AnalysisOptions.standalone(
+                      id: StringId('standalone'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: false,

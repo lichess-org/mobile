@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -297,6 +298,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
               ? EngineLines(
+                  filters: (id: state.evaluationContext.id, path: state.currentPath),
                   savedEval: currentNode.eval,
                   isGameOver: currentNode.position.isGameOver,
                   onTapMove: ref
@@ -419,6 +421,10 @@ class _BroadcastAnalysisBoardState
         )).notifier,
       )
       .onUserMove(move);
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   void onPromotionSelection(Role? role) => ref
@@ -608,6 +614,10 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               future: toggleFuture,
               builder: (context, snapshot) {
                 return EngineButton(
+                  filters: (
+                    id: broadcastAnalysisState.evaluationContext.id,
+                    path: broadcastAnalysisState.currentPath,
+                  ),
                   savedEval: broadcastAnalysisState.currentNode.eval,
                   onTap: snapshot.connectionState != ConnectionState.waiting
                       ? () async {
