@@ -1007,6 +1007,7 @@ sealed class AnalysisState
   );
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.
+  ///
   /// Used for standalone analysis to display player names and ratings if provided in the PGN.
   AnalysisPlayer? playerFromPgnHeaders(Side side) {
     if (archivedGame != null) return null;

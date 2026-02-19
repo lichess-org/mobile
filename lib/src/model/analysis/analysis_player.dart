@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'analysis_player.freezed.dart';
 
 /// A simple player representation for analysis from PGN headers.
+///
 /// Unlike `Player` from `package:lichess_mobile/src/model/game/player.dart`,
 /// this doesn't require user accounts or full game context.
 @freezed
@@ -15,6 +16,7 @@ sealed class AnalysisPlayer with _$AnalysisPlayer {
       _AnalysisPlayer;
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.
+  ///
   /// Returns null if the player name is not available or is just a placeholder.
   static AnalysisPlayer? fromPgnHeaders(IMap<String, String> pgnHeaders, Side side) {
     final nameKey = side == .white ? 'White' : 'Black';
