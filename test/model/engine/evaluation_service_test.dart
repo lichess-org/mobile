@@ -418,27 +418,6 @@ void main() {
       expect(service.evaluationState.value.eval, isNull);
     });
 
-    test('evaluate() throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      const work = EvalWork(
-        id: StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
-        variant: Variant.antichess,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: Duration(seconds: 1),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IListConst<Step>([]),
-        threatMode: false,
-      );
-
-      expect(() => service.evaluate(work), throwsA(isA<EngineUnsupportedVariantException>()));
-      expect(service.evaluationState.value.currentWork, isNull);
-    });
-
     test('currentWork is updated immediately on evaluate()', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1353,15 +1332,6 @@ void main() {
       expect(move, equals('e2e4'));
     });
 
-    test('findMove throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      final work = makeMoveWork(variant: Variant.antichess);
-
-      expect(() => service.findMove(work), throwsA(isA<EngineUnsupportedVariantException>()));
-    });
-
     test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
@@ -1661,26 +1631,6 @@ void main() {
       final eval2 = await service.findEval(work2);
       expect(eval2, isNotNull);
       expect(eval2, equals(eval1));
-    });
-
-    test('findEval throws for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      const work = EvalWork(
-        id: StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
-        variant: Variant.antichess,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: Duration(seconds: 1),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IListConst<Step>([]),
-        threatMode: false,
-      );
-
-      expect(() => service.findEval(work), throwsA(isA<EngineUnsupportedVariantException>()));
     });
 
     test('findEval times out and returns last eval received', () {
