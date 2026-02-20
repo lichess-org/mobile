@@ -90,12 +90,10 @@ class EvaluationService {
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
 
-  // The effective (actual) flavor the engine is running. May differ from the originally requested
-  // flavor when e.g. latestNoNNUE falls back to sf16 due to missing NNUE files.
-  StockfishFlavor? _currentFlavor;
-  // The flavor that was originally requested when the engine was last (re)started. Used for
-  // restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause an infinite restart
-  // loop on subsequent latestNoNNUE requests.
+  /// The flavor that was originally requested when the engine was last (re)started.
+  ///
+  /// Used for restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause restarts on
+  /// subsequent latestNoNNUE requests.
   StockfishFlavor? _currentRequestedFlavor;
   Variant? _currentVariant;
   bool _initInProgress = false;
@@ -310,9 +308,8 @@ class EvaluationService {
 
     final stockfishState = _stockfish.state.value;
 
-    // Compare against the originally requested flavor, not the effective one. This prevents an
-    // infinite restart loop when latestNoNNUE fell back to sf16: the next latestNoNNUE request
-    // would otherwise see _currentFlavor==sf16 != latestNoNNUE and needlessly restart.
+    // Compare against the originally requested flavor, not the effective one. This prevents restart
+    // when latestNoNNUE fell back to sf16
     final needsRestart =
         _currentRequestedFlavor != flavor ||
         _currentVariant != work.variant ||
@@ -399,7 +396,6 @@ class EvaluationService {
 
       _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
-      _currentFlavor = actualFlavor;
       _currentRequestedFlavor = flavor;
       _currentVariant = variant;
 
@@ -510,7 +506,6 @@ class EvaluationService {
     _discardMoveResults = true;
     _currentMoveWork = null;
     _stockfish.quit();
-    _currentFlavor = null;
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
