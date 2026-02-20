@@ -40,7 +40,6 @@ class MaterialDifferenceDisplay extends StatelessWidget {
             children: [
               for (final role in Role.values)
                 for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++) roleIcon(role),
-              ...Iterable.generate(materialDiff?.checksGiven ?? 0, (_) => roleIcon(Role.king)),
               const SizedBox(width: 3),
               Text(
                 // a text font size of 14 is used to ensure that the text will take more vertical space
@@ -50,6 +49,10 @@ class MaterialDifferenceDisplay extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: textShade(context, 0.5)),
                 materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
               ),
+              if (materialDiff?.checksGiven != null) ...[
+                const SizedBox(width: 3),
+                ...Iterable.generate(materialDiff?.checksGiven ?? 0, (_) => roleIcon(Role.king)),
+              ],
             ],
           )
         : const SizedBox.shrink();
