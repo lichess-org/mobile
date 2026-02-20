@@ -376,6 +376,7 @@ class EvaluationService {
 
       await _stockfish.start(
         flavor: actualFlavor,
+        // we always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
         variant: variant.fairy,
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
