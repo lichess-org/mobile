@@ -202,7 +202,7 @@ class GameController extends AsyncNotifier<GameState> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     state = AsyncValue.data(
@@ -286,7 +286,7 @@ class GameController extends AsyncNotifier<GameState> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     state = AsyncValue.data(
@@ -671,7 +671,7 @@ class GameController extends AsyncNotifier<GameState> {
           final newStep = GameStep(
             sanMove: sanMove,
             position: newPos,
-            diff: MaterialDiff.fromBoard(newPos.board),
+            diff: MaterialDiff.fromPosition(newPos),
           );
 
           newState = newState.copyWith(

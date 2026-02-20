@@ -221,7 +221,7 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
           GameStep(
             sanMove: SanMove(san, move),
             position: position,
-            diff: MaterialDiff.fromBoard(position.board),
+            diff: MaterialDiff.fromPosition(position),
             archivedWhiteClock: index.isOdd ? stepClock : clock,
             archivedBlackClock: index.isEven ? stepClock : clock,
           ),

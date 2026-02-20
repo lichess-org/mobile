@@ -412,7 +412,7 @@ IList<GameStep> stepsFromJson(String json) {
       GameStep(
         position: position,
         sanMove: SanMove(san, move),
-        diff: MaterialDiff.fromBoard(position.board),
+        diff: MaterialDiff.fromPosition(position),
       ),
     );
   }
