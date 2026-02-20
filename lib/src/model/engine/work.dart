@@ -21,7 +21,9 @@ sealed class Work {
   /// Identifier to associate this work with a game, puzzle, etc.
   StringId get id;
 
-  /// The engine to use (if variant is Standard or Chess960, otherwise [StockfishFlavor.variant] will be used).
+  /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
+  /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
+  /// will be used instead.
   StockfishFlavor get stockfishFlavor;
   Variant get variant;
   int get threads;
