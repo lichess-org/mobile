@@ -166,6 +166,7 @@ abstract class AnalysisBoardState<
           onClearShapes: _onClearShapes,
           newShapeColor: boardPrefs.shapeColor.color,
         ),
+        enableDropMoves: analysisState.variant.hasDropMoves,
       ),
     );
   }

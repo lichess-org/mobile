@@ -380,6 +380,7 @@ class _Body extends ConsumerWidget {
               )
             : null,
         bottomBar: _BottomBar(options: options),
+        pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
             pov: pov,
