@@ -80,5 +80,37 @@ void main() {
       expect(diff.bySide(Side.white).checksGiven, 1);
       expect(diff.bySide(Side.black).checksGiven, 0);
     });
+
+    test('horde returns empty material diff', () {
+      final Position position = Position.setupPosition(
+        Rule.horde,
+        Setup.parseFen('rnbqkbnr/pppppppp/8/8/pppppppp/pppppppp/PPPPPPPP/PPPPPPPP w kq - 0 1'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
+
+      for (final side in Side.values) {
+        final sideDiff = diff.bySide(side);
+        expect(sideDiff.score, 0);
+        expect(sideDiff.pieces.isEmpty, isTrue);
+        expect(sideDiff.capturedPieces.isEmpty, isTrue);
+        expect(sideDiff.checksGiven, null);
+      }
+    });
+
+    test('crazyhouse returns empty material diff', () {
+      final Position position = Position.setupPosition(
+        Rule.crazyhouse,
+        Setup.parseFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
+
+      for (final side in Side.values) {
+        final sideDiff = diff.bySide(side);
+        expect(sideDiff.score, 0);
+        expect(sideDiff.pieces.isEmpty, isTrue);
+        expect(sideDiff.capturedPieces.isEmpty, isTrue);
+        expect(sideDiff.checksGiven, null);
+      }
+    });
   });
 }
