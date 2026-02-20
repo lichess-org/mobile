@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -19,8 +18,8 @@ final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
-/// Variants supported by the local engine.
-const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
+/// Variants supported by the official Stockfish engine.
+const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// Exception thrown when the engine does not support the requested variant.
 class EngineUnsupportedVariantException implements Exception {
@@ -91,7 +90,12 @@ class EvaluationService {
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
 
-  StockfishFlavor? _currentFlavor;
+  /// The flavor that was originally requested when the engine was last (re)started.
+  ///
+  /// Used for restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause restarts on
+  /// subsequent latestNoNNUE requests.
+  StockfishFlavor? _currentRequestedFlavor;
+  Variant? _currentVariant;
   bool _initInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
@@ -174,12 +178,7 @@ class EvaluationService {
   /// If [goDeeper] is true, the engine will use the maximum search time.
   ///
   /// Returns `null` if a cached eval is sufficient.
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      throw EngineUnsupportedVariantException(work.variant);
-    }
-
     // reset eval
     _setEval(null);
 
@@ -197,7 +196,7 @@ class EvaluationService {
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
@@ -217,8 +216,6 @@ class EvaluationService {
   ///
   /// If [minDepth] is provided, the evaluation will stop early once this depth is reached.
   /// Otherwise, it will run for the full [EvalWork.searchTime].
-  ///
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   Future<LocalEval?> findEval(EvalWork work, {int? minDepth}) async {
     assert(work.searchTime != Duration.zero, 'searchTime must be set for findEval');
 
@@ -265,17 +262,12 @@ class EvaluationService {
   ///
   /// Returns a [Future] that completes with the best move found by the engine.
   ///
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
   /// superseded by another [findMove] call.
   Future<UCIMove> findMove(MoveWork work) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      return Future.error(EngineUnsupportedVariantException(work.variant));
-    }
-
     _logger.info(
       'Finding move at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, elo=${work.elo}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, skill=${work.skill}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
@@ -310,13 +302,17 @@ class EvaluationService {
 
   /// Start the given [work], restarting the engine if necessary.
   void _startWork(Work work) {
-    final flavor = work.enginePref == ChessEnginePref.sfLatest
-        ? StockfishFlavor.latestNoNNUE
-        : StockfishFlavor.sf16;
+    final flavor = officialStockfishVariants.contains(work.variant)
+        ? work.stockfishFlavor
+        : StockfishFlavor.variant;
 
     final stockfishState = _stockfish.state.value;
+
+    // Compare against the originally requested flavor, not the effective one. This prevents restart
+    // when latestNoNNUE fell back to sf16
     final needsRestart =
-        _currentFlavor != flavor ||
+        _currentRequestedFlavor != flavor ||
+        _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
@@ -350,7 +346,7 @@ class EvaluationService {
     if (needsRestart) {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
-      _initEngine(flavor).then((_) {
+      _initEngine(flavor, work.variant).then((_) {
         // Compute the current work (might be different from original if another request came in)
         final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
@@ -362,7 +358,7 @@ class EvaluationService {
     }
   }
 
-  Future<void> _initEngine(StockfishFlavor flavor) async {
+  Future<void> _initEngine(StockfishFlavor flavor, Variant variant) async {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
@@ -387,6 +383,8 @@ class EvaluationService {
 
       await _stockfish.start(
         flavor: actualFlavor,
+        // we always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+        variant: variant.fairy,
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
       );
@@ -398,7 +396,8 @@ class EvaluationService {
 
       _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
-      _currentFlavor = actualFlavor;
+      _currentRequestedFlavor = flavor;
+      _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
     } catch (e, s) {
@@ -507,7 +506,8 @@ class EvaluationService {
     _discardMoveResults = true;
     _currentMoveWork = null;
     _stockfish.quit();
-    _currentFlavor = null;
+    _currentRequestedFlavor = null;
+    _currentVariant = null;
     _initInProgress = false;
 
     _evaluationState.value = (
@@ -637,4 +637,20 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
+}
+
+extension FairyVariantExtension on Variant {
+  /// The Fairy-Stockfish variant name
+  String get fairy => switch (this) {
+    Variant.standard => 'chess',
+    Variant.chess960 => 'chess',
+    Variant.fromPosition => 'chess',
+    Variant.antichess => 'antichess',
+    Variant.kingOfTheHill => 'kingofthehill',
+    Variant.threeCheck => '3check',
+    Variant.atomic => 'atomic',
+    Variant.horde => 'horde',
+    Variant.racingKings => 'racingkings',
+    Variant.crazyhouse => 'crazyhouse',
+  };
 }

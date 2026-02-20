@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -28,6 +27,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:logging/logging.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
 
@@ -50,6 +50,11 @@ const _kEvaluationMultivpv = 3;
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
 const _kOpeningPlyThreshold = 30;
+
+/// Stockfish flavor to use for the engine opponent and hint generation.
+///
+/// We use Fairy-Stockfish here for the negative skill levels and variant support.
+const _kComputerStockfishFlavor = StockfishFlavor.variant;
 
 /// Normalizes a UCI move string for comparison by converting alternate castling
 /// notations to standard notation.
@@ -288,7 +293,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // Always run the eval to get the eval string (and for the slow path, the full comment)
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
-      final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
 
       final stepsAfter = state.game.steps
           .skip(1)
@@ -297,7 +301,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final workAfter = EvalWork(
         id: state.gameSessionId,
-        enginePref: enginePrefs.enginePref,
+        stockfishFlavor: _kComputerStockfishFlavor,
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
@@ -456,7 +460,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
-      final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
 
       final steps = state.game.steps
           .skip(1)
@@ -465,7 +468,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final work = MoveWork(
         id: state.gameSessionId,
-        enginePref: enginePrefs.enginePref,
         variant: Variant.standard,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
@@ -594,7 +596,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
-      final enginePrefs = ref.read(engineEvaluationPreferencesProvider);
 
       final steps = state.game.steps
           .skip(1)
@@ -603,7 +604,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final work = EvalWork(
         id: state.gameSessionId,
-        enginePref: enginePrefs.enginePref,
+        stockfishFlavor: _kComputerStockfishFlavor,
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,

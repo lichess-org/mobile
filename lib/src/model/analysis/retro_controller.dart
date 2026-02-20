@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -110,10 +109,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
     _game = await ref.watch(archivedGameProvider(options.id).future);
-
-    if (engineSupportedVariants.contains(_game.meta.variant) == false) {
-      throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
-    }
 
     _root = _game.makeTree();
 

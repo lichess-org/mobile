@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -961,9 +960,8 @@ sealed class AnalysisState
       isEngineAvailable(prefs) ||
       (isComputerAnalysisAllowed && isServerAnalysisEnabled && hasServerAnalysis);
 
-  /// Whether the engine is allowed for this analysis and variant.
-  bool get isEngineAllowed =>
-      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant);
+  /// Whether the engine is allowed for this analysis.
+  bool get isEngineAllowed => isComputerAnalysisAllowed;
 
   ViewNode? get liveMoveNode => pathToLiveMove != null
       ? pathToLiveMove!.isEmpty

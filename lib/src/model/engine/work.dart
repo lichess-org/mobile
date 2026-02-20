@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'work.freezed.dart';
 
@@ -21,8 +21,10 @@ sealed class Work {
   /// Identifier to associate this work with a game, puzzle, etc.
   StringId get id;
 
-  /// The engine preference to use (only relevant for Standard and Chess960 variants).
-  ChessEnginePref get enginePref;
+  /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
+  /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
+  /// will be used instead.
+  StockfishFlavor get stockfishFlavor;
   Variant get variant;
   int get threads;
   int? get hashSize;
@@ -47,8 +49,7 @@ sealed class EvalWork extends Work with _$EvalWork {
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
+    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     required int threads,
     int? hashSize,
@@ -87,9 +88,6 @@ sealed class MoveWork extends Work with _$MoveWork {
   const factory MoveWork({
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
-
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
     required Variant variant,
     int? hashSize,
     required Position initialPosition,
@@ -99,11 +97,17 @@ sealed class MoveWork extends Work with _$MoveWork {
     required StockfishLevel level,
   }) = _MoveWork;
 
+  /// The Stockfish flavor to use with MoveWork.
+  ///
+  /// It is always set to [StockfishFlavor.variant] since only Fairy-Stockfish supports negative skill levels.
+  @override
+  StockfishFlavor get stockfishFlavor => StockfishFlavor.variant;
+
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
-  int get elo => level.elo;
+  /// The skill level from -20 to 20. For Stockfish option "Skill Level".
+  int get skill => level.skill;
 
   @override
   int get threads => level.threads;

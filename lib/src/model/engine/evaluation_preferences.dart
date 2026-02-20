@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'evaluation_preferences.freezed.dart';
 part 'evaluation_preferences.g.dart';
@@ -77,6 +78,11 @@ enum ChessEnginePref {
   String get version => switch (this) {
     ChessEnginePref.sf16 => '16',
     ChessEnginePref.sfLatest => '18',
+  };
+
+  StockfishFlavor get flavor => switch (this) {
+    ChessEnginePref.sf16 => StockfishFlavor.sf16,
+    ChessEnginePref.sfLatest => StockfishFlavor.latestNoNNUE,
   };
 }
 

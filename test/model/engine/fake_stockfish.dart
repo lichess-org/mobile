@@ -4,6 +4,12 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:multistockfish/multistockfish.dart';
 
+String _engineName(StockfishFlavor flavor) => switch (flavor) {
+  StockfishFlavor.sf16 => 'Stockfish 16',
+  StockfishFlavor.latestNoNNUE => 'Stockfish 18',
+  StockfishFlavor.variant => 'Fairy-Stockfish',
+};
+
 /// A fake implementation of [Stockfish] for testing.
 class FakeStockfish implements Stockfish {
   FakeStockfish();
@@ -52,8 +58,7 @@ class FakeStockfish implements Stockfish {
 
     // In the real world, multistockfish sends "uci" to the engine, triggering it to respond with "uciok" and its name.
     // So here, we simulate that by emitting these lines immediately.
-    final engineName = (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
-    _emit('id name $engineName\n');
+    _emit('id name ${_engineName(flavor)}\n');
     _emit('uciok\n');
   }
 
@@ -180,10 +185,7 @@ class DelayedFakeStockfish implements Stockfish {
     }
     _state.value = StockfishState.ready;
 
-    final engineName =
-        _customEngineName ??
-        (_flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16');
-    _emit('id name $engineName\n');
+    _emit('id name ${_customEngineName ?? _engineName(flavor)}\n');
     _emit('uciok\n');
   }
 
@@ -574,8 +576,7 @@ class LegalMoveFakeStockfish implements Stockfish {
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
 
-    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
-    _emit('id name $engineName\n');
+    _emit('id name ${_engineName(flavor)}\n');
     _emit('uciok\n');
   }
 
@@ -690,8 +691,7 @@ class MultiPvFakeStockfish implements Stockfish {
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
 
-    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
-    _emit('id name $engineName\n');
+    _emit('id name ${_engineName(flavor)}\n');
     _emit('uciok\n');
   }
 
@@ -875,8 +875,7 @@ class PracticeModeStockfish implements Stockfish {
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
 
-    final engineName = _flavor == StockfishFlavor.latestNoNNUE ? 'Stockfish 18' : 'Stockfish 16';
-    _emit('id name $engineName\n');
+    _emit('id name ${_engineName(flavor)}\n');
     _emit('uciok\n');
   }
 

@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -604,8 +603,7 @@ class _BottomBar extends ConsumerWidget {
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
         if (options case ArchivedGame())
-          if (analysisState.isComputerAnalysisAllowed &&
-              engineSupportedVariants.contains(analysisState.variant))
+          if (analysisState.isComputerAnalysisAllowed)
             if (mySide != null)
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),

@@ -5,27 +5,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
+import 'fake_nnue_service.dart';
 import 'fake_stockfish.dart';
 
 EvalWork makeWork({
   StringId? id,
   UciPath? path,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  StockfishFlavor flavor = StockfishFlavor.sf16,
+  Variant variant = Variant.standard,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
   return EvalWork(
     id: id ?? const StringId('test'),
-    enginePref: enginePref,
-    variant: Variant.standard,
+    stockfishFlavor: flavor,
+    variant: variant,
     threads: 1,
     path: path ?? UciPath.empty,
     searchTime: searchTime,
@@ -38,14 +40,12 @@ EvalWork makeWork({
 
 MoveWork makeMoveWork({
   StringId? id,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
   StockfishLevel level = StockfishLevel.level3,
   Position? initialPosition,
   Variant variant = Variant.standard,
 }) {
   return MoveWork(
     id: id ?? const StringId('test'),
-    enginePref: enginePref,
     variant: variant,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
@@ -419,27 +419,6 @@ void main() {
       expect(service.evaluationState.value.eval, isNull);
     });
 
-    test('evaluate() throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      const work = EvalWork(
-        id: StringId('test'),
-        enginePref: ChessEnginePref.sf16,
-        variant: Variant.antichess,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: Duration(seconds: 1),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IListConst<Step>([]),
-        threatMode: false,
-      );
-
-      expect(() => service.evaluate(work), throwsA(isA<EngineUnsupportedVariantException>()));
-      expect(service.evaluationState.value.currentWork, isNull);
-    });
-
     test('currentWork is updated immediately on evaluate()', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -501,6 +480,46 @@ void main() {
       expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
     });
 
+    test('ucinewgame is sent when variant changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), variant: Variant.standard);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), variant: Variant.atomic);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when flavor changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.sf16);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.latestNoNNUE);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
     test('ucinewgame is sent when work id changes', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
@@ -544,16 +563,97 @@ void main() {
 
       expect(delayedStockfish.stdinCommands, isNot(contains('ucinewgame')));
     });
+
+    test(
+      'latestNoNNUE falling back to sf16 does not cause restart on subsequent latestNoNNUE requests',
+      () async {
+        final delayedStockfish = DelayedFakeStockfish();
+        testBinding.stockfish = delayedStockfish;
+
+        // NNUE files are unavailable: latestNoNNUE will fall back to sf16
+        final container = await makeContainer(
+          overrides: {
+            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
+              FakeNnueServiceUnavailable(),
+            ),
+          },
+        );
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeWork(flavor: StockfishFlavor.latestNoNNUE);
+        final stream1 = service.evaluate(work1);
+        await stream1!.first;
+
+        expect(delayedStockfish.startCallCount, 1);
+
+        // A second request with latestNoNNUE should reuse the running sf16 engine.
+        final work2 = makeWork(
+          flavor: StockfishFlavor.latestNoNNUE,
+          path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        );
+        final stream2 = service.evaluate(work2);
+        await stream2!.first;
+
+        expect(
+          delayedStockfish.startCallCount,
+          1,
+          reason:
+              'Engine must not restart when latestNoNNUE already fell back to sf16 '
+              'and a new latestNoNNUE request arrives',
+        );
+      },
+    );
   });
 
   group('EvaluationService', () {
+    test('Can use StockfishFlavor.variant for standard chess and 960', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final workStandard = makeWork(
+        id: const StringId('testStandard'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.standard,
+      );
+      final streamStandard = service.evaluate(workStandard);
+      expect(streamStandard, isNotNull);
+      await streamStandard!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+
+      final work960 = makeWork(
+        id: const StringId('test960'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.chess960,
+      );
+      final stream960 = service.evaluate(work960);
+      expect(stream960, isNotNull);
+      await stream960!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
+    test('Cannot override StockfishFlavor for non standard chess variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeWork(
+        id: const StringId('test'),
+        flavor: StockfishFlavor.sf16,
+        variant: Variant.atomic,
+      );
+      final stream = service.evaluate(work);
+      expect(stream, isNotNull);
+      await stream!.first;
+      // Should ignore the requested sf16 flavor and fall back to variant for non-standard variants
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
     test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
       final work1 = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -566,7 +666,7 @@ void main() {
 
       final work2 = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
@@ -599,7 +699,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -624,7 +724,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -648,7 +748,7 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        enginePref: ChessEnginePref.sf16,
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -678,7 +778,7 @@ void main() {
 
         final work = EvalWork(
           id: const StringId('test'),
-          enginePref: ChessEnginePref.sf16,
+          stockfishFlavor: StockfishFlavor.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,
@@ -715,7 +815,9 @@ void main() {
       service.quit();
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      final stream2 = service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+      final stream2 = service.evaluate(
+        work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE),
+      );
       expect(stream2, isNotNull);
       await stream2!.first;
 
@@ -1036,7 +1138,7 @@ void main() {
         async.elapse(const Duration(seconds: 1));
 
         // Restart with different engine name
-        service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+        service.evaluate(work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE));
         async.elapse(const Duration(seconds: 2));
 
         // Notifier should have the updated engine name
@@ -1352,16 +1454,7 @@ void main() {
       expect(move, equals('e2e4'));
     });
 
-    test('findMove throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      final work = makeMoveWork(variant: Variant.antichess);
-
-      expect(() => service.findMove(work), throwsA(isA<EngineUnsupportedVariantException>()));
-    });
-
-    test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
+    test('findMove sets Skill Level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1371,11 +1464,10 @@ void main() {
       final work = makeMoveWork(level: .level6);
       await service.findMove(work);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
+      expect(delayedStockfish.options['Skill Level'], equals('6'));
     });
 
-    test('findMove uses multiPv scaled by elo', () async {
+    test('findMove uses multiPv scaled by level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1442,7 +1534,7 @@ void main() {
       expect(states.last, anyOf(EngineState.idle, EngineState.computing));
     });
 
-    test('evaluate after findMove resets UCI_LimitStrength to false', () async {
+    test('evaluate after findMove resets Skill Level to 20', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1453,15 +1545,14 @@ void main() {
       final moveWork = makeMoveWork(level: .level6);
       await service.findMove(moveWork);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1850'));
+      expect(delayedStockfish.options['Skill Level'], equals('6'));
 
       // Now do an evaluate
       final evalWork = makeWork();
       final stream = service.evaluate(evalWork);
       await stream!.first;
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('false'));
+      expect(delayedStockfish.options['Skill Level'], equals('20'));
     });
 
     test('findMove does not affect evaluationState.currentWork', () async {
@@ -1660,26 +1751,6 @@ void main() {
       final eval2 = await service.findEval(work2);
       expect(eval2, isNotNull);
       expect(eval2, equals(eval1));
-    });
-
-    test('findEval throws for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      const work = EvalWork(
-        id: StringId('test'),
-        enginePref: ChessEnginePref.sf16,
-        variant: Variant.antichess,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: Duration(seconds: 1),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IListConst<Step>([]),
-        threatMode: false,
-      );
-
-      expect(() => service.findEval(work), throwsA(isA<EngineUnsupportedVariantException>()));
     });
 
     test('findEval times out and returns last eval received', () {

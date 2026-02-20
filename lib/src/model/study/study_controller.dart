@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -577,7 +576,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
   /// Whether the engine is available for evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant) && prefs.isEnabled;
+      isComputerAnalysisAllowed && prefs.isEnabled;
 
   bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
 
