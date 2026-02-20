@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +12,9 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/pgn_game_list.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class LoadPositionScreen extends StatelessWidget {
   const LoadPositionScreen({super.key});
@@ -140,25 +145,37 @@ class _BodyState extends State<_Body> {
       );
 
       if (result != null && result.files.single.bytes != null) {
-        final content = String.fromCharCodes(result.files.single.bytes!);
+        final content = utf8.decode(result.files.single.bytes!);
 
-        // Validate that it's actually a PGN file
         try {
-          PgnGame.parsePgn(content);
-          _controller.text = content;
+          final games = PgnGame.parseMultiGamePgn(content);
+
+          if (games.isEmpty) {
+            if (mounted) {
+              showSnackBar(context, 'No valid PGN games found', type: SnackBarType.error);
+            }
+            return;
+          }
+
+          if (games.length == 1) {
+            _controller.text = content;
+          } else {
+            if (mounted) {
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(PgnGamesListScreen.buildRoute(context, games.lock, result.files.single.name));
+            }
+          }
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Invalid PGN file: $e'), backgroundColor: Colors.red),
-            );
+            showSnackBar(context, 'Invalid PGN file: $e', type: SnackBarType.error);
           }
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading file: $e'), backgroundColor: Colors.red),
-        );
+        showSnackBar(context, 'Error loading file: $e', type: SnackBarType.error);
       }
     }
   }
