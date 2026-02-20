@@ -72,6 +72,7 @@ const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.threeCheck,
   Variant.racingKings,
   Variant.horde,
+  Variant.crazyhouse,
 });
 
 /// Set of supported variants for playing a game.
