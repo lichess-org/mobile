@@ -99,6 +99,7 @@ enum AnalysisGameResult {
       '1-0' => AnalysisGameResult.whiteWins,
       '0-1' => AnalysisGameResult.blackWins,
       '½-½' => AnalysisGameResult.draw,
+      '1/2-1/2' => AnalysisGameResult.draw,
       _ => AnalysisGameResult.other,
     };
   }
