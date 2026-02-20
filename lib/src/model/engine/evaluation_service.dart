@@ -90,7 +90,13 @@ class EvaluationService {
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
 
+  // The effective (actual) flavor the engine is running. May differ from the originally requested
+  // flavor when e.g. latestNoNNUE falls back to sf16 due to missing NNUE files.
   StockfishFlavor? _currentFlavor;
+  // The flavor that was originally requested when the engine was last (re)started. Used for
+  // restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause an infinite restart
+  // loop on subsequent latestNoNNUE requests.
+  StockfishFlavor? _currentRequestedFlavor;
   Variant? _currentVariant;
   bool _initInProgress = false;
   bool _discardEvalResults = false;
@@ -303,8 +309,12 @@ class EvaluationService {
         : StockfishFlavor.variant;
 
     final stockfishState = _stockfish.state.value;
+
+    // Compare against the originally requested flavor, not the effective one. This prevents an
+    // infinite restart loop when latestNoNNUE fell back to sf16: the next latestNoNNUE request
+    // would otherwise see _currentFlavor==sf16 != latestNoNNUE and needlessly restart.
     final needsRestart =
-        _currentFlavor != flavor ||
+        _currentRequestedFlavor != flavor ||
         _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
@@ -390,6 +400,7 @@ class EvaluationService {
       _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
       _currentFlavor = actualFlavor;
+      _currentRequestedFlavor = flavor;
       _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
@@ -500,6 +511,7 @@ class EvaluationService {
     _currentMoveWork = null;
     _stockfish.quit();
     _currentFlavor = null;
+    _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
 

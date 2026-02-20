@@ -6,12 +6,14 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
+import 'fake_nnue_service.dart';
 import 'fake_stockfish.dart';
 
 EvalWork makeWork({
@@ -561,6 +563,46 @@ void main() {
 
       expect(delayedStockfish.stdinCommands, isNot(contains('ucinewgame')));
     });
+
+    test(
+      'latestNoNNUE falling back to sf16 does not cause restart on subsequent latestNoNNUE requests',
+      () async {
+        final delayedStockfish = DelayedFakeStockfish();
+        testBinding.stockfish = delayedStockfish;
+
+        // NNUE files are unavailable: latestNoNNUE will fall back to sf16
+        final container = await makeContainer(
+          overrides: {
+            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
+              FakeNnueServiceUnavailable(),
+            ),
+          },
+        );
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeWork(flavor: StockfishFlavor.latestNoNNUE);
+        final stream1 = service.evaluate(work1);
+        await stream1!.first;
+
+        expect(delayedStockfish.startCallCount, 1);
+
+        // A second request with latestNoNNUE should reuse the running sf16 engine.
+        final work2 = makeWork(
+          flavor: StockfishFlavor.latestNoNNUE,
+          path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        );
+        final stream2 = service.evaluate(work2);
+        await stream2!.first;
+
+        expect(
+          delayedStockfish.startCallCount,
+          1,
+          reason:
+              'Engine must not restart when latestNoNNUE already fell back to sf16 '
+              'and a new latestNoNNUE request arrives',
+        );
+      },
+    );
   });
 
   group('EvaluationService', () {
