@@ -59,6 +59,8 @@ String gameStatusL10n(
       switch (variant) {
         case Variant.kingOfTheHill:
           return context.l10n.kingInTheCenter;
+        case Variant.racingKings:
+          return context.l10n.raceFinished;
         case Variant.threeCheck:
           return context.l10n.threeChecks;
         default:
