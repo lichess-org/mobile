@@ -324,6 +324,7 @@ class AnalysisLayout extends StatelessWidget {
                                 child: boardHeader,
                               ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 boardBuilder(
                                   context,
