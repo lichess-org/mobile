@@ -1238,8 +1238,13 @@ class InlineMove extends ConsumerWidget {
                     : null)
         : null;
 
+    // In some crazyhouse PGNs (e.g. lichess studies), pawn drops include the `P` prefix,
+    // but we don't want to display it in the move list.
+    final san = branch.sanMove.san.startsWith('P')
+        ? branch.sanMove.san.substring(1)
+        : branch.sanMove.san;
     final moveWithNag =
-        branch.sanMove.san +
+        san +
         (branch.nags != null && params.shouldShowAnnotations
             ? moveAnnotationChar(branch.nags!)
             : '');
