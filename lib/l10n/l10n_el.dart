@@ -953,7 +953,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastGamePoints => 'Game Points';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Παρτίδες';
 
   @override
   String get broadcastMatchHistory => 'Match History';
@@ -1967,6 +1967,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Τακτικά που αφορούν τον κανόνα en passant, σύμφωνα με τον οποίο ένα πιόνι μπορεί να αιχμαλωτίσει ένα αντίπαλο πιόνι το οποίο προσπέρασε κινούμενο από την αρχική του θέση δύο τετράγωνα μπροστά.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Ευάλωτος βασιλιάς';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Ένας αξιωματικός κάνει σαχ στον αντίπαλο βασιλιά, περιορίζοντάς τον με τη βοήθεια ενός πύργου.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Τριγωνικό ματ';
@@ -4066,9 +4078,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Ζητήστε ανάλυση της παρτίδας από υπολογιστή (Μάθετε από τα λάθη σας)';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Συνέχεια (Μάθετε από τα λάθη σας)';
 
   @override
   String get keyNextBlunder => 'Επόμενο σοβαρό σφάλμα';

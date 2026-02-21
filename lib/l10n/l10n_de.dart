@@ -1018,7 +1018,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String broadcastGameX(String param) {
-    return '$param Partien';
+    return 'Partie $param';
   }
 
   @override
@@ -1967,6 +1967,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Eine Taktik, die die Schachregel \"en passant\" einbezieht, bei der ein Bauer einen gegnerischen Bauer schlagen kann, der an ihm mit seinem Doppelschritt aus der Ausgangsstellung vorbeigegangen ist.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette-Matt';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Zwei benachbarte Fluchtfelder für einen im Schach stehenden König werden von anderen Figuren besetzt.';
+
+  @override
   String get puzzleThemeExposedKing => 'Exponierter König';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Benutze den Läufer, um den König ins Schach zu stellen, während dein Turm ihn weiter beschränkt.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Schwalbenschwanz-Matt';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Ein Mattmuster, das dem Erscheinungsbild eines Schwalbenschwanzes ähnelt, ähnlich einer V-Form.';
 
   @override
   String get puzzleThemeTriangleMate => 'Dreiecks-Matt';
@@ -4066,9 +4078,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Hole dir eine Computer-Analyse, lerne aus deinen Fehlern';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Als Nächstes (Lerne aus deinen Fehlern)';
 
   @override
   String get keyNextBlunder => 'Der nächste grobe Patzer';

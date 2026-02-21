@@ -1967,6 +1967,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktikk som utnytter en passant-regelen, der en bonde kan slå en motstanderbonde som har passert den ved å flytte to felt.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epålettmatt';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Kongens to fluktfelter er opptatt av andre brikker.';
+
+  @override
   String get puzzleThemeExposedKing => 'Utsatt konge';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Løperen setter matt, mens tårnet sperrer.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Svalehalematt';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Et mattmønster som visuelt ligner halen til en svale, med en form som minner om en V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmatt';
@@ -4066,9 +4078,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Be om maskinanalyse, lær av feilene dine';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Neste (lær av feilene dine)';
 
   @override
   String get keyNextBlunder => 'Neste bukk';

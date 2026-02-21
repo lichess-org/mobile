@@ -900,7 +900,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Stillingen beregnes på baggrund af transmitterede partier og kan afvige fra de officielle resultater.';
 
   @override
   String get broadcastAllTeams => 'Alle hold';
@@ -947,19 +947,19 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Matchpoint';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Partipoint';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Matcher';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Match-historik';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Holdresultater';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1022,7 +1022,7 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'Elimineringsrunder';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1967,6 +1967,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Eksponeret konge';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmat';
@@ -4066,9 +4078,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Anmod om computeranalyse, Lær af dine fejl';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Næste (Lær af dine fejl)';
 
   @override
   String get keyNextBlunder => 'Næste brøler';

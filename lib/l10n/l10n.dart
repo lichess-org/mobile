@@ -3494,6 +3494,18 @@ abstract class AppLocalizations {
   /// **'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.'**
   String get puzzleThemeEnPassantDescription;
 
+  /// No description provided for @puzzleThemeEpauletteMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Epaulette mate'**
+  String get puzzleThemeEpauletteMate;
+
+  /// No description provided for @puzzleThemeEpauletteMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two adjacent escape squares for a checked king are occupied by other pieces.'**
+  String get puzzleThemeEpauletteMateDescription;
+
   /// No description provided for @puzzleThemeExposedKing.
   ///
   /// In en, this message translates to:
@@ -3601,6 +3613,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use the bishop to check the king, while your rook helps to confine it.'**
   String get puzzleThemeMorphysMateDescription;
+
+  /// No description provided for @puzzleThemeSwallowstailMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Swallow\'s tail mate'**
+  String get puzzleThemeSwallowstailMate;
+
+  /// No description provided for @puzzleThemeSwallowstailMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.'**
+  String get puzzleThemeSwallowstailMateDescription;
 
   /// No description provided for @puzzleThemeTriangleMate.
   ///
@@ -7483,12 +7507,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Request computer analysis, Learn from your mistakes'**
   String get keyRequestComputerAnalysis;
-
-  /// No description provided for @keyNextLearnFromYourMistakes.
-  ///
-  /// In en, this message translates to:
-  /// **'Next (Learn from your mistakes)'**
-  String get keyNextLearnFromYourMistakes;
 
   /// No description provided for @keyNextBlunder.
   ///

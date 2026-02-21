@@ -1967,6 +1967,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Igarotzean harrapatzeko arauarekin zerikusia duen taktika.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Babesik gabeko erregea';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Erabili alfila erregeari mate emateko gazteluak erregea baztertuta mantentzen duen artean.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Hirukiaren matea';
@@ -4066,9 +4078,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Ordenagailuaren analisia eskatu. Ikasi zure akatsak aztertuz';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Hurrengoa (ikasi zure akatsak aztertuz)';
 
   @override
   String get keyNextBlunder => 'Hurrengo hanka-sartzea';

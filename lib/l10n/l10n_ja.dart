@@ -1939,6 +1939,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => '危険なキング';
 
   @override
@@ -1991,6 +1997,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => '三角のメイト';
@@ -4038,9 +4050,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'コンピュータ解析の要請、自分の悪手に学ぶ';
-
-  @override
-  String get keyNextLearnFromYourMistakes => '次（自分の悪手に学ぶ）';
 
   @override
   String get keyNextBlunder => '次の大悪手';

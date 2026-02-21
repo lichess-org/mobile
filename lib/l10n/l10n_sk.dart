@@ -2023,6 +2023,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika spojená s pravidlom brania mimochodom, kedy pešiak môže vziať súperovho pešiaka, ktorý sa pohol zo základného postavenia o dve polia a tým sa dostal na jeho úroveň.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Oslabený kráľ';
 
   @override
@@ -2075,6 +2081,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Strelec dáva kráľovi mat, zatiaľ čo veža obmedzuje jeho pohyb.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trojuholníkový mat';
@@ -2695,7 +2707,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get undefendedPieces => 'Undefended pieces';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Figúrky vo väzbe';
 
   @override
   String get checkableKing => 'Checkable king';
@@ -3297,7 +3309,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get gameAsGIF => 'Uložiť ako GIF';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Mená hráčov';
 
   @override
   String get moveAnnotations => 'Move annotations';
@@ -4122,9 +4134,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Požadujte analýzu počítačom, Poučte sa zo svojich chýb';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Ďalej (Poučte sa zo svojich chýb)';
 
   @override
   String get keyNextBlunder => 'Ďalšia hrubá chyba';

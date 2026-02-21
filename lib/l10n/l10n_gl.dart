@@ -1967,6 +1967,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Táctica que involucra a captura ao paso, onde un peón pode capturar a un peón opoñente que o deixou atrás usando o seu movemento inicial de dúas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mate das xarreteiras';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'As dúas casas de escape a ámbolos dous lados do rei en xaque están ocupadas.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Usa o bispo para dar xaque mentres a torre axuda a confinar ó rei.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mate da cola de anduriña';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'É un patrón de mate que semella a cola en forma de V dunha anduriña.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mate do triángulo';
@@ -4066,9 +4078,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicitar unha análise por computador, Aprende dos teus erros';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Seguinte (Aprende dos teus erros)';
 
   @override
   String get keyNextBlunder => 'Seguinte metida de zoca';

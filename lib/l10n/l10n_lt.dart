@@ -2021,6 +2021,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika susijusi su kirtimu prasilenkiant (en passant). Pėstininkas gali nukirsti priešininko pėstininką, kuris \"aplenkė\" pirmąjį perkeltas per du langelius.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Atidengtas karalius';
 
   @override
@@ -2073,6 +2079,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4120,9 +4132,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Paprašyti kompiuterio analizės, pasimokykite iš savo klaidų';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Toliau (pasimokyti iš savo klaidų)';
 
   @override
   String get keyNextBlunder => 'Kita šiurkšti klaida';

@@ -1995,6 +1995,12 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika koja uključuje pravilo \"en passant\", gdje pješak može uhvatiti protivničkog pješaka koji ga je zaobišao koristeći svoj početni potez u dva kvadrata.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Izloženi kralj';
 
   @override
@@ -2047,6 +2053,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trokutni partner';
@@ -4094,9 +4106,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Zatražite računarsku analizu, učite na svojim greškama';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Sljedeće (Učite na svojim greškama)';
 
   @override
   String get keyNextBlunder => 'Sljedeći grubi previd';

@@ -1967,6 +1967,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat spaletë';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dy katrorë shpëtimi ngjitur njëri me tjetrin, për një mbret nën shah, janë të zënë nga gurë të tjerë.';
+
+  @override
   String get puzzleThemeExposedKing => 'Mbreti i ekspozuar';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Përdorni oficerin për t’i dhënë shah mbretit, teksa torreja juaj ndihmon të kufohet ai.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat bisht harabeli';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Një model shah-mati që nga ana pamore ngjan me bishtin e një harabeli, e ngjashme me një formë V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat trekëndësh';
@@ -4066,9 +4078,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kërkoni analizim nga kompjuteri, Mësoni nga gabimet tuaja';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Pasuesi (Mësoni nga gabimet tuaja)';
 
   @override
   String get keyNextBlunder => 'Gafa pasuese';

@@ -1967,6 +1967,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Uma tática que envolve a regra de \"en passant\", onde um peão pode capturar um peão adversário que o ignorou usando o seu primeiro movimento de duas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Seguinte (Aprenda com os seus erros)';
 
   @override
   String get keyNextBlunder => 'Próxima gafe';
@@ -7382,7 +7391,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastScore => 'Pontuação';
 
   @override
-  String get broadcastStandingsDisclaimer => 'As classificações são calculadas a partir das partidas transmitidas e podem diferir dos resultados oficiais.';
+  String get broadcastStandingsDisclaimer => 'Classificações são calculadas com base nas partidas transmitidas e podem não refletir os resultados oficiais.';
 
   @override
   String get broadcastAllTeams => 'Todas as equipes';
@@ -7429,19 +7438,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get broadcastMatchPoints => 'Pontos de matches';
+  String get broadcastMatchPoints => 'Pontos de Confronto';
 
   @override
-  String get broadcastGamePoints => 'Pontos de partidas';
+  String get broadcastGamePoints => 'Pontos de Partidas';
 
   @override
-  String get broadcastMatches => 'Partidas';
+  String get broadcastMatches => 'Confrontos';
 
   @override
-  String get broadcastMatchHistory => 'Histórico de partidas';
+  String get broadcastMatchHistory => 'Histórico de Confronto';
 
   @override
-  String get broadcastTeamResults => 'Resultados das equipes';
+  String get broadcastTeamResults => 'Resultados das Equipes';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -8392,7 +8401,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeDoubleBishopMateDescription => 'Dois bispos atacantes em diagonais adjacentes dão um mate em um rei obstruído por peças amigas.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Mate da cauda de andorinha';
+  String get puzzleThemeDovetailMate => 'Mate de Cozio';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'Uma dama dá um mate em um rei adjacente, cujos únicos dois quadrados de fuga estão obstruídos por peças amigas.';
@@ -8449,6 +8458,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeEnPassantDescription => 'Uma tática envolvendo a regra do en passant, onde um peão pode capturar um peão do oponente que passou por ele usando seu movimento inicial de duas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mate epaulette';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Duas casas de fuga adjacentes ao rei em xeque são ocupadas por outras peças.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -8501,6 +8516,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use o bispo para dar xeque no rei, enquanto sua torre ajuda a confiná-lo.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mate gueridon';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Uma padrão de xeque-mate que se assemelha visualmente à cauda de uma andorinha, em formato de V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mate do triângulo';
@@ -10548,9 +10569,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Próximo (Aprenda com seus erros)';
 
   @override
   String get keyNextBlunder => 'Próximo erro grave';

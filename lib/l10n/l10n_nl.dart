@@ -900,7 +900,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Standen worden berekend aan de hand van uitgezonden partijen en kunnen verschillen van de officiële resultaten.';
 
   @override
   String get broadcastAllTeams => 'Alle teams';
@@ -947,19 +947,19 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Wedstrijdpunten';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Partijpunten';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Wedstrijden';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Wedstrijdgeschiedenis';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Teamresultaten';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1967,6 +1967,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulettenmat';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Twee aangrenzende ontsnappingsvakjes voor een koning in schaak worden bezet door andere stukken.';
+
+  @override
   String get puzzleThemeExposedKing => 'Onveilige koning';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Gebruik de loper om de koning te mat te zetten, terwijl je toren helpt om hem te de pas af te snijden.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Zwaluwstaartmat';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Een matpatroon dat visueel lijkt op de staart van een zwaluw, zoals de vorm van een V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Driehoeksmat';
@@ -4066,9 +4078,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Volgende (leer van je fouten)';
 
   @override
   String get keyNextBlunder => 'Volgende blunder';

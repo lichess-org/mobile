@@ -2023,6 +2023,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika, ki vključuje pravilo en passant, kjer lahko kmet zajame nasprotnega kmeta, ki ga je z napredovanjem za dve polji zaobšel.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epoleta mat';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dve sosednji polji za pobeg pri šahovskem kralju sta zasedeni z drugimi figurami.';
+
+  @override
   String get puzzleThemeExposedKing => 'Izpostavljeni kralj';
 
   @override
@@ -2075,6 +2081,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'S lovcem šahiraj kralja, medtem ko ti trdnjava pomaga omejiti napad.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat lastovičinega repa';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Vzorec šaha in mata, ki vizualno spominja na lastovičji rep, podoben obliki črke V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trikotni mat';
@@ -4122,9 +4134,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Naslednji (Učite se iz svojih napak)';
 
   @override
   String get keyNextBlunder => 'Naslednji spodrsljaj';

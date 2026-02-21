@@ -900,7 +900,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastScore => 'Puntuació';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'La classificació es calcula utilitzant les partides de la retransmissió i pot variar dels resultats oficials.';
 
   @override
   String get broadcastAllTeams => 'Tots els equips';
@@ -947,19 +947,19 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Punts d\'enfentraments';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Punts de partides';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Enfrentaments';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Historial d\'enfrentaments';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Resultats per equip';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1967,6 +1967,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una tàctica que involucra la regla de captura de pas, on un peó pot capturar el peó d\'un oponent que l\'ha passat utilitzant el seu moviment inicial de dues caselles.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat de l\'espatllera';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dues caselles adjacents al rei escaquejat estan ocupades per altres peces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposat';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Utilitza l\'alfil per fer escac al rei mentre la torre ajuda a confinar-lo.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat de la cua d\'oreneta';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Un mat que visualment ens recorda la forma de la cua d\'una oreneta, similar a una forma de V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat del triangle';
@@ -4066,9 +4078,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Demana una anàlisi computeritzada, aprèn dels teus errors';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Següent (apren dels teus errors)';
 
   @override
   String get keyNextBlunder => 'Següent errada';

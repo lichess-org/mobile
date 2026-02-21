@@ -1939,6 +1939,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '涉及吃过路兵规则的战术，兵可以吃掉利用初始两格移动越过它的对方兵。';
 
   @override
+  String get puzzleThemeEpauletteMate => '肩章将杀';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => '被将杀的王有两个相邻的逃逸格，但均被其他棋子占据。';
+
+  @override
   String get puzzleThemeExposedKing => '暴露的王';
 
   @override
@@ -1991,6 +1997,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => '利用象来将军，同时您的车协助限制王移动。';
+
+  @override
+  String get puzzleThemeSwallowstailMate => '燕尾杀王';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => '一种呈 V 字形、视觉上形似燕尾的将杀模式。';
 
   @override
   String get puzzleThemeTriangleMate => '三角将杀';
@@ -4038,9 +4050,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => '请求电脑分析，并从失误中学习';
-
-  @override
-  String get keyNextLearnFromYourMistakes => '下一个（从失误中学习）';
 
   @override
   String get keyNextBlunder => '下一个败着';
@@ -10173,9 +10182,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get keyRequestComputerAnalysis => '請求引擎分析，從你的失誤中學習';
-
-  @override
-  String get keyNextLearnFromYourMistakes => '下一個 (從你的失誤中學習)';
 
   @override
   String get keyNextBlunder => '下一個漏著';

@@ -940,7 +940,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastScore => 'Wynik';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Klasyfikacja obliczana jest na podstawie nadawanych partii i może różnić się od oficjalnych wyników.';
 
   @override
   String get broadcastAllTeams => 'Wszystkie kluby';
@@ -987,19 +987,19 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Punkty meczowe';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Punkty gry';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Mecze';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Historia meczu';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Wyniki zespołu';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -2023,6 +2023,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go wykonawszy swoje początkowe posuniecie o dwa pola.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat naramiennikowy';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Odsłonięty król';
 
   @override
@@ -2075,6 +2081,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Goniec daje mata w narożniku, a wieża blokuje pola ucieczki w sąsiedniej kolumnie.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat trójkątny';
@@ -4122,9 +4134,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Poproś o analizę komputerową, ucz się na swoich błędach';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Następny (Ucz się na swoich błędach)';
 
   @override
   String get keyNextBlunder => 'Następny błąd';

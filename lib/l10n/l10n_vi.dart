@@ -1939,6 +1939,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Một đòn chiến thuật bao gồm luật bắt tốt qua đường, khi một quân tốt có thể ăn một quân tốt đối phương đi qua mặt nó khi đi 2 ô từ vị trí ban đầu của nó.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Vua bị hở';
 
   @override
@@ -1991,6 +1997,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Dùng quân tượng để chiếu vua, trong khi quân xe giúp kìm hãm vua.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Chiếu hết kiểu tam giác';
@@ -4038,9 +4050,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Yêu cầu máy tính phân tích, Học từ sai lầm của bạn';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Tiếp theo (Học từ sai lầm của bạn)';
 
   @override
   String get keyNextBlunder => 'Nước đi sai nghiêm trọng tiếp theo';

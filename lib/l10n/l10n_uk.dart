@@ -940,7 +940,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastScore => 'Очки';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Турнірні таблиці розраховуються за допомогою трансльованих ігор та можуть відрізнятися від офіційних результатів.';
 
   @override
   String get broadcastAllTeams => 'Усі команди';
@@ -987,19 +987,19 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Бали матчів';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Бали ігор';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Матчі';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Історія матчів';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Результати команд';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1966,7 +1966,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => 'Два слони на сусідніх діагоналях ставлять мат королю, який оточений власними фігурами.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Мат \"ластівчин хвіст\"';
+  String get puzzleThemeDovetailMate => 'Мат Козіо';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'Ферзь ставить мат королю поруч, єдині два поля для відступу якого зайняті його власними фігурами.';
@@ -2023,6 +2023,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика із застосуванням правила \"взяття на проході\", коли пішак може взяти пішака суперника, що зробив початковий хід на два поля, внаслідок якого перетинаюче поле під боєм пішака.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Еполетний мат';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Два суміжні поля для короля якому дали шах займають інші фігури.';
+
+  @override
   String get puzzleThemeExposedKing => 'Незахищений король';
 
   @override
@@ -2077,6 +2083,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
 
   @override
+  String get puzzleThemeSwallowstailMate => 'Мат \"ластівчин хвіст\"';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Матовий патерн, який візуально нагадує ластівчин хвіст, подібно до літери \"У\".';
+
+  @override
   String get puzzleThemeTriangleMate => 'Трикутний мат';
 
   @override
@@ -2089,7 +2101,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeVukovicMateDescription => 'Тура й кінь об\'єднуються, аби поставити мат королю. Тура, яку захищає третя фігура, ставить мат, а кінь блокує всі поля, через які король може втекти.';
 
   @override
-  String get puzzleThemeKnightEndgame => 'Коньовий ендшпіль';
+  String get puzzleThemeKnightEndgame => 'Кіньовий ендшпіль';
 
   @override
   String get puzzleThemeKnightEndgameDescription => 'Ендшпіль лише з конями та пішаками.';
@@ -2125,10 +2137,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeMateIn1Description => 'Поставте мат в один хід.';
 
   @override
-  String get puzzleThemeMateIn2 => 'Мат в 2 ходи';
+  String get puzzleThemeMateIn2 => 'Мат у 2 ходи';
 
   @override
-  String get puzzleThemeMateIn2Description => 'Поставте мат в два ходи.';
+  String get puzzleThemeMateIn2Description => 'Поставте мат у два ходи.';
 
   @override
   String get puzzleThemeMateIn3 => 'Мат в 3 ходи';
@@ -4122,9 +4134,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Зробити запит на комп\'ютерний аналіз, Учіться на своїх помилках';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Далі (Вивчити свої помилки)';
 
   @override
   String get keyNextBlunder => 'Наступна груба помилка';

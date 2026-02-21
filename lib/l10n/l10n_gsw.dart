@@ -1967,6 +1967,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'E Taktik wo \"En-Passant\" beinhaltet - e Regle wo en Pur cha en gägnerische Pur schlaa, wänn de ihn mit em \"Zwei-Fälder-Zug\" übergange hät.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette Matt';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Zwei benachbarti Fluchtfälder, für en schach-g\'schtellte König, sind vu andere Figure b\'setzt.';
+
+  @override
   String get puzzleThemeExposedKing => 'Exponierte König';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Schachmatt mit em Läufer, wobi de Turm hilft, de König z\'fange.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Schwalbeschwanz Matt';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Es Schachmattmuschter - optisch inere V-Form, ähnlich wie en Schwalbeschwanz.';
 
   @override
   String get puzzleThemeTriangleMate => 'Drüeck-Matt';
@@ -4066,9 +4078,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Computeranalyse afordere, Lern us dine Fähler';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Nächschts (Lern vu dine Fähler)';
 
   @override
   String get keyNextBlunder => 'Nächschte Patzer';

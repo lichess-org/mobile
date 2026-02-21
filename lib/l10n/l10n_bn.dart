@@ -1967,6 +1967,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'এন প্যাসান্ট রুলকে কেন্দ্র করে একটি ট্যাকটিক, যেখানে একটা সৈন্য একটা প্রতিপক্ষের সৈন্যকে খেতে পারে যা তাকে পাশ কাটিয়েছে নিজের দুই ঘর অতিক্রমের ক্ষমতা ব্যবহার করে।';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'বহি:প্রকাশিত রাজা';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অনুরোধ করুন, আপনার ভুলগুলো থেকে শিখুন';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'পরবর্তী (আপনার ভুল থেকে শিখুন)';
 
   @override
   String get keyNextBlunder => 'পরবর্তী সাঙ্ঘাতিক ভুল';

@@ -1991,6 +1991,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Stratēģija, kas iesaista garāmejošā sitiena noteikumu, kurš nosaka, ka bandinieks var nosist pretinieka bandinieku, ja tas tikko nostājies blakus ar sākotnējo divu lauciņu gājienu.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Atklāts karalis';
 
   @override
@@ -2043,6 +2049,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4090,9 +4102,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Pieprasi datora analīzi, Mācies no savām kļūdām';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Nākamais (Mācies no savām kļūdām)';
 
   @override
   String get keyNextBlunder => 'Nākamā rupjā kļūda';

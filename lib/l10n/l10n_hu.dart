@@ -1967,6 +1967,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Az en passant szabályt használó taktika, mikor egy gyalog leütheti a mellette elhaladó, alapállásból kettőt lépő ellenfél gyalogját.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Kiszolgáltatott király';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kérelmezz számítógépes elemzést és tanulj a hibáidból';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Következő (Tanulj a hibáidból)';
 
   @override
   String get keyNextBlunder => 'Következő baklövés';

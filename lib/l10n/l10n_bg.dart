@@ -1967,6 +1967,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика включваща вземане \"ан пасан\", където пешка може да вземе противникова пешка, която я е подминала правейки двоен ход.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Незащитен цар';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Oфицерът нанася мат, докато топът блокира царя по вертикала.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Мат „Триъгълник“';
@@ -4066,9 +4078,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Поискайте компютърен анализ, Учете се от грешките си';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Продължи (Учете се от грешките си)';
 
   @override
   String get keyNextBlunder => 'Следваща груба грешка';

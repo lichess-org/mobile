@@ -1967,6 +1967,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika, kus rakendatakse en passant reeglit, kus ettur saab lüüa mööda läinud vastase etturit kasutades algset kahe ruutu käiku.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Paljas kuningas';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Next (Learn from your mistakes)';
 
   @override
   String get keyNextBlunder => 'Next blunder';

@@ -1967,6 +1967,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Մերկ արքա';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Պատվիրեք համակարգչային վերլուծություն, սովորեք սեփական սխալներից';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Հաջորդը (Սովորեք ձեր սխալներից)';
 
   @override
   String get keyNextBlunder => 'Հաջորդ վրիպումը';

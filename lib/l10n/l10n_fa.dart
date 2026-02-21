@@ -1967,6 +1967,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'گرفتن پیاده در حال عبور با پیاده دیگر.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'شاه در معرض خطر';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'رُخ به محدود کردنِ شاه کمک می‌کند، فیل مات می‌کند.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'ماتِ مثلث';
@@ -4066,9 +4078,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'درخواست تحلیل رایانه‌ای، از اشتباه‌های‌تان بیاموزید';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'بعدی (از اشتباه‌های‌تان بیاموزید)';
 
   @override
   String get keyNextBlunder => 'اشتباه فاحش بعدی';

@@ -1967,6 +1967,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Re esposto';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Matto triangolare';
@@ -4068,9 +4080,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Richiedi analisi del computer, Impara dai tuoi errori';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Prossimo (Impara dai tuoi errori)';
-
-  @override
   String get keyNextBlunder => 'Prossimo grave errore';
 
   @override
@@ -6085,7 +6094,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyCounterplay => 'Contrattacco';
 
   @override
-  String get studyTimeTrouble => 'Prolemi di tempo';
+  String get studyTimeTrouble => 'Problemi di tempo';
 
   @override
   String get studyWithCompensation => 'Con compenso';
@@ -6207,7 +6216,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Carica una partita lichess esistente';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Incolla un\'URL di una partita lichess, <br>come (like lichess.org/7fHIU0XI)<br>per caricare le mosse nel capitolo.';
+  String get studyLoadExistingLichessGameText => 'Incolla un\'URL di una partita lichess <br> (come lichess.org/7fHIU0XI)<br>per caricare le mosse nel capitolo.';
 
   @override
   String get studyFromFenStringTitle => 'Da una stringa FEN';
@@ -6228,7 +6237,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyVariantsAreSupportedText => 'Proprio così, puoi studiare le varianti crazyhouse<br>e lichess!';
 
   @override
-  String get studyChapterConclusionText => 'I capitoli sono salvati per sempre.<br>Divertiti a organzizare il tuo contenuto scacchistico!';
+  String get studyChapterConclusionText => 'I capitoli sono salvati per sempre.<br>Divertiti a organizzare il tuo contenuto scacchistico!';
 
   @override
   String get studyDoubleDefeat => 'Doppia sconfitta';
@@ -6237,7 +6246,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyBlackDefeatWhiteCanNotWin => 'Il Nero è sconfitto, ma il Bianco non può vincere';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'Il Bianco è sconfitto, ma il Nero non pul vincere';
+  String get studyWhiteDefeatBlackCanNotWin => 'Il Bianco è sconfitto, ma il Nero non può vincere';
 
   @override
   String studyNbChapters(int count) {

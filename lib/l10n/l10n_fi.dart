@@ -1967,6 +1967,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan ohittanut sen.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epolettimatti';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Kahdessa ruudussa shakatun kuninkaan molemmin puolin on kussakin pakoruudun vievä nappula.';
+
+  @override
   String get puzzleThemeExposedKing => 'Suojaton kuningas';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Matita vastustajan kuningas lähetilläsi samalla kun torni vie kuninkaalta pakoruudut.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Pääskynpyrstömatti';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Mattikuvio, jonka V-muoto muistuttaa pääskyn pyrstön muotoa.';
 
   @override
   String get puzzleThemeTriangleMate => 'Kolmiomatti';
@@ -4066,9 +4078,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Pyydä tietokoneanalyysiä, opi virheistäsi';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Seuraava (Opi virheistäsi)';
 
   @override
   String get keyNextBlunder => 'Seuraava vakava virhe';

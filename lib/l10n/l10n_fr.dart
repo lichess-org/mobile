@@ -1967,6 +1967,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Une tactique impliquant la règle de la prise en passant, où un pion peut capturer un pion adverse qui l\'a croisé lors de son déplacement initial de deux cases.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat des épaulettes';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Deux cases de fuite des deux côtés du roi en échec sont occupées par des pièces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Roi exposé';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Le fou met le roi adverse échec et mat avec l\'aide de la tour.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat du guéridon';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Motif de mat qui ressemble visuellement à un guéridon (une petite table soutenue par un pied central).';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat du triangle';
@@ -4066,9 +4078,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Demandez une analyse informatique, apprenez de vos erreurs';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Suivant (apprenez de vos erreurs)';
 
   @override
   String get keyNextBlunder => 'Gaffe suivante';

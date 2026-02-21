@@ -1018,16 +1018,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastOpenTournament => 'Open';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Ženy';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Muži';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Dívky';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Chlapci';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
@@ -1036,22 +1036,22 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'Girls U$param';
+    return 'Dívky U$param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Boys U$param';
+    return 'Chlapci U$param';
   }
 
   @override
   String get broadcastQuarterfinals => 'Quarterfinals';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Semifinále';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Finále';
 
   @override
   String get broadcastTiebreaks => 'Tiebreaks';
@@ -2021,6 +2021,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Ohrožený král';
 
   @override
@@ -2073,6 +2079,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trojúhelníkový mat';
@@ -2754,7 +2766,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Zaregistrován $param';
   }
 
   @override
@@ -3295,7 +3307,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get gameAsGIF => 'Uložit jako GIF';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Jména hráčů';
 
   @override
   String get moveAnnotations => 'Move annotations';
@@ -4122,9 +4134,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Vyžádejte si počítačovou analýzu, poučte se ze svých chyb';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Další (poučit se z chyb)';
-
-  @override
   String get keyNextBlunder => 'Další hrubá chyba';
 
   @override
@@ -4416,7 +4425,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get brightness => 'Jas';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Hue';
@@ -4620,7 +4629,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Vyzvat $param';
   }
 
   @override
@@ -5048,7 +5057,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get clearSearch => 'Vymazat vyhledávání';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Štítky';
 
   @override
   String get enPassant => 'Braní mimochodem';

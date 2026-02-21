@@ -1967,6 +1967,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una táctica que involucra la captura al paso, donde un peón puede capturar a un peón oponente que lo ha pasado por alto usando su movimiento inicial de dos casillas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mate de las hombreras';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Las dos casillas de escape adyacentes al rey en jaque están ocupadas por otras piezas.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rey expuesto';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Utiliza el alfil para dar jaque al rey, mientras que tu torre ayuda a mantenerlo confinado.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mate cola de golondrina';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Un patrón de mate que se asemeja visualmente a la cola de una golondrina, en forma de V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mate del triángulo';
@@ -4066,9 +4078,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicitar análisis del ordenador, aprende de tus errores';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Siguiente (Aprende de tus errores)';
 
   @override
   String get keyNextBlunder => 'Siguiente error grave';

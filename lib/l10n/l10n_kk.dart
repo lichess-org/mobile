@@ -1967,6 +1967,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Бір сазбаз, қасынан қарсыластың сарбазы өткенде, оны басып алатын жағдайды, яғни жолай басып алуды қамтитын тактика.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Жалаңаш патша';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Компьютерлік талдауды бастаңыз, Әр қателіктен сабақ алыңыз';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Келесі (Қателіктен сабақ алыңыз)';
 
   @override
   String get keyNextBlunder => 'Келесі өрескел қателік';

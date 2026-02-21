@@ -1967,6 +1967,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktiko kiu temas pri la preterpasa prena regulo, per kiu soldato povas kapti kontraŭan soldaton kiu preterpasis ĝin dum sia komenca du-ĉela movo.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Neprotektita reĝo';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangula mato';
@@ -4066,9 +4078,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Peti komputilan analizon, Lerni de viaj eraroj';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Sekvo (Lerni de viaj eraroj)';
 
   @override
   String get keyNextBlunder => 'Sekva erarego';

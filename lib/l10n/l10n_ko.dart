@@ -1939,6 +1939,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
 
   @override
+  String get puzzleThemeEpauletteMate => '에팔레트 메이트';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => '체크된 킹의 두 인접한 탈출로가 다른 기물에 의해 막혀 있습니다.';
+
+  @override
   String get puzzleThemeExposedKing => '노출된 킹';
 
   @override
@@ -1991,6 +1997,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => '룩으로 킹의 퇴로를 차단하고, 비숍으로 킹에게 체크합니다.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => '스왈로우테일 메이트';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'V자 모양인 제비의 꼬리를 시각적으로 닮은 체크메이트 패턴입니다.';
 
   @override
   String get puzzleThemeTriangleMate => '트라이앵글 메이트';
@@ -4038,9 +4050,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => '컴퓨터 분석 요청, 실수에서 배우기';
-
-  @override
-  String get keyNextLearnFromYourMistakes => '다음 (실수에서 배우기)';
 
   @override
   String get keyNextBlunder => '다음 블런더';

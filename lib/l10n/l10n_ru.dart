@@ -2023,6 +2023,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика с применением правила «взятие на проходе», где своя пешка может взять пешку противника, сходившую на две клетки из своего начального положения, и при этом пропущенное поле было под боем своей пешки.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Эполетный мат';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Открытый король';
 
   @override
@@ -2075,6 +2081,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Слон ставит мат, в то время как ладья контролирует соседнюю вертикаль.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Треугольный мат';
@@ -4122,9 +4134,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь над своими ошибками';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Далее (Разобрать свои ошибки)';
 
   @override
   String get keyNextBlunder => 'Следующий зевок';

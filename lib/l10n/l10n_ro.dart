@@ -1995,6 +1995,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'O tactică cu regula en passant, unde un pion poate captura un pion adversar care l-a întrecut folosind mutarea sa inițială de două pătrate.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat cu epoleți';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Două pătrate de evacuare adiacente pentru un rege în șah sunt ocupate de alte piese.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rege expus';
 
   @override
@@ -2037,16 +2043,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Mat Pillsbury';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'Tura dă mat, iar nebunul ajută la constrângerea regelui.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Mat Morphy';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Folosește nebunul ca să dai șah regelui, în timp ce tura îl constrânge.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat coadă de rândunică';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Un fel de mat care se aseamănă vizual cu o coadă de rândunică, similar cu o formă de V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat în triunghi';
@@ -2139,10 +2151,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'O tactică în prima etapă a jocului.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Mat Opera';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Dă șah la rege cu o tură si folosește un nebun ca sa aperi tura.';
 
   @override
   String get puzzleThemePawnEndgame => 'Final cu pioni';
@@ -2667,10 +2679,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get undefendedPieces => 'Piese neapărate';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Piese țintuite';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Rege expus la șah';
 
   @override
   String get multipleLines => 'Mutări multiple';
@@ -4096,9 +4108,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Solicită analiza calculatorului, Învață din greșelile tale';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Următorul (Învață din greșelile tale)';
-
-  @override
   String get keyNextBlunder => 'Următoarea greșeală gravă';
 
   @override
@@ -4126,7 +4135,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get togglePositionAnnotations => 'Activează/Dezactivează adnotările pozițiilor';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Comută adnotări observaționale';
 
   @override
   String get variationArrowsInfo => 'Săgețile de variație vă permit să navigați fără a utiliza lista mutărilor.';
@@ -5025,7 +5034,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get tags => 'Etichete';
 
   @override
-  String get enPassant => 'En passant rights';
+  String get enPassant => 'En passant legale';
 
   @override
   String opponentLeftCounter(int count) {

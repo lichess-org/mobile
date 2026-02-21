@@ -1967,6 +1967,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Başlangıçta iki kare ileri giden kurnaz piyonun, rakip piyon ile yan yana geldikten sonra geçerken alma kuralı sebebiyle helvasının yendiği taktikler.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Savunmasız şah';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Kale şahı sınırlarken, fil matı gerçekleştirir.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Görsel olarak V şekline benzer bir kırlangıç kuyruğu görünümünü andıran bir şah mat deseni.';
 
   @override
   String get puzzleThemeTriangleMate => 'Üçgen matı';
@@ -2269,10 +2281,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gameSetup => 'Oyun ayarları';
 
   @override
-  String get challengeAFriend => 'Arkadaşa meydan oku';
+  String get challengeAFriend => 'Bir arkadaşınıza meydan okuyun';
 
   @override
-  String get playAgainstComputer => 'Bilgisayara Karşı Oyna';
+  String get playAgainstComputer => 'Bilgisayara karşı oyna';
 
   @override
   String get gameMode => 'Oyun modu';
@@ -4066,9 +4078,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Sonraki (Hatalarından ders al)';
 
   @override
   String get keyNextBlunder => 'Sonraki vahim hata';

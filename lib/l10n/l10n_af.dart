@@ -1967,6 +1967,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '\'N Taktiek waarby die en passant-reël betrokke is, waar \'n pion \'n teenstanderspion kan vang wat dit omseil het met die aanvanklike beweging van twee vierkante.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Blootgestelde koning';
 
   @override
@@ -2019,6 +2025,12 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -4066,9 +4078,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Vra rekenaaranalise aan, Leer uit jou foute';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Volgende (Leer uit jou foute)';
 
   @override
   String get keyNextBlunder => 'Volgende flater';
