@@ -427,12 +427,13 @@ class _FenDialogState extends State<_FenDialog> {
     if (text.isEmpty) return;
 
     _controller.text = text;
-    Navigator.of(context, rootNavigator: true).pop();
     try {
       final pos = Chess.fromSetup(Setup.parseFen(text));
       widget.onFenLoaded(pos.fen);
     } catch (_) {
       showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
+    } finally {
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 
