@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 import '../test_helpers.dart';
@@ -22,7 +23,11 @@ void main() {
         child: const MaterialApp(
           home: GameLayout(
             orientation: Side.white,
-            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+            boardParams: GameBoardParams.readonly(
+              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+              variant: Variant.standard,
+              pockets: null,
+            ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
               key: ValueKey('top_table'),
@@ -69,7 +74,11 @@ void main() {
         child: const MaterialApp(
           home: GameLayout(
             orientation: Side.white,
-            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+            boardParams: GameBoardParams.readonly(
+              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+              variant: Variant.standard,
+              pockets: null,
+            ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
               key: ValueKey('top_table'),

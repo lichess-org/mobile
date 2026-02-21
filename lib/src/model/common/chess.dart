@@ -133,6 +133,8 @@ enum Variant {
 
   bool get isPlaySupported => playSupportedVariants.contains(this);
 
+  bool get hasDropMoves => this == Variant.crazyhouse;
+
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 
   static Variant fromRule(Rule rule) {

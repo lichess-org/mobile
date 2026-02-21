@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 /// Returns the estimated height of what is left after removing the height of the board from the screen.
 double estimateHeightMinusBoard(MediaQueryData mediaQuery) {
@@ -42,6 +43,14 @@ ScreenType getScreenType(BuildContext context) {
 /// Returns true if the device form factor is at least as large as a tablet
 bool isTabletOrLarger(BuildContext context) {
   return getScreenType(context) >= ScreenType.tablet;
+}
+
+/// How big a square in the [PocketsMenu] should be, based on the size of the board and whether the device is a tablet.
+double pocketSquareSize({required double boardSize, required bool isTablet}) {
+  final squareSize = boardSize / 8;
+  // On tablets, displaying the pockets at the same size as regular pieces
+  // can lead to overflows and looks weird, so reduce the size a bit.
+  return isTablet ? 0.7 * squareSize : squareSize;
 }
 
 enum ScreenType { watch, handset, tablet, desktop }

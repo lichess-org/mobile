@@ -271,6 +271,7 @@ class _Body extends ConsumerWidget {
 
         return AnalysisLayout(
           pov: pov,
+          sideToMove: state.currentPosition.turn,
           tabController: tabController,
           boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
             roundId: roundId,

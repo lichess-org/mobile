@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -258,7 +259,7 @@ class GameBody extends ConsumerWidget {
                 isBoardTurned: isBoardTurned,
               ),
               lastMove: gameState.game.moveAt(gameState.stepCursor),
-              interactiveBoardParams: (
+              boardParams: GameBoardParams.interactive(
                 variant: gameState.game.meta.variant,
                 position: gameState.currentPosition,
                 playerSide: gameState.game.playable && !gameState.isReplaying

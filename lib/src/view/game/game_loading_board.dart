@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -34,9 +36,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
     return SafeArea(
       child: GameLayout(
         orientation: Side.white,
-        fen: kEmptyFen,
-        topTable: const SizedBox.shrink(),
-        bottomTable: const SizedBox.shrink(),
+        boardParams: GameBoardParams.emptyBoard,
         moves: const [],
         boardOverlay: Card(
           color: Theme.of(context).dialogTheme.backgroundColor,
@@ -136,9 +136,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
     return SafeArea(
       child: GameLayout(
         orientation: Side.white,
-        fen: kEmptyFen,
-        topTable: const SizedBox.shrink(),
-        bottomTable: const SizedBox.shrink(),
+        boardParams: GameBoardParams.emptyBoard,
         moves: const [],
         boardOverlay: Card(
           color: Theme.of(context).dialogTheme.backgroundColor,
@@ -227,7 +225,11 @@ class StandaloneGameLoadingContent extends StatelessWidget {
       child: SafeArea(
         child: GameLayout(
           orientation: position?.orientation ?? Side.white,
-          fen: position?.fen ?? kEmptyFen,
+          boardParams: GameBoardParams.readonly(
+            fen: position?.fen ?? kEmptyFen,
+            variant: Variant.standard,
+            pockets: null,
+          ),
           lastMove: position?.lastMove,
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
@@ -300,9 +302,7 @@ class LoadGameError extends StatelessWidget {
           child: SafeArea(
             child: GameLayout(
               orientation: Side.white,
-              fen: kEmptyFen,
-              topTable: const SizedBox.shrink(),
-              bottomTable: const SizedBox.shrink(),
+              boardParams: GameBoardParams.emptyBoard,
               moves: const [],
               errorMessage: errorMessage,
             ),
@@ -341,9 +341,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
           child: SafeArea(
             child: GameLayout(
               orientation: Side.white,
-              fen: kEmptyFen,
-              topTable: const SizedBox.shrink(),
-              bottomTable: const SizedBox.shrink(),
+              boardParams: GameBoardParams.emptyBoard,
               moves: const [],
               boardOverlay: Card(
                 color: Theme.of(context).dialogTheme.backgroundColor,
