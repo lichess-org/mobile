@@ -6,21 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
-
-typedef InteractiveBoardParams = ({
-  Variant variant,
-  Position position,
-  PlayerSide playerSide,
-  NormalMove? promotionMove,
-  void Function(Move, {bool? viaDragAndDrop}) onMove,
-  void Function(Role? role) onPromotionSelection,
-  Premovable? premovable,
-});
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 Side variantBoardOrientation({
   required Variant variant,
@@ -50,12 +42,13 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Creates a game layout with the given values.
   const GameLayout({
     required this.orientation,
-    this.fen,
-    this.interactiveBoardParams,
+    required this.boardParams,
     this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.topTableUpsideDown = false,
+    this.bottomTableUpsideDown = false,
     this.topTableFlex = 1,
     this.bottomTableFlex = 1,
     this.shapes,
@@ -68,20 +61,18 @@ class GameLayout extends ConsumerStatefulWidget {
     this.zenMode = false,
     this.userActionsBar,
     super.key,
-  }) : assert(
-         fen != null || interactiveBoardParams != null,
-         'Either a fen or interactiveBoardParams must be provided',
-       );
+  });
 
   /// Creates an empty game layout (useful for loading).
   const GameLayout.empty({this.moves, this.errorMessage})
     : orientation = Side.white,
-      fen = kEmptyFen,
-      interactiveBoardParams = null,
+      boardParams = GameBoardParams.emptyBoard,
       lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
+      topTableUpsideDown = false,
+      bottomTableUpsideDown = false,
       topTableFlex = 1,
       bottomTableFlex = 1,
       shapes = null,
@@ -92,9 +83,7 @@ class GameLayout extends ConsumerStatefulWidget {
       zenMode = false,
       userActionsBar = null;
 
-  final String? fen;
-
-  final InteractiveBoardParams? interactiveBoardParams;
+  final GameBoardParams boardParams;
 
   final Side orientation;
 
@@ -114,6 +103,12 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
+
+  /// Whether to render the [topTable] upside down. Used for OTB games.
+  final bool topTableUpsideDown;
+
+  /// Whether to render the [bottomTable] upside down. Used for OTB games.
+  final bool bottomTableUpsideDown;
 
   /// Flex factor for the top table in portrait mode (default: 1).
   final int topTableFlex;
@@ -170,6 +165,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             onClearShapes: _onClearShapes,
             newShapeColor: boardPrefs.shapeColor.color,
           ),
+          enableDropMoves: widget.boardParams.variant.hasDropMoves == true,
         );
 
         final settings = widget.boardSettingsOverrides != null
@@ -179,18 +175,69 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         final shapes = userShapes.union(widget.shapes ?? ISet());
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
-        final fen = widget.interactiveBoardParams?.position.fen ?? widget.fen!;
-        final gameData = widget.interactiveBoardParams != null
-            ? boardPrefs.toGameData(
-                variant: widget.interactiveBoardParams!.variant,
-                position: widget.interactiveBoardParams!.position,
-                playerSide: widget.interactiveBoardParams!.playerSide,
-                promotionMove: widget.interactiveBoardParams!.promotionMove,
-                onMove: widget.interactiveBoardParams!.onMove,
-                onPromotionSelection: widget.interactiveBoardParams!.onPromotionSelection,
-                premovable: widget.interactiveBoardParams!.premovable,
-              )
-            : null;
+        final fen = widget.boardParams.fen;
+        final gameData = switch (widget.boardParams) {
+          ReadonlyBoardParams() => null,
+          final InteractiveBoardParams board => boardPrefs.toGameData(
+            variant: board.variant,
+            position: board.position,
+            playerSide: board.playerSide,
+            promotionMove: board.promotionMove,
+            onMove: board.onMove,
+            onPromotionSelection: board.onPromotionSelection,
+            premovable: board.premovable,
+          ),
+        };
+
+        final sideToMove = switch (widget.boardParams) {
+          ReadonlyBoardParams() => null,
+          InteractiveBoardParams(:final position, :final playerSide) =>
+            playerSide == PlayerSide.none ? null : position.turn,
+        };
+
+        final pockets = widget.boardParams.pockets;
+
+        Widget topTable({required double boardSize}) => RotatedBox(
+          quarterTurns: widget.topTableUpsideDown ? 2 : 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            verticalDirection: widget.topTableUpsideDown
+                ? VerticalDirection.up
+                : VerticalDirection.down,
+            children: [
+              if (pockets != null)
+                PocketsMenu(
+                  side: widget.orientation.opposite,
+                  sideToMove: sideToMove,
+                  pockets: pockets,
+                  squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                  isUpsideDown: widget.topTableUpsideDown,
+                ),
+              widget.topTable,
+            ],
+          ),
+        );
+
+        Widget bottomTable({required double boardSize}) => RotatedBox(
+          quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            verticalDirection: widget.bottomTableUpsideDown
+                ? VerticalDirection.up
+                : VerticalDirection.down,
+            children: [
+              widget.bottomTable,
+              if (pockets != null)
+                PocketsMenu(
+                  side: widget.orientation,
+                  sideToMove: sideToMove,
+                  pockets: pockets,
+                  squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                  isUpsideDown: widget.bottomTableUpsideDown,
+                ),
+            ],
+          ),
+        );
 
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
@@ -199,6 +246,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           final boardSize = sideWidth >= 250
               ? defaultBoardSize
               : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
@@ -222,7 +270,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      widget.topTable,
+                      topTable(boardSize: boardSize),
                       if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
@@ -244,7 +292,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                           child: widget.userActionsBar,
                         ),
 
-                      widget.bottomTable,
+                      bottomTable(boardSize: boardSize),
                     ],
                   ),
                 ),
@@ -253,13 +301,19 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
-          final double boardSize = isTablet
-              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-              : defaultBoardSize;
+
+          final pocketsPadding = (pockets != null && (isTablet || isShortVerticalScreen(context)))
+              ? kAdditionalBoardSidePaddingForPockets
+              : 0;
+
+          final double boardSize =
+              (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
+              pocketsPadding;
 
           // vertical space left on portrait mode to check if we can display the
           // move list
-          final verticalSpaceLeftBoardOnPortrait = constraints.biggest.height - boardSize;
+          final verticalSpaceLeftBoardOnPortrait =
+              constraints.biggest.height - boardSize - (pockets != null ? boardSize / 3 : 0);
 
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -284,7 +338,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  child: widget.topTable,
+                  child: topTable(boardSize: boardSize),
                 ),
               ),
               Padding(
@@ -310,7 +364,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  child: widget.bottomTable,
+                  child: bottomTable(boardSize: boardSize),
                 ),
               ),
               if (widget.userActionsBar != null) widget.userActionsBar!,

@@ -376,6 +376,7 @@ class _Body extends ConsumerWidget {
       child: AnalysisLayout(
         tabController: controller,
         pov: pov,
+        sideToMove: analysisState.currentPosition.turn,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
         boardHeader: boardHeader,

@@ -77,6 +77,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -113,6 +114,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -399,6 +401,7 @@ class _Body extends ConsumerWidget {
         length: 1,
         child: AnalysisLayout(
           pov: Side.white,
+          sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
             child: Center(child: Text('${variant.label} is not supported yet.')),
@@ -423,6 +426,7 @@ class _Body extends ConsumerWidget {
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
+      sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:

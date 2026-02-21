@@ -129,6 +129,7 @@ class AnalysisLayout extends StatelessWidget {
     required this.boardBuilder,
     required this.children,
     required this.pov,
+    required this.sideToMove,
     this.boardHeader,
     this.boardFooter,
     this.engineGaugeBuilder,
@@ -145,6 +146,8 @@ class AnalysisLayout extends StatelessWidget {
 
   /// The side the board is displayed from.
   final Side pov;
+
+  final Side? sideToMove;
 
   /// A widget to show above the board.
   ///

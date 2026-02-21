@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
@@ -224,10 +225,9 @@ class _BodyState extends ConsumerState<_Body> {
                       youAre: orientation,
                       isBoardTurned: isBoardFlipped,
                     ),
-                    fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
                     shapes: _buildBoardShapes(gameState),
-                    interactiveBoardParams: (
+                    boardParams: GameBoardParams.interactive(
                       variant: Variant.standard,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished

@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -189,7 +190,7 @@ class _BodyState extends ConsumerState<_Body> {
                 isBoardTurned: isBoardTurned,
               ),
               lastMove: game.moveAt(stepCursor),
-              interactiveBoardParams: (
+              boardParams: GameBoardParams.interactive(
                 variant: game.meta.variant,
                 position: position,
                 playerSide: game.playable && !isReplaying

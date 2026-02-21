@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
@@ -211,20 +212,19 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(
                       side: orientation.opposite,
-                      upsideDown:
-                          !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                       clockKey: const ValueKey('topClock'),
                     ),
+                    topTableUpsideDown:
+                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                     bottomTable: _Player(
                       side: orientation,
-                      upsideDown:
-                          overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                       clockKey: const ValueKey('bottomClock'),
                     ),
+                    bottomTableUpsideDown:
+                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
-                    fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
-                    interactiveBoardParams: (
+                    boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
@@ -425,11 +425,10 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _Player extends ConsumerWidget {
-  const _Player({required this.clockKey, required this.side, required this.upsideDown});
+  const _Player({required this.clockKey, required this.side});
 
   final Side side;
   final Key clockKey;
-  final bool upsideDown;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -437,27 +436,24 @@ class _Player extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
 
-    return RotatedBox(
-      quarterTurns: upsideDown ? 2 : 0,
-      child: GamePlayer(
-        game: gameState.game,
-        side: side,
-        materialDiff: boardPreferences.materialDifferenceFormat.visible
-            ? gameState.currentMaterialDiff(side)
-            : null,
-        materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-        shouldLinkToUserProfile: false,
-        clock: clock.timeIncrement.isInfinite
-            ? null
-            : Clock(
-                timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
-                key: clockKey,
-                active: clock.activeClock == side,
-                emergencyThreshold: Duration(
-                  seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
-                ),
+    return GamePlayer(
+      game: gameState.game,
+      side: side,
+      materialDiff: boardPreferences.materialDifferenceFormat.visible
+          ? gameState.currentMaterialDiff(side)
+          : null,
+      materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+      shouldLinkToUserProfile: false,
+      clock: clock.timeIncrement.isInfinite
+          ? null
+          : Clock(
+              timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+              key: clockKey,
+              active: clock.activeClock == side,
+              emergencyThreshold: Duration(
+                seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
               ),
-      ),
+            ),
     );
   }
 }
