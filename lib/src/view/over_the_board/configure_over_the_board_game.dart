@@ -37,6 +37,7 @@ class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
 
 class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
+  late TimeControlType chosenTimeControlType;
 
   late TimeIncrement timeIncrement;
 
@@ -46,7 +47,20 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     chosenVariant = gameState.game.meta.variant;
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
+    chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
     super.initState();
+  }
+
+  void _setTimeControlType(TimeControlType type) {
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
+    setState(() {
+      chosenTimeControlType = type;
+      if (type == TimeControlType.unlimited) {
+        timeIncrement = const TimeIncrement.infinite();
+      } else if (timeIncrement.isInfinite) {
+        timeIncrement = TimeIncrement.blitzDefault();
+      }
+    });
   }
 
   void _setTotalTime(num seconds) {
@@ -85,44 +99,68 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 );
               },
             ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.minutesPerSide}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: clockLabelInMinutes(timeIncrement.time),
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                value: timeIncrement.time,
-                values: kAvailableTimesInSeconds,
-                labelBuilder: clockLabelInMinutes,
-                onChange: _setTotalTime,
-                onChangeEnd: _setTotalTime,
-              ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.timeControl),
+              settingsValue: chosenTimeControlType.label(context.l10n),
+              onTap: () {
+                showChoicePicker<TimeControlType>(
+                  context,
+                  choices: TimeControlType.values,
+                  selectedItem: chosenTimeControlType,
+                  labelBuilder: (TimeControlType control) => Text(control.label(context.l10n)),
+                  onSelectedItemChanged: (TimeControlType control) => _setTimeControlType(control),
+                );
+              },
             ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.incrementInSeconds}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: timeIncrement.increment.toString(),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 400),
+              firstChild: const SizedBox.shrink(),
+              secondChild: Column(
+                children: [
+                  ListTile(
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.minutesPerSide}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            text: clockLabelInMinutes(timeIncrement.time),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                    subtitle: NonLinearSlider(
+                      value: timeIncrement.time,
+                      values: kAvailableTimesInSeconds,
+                      labelBuilder: clockLabelInMinutes,
+                      onChange: _setTotalTime,
+                      onChangeEnd: _setTotalTime,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.incrementInSeconds}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            text: timeIncrement.increment.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    subtitle: NonLinearSlider(
+                      value: timeIncrement.increment,
+                      values: kAvailableIncrementsInSeconds,
+                      onChange: _setIncrement,
+                      onChangeEnd: _setIncrement,
+                    ),
+                  ),
+                ],
               ),
-              subtitle: NonLinearSlider(
-                value: timeIncrement.increment,
-                values: kAvailableIncrementsInSeconds,
-                onChange: _setIncrement,
-                onChangeEnd: _setIncrement,
-              ),
+              crossFadeState: timeIncrement.isInfinite
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
             ),
           ],
         ),
