@@ -626,7 +626,7 @@
   <string name="onlyExistingConversations">仅现有的对话</string>
   <string name="onlyFriends">仅限好友</string>
   <string name="menu">菜单</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">王车易位</string>
+  <string name="castling">王车易位</string>
   <string name="whiteCastlingKingside">白方 O-O</string>
   <string name="blackCastlingKingside">黑方 O-O</string>
   <plurals name="nbForumPosts">
@@ -683,7 +683,6 @@
   <string name="keyShowOrHideComments">显示/隐藏评论</string>
   <string name="keyEnterOrExitVariation">进入/退出变着</string>
   <string name="keyRequestComputerAnalysis">请求电脑分析，并从失误中学习</string>
-  <string name="keyNextLearnFromYourMistakes">下一个（从失误中学习）</string>
   <string name="keyNextBlunder">下一个败着</string>
   <string name="keyNextMistake">下一个错着</string>
   <string name="keyNextInaccuracy">下一个失准</string>
@@ -983,5 +982,5 @@
   <string name="search">搜索</string>
   <string name="clearSearch">清除搜索</string>
   <string name="tags">标签</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">吃过路兵</string>
+  <string name="enPassant">吃过路兵</string>
 </resources>

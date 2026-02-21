@@ -665,7 +665,7 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="onlyExistingConversations">Berre eksisterande samtalar</string>
   <string name="onlyFriends">Berre vener</string>
   <string name="menu">Meny</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Rokade</string>
+  <string name="castling">Rokade</string>
   <string name="whiteCastlingKingside">Kvit O-O</string>
   <string name="blackCastlingKingside">Svart O-O</string>
   <plurals name="nbForumPosts">
@@ -723,7 +723,6 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="keyShowOrHideComments">syn/gøym kommentarar</string>
   <string name="keyEnterOrExitVariation">gå inn i/gå ut av varianten</string>
   <string name="keyRequestComputerAnalysis">Be om maskinanalyse. Lær av feila dine</string>
-  <string name="keyNextLearnFromYourMistakes">Neste (lær av feila dine)</string>
   <string name="keyNextBlunder">Neste store mistak (\"bukk\")</string>
   <string name="keyNextMistake">Neste mistak</string>
   <string name="keyNextInaccuracy">Neste upresise trekk</string>
@@ -1029,5 +1028,5 @@ Alle kostnader for drift, utvikling og innhald vert finansiert eine og åleine a
   <string name="search">Søk</string>
   <string name="clearSearch">Nytt søk</string>
   <string name="tags">Etikettar</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">En passant</string>
+  <string name="enPassant">En passant</string>
 </resources>

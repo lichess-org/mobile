@@ -96,6 +96,6 @@
   <string name="quarterfinals">Kvartfinaler</string>
   <string name="semifinals">Semifinaler</string>
   <string name="finals">Finaler</string>
-  <string name="gameX">Parti %s</string>
+  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Parti %s</string>
   <string name="knockouts">Utslagsrunder</string>
 </resources>

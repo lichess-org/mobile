@@ -627,7 +627,7 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="onlyExistingConversations">Chỉ từ các cuộc trò chuyện hiện tại</string>
   <string name="onlyFriends">Chỉ bạn bè</string>
   <string name="menu">Mục lục</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">Nhập thành</string>
+  <string name="castling">Nhập thành</string>
   <string name="whiteCastlingKingside">Trắng O-O</string>
   <string name="blackCastlingKingside">Đen O-O</string>
   <plurals name="nbForumPosts">
@@ -684,7 +684,6 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="keyShowOrHideComments">hiện/ẩn bình luận</string>
   <string name="keyEnterOrExitVariation">vào/thoát biến</string>
   <string name="keyRequestComputerAnalysis">Yêu cầu máy tính phân tích, Học từ sai lầm của bạn</string>
-  <string name="keyNextLearnFromYourMistakes">Tiếp theo (Học từ sai lầm của bạn)</string>
   <string name="keyNextBlunder">Nước đi sai nghiêm trọng tiếp theo</string>
   <string name="keyNextMistake">Nước đi sai lầm tiếp theo</string>
   <string name="keyNextInaccuracy">Nước đi không chính xác tiếp theo</string>
@@ -984,5 +983,5 @@ Mọi chi phí vận hành, phát triển, và nội dung được tài trợ b�
   <string name="search">Tìm kiếm</string>
   <string name="clearSearch">Xóa nội dung tìm kiếm</string>
   <string name="tags">Thẻ</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">Bắt tốt qua đường</string>
+  <string name="enPassant">Bắt tốt qua đường</string>
 </resources>

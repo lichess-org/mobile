@@ -664,7 +664,7 @@
   <string name="onlyExistingConversations">केवळ विद्यमान संभाषणे</string>
   <string name="onlyFriends">फक्त मित्र</string>
   <string name="menu">मेनू</string>
-  <string name="castling" comment="Label for a box on the right side of the board editor, where the user can select castling rights. Noun.&#10;&#10;NOTE: this string used to read &quot;Castling&quot;, with &quot;rights&quot; added in 2026 for clarity.">किल्लेकोट</string>
+  <string name="castling">किल्लेकोट</string>
   <string name="whiteCastlingKingside">पांढरा O-O</string>
   <string name="blackCastlingKingside">काळा O-O</string>
   <plurals name="nbForumPosts">
@@ -722,7 +722,6 @@
   <string name="keyShowOrHideComments">प्रतिक्रिया दाखवा/लपवा</string>
   <string name="keyEnterOrExitVariation">variation च्या आत/बाहेर</string>
   <string name="keyRequestComputerAnalysis">संगणक विश्लेषणासाठी विनतंती करा, तुमच्या चुकांपासून शिका</string>
-  <string name="keyNextLearnFromYourMistakes">पुढील (तुमच्या चुकांपासून शिका)</string>
   <string name="keyNextBlunder">पुढील घोडचूक</string>
   <string name="keyNextMistake">पुढील चूक</string>
   <string name="keyNextInaccuracy">पुढील अयोग्य चाल</string>
@@ -1029,5 +1028,5 @@
   <string name="search">शोधा</string>
   <string name="clearSearch">शोध हटवा</string>
   <string name="tags">टॅंग्स</string>
-  <string name="enPassant" comment="Appears in the board editor (https://lichess.org/editor).&#10;&#10;It is for a setting to determine if en passant will be available for that current position.&#10;&#10;If it is selected, then it will be added to the FEN for that position - meaning that if you play the game from that exact position, it will be possible to capture en passant.&#10;&#10;NOTE: this string used to read &quot;En passant&quot;, with &quot;rights&quot; added in 2026 for clarity.">एन पसांट</string>
+  <string name="enPassant">एन पसांट</string>
 </resources>
