@@ -55,7 +55,22 @@ class OfflineComputerGameScreen extends ConsumerWidget {
         : context.l10n.playAgainstComputer;
 
     return Scaffold(
-      appBar: AppBar(title: AppBarTitleText(title)),
+      appBar: AppBar(
+        title: AppBarTitleText(title),
+        actions: [
+          if (practiceMode)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Practice settings',
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => const _PracticeSettingsSheet(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -480,6 +495,9 @@ class _PracticeCommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final hideBestMove = prefs.hideBestMove;
+    final hideEvaluation = prefs.hideEvaluation;
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
@@ -522,7 +540,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       Widget? suggestedMoveWidget;
       final suggestedMove = practiceComment.suggestedMove;
-      if (suggestedMove != null) {
+      if (suggestedMove != null && !hideBestMove) {
         final moveText = suggestedMove.san;
         final labelText = practiceComment.isShowingAlternative
             ? context.l10n.anotherWasX('')
@@ -577,7 +595,7 @@ class _PracticeCommentCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (practiceComment.evalAfter != null)
+          if (practiceComment.evalAfter != null && !hideEvaluation)
             Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
@@ -592,14 +610,15 @@ class _PracticeCommentCard extends ConsumerWidget {
           Expanded(
             child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
           ),
-          if (cachedEval != null)
-            Text(cachedEval, style: evalTextStyle)
-          else
-            const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-            ),
+          if (!hideEvaluation)
+            if (cachedEval != null)
+              Text(cachedEval, style: evalTextStyle)
+            else
+              const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+              ),
         ],
       );
     } else {
@@ -766,6 +785,40 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             },
             child: Text(context.l10n.play, style: Styles.bold),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PracticeSettingsSheet extends ConsumerWidget {
+  const _PracticeSettingsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListSection(
+          header: const Text('Practice settings'),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.hideBestMove),
+              value: prefs.hideBestMove,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Hide evaluation'),
+              value: prefs.hideEvaluation,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+              },
+            ),
+          ],
         ),
       ],
     );
