@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.provider.Settings
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import io.flutter.embedding.android.FlutterActivity
@@ -45,11 +46,10 @@ class MainActivity: FlutterActivity() {
             val totalMemInMb = memoryInfo.totalMem / 1048576L
             result.success(totalMemInMb.toInt())
           }
-          // "getAvailableRam" -> {
-          //   val memoryInfo = getAvailableMemory()
-          //   val availMemInMb = memoryInfo.availMem / 1048576L
-          //   result.success(availMemInMb.toInt())
-          // }
+          "areAnimationsEnabled" -> {
+            val animationsEnabled = areAnimationsEnabled()
+            result.success(animationsEnabled)
+          }
           else -> {
             result.notImplemented()
           }
@@ -71,6 +71,32 @@ class MainActivity: FlutterActivity() {
     val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     return ActivityManager.MemoryInfo().also { memoryInfo ->
         activityManager.getMemoryInfo(memoryInfo)
+    }
+  }
+
+  private fun areAnimationsEnabled(): Boolean {
+    return try {
+      // Check both animator duration scale and transition animation scale
+      // TRANSITION_ANIMATION_SCALE controls "remove animations" setting
+      val animatorScale = Settings.Global.getFloat(
+        contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        1.0f
+      )
+      val transitionScale = Settings.Global.getFloat(
+        contentResolver,
+        Settings.Global.TRANSITION_ANIMATION_SCALE,
+        1.0f
+      )
+      val windowScale = Settings.Global.getFloat(
+        contentResolver,
+        Settings.Global.WINDOW_ANIMATION_SCALE,
+        1.0f
+      )
+      // If any of these are 0, animations are effectively disabled
+      animatorScale > 0.0f && transitionScale > 0.0f && windowScale > 0.0f
+    } catch (e: Settings.SettingNotFoundException) {
+      true
     }
   }
 }

@@ -37,8 +37,18 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final isAndroid = Theme.of(context).platform == TargetPlatform.android;
 
-    final androidVersionAsync = ref.watch(androidVersionProvider);
+    // Only watch Android-specific providers on Android
+    final androidVersionAsync = isAndroid ? ref.watch(androidVersionProvider) : null;
+    final androidAnimationsAsync = isAndroid ? ref.watch(androidAnimationsProvider) : null;
+
+    // Only refresh on Android
+    if (isAndroid) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.invalidate(androidAnimationsProvider);
+      });
+    }
 
     return ListView(
       children: [
@@ -70,32 +80,56 @@ class _Body extends ConsumerWidget {
                 );
               },
             ),
-            SwitchSettingTile(
-              title: Text(context.l10n.preferencesPieceAnimation),
-              value: boardPrefs.pieceAnimation,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+            Consumer(
+              builder: (context, ref, child) {
+                // Only check animations on Android, default to enabled for others
+                final systemAnimationsEnabled =
+                    !isAndroid ||
+                    (androidAnimationsAsync?.maybeWhen(
+                          data: (enabled) => enabled,
+                          orElse: () => true,
+                        ) ??
+                        true);
+
+                return SwitchSettingTile(
+                  title: Text(context.l10n.preferencesPieceAnimation),
+                  subtitle: systemAnimationsEnabled
+                      ? null
+                      : Text(
+                          'Disabled by system settings',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                  value: systemAnimationsEnabled && boardPrefs.pieceAnimation,
+                  onChanged: systemAnimationsEnabled
+                      ? (value) {
+                          ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+                        }
+                      : null,
+                );
               },
             ),
-            if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
-              androidVersionAsync.maybeWhen(
-                data: (version) => version != null && version.sdkInt >= 29
-                    ? SwitchSettingTile(
-                        title: Text(context.l10n.mobileSettingsImmersiveMode),
-                        subtitle: Text(
-                          context.l10n.mobileSettingsImmersiveModeSubtitle,
-                          maxLines: 5,
-                        ),
-                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
-                        onChanged: (value) {
-                          ref
-                              .read(boardPreferencesProvider.notifier)
-                              .toggleImmersiveModeWhilePlaying();
-                        },
-                      )
-                    : const SizedBox.shrink(),
-                orElse: () => const SizedBox.shrink(),
-              ),
+            if (isAndroid && !isTabletOrLarger(context))
+              androidVersionAsync?.maybeWhen(
+                    data: (version) => version != null && version.sdkInt >= 29
+                        ? SwitchSettingTile(
+                            title: Text(context.l10n.mobileSettingsImmersiveMode),
+                            subtitle: Text(
+                              context.l10n.mobileSettingsImmersiveModeSubtitle,
+                              maxLines: 5,
+                            ),
+                            value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                            onChanged: (value) {
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .toggleImmersiveModeWhilePlaying();
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                    orElse: () => const SizedBox.shrink(),
+                  ) ??
+                  const SizedBox.shrink(),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesPieceDestinations),
               value: boardPrefs.showLegalMoves,

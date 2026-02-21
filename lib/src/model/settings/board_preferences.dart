@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
@@ -20,6 +21,24 @@ final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   BoardPreferences.new,
   name: 'BoardPreferencesProvider',
 );
+
+/// A provider that returns the effective piece animation duration, considering Android system settings.
+final effectivePieceAnimationDurationProvider = Provider<Duration>((ref) {
+  final boardPrefs = ref.watch(boardPreferencesProvider);
+  final androidAnimationsAsync = ref.watch(androidAnimationsProvider);
+
+  final androidAnimationsEnabled = androidAnimationsAsync.maybeWhen(
+    data: (enabled) => enabled,
+    orElse: () => true, // Default to enabled if we can't determine
+  );
+
+  // If Android animations are disabled, always return Duration.zero regardless of app setting
+  if (!androidAnimationsEnabled) {
+    return Duration.zero;
+  }
+
+  return boardPrefs.pieceAnimationDuration;
+});
 
 class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
   @override
