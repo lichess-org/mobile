@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/board_editor/position.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -59,7 +60,7 @@ class _OpeningsTabState extends State<_OpeningsTab> {
 
   @override
   void initState() {
-    _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
+    _openings = rootBundle.loadString('assets/positions.json').then((s) {
       final List<Position> result = [];
       for (final opening in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
         for (final position
@@ -109,7 +110,7 @@ class _EndGamesTabState extends State<_EndGamesTab> {
 
   @override
   void initState() {
-    _endGames = DefaultAssetBundle.of(context).loadString('assets/endgames.json').then((s) {
+    _endGames = rootBundle.loadString('assets/endgames.json').then((s) {
       final List<Position> result = [];
       for (final position in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
         result.add(Position.fromJson(position));
