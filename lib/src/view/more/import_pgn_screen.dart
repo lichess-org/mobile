@@ -84,16 +84,7 @@ class _BodyState extends State<_Body> {
 
       if (games.length == 1) {
         final game = games.first;
-        final initialPosition = PgnGame.startingPosition(game.headers);
         final rule = Rule.fromPgn(game.headers['Variant']);
-        final mainlineMoves = game.moves.mainline();
-
-        if ((mainlineMoves.isNotEmpty &&
-                initialPosition.parseSan(mainlineMoves.first.san) == null) ||
-            (mainlineMoves.isEmpty && game.headers['FEN'] == null)) {
-          showSnackBar(context, context.l10n.invalidPgn, type: SnackBarType.error);
-          return;
-        }
 
         Navigator.of(context, rootNavigator: true).push(
           AnalysisScreen.buildRoute(
@@ -103,7 +94,7 @@ class _BodyState extends State<_Body> {
               orientation: Side.white,
               pgn: text,
               isComputerAnalysisAllowed: true,
-              initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
+              initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
               variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
             ),
           ),

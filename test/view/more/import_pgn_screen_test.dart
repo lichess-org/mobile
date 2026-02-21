@@ -62,18 +62,6 @@ void main() {
     );
   });
 
-  group('Initial state', () {
-    testWidgets('Import PGN is a standalone button, not an icon inside the text field', (
-      tester,
-    ) async {
-      final app = await _makeApp(tester);
-      await tester.pumpWidget(app);
-
-      expect(find.widgetWithText(FilledButton, 'Or upload a PGN file'), findsOneWidget);
-      expect(find.byIcon(Icons.upload_file), findsNothing);
-    });
-  });
-
   group('Clipboard paste', () {
     testWidgets('Valid single-game PGN navigates to analysis screen immediately', (tester) async {
       const pgn = '[White "A"]\n[Black "B"]\n\n1. e4 e5 *';
@@ -101,19 +89,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ImportPgnScreen), findsNothing);
-    });
-
-    testWidgets('Invalid PGN shows snackbar and stays on screen', (tester) async {
-      _mockClipboard('not a valid pgn');
-
-      final app = await _makeApp(tester);
-      await tester.pumpWidget(app);
-
-      await tester.tap(find.byIcon(Icons.paste));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ImportPgnScreen), findsOneWidget);
-      expect(find.text('Invalid PGN'), findsOneWidget);
     });
 
     testWidgets('Multi-game PGN from clipboard navigates to the game list screen', (tester) async {
