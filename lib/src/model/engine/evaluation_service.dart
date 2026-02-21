@@ -179,11 +179,11 @@ class EvaluationService {
   ///
   /// Returns `null` if a cached eval is sufficient.
   Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
-    // reset eval
+    // reset eval is needed to avoid showing a stale eval from a previous work in a different position
     _setEval(null);
 
-    // Check if cached eval is sufficient
     if (!work.threatMode) {
+      // If we have an already good enough eval in cache, skip the evaluation
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
         case CloudEval _ when goDeeper == false:
@@ -271,7 +271,6 @@ class EvaluationService {
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
-    // Cancel any previous pending move request
     _cancelPendingMoveRequest();
 
     final completer = Completer<UCIMove>();
@@ -316,7 +315,6 @@ class EvaluationService {
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
-    // Check if we need to clear engine context (different game/puzzle)
     final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
     final needsNewGame =
         previousWork != null &&
@@ -383,7 +381,7 @@ class EvaluationService {
 
       await _stockfish.start(
         flavor: actualFlavor,
-        // we always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+        // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
         variant: variant.fairy,
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
