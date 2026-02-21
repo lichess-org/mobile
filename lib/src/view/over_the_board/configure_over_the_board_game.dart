@@ -61,6 +61,16 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     });
   }
 
+  void _toggleInfiniteTime(bool isInfinite) {
+    setState(() {
+      if (isInfinite) {
+        timeIncrement = TimeIncrement.blitzDefault();
+      } else {
+        timeIncrement = const TimeIncrement.infinite();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
@@ -85,44 +95,62 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 );
               },
             ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.minutesPerSide}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: clockLabelInMinutes(timeIncrement.time),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 400),
+              firstChild: const SizedBox.shrink(),
+              secondChild: Column(
+                children: [
+                  ListTile(
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.minutesPerSide}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            text: clockLabelInMinutes(timeIncrement.time),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                    subtitle: NonLinearSlider(
+                      value: timeIncrement.time,
+                      values: kAvailableTimesInSeconds,
+                      labelBuilder: clockLabelInMinutes,
+                      onChange: _setTotalTime,
+                      onChangeEnd: _setTotalTime,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text.rich(
+                      TextSpan(
+                        text: '${context.l10n.incrementInSeconds}: ',
+                        children: [
+                          TextSpan(
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            text: timeIncrement.increment.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    subtitle: NonLinearSlider(
+                      value: timeIncrement.increment,
+                      values: kAvailableIncrementsInSeconds,
+                      onChange: _setIncrement,
+                      onChangeEnd: _setIncrement,
+                    ),
+                  ),
+                ],
               ),
-              subtitle: NonLinearSlider(
-                value: timeIncrement.time,
-                values: kAvailableTimesInSeconds,
-                labelBuilder: clockLabelInMinutes,
-                onChange: _setTotalTime,
-                onChangeEnd: _setTotalTime,
-              ),
+              crossFadeState: timeIncrement.isInfinite
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
             ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.incrementInSeconds}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: timeIncrement.increment.toString(),
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                value: timeIncrement.increment,
-                values: kAvailableIncrementsInSeconds,
-                onChange: _setIncrement,
-                onChangeEnd: _setIncrement,
-              ),
+            SwitchSettingTile(
+              title: Text(context.l10n.unlimited),
+              value: timeIncrement.isInfinite,
+              onChanged: (value) {
+                _toggleInfiniteTime(timeIncrement.isInfinite);
+              },
             ),
           ],
         ),
