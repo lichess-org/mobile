@@ -113,9 +113,7 @@ class Clock extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             color: resolveBackgroundColor(),
-            border: useSideColor
-                ? Border.all(color: colorScheme.outline, width: 1.5)
-                : null,
+            border: useSideColor ? Border.all(color: colorScheme.outline, width: 1.5) : null,
           ),
           child: Padding(
             padding: padding,
