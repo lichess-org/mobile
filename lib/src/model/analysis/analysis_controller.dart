@@ -345,7 +345,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
-      pov: options.orientation,
+      pov: _variant == Variant.racingKings ? Side.white : options.orientation,
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
