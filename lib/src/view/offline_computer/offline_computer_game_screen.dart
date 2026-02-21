@@ -219,7 +219,11 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
-                    orientation: isBoardFlipped ? orientation.opposite : orientation,
+                    orientation: variantBoardOrientation(
+                      variant: gameState.game.meta.variant,
+                      youAre: orientation,
+                      isBoardTurned: isBoardFlipped,
+                    ),
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
                     shapes: _buildBoardShapes(gameState),

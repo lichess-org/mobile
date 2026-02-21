@@ -183,7 +183,11 @@ class _BodyState extends ConsumerState<_Body> {
         Expanded(
           child: SafeArea(
             child: GameLayout(
-              orientation: isBoardTurned ? youAre!.opposite : youAre!,
+              orientation: variantBoardOrientation(
+                variant: game.meta.variant,
+                youAre: youAre!,
+                isBoardTurned: isBoardTurned,
+              ),
               lastMove: game.moveAt(stepCursor),
               interactiveBoardParams: (
                 variant: game.meta.variant,
