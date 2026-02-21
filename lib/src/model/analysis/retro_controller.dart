@@ -349,7 +349,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       if (!isNavigating && isForward) {
         final isCheck = currentNode.sanMove.isCheck;
         if (currentNode.sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref.read(moveFeedbackServiceProvider).captureFeedback(state.variant, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -358,7 +358,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       else {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
-          soundService.play(Sound.capture);
+          soundService.playCaptureSound(state.variant);
         } else {
           soundService.play(Sound.move);
         }
