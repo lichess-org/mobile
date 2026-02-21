@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
@@ -190,5 +191,39 @@ void main() {
       ),
       Side.black,
     );
+  });
+
+  testWidgets('Crazyhouse displays pockets and supports drop moves', (WidgetTester tester) async {
+    final playedMoves = <Move>[];
+    final app = await makeTestProviderScope(
+      tester,
+      child: MaterialApp(
+        home: GameLayout(
+          orientation: Side.white,
+          boardParams: GameBoardParams.interactive(
+            variant: Variant.crazyhouse,
+            position: Crazyhouse.fromSetup(
+              Setup.parseFen('rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3'),
+            ),
+            playerSide: PlayerSide.white,
+            onMove: (move, {viaDragAndDrop}) {
+              playedMoves.add(move);
+            },
+            onPromotionSelection: (_) {},
+            premovable: null,
+            promotionMove: null,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(app);
+
+    expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+    // Only the pockets of the player side should be interactive.
+    await playDropMove(tester, Side.white, Role.pawn, 'a4');
+    await playDropMove(tester, Side.black, Role.pawn, 'a3');
+
+    expect(playedMoves, [const DropMove(to: Square.a4, role: Role.pawn)]);
   });
 }
