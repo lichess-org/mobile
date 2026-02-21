@@ -462,12 +462,24 @@ class _Player extends ConsumerWidget {
     }
 
     // Human player - just show captured pieces and practice comment
+    final practiceStatusLabel = !game.practiceMode
+        ? null
+        : gameState.isEngineThinking || gameState.isEvaluatingMove
+        ? context.l10n.computerThinking
+        : !gameState.finished && gameState.turn == game.playerSide
+        ? context.l10n.yourTurn
+        : null;
+
     return Column(
       crossAxisAlignment: .stretch,
       mainAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
         if (game.practiceMode) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(practiceStatusLabel ?? ''),
+          ),
           _PracticeCommentCard(gameState: gameState),
           const SizedBox(height: 8),
         ],
@@ -513,17 +525,7 @@ class _PracticeCommentCard extends ConsumerWidget {
     IconData? icon;
 
     if (isEvaluatingMove) {
-      content = Row(
-        children: [
-          const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          Text(context.l10n.evaluatingYourMove),
-        ],
-      );
+      content = Text(context.l10n.evaluatingYourMove);
     } else if (practiceComment != null) {
       final verdict = practiceComment.verdict;
       icon = practiceComment.icon;
@@ -607,18 +609,9 @@ class _PracticeCommentCard extends ConsumerWidget {
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
-          Expanded(
-            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
-          ),
+          const Spacer(),
           if (!hideEvaluation)
-            if (cachedEval != null)
-              Text(cachedEval, style: evalTextStyle)
-            else
-              const SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-              ),
+            if (cachedEval != null) Text(cachedEval, style: evalTextStyle),
         ],
       );
     } else {
