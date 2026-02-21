@@ -263,14 +263,35 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       (m) => _normalizeUci(m.move.uci) == normalizedMoveUci,
     );
 
-    // Fetch master database upfront (only in opening phase) - needed in both paths
-    final masterEntry = plyBeforeMove < _kOpeningPlyThreshold
-        ? await _fetchMasterDatabase(positionBeforeFen)
-        : null;
+    // Capture the position after the player's move to guard against stale updates.
+    final positionAfterFen = state.currentPosition.fen;
 
-    if (!ref.mounted) return;
+    // Fire-and-forget master database check (only in opening phase).
+    // Updates the comment verdict to goodMove if the move is a known book move,
+    // without blocking the evaluation or the engine reply.
+    if (plyBeforeMove < _kOpeningPlyThreshold) {
+      _fetchMasterDatabase(positionBeforeFen).then((masterEntry) {
+        if (!ref.mounted || masterEntry == null) return;
+        if (state.currentPosition.fen != positionAfterFen) return;
+        final currentComment = state.practiceComment;
+        if (currentComment == null || currentComment.isBookMove) return;
+        final isBookMove = masterEntry.moves.any(
+          (m) => _normalizeUci(m.uci) == normalizedMoveUci && m.games > 1,
+        );
+        if (!isBookMove) return;
+        state = state.copyWith(
+          practiceComment: currentComment.copyWith(
+            verdict: MoveVerdict.goodMove,
+            isBookMove: true,
+            bestMove: null,
+          ),
+        );
+      });
+    }
 
-    // Fast path: move was in the analysis, show comment immediately from cached data
+    // Fast path: move was in the analysis, show comment immediately from cached data.
+    // Keep isEvaluatingMove: true so the status label continues to show
+    // "Computer thinking..." while the follow-up eval fetches the eval string.
     if (cachedMoveData != null) {
       _logger.info('Using cached eval for move: ${move.uci}');
 
@@ -281,11 +302,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         winningChancesBefore: cachedWinningChances,
         winningChancesAfter: cachedMoveData.winningChances,
         evalAfterString: null, // Will be updated when eval completes
-        masterEntry: masterEntry,
+        masterEntry: null,
         playerSide: playerSide,
       );
 
-      state = state.copyWith(isEvaluatingMove: false, practiceComment: comment);
+      // Show the comment immediately but keep isEvaluatingMove: true so the
+      // status line keeps showing "Computer thinking..." during the follow-up eval.
+      state = state.copyWith(practiceComment: comment);
     } else {
       _logger.info('Move not in cache, evaluating: ${move.uci}');
     }
@@ -322,11 +345,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (state.practiceComment != null) {
         // Fast path follow-up: update existing comment with eval string
-        if (evalAfter != null) {
-          state = state.copyWith(
-            practiceComment: state.practiceComment!.copyWith(evalAfter: evalAfter.evalString),
-          );
-        }
+        state = state.copyWith(
+          isEvaluatingMove: false,
+          practiceComment: state.practiceComment!.copyWith(evalAfter: evalAfter?.evalString),
+        );
       } else if (evalAfter != null) {
         // Slow path: create full comment with eval
         final winningChancesAfter = -evalAfter.winningChances(playerSide.opposite);
@@ -338,7 +360,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           winningChancesBefore: cachedWinningChances,
           winningChancesAfter: winningChancesAfter,
           evalAfterString: evalAfter.evalString,
-          masterEntry: masterEntry,
+          masterEntry: null,
           playerSide: playerSide,
         );
 

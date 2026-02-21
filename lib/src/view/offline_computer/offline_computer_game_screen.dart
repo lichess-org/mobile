@@ -524,9 +524,7 @@ class _PracticeCommentCard extends ConsumerWidget {
     Color? iconColor;
     IconData? icon;
 
-    if (isEvaluatingMove) {
-      content = Text(context.l10n.evaluatingYourMove);
-    } else if (practiceComment != null) {
+    if (practiceComment != null) {
       final verdict = practiceComment.verdict;
       icon = practiceComment.icon;
       iconColor = practiceComment.color;
@@ -601,6 +599,8 @@ class _PracticeCommentCard extends ConsumerWidget {
             Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
+    } else if (isEvaluatingMove) {
+      content = Text(context.l10n.evaluatingYourMove);
     } else if (gameState.finished) {
       // Game is over
       content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
