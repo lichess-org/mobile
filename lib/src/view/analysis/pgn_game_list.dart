@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 typedef _GameData = ({
   AnalysisPlayer? white,
@@ -46,39 +47,37 @@ class PgnGamesListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.nbGames(games.length))),
-      body: SafeArea(
-        child: ListView.separated(
-          itemCount: games.length,
-          addAutomaticKeepAlives: false,
-          addRepaintBoundaries: false,
-          separatorBuilder: (context, index) =>
-              const Divider(height: 1, thickness: 1, indent: 16, endIndent: 16),
-          itemBuilder: (context, index) {
-            final game = games[index];
-            final gameData = _gameData[index];
-            return ListTile(
-              title: Text(gameData.title, maxLines: 2, overflow: .ellipsis),
-              subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  AnalysisScreen.buildRoute(
-                    context,
-                    AnalysisOptions.standalone(
-                      id: const StringId('standalone'),
-                      orientation: .white,
-                      pgn: game.makePgn(),
-                      variant: gameData.variant,
-                      isComputerAnalysisAllowed: true,
-                      initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
-                    ),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.nbGames(games.length))),
+      body: ListView.separated(
+        itemCount: games.length,
+        addAutomaticKeepAlives: false,
+        addRepaintBoundaries: false,
+        separatorBuilder: (context, index) =>
+            const Divider(height: 1, thickness: 1, indent: 16, endIndent: 16),
+        itemBuilder: (context, index) {
+          final game = games[index];
+          final gameData = _gameData[index];
+          return ListTile(
+            title: Text(gameData.title, maxLines: 2, overflow: .ellipsis),
+            subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  AnalysisOptions.standalone(
+                    id: const StringId('standalone'),
+                    orientation: .white,
+                    pgn: game.makePgn(),
+                    variant: gameData.variant,
+                    isComputerAnalysisAllowed: true,
+                    initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
                   ),
-                );
-              },
-            );
-          },
-        ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
