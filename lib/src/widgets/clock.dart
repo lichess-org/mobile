@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -21,6 +22,7 @@ class Clock extends StatelessWidget {
     this.active = false,
     this.clockStyle,
     this.emergencyThreshold,
+    this.side,
     this.padLeft = false,
     this.padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
     super.key,
@@ -38,6 +40,13 @@ class Clock extends StatelessWidget {
 
   /// Clock style to use.
   final ClockStyle? clockStyle;
+
+  /// The chess side this clock belongs to ([Side.white] or [Side.black]).
+  ///
+  /// When provided and [active] is `true`, the clock background will use a
+  /// white background for [Side.white] and a black background for [Side.black],
+  /// unless the clock is in emergency mode (which always takes priority).
+  final Side? side;
 
   /// Whether to pad with a leading zero (default is `false`).
   final bool padLeft;
@@ -61,6 +70,40 @@ class Clock extends StatelessWidget {
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
+    // Determine whether to use the side-based active background.
+    // Conditions: clock is active, a side is provided, time is still running,
+    // and we are NOT in emergency (emergency always takes priority).
+    final useSideColor = active && side != null && timeLeft > Duration.zero && !isEmergency;
+
+    Color resolveBackgroundColor() {
+      if (timeLeft <= Duration.zero) {
+        return effectiveClockStyle.emergencyBackgroundColor;
+      }
+      if (active) {
+        if (isEmergency) return effectiveClockStyle.emergencyBackgroundColor;
+        if (useSideColor) {
+          return side == Side.white ? Colors.white60 : Colors.black87;
+        }
+        return effectiveClockStyle.activeBackgroundColor;
+      }
+      return effectiveClockStyle.backgroundColor;
+    }
+
+    Color resolveTextColor() {
+      if (timeLeft <= Duration.zero) {
+        return effectiveClockStyle.emergencyTextColor;
+      }
+      if (active) {
+        if (isEmergency) return effectiveClockStyle.emergencyTextColor;
+        if (useSideColor) {
+          // Ensure legibility against white/black backgrounds.
+          return side == Side.white ? Colors.black : Colors.white;
+        }
+        return effectiveClockStyle.activeTextColor;
+      }
+      return effectiveClockStyle.textColor;
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
@@ -69,13 +112,10 @@ class Clock extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color: timeLeft > Duration.zero
-                ? active
-                      ? isEmergency
-                            ? effectiveClockStyle.emergencyBackgroundColor
-                            : effectiveClockStyle.activeBackgroundColor
-                      : effectiveClockStyle.backgroundColor
-                : effectiveClockStyle.emergencyBackgroundColor,
+            color: resolveBackgroundColor(),
+            border: useSideColor
+                ? Border.all(color: colorScheme.outline, width: 1.5)
+                : null,
           ),
           child: Padding(
             padding: padding,
@@ -87,13 +127,7 @@ class Clock extends StatelessWidget {
                       ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
                       : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color: timeLeft > Duration.zero
-                        ? active
-                              ? isEmergency
-                                    ? effectiveClockStyle.emergencyTextColor
-                                    : effectiveClockStyle.activeTextColor
-                              : effectiveClockStyle.textColor
-                        : effectiveClockStyle.emergencyTextColor,
+                    color: resolveTextColor(),
                     fontSize: _kClockFontSize * fontScaleFactor,
                     height: isShortVerticalScreen(context) ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
