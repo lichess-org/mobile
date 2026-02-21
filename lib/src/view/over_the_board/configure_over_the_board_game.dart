@@ -37,6 +37,7 @@ class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
 
 class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
+  late TimeControlType chosenTimeControlType;
 
   late TimeIncrement timeIncrement;
 
@@ -46,7 +47,20 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     chosenVariant = gameState.game.meta.variant;
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
+    chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
     super.initState();
+  }
+
+  void _setTimeControlType(TimeControlType type) {
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
+    setState(() {
+      chosenTimeControlType = type;
+      if (type == TimeControlType.unlimited) {
+        timeIncrement = const TimeIncrement.infinite();
+      } else if (timeIncrement.isInfinite) {
+        timeIncrement = TimeIncrement.blitzDefault();
+      }
+    });
   }
 
   void _setTotalTime(num seconds) {
@@ -58,16 +72,6 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
   void _setIncrement(num seconds) {
     setState(() {
       timeIncrement = TimeIncrement(timeIncrement.time, seconds.toInt());
-    });
-  }
-
-  void _toggleInfiniteTime(bool isInfinite) {
-    setState(() {
-      if (isInfinite) {
-        timeIncrement = TimeIncrement.blitzDefault();
-      } else {
-        timeIncrement = const TimeIncrement.infinite();
-      }
     });
   }
 
@@ -92,6 +96,19 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                   onSelectedItemChanged: (Variant variant) => setState(() {
                     chosenVariant = variant;
                   }),
+                );
+              },
+            ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.timeControl),
+              settingsValue: chosenTimeControlType.label(context.l10n),
+              onTap: () {
+                showChoicePicker<TimeControlType>(
+                  context,
+                  choices: TimeControlType.values,
+                  selectedItem: chosenTimeControlType,
+                  labelBuilder: (TimeControlType control) => Text(control.label(context.l10n)),
+                  onSelectedItemChanged: (TimeControlType control) => _setTimeControlType(control),
                 );
               },
             ),
@@ -144,13 +161,6 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               crossFadeState: timeIncrement.isInfinite
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.unlimited),
-              value: timeIncrement.isInfinite,
-              onChanged: (value) {
-                _toggleInfiniteTime(timeIncrement.isInfinite);
-              },
             ),
           ],
         ),
