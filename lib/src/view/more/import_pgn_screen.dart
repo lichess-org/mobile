@@ -103,6 +103,7 @@ class _BodyState extends State<_Body> {
               orientation: Side.white,
               pgn: text,
               isComputerAnalysisAllowed: true,
+              initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
               variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
             ),
           ),
