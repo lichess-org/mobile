@@ -99,6 +99,7 @@ class _Pocket extends StatelessWidget {
     return IgnorePointer(
       ignoring: !interactive || count == 0,
       child: Draggable(
+        key: ValueKey('pocket-${side.name}${role.name}'),
         data: Piece(role: role, color: side),
         feedback: RotatedBox(
           quarterTurns: isUpsideDown ? 2 : 0,
