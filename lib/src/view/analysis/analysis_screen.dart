@@ -602,7 +602,15 @@ class _BottomBar extends ConsumerWidget {
                     )
                     .toList(),
                 selectedItem: analysisState.variant,
-                labelBuilder: (Variant variant) => Text(variant.label),
+                labelBuilder: (Variant variant) => Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
+                      const WidgetSpan(child: SizedBox(width: 8)),
+                      TextSpan(text: variant.label),
+                    ],
+                  ),
+                ),
                 onSelectedItemChanged: (Variant variant) =>
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       ref

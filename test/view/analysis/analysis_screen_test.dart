@@ -137,18 +137,18 @@ void main() {
           await tester.tap(find.text('Variant'));
           await tester.pumpAndSettle(); // wait for dialog to open
 
-          expect(find.text('Standard'), findsOneWidget);
-          expect(find.text('Chess960'), findsNothing);
-          expect(find.text('From Position'), findsNothing);
-          expect(find.text('Antichess'), findsOneWidget);
-          expect(find.text('King of the Hill'), findsOneWidget);
-          expect(find.text('Three Check'), findsOneWidget);
-          expect(find.text('Atomic'), findsNothing);
-          expect(find.text('Horde'), findsOneWidget);
-          expect(find.text('Racing Kings'), findsOneWidget);
-          expect(find.text('Crazyhouse'), findsNothing);
+          expect(find.textContaining('Standard'), findsOneWidget);
+          expect(find.textContaining('Chess960'), findsNothing);
+          expect(find.textContaining('From Position'), findsNothing);
+          expect(find.textContaining('Antichess'), findsOneWidget);
+          expect(find.textContaining('King of the Hill'), findsOneWidget);
+          expect(find.textContaining('Three Check'), findsOneWidget);
+          expect(find.textContaining('Atomic'), findsNothing);
+          expect(find.textContaining('Horde'), findsOneWidget);
+          expect(find.textContaining('Racing Kings'), findsOneWidget);
+          expect(find.textContaining('Crazyhouse'), findsNothing);
 
-          await tester.tap(find.text('Horde'));
+          await tester.tap(find.textContaining('Horde'));
           await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
           // Horde starting position should be loaded:
@@ -1022,7 +1022,7 @@ void main() {
     await tester.pumpAndSettle(); // wait for menu to open
     await tester.tap(find.text('Variant'));
     await tester.pumpAndSettle(); // wait for variant selection dialog to open
-    await tester.tap(find.text('Racing Kings'));
+    await tester.tap(find.textContaining('Racing Kings'));
     await tester.pumpAndSettle(); // wait for variant to change
 
     // Make some moves
