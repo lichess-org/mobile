@@ -19,10 +19,9 @@ typedef _GameData = ({
 
 /// A screen that lists multiple games parsed from one PGN file, allowing the user to select one for analysis.
 class PgnGamesListScreen extends StatelessWidget {
-  PgnGamesListScreen({required this.games, required this.source, super.key});
+  PgnGamesListScreen({required this.games, super.key});
 
   final IList<PgnGame> games;
-  final String source;
 
   late final IList<_GameData> _gameData = List.generate(games.length, (index) {
     final game = games[index];
@@ -41,24 +40,14 @@ class PgnGamesListScreen extends StatelessWidget {
     );
   }, growable: false).lock;
 
-  static Route<dynamic> buildRoute(BuildContext context, IList<PgnGame> games, String source) {
-    return buildScreenRoute(
-      context,
-      screen: PgnGamesListScreen(games: games, source: source),
-    );
+  static Route<dynamic> buildRoute(BuildContext context, IList<PgnGame> games) {
+    return buildScreenRoute(context, screen: PgnGamesListScreen(games: games));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Flexible(child: Text(source, overflow: .ellipsis)),
-            Text(' • ${games.length} ${context.l10n.games}'),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: Text(context.l10n.nbGames(games.length))),
       body: SafeArea(
         child: ListView.separated(
           itemCount: games.length,

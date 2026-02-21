@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
-import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
+import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -72,8 +72,8 @@ class _Body extends ConsumerWidget {
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                title: Text(context.l10n.loadPosition),
-                onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
+                title: Text(context.l10n.importPgn),
+                onTap: () => Navigator.of(context).push(ImportPgnScreen.buildRoute(context)),
               ),
               ListTile(
                 leading: const Icon(Icons.biotech_outlined),
