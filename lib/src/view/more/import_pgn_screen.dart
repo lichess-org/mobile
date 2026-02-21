@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/pgn_game_list.dart';
+import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ImportPgnScreen extends StatelessWidget {
