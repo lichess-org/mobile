@@ -118,7 +118,7 @@ final analysisControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'AnalysisControllerProvider',
     );
 
-({Root root, UciPath path})? _savedStandalone;
+({Root root, UciPath path, Variant variant})? _savedStandalone;
 
 void clearSavedStandaloneAnalysis() {
   _savedStandalone = null;
@@ -192,7 +192,9 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         }
       case Standalone(:final variant, pgn: final gamePgn):
         {
-          _variant = variant;
+          _variant = gamePgn.isEmpty && _savedStandalone != null
+              ? _savedStandalone!.variant
+              : variant;
           pgn = gamePgn;
           opening = null;
           serverAnalysis = null;
@@ -202,7 +204,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           // We want to keep the standalone analysis session alive even if the user navigates away
           ref.onCancel(() {
             if (_root.mainline.isNotEmpty) {
-              _savedStandalone = (root: _root, path: _currentPath);
+              _savedStandalone = (root: _root, path: _currentPath, variant: _variant);
             }
           });
         }
@@ -229,6 +231,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
               'Event': '?',
               'Site': '?',
               'Date': _dateFormat.format(DateTime.now()),
+              'Variant': _variant.label,
               'Round': '?',
               'White': '?',
               'Black': '?',
