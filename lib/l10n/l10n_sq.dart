@@ -67,6 +67,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
+  String get mobileNewGame => 'Lojë e re';
+
+  @override
   String get mobileNoSearchResults => 'Nuk ka rezultate';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Mirë se vini te aplikacioni Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Shihni Lojën';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Hidhe tej';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Përshtateni';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Resht së shfaquri kërcënimin';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Të plotësuar';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Kalo te faqja ime';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompakte';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'E hollësishme';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Hapja e Explorer-it s’bëhet dot jashtë linje.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\\nMund ta përdorni që nga skeda shtëpi.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'E mëparshmja';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -897,6 +900,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastScore => 'Përfundim';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Krejt ekipet';
 
   @override
@@ -941,12 +947,82 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Pikë Ndeshjeje';
+
+  @override
+  String get broadcastGamePoints => 'Pikë Loje';
+
+  @override
+  String get broadcastMatches => 'Ndeshje';
+
+  @override
+  String get broadcastMatchHistory => 'Historik Ndeshjesh';
+
+  @override
+  String get broadcastTeamResults => 'Përfundime Ekipi';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Termi(at) vijues do të përkthehen automatikisht: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Raundi $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Mbajtja e emrit parazgjedhje do ta përkthejë automatikisht në krejt gjuhët e tjera.';
+
+  @override
+  String get broadcastOpenTournament => 'I hapur';
+
+  @override
+  String get broadcastWomenTournament => 'Femra';
+
+  @override
+  String get broadcastMenTournament => 'Meshkuj';
+
+  @override
+  String get broadcastGirlsTournament => 'Vajza';
+
+  @override
+  String get broadcastBoysTournament => 'Djem';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'I hapur për U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Vajzat U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Djem U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Çerekfinale';
+
+  @override
+  String get broadcastSemifinals => 'Gjysmëfinale';
+
+  @override
+  String get broadcastFinals => 'Fiale';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Loja $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1967,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat spaletë';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dy katrorë shpëtimi ngjitur njëri me tjetrin, për një mbret nën shah, janë të zënë nga gurë të tjerë.';
+
+  @override
   String get puzzleThemeExposedKing => 'Mbreti i ekspozuar';
 
   @override
@@ -1943,6 +2025,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Përdorni oficerin për t’i dhënë shah mbretit, teksa torreja juaj ndihmon të kufohet ai.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat bisht harabeli';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Një model shah-mati që nga ana pamore ngjan me bishtin e një harabeli, e ngjashme me një formë V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat trekëndësh';
@@ -2215,6 +2303,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ose lëreni kundërshtarin tuaj të skanojë këtë kod QR';
+
+  @override
+  String get reusableChallengeUrl => 'URL e ripërdorshme sfide';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Një lidhje e përhershme, për këdo që dëshiron t’ju sfidojë me saktësisht këto rregullime.';
 
   @override
   String get waiting => 'Në pritje';
@@ -3159,6 +3253,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get gameAsGIF => 'GIF i lojës';
 
   @override
+  String get playerNames => 'Emra lojtarësh';
+
+  @override
+  String get moveAnnotations => 'Shënime lëvizjesh';
+
+  @override
   String get pasteTheFenStringHere => 'Ngjitni këtu tekstin FEN';
 
   @override
@@ -3893,7 +3993,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get hostANewSimul => 'Organizoni një simultane të re';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Regjistrohu për të pritur ose bashkuar një simul';
+  String get signUpToHostOrJoinASimul => 'Regjistrohuni që të organizoni, ose të merrni pjesë, në një simultane';
 
   @override
   String get noSimulFound => 'S’u gjet simultane';
@@ -3978,9 +4078,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kërkoni analizim nga kompjuteri, Mësoni nga gabimet tuaja';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Pasuesi (Mësoni nga gabimet tuaja)';
 
   @override
   String get keyNextBlunder => 'Gafa pasuese';
@@ -4272,6 +4369,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get brightness => 'Ndriçim';
+
+  @override
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Ngjyrim';
@@ -4906,7 +5006,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tags => 'Etiketa';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {

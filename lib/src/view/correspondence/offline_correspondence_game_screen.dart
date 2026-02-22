@@ -183,8 +183,12 @@ class _BodyState extends ConsumerState<_Body> {
         Expanded(
           child: SafeArea(
             child: GameLayout(
-              orientation: isBoardTurned ? youAre!.opposite : youAre!,
-              lastMove: game.moveAt(stepCursor) as NormalMove?,
+              orientation: variantBoardOrientation(
+                variant: game.meta.variant,
+                youAre: youAre!,
+                isBoardTurned: isBoardTurned,
+              ),
+              lastMove: game.moveAt(stepCursor),
               interactiveBoardParams: (
                 variant: game.meta.variant,
                 position: position,
@@ -194,7 +198,7 @@ class _BodyState extends ConsumerState<_Body> {
                           : PlayerSide.black
                     : PlayerSide.none,
                 promotionMove: promotionMove,
-                onMove: (move, {isDrop}) {
+                onMove: (move, {viaDragAndDrop}) {
                   onUserMove(move);
                 },
                 onPromotionSelection: onPromotionSelection,
@@ -225,6 +229,7 @@ class _BodyState extends ConsumerState<_Body> {
                         AnalysisScreen.buildRoute(
                           context,
                           AnalysisOptions.standalone(
+                            id: game.id,
                             orientation: game.youAre!,
                             pgn: game.makePgn(),
                             isComputerAnalysisAllowed: false,
@@ -318,8 +323,8 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void onUserMove(NormalMove move) {
-    if (isPromotionPawnMove(game.lastPosition, move)) {
+  void onUserMove(Move move) {
+    if (move case NormalMove() when isPromotionPawnMove(game.lastPosition, move)) {
       setState(() {
         promotionMove = move;
       });
@@ -331,7 +336,7 @@ class _BodyState extends ConsumerState<_Body> {
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     setState(() {
@@ -410,7 +415,7 @@ class _BodyState extends ConsumerState<_Body> {
   void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      ref.read(moveFeedbackServiceProvider).captureFeedback(game.variant, check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
     }

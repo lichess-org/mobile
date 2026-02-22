@@ -84,10 +84,7 @@ final puzzleDashboardProvider = FutureProvider.autoDispose.family<PuzzleDashboar
 ) {
   final authUser = ref.watch(authControllerProvider);
   if (authUser == null) return null;
-  return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleDashboard(days),
-    const Duration(hours: 3),
-  );
+  return ref.watch(puzzleRepositoryProvider).puzzleDashboard(days);
 }, name: 'PuzzleDashboardProvider');
 
 /// Fetches recent puzzle activity for the current user.
@@ -96,10 +93,7 @@ final puzzleRecentActivityProvider = FutureProvider.autoDispose<IList<PuzzleHist
 ) {
   final authUser = ref.watch(authControllerProvider);
   if (authUser == null) return null;
-  return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleActivity(20),
-    const Duration(hours: 3),
-  );
+  return ref.watch(puzzleRepositoryProvider).puzzleActivity(20);
 }, name: 'PuzzleRecentActivityProvider');
 
 /// Fetches the storm dashboard for a given user [UserId].

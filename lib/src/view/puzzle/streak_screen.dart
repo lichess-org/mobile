@@ -140,7 +140,7 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: puzzleState.promotionMove,
-      onMove: (move, {isDrop, captured}) {
+      onMove: (move, {viaDragAndDrop}) {
         ref.read(ctrlProvider.notifier).onUserMove(move);
       },
       onPromotionSelection: (role) {
@@ -215,7 +215,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: puzzleState.lastMove as NormalMove?,
+                                lastMove: puzzleState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -348,7 +348,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: puzzleState.lastMove as NormalMove?,
+                                lastMove: puzzleState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -503,6 +503,7 @@ class _BottomBar extends ConsumerWidget {
                 AnalysisScreen.buildRoute(
                   context,
                   AnalysisOptions.standalone(
+                    id: puzzleState.puzzle.puzzle.id,
                     orientation: puzzleState.pov,
                     pgn: ref.read(ctrlProvider.notifier).makePgn(),
                     isComputerAnalysisAllowed: true,

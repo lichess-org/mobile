@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'evaluation_preferences.freezed.dart';
 part 'evaluation_preferences.g.dart';
@@ -66,7 +67,22 @@ enum ChessEnginePref {
 
   String get label => switch (this) {
     ChessEnginePref.sf16 => 'Stockfish 16',
-    ChessEnginePref.sfLatest => 'Stockfish 17.1 (79MB)',
+    ChessEnginePref.sfLatest => 'Stockfish 18 ($nnueTotalSizeMB)',
+  };
+
+  String get shortLabel => switch (this) {
+    ChessEnginePref.sf16 => 'SF 16',
+    ChessEnginePref.sfLatest => 'SF 18',
+  };
+
+  String get version => switch (this) {
+    ChessEnginePref.sf16 => '16',
+    ChessEnginePref.sfLatest => '18',
+  };
+
+  StockfishFlavor get flavor => switch (this) {
+    ChessEnginePref.sf16 => StockfishFlavor.sf16,
+    ChessEnginePref.sfLatest => StockfishFlavor.latestNoNNUE,
   };
 }
 

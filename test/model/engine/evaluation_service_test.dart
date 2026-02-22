@@ -5,26 +5,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
+import 'fake_nnue_service.dart';
 import 'fake_stockfish.dart';
 
 EvalWork makeWork({
   StringId? id,
   UciPath? path,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
+  StockfishFlavor flavor = StockfishFlavor.sf16,
+  Variant variant = Variant.standard,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
   return EvalWork(
-    id: id,
-    enginePref: enginePref,
-    variant: Variant.standard,
+    id: id ?? const StringId('test'),
+    stockfishFlavor: flavor,
+    variant: variant,
     threads: 1,
     path: path ?? UciPath.empty,
     searchTime: searchTime,
@@ -37,19 +40,16 @@ EvalWork makeWork({
 
 MoveWork makeMoveWork({
   StringId? id,
-  ChessEnginePref enginePref = ChessEnginePref.sf16,
-  int elo = 1500,
+  StockfishLevel level = StockfishLevel.level3,
   Position? initialPosition,
   Variant variant = Variant.standard,
 }) {
   return MoveWork(
-    id: id,
-    enginePref: enginePref,
+    id: id ?? const StringId('test'),
     variant: variant,
-    threads: 1,
     initialPosition: initialPosition ?? Chess.initial,
     steps: const IListConst<Step>([]),
-    elo: elo,
+    level: level,
   );
 }
 
@@ -419,26 +419,6 @@ void main() {
       expect(service.evaluationState.value.eval, isNull);
     });
 
-    test('evaluate() throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      const work = EvalWork(
-        enginePref: ChessEnginePref.sf16,
-        variant: Variant.antichess,
-        threads: 1,
-        path: UciPath.empty,
-        searchTime: Duration(seconds: 1),
-        multiPv: 1,
-        initialPosition: Chess.initial,
-        steps: IListConst<Step>([]),
-        threatMode: false,
-      );
-
-      expect(() => service.evaluate(work), throwsA(isA<EngineUnsupportedVariantException>()));
-      expect(service.evaluationState.value.currentWork, isNull);
-    });
-
     test('currentWork is updated immediately on evaluate()', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -447,6 +427,23 @@ void main() {
       service.evaluate(work);
 
       expect(service.evaluationState.value.currentWork, work);
+    });
+
+    test('eval is reset immediately when evaluate() is called with new work', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // Start first evaluation and wait for an eval result
+      final work1 = makeWork(id: const StringId('game1'));
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+      expect(service.evaluationState.value.eval, isNotNull);
+
+      // Start a new evaluation - eval must be cleared immediately, before any new results arrive
+      final work2 = makeWork(id: const StringId('game2'));
+      service.evaluate(work2);
+
+      expect(service.evaluationState.value.eval, isNull);
     });
 
     test('evalStream emits results tagged with correct work', () async {
@@ -472,12 +469,51 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      // Clear commands to track only new ones
       delayedStockfish.stdinCommands.clear();
 
       // Different initialPosition (after e4)
       final positionAfterE4 = Chess.initial.play(Move.parse('e2e4')!);
-      final work2 = makeWork(id: const StringId('game2'), initialPosition: positionAfterE4);
+      final work2 = makeWork(id: const StringId('game1'), initialPosition: positionAfterE4);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when variant changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), variant: Variant.standard);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), variant: Variant.atomic);
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
+
+      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when flavor changes (engine restart)', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work1 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.sf16);
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
+
+      delayedStockfish.stdinCommands.clear();
+
+      final work2 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.latestNoNNUE);
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
@@ -497,7 +533,6 @@ void main() {
 
       delayedStockfish.stdinCommands.clear();
 
-      // Same initialPosition but different id
       final work2 = makeWork(id: const StringId('game2'));
       final stream2 = service.evaluate(work2);
       await stream2!.first;
@@ -528,15 +563,97 @@ void main() {
 
       expect(delayedStockfish.stdinCommands, isNot(contains('ucinewgame')));
     });
+
+    test(
+      'latestNoNNUE falling back to sf16 does not cause restart on subsequent latestNoNNUE requests',
+      () async {
+        final delayedStockfish = DelayedFakeStockfish();
+        testBinding.stockfish = delayedStockfish;
+
+        // NNUE files are unavailable: latestNoNNUE will fall back to sf16
+        final container = await makeContainer(
+          overrides: {
+            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
+              FakeNnueServiceUnavailable(),
+            ),
+          },
+        );
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeWork(flavor: StockfishFlavor.latestNoNNUE);
+        final stream1 = service.evaluate(work1);
+        await stream1!.first;
+
+        expect(delayedStockfish.startCallCount, 1);
+
+        // A second request with latestNoNNUE should reuse the running sf16 engine.
+        final work2 = makeWork(
+          flavor: StockfishFlavor.latestNoNNUE,
+          path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        );
+        final stream2 = service.evaluate(work2);
+        await stream2!.first;
+
+        expect(
+          delayedStockfish.startCallCount,
+          1,
+          reason:
+              'Engine must not restart when latestNoNNUE already fell back to sf16 '
+              'and a new latestNoNNUE request arrives',
+        );
+      },
+    );
   });
 
   group('EvaluationService', () {
+    test('Can use StockfishFlavor.variant for standard chess and 960', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final workStandard = makeWork(
+        id: const StringId('testStandard'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.standard,
+      );
+      final streamStandard = service.evaluate(workStandard);
+      expect(streamStandard, isNotNull);
+      await streamStandard!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+
+      final work960 = makeWork(
+        id: const StringId('test960'),
+        flavor: StockfishFlavor.variant,
+        variant: Variant.chess960,
+      );
+      final stream960 = service.evaluate(work960);
+      expect(stream960, isNotNull);
+      await stream960!.first;
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
+    test('Cannot override StockfishFlavor for non standard chess variants', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeWork(
+        id: const StringId('test'),
+        flavor: StockfishFlavor.sf16,
+        variant: Variant.atomic,
+      );
+      final stream = service.evaluate(work);
+      expect(stream, isNotNull);
+      await stream!.first;
+      // Should ignore the requested sf16 flavor and fall back to variant for non-standard variants
+      expect(service.evaluationState.value.engineName, 'Fairy-Stockfish');
+    });
+
     test('Multiple evaluations - last caller wins', () async {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
       final work1 = EvalWork(
-        enginePref: ChessEnginePref.sf16,
+        id: const StringId('test'),
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -548,7 +665,8 @@ void main() {
       );
 
       final work2 = EvalWork(
-        enginePref: ChessEnginePref.sf16,
+        id: const StringId('test'),
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
@@ -580,7 +698,8 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
-        enginePref: ChessEnginePref.sf16,
+        id: const StringId('test'),
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -604,7 +723,8 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
-        enginePref: ChessEnginePref.sf16,
+        id: const StringId('test'),
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -627,7 +747,8 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       final work = EvalWork(
-        enginePref: ChessEnginePref.sf16,
+        id: const StringId('test'),
+        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -656,7 +777,8 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         final work = EvalWork(
-          enginePref: ChessEnginePref.sf16,
+          id: const StringId('test'),
+          stockfishFlavor: StockfishFlavor.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,
@@ -693,11 +815,13 @@ void main() {
       service.quit();
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      final stream2 = service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+      final stream2 = service.evaluate(
+        work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE),
+      );
       expect(stream2, isNotNull);
       await stream2!.first;
 
-      expect(service.evaluationState.value.engineName, 'Stockfish 17');
+      expect(service.evaluationState.value.engineName, 'Stockfish 18');
     });
   });
 
@@ -992,9 +1116,13 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         EngineEvaluationState? latestState;
-        container.listen(engineEvaluationProvider, (_, next) {
-          latestState = next;
-        }, fireImmediately: true);
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: true,
+        );
 
         final work = makeWork();
 
@@ -1010,15 +1138,243 @@ void main() {
         async.elapse(const Duration(seconds: 1));
 
         // Restart with different engine name
-        service.evaluate(work.copyWith(enginePref: ChessEnginePref.sfLatest));
+        service.evaluate(work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE));
         async.elapse(const Duration(seconds: 2));
 
         // Notifier should have the updated engine name
         expect(
           latestState?.engineName,
-          'Stockfish 17',
+          'Stockfish 18',
           reason: 'EngineEvaluationNotifier should update engineName when engine restarts',
         );
+      });
+    });
+
+    test('notifier with id filter ignores eval results from work with different id', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? game1State;
+        container.listen(
+          engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
+          (_, next) {
+            game1State = next;
+          },
+          fireImmediately: true,
+        );
+
+        // Evaluate work for 'game2' - different id than the notifier's filter
+        final work = makeWork(id: const StringId('game2'));
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // The 'game1' notifier should not have received any eval - still in initial state
+        expect(
+          game1State?.eval,
+          isNull,
+          reason: 'Notifier should not receive eval updates from work with a different id',
+        );
+        expect(game1State?.state, EngineState.initial);
+      });
+    });
+
+    test('notifier with path filter ignores eval results from work with different path', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+        final d4Path = UciPath.fromId(UciCharPair.fromUci('d2d4'));
+
+        EngineEvaluationState? e4State;
+        container.listen(engineEvaluationProvider((id: const StringId('test'), path: e4Path)), (
+          _,
+          next,
+        ) {
+          e4State = next;
+        }, fireImmediately: true);
+
+        // Evaluate work with a different path (d4 instead of e4)
+        final work = makeWork(id: const StringId('test'), path: d4Path);
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // The notifier listening for the e4 path should not receive updates for d4 work
+        expect(
+          e4State?.eval,
+          isNull,
+          reason: 'Notifier should not receive eval updates from work with a different path',
+        );
+        expect(e4State?.state, EngineState.initial);
+      });
+    });
+
+    test('notifier receives eval results for matching id and path', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? latestState;
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: false,
+        );
+
+        final work = makeWork(); // id: 'test', path: UciPath.empty
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(
+          latestState?.eval,
+          isNotNull,
+          reason: 'Notifier should receive eval updates from work with matching id and path',
+        );
+      });
+    });
+
+    test('notifier does not filter work.path when path filter is null', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? latestState;
+        container.listen(engineEvaluationProvider((id: const StringId('test'), path: null)), (
+          _,
+          next,
+        ) {
+          latestState = next;
+        }, fireImmediately: false);
+
+        final work = makeWork();
+        service.evaluate(work);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(
+          latestState?.eval,
+          isNotNull,
+          reason: 'Notifier should receive updates from null path filter regardless of work.path',
+        );
+      });
+    });
+
+    test(
+      'two notifiers with different ids are isolated: only the matching one receives updates',
+      () async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+        final container = await makeContainer();
+
+        fakeAsync((async) {
+          final service = container.read(evaluationServiceProvider);
+
+          EngineEvaluationState? game1State;
+          EngineEvaluationState? game2State;
+
+          container.listen(
+            engineEvaluationProvider((id: const StringId('game1'), path: UciPath.empty)),
+            (_, next) {
+              game1State = next;
+            },
+            fireImmediately: true,
+          );
+
+          container.listen(
+            engineEvaluationProvider((id: const StringId('game2'), path: UciPath.empty)),
+            (_, next) {
+              game2State = next;
+            },
+            fireImmediately: true,
+          );
+
+          // Evaluate work for 'game1'
+          final work1 = makeWork(id: const StringId('game1'));
+          service.evaluate(work1);
+          async.elapse(const Duration(milliseconds: 50));
+
+          throttleStockfish.emitEvalEvents();
+          async.flushMicrotasks();
+          async.elapse(kEngineEvalEmissionThrottleDelay);
+
+          // Only the 'game1' notifier should have received the eval
+          expect(
+            game1State?.eval,
+            isNotNull,
+            reason: 'game1 notifier should receive updates for game1 work',
+          );
+          expect(
+            game2State?.eval,
+            isNull,
+            reason: 'game2 notifier should not receive updates for game1 work',
+          );
+          expect(game2State?.state, EngineState.initial);
+        });
+      },
+    );
+
+    test('all notifiers are reset to initial state when quit() is called', () async {
+      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleStockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        EngineEvaluationState? game1State;
+
+        container.listen(engineEvaluationProvider((id: const StringId('game1'), path: null)), (
+          _,
+          next,
+        ) {
+          game1State = next;
+        }, fireImmediately: true);
+
+        final work1 = makeWork(id: const StringId('game1'));
+        service.evaluate(work1);
+        async.elapse(const Duration(milliseconds: 50));
+
+        throttleStockfish.emitEvalEvents();
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        expect(game1State?.eval, isNotNull);
+
+        service.quit();
+        async.flushMicrotasks();
+
+        expect(game1State?.state, EngineState.initial, reason: 'game1 notifier should be reset');
+        expect(game1State?.eval, isNull, reason: 'game1 notifier eval should be cleared');
       });
     });
 
@@ -1031,9 +1387,13 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         EngineEvaluationState? latestState;
-        container.listen(engineEvaluationProvider, (_, next) {
-          latestState = next;
-        }, fireImmediately: true);
+        container.listen(
+          engineEvaluationProvider((id: const StringId('test'), path: UciPath.empty)),
+          (_, next) {
+            latestState = next;
+          },
+          fireImmediately: true,
+        );
 
         final work = makeWork();
 
@@ -1094,64 +1454,65 @@ void main() {
       expect(move, equals('e2e4'));
     });
 
-    test('findMove throws EngineUnsupportedVariantException for unsupported variants', () async {
-      final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
-
-      final work = makeMoveWork(variant: Variant.antichess);
-
-      expect(() => service.findMove(work), throwsA(isA<EngineUnsupportedVariantException>()));
-    });
-
-    test('findMove sets UCI_LimitStrength and UCI_Elo options', () async {
+    test('findMove sets Skill Level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = makeMoveWork(elo: 1800);
+      final work = makeMoveWork(level: .level6);
       await service.findMove(work);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+      expect(delayedStockfish.options['Skill Level'], equals('8'));
     });
 
-    test('findMove uses multiPv scaled by elo', () async {
+    test('findMove uses multiPv scaled by level', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      final work = makeMoveWork(elo: 1500);
+      final work = makeMoveWork(level: .level2);
       await service.findMove(work);
 
       expect(delayedStockfish.options['MultiPV'], equals('8'));
     });
 
-    test('MoveWork.searchTime scales with elo', () {
-      final level1 = makeMoveWork(elo: 1320);
-      final level5 = makeMoveWork(elo: 1750);
-      final level8 = makeMoveWork(elo: 2100);
-      final level12 = makeMoveWork(elo: 3190);
+    test('MoveWork delegates searchTime to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level5 = makeMoveWork(level: .level5);
+      final level8 = makeMoveWork(level: .level8);
+      final level12 = makeMoveWork(level: .level12);
 
-      // See MoveWork.searchTime documentation for full table
-      expect(level1.searchTime.inMilliseconds, equals(150));
-      expect(level5.searchTime.inMilliseconds, equals(640));
-      expect(level8.searchTime.inMilliseconds, equals(1699));
-      expect(level12.searchTime.inMilliseconds, equals(5000));
+      expect(level1.searchTime.inMilliseconds, equals(500));
+      expect(level5.searchTime.inMilliseconds, equals(920));
+      expect(level8.searchTime.inMilliseconds, equals(1380));
+      expect(level12.searchTime.inMilliseconds, equals(2000));
     });
 
-    test('MoveWork.multiPv scales inversely with elo', () {
-      final lowElo = makeMoveWork(elo: 1320);
-      final midElo = makeMoveWork(elo: 1800);
-      final highElo = makeMoveWork(elo: 2500);
+    test('MoveWork delegates threads to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level5 = makeMoveWork(level: .level5);
+      final level6 = makeMoveWork(level: .level6);
+      final level12 = makeMoveWork(level: .level12);
 
-      // See MoveWork.multiPv documentation for full table
-      expect(lowElo.multiPv, equals(10));
-      expect(midElo.multiPv, equals(5));
-      expect(highElo.multiPv, equals(4));
+      // Levels 1-5 use 1 thread, levels 6-12 use 2 threads
+      expect(level1.threads, equals(1));
+      expect(level5.threads, equals(1));
+      expect(level6.threads, equals(2));
+      expect(level12.threads, equals(2));
+    });
+
+    test('MoveWork delegates multiPv to StockfishLevel', () {
+      final level1 = makeMoveWork(level: .level1);
+      final level6 = makeMoveWork(level: .level6);
+      final level10 = makeMoveWork(level: .level10);
+
+      expect(level1.multiPv, equals(10));
+      expect(level6.multiPv, equals(4));
+      expect(level10.multiPv, equals(4));
     });
 
     test('findMove transitions state from initial to loading to idle', () async {
@@ -1173,7 +1534,7 @@ void main() {
       expect(states.last, anyOf(EngineState.idle, EngineState.computing));
     });
 
-    test('evaluate after findMove resets UCI_LimitStrength to false', () async {
+    test('evaluate after findMove resets Skill Level to 20', () async {
       final delayedStockfish = DelayedFakeStockfish();
       testBinding.stockfish = delayedStockfish;
 
@@ -1181,18 +1542,17 @@ void main() {
       final service = container.read(evaluationServiceProvider);
 
       // First do a findMove
-      final moveWork = makeMoveWork(elo: 1800);
+      final moveWork = makeMoveWork(level: .level6);
       await service.findMove(moveWork);
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('true'));
-      expect(delayedStockfish.options['UCI_Elo'], equals('1800'));
+      expect(delayedStockfish.options['Skill Level'], equals('8'));
 
       // Now do an evaluate
       final evalWork = makeWork();
       final stream = service.evaluate(evalWork);
       await stream!.first;
 
-      expect(delayedStockfish.options['UCI_LimitStrength'], equals('false'));
+      expect(delayedStockfish.options['Skill Level'], equals('20'));
     });
 
     test('findMove does not affect evaluationState.currentWork', () async {
@@ -1290,8 +1650,8 @@ void main() {
         final container = await makeContainer();
         final service = container.read(evaluationServiceProvider);
 
-        final work1 = makeMoveWork(elo: 1500);
-        final work2 = makeMoveWork(elo: 1800);
+        final work1 = makeMoveWork(level: .level3);
+        final work2 = makeMoveWork(level: .level6);
 
         // Start first findMove
         final future1 = service.findMove(work1);
@@ -1311,6 +1671,152 @@ void main() {
         // Second future should complete with the move
         final move2 = await future2;
         expect(move2, equals('e2e4'));
+      });
+    });
+  });
+
+  group('EvaluationService.findEval', () {
+    test('findEval returns evaluation result', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final work = makeWork(searchTime: const Duration(seconds: 1));
+      final eval = await service.findEval(work);
+
+      expect(eval, isNotNull);
+      expect(eval!.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
+    });
+
+    test('findEval with minDepth stops early when depth is reached', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeWork(searchTime: const Duration(seconds: 5));
+
+        // Start findEval with minDepth of 12
+        final evalFuture = service.findEval(work, minDepth: 12);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit eval at depth 11 (below minDepth)
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Emit eval at depth 12 (reaches minDepth) - should trigger stop
+        throttleStockfish.emitEvalEvents(); // depth 12
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Emit bestmove to complete the stream
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        expect(eval!.depth, 12);
+      });
+    });
+
+    test('findEval returns cached eval when cache has sufficient depth', () async {
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // First evaluation to get a real eval
+      final work1 = makeWork(searchTime: const Duration(seconds: 1));
+      final eval1 = await service.findEval(work1);
+      expect(eval1, isNotNull);
+
+      // Create a step with the cached eval
+      final move = Move.parse('e2e4')!;
+      final positionAfterMove = Chess.initial.play(move);
+      final (_, san) = Chess.initial.makeSan(move);
+      final stepWithCache = Step(
+        position: positionAfterMove,
+        sanMove: SanMove(san, move),
+        eval: eval1,
+      );
+
+      // Create work with cached eval that has sufficient searchTime
+      final work2 = makeWork(
+        searchTime: const Duration(seconds: 1),
+      ).copyWith(steps: IList([stepWithCache]));
+
+      // findEval should return the cached eval without starting new evaluation
+      final eval2 = await service.findEval(work2);
+      expect(eval2, isNotNull);
+      expect(eval2, equals(eval1));
+    });
+
+    test('findEval times out and returns last eval received', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        // Short search time to trigger timeout
+        final work = makeWork(searchTime: const Duration(milliseconds: 500));
+
+        final evalFuture = service.findEval(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit one eval event
+        throttleStockfish.emitEvalEvents(); // depth 11
+        async.flushMicrotasks();
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Elapse past searchTime + buffer (500ms + 500ms)
+        async.elapse(const Duration(seconds: 1));
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        expect(eval!.depth, 11);
+      });
+    });
+
+    test('findEval without minDepth runs for full searchTime', () {
+      fakeAsync((async) async {
+        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
+        testBinding.stockfish = throttleStockfish;
+
+        final container = await makeContainer();
+        final service = container.read(evaluationServiceProvider);
+
+        final work = makeWork(searchTime: const Duration(milliseconds: 500));
+
+        final evalFuture = service.findEval(work);
+
+        // Let engine initialize
+        async.elapse(const Duration(milliseconds: 50));
+
+        // Emit multiple eval events at increasing depths
+        for (var i = 0; i < 5; i++) {
+          throttleStockfish.emitEvalEvents();
+          async.flushMicrotasks();
+          async.elapse(const Duration(milliseconds: 50));
+        }
+
+        // Final depth should be 15 (10 + 5 events)
+        // Without minDepth, should continue until timeout
+        async.elapse(const Duration(seconds: 1));
+
+        // Emit bestmove to complete
+        throttleStockfish.emitBestMove();
+        async.flushMicrotasks();
+
+        final eval = await evalFuture;
+        expect(eval, isNotNull);
+        // Should have the last emitted eval
+        expect(eval!.depth, greaterThanOrEqualTo(14));
       });
     });
   });

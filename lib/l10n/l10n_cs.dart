@@ -67,6 +67,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override
+  String get mobileNewGame => 'Nová hra';
+
+  @override
   String get mobileNoSearchResults => 'Žádné výsledky';
 
   @override
@@ -242,7 +245,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Vítejte v aplikaci Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Zobrazit hru';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -263,7 +266,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Jump to my page';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompaktní';
 
   @override
   String get mobileDisplayModeDetailed => 'Detailed';
@@ -275,7 +278,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Předchozí';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -865,7 +868,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastFederation => 'Federace';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Věk';
 
   @override
   String get broadcastUnrated => 'Nehodnocen';
@@ -937,6 +940,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastScore => 'Skóre';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Všechny týmy';
 
   @override
@@ -981,12 +987,82 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Kolo $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Ponechání výchozího jména se automaticky přeloží do jiného jazyka.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Ženy';
+
+  @override
+  String get broadcastMenTournament => 'Muži';
+
+  @override
+  String get broadcastGirlsTournament => 'Dívky';
+
+  @override
+  String get broadcastBoysTournament => 'Chlapci';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Dívky U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Chlapci U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinále';
+
+  @override
+  String get broadcastFinals => 'Finále';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1945,6 +2021,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Ohrožený král';
 
   @override
@@ -1997,6 +2079,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trojúhelníkový mat';
@@ -2269,6 +2357,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Nebo nechte soupeře naskenovat tento QR kód';
+
+  @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
 
   @override
   String get waiting => 'Čeká se';
@@ -2672,7 +2766,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Zaregistrován $param';
   }
 
   @override
@@ -3050,7 +3144,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get exportGames => 'Exportovat partie';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filtr ratingu';
 
   @override
   String get thisAccountViolatedTos => 'Tento účet porušil podmínky služeb Lichess';
@@ -3211,6 +3305,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Uložit jako GIF';
+
+  @override
+  String get playerNames => 'Jména hráčů';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
 
   @override
   String get pasteTheFenStringHere => 'Zde vložte FEN řetězec';
@@ -4034,9 +4134,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Vyžádejte si počítačovou analýzu, poučte se ze svých chyb';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Další (poučit se z chyb)';
-
-  @override
   String get keyNextBlunder => 'Další hrubá chyba';
 
   @override
@@ -4328,6 +4425,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get brightness => 'Jas';
 
   @override
+  String get contrast => 'Kontrast';
+
+  @override
   String get hue => 'Hue';
 
   @override
@@ -4529,7 +4629,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Vyzvat $param';
   }
 
   @override
@@ -4957,10 +5057,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get clearSearch => 'Vymazat vyhledávání';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Štítky';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Braní mimochodem';
 
   @override
   String opponentLeftCounter(int count) {

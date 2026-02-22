@@ -871,7 +871,6 @@ https://lichess. org/report.</string>
   <string name="keyShowOrHideComments">أظهر/أخفِ التعليقات</string>
   <string name="keyEnterOrExitVariation">متغير دخول/خروج</string>
   <string name="keyRequestComputerAnalysis">اطلب تحليل الحاسوب وتعلم من أخطائك</string>
-  <string name="keyNextLearnFromYourMistakes">التالي (تعلم من أخطائك)</string>
   <string name="keyNextBlunder">الخطأ الفادح التالي</string>
   <string name="keyNextMistake">الخطأ التالي</string>
   <string name="keyNextInaccuracy">النقلة غير الدقيقة التالية</string>

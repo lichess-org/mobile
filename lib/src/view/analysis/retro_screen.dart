@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -69,6 +71,7 @@ class RetroScreen extends ConsumerWidget {
             actions: [
               if (value.isEngineAvailable(enginePrefs) == true)
                 EngineButton(
+                  filters: (id: value.evaluationContext.id, path: value.currentPath),
                   savedEval: value.currentNode.eval,
                   goDeeper: () => ref
                       .read(retroControllerProvider(options).notifier)
@@ -179,9 +182,13 @@ class _RetroAnalysisBoardState
   bool get interactive => analysisState.feedback != RetroFeedback.evalMove;
 
   @override
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     ref.read(retroControllerProvider(widget.options).notifier).onUserMove(move);
   }
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   void onPromotionSelection(Role? role) {
@@ -195,14 +202,14 @@ class _RetroAnalysisBoardState
   ISet<Shape> get extraShapes {
     final state = ref.watch(retroControllerProvider(widget.options)).requireValue;
     if (state.isSolving && state.currentMistake != null) {
+      final boardPrefs = ref.watch(boardPreferencesProvider);
       final mistake = state.currentMistake!.userMove;
-      return ISet<Shape>([
-        Arrow(
-          color: ShapeColor.red.color.withValues(alpha: 0.4),
-          orig: mistake.from,
-          dest: mistake.to,
-        ),
-      ]);
+      return moveShapes(
+        move: mistake,
+        color: ShapeColor.red.color.withValues(alpha: 0.4),
+        sideToMove: state.currentPosition.turn,
+        pieceAssets: boardPrefs.pieceSet.assets,
+      );
     }
     return ISet();
   }

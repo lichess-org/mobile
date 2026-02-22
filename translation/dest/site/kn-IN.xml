@@ -666,7 +666,6 @@
   <string name="keyShowOrHideComments">ಅಭಿಪ್ರಾಯಗಳನ್ನು ತೋರಿಸಿ/ಅಡಗಿಸಿ</string>
   <string name="keyEnterOrExitVariation">ಕವಲುದಾರಿ ಪ್ರವೇಶಿಸಿ/ನಿರ್ಗಮಿಸಿ</string>
   <string name="keyRequestComputerAnalysis">ಕಂಪ್ಯೂಟರ್ ವಿಶ್ಲೇಷಣೆಯನ್ನು ವಿನಂತಿಸಿ, ನಿಮ್ಮ ತಪ್ಪುಗಳಿಂದ ಕಲಿಯಿರಿ</string>
-  <string name="keyNextLearnFromYourMistakes">ಮುಂದೆ (ನಿಮ್ಮ ತಪ್ಪುಗಳಿಂದ ಕಲಿಯಿರಿ)</string>
   <string name="keyNextBlunder">ಮುಂದಿನ ಪ್ರಮಾದ</string>
   <string name="keyNextMistake">ಮುಂದಿನ ತಪ್ಪು</string>
   <string name="keyNextInaccuracy">ಮುಂದಿನ ಅಚಾತುರ್ಯ</string>

@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 
@@ -13,14 +14,7 @@ const minDepth = 6;
 const maxPlies = 245;
 
 class UCIProtocol {
-  UCIProtocol()
-    : _options = {
-        'Threads': '1',
-        'Hash': '16',
-        'MultiPV': '1',
-        'UCI_LimitStrength': 'false',
-        'UCI_Elo': '1350',
-      };
+  UCIProtocol() : _options = {'Threads': '1', 'Hash': '16', 'MultiPV': '1'};
 
   final _log = Logger('UCIProtocol');
   final Map<String, String> _options;
@@ -57,8 +51,6 @@ class UCIProtocol {
     _options['Threads'] = '1';
     _options['Hash'] = '16';
     _options['MultiPV'] = '1';
-    _options['UCI_LimitStrength'] = 'false';
-    _options['UCI_Elo'] = '1350';
 
     _engineName.value = null;
     _isComputing.value = false;
@@ -74,7 +66,12 @@ class UCIProtocol {
   void connected(void Function(String command) send) {
     _send = send;
 
-    _sendAndLog('uci');
+    // Affects notation only. Life would be easier if everyone would always
+    // unconditionally use this mode.
+    setOption('UCI_Chess960', 'true');
+
+    _sendAndLog('ucinewgame');
+    _sendAndLog('isready');
   }
 
   void dispose() {
@@ -114,16 +111,10 @@ class UCIProtocol {
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
-    _log.fine('>>> $line');
+    // no need to log lines as it is already logged by Stockfish plugin (finer)
+    // _log.fine('>>> $line');
     final parts = line.trim().split(spaceRegex);
-    if (parts.first == 'uciok') {
-      // Affects notation only. Life would be easier if everyone would always
-      // unconditionally use this mode.
-      setOption('UCI_Chess960', 'true');
-
-      _sendAndLog('ucinewgame');
-      _sendAndLog('isready');
-    } else if (parts.first == 'readyok') {
+    if (parts.first == 'readyok') {
       _swapWork();
     } else if (parts.first == 'id' && parts[1] == 'name') {
       _engineName.value = parts.sublist(2).join(' ');
@@ -238,17 +229,16 @@ class UCIProtocol {
       _currentEval = null;
       _expectedPvs = 1;
 
-      setOption('Threads', _work!.threads.toString());
+      setOption('Threads', math.min(_work!.threads, maxEngineCores).toString());
       setOption('Hash', (_work!.hashSize ?? 16).toString());
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 
       // Configure strength limitation for MoveWork
       switch (_work!) {
         case final MoveWork moveWork:
-          setOption('UCI_LimitStrength', 'true');
-          setOption('UCI_Elo', moveWork.elo.toString());
+          setOption('Skill Level', moveWork.skill.toString());
         case EvalWork():
-          setOption('UCI_LimitStrength', 'false');
+          setOption('Skill Level', '20');
       }
 
       final positionCommand = switch (_work) {

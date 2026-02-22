@@ -67,6 +67,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
 
   @override
+  String get mobileNewGame => '새 게임';
+
+  @override
   String get mobileNoSearchResults => '결과 없음';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Lichess 앱에 오신 것을 환영합니다!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => '경기 보기';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => '팁: 홈 스크린에 위젯을 추가하거나 필요없는 위젯을 삭제할 수 있습니다!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => '무시';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => '맞춤설정';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => '위험요소 표시하지 않기';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => '종료됨';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => '내 페이지로 이동';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => '간단';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => '상세';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\\n홈 탭에서 들어갈 수 있습니다.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => '이전';
 
   @override
   String get activityActivity => '활동';
@@ -717,7 +720,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastOngoing => '진행중';
 
   @override
-  String get broadcastUpcoming => '방영 예정';
+  String get broadcastUpcoming => '예정';
 
   @override
   String get broadcastRoundName => '라운드 이름';
@@ -877,6 +880,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastScore => '점수';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => '모든 팀';
 
   @override
@@ -921,12 +927,82 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return '다음 용어가 자동으로 번역됩니다: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return '$param라운드';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => '기본 이름을 유지하면 자동으로 다른 모든 언어로 번역됩니다.';
+
+  @override
+  String get broadcastOpenTournament => '오픈';
+
+  @override
+  String get broadcastWomenTournament => '여성';
+
+  @override
+  String get broadcastMenTournament => '남성';
+
+  @override
+  String get broadcastGirlsTournament => '소녀';
+
+  @override
+  String get broadcastBoysTournament => '소년';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'U-$param 오픈';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'U-$param 소녀';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'U-$param 소년';
+  }
+
+  @override
+  String get broadcastQuarterfinals => '8강전';
+
+  @override
+  String get broadcastSemifinals => '준결승전';
+
+  @override
+  String get broadcastFinals => '결승전';
+
+  @override
+  String get broadcastTiebreaks => '타이브레이커';
+
+  @override
+  String broadcastGameX(String param) {
+    return '게임 $param';
+  }
+
+  @override
+  String get broadcastKnockouts => '녹아웃';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1863,6 +1939,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
 
   @override
+  String get puzzleThemeEpauletteMate => '에팔레트 메이트';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => '체크된 킹의 두 인접한 탈출로가 다른 기물에 의해 막혀 있습니다.';
+
+  @override
   String get puzzleThemeExposedKing => '노출된 킹';
 
   @override
@@ -1915,6 +1997,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => '룩으로 킹의 퇴로를 차단하고, 비숍으로 킹에게 체크합니다.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => '스왈로우테일 메이트';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'V자 모양인 제비의 꼬리를 시각적으로 닮은 체크메이트 패턴입니다.';
 
   @override
   String get puzzleThemeTriangleMate => '트라이앵글 메이트';
@@ -2187,6 +2275,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => '상대방에게 이 QR 코드를 스캔하라고 하셔도 됩니다.';
+
+  @override
+  String get reusableChallengeUrl => '재사용 가능 도전 URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => '누구나 동일한 설정으로 당신에게 도전할 수 있는 영구적인 링크입니다.';
 
   @override
   String get waiting => '기다리는 중';
@@ -2523,16 +2617,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get evaluationGauge => '평가 게이지';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => '전술 시각화';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => '수비가 없는 기물들';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => '핀에 걸린 기물들';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => '체크할 수 있는 킹';
 
   @override
   String get multipleLines => '다중 라인 수';
@@ -2656,7 +2750,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get variants => '변형';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => '더 많은 플레이 방법';
 
   @override
   String get timeControl => '시간 제한';
@@ -2887,7 +2981,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get unlimited => '무제한';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => '필요한 만큼 시간을 쓰세요';
 
   @override
   String get mode => '모드';
@@ -3129,6 +3223,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'GIF로 저장하기';
+
+  @override
+  String get playerNames => '플레이어명';
+
+  @override
+  String get moveAnnotations => '수 주석';
 
   @override
   String get pasteTheFenStringHere => 'FEN값을 붙여 넣으세요';
@@ -3952,9 +4052,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get keyRequestComputerAnalysis => '컴퓨터 분석 요청, 실수에서 배우기';
 
   @override
-  String get keyNextLearnFromYourMistakes => '다음 (실수에서 배우기)';
-
-  @override
   String get keyNextBlunder => '다음 블런더';
 
   @override
@@ -4244,6 +4341,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get brightness => '명도';
+
+  @override
+  String get contrast => '대비';
 
   @override
   String get hue => '색상';

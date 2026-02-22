@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:logging/logging.dart';
@@ -17,7 +18,18 @@ final _soundEffectPlugin = SoundEffect();
 final _logger = Logger('SoundService');
 
 // Must match name of files in assets/sounds/standard
-enum Sound { move, capture, lowTime, dong, error, confirmation, puzzleStormEnd, clock, berserk }
+enum Sound {
+  move,
+  capture,
+  explosion,
+  lowTime,
+  dong,
+  error,
+  confirmation,
+  puzzleStormEnd,
+  clock,
+  berserk,
+}
 
 /// A provider for [SoundService].
 final soundServiceProvider = Provider<SoundService>((Ref ref) {
@@ -89,6 +101,11 @@ class SoundService {
       return;
     }
     _soundEffectPlugin.play(sound.name, volume: finalVolume);
+  }
+
+  /// Play the capture sound for the given chess [variant].
+  Future<void> playCaptureSound(Variant variant, {double volume = 1.0}) async {
+    await play(variant == Variant.atomic ? Sound.explosion : Sound.capture, volume: volume);
   }
 
   /// Change the sound theme and optionally play a move sound.

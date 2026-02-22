@@ -67,6 +67,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tem de iniciar sessão para visualizar esta página.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Sem resultados';
 
   @override
@@ -897,6 +900,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastScore => 'Pontuação';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Todas as equipas';
 
   @override
@@ -941,12 +947,82 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Ronda $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Manter o nome padrão irá traduzi-lo automaticamente para todas as outras línguas.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1967,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Uma tática que envolve a regra de \"en passant\", onde um peão pode capturar um peão adversário que o ignorou usando o seu primeiro movimento de duas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -1943,6 +2025,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -2215,6 +2303,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ou deixe o seu oponente ler este código QR';
+
+  @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
 
   @override
   String get waiting => 'A aguardar';
@@ -3159,6 +3253,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get gameAsGIF => 'Jogo como GIF';
 
   @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
+
+  @override
   String get pasteTheFenStringHere => 'Coloca a notação FEN aqui';
 
   @override
@@ -3980,9 +4080,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Seguinte (Aprenda com os seus erros)';
-
-  @override
   String get keyNextBlunder => 'Próxima gafe';
 
   @override
@@ -4272,6 +4369,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get brightness => 'Brilho';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Tonalidade';
@@ -6458,6 +6558,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileMustBeLoggedIn => 'Você precisa estar logado para ver essa pagina.';
 
   @override
+  String get mobileNewGame => 'Nova partida';
+
+  @override
   String get mobileNoSearchResults => 'Sem Resultados';
 
   @override
@@ -6487,7 +6590,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar peça segurada';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Você quer terminar o turno?';
+  String get mobilePuzzleStormConfirmEndRun => 'Você quer terminar essa tentativa?';
 
   @override
   String get mobilePuzzleStormFilterNothingToShow => 'Nada para mostrar aqui, por favor, altere os filtros';
@@ -6496,13 +6599,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePuzzleStormNothingToShow => 'Nada para mostrar aqui. Jogue algumas rodadas da Puzzle Storm.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Resolva quantos quebra-cabeças for possível em 3 minutos.';
+  String get mobilePuzzleStormSubtitle => 'Resolva quantos problemas for possível em 3 minutos.';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'Você perderá a sua sequência atual e sua pontuação será salva.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Jogue quebra-cabeças de suas aberturas favoritas, ou escolha um tema.';
+  String get mobilePuzzleThemesSubtitle => 'Jogue problemas de suas aberturas favoritas, ou escolha um tema.';
 
   @override
   String get mobilePuzzlesTab => 'Problemas';
@@ -6538,7 +6641,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Ocultar a interface do sistema enquanto joga. Utilizo isso se você está incomodado pelos gestos de navegação do sistema nas bordas do sistema. Aplicada nas telas de partida e quebra-cabeças.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ocultar a interface do sistema enquanto joga. Utilizo isso se você está incomodado pelos gestos de navegação do sistema nas bordas do sistema. Aplicada nas telas de partida e problemas.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Peças capturadas';
@@ -6595,7 +6698,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSharePositionAsFEN => 'Compartilhar posição como FEN';
 
   @override
-  String get mobileSharePuzzle => 'Compartilhar este quebra-cabeça';
+  String get mobileSharePuzzle => 'Compartilhar este problema';
 
   @override
   String get mobileShowComments => 'Mostrar comentários';
@@ -6631,6 +6734,42 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileWelcomeToLichessApp => 'Bem-vindo ao aplicativo Lichess!';
+
+  @override
+  String get mobileViewGame => 'Ver partida';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Dica: Você pode adicionar mais widgets para a Tela Inicial ou remover aqueles que você não precisa!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dispensar';
+
+  @override
+  String get mobileCustomizeButton => 'Personalizar';
+
+  @override
+  String get mobileStopShowingThreat => 'Parar de mostrar ameaça';
+
+  @override
+  String get mobileTournamentCompleted => 'Concluído';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Ir para a minha página';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compacto';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detalhado';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
+
+  @override
+  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\\nVocê pode acessá-lo pela aba de início.';
+
+  @override
+  String get mobilePreviousPage => 'Anterior';
 
   @override
   String get activityActivity => 'Atividade';
@@ -6673,8 +6812,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Resolveu $count quebra-cabeças táticos',
-      one: 'Resolveu $count quebra-cabeça tático',
+      other: 'Resolveu $count problemas',
+      one: 'Resolveu $count problema',
     );
     return '$_temp0';
   }
@@ -6875,7 +7014,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Quando o jogador clica no botão Berserk no começo de um jogo, ele tem seu tempo reduzido pela metade. Nesse caso, uma vitória valerá um ponto a mais.\n\nFazendo o Berserk em jogos com controle de tempo com incremento, cancelará o mesmo. (a exceção é 1+2, que ficará 1+0)\n\nBerserk não está disponível em jogos sem tempo inicial (0+1, 0+2).\n\nBerserk só garante um ponto extra se você jogar pelo menos 7 movimentos na partida.';
+  String get arenaBerserkAnswer => 'Quando o jogador clica no botão Berserk no começo de um partida, ele tem seu tempo reduzido pela metade, mas uma vitória valerá um ponto a mais no torneiro.\n\nFazendo o Berserk em partidas com controle de tempo com incremento, cancelará o incremento. (a exceção é 1+2, que ficará 1+0)\n\nBerserk não está disponível em jogos sem tempo inicial (0+1, 0+2).\n\nBerserk só garante um ponto extra se você jogar pelo menos 7 movimentos na partida.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Como se decide o vencedor do torneio?';
@@ -7252,6 +7391,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastScore => 'Pontuação';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Classificações são calculadas com base nas partidas transmitidas e podem não refletir os resultados oficiais.';
+
+  @override
   String get broadcastAllTeams => 'Todas as equipes';
 
   @override
@@ -7296,12 +7438,82 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String get broadcastMatchPoints => 'Pontos de Confronto';
+
+  @override
+  String get broadcastGamePoints => 'Pontos de Partidas';
+
+  @override
+  String get broadcastMatches => 'Confrontos';
+
+  @override
+  String get broadcastMatchHistory => 'Histórico de Confronto';
+
+  @override
+  String get broadcastTeamResults => 'Resultados das Equipes';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Os seguintes termos serão automaticamente traduzidos: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Rodada $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Manter o título padrão permitirá traduzi-lo automaticamente para todas as línguas.';
+
+  @override
+  String get broadcastOpenTournament => 'Absoluto';
+
+  @override
+  String get broadcastWomenTournament => 'Feminino';
+
+  @override
+  String get broadcastMenTournament => 'Masculino';
+
+  @override
+  String get broadcastGirlsTournament => 'Meninas';
+
+  @override
+  String get broadcastBoysTournament => 'Meninos';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Absoluto Sub-$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Meninas Sub-$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Meninos Sub-$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quartas de final';
+
+  @override
+  String get broadcastSemifinals => 'Semifinais';
+
+  @override
+  String get broadcastFinals => 'Finais';
+
+  @override
+  String get broadcastTiebreaks => 'Desempates';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partida $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Mata-matas';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -7801,10 +8013,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesShowClockOnTheLeft => 'Mostrar à esquerda em dispositivos móveis';
 
   @override
-  String get puzzlePuzzles => 'Quebra-cabeças';
+  String get puzzlePuzzles => 'Problemas';
 
   @override
-  String get puzzlePuzzleThemes => 'Temas de quebra-cabeça';
+  String get puzzlePuzzleThemes => 'Temas de Problemas';
 
   @override
   String get puzzleRecommended => 'Recomendado';
@@ -7837,19 +8049,19 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleSpecialMoves => 'Movimentos especiais';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Você gostou deste quebra-cabeças?';
+  String get puzzleDidYouLikeThisPuzzle => 'Você gostou deste problema?';
 
   @override
   String get puzzleVoteToLoadNextOne => 'Vote para carregar o próximo!';
 
   @override
-  String get puzzleUpVote => 'Votar a favor do quebra-cabeça';
+  String get puzzleUpVote => 'Aprovar problema';
 
   @override
-  String get puzzleDownVote => 'Votar contra o quebra-cabeça';
+  String get puzzleDownVote => 'Reprovar o problema';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Sua pontuação de quebra-cabeças não mudará. Note que os quebra-cabeças não são uma competição. A pontuação indica os quebra-cabeças que se adequam às suas habilidades.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Sua pontuação de problemas não mudará. Note que os problemas não são uma competição. A pontuação indica os problemas que se adequam às suas habilidades.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Encontre o melhor lance para as brancas.';
@@ -7862,14 +8074,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String puzzlePuzzleId(String param) {
-    return 'Quebra-cabeça $param';
+    return 'Problema $param';
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'Quebra-cabeça do dia';
+  String get puzzlePuzzleOfTheDay => 'Problema do dia';
 
   @override
-  String get puzzleDailyPuzzle => 'Quebra-cabeça diário';
+  String get puzzleDailyPuzzle => 'Problema diário';
 
   @override
   String get puzzleClickToSolve => 'Clique para resolver';
@@ -7887,13 +8099,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzlePuzzleSuccess => 'Sucesso!';
 
   @override
-  String get puzzlePuzzleComplete => 'Quebra-cabeças concluído!';
+  String get puzzlePuzzleComplete => 'Problema concluído!';
 
   @override
   String get puzzleByOpenings => 'Por abertura';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Quebra-cabeças por abertura';
+  String get puzzlePuzzlesByOpenings => 'Problemas por abertura';
 
   @override
   String get puzzleOpeningsYouPlayedTheMost => 'Aberturas que você mais jogou em partidas valendo pontos';
@@ -7905,10 +8117,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleUseCtrlF => 'Aperte Ctrl + F para encontrar sua abertura favorita!';
 
   @override
-  String get puzzleNotTheMove => 'O movimento não é este!';
+  String get puzzleNotTheMove => 'Esse não é o lance!';
 
   @override
-  String get puzzleTrySomethingElse => 'Tente algo diferente.';
+  String get puzzleTrySomethingElse => 'Tenta outra coisa.';
 
   @override
   String puzzleRatingX(String param) {
@@ -7951,13 +8163,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleAddAnotherTheme => 'Adicionar um outro tema';
 
   @override
-  String get puzzleNextPuzzle => 'Próximo quebra-cabeça';
+  String get puzzleNextPuzzle => 'Próximo problema';
 
   @override
   String get puzzleJumpToNextPuzzleImmediately => 'Ir para o próximo problema automaticamente';
 
   @override
-  String get puzzlePuzzleDashboard => 'Painel do quebra-cabeças';
+  String get puzzlePuzzleDashboard => 'Painel de Problemas';
 
   @override
   String get puzzleImprovementAreas => 'Áreas de aprimoramento';
@@ -7966,7 +8178,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleStrengths => 'Pontos fortes';
 
   @override
-  String get puzzleHistory => 'Histórico de quebra-cabeças';
+  String get puzzleHistory => 'Histórico de problemas';
 
   @override
   String get puzzleSolved => 'resolvido';
@@ -7975,7 +8187,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleFailed => 'falhou';
 
   @override
-  String get puzzleStreakDescription => 'Resolva quebra-cabeças progressivamente mais difíceis e construa uma sequência de vitórias. Não há relógio, então tome seu tempo. Um movimento errado e o jogo acaba! Porém, você pode pular um movimento por sessão.';
+  String get puzzleStreakDescription => 'Resolva problemas progressivamente mais difíceis e construa uma sequência de vitórias. Não há relógio, então tome seu tempo. Um lance errado e o jogo acaba! Porém, você pode pular um movimento por sessão.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -7983,7 +8195,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get puzzleStreakSkipExplanation => 'Pule este lance para preservar a sua sequência! Funciona apenas uma vez por corrida.';
+  String get puzzleStreakSkipExplanation => 'Pule este lance para preservar a sua sequência! Funciona apenas uma vez por tentativa.';
 
   @override
   String get puzzleContinueTheStreak => 'Continuar a sequência';
@@ -7995,13 +8207,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleFromMyGames => 'Dos meus jogos';
 
   @override
-  String get puzzleLookupOfPlayer => 'Pesquise quebra-cabeças de um jogador específico';
+  String get puzzleLookupOfPlayer => 'Pesquise problemas das partidas um jogador específico';
 
   @override
-  String get puzzleSearchPuzzles => 'Procurar quebra-cabeças';
+  String get puzzleSearchPuzzles => 'Procurar problemas';
 
   @override
-  String get puzzleFromMyGamesNone => 'Você não tem nenhum quebra-cabeça no banco de dados, mas o Lichess ainda te ama muito.\nJogue partidas rápidas e clássicas para aumentar suas chances de ter um desafio seu adicionado!';
+  String get puzzleFromMyGamesNone => 'Você não tem nenhum problema no banco de dados, mas o Lichess ainda te ama muito.\n\nJogue partidas rápidas e clássicas para aumentar suas chances de ter um problema seu adicionado!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Treine, analise, melhore';
@@ -8012,7 +8224,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Não há nada para mostrar aqui, jogue alguns quebra-cabeças primeiro!';
+  String get puzzleNoPuzzlesToShow => 'Não há nada para mostrar aqui, jogue alguns problemas primeiro!';
 
   @override
   String get puzzleImprovementAreasDescription => 'Treine estes para otimizar o seu progresso!';
@@ -8036,8 +8248,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count pontos abaixo da sua classificação de quebra-cabeças',
-      one: 'Um ponto abaixo da sua classificação de quebra-cabeças',
+      other: '$count pontos abaixo da sua classificação de problemas',
+      one: 'Um ponto abaixo da sua classificação de problemas',
     );
     return '$_temp0';
   }
@@ -8047,8 +8259,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count pontos acima da sua classificação de quebra-cabeças',
-      one: 'Um ponto acima da sua classificação de quebra-cabeças',
+      other: '$count pontos acima da sua classificação de problemas',
+      one: 'Um ponto acima da sua classificação de problemas',
     );
     return '$_temp0';
   }
@@ -8058,8 +8270,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count problemas nos jogos de $param2',
-      one: 'Um quebra-cabeça nos jogos de $param2',
+      other: '$count problemas encontrados nas partidas de $param2',
+      one: 'Um problema encontrado nas partidas de $param2',
     );
     return '$_temp0';
   }
@@ -8189,7 +8401,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeDoubleBishopMateDescription => 'Dois bispos atacantes em diagonais adjacentes dão um mate em um rei obstruído por peças amigas.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Mate da cauda de andorinha';
+  String get puzzleThemeDovetailMate => 'Mate de Cozio';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'Uma dama dá um mate em um rei adjacente, cujos únicos dois quadrados de fuga estão obstruídos por peças amigas.';
@@ -8246,6 +8458,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeEnPassantDescription => 'Uma tática envolvendo a regra do en passant, onde um peão pode capturar um peão do oponente que passou por ele usando seu movimento inicial de duas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mate epaulette';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Duas casas de fuga adjacentes ao rei em xeque são ocupadas por outras peças.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -8300,6 +8518,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeMorphysMateDescription => 'Use o bispo para dar xeque no rei, enquanto sua torre ajuda a confiná-lo.';
 
   @override
+  String get puzzleThemeSwallowstailMate => 'Mate gueridon';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Uma padrão de xeque-mate que se assemelha visualmente à cauda de uma andorinha, em formato de V.';
+
+  @override
   String get puzzleThemeTriangleMate => 'Mate do triângulo';
 
   @override
@@ -8318,7 +8542,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeKnightEndgameDescription => 'Um final jogado apenas com cavalos e peões.';
 
   @override
-  String get puzzleThemeLong => 'Quebra-cabeças longo';
+  String get puzzleThemeLong => 'Problema longo';
 
   @override
   String get puzzleThemeLongDescription => 'Vitória em três movimentos.';
@@ -8327,13 +8551,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeMaster => 'Partidas de mestres';
 
   @override
-  String get puzzleThemeMasterDescription => 'Quebra-cabeças de partidas jogadas por jogadores titulados.';
+  String get puzzleThemeMasterDescription => 'Problemas de partidas jogadas por jogadores titulados.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Partidas de Mestre vs Mestre';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'Quebra-cabeças de partidas entre dois jogadores titulados.';
+  String get puzzleThemeMasterVsMasterDescription => 'Problemas de partidas entre dois jogadores titulados.';
 
   @override
   String get puzzleThemeMate => 'Xeque-mate';
@@ -8378,10 +8602,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeMiddlegameDescription => 'Tática durante a segunda fase do jogo.';
 
   @override
-  String get puzzleThemeOneMove => 'Quebra-cabeças de um movimento';
+  String get puzzleThemeOneMove => 'Problema de um lance';
 
   @override
-  String get puzzleThemeOneMoveDescription => 'Quebra-cabeças de um movimento.';
+  String get puzzleThemeOneMoveDescription => 'Um problema que é resolvido com apenas um movimento.';
 
   @override
   String get puzzleThemeOpening => 'Abertura';
@@ -8450,7 +8674,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeSacrificeDescription => 'Uma tática envolvendo a entrega de material no curto prazo, com o objetivo de se obter uma vantagem após uma sequência forçada de movimentos.';
 
   @override
-  String get puzzleThemeShort => 'Quebra-cabeças curto';
+  String get puzzleThemeShort => 'Problema curto';
 
   @override
   String get puzzleThemeShortDescription => 'Vitória em dois lances.';
@@ -8471,7 +8695,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeSuperGM => 'Super partidas de GMs';
 
   @override
-  String get puzzleThemeSuperGMDescription => 'Quebra-cabeças de partidas jogadas pelos melhores jogadores do mundo.';
+  String get puzzleThemeSuperGMDescription => 'Problemas de partidas jogadas pelos melhores jogadores do mundo.';
 
   @override
   String get puzzleThemeTrappedPiece => 'Peça presa';
@@ -8486,7 +8710,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeUnderPromotionDescription => 'Promover para cavalo, bispo ou torre.';
 
   @override
-  String get puzzleThemeVeryLong => 'Quebra-cabeças muito longo';
+  String get puzzleThemeVeryLong => 'Problema muito longo';
 
   @override
   String get puzzleThemeVeryLongDescription => 'Quatro movimentos ou mais para vencer.';
@@ -8513,11 +8737,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemePlayerGames => 'Partidas de jogadores';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Procure quebra-cabeças gerados a partir de suas partidas ou das de outro jogador.';
+  String get puzzleThemePlayerGamesDescription => 'Procure problemas gerados a partir de suas partidas ou das partidas de outro jogador.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Esses quebra-cabeças estão em domínio público, e você pode baixá-los em $param.';
+    return 'Esses problemas estão em domínio público, e você pode baixá-los em $param.';
   }
 
   @override
@@ -8570,6 +8794,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ou deixe seu oponente ler este QR code';
+
+  @override
+  String get reusableChallengeUrl => 'URL reutilizável para desafios';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Um link permanente para qualquer pessoa desafiar você com essas mesmas configurações.';
 
   @override
   String get waiting => 'Aguardando';
@@ -8729,7 +8959,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get loadingEngine => 'Carregando ...';
 
   @override
-  String get calculatingMoves => 'Calculando jogadas...';
+  String get calculatingMoves => 'Calculando lances...';
 
   @override
   String get engineFailed => 'Erro ao carregar o engine';
@@ -8738,7 +8968,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get cloudAnalysis => 'Análise na nuvem';
 
   @override
-  String get goDeeper => 'Detalhar';
+  String get goDeeper => 'Aprofundar';
 
   @override
   String get showThreat => 'Mostrar ameaça';
@@ -9514,6 +9744,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get gameAsGIF => 'Salvar a partida como GIF';
 
   @override
+  String get playerNames => 'Nomes dos jogadores';
+
+  @override
+  String get moveAnnotations => 'Anotações de lances';
+
+  @override
   String get pasteTheFenStringHere => 'Cole a notação FEN aqui';
 
   @override
@@ -9829,7 +10065,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get autoSwitch => 'Alternar automaticamente';
 
   @override
-  String get puzzles => 'Quebra-cabeças';
+  String get puzzles => 'Problemas';
 
   @override
   String get onlineBots => 'Bots online';
@@ -10332,10 +10568,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get keyEnterOrExitVariation => 'entrar/sair da variante';
 
   @override
-  String get keyRequestComputerAnalysis => 'Solicite análise do computador, aprenda com seus erros';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Próximo (Aprenda com seus erros)';
+  String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
   String get keyNextBlunder => 'Próximo erro grave';
@@ -10558,7 +10791,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get everybodyGetsAllFeaturesForFree => 'Todos têm todos os recursos de graça';
 
   @override
-  String get viewTheSolution => 'Ver solução';
+  String get viewTheSolution => 'Ver a solução';
 
   @override
   String get noChallenges => 'Sem desafios.';
@@ -10582,7 +10815,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get quickPairing => 'Pareamento rápido';
 
   @override
-  String get lobby => 'Salão';
+  String get lobby => 'Sala de espera';
 
   @override
   String get anonymous => 'Anônimo';
@@ -10627,6 +10860,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get brightness => 'Brilho';
+
+  @override
+  String get contrast => 'Contraste';
 
   @override
   String get hue => 'Tom';
@@ -10785,13 +11021,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noMistakesFoundForBlack => 'Nenhum erro encontrado para as Pretas';
 
   @override
-  String get doneReviewingWhiteMistakes => 'Erros das brancas já revistos';
+  String get doneReviewingWhiteMistakes => 'Terminada a revisão de erros das brancas';
 
   @override
-  String get doneReviewingBlackMistakes => 'Erros das pretas já revistos';
+  String get doneReviewingBlackMistakes => 'Terminada a revisão de erros das pretas';
 
   @override
-  String get doItAgain => 'Faça novamente';
+  String get doItAgain => 'Repetir';
 
   @override
   String get reviewWhiteMistakes => 'Rever erros das Brancas';
@@ -10861,10 +11097,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get howToAvoidThis => 'Como evitar isso?';
 
   @override
-  String get playEveryGame => 'Jogue todos os jogos que inicia.';
+  String get playEveryGame => 'Jogue todas as partidas que você iniciar.';
 
   @override
-  String get tryToWin => 'Tente vencer (ou pelo menos empatar) todos os jogos que jogar.';
+  String get tryToWin => 'Tente vencer (ou pelo menos empatar) todos as partidas que jogar.';
 
   @override
   String get resignLostGames => 'Conceda partidas perdidas (não deixe o relógio ir até ao fim).';
@@ -11154,7 +11390,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get toggleLocalAnalysis => 'Ativar/desativar análise local do computador';
 
   @override
-  String get toggleAllAnalysis => 'Ativar/desativar todas análises locais do computador';
+  String get toggleAllAnalysis => 'Alternar todas as análises de computador';
 
   @override
   String get playComputerMove => 'Jogar o melhor lance de computador';
@@ -11412,7 +11648,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       count,
       locale: localeName,
       other: '$count horas',
-      one: '$count horas',
+      one: '$count hora',
     );
     return '$_temp0';
   }
@@ -11445,7 +11681,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
       count,
       locale: localeName,
       other: '$count problemas',
-      one: '$count quebra-cabeça',
+      one: '$count problema',
     );
     return '$_temp0';
   }
@@ -11751,10 +11987,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get stormMoveToStart => 'Mova para começar';
 
   @override
-  String get stormYouPlayTheWhitePiecesInAllPuzzles => 'Você joga com as peças brancas em todos os quebra-cabeças';
+  String get stormYouPlayTheWhitePiecesInAllPuzzles => 'Você joga com as peças brancas em todos os problemas';
 
   @override
-  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'Você joga com as peças pretas em todos os quebra-cabeças';
+  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'Você joga com as peças pretas em todos os problemas';
 
   @override
   String get stormPuzzlesSolved => 'quebra-cabeças resolvidos';
@@ -11806,25 +12042,25 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get stormHighestSolved => 'Classificação mais alta';
 
   @override
-  String get stormPuzzlesPlayed => 'Quebra-cabeças jogados';
+  String get stormPuzzlesPlayed => 'Problemas jogados';
 
   @override
-  String get stormNewRun => 'Nova série (tecla de atalho: espaço)';
+  String get stormNewRun => 'Nova tentativa (tecla de atalho: espaço)';
 
   @override
-  String get stormEndRun => 'Finalizar série (tecla de atalho: Enter)';
+  String get stormEndRun => 'Finalizar tentativa (tecla de atalho: Enter)';
 
   @override
   String get stormHighscores => 'Melhores pontuações';
 
   @override
-  String get stormViewBestRuns => 'Ver melhores séries';
+  String get stormViewBestRuns => 'Ver as melhores tentativas';
 
   @override
-  String get stormBestRunOfDay => 'Melhor série do dia';
+  String get stormBestRunOfDay => 'Melhor tentativa do dia';
 
   @override
-  String get stormRuns => 'Séries';
+  String get stormRuns => 'Tentativas';
 
   @override
   String get stormGetReady => 'Prepare-se!';
@@ -11880,13 +12116,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get stormSkipExplanation => 'Pule este lance para preservar o seu combo! Funciona apenas uma vez por corrida.';
 
   @override
-  String get stormFailedPuzzles => 'Quebra-cabeças falhados';
+  String get stormFailedPuzzles => 'Problemas com falha';
 
   @override
-  String get stormSlowPuzzles => 'Quebra-cabeças lentos';
+  String get stormSlowPuzzles => 'Problemas lentos';
 
   @override
-  String get stormSkippedPuzzle => 'Quebra-cabeça pulado';
+  String get stormSkippedPuzzle => 'Problema pulado';
 
   @override
   String get stormThisWeek => 'Essa semana';
@@ -11901,17 +12137,17 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get stormClickToReload => 'Clique para recarregar';
 
   @override
-  String get stormThisRunHasExpired => 'Esta corrida acabou!';
+  String get stormThisRunHasExpired => 'Essa tentativa expirou!';
 
   @override
-  String get stormThisRunWasOpenedInAnotherTab => 'Esta corrida foi aberta em outra aba!';
+  String get stormThisRunWasOpenedInAnotherTab => 'Essa tentativa foi aberta em outra aba!';
 
   @override
   String stormXRuns(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count séries',
+      other: '$count tentativas',
       one: '1 tentativa',
     );
     return '$_temp0';
@@ -12349,7 +12585,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get studyCounterplay => 'Contra-ataque';
 
   @override
-  String get studyTimeTrouble => 'Problema de tempo';
+  String get studyTimeTrouble => 'Pressão no tempo';
 
   @override
   String get studyWithCompensation => 'Com compensação';

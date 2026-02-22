@@ -67,6 +67,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Musisz być zalogowany, aby wyświetlić tę stronę.';
 
   @override
+  String get mobileNewGame => 'Nowa partia';
+
+  @override
   String get mobileNoSearchResults => 'Brak wyników';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Witaj w aplikacji Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Zobacz partię';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Wskazówka: Możesz dodać więcej widżetów do ekranu głównego lub usunąć te, których nie potrzebujesz!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Dostosuj';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Przestań pokazywać zagrożenie';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Zakończone';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Przejdź do mojej strony';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompaktowy';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Szczegółowy';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\\nMożesz zobaczyć je w głównej zakładce.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Wróć';
 
   @override
   String get activityActivity => 'Aktywność';
@@ -937,6 +940,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastScore => 'Wynik';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Klasyfikacja obliczana jest na podstawie nadawanych partii i może różnić się od oficjalnych wyników.';
+
+  @override
   String get broadcastAllTeams => 'Wszystkie kluby';
 
   @override
@@ -981,12 +987,82 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Punkty meczowe';
+
+  @override
+  String get broadcastGamePoints => 'Punkty gry';
+
+  @override
+  String get broadcastMatches => 'Mecze';
+
+  @override
+  String get broadcastMatchHistory => 'Historia meczu';
+
+  @override
+  String get broadcastTeamResults => 'Wyniki zespołu';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Następujące terminy zostaną automatycznie przetłumaczone: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Runda $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Zachowanie domyślnej nazwy rundy automatycznie przetłumaczy ją na wszystkie inne języki.';
+
+  @override
+  String get broadcastOpenTournament => 'Otwarta';
+
+  @override
+  String get broadcastWomenTournament => 'Kobiety';
+
+  @override
+  String get broadcastMenTournament => 'Mężczyźni';
+
+  @override
+  String get broadcastGirlsTournament => 'Dziewczęta';
+
+  @override
+  String get broadcastBoysTournament => 'Chłopcy';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Otwarta U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Dziewczęta U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Chłopcy U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Ćwierćfinały';
+
+  @override
+  String get broadcastSemifinals => 'Półfinały';
+
+  @override
+  String get broadcastFinals => 'Finały';
+
+  @override
+  String get broadcastTiebreaks => 'Dogrywki';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partia $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Eliminacje';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1836,7 +1912,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Goniec daje mata, a hetman blokuje pozostałe pola ucieczki';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Mat dwoma wieżami na 2. lub 7. linii';
+  String get puzzleThemeBlindSwineMate => 'Mat Janowskiego';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'Dwie wieże współpracują, aby zamatować króla przeciwnika w kwadracie 2 × 2.';
@@ -1866,10 +1942,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy, który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
 
   @override
-  String get puzzleThemeCornerMate => 'Corner mate';
+  String get puzzleThemeCornerMate => 'Mat w narożniku szachownicy';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+  String get puzzleThemeCornerMateDescription => 'Zagoń króla przeciwnika do narożnika szachownicy przy pomocy wieży lub hetmana i zamatuj skoczkiem.';
 
   @override
   String get puzzleThemeCrushing => 'Decydująca przewaga';
@@ -1947,6 +2023,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go wykonawszy swoje początkowe posuniecie o dwa pola.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat naramiennikowy';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Odsłonięty król';
 
   @override
@@ -2001,10 +2083,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Goniec daje mata w narożniku, a wieża blokuje pola ucieczki w sąsiedniej kolumnie.';
 
   @override
-  String get puzzleThemeTriangleMate => 'Triangle mate';
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
 
   @override
-  String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+
+  @override
+  String get puzzleThemeTriangleMate => 'Mat trójkątny';
+
+  @override
+  String get puzzleThemeTriangleMateDescription => 'Hetman i wieża są ustawione na tej samej linii i matują stojąc bezpośrednio przy królu przeciwnika tworząc trójkąt.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic\'a';
@@ -2271,6 +2359,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Lub pozwól przeciwnikowi zeskanować ten kod QR';
+
+  @override
+  String get reusableChallengeUrl => 'URL wyzwania wielokrotnego użytku';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Stały link do wyzwania na określonych warunkach, które każdy może Ci rzucić.';
 
   @override
   String get waiting => 'Oczekiwanie';
@@ -3058,7 +3152,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get thisAccountViolatedTos => 'Użytkownik tego konta naruszył warunki korzystania z Lichess';
 
   @override
-  String get openingExplorerAndTablebase => 'Biblioteka otwarć i końcówek';
+  String get openingExplorerAndTablebase => 'Biblioteka debiutów i końcówek';
 
   @override
   String get takeback => 'Cofnij ruch';
@@ -3213,6 +3307,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Zapisz jako GIF';
+
+  @override
+  String get playerNames => 'Nazwy graczy';
+
+  @override
+  String get moveAnnotations => 'Adnotacje do posunięcia';
 
   @override
   String get pasteTheFenStringHere => 'Wklej tutaj pozycję w formacie FEN';
@@ -4036,9 +4136,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Poproś o analizę komputerową, ucz się na swoich błędach';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Następny (Ucz się na swoich błędach)';
-
-  @override
   String get keyNextBlunder => 'Następny błąd';
 
   @override
@@ -4328,6 +4425,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get brightness => 'Jasność';
+
+  @override
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Odcień';

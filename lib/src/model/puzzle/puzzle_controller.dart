@@ -97,8 +97,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     );
   }
 
-  Future<void> onUserMove(NormalMove move) async {
-    if (isPromotionPawnMove(state.currentPosition, move)) {
+  Future<void> onUserMove(Move move) async {
+    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
@@ -310,7 +310,7 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (isForward) {
         final isCheck = sanMove.isCheck;
         if (sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref.read(moveFeedbackServiceProvider).captureFeedback(Variant.standard, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -425,6 +425,7 @@ sealed class PuzzleState with _$PuzzleState {
 
   AnalysisOptions makeAnalysisOptions(String Function() makePgn) {
     return AnalysisOptions.standalone(
+      id: puzzle.puzzle.id,
       orientation: pov,
       pgn: makePgn(),
       isComputerAnalysisAllowed: true,

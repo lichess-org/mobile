@@ -2,13 +2,15 @@
 <resources>
   <string name="gameSetup">Oyun ayarları</string>
   <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Bir arkadaşınıza meydan okuyun</string>
-  <string name="playAgainstComputer">Bilgisayara Karşı Oyna</string>
+  <string name="playAgainstComputer">Bilgisayara karşı oyna</string>
   <string name="gameMode">Oyun modu</string>
   <string name="createLobbyGame">Lobi oyunu oluştur</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Oyuna davet etmek için, bu linki gönderin</string>
   <string name="gameOver">Oyun bitti</string>
   <string name="waitingForOpponent">Rakip bekleniyor</string>
   <string name="orLetYourOpponentScanQrCode">Veya rakibiniz bu QR kodunu tarasın</string>
+  <string name="reusableChallengeUrl">Yeniden kullanılabilir meydan okuma bağlantısı</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Bu ayarlar tam olarak aynı olduğundan, herkesin size meydan okuyabileceği kalıcı bir bağlantı.</string>
   <string name="waiting">Bekleniyor</string>
   <string name="yourTurn">Sıra sizde</string>
   <string name="aiNameLevelAiLevel">%1$s seviye %2$s</string>
@@ -108,7 +110,7 @@
   <string name="openingExplorer">Açılış kâşifi</string>
   <string name="openingEndgameExplorer">Açılış/oyunsonu kâşifi</string>
   <string name="xOpeningExplorer">%s açılış kâşifi</string>
-  <string name="playFirstOpeningEndgameExplorerMove">İlk sıradaki açılış kaşifi/oyun sonu analizi hamlesini oyna</string>
+  <string name="playFirstOpeningEndgameExplorerMove">İlk sıradaki açılış kâşifi/oyun sonu analizi hamlesini oyna</string>
   <string name="winPreventedBy50MoveRule">Galibiyet 50 hamle kuralı yüzünden engellendi</string>
   <string name="lossSavedBy50MoveRule">Mağlubiyet 50 hamle kuralı sayesinde önlendi</string>
   <string name="winOr50MovesByPriorMistake">Galibiyet veya geçmiş hata sebebiyle 50 hamle</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Lider Tablosu</string>
   <string name="screenshotCurrentPosition">Geçerli pozisyonun ekran görüntüsünü al</string>
   <string name="gameAsGIF">Oyunun GIF hali</string>
+  <string name="playerNames">Oyuncu isimleri</string>
+  <string name="moveAnnotations">Hamle açıklamaları</string>
   <string name="pasteTheFenStringHere">FEN kodunu buraya yapıştırın</string>
   <string name="pasteThePgnStringHere">PGN kodunu buraya yapıştırın</string>
   <string name="orUploadPgnFile">Veya bir PGN dosyası yükle</string>
@@ -718,7 +722,6 @@
   <string name="keyShowOrHideComments">yorumları gizle/göster</string>
   <string name="keyEnterOrExitVariation">varyasyona gir/çık</string>
   <string name="keyRequestComputerAnalysis">Bilgisayar analizi talep et, Hatalarından ders al</string>
-  <string name="keyNextLearnFromYourMistakes">Sonraki (Hatalarından ders al)</string>
   <string name="keyNextBlunder">Sonraki vahim hata</string>
   <string name="keyNextMistake">Sonraki hata</string>
   <string name="keyNextInaccuracy">Sonraki kusurlu hamle</string>
@@ -814,6 +817,7 @@
   <string name="size">Boyut</string>
   <string name="opacity">Opaklık</string>
   <string name="brightness">Parlaklık</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Ton</string>
   <string name="boardReset">Renkleri varsayılana döndür</string>
   <string name="pieceSet">Taş seti</string>

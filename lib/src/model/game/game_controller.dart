@@ -171,10 +171,10 @@ class GameController extends AsyncNotifier<GameState> {
     }
   }
 
-  void userMove(NormalMove move, {bool? isDrop, bool? isPremove}) {
+  void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (isPromotionPawnMove(curState.game.lastPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(curState.game.lastPosition, move)) {
       state = AsyncValue.data(curState.copyWith(promotionMove: move));
       return;
     }
@@ -184,12 +184,25 @@ class GameController extends AsyncNotifier<GameState> {
       return;
     }
 
-    final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
+    final (Position, String) sanResult;
+    try {
+      sanResult = curState.game.lastPosition.makeSan(move);
+    } on PlayException catch (e) {
+      LichessBinding.instance.firebaseCrashlytics.recordError(
+        'Invalid user move: $e',
+        null,
+        reason: 'PlayException thrown when making SAN of user move',
+        information: ['move: $move', 'position: ${curState.game.lastPosition}'],
+      );
+      _logger.warning('Invalid user move: $e');
+      return;
+    }
+    final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     state = AsyncValue.data(
@@ -201,7 +214,7 @@ class GameController extends AsyncNotifier<GameState> {
       ),
     );
 
-    _playMoveFeedback(sanMove, skipAnimationDelay: isDrop ?? false);
+    _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
 
     _sendMoveToSocket(
       move,
@@ -224,7 +237,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
 
     final move = curState.promotionMove!.withPromotion(role);
-    userMove(move, isDrop: true);
+    userMove(move, viaDragAndDrop: true);
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled
@@ -254,12 +267,26 @@ class GameController extends AsyncNotifier<GameState> {
       return;
     }
 
-    final (newPos, newSan) = curState.game.lastPosition.makeSan(moveToConfirm);
+    final (Position, String) sanResult;
+    try {
+      sanResult = curState.game.lastPosition.makeSan(moveToConfirm);
+    } on PlayException catch (e) {
+      LichessBinding.instance.firebaseCrashlytics.recordError(
+        'Invalid confirm move: $e',
+        null,
+        reason: 'PlayException thrown when making SAN of confirm move',
+        information: ['move: $moveToConfirm', 'position: ${curState.game.lastPosition}'],
+      );
+      _logger.warning('Invalid confirm move: $e');
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: null));
+      return;
+    }
+    final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, moveToConfirm);
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
-      diff: MaterialDiff.fromBoard(newPos.board),
+      diff: MaterialDiff.fromPosition(newPos),
     );
 
     state = AsyncValue.data(
@@ -279,7 +306,7 @@ class GameController extends AsyncNotifier<GameState> {
   }
 
   /// Set or unset a premove.
-  void setPremove(NormalMove? move) {
+  void setPremove(Move? move) {
     final curState = state.requireValue;
     state = AsyncValue.data(curState.copyWith(premove: move));
   }
@@ -520,7 +547,9 @@ class GameController extends AsyncNotifier<GameState> {
   void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      ref
+          .read(moveFeedbackServiceProvider)
+          .captureFeedback(state.requireValue.game.meta.variant, check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
     }
@@ -644,11 +673,15 @@ class GameController extends AsyncNotifier<GameState> {
           final newStep = GameStep(
             sanMove: sanMove,
             position: newPos,
-            diff: MaterialDiff.fromBoard(newPos.board),
+            diff: MaterialDiff.fromPosition(newPos),
           );
 
           newState = newState.copyWith(
             game: newState.game.copyWith(steps: newState.game.steps.add(newStep)),
+            // Clear any pending move confirmation or promotion since the position
+            // has changed and these moves are no longer valid.
+            moveToConfirm: null,
+            promotionMove: null,
           );
 
           if (!curState.isReplaying) {
@@ -715,6 +748,8 @@ class GameController extends AsyncNotifier<GameState> {
             final postMovePosition = state.value?.game.lastPosition;
             if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
               userMove(postMovePremove, isPremove: true);
+            } else if (postMovePremove != null) {
+              newState = newState.copyWith(premove: null);
             }
           });
         }
@@ -1013,7 +1048,7 @@ sealed class GameState with _$GameState {
     NormalMove? promotionMove,
 
     /// Premove waiting to be played
-    NormalMove? premove,
+    Move? premove,
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
@@ -1125,6 +1160,7 @@ sealed class GameState with _$GameState {
           gameFullId: gameFullId,
         )
       : AnalysisOptions.standalone(
+          id: gameFullId.gameId,
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
           pgn: game.makePgn(),

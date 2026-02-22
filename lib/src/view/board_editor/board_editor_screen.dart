@@ -2,12 +2,14 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +18,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -42,6 +45,17 @@ class BoardEditorScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(context.l10n.boardEditor),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'FEN',
+            onPressed: () => showDialog<void>(
+              context: context,
+              builder: (_) => _FenDialog(
+                onFenLoaded: (fen) =>
+                    ref.read(boardEditorControllerProvider(initialFen).notifier).loadFen(fen),
+              ),
+            ),
+          ),
           SemanticIconButton(
             semanticsLabel: context.l10n.mobileSharePositionAsFEN,
             onPressed: () => launchShareDialog(context, ShareParams(text: boardEditorState.fen)),
@@ -283,7 +297,7 @@ class _BottomBar extends ConsumerWidget {
                 onPressed: () {
                   final notifier = ref.read(editorController.notifier);
                   Navigator.of(context).push(
-                    SearchPositionScreen.buildRoute(
+                    BoardEditorPositionsScreen.buildRoute(
                       context,
                       onPositionSelected: (position) => {
                         notifier.loadFen(position.fen),
@@ -360,6 +374,7 @@ class _BottomBar extends ConsumerWidget {
                     AnalysisScreen.buildRoute(
                       context,
                       AnalysisOptions.standalone(
+                        id: const StringId('standalone'),
                         orientation: editorState.orientation,
                         pgn: editorState.pgn!,
                         isComputerAnalysisAllowed: true,
@@ -382,6 +397,62 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.tune,
         ),
       ],
+    );
+  }
+}
+
+class _FenDialog extends StatefulWidget {
+  const _FenDialog({required this.onFenLoaded});
+
+  final void Function(String fen) onFenLoaded;
+
+  @override
+  State<_FenDialog> createState() => _FenDialogState();
+}
+
+class _FenDialogState extends State<_FenDialog> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pasteFromClipboard() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data?.text == null || !mounted) return;
+
+    final text = data!.text!.trim();
+    if (text.isEmpty) return;
+
+    _controller.text = text;
+    try {
+      final pos = Chess.fromSetup(Setup.parseFen(text));
+      widget.onFenLoaded(pos.fen);
+    } catch (_) {
+      showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
+    } finally {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: TextField(
+        controller: _controller,
+        readOnly: true,
+        onTap: _pasteFromClipboard,
+        decoration: InputDecoration(
+          hintText: context.l10n.pasteTheFenStringHere,
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.paste),
+            onPressed: _pasteFromClipboard,
+            tooltip: 'Paste from clipboard',
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,17 +1,21 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:http/http.dart' show ClientException;
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -54,59 +58,13 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
     return puzzleDashboard.when(
       data: (dashboard) {
-        if (dashboard == null) {
-          return const SizedBox.shrink();
-        }
-        final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
-        return ListSection(
-          header: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(context.l10n.puzzlePuzzleDashboard),
-                        Text(
-                          context.l10n.puzzlePuzzleDashboardDescription,
-                          style: Styles.subtitle.copyWith(
-                            color: textShade(context, Styles.subtitleOpacity),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (showDaysSelector) const DaysSelector(),
-                ],
-              ),
-            ],
-          ),
+        if (dashboard == null) return const SizedBox.shrink();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            StatCardRow([
-              StatCard(
-                context.l10n.performance,
-                value: dashboard.global.performance.toString(),
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n
-                    .puzzleNbPlayed(dashboard.global.nb)
-                    .replaceAll(RegExp(r'\d+'), '')
-                    .trim()
-                    .capitalize(),
-                value: dashboard.global.nb.toString().localizeNumbers(),
-                elevation: 0,
-              ),
-              StatCard(
-                context.l10n.puzzleSolved.capitalize(),
-                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                elevation: 0,
-              ),
-            ]),
-            if (chartData.length >= 3) PuzzleChart(chartData),
+            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector),
+            _PerformanceSection(dashboard: dashboard, metric: Metric.improvementArea),
+            _PerformanceSection(dashboard: dashboard, metric: Metric.strength),
           ],
         );
       },
@@ -169,9 +127,104 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   }
 }
 
+class _ChartSection extends StatelessWidget {
+  const _ChartSection({required this.dashboard, required this.showDaysSelector});
+
+  final PuzzleDashboard dashboard;
+  final bool showDaysSelector;
+
+  @override
+  Widget build(BuildContext context) {
+    final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+    return ListSection(
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(context.l10n.puzzlePuzzleDashboard),
+                    Text(
+                      context.l10n.puzzlePuzzleDashboardDescription,
+                      style: Styles.subtitle.copyWith(
+                        color: textShade(context, Styles.subtitleOpacity),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (showDaysSelector) const DaysSelector(),
+            ],
+          ),
+        ],
+      ),
+      children: [
+        StatCardRow([
+          StatCard(context.l10n.performance, value: dashboard.global.performance.toString()),
+          StatCard(
+            context.l10n
+                .puzzleNbPlayed(dashboard.global.nb)
+                .replaceAll(RegExp(r'\d+'), '')
+                .trim()
+                .capitalize(),
+            value: dashboard.global.nb.toString().localizeNumbers(),
+          ),
+          StatCard(
+            context.l10n.puzzleSolved.capitalize(),
+            value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+          ),
+        ]),
+        if (chartData.length >= 3) PuzzleChart(chartData),
+      ],
+    );
+  }
+}
+
+class _PerformanceSection extends StatelessWidget {
+  const _PerformanceSection({required this.dashboard, required this.metric});
+
+  final PuzzleDashboard dashboard;
+  final Metric metric;
+
+  @override
+  Widget build(BuildContext context) {
+    final themes = metric.sort(dashboard.themes);
+    return ListSection(
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(metric.title(context.l10n)), // #4: logic on enum
+                    Text(
+                      metric.subtitle(context.l10n), // #4: logic on enum
+                      style: Styles.subtitle.copyWith(
+                        color: textShade(context, Styles.subtitleOpacity),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      children: [for (final item in themes) PuzzleThemeRow(data: item)],
+    );
+  }
+}
+
 class PuzzleChart extends StatelessWidget {
   const PuzzleChart(this.puzzleData);
-
   final List<PuzzleDashboardData> puzzleData;
 
   @override
@@ -234,6 +287,32 @@ class DaysSelector extends ConsumerWidget {
   }
 }
 
+enum Metric {
+  strength,
+  improvementArea;
+
+  static const _itemsToShow = 3;
+
+  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes) => switch (this) {
+    strength =>
+      themes
+          .sortedByCompare((e) => e.performance, (a, b) => b.compareTo(a))
+          .take(_itemsToShow)
+          .toList(),
+    improvementArea => themes.sortedBy((e) => e.performance).take(_itemsToShow).toList(),
+  };
+
+  String title(AppLocalizations l10n) => switch (this) {
+    strength => l10n.puzzleStrengths,
+    improvementArea => l10n.puzzleImprovementAreas,
+  };
+
+  String subtitle(AppLocalizations l10n) => switch (this) {
+    strength => l10n.puzzleStrengthDescription,
+    improvementArea => l10n.puzzleImprovementAreasDescription,
+  };
+}
+
 enum Days {
   oneday(1),
   twodays(2),
@@ -263,5 +342,54 @@ String _daysL10n(BuildContext context, Days day) {
       return context.l10n.nbDays(60);
     case Days.threemonths:
       return context.l10n.nbDays(90);
+  }
+}
+
+class PuzzleThemeRow extends ConsumerWidget {
+  final PuzzleDashboardData data;
+  const PuzzleThemeRow({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeInfo = data.theme.l10n(context.l10n);
+    final solvePercentage = data.nb > 0 ? (data.firstWins / data.nb * 100).toInt() : 0;
+
+    return InkWell(
+      onTap: () {
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(data.theme)));
+        ref.invalidate(puzzleDashboardProvider);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(themeInfo.name, style: Styles.boardPreviewTitle),
+            const SizedBox(height: 4),
+            Text(
+              themeInfo.description,
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.formDescription,
+            ),
+            StatCardRow([
+              StatCard(context.l10n.performance, value: data.performance.toString()),
+              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
+              StatCard(
+                context.l10n
+                    .puzzleNbPlayed(data.nb)
+                    .replaceAll(RegExp(r'\d+'), '')
+                    .trim()
+                    .capitalize(),
+                value: data.nb.toString().localizeNumbers(),
+              ),
+            ]),
+          ],
+        ),
+      ),
+    );
   }
 }

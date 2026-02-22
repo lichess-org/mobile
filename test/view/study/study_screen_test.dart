@@ -49,7 +49,7 @@ Study makeStudy({
   IList<String?> hints = const IList.empty(),
   IList<String?> deviationComments = const IList.empty(),
 }) {
-  chapter = chapter ?? makeChapter(id: const StudyChapterId('1'));
+  final effectiveChapter = chapter ?? makeChapter(id: const StudyChapterId('1'));
   return Study(
     id: testId,
     name: '',
@@ -58,8 +58,8 @@ Study makeStudy({
     ownerId: null,
     features: (cloneable: false, chat: false, sticky: false),
     topics: const IList.empty(),
-    chapters: chapters ?? IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
-    chapter: chapter,
+    chapters: chapters ?? IList([StudyChapterMeta(id: effectiveChapter.id, name: '', fen: null)]),
+    chapter: effectiveChapter,
     members: IMap(const {
       UserId(''): StudyMember(
         user: LightUser(id: UserId(''), name: ''),

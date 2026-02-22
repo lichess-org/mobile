@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,9 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -19,14 +22,16 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:logging/logging.dart';
 
 part 'broadcast_analysis_controller.freezed.dart';
+
+final _logger = Logger('BroadcastAnalysisController');
 
 typedef BroadcastAnalysisControllerParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
@@ -56,8 +61,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
   final _syncDebouncer = Debouncer(const Duration(milliseconds: 150));
 
-  Timer? _startEngineEvalTimer;
-
   Object? _key = Object();
 
   @override
@@ -74,7 +77,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       _key = null;
       _subscription?.cancel();
       _socketOpenSubscription?.cancel();
-      _startEngineEvalTimer?.cancel();
       _appLifecycleListener?.dispose();
       _syncDebouncer.cancel();
     });
@@ -105,11 +107,11 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       },
     );
 
-    final pgn = await ref
+    final pgnWithAnalysisSummary = await ref
         .read(broadcastRepositoryProvider)
         .getGamePgn(params.roundId, params.gameId);
 
-    final game = PgnGame.parsePgn(pgn);
+    final game = PgnGame.parsePgn(pgnWithAnalysisSummary.pgn);
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
@@ -133,13 +135,10 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: Side.white,
-      evaluationContext: EvaluationContext(
-        id: params.gameId,
-        variant: Variant.standard,
-        initialPosition: _root.position,
-      ),
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
+      analysisSummary: pgnWithAnalysisSummary.analysisSummary,
+      acplChartData: _makeAcplChartData(),
     );
 
     // We need to define the state value in the build method because `sendEvalGetEvent` and
@@ -157,7 +156,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref
+    final BroadcastGamePgnWithAnalysisSummary pgnWithAnalysisSummary = await ref
         .read(broadcastRepositoryProvider)
         .getGamePgn(params.roundId, params.gameId);
 
@@ -165,7 +164,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (key == _key) {
       final curState = state.requireValue;
       final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
-      final game = PgnGame.parsePgn(pgn);
+      final game = PgnGame.parsePgn(pgnWithAnalysisSummary.pgn);
       final pgnHeaders = IMap(game.headers);
       final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
@@ -195,6 +194,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           root: _root.view,
           lastMove: lastMove,
           clocks: _getClocks(newCurrentPath),
+          analysisSummary: pgnWithAnalysisSummary.analysisSummary,
+          acplChartData: _makeAcplChartData(),
         ),
       );
     }
@@ -245,7 +246,15 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final uciMove = pick(event.data, 'n', 'uci').asUciMoveOrThrow();
     final clock = pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
-    final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
+    final (UciPath? newPath, bool isNewNode) result;
+    try {
+      result = _root.addMoveAt(path, uciMove, clock: clock);
+    } on PlayException catch (e) {
+      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+      _reloadPgn();
+      return;
+    }
+    final (newPath, isNewNode) = result;
 
     if (newPath != null && isNewNode == false) {
       _root.updateAt(newPath, (node) {
@@ -283,12 +292,12 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.hasValue) return;
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncData(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -451,7 +460,9 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       if (!isNavigating && isForward) {
         final isCheck = currentNode.sanMove.isCheck;
         if (currentNode.sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref
+              .read(moveFeedbackServiceProvider)
+              .captureFeedback(state.requireValue.variant, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -460,7 +471,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       else {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
-          soundService.play(Sound.capture);
+          soundService.playCaptureSound(state.requireValue.variant);
         } else {
           soundService.play(Sound.move);
         }
@@ -507,6 +518,40 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       clock: (node is Branch) ? node.clock : null,
     );
   }
+
+  IList<ExternalEval>? _makeAcplChartData() {
+    if (!_root.mainline.any((node) => node.lichessAnalysisComments != null)) {
+      return null;
+    }
+    final list = _root.mainline
+        .map(
+          (node) => (
+            node.position.isCheckmate,
+            node.position.turn,
+            node.lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+          ),
+        )
+        .map((el) {
+          final (isCheckmate, side, eval) = el;
+          return eval != null
+              ? ExternalEval(
+                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                  mate: eval.mate,
+                  depth: eval.depth,
+                )
+              : ExternalEval(
+                  cp: null,
+                  // hack to display checkmate as the max eval
+                  mate: isCheckmate
+                      ? side == Side.white
+                            ? -1
+                            : 1
+                      : null,
+                );
+        })
+        .toList(growable: false);
+    return list.isEmpty ? null : IList(list);
+  }
 }
 
 @freezed
@@ -544,8 +589,6 @@ sealed class BroadcastAnalysisState
     /// Whether the user has enabled server analysis.
     required bool isServerAnalysisEnabled,
 
-    required EvaluationContext evaluationContext,
-
     /// Clocks if available.
     ({Duration? parentClock, Duration? clock})? clocks,
 
@@ -563,6 +606,13 @@ sealed class BroadcastAnalysisState
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
 
+    /// Optional ACPL chart data of the game, coming from lichess server analysis.
+    IList<ExternalEval>? acplChartData,
+
+    /// The analysis summary sent by the server.
+    /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
+    BroadcastAnalysisSummary? analysisSummary,
+
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;
 
@@ -578,11 +628,18 @@ sealed class BroadcastAnalysisState
   @override
   bool get alwaysRequestCloudEval => true;
 
-  /// We currently assume that all broadcast games are standard but this is incorrect as there are
-  /// Chess960 tournaments broadcasted on Lichess.
-  /// TODO: use the correct variant for broadcast game.
+  /// We currently assume that all broadcast games are either standard or chess960
+  ///
+  /// If the starting FEN is different from the standard one we assume it's a chess960 game, otherwise it's a standard game.
+  // TODO: get the variant from the server when it's supported
   @override
-  Variant get variant => Variant.standard;
+  Variant get variant => pgnHeaders['FEN'] != null && pgnHeaders['FEN'] != kInitialFEN
+      ? Variant.chess960
+      : Variant.standard;
+
+  @override
+  EvaluationContext get evaluationContext =>
+      EvaluationContext(id: id, variant: variant, initialPosition: root.position);
 
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => root.mainline.any((node) => node.serverEval != null);
@@ -606,5 +663,6 @@ sealed class BroadcastAnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
 }

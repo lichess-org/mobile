@@ -6,7 +6,8 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 part 'work.freezed.dart';
 
@@ -17,11 +18,13 @@ typedef MoveResult = (MoveWork, UCIMove);
 sealed class Work {
   const Work();
 
-  /// Optional identifier to associate this work with a game, puzzle, etc.
-  StringId? get id;
+  /// Identifier to associate this work with a game, puzzle, etc.
+  StringId get id;
 
-  /// The engine preference to use (only relevant for Standard and Chess960 variants).
-  ChessEnginePref get enginePref;
+  /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
+  /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
+  /// will be used instead.
+  StockfishFlavor get stockfishFlavor;
   Variant get variant;
   int get threads;
   int? get hashSize;
@@ -43,11 +46,10 @@ sealed class EvalWork extends Work with _$EvalWork {
   const EvalWork._() : super();
 
   const factory EvalWork({
-    /// Optional identifier to associate this work with a game, puzzle, etc.
-    StringId? id,
+    /// Identifier to associate this work with a game, puzzle, etc.
+    required StringId id,
 
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
+    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     required int threads,
     int? hashSize,
@@ -84,96 +86,37 @@ sealed class MoveWork extends Work with _$MoveWork {
   const MoveWork._() : super();
 
   const factory MoveWork({
-    /// Optional identifier to associate this work with a game, puzzle, etc.
-    StringId? id,
-
-    /// The engine preference to use (only relevant for Standard and Chess960 variants).
-    required ChessEnginePref enginePref,
+    /// Identifier to associate this work with a game, puzzle, etc.
+    required StringId id,
     required Variant variant,
-    required int threads,
     int? hashSize,
     required Position initialPosition,
     required IList<Step> steps,
 
-    /// The Elo rating to simulate for the engine using UCI_LimitStrength and UCI_Elo.
-    required int elo,
+    /// The Stockfish strength level.
+    required StockfishLevel level,
   }) = _MoveWork;
+
+  /// The Stockfish flavor to use with MoveWork.
+  ///
+  /// It is always set to [StockfishFlavor.variant] since only Fairy-Stockfish supports negative skill levels.
+  @override
+  StockfishFlavor get stockfishFlavor => StockfishFlavor.variant;
 
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// Number of principal variations to compute for move selection.
-  ///
-  /// Stockfish's strength limiting works by applying a randomized bias to scores
-  /// of slightly worse moves among at least 4 candidates. MultiPV increases
-  /// this candidate pool, giving more suboptimal moves to choose from at lower Elos.
-  ///
-  /// | Level | Elo  | MultiPV |
-  /// |-------|------|---------|
-  /// | 1     | 1320 | 10      |
-  /// | 2     | 1450 | 8       |
-  /// | 3     | 1550 | 7       |
-  /// | 4     | 1650 | 6       |
-  /// | 5     | 1750 | 5       |
-  /// | 6     | 1850 | 5       |
-  /// | 7     | 1950 | 5       |
-  /// | 8     | 2100 | 4       |
-  /// | 9     | 2300 | 4       |
-  /// | 10    | 2550 | 4       |
-  /// | 11    | 2850 | 3       |
-  /// | 12    | 3190 | 2       |
-  @override
-  int get multiPv {
-    if (elo <= 1650) {
-      // Levels 1-4: fast drop from 10 to 6
-      return (10 - ((elo - 1320) / (1650 - 1320) * 4)).round().clamp(6, 10);
-    } else if (elo >= 3000) {
-      // Level 12: 2
-      return 2;
-    } else if (elo >= 2850) {
-      // Level 11: 3
-      return 3;
-    } else if (elo >= 2100) {
-      // Levels 8-10: 4
-      return 4;
-    } else {
-      // Levels 5-7: 5
-      return 5;
-    }
-  }
+  /// The skill level from -20 to 20. For Stockfish option "Skill Level".
+  int get skill => level.skill;
 
-  /// Search time based on Elo rating.
-  ///
-  /// Lower Elos get shorter search times since the strength limiting mechanism
-  /// (randomized bias on move scores) selects the move early in the search
-  /// at depth = 1 + Skill Level.
-  ///
-  /// | Level | Elo  | Search Time |
-  /// |-------|------|-------------|
-  /// | 1     | 1320 | 150ms       |
-  /// | 2     | 1450 | 300ms       |
-  /// | 3     | 1550 | 410ms       |
-  /// | 4     | 1650 | 525ms       |
-  /// | 5     | 1750 | 640ms       |
-  /// | 6     | 1850 | 940ms       |
-  /// | 7     | 1950 | 1250ms      |
-  /// | 8     | 2100 | 1700ms      |
-  /// | 9     | 2300 | 2300ms      |
-  /// | 10    | 2550 | 3060ms      |
-  /// | 11    | 2850 | 3970ms      |
-  /// | 12    | 3190 | 5000ms      |
   @override
-  Duration get searchTime {
-    final int ms;
-    if (elo <= 1750) {
-      // Levels 1-5: linear from 150ms to 640ms
-      ms = (150 + ((elo - 1320) / (1750 - 1320) * 490)).toInt();
-    } else {
-      // Levels 6-12: linear from 640ms to 5000ms
-      ms = (640 + ((elo - 1750) / (3190 - 1750) * 4360)).toInt();
-    }
-    return Duration(milliseconds: ms.clamp(150, 5000));
-  }
+  int get threads => level.threads;
+
+  @override
+  int get multiPv => level.multiPv;
+
+  @override
+  Duration get searchTime => level.searchTime;
 }
 
 @freezed

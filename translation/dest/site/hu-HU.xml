@@ -714,7 +714,6 @@
   <string name="keyShowOrHideComments">kommentek megjelenítése/elrejtése</string>
   <string name="keyEnterOrExitVariation">ki/belépés változatba</string>
   <string name="keyRequestComputerAnalysis">Kérelmezz számítógépes elemzést és tanulj a hibáidból</string>
-  <string name="keyNextLearnFromYourMistakes">Következő (Tanulj a hibáidból)</string>
   <string name="keyNextBlunder">Következő baklövés</string>
   <string name="keyNextMistake">Következő hiba</string>
   <string name="keyNextInaccuracy">Következő pontatlanság</string>
@@ -810,7 +809,8 @@ Jelszavad megváltoztatásához kattints az üzenetben lévő linkre.</string>
   <string name="board">Sakktábla</string>
   <string name="size">Méret</string>
   <string name="opacity">Átlátszóság</string>
-  <string name="brightness">Kontraszt</string>
+  <string name="brightness">Fényerő</string>
+  <string name="contrast">Kontraszt</string>
   <string name="hue">Árnyalat</string>
   <string name="boardReset">Színek visszaállítása az alapértékre</string>
   <string name="pieceSet">Figurakészlet</string>

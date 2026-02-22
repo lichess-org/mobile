@@ -7,10 +7,14 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:logging/logging.dart';
 
 part 'eval.freezed.dart';
 part 'eval.g.dart';
+
+final _logger = Logger('Eval');
 
 /// Base class for evals.
 sealed class Eval {
@@ -181,15 +185,31 @@ sealed class PvData with _$PvData {
     Position pos = fromPosition;
     final List<String> res = [];
     for (final uciMove in moves.sublist(0, math.min(12, moves.length))) {
-      // assume uciMove string is valid as it comes from stockfish
-      final move = Move.parse(uciMove)!;
-      if (pos.isLegal(move)) {
-        final (newPos, san) = pos.makeSanUnchecked(move);
-        res.add(san);
-        pos = newPos;
-      } else {
+      final move = Move.parse(uciMove);
+      final movesString = moves.join(' ');
+      if (move == null) {
+        LichessBinding.instance.firebaseCrashlytics.recordError(
+          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen}',
+          null,
+          reason: 'Failed to parse UCI move from PV',
+        );
+        _logger.warning(
+          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen}',
+        );
         break;
       }
+      if (!pos.isLegal(move)) {
+        LichessBinding.instance.firebaseCrashlytics.recordError(
+          'Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}',
+          null,
+          reason: 'Move from PV is not legal in the given position',
+        );
+        _logger.warning('Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}');
+        break;
+      }
+      final (newPos, san) = pos.makeSanUnchecked(move);
+      res.add(san);
+      pos = newPos;
     }
     return res;
   }
@@ -222,6 +242,7 @@ ISet<Shape> moveShapes({
       ),
   }.toISet(),
   DropMove(role: final role, to: _) => {
+    Circle(color: color, orig: move.to, scale: scale),
     PieceShape(
       color: color,
       orig: move.to,

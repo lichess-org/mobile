@@ -9,6 +9,8 @@
   <string name="gameOver">Partiet er avslutta</string>
   <string name="waitingForOpponent">Ventar på motspelar</string>
   <string name="orLetYourOpponentScanQrCode">Eller la motspelaren din skanna denne QR-koden</string>
+  <string name="reusableChallengeUrl">Ombrukeleg utfordrings-URL</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Ei permanent lenke der kven som helst kan utfordra deg med eksakt desse innstillingane.</string>
   <string name="waiting">Ventar</string>
   <string name="yourTurn">Ditt trekk</string>
   <string name="aiNameLevelAiLevel">%1$s på nivå %2$s</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Leiartabell</string>
   <string name="screenshotCurrentPosition">Ta eit skjermbilete av gjeldande stilling</string>
   <string name="gameAsGIF">Parti som GIF</string>
+  <string name="playerNames">Namn på spelarane</string>
+  <string name="moveAnnotations">Trekknotasjon</string>
   <string name="pasteTheFenStringHere">Lim inn FEN-koden her</string>
   <string name="pasteThePgnStringHere">Lim inn PGN-koden her</string>
   <string name="orUploadPgnFile">Eller last opp ei PGN-fil</string>
@@ -719,7 +723,6 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="keyShowOrHideComments">syn/gøym kommentarar</string>
   <string name="keyEnterOrExitVariation">gå inn i/gå ut av varianten</string>
   <string name="keyRequestComputerAnalysis">Be om maskinanalyse. Lær av feila dine</string>
-  <string name="keyNextLearnFromYourMistakes">Neste (lær av feila dine)</string>
   <string name="keyNextBlunder">Neste store mistak (\"bukk\")</string>
   <string name="keyNextMistake">Neste mistak</string>
   <string name="keyNextInaccuracy">Neste upresise trekk</string>
@@ -815,6 +818,7 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="size">Storleik</string>
   <string name="opacity">Opasitet</string>
   <string name="brightness">Lysstyrke</string>
+  <string name="contrast">Kontrast</string>
   <string name="hue">Fargetone</string>
   <string name="boardReset">Sttendestill til standardfargar</string>
   <string name="pieceSet">Brikkesett</string>

@@ -9,26 +9,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
-class OfflineComputerGameScreen extends StatelessWidget {
+class OfflineComputerGameScreen extends ConsumerWidget {
   const OfflineComputerGameScreen({this.initialFen, super.key});
 
   /// Optional initial FEN to start the game from a custom position.
@@ -39,9 +46,31 @@ class OfflineComputerGameScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final practiceMode = ref.watch(
+      offlineComputerGameControllerProvider.select((s) => s.game.practiceMode),
+    );
+    final title = practiceMode
+        ? context.l10n.practiceWithComputer
+        : context.l10n.playAgainstComputer;
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.playAgainstComputer)),
+      appBar: AppBar(
+        title: AppBarTitleText(title),
+        actions: [
+          if (practiceMode)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Practice settings',
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => const _PracticeSettingsSheet(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -71,9 +100,9 @@ class _BodyState extends ConsumerState<_Body> {
         return;
       }
 
-      final ongoingGame = await ref.read(offlineComputerGameStorageProvider).fetchOngoingGame();
-      if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
-        ref.read(offlineComputerGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+      final savedGame = await ref.read(offlineComputerGameStorageProvider).fetchGame();
+      if (savedGame != null && savedGame.game.steps.length > 1) {
+        ref.read(offlineComputerGameControllerProvider.notifier).loadGame(savedGame);
       } else {
         if (!mounted) return;
         _showNewGameDialog();
@@ -81,9 +110,19 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
-  void _saveGameState() {
+  Future<void> _saveGameState() async {
     if (!mounted) return;
-    ref.read(offlineComputerGameControllerProvider.notifier).saveState();
+    final state = ref.read(offlineComputerGameControllerProvider);
+    await ref
+        .read(offlineComputerGameStorageProvider)
+        .save(
+          SavedOfflineComputerGame(
+            game: state.game,
+            gameSessionId: state.gameSessionId.value,
+            lastPracticeComment: state.practiceComment,
+            lastEvalString: state.cachedEvalString,
+          ),
+        );
   }
 
   @override
@@ -98,12 +137,34 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => OfflineComputerGameResultDialog(
                 game: newGameState.game,
+                gameSessionId: newGameState.gameSessionId,
                 onNewGame: () {
                   Navigator.pop(context);
                   _showNewGameDialog();
                 },
               ),
               barrierDismissible: true,
+            );
+          }
+        });
+      }
+
+      // Check for threefold repetition
+      if (previous?.game.isThreefoldRepetition == false &&
+          newGameState.game.isThreefoldRepetition == true) {
+        Timer(const Duration(milliseconds: 500), () {
+          if (context.mounted) {
+            showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => YesNoDialog(
+                title: Text(context.l10n.threefoldRepetition),
+                content: Text(context.l10n.claimADraw),
+                onYes: () {
+                  Navigator.pop(context);
+                  ref.read(offlineComputerGameControllerProvider.notifier).claimThreefoldDraw();
+                },
+                onNo: () => Navigator.pop(context),
+              ),
             );
           }
         });
@@ -122,7 +183,7 @@ class _BodyState extends ConsumerState<_Body> {
 
           final navigator = Navigator.of(context);
           final game = gameState.game;
-          if (game.abortable || game.finished) {
+          if (game.abortable) {
             return navigator.pop();
           }
 
@@ -133,18 +194,16 @@ class _BodyState extends ConsumerState<_Body> {
                 title: Text(context.l10n.mobileAreYouSure),
                 content: const Text('No worries, your game will be saved.'),
                 onNo: () => Navigator.of(context).pop(false),
-                onYes: () {
-                  _saveGameState();
-                  Navigator.of(context).pop(true);
-                },
+                onYes: () => Navigator.of(context).pop(true),
               ),
             );
             if (shouldPop == true) {
+              await _saveGameState();
               navigator.pop();
             }
           } else {
             // Save state even if the game is finished, we might want to analyse it later
-            _saveGameState();
+            await _saveGameState();
             navigator.pop();
           }
         },
@@ -158,27 +217,29 @@ class _BodyState extends ConsumerState<_Body> {
                     key: _boardKey,
                     topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
-                    orientation: isBoardFlipped ? orientation.opposite : orientation,
+                    topTableFlex: 1,
+                    bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
+                    orientation: variantBoardOrientation(
+                      variant: gameState.game.meta.variant,
+                      youAre: orientation,
+                      isBoardTurned: isBoardFlipped,
+                    ),
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
-                    shapes: gameState.hintSquare != null
-                        ? ISet({
-                            Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!),
-                          })
-                        : null,
+                    shapes: _buildBoardShapes(gameState),
                     interactiveBoardParams: (
                       variant: Variant.standard,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
                           ? PlayerSide.none
-                          : isPlayerTurn
+                          : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
                       onPromotionSelection: ref
                           .read(offlineComputerGameControllerProvider.notifier)
                           .onPromotionSelection,
                       promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
+                      onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
                       premovable: null,
@@ -197,10 +258,37 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog() {
-    showAdaptiveDialog<void>(
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    showModalBottomSheet<void>(
       context: context,
-      builder: (context) => _NewGameDialog(initialFen: widget.initialFen),
+      isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+      builder: (context) => _NewGameSheet(initialFen: widget.initialFen),
     );
+  }
+
+  ISet<Shape>? _buildBoardShapes(OfflineComputerGameState gameState) {
+    final shapes = <Shape>{};
+
+    // Add hint circle if showing
+    if (gameState.hintSquare != null) {
+      shapes.add(Circle(color: const Color(0x664D9E4D), orig: gameState.hintSquare!));
+    }
+
+    // Add suggested move arrow if showing
+    final suggestedMove = gameState.showingSuggestedMove;
+    if (suggestedMove != null) {
+      final color = gameState.practiceComment?.verdict.color ?? Colors.blue;
+      shapes.add(
+        Arrow(
+          color: color.withValues(alpha: 0.8),
+          orig: suggestedMove.from,
+          dest: suggestedMove.to,
+        ),
+      );
+    }
+
+    return shapes.isNotEmpty ? ISet(shapes) : null;
   }
 }
 
@@ -222,7 +310,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         BottomBarButton(
           label: context.l10n.takeback,
-          onTap: gameState.canTakeback && gameState.game.casual
+          onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
@@ -255,7 +343,6 @@ class _BottomBar extends ConsumerWidget {
             ref.read(_isBoardFlippedProvider.notifier).toggle();
           },
         ),
-        BottomSheetAction(makeLabel: (context) => const Text('New game'), onPressed: onNewGame),
         if (gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
@@ -263,6 +350,7 @@ class _BottomBar extends ConsumerWidget {
               AnalysisScreen.buildRoute(
                 context,
                 AnalysisOptions.standalone(
+                  id: gameState.gameSessionId,
                   orientation: gameState.game.playerSide,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
@@ -276,6 +364,10 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.resign),
             onPressed: () => _showResignDialog(context, ref),
           ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileNewGame),
+          onPressed: onNewGame,
+        ),
       ],
     );
   }
@@ -296,10 +388,11 @@ class _BottomBar extends ConsumerWidget {
   }
 
   bool _canGetHint(OfflineComputerGameState gameState) {
-    return gameState.game.casual &&
+    return (gameState.game.casual || gameState.game.practiceMode) &&
         gameState.game.playable &&
         !gameState.isEngineThinking &&
         !gameState.isLoadingHint &&
+        !gameState.isEvaluatingMove &&
         gameState.turn == gameState.game.playerSide;
   }
 }
@@ -355,13 +448,9 @@ class _Player extends ConsumerWidget {
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (gameState.isEngineThinking) ...[
-                      const SizedBox(width: 8),
-                      const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                      ),
+                    if (gameState.isEngineThinking) ...const [
+                      SizedBox(width: 8),
+                      Icon(Icons.hourglass_top, size: 16),
                     ],
                   ],
                 ),
@@ -376,33 +465,190 @@ class _Player extends ConsumerWidget {
       );
     }
 
-    // Human player - just show captured pieces
-    return Row(
-      mainAxisSize: .max,
-      mainAxisAlignment: .start,
+    // Human player - just show captured pieces and practice comment
+    final practiceStatusLabel = !game.practiceMode
+        ? null
+        : gameState.isEngineThinking || gameState.isEvaluatingMove
+        ? context.l10n.computerThinking
+        : !gameState.finished && gameState.turn == game.playerSide
+        ? context.l10n.yourTurn
+        : null;
+
+    return Column(
+      crossAxisAlignment: .stretch,
+      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
-        MaterialDifferenceDisplay(
-          materialDiff: materialDiff,
-          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+        if (game.practiceMode) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(practiceStatusLabel ?? ''),
+          ),
+          _PracticeCommentCard(gameState: gameState),
+          const SizedBox(height: 8),
+        ],
+        Row(
+          mainAxisSize: .max,
+          mainAxisAlignment: .start,
+          children: [
+            MaterialDifferenceDisplay(
+              materialDiff: materialDiff,
+              materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-class _NewGameDialog extends ConsumerStatefulWidget {
-  const _NewGameDialog({this.initialFen});
+class _PracticeCommentCard extends ConsumerWidget {
+  const _PracticeCommentCard({required this.gameState});
+
+  final OfflineComputerGameState gameState;
+
+  static const _cardHeight = 54.0;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final hideBestMove = prefs.hideBestMove;
+    final hideEvaluation = prefs.hideEvaluation;
+    final isEvaluatingMove = gameState.isEvaluatingMove;
+    final practiceComment = gameState.practiceComment;
+    final showingSuggestedMove = gameState.showingSuggestedMove;
+    final evalTextStyle = TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: textShade(context, 0.6),
+    );
+
+    Widget content;
+    Color? backgroundColor;
+    Color? iconColor;
+    IconData? icon;
+
+    if (practiceComment != null) {
+      final verdict = practiceComment.verdict;
+      icon = practiceComment.icon;
+      iconColor = practiceComment.color;
+      backgroundColor = practiceComment.color.withValues(alpha: 0.1);
+
+      final verdictText = switch (verdict) {
+        MoveVerdict.goodMove => context.l10n.studyGoodMove,
+        MoveVerdict.notBest => "Good, but there's better",
+        MoveVerdict.inaccuracy => context.l10n.inaccuracy,
+        MoveVerdict.mistake => context.l10n.mistake,
+        MoveVerdict.blunder => context.l10n.blunder,
+      };
+
+      Widget? suggestedMoveWidget;
+      final suggestedMove = practiceComment.suggestedMove;
+      if (suggestedMove != null && !hideBestMove) {
+        final moveText = suggestedMove.san;
+        final labelText = practiceComment.isShowingAlternative
+            ? context.l10n.anotherWasX('')
+            : context.l10n.bestWasX('');
+        final label = labelText.replaceAll(' ', '').isEmpty
+            ? ''
+            : labelText.substring(0, labelText.length - 1);
+        final isShowing = showingSuggestedMove == suggestedMove.move;
+
+        suggestedMoveWidget = GestureDetector(
+          onTap: () {
+            final move = suggestedMove.move;
+            if (move is NormalMove) {
+              ref.read(offlineComputerGameControllerProvider.notifier).toggleSuggestedMove(move);
+            }
+          },
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: label),
+                const TextSpan(text: ' '),
+                TextSpan(
+                  text: moveText,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isShowing ? iconColor : null,
+                    decoration: TextDecoration.underline,
+                    decorationStyle: TextDecorationStyle.dotted,
+                  ),
+                ),
+              ],
+            ),
+            style: TextStyle(fontSize: 12, color: textShade(context, 0.6)),
+          ),
+        );
+      }
+
+      content = Row(
+        children: [
+          Icon(icon, color: iconColor, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  verdictText,
+                  style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                ),
+                if (suggestedMoveWidget != null) suggestedMoveWidget,
+              ],
+            ),
+          ),
+          if (practiceComment.evalAfter != null && !hideEvaluation)
+            Text(practiceComment.evalAfter!, style: evalTextStyle),
+        ],
+      );
+    } else if (isEvaluatingMove) {
+      content = Text(context.l10n.evaluatingYourMove);
+    } else if (gameState.finished) {
+      // Game is over
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
+    } else if (gameState.turn == gameState.game.playerSide) {
+      // Player's turn
+      final cachedEval = gameState.cachedEvalString;
+      content = Row(
+        children: [
+          const Spacer(),
+          if (!hideEvaluation)
+            if (cachedEval != null) Text(cachedEval, style: evalTextStyle),
+        ],
+      );
+    } else {
+      content = const SizedBox.shrink();
+    }
+
+    return Container(
+      height: _cardHeight,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Align(alignment: Alignment.centerLeft, child: content),
+    );
+  }
+}
+
+class _NewGameSheet extends ConsumerStatefulWidget {
+  const _NewGameSheet({this.initialFen});
 
   final String? initialFen;
 
   @override
-  ConsumerState<_NewGameDialog> createState() => _NewGameDialogState();
+  ConsumerState<_NewGameSheet> createState() => _NewGameSheetState();
 }
 
-class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
+class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
   late bool _casual;
+  late bool _practiceMode;
 
   String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
     SideChoice.white => context.l10n.white,
@@ -417,22 +663,20 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
     _casual = prefs.casual;
+    _practiceMode = prefs.practiceMode;
   }
 
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return AlertDialog.adaptive(
-      title: Text(context.l10n.gameSetup),
-      content: Material(
-        type: MaterialType.transparency,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (widget.initialFen != null) ...[
-              const SizedBox(height: 8),
-              SizedBox(
+    return BottomSheetScrollableContainer(
+      children: [
+        if (widget.initialFen != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Center(
+              child: SizedBox(
                 width: 150,
                 height: 150,
                 child: StaticChessboard(
@@ -447,77 +691,131 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                 ),
               ),
-              const SizedBox(height: 16),
-            ] else
-              const SizedBox(height: 16),
-            Text('${context.l10n.level}: ${_selectedLevel.level}'),
-            NonLinearSlider(
-              value: _selectedLevel.level,
-              values: StockfishLevel.values.map((l) => l.level).toList(),
-              onChange: (value) {
-                setState(() {
-                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                });
-              },
-              onChangeEnd: (value) {
-                setState(() {
-                  _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                });
-                ref
-                    .read(offlineComputerGamePreferencesProvider.notifier)
-                    .setStockfishLevel(_selectedLevel);
-              },
             ),
+          ),
+        ListSection(
+          materialFilledCard: true,
+          children: [
             ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(context.l10n.side),
-              trailing: TextButton(
-                onPressed: () {
-                  showChoicePicker(
-                    context,
-                    choices: SideChoice.values,
-                    selectedItem: _selectedSideChoice,
-                    labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                    onSelectedItemChanged: (SideChoice choice) {
-                      setState(() => _selectedSideChoice = choice);
-                      ref
-                          .read(offlineComputerGamePreferencesProvider.notifier)
-                          .setSideChoice(choice);
-                    },
-                  );
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.level}: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: '${_selectedLevel.level}',
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _selectedLevel.level,
+                values: StockfishLevel.values.map((l) => l.level).toList(),
+                onChange: (value) {
+                  setState(() {
+                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
+                  });
                 },
-                child: Text(_sideChoiceLabel(context, _selectedSideChoice)),
+                onChangeEnd: (value) {
+                  setState(() {
+                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
+                  });
+                  ref
+                      .read(offlineComputerGamePreferencesProvider.notifier)
+                      .setStockfishLevel(_selectedLevel);
+                },
               ),
             ),
-            SwitchListTile.adaptive(
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: SideChoice.values,
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Practice mode'),
+              subtitle: const Text('Get feedback on your moves'),
+              value: _practiceMode,
+              onChanged: (value) {
+                setState(() => _practiceMode = value);
+                ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
+              },
+            ),
+            SwitchSettingTile(
               title: Text(context.l10n.casual),
               subtitle: const Text('Allow takebacks and hints'),
-              value: _casual,
-              onChanged: (value) {
-                setState(() => _casual = value);
-                ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
-              },
-              contentPadding: EdgeInsets.zero,
+              value: _practiceMode || _casual,
+              onChanged: _practiceMode
+                  ? null
+                  : (value) {
+                      setState(() => _casual = value);
+                      ref.read(offlineComputerGamePreferencesProvider.notifier).setCasual(value);
+                    },
             ),
           ],
         ),
-      ),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.cancel)),
-        TextButton(
-          onPressed: () {
-            final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
-            ref
-                .read(offlineComputerGameControllerProvider.notifier)
-                .startNewGame(
-                  stockfishLevel: _selectedLevel,
-                  playerSide: side,
-                  casual: _casual,
-                  initialFen: widget.initialFen,
-                );
-            Navigator.pop(context);
-          },
-          child: Text(context.l10n.play),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FilledButton(
+            onPressed: () {
+              final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
+              ref
+                  .read(offlineComputerGameControllerProvider.notifier)
+                  .startNewGame(
+                    stockfishLevel: _selectedLevel,
+                    playerSide: side,
+                    casual: _practiceMode || _casual,
+                    practiceMode: _practiceMode,
+                    initialFen: widget.initialFen,
+                  );
+              Navigator.pop(context);
+            },
+            child: Text(context.l10n.play, style: Styles.bold),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PracticeSettingsSheet extends ConsumerWidget {
+  const _PracticeSettingsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListSection(
+          header: const Text('Practice settings'),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.hideBestMove),
+              value: prefs.hideBestMove,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Hide evaluation'),
+              value: prefs.hideEvaluation,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -525,9 +823,15 @@ class _NewGameDialogState extends ConsumerState<_NewGameDialog> {
 }
 
 class OfflineComputerGameResultDialog extends StatelessWidget {
-  const OfflineComputerGameResultDialog({required this.game, required this.onNewGame, super.key});
+  const OfflineComputerGameResultDialog({
+    required this.game,
+    required this.gameSessionId,
+    required this.onNewGame,
+    super.key,
+  });
 
   final OfflineComputerGame game;
+  final StringId gameSessionId;
   final VoidCallback onNewGame;
 
   @override
@@ -561,7 +865,25 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       content: Text(subtitle),
       actions: [
         TextButton(onPressed: () => Navigator.pop(context), child: Text(context.l10n.close)),
-        TextButton(onPressed: onNewGame, child: const Text('New game')),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions.standalone(
+                  id: gameSessionId,
+                  orientation: game.playerSide,
+                  pgn: game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: Variant.standard,
+                ),
+              ),
+            );
+          },
+          child: Text(context.l10n.analysis),
+        ),
+        TextButton(onPressed: onNewGame, child: Text(context.l10n.mobileNewGame)),
       ],
     );
   }

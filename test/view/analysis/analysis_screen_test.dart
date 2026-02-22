@@ -49,6 +49,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,
@@ -75,6 +76,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,
@@ -107,6 +109,53 @@ void main() {
         isTrue,
       );
     });
+
+    for (final pgn in ['', sanMoves]) {
+      testWidgets('change variant if PGN is empty, pgn: $pgn', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: AnalysisScreen(
+            options: AnalysisOptions.standalone(
+              id: const StringId('standalone'),
+              orientation: Side.white,
+              pgn: pgn,
+              isComputerAnalysisAllowed: false,
+              variant: Variant.standard,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle(); // wait for menu to open
+
+        final canChangeVariant = pgn.isEmpty;
+        expect(find.text('Variant'), canChangeVariant ? findsOneWidget : findsNothing);
+
+        if (canChangeVariant) {
+          await tester.tap(find.text('Variant'));
+          await tester.pumpAndSettle(); // wait for dialog to open
+
+          expect(find.textContaining('Standard'), findsOneWidget);
+          expect(find.textContaining('Chess960'), findsNothing);
+          expect(find.textContaining('From Position'), findsNothing);
+          expect(find.textContaining('Antichess'), findsOneWidget);
+          expect(find.textContaining('King of the Hill'), findsOneWidget);
+          expect(find.textContaining('Three Check'), findsOneWidget);
+          expect(find.textContaining('Atomic'), findsNothing);
+          expect(find.textContaining('Horde'), findsOneWidget);
+          expect(find.textContaining('Racing Kings'), findsOneWidget);
+          expect(find.textContaining('Crazyhouse'), findsNothing);
+
+          await tester.tap(find.textContaining('Horde'));
+          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+          // Horde starting position should be loaded:
+          expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+        }
+      });
+    }
   });
 
   group('Analysis Tree View', () {
@@ -133,6 +182,7 @@ void main() {
           options:
               options ??
               AnalysisOptions.standalone(
+                id: const StringId('standalone'),
                 orientation: Side.white,
                 pgn: pgn,
                 isComputerAnalysisAllowed: false,
@@ -874,6 +924,7 @@ void main() {
           },
           home: const AnalysisScreen(
             options: AnalysisOptions.standalone(
+              id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
               isComputerAnalysisAllowed: false,
@@ -922,6 +973,7 @@ void main() {
           home: AnalysisScreen(
             key: ValueKey(castlingMethod),
             options: const AnalysisOptions.standalone(
+              id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
               isComputerAnalysisAllowed: false,
@@ -965,20 +1017,31 @@ void main() {
     await tester.tap(find.text('Analysis board'));
     await tester.pumpAndSettle();
 
+    // Change variant to Racing Kings to verify that variant is also saved/restored correctly
+    await tester.tap(find.bySemanticsLabel('Menu'));
+    await tester.pumpAndSettle(); // wait for menu to open
+    await tester.tap(find.text('Variant'));
+    await tester.pumpAndSettle(); // wait for variant selection dialog to open
+    await tester.tap(find.textContaining('Racing Kings'));
+    await tester.pumpAndSettle(); // wait for variant to change
+
     // Make some moves
-    await playMove(tester, 'e2', 'e4');
-    await playMove(tester, 'e7', 'e5');
-    await playMove(tester, 'f2', 'f4');
+    await playMove(tester, 'e2', 'd4');
+    await playMove(tester, 'a2', 'a3');
+    await playMove(tester, 'h2', 'g3');
 
     // Verify we made the moves
-    expect(find.textContaining('f4'), findsOneWidget);
+    expect(find.textContaining('Nd4'), findsOneWidget);
+    expect(find.textContaining('Ka3'), findsOneWidget);
+    expect(find.textContaining('Kg3'), findsOneWidget);
 
     // go back a move
     await tester.tap(find.byKey(const Key('goto-previous')));
     await tester.pump();
 
-    expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
-    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+    expect(find.byKey(const ValueKey('d4-whiteknight')), findsOneWidget);
+    expect(find.byKey(const ValueKey('a3-blackking')), findsOneWidget);
+    expect(find.byKey(const ValueKey('g3-whiteking')), findsNothing);
 
     // Navigate back to More tab
     await tester.pageBack();
@@ -992,14 +1055,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify moves are still present and session was restored
-    expect(find.textContaining('e4'), findsOneWidget);
-    expect(find.textContaining('e5'), findsOneWidget);
-    expect(find.textContaining('f4'), findsOneWidget);
+    expect(find.textContaining('Nd4'), findsOneWidget);
+    expect(find.textContaining('Ka3'), findsOneWidget);
+    expect(find.textContaining('Kg3'), findsOneWidget);
 
     // Verify board state is correct
-    expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-    expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
-    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+    expect(find.byKey(const ValueKey('d4-whiteknight')), findsOneWidget);
+    expect(find.byKey(const ValueKey('a3-blackking')), findsOneWidget);
+    expect(find.byKey(const ValueKey('g3-whiteking')), findsNothing);
   });
   testWidgets('Clear moves clears standalone analysis', (tester) async {
     // Open from More tab and navigate to board analysis
@@ -1118,6 +1181,7 @@ void main() {
         tester,
         home: AnalysisScreen(
           options: AnalysisOptions.standalone(
+            id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
             isComputerAnalysisAllowed: false,

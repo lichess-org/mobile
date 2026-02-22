@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_summary.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
@@ -86,7 +88,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   void initState() {
     super.initState();
 
-    tabs = [AnalysisTab.explorer, AnalysisTab.moves];
+    tabs = [AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
   }
@@ -198,9 +200,11 @@ class _BroadcastGameMenu extends ConsumerWidget {
           label: context.l10n.mobileShareGamePGN,
           onPressed: () async {
             try {
-              final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+              final pgnOnly = await ref
+                  .read(broadcastRepositoryProvider)
+                  .getGamePgn(roundId, gameId, withAnalysisSummary: false);
               if (context.mounted) {
-                launchShareDialog(context, ShareParams(text: pgn));
+                launchShareDialog(context, ShareParams(text: pgnOnly.pgn));
               }
             } catch (e) {
               if (context.mounted) {
@@ -294,6 +298,7 @@ class _Body extends ConsumerWidget {
           engineLines:
               isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
               ? EngineLines(
+                  filters: (id: state.evaluationContext.id, path: state.currentPath),
                   savedEval: currentNode.eval,
                   isGameOver: currentNode.position.isGameOver,
                   onTapMove: ref
@@ -312,7 +317,11 @@ class _Body extends ConsumerWidget {
             tournamentSlug: tournamentSlug,
             roundSlug: roundSlug,
           ),
-          children: [_OpeningExplorerTab(roundId, gameId), _BroadcastGameTreeView(roundId, gameId)],
+          children: [
+            _OpeningExplorerTab(roundId, gameId),
+            _BroadcastGameTreeView(roundId, gameId),
+            BroadcastGameSummary(roundId: roundId, gameId: gameId),
+          ],
         );
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
@@ -404,7 +413,7 @@ class _BroadcastAnalysisBoardState
       analysisState.isServerAnalysisEnabled && analysisPrefs.showAnnotations;
 
   @override
-  void onUserMove(NormalMove move) => ref
+  void onUserMove(Move move) => ref
       .read(
         broadcastAnalysisControllerProvider((
           roundId: widget.roundId,
@@ -412,6 +421,10 @@ class _BroadcastAnalysisBoardState
         )).notifier,
       )
       .onUserMove(move);
+
+  @override
+  EngineEvaluationFilters get engineEvaluationFilters =>
+      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
   void onPromotionSelection(Role? role) => ref
@@ -601,6 +614,10 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               future: toggleFuture,
               builder: (context, snapshot) {
                 return EngineButton(
+                  filters: (
+                    id: broadcastAnalysisState.evaluationContext.id,
+                    path: broadcastAnalysisState.currentPath,
+                  ),
                   savedEval: broadcastAnalysisState.currentNode.eval,
                   onTap: snapshot.connectionState != ConnectionState.waiting
                       ? () async {

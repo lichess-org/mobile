@@ -5,19 +5,20 @@
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All Schpiel</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bisch sicher?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brätt-Ischtellige</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugsrücknam-Offerte zruggzieh</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Leere</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugsrücknahms-Offerte zruggzieh</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Lösche</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Lösch die gschpeicherete Züg</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Es Schpiel mitschpille</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Rückmäldig</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Guete Abig, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Guete Abig</string>
-  <string name="goodDay" comment="%s is the user's name&#10;&#10;A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Guete Tag, %s</string>
-  <string name="goodDayWithoutName" comment=" A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus'. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time-based concept, just use a generic greeting (like 'Hello' in english).">Guete Tag</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Guete Tag, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Guete Tag</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Variante verberge</string>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Afangssite</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startsite</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live Streamer</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Muesch iglogt si, zum die Site z\'gseh.</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du muesch igloggt si, um die Site z\'gseh.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Neus Schpiel</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nüt g\'funde</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgsch keim Schpiller.</string>
@@ -29,7 +30,7 @@
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Vegrösserig vu de zogene Figur</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wottsch de Lauf beände?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nüt zum Zeige, bitte d\'Filter ändere</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Es git nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lös i 3 Minute so vill Ufgabe wie möglich.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.</string>
@@ -37,35 +38,35 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzlich Gsuechts</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Buechzeiche entferne</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server-Analyse</string>
-  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Position vode Uhr</string>
-  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Vorischtellige</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Stellig vo de Uhr</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Vor-Ischtellige</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Markierig, zogeni Figur</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Chreis</string>
-  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Vieregg</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Fäld</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Home Widgets</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Ibettete Modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">UI-System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpiel- und au für de Puzzle-Storm-Bildschirm.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">g\'schlageni Figure</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">wähl es Bild</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Eigeni Hindergründ funktioniered nur im Dunkelmodus. Es dunkles Bild wird empfohlen.</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Eigeni Hindergründ funktioniered nur im \"Darkmode\". Es wird es dunkels Bild empfohle.</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Bild undütlich mache</string>
-  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Bild verstecke</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Brätt verberge</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Brätt zeige</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Wüsche, zum anderi Hindergründ zeige</string>
-  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Atippe oder Ziehe</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tippe oder Ziehe</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tipp uf zwei Fälder</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Form Zeichnig</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Zeig de Rand</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Haptischi Rückmäldig</string>
-  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wens aktiviert isch, vibriert s Grät churz, wenn du e Figur bewegsch oder schlosch.</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wänns aktiviert isch, vibriert s\'Grät churz, wänn du e Figur bewegsch oder schlasch.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ischtelle</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Teil s\'PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Teil d\'Schpiel-URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Teil d\'Position als FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teil die Ufgab</string>
   <string name="showComments" comment="Shown in the analysis screen.">Zeig Kommentär</string>
-  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Resultat zeige</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Zeig Resultat</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Zeig Variante</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Es isch öppis schief gange.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Syschtem-Farbe</string>
@@ -75,4 +76,16 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte bis en Gegner erschint...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Luege</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Willkomme bi de Lichess-App!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Schpiel verfolge</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tipp: Du chasch witeri Widget uf de Schtartbildschirm tue oder Unnötigi entferne!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Ablehne</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Apasse</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Drohige nümme zeige</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Komplett</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Gang uf mini Site</string>
+  <string name="displayModeCompact" comment="">Kompakt</string>
+  <string name="displayModeDetailed" comment="">Detailiert</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">De Explorer chasch offline nöd öffne.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Useforderig isch gmacht: Du wirsch avisiert, wänn\'s Schpiel afangt. Du chasch\'s au uf de \"Home-Site\" ufrüefe.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Vorher</string>
 </resources>

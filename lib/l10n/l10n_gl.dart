@@ -67,6 +67,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta páxina.';
 
   @override
+  String get mobileNewGame => 'Nova partida';
+
+  @override
   String get mobileNoSearchResults => 'Sen resultados';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Benvido á aplicación de Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ver a partida';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Consello: podes engadir máis trebellos na Pantalla de Inicio ou eliminar os que non precisas!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Descartar';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Personalizar';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Non amosar a ameaza';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Completados';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Ir á miña páxina';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Compacto';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detallado';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'O Explorador de Aperturas non está dispoñible sen conexión.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Desafío creado: serás notificado cando comece a partida.\\nPodes acceder ó reto dende a pantalla de Inicio.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Anterior';
 
   @override
   String get activityActivity => 'Actividade';
@@ -897,6 +900,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastScore => 'Resultado';
 
   @override
+  String get broadcastStandingsDisclaimer => 'A clasificación calcúlase empregando as partidas transmitidas e pode diferir dos resultados oficiais.';
+
+  @override
   String get broadcastAllTeams => 'Todos os equipos';
 
   @override
@@ -941,12 +947,82 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Puntos de encontro';
+
+  @override
+  String get broadcastGamePoints => 'Puntos de partidas';
+
+  @override
+  String get broadcastMatches => 'Encontros';
+
+  @override
+  String get broadcastMatchHistory => 'Historial de encontros';
+
+  @override
+  String get broadcastTeamResults => 'Resultados do equipo';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Os seguintes termos vanse traducir automaticamente: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Rolda $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Débese deixar o nome por defecto para traducilo automaticamente ó resto de linguas.';
+
+  @override
+  String get broadcastOpenTournament => 'Aberto';
+
+  @override
+  String get broadcastWomenTournament => 'Feminino';
+
+  @override
+  String get broadcastMenTournament => 'Masculino';
+
+  @override
+  String get broadcastGirlsTournament => 'Rapazas';
+
+  @override
+  String get broadcastBoysTournament => 'Rapaces';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Aberto Sub$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Rapazas Sub$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Rapaces Sub$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Cuartos de final';
+
+  @override
+  String get broadcastSemifinals => 'Semifinais';
+
+  @override
+  String get broadcastFinals => 'Finais';
+
+  @override
+  String get broadcastTiebreaks => 'Desempates';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partida $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Eliminatorias';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1967,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Táctica que involucra a captura ao paso, onde un peón pode capturar a un peón opoñente que o deixou atrás usando o seu movemento inicial de dúas casas.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mate das xarreteiras';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'As dúas casas de escape a ámbolos dous lados do rei en xaque están ocupadas.';
+
+  @override
   String get puzzleThemeExposedKing => 'Rei exposto';
 
   @override
@@ -1943,6 +2025,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Usa o bispo para dar xaque mentres a torre axuda a confinar ó rei.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mate da cola de anduriña';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'É un patrón de mate que semella a cola en forma de V dunha anduriña.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mate do triángulo';
@@ -2215,6 +2303,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ou deixa que o teu rival escanee este código QR';
+
+  @override
+  String get reusableChallengeUrl => 'URL de desafío reutilizable';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Unha ligazón permanente para quen desexe desafiarte con estes precisos axustes.';
 
   @override
   String get waiting => 'Agardando';
@@ -3159,6 +3253,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameAsGIF => 'Gardar a partida en formato GIF';
 
   @override
+  String get playerNames => 'Nomes das xogadoras/es';
+
+  @override
+  String get moveAnnotations => 'Mover anotacións';
+
+  @override
   String get pasteTheFenStringHere => 'Pega o texto FEN aquí';
 
   @override
@@ -3980,9 +4080,6 @@ class AppLocalizationsGl extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Solicitar unha análise por computador, Aprende dos teus erros';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Seguinte (Aprende dos teus erros)';
-
-  @override
   String get keyNextBlunder => 'Seguinte metida de zoca';
 
   @override
@@ -4272,6 +4369,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get brightness => 'Brillo';
+
+  @override
+  String get contrast => 'Contraste';
 
   @override
   String get hue => 'Matiz';

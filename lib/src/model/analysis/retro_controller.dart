@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -43,10 +42,10 @@ sealed class Mistake with _$Mistake {
   }) = _Mistake;
 
   ViewBranch get userBranch => branch.children[0];
-  NormalMove get userMove => userBranch.sanMove.move as NormalMove;
+  Move get userMove => userBranch.sanMove.move;
 
   ViewBranch get serverBranch => branch.children[1];
-  NormalMove get serverMove => serverBranch.sanMove.move as NormalMove;
+  Move get serverMove => serverBranch.sanMove.move;
 
   bool isSolution(RetroCurrentNode node) =>
       node.position == serverBranch.position ||
@@ -110,10 +109,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
     _game = await ref.watch(archivedGameProvider(options.id).future);
-
-    if (engineSupportedVariants.contains(_game.meta.variant) == false) {
-      throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
-    }
 
     _root = _game.makeTree();
 
@@ -245,10 +240,10 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     );
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -354,7 +349,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       if (!isNavigating && isForward) {
         final isCheck = currentNode.sanMove.isCheck;
         if (currentNode.sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref.read(moveFeedbackServiceProvider).captureFeedback(state.variant, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -363,7 +358,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       else {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
-          soundService.play(Sound.capture);
+          soundService.playCaptureSound(state.variant);
         } else {
           soundService.play(Sound.move);
         }
@@ -544,6 +539,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
+    filters: (id: evaluationContext.id, path: currentPath),
   );
 
   bool get canGoNext => !isSolving && currentNode.hasChild;

@@ -1,34 +1,25 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
-import 'package:dartchess/dartchess.dart' hide File;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
-part 'evaluation_service.freezed.dart';
-
 final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
-final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
-final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
-
-/// Variants supported by the local engine.
-const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
+/// Variants supported by the official Stockfish engine.
+const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// Exception thrown when the engine does not support the requested variant.
 class EngineUnsupportedVariantException implements Exception {
@@ -81,6 +72,13 @@ class EvaluationService {
     _moveSubscription = _protocol.moveStream.listen(_onMoveResult);
   }
 
+  static const _defaultState = (
+    engineName: null,
+    eval: null,
+    state: EngineState.initial,
+    currentWork: null,
+  );
+
   final int maxMemory;
   final NnueService _nnueService;
 
@@ -92,7 +90,12 @@ class EvaluationService {
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
 
-  StockfishFlavor? _currentFlavor;
+  /// The flavor that was originally requested when the engine was last (re)started.
+  ///
+  /// Used for restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause restarts on
+  /// subsequent latestNoNNUE requests.
+  StockfishFlavor? _currentRequestedFlavor;
+  Variant? _currentVariant;
   bool _initInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
@@ -118,12 +121,7 @@ class EvaluationService {
   /// Stream of move results tagged with their [MoveWork].
   Stream<MoveResult> get moveStream => _moveController.stream;
 
-  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier((
-    engineName: null,
-    eval: null,
-    state: EngineState.initial,
-    currentWork: null,
-  ));
+  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(_defaultState);
 
   /// The current engine evaluation state, combining engine name, eval, state, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
@@ -131,7 +129,7 @@ class EvaluationService {
   /// The current engine state.
   EngineState get _engineState => _evaluationState.value.state;
 
-  Work? _currentWork;
+  MoveWork? _currentMoveWork;
 
   void _setEngineState(EngineState newState) {
     _logger.fine('Engine state: ${newState.name}');
@@ -145,13 +143,12 @@ class EvaluationService {
   }
 
   void _setEvalWork(EvalWork? work) {
-    _currentWork = work;
     _setState(workFn: () => work);
   }
 
   // ignore: use_setters_to_change_properties
   void _setMoveWork(MoveWork? work) {
-    _currentWork = work;
+    _currentMoveWork = work;
   }
 
   void _setState({
@@ -179,17 +176,14 @@ class EvaluationService {
   /// when the evaluation finishes or is replaced by another request.
   ///
   /// If [goDeeper] is true, the engine will use the maximum search time.
-  /// If [forceRestart] is true, the engine will restart even if a cached eval exists.
   ///
   /// Returns `null` if a cached eval is sufficient.
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false, bool forceRestart = false}) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      throw EngineUnsupportedVariantException(work.variant);
-    }
+  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
+    // reset eval is needed to avoid showing a stale eval from a previous work in a different position
+    _setEval(null);
 
-    // Check if cached eval is sufficient
-    if (!work.threatMode && !forceRestart) {
+    if (!work.threatMode) {
+      // If we have an already good enough eval in cache, skip the evaluation
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
         case CloudEval _ when goDeeper == false:
@@ -202,11 +196,64 @@ class EvaluationService {
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
-    return _startWork(work, evalStream.where((result) => result.$1 == work));
+    _startWork(work);
+
+    return evalStream.where((result) => result.$1 == work);
+  }
+
+  /// Find the evaluation for the given [work].
+  ///
+  /// This will stop any current work and start a new evaluation. Last caller wins.
+  ///
+  /// Returns a [Future] that completes with the evaluation, or `null` if no evaluation
+  /// could be obtained (e.g. the engine fails).
+  ///
+  /// The [work] must have a [EvalWork.searchTime] set.
+  ///
+  /// If [minDepth] is provided, the evaluation will stop early once this depth is reached.
+  /// Otherwise, it will run for the full [EvalWork.searchTime].
+  Future<LocalEval?> findEval(EvalWork work, {int? minDepth}) async {
+    assert(work.searchTime != Duration.zero, 'searchTime must be set for findEval');
+
+    final stream = evaluate(work);
+    if (stream == null) {
+      // do we have a cached eval?
+      switch (work.evalCache) {
+        case final LocalEval localEval:
+          return localEval;
+        case CloudEval _:
+          return null;
+        case _:
+          return null;
+      }
+    }
+
+    LocalEval? finalEval;
+    try {
+      await for (final (_, eval) in stream.timeout(
+        work.searchTime + const Duration(milliseconds: 500),
+      )) {
+        finalEval = eval;
+        if (minDepth != null && eval.depth >= minDepth) {
+          stop();
+          break;
+        }
+      }
+    } on TimeoutException {
+      stop();
+    }
+
+    _logger.info(
+      'Final eval at ply ${work.position.ply}: '
+      'depth=${finalEval?.depth}, cp=${finalEval?.cp}, mate=${finalEval?.mate}, '
+      'nodes=${finalEval?.nodes}, time=${finalEval?.searchTime.inMilliseconds}ms',
+    );
+
+    return finalEval;
   }
 
   /// Find the best move for the given [work] at the specified engine strength level.
@@ -215,21 +262,15 @@ class EvaluationService {
   ///
   /// Returns a [Future] that completes with the best move found by the engine.
   ///
-  /// Throws [EngineUnsupportedVariantException] if the variant is not supported.
   /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
   /// superseded by another [findMove] call.
   Future<UCIMove> findMove(MoveWork work) {
-    if (!engineSupportedVariants.contains(work.variant)) {
-      return Future.error(EngineUnsupportedVariantException(work.variant));
-    }
-
     _logger.info(
       'Finding move at ply ${work.position.ply} with options: '
-      'enginePref=${work.enginePref}, elo=${work.elo}, cores=${work.threads}, '
+      'flavor=${work.stockfishFlavor}, skill=${work.skill}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms',
     );
 
-    // Cancel any previous pending move request
     _cancelPendingMoveRequest();
 
     final completer = Completer<UCIMove>();
@@ -243,7 +284,7 @@ class EvaluationService {
 
     _pendingMoveRequest = (completer, subscription);
 
-    _startWork(work, null);
+    _startWork(work);
 
     return completer.future;
   }
@@ -259,21 +300,25 @@ class EvaluationService {
   }
 
   /// Start the given [work], restarting the engine if necessary.
-  T? _startWork<T>(Work work, T? resultStream) {
-    final flavor = work.enginePref == ChessEnginePref.sfLatest
-        ? StockfishFlavor.latestNoNNUE
-        : StockfishFlavor.sf16;
+  void _startWork(Work work) {
+    final flavor = officialStockfishVariants.contains(work.variant)
+        ? work.stockfishFlavor
+        : StockfishFlavor.variant;
 
     final stockfishState = _stockfish.state.value;
+
+    // Compare against the originally requested flavor, not the effective one. This prevents restart
+    // when latestNoNNUE fell back to sf16
     final needsRestart =
-        _currentFlavor != flavor ||
+        _currentRequestedFlavor != flavor ||
+        _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
         stockfishState == StockfishState.error;
 
-    // Check if we need to clear engine context (different game/puzzle)
+    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
     final needsNewGame =
-        _currentWork != null &&
-        (_currentWork!.id != work.id || _currentWork!.initialPosition != work.initialPosition);
+        previousWork != null &&
+        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
 
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
@@ -292,16 +337,16 @@ class EvaluationService {
       _logger.fine('Work requested while engine initialization is in progress, queuing work');
 
       // Init in progress, work will be computed when init finishes
-      // (the _initEngine callback checks _currentWork)
-      return resultStream;
+      // (the _initEngine callback checks the current work state)
+      return;
     }
 
     if (needsRestart) {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
-      _initEngine(flavor).then((_) {
+      _initEngine(flavor, work.variant).then((_) {
         // Compute the current work (might be different from original if another request came in)
-        final currentWork = _currentWork;
+        final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
           _protocol.compute(currentWork);
         }
@@ -309,11 +354,9 @@ class EvaluationService {
     } else {
       _protocol.compute(work, newGame: needsNewGame);
     }
-
-    return resultStream;
   }
 
-  Future<void> _initEngine(StockfishFlavor flavor) async {
+  Future<void> _initEngine(StockfishFlavor flavor, Variant variant) async {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
@@ -338,6 +381,8 @@ class EvaluationService {
 
       await _stockfish.start(
         flavor: actualFlavor,
+        // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+        variant: variant.fairy,
         smallNetPath: smallNetPath,
         bigNetPath: bigNetPath,
       );
@@ -349,7 +394,8 @@ class EvaluationService {
 
       _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
 
-      _currentFlavor = actualFlavor;
+      _currentRequestedFlavor = flavor;
+      _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
     } catch (e, s) {
@@ -439,7 +485,7 @@ class EvaluationService {
   /// The engine can still emit results for the current work until it fully stops.
   void stop() {
     _protocol.compute(null);
-    _currentWork = null;
+    _currentMoveWork = null;
     _setEvalWork(null);
   }
 
@@ -456,9 +502,10 @@ class EvaluationService {
     _cancelPendingMoveRequest();
     _discardEvalResults = true;
     _discardMoveResults = true;
-    _currentWork = null;
+    _currentMoveWork = null;
     _stockfish.quit();
-    _currentFlavor = null;
+    _currentRequestedFlavor = null;
+    _currentVariant = null;
     _initInProgress = false;
 
     _evaluationState.value = (
@@ -474,7 +521,7 @@ class EvaluationService {
     _evalThrottleTimer = null;
     _pendingEvalResult = null;
     _cancelPendingMoveRequest();
-    _currentWork = null;
+    _currentMoveWork = null;
     _stdoutSubscription.cancel();
     _evalSubscription.cancel();
     _moveSubscription.cancel();
@@ -501,13 +548,20 @@ typedef EngineEvaluationState = ({
 });
 
 /// A provider that exposes the current engine evaluation state to the UI.
-final engineEvaluationProvider =
-    NotifierProvider.autoDispose<EngineEvaluationNotifier, EngineEvaluationState>(
+final engineEvaluationProvider = NotifierProvider.autoDispose
+    .family<EngineEvaluationNotifier, EngineEvaluationState, EngineEvaluationFilters>(
       EngineEvaluationNotifier.new,
       name: 'EngineEvaluationProvider',
     );
 
+/// A type for filtering engine evaluation notifications.
+typedef EngineEvaluationFilters = ({StringId id, UciPath? path});
+
 class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
+  EngineEvaluationNotifier(this.filters);
+
+  final EngineEvaluationFilters filters;
+
   @override
   EngineEvaluationState build() {
     final listenable = ref.watch(evaluationServiceProvider).evaluationState;
@@ -518,7 +572,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
       listenable.removeListener(_listener);
     });
 
-    return listenable.value;
+    final evalState = listenable.value;
+    if (_filter(evalState)) {
+      return evalState;
+    } else {
+      return EvaluationService._defaultState;
+    }
   }
 
   void _listener() {
@@ -527,20 +586,19 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
       if (ref.mounted) {
-        state = ref.read(evaluationServiceProvider).evaluationState.value;
+        final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
+        if (_filter(evaluationState)) {
+          state = evaluationState;
+        }
       }
     });
   }
-}
 
-@freezed
-sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    /// Optional identifier to associate the evaluation with a game, puzzle, study, etc.
-    StringId? id,
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
+  bool _filter(EngineEvaluationState state) {
+    final (id: id, path: path) = filters;
+    final work = state.currentWork;
+    return work == null || (work.id == id && (path == null || work.path == path));
+  }
 }
 
 /// A function to choose the eval that should be displayed.
@@ -577,4 +635,20 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
+}
+
+extension FairyVariantExtension on Variant {
+  /// The Fairy-Stockfish variant name
+  String get fairy => switch (this) {
+    Variant.standard => 'chess',
+    Variant.chess960 => 'chess',
+    Variant.fromPosition => 'chess',
+    Variant.antichess => 'antichess',
+    Variant.kingOfTheHill => 'kingofthehill',
+    Variant.threeCheck => '3check',
+    Variant.atomic => 'atomic',
+    Variant.horde => 'horde',
+    Variant.racingKings => 'racingkings',
+    Variant.crazyhouse => 'crazyhouse',
+  };
 }

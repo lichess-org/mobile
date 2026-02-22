@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
@@ -8,6 +9,18 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 
 import '../../test_provider_scope.dart';
+
+void _mockClipboard(String text) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (methodCall) async {
+      if (methodCall.method == 'Clipboard.getData') {
+        return {'text': text};
+      }
+      return null;
+    },
+  );
+}
 
 void main() {
   group('Board Editor', () {
@@ -289,6 +302,56 @@ void main() {
         container.read(controllerProvider).fen,
         'Qnbqkbnr/Qppppppp/Q7/Q7/Q7/Q6r/QPPPPPPP/QNBQKBNr w k - 0 1',
       );
+    });
+
+    group('FEN dialog', () {
+      tearDown(() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        );
+      });
+
+      testWidgets('Pasting valid FEN loads position and closes dialog', (tester) async {
+        // Spanish Opening after 1.e4 e5 2.Nf3 Nc6 3.Bb5: bishop on c4, not f1
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 3';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        // Dialog is gone, board editor is still on screen
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(BoardEditorScreen), findsOneWidget);
+
+        // Board reflects the new position
+        expect(find.byKey(const Key('c4-whitebishop')), findsOneWidget);
+        expect(find.byKey(const Key('f1-whitebishop')), findsNothing);
+      });
+
+      testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
+        _mockClipboard('not a valid fen');
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.text('Invalid FEN'), findsOneWidget);
+      });
     });
 
     testWidgets('Drag pieces onto the board', (tester) async {

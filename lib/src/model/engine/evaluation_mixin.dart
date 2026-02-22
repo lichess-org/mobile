@@ -4,8 +4,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -15,7 +17,8 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:meta/meta.dart';
+
+part 'evaluation_mixin.freezed.dart';
 
 /// The debounce delay for requesting an eval.
 ///
@@ -29,6 +32,16 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
 const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
+
+@freezed
+sealed class EvaluationContext with _$EvaluationContext {
+  const factory EvaluationContext({
+    /// Identifier to associate the evaluation with a game, puzzle, study, etc.
+    required StringId id,
+    required Variant variant,
+    required Position initialPosition,
+  }) = _EvaluationContext;
+}
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -108,7 +121,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     await _evaluationPreferencesNotifier.toggle();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      requestEval(forceRestart: true);
+      requestEval();
     } else {
       _evaluationService.quit();
     }
@@ -122,21 +135,21 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineCores(int numEngineCores) {
     _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
     _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
 
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   /// Requests an engine evaluation if available.
@@ -155,7 +168,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval({bool goDeeper = false, bool forceRestart = false}) {
+  void requestEval({bool goDeeper = false}) {
     if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
 
     final delayLocalEngine =
@@ -166,13 +179,13 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       _sendEvalGetEvent();
 
       if (!delayLocalEngine) {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       }
     });
 
     if (delayLocalEngine) {
       _localEngineAfterDelayDebounce(() {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       });
     }
   }
@@ -258,7 +271,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     });
   }
 
-  void _startEngineEval({bool goDeeper = false, bool forceRestart = false}) {
+  void _startEngineEval({bool goDeeper = false}) {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
 
@@ -266,7 +279,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     final work = EvalWork(
       id: curState.evaluationContext.id,
-      enginePref: evaluationPrefs.enginePref,
+      stockfishFlavor: evaluationPrefs.enginePref.flavor,
       variant: curState.evaluationContext.variant,
       threads: evaluationPrefs.numEngineCores,
       hashSize: _evaluationService.maxMemory,
@@ -279,9 +292,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
-    _evaluationService.evaluate(work, goDeeper: goDeeper, forceRestart: forceRestart)?.forEach((
-      event,
-    ) {
+    _evaluationService.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
       if (curState.engineInThreatMode) {
         return;
       }

@@ -88,7 +88,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       size: widget.size,
       fen: widget.fen,
       orientation: widget.orientation,
-      lastMove: widget.lastMove as NormalMove?,
+      lastMove: widget.lastMove,
       enableCoordinates: false,
       borderRadius: (widget.showEvaluationGauge)
           ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)

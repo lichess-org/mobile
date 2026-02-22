@@ -83,9 +83,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   @override
   void initState() {
     super.initState();
-    // Cancel pending seek or challenges when app goes to background to prevent games being created
+    // Cancel pending seek when app goes to background to prevent games being created
     // while the user is away from the app.
-    _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeekOrChallenge);
+    _appLifecycleListener = AppLifecycleListener(onPause: _cancelSeek);
   }
 
   @override
@@ -94,10 +94,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     super.dispose();
   }
 
-  Future<void> _cancelSeekOrChallenge() async {
+  Future<void> _cancelSeek() async {
     if (!mounted) return;
     final loader = ref.read(gameScreenLoaderProvider(widget.source));
-    // Only cancel if we are still seeking or waiting for challenge to be accepted
+    // Only cancel if we are still seeking
     if (loader is! AsyncLoading<GameScreenState>) {
       return;
     }
@@ -105,7 +105,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       case LobbySource():
         await ref.read(createGameServiceProvider).cancelSeek();
       case UserChallengeSource():
-        await ref.read(createGameServiceProvider).cancelChallenge();
+        break;
       case ExistingGameSource():
         break;
     }

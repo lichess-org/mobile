@@ -676,7 +676,7 @@
   <string name="webmasters">Retejestroj</string>
   <string name="about">Pri</string>
   <string name="aboutX">Pri %s</string>
-  <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s estas senpaga (%2$s), libera, ne-reklamoj, malferma-kodo ŝaka servilo.</string>
+  <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s estas senpaga (%2$s), libera, senreklama, malfermitkoda ŝaka servilo.</string>
   <string name="really">vere</string>
   <string name="contribute">Kontribui</string>
   <string name="termsOfService">Uzkondiĉojn</string>
@@ -717,7 +717,6 @@
   <string name="keyShowOrHideComments">(mal)montri komentojn</string>
   <string name="keyEnterOrExitVariation">eniru/forlasu variaĵon</string>
   <string name="keyRequestComputerAnalysis">Peti komputilan analizon, Lerni de viaj eraroj</string>
-  <string name="keyNextLearnFromYourMistakes">Sekvo (Lerni de viaj eraroj)</string>
   <string name="keyNextBlunder">Sekva erarego</string>
   <string name="keyNextMistake">Sekva eraro</string>
   <string name="keyNextInaccuracy">Sekva erareto</string>

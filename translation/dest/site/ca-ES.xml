@@ -9,6 +9,8 @@
   <string name="gameOver">Partida finalitzada</string>
   <string name="waitingForOpponent">Esperant a l\'oponent</string>
   <string name="orLetYourOpponentScanQrCode">O deixeu que el vostre oponent escanegi aquest codi QR</string>
+  <string name="reusableChallengeUrl">URL repte reutilitzable</string>
+  <string name="permanentLinkForAnyoneToChallengeYou">Un enllaç permanent perquè qualsevol et pugui reptar amb aquestes configuracions exactes.</string>
   <string name="waiting">Esperant</string>
   <string name="yourTurn">El teu torn</string>
   <string name="aiNameLevelAiLevel">%1$s nivell %2$s</string>
@@ -429,6 +431,8 @@
   <string name="leaderboard">Tauló de líders</string>
   <string name="screenshotCurrentPosition">Fes una captura de pantalla de la posició actual</string>
   <string name="gameAsGIF">Partida com a GIF</string>
+  <string name="playerNames">Noms dels jugadors</string>
+  <string name="moveAnnotations">Anotacions de les jugades</string>
   <string name="pasteTheFenStringHere">Enganxa el text FEN aquí</string>
   <string name="pasteThePgnStringHere">Enganxa el text PGN aquí</string>
   <string name="orUploadPgnFile">O penja un arxiu PGN</string>
@@ -718,7 +722,6 @@
   <string name="keyShowOrHideComments">mostrar/ocultar comentaris</string>
   <string name="keyEnterOrExitVariation">entrar/sortir variació</string>
   <string name="keyRequestComputerAnalysis">Demana una anàlisi computeritzada, aprèn dels teus errors</string>
-  <string name="keyNextLearnFromYourMistakes">Següent (apren dels teus errors)</string>
   <string name="keyNextBlunder">Següent errada</string>
   <string name="keyNextMistake">Següent errada greu</string>
   <string name="keyNextInaccuracy">Següent imprecisió</string>
@@ -813,6 +816,7 @@
   <string name="size">Mida</string>
   <string name="opacity">Opacitat</string>
   <string name="brightness">Brillantor</string>
+  <string name="contrast">Contrast</string>
   <string name="hue">Tonalitat</string>
   <string name="boardReset">Restableix els colors per defecte</string>
   <string name="pieceSet">Conjunt de peces</string>

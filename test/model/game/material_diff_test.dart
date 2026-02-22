@@ -5,9 +5,12 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 
 void main() {
   group('GameMaterialDiff', () {
-    test('generation from board', () {
-      final Board board = Board.parseFen('r5k1/3Q1pp1/2p4p/4P1b1/p3R3/3P4/6PP/R5K1');
-      final MaterialDiff diff = MaterialDiff.fromBoard(board);
+    test('generation from position', () {
+      final Position position = Position.setupPosition(
+        Rule.chess,
+        Setup.parseFen('r5k1/3Q1pp1/2p4p/4P1b1/p3R3/3P4/6PP/R5K1'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
 
       expect(diff.bySide(Side.black).score, equals(-10));
       expect(diff.bySide(Side.white).score, equals(10));
@@ -63,6 +66,51 @@ void main() {
           }),
         ),
       );
+
+      expect(diff.bySide(Side.white).checksGiven, null);
+      expect(diff.bySide(Side.black).checksGiven, null);
+    });
+    test('three-check', () {
+      final Position position = Position.setupPosition(
+        Rule.threecheck,
+        Setup.parseFen('rnbqkbnr/ppp1pppp/3p4/1B6/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 2+3 1 2'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
+
+      expect(diff.bySide(Side.white).checksGiven, 1);
+      expect(diff.bySide(Side.black).checksGiven, 0);
+    });
+
+    test('horde returns empty material diff', () {
+      final Position position = Position.setupPosition(
+        Rule.horde,
+        Setup.parseFen('rnbqkbnr/pppppppp/8/8/pppppppp/pppppppp/PPPPPPPP/PPPPPPPP w kq - 0 1'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
+
+      for (final side in Side.values) {
+        final sideDiff = diff.bySide(side);
+        expect(sideDiff.score, 0);
+        expect(sideDiff.pieces.isEmpty, isTrue);
+        expect(sideDiff.capturedPieces.isEmpty, isTrue);
+        expect(sideDiff.checksGiven, null);
+      }
+    });
+
+    test('crazyhouse returns empty material diff', () {
+      final Position position = Position.setupPosition(
+        Rule.crazyhouse,
+        Setup.parseFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'),
+      );
+      final MaterialDiff diff = MaterialDiff.fromPosition(position);
+
+      for (final side in Side.values) {
+        final sideDiff = diff.bySide(side);
+        expect(sideDiff.score, 0);
+        expect(sideDiff.pieces.isEmpty, isTrue);
+        expect(sideDiff.capturedPieces.isEmpty, isTrue);
+        expect(sideDiff.checksGiven, null);
+      }
     });
   });
 }

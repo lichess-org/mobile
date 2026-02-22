@@ -67,6 +67,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Nessun risultato';
 
   @override
@@ -897,6 +900,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastScore => 'Punteggio';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Tutte le squadre';
 
   @override
@@ -941,12 +947,82 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Turno $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Mantenendo il nome predefinito, questo verrà automaticamente tradotto in tutte le altre lingue.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1891,6 +1967,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Re esposto';
 
   @override
@@ -1943,6 +2025,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Matto triangolare';
@@ -2215,6 +2303,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'O fai scansionare questo codice QR al tuo avversario';
+
+  @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
 
   @override
   String get waiting => 'In attesa';
@@ -3159,6 +3253,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameAsGIF => 'Salva la partita come GIF';
 
   @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
+
+  @override
   String get pasteTheFenStringHere => 'Incolla qui la stringa FEN';
 
   @override
@@ -3980,9 +4080,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Richiedi analisi del computer, Impara dai tuoi errori';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Prossimo (Impara dai tuoi errori)';
-
-  @override
   String get keyNextBlunder => 'Prossimo grave errore';
 
   @override
@@ -4272,6 +4369,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get brightness => 'Luminosità';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Tonalità';
@@ -4906,7 +5006,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tags => 'Tag';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5994,7 +6094,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyCounterplay => 'Contrattacco';
 
   @override
-  String get studyTimeTrouble => 'Prolemi di tempo';
+  String get studyTimeTrouble => 'Problemi di tempo';
 
   @override
   String get studyWithCompensation => 'Con compenso';
@@ -6116,7 +6216,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Carica una partita lichess esistente';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Incolla un\'URL di una partita lichess, <br>come (like lichess.org/7fHIU0XI)<br>per caricare le mosse nel capitolo.';
+  String get studyLoadExistingLichessGameText => 'Incolla un\'URL di una partita lichess <br> (come lichess.org/7fHIU0XI)<br>per caricare le mosse nel capitolo.';
 
   @override
   String get studyFromFenStringTitle => 'Da una stringa FEN';
@@ -6137,7 +6237,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyVariantsAreSupportedText => 'Proprio così, puoi studiare le varianti crazyhouse<br>e lichess!';
 
   @override
-  String get studyChapterConclusionText => 'I capitoli sono salvati per sempre.<br>Divertiti a organzizare il tuo contenuto scacchistico!';
+  String get studyChapterConclusionText => 'I capitoli sono salvati per sempre.<br>Divertiti a organizzare il tuo contenuto scacchistico!';
 
   @override
   String get studyDoubleDefeat => 'Doppia sconfitta';
@@ -6146,7 +6246,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyBlackDefeatWhiteCanNotWin => 'Il Nero è sconfitto, ma il Bianco non può vincere';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'Il Bianco è sconfitto, ma il Nero non pul vincere';
+  String get studyWhiteDefeatBlackCanNotWin => 'Il Bianco è sconfitto, ma il Nero non può vincere';
 
   @override
   String studyNbChapters(int count) {

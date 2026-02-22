@@ -67,6 +67,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'No results';
 
   @override
@@ -937,6 +940,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastScore => 'Taškų skaičius';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Visos komandos';
 
   @override
@@ -981,12 +987,82 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Round $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1945,6 +2021,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika susijusi su kirtimu prasilenkiant (en passant). Pėstininkas gali nukirsti priešininko pėstininką, kuris \"aplenkė\" pirmąjį perkeltas per du langelius.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Atidengtas karalius';
 
   @override
@@ -1997,6 +2079,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -2269,6 +2357,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Arba leiskite priešininkui nuskenuoti šį QR kodą';
+
+  @override
+  String get reusableChallengeUrl => 'Pakartotino iššūkio URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Nuolatinė nuoroda bet kuriam jums iššūkį teikiančiam pagal šiuos tikslius nustatymus.';
 
   @override
   String get waiting => 'Laukiama';
@@ -2605,16 +2699,16 @@ class AppLocalizationsLt extends AppLocalizations {
   String get evaluationGauge => 'Vertinimo matuoklis';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Vizualiniai motyvai';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Neapsaugotos figūros';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Surištos figūros';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Šachuojamas karalius';
 
   @override
   String get multipleLines => 'Keletas linijų';
@@ -2738,7 +2832,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get variants => 'Variantai';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Daugiau žaidimo variantų';
 
   @override
   String get timeControl => 'Laiko kontrolė';
@@ -2969,7 +3063,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get unlimited => 'Neribota';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Galvokite tiek laiko, kiek jums reikalinga';
 
   @override
   String get mode => 'Tipas';
@@ -3211,6 +3305,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get gameAsGIF => 'Žaidimas kaip GIF animacija';
+
+  @override
+  String get playerNames => 'Žaidėjų vardai';
+
+  @override
+  String get moveAnnotations => 'Ėjimų žymėjimas';
 
   @override
   String get pasteTheFenStringHere => 'FEN tekstą įrašykite čia';
@@ -4034,9 +4134,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Paprašyti kompiuterio analizės, pasimokykite iš savo klaidų';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Toliau (pasimokyti iš savo klaidų)';
-
-  @override
   String get keyNextBlunder => 'Kita šiurkšti klaida';
 
   @override
@@ -4064,7 +4161,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get togglePositionAnnotations => 'Įjungti pozicijos komentarus';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Perjungti stebėjimo anotacijas';
 
   @override
   String get variationArrowsInfo => 'Variacijų rodyklės leidžia jums naviguoti nenaudojant ėjimų sarašo.';
@@ -4326,6 +4423,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get brightness => 'Ryškumas';
+
+  @override
+  String get contrast => 'Kontrastas';
 
   @override
   String get hue => 'Atspalvis';
@@ -4604,7 +4704,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get edit => 'Keisti';
 
   @override
-  String get ultraBullet => 'UltraBullet';
+  String get ultraBullet => 'Ultra-kulka';
 
   @override
   String get bullet => 'Kulka';
@@ -4822,7 +4922,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param galima formatuoti.';
   }
 
   @override
@@ -4960,7 +5060,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get tags => 'Žymos';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Kirsti prasilenkiant';
 
   @override
   String opponentLeftCounter(int count) {

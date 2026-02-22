@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="advancedPawn">İlerlemiş piyon</string>
-  <string name="advancedPawnDescription">Terfi eden veya terfi etmek üzere olan bir piyon taktik bilgisinin olmazsa olmazıdır.</string>
+  <string name="advancedPawnDescription">Piyonlarınızdan biri rakip alanın içlerine kadar ilerlemiş durumda ve belki de terfi etmek üzere.</string>
   <string name="advantage">Avantaj</string>
   <string name="advantageDescription">Mutlak bir üstünlük kazanma şansını yakala. (200sp ≤ analiz ≤ 600sp)</string>
   <string name="anastasiaMate">Anastasia matı</string>
@@ -71,6 +71,7 @@
   <string name="pillsburysMateDescription">Fil şahı sınırlarken, kale matı gerçekleştirir.</string>
   <string name="morphysMate">Morphy matı</string>
   <string name="morphysMateDescription">Kale şahı sınırlarken, fil matı gerçekleştirir.</string>
+  <string name="swallowstailMateDescription" comment="Description for &quot;Swallow's tail mate&quot; (translatable separately).">Görsel olarak V şekline benzer bir kırlangıç kuyruğu görünümünü andıran bir şah mat deseni.</string>
   <string name="triangleMate">Üçgen matı</string>
   <string name="triangleMateDescription">Rakip şahtan bir kare uzakta olan vezir veya kale, aynı sıra veya sütunda yer alır ve aralarında bir karelik boşluk bulunur; bu da bir üçgen oluşturur.</string>
   <string name="vukovicMate">Vukovic matı</string>

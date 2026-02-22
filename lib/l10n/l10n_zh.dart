@@ -67,6 +67,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
 
   @override
+  String get mobileNewGame => '新的对局';
+
+  @override
   String get mobileNoSearchResults => '无结果';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWelcomeToLichessApp => '欢迎使用 Lichess 应用！';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => '查看对局';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => '提示：您可以在主屏幕上添加更多小组件，或移除不需要的';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => '取消';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => '自定义';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => '停止显示威胁';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => '已完成';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => '跳转到我的页面';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => '简洁模式';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => '详细模式';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => '上一页';
 
   @override
   String get activityActivity => '动态';
@@ -877,6 +880,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastScore => '得分';
 
   @override
+  String get broadcastStandingsDisclaimer => '数据统计基于赛事转播画面计算，可能与官方结果存在出入';
+
+  @override
   String get broadcastAllTeams => '所有团队';
 
   @override
@@ -921,12 +927,82 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => '赛事分数';
+
+  @override
+  String get broadcastGamePoints => '对局分数';
+
+  @override
+  String get broadcastMatches => '场次';
+
+  @override
+  String get broadcastMatchHistory => '赛事历史';
+
+  @override
+  String get broadcastTeamResults => '战队成绩';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return '以下词语将被自动翻译：$param。';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return '第 $param 轮';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => '保留默认名称会将其自动翻译为其他语言。';
+
+  @override
+  String get broadcastOpenTournament => '公开组';
+
+  @override
+  String get broadcastWomenTournament => '女子组';
+
+  @override
+  String get broadcastMenTournament => '男子组';
+
+  @override
+  String get broadcastGirlsTournament => '女子组';
+
+  @override
+  String get broadcastBoysTournament => '男子组';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return '公开U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return '女子U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return '男子U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => '四分之一决赛';
+
+  @override
+  String get broadcastSemifinals => '半决赛';
+
+  @override
+  String get broadcastFinals => '决赛';
+
+  @override
+  String get broadcastTiebreaks => '加赛';
+
+  @override
+  String broadcastGameX(String param) {
+    return '第 $param 局';
+  }
+
+  @override
+  String get broadcastKnockouts => '淘汰赛';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1863,6 +1939,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '涉及吃过路兵规则的战术，兵可以吃掉利用初始两格移动越过它的对方兵。';
 
   @override
+  String get puzzleThemeEpauletteMate => '肩章将杀';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => '被将杀的王有两个相邻的逃逸格，但均被其他棋子占据。';
+
+  @override
   String get puzzleThemeExposedKing => '暴露的王';
 
   @override
@@ -1915,6 +1997,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => '利用象来将军，同时您的车协助限制王移动。';
+
+  @override
+  String get puzzleThemeSwallowstailMate => '燕尾杀王';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => '一种呈 V 字形、视觉上形似燕尾的将杀模式。';
 
   @override
   String get puzzleThemeTriangleMate => '三角将杀';
@@ -2187,6 +2275,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => '或让对方扫描此二维码';
+
+  @override
+  String get reusableChallengeUrl => '可重复使用的挑战链接';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => '一个永久链接，任何人都可以使用此设定向您发起挑战。';
 
   @override
   String get waiting => '等待中';
@@ -3131,6 +3225,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gameAsGIF => '保存对局为 GIF';
 
   @override
+  String get playerNames => '棋手名称';
+
+  @override
+  String get moveAnnotations => '着法评注';
+
+  @override
   String get pasteTheFenStringHere => '在此处粘贴 FEN 文本';
 
   @override
@@ -3952,9 +4052,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get keyRequestComputerAnalysis => '请求电脑分析，并从失误中学习';
 
   @override
-  String get keyNextLearnFromYourMistakes => '下一个（从失误中学习）';
-
-  @override
   String get keyNextBlunder => '下一个败着';
 
   @override
@@ -4244,6 +4341,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get brightness => '亮度';
+
+  @override
+  String get contrast => '对比';
 
   @override
   String get hue => '色调';
@@ -10082,9 +10182,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get keyRequestComputerAnalysis => '請求引擎分析，從你的失誤中學習';
-
-  @override
-  String get keyNextLearnFromYourMistakes => '下一個 (從你的失誤中學習)';
 
   @override
   String get keyNextBlunder => '下一個漏著';

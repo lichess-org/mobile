@@ -655,7 +655,6 @@
   <string name="keyGoToStartOrEnd">පටන් ගැනීමට/අවසානයට යන්න</string>
   <string name="keyShowOrHideComments">අදහස් පෙන්වන්න/සඟවන්න</string>
   <string name="keyRequestComputerAnalysis">විශ්ලේෂණය ඉල්ලුම් කරන්න</string>
-  <string name="keyNextLearnFromYourMistakes">ඊලඟට (ඔබේ වැරදීම්වලින් ඉගෙන ගන්න)</string>
   <string name="keyNextBlunder">ඊලඟ වරද</string>
   <string name="keyNextMistake">ඊලඟ වැරැද්ද</string>
   <string name="keyNextInaccuracy">ඊලඟ අතපසු වීම</string>

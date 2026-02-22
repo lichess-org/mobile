@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
@@ -19,6 +20,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:share_plus/share_plus.dart';
 
 class OpeningExplorerScreen extends ConsumerStatefulWidget {
   const OpeningExplorerScreen({required this.options, super.key});
@@ -49,6 +52,10 @@ class _OpeningExplorerScreenState extends ConsumerState<OpeningExplorerScreen> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
+    final boardState = switch (ref.watch(ctrlProvider)) {
+      AsyncData(value: final state) => state.currentPosition,
+      _ => null,
+    };
 
     final body = switch (ref.watch(ctrlProvider)) {
       AsyncData(value: final state) => _Body(options: widget.options, state: state),
@@ -61,6 +68,14 @@ class _OpeningExplorerScreenState extends ConsumerState<OpeningExplorerScreen> {
       body: body,
       appBar: AppBar(
         title: Text(context.l10n.openingExplorer),
+        actions: [
+          if (boardState != null)
+            SemanticIconButton(
+              semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+              onPressed: () => launchShareDialog(context, ShareParams(text: boardState.fen)),
+              icon: const PlatformShareIcon(),
+            ),
+        ],
         bottom: _MoveList(options: widget.options),
       ),
     );

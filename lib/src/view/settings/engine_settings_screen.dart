@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -43,26 +44,22 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     });
 
     _downloadProgress = ref.read(nnueServiceProvider).nnueDownloadProgress;
-    _downloadProgress.addListener(_onDownloadProgressChanged);
 
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _downloadProgress.removeListener(_onDownloadProgressChanged);
-    super.dispose();
-  }
-
-  Future<void> _onDownloadProgressChanged() async {
-    if (_downloadProgress.value == 1.0 && _downloadNNUEFilesFuture != null) {
-      final downloaded = await _downloadNNUEFilesFuture!;
+  void _startDownload() {
+    final future = ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false);
+    future.then((downloaded) {
       if (mounted && downloaded) {
         setState(() {
           _hasVerifiedNNUEFiles = true;
         });
       }
-    }
+    });
+    setState(() {
+      _downloadNNUEFilesFuture = future;
+    });
   }
 
   @override
@@ -93,12 +90,8 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         ref
                             .read(engineEvaluationPreferencesProvider.notifier)
                             .setEvaluationFunction(value ?? ChessEnginePref.sf16);
-                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == true) {
-                          setState(() {
-                            _downloadNNUEFilesFuture = ref
-                                .read(nnueServiceProvider)
-                                .downloadNNUEFiles(inBackground: false);
-                          });
+                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false) {
+                          _startDownload();
                         }
                       },
                     );
@@ -115,12 +108,15 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                             ? AnimatedBuilder(
                                 animation: _downloadProgress,
                                 builder: (_, _) {
-                                  return CircularProgressIndicator(value: _downloadProgress.value);
+                                  final progress = _downloadProgress.value;
+                                  return CircularProgressIndicator(
+                                    value: progress > 0.0 ? progress : null,
+                                  );
                                 },
                               )
                             : const Icon(Icons.download),
                         title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                        subtitle: const Text('79MB'),
+                        subtitle: const Text(nnueTotalSizeMB),
                         enabled: !isLoading,
                         onTap: () async {
                           final downloaded = await fetchData();
@@ -138,7 +134,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   ListTile(
                     trailing: const Icon(Icons.check),
                     title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('79MB (tap to delete)'),
+                    subtitle: const Text('$nnueTotalSizeMB (tap to delete)'),
                     onTap: () async {
                       final isOk = await showAdaptiveDialog<bool>(
                         context: context,

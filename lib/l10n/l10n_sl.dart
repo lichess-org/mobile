@@ -67,6 +67,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Prijavite se za ogled te strani.';
 
   @override
+  String get mobileNewGame => 'Nova igra';
+
+  @override
   String get mobileNoSearchResults => 'Ni rezultatov';
 
   @override
@@ -242,40 +245,40 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Dobrodošli v Lichess aplikaciji!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ogled igre';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Nasvet: Na začetni zaslon lahko dodate več pripomočkov ali pa odstranite tiste, ki jih ne potrebujete!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Opusti';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Prilagodi';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Nehaj prikazovati grožnje';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Zaključeno';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Skoči na mojo stran';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Zgoščeno';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Podrobno';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Odpiranje Raziskovalca ni na voljo brez povezave.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Izziv ustvarjen: Obveščeni boste, ko se igra začne. Do njega lahko dostopate na zavihku Domov.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Prejšnji';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -937,6 +940,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastScore => 'Rezultat';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Lestvice se izračunajo na podlagi predvajanih tekem in se lahko razlikujejo od uradnih rezultatov.';
+
+  @override
   String get broadcastAllTeams => 'Vse ekipe';
 
   @override
@@ -981,12 +987,82 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Točke s tekme';
+
+  @override
+  String get broadcastGamePoints => 'Točke igre';
+
+  @override
+  String get broadcastMatches => 'Tekme';
+
+  @override
+  String get broadcastMatchHistory => 'Zgodovina tekem';
+
+  @override
+  String get broadcastTeamResults => 'Rezultati ekip';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Naslednji izraz(i) bodo samodejno prevedeni: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Krog $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Če ohranite privzeto ime, se bo samodejno prevedlo v vse druge jezike.';
+
+  @override
+  String get broadcastOpenTournament => 'Odpri';
+
+  @override
+  String get broadcastWomenTournament => 'Ženske';
+
+  @override
+  String get broadcastMenTournament => 'Moški';
+
+  @override
+  String get broadcastGirlsTournament => 'Dekleta';
+
+  @override
+  String get broadcastBoysTournament => 'Fantje';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Odprti turnir U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Dekleta U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Fantje U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Četrtfinala';
+
+  @override
+  String get broadcastSemifinals => 'Polfinali';
+
+  @override
+  String get broadcastFinals => 'Finala';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaki';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Igra $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Nokauti';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1947,6 +2023,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktika, ki vključuje pravilo en passant, kjer lahko kmet zajame nasprotnega kmeta, ki ga je z napredovanjem za dve polji zaobšel.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epoleta mat';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dve sosednji polji za pobeg pri šahovskem kralju sta zasedeni z drugimi figurami.';
+
+  @override
   String get puzzleThemeExposedKing => 'Izpostavljeni kralj';
 
   @override
@@ -1999,6 +2081,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'S lovcem šahiraj kralja, medtem ko ti trdnjava pomaga omejiti napad.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat lastovičinega repa';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Vzorec šaha in mata, ki vizualno spominja na lastovičji rep, podoben obliki črke V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trikotni mat';
@@ -2271,6 +2359,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ali pa naj vaš nasprotnik skenira to QR kodo';
+
+  @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
 
   @override
   String get waiting => 'Čakam';
@@ -3215,6 +3309,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get gameAsGIF => 'Partija kot GIF';
 
   @override
+  String get playerNames => 'Imena igralcev';
+
+  @override
+  String get moveAnnotations => 'Zapis potez';
+
+  @override
   String get pasteTheFenStringHere => 'Prilepi FEN niz sem';
 
   @override
@@ -4036,9 +4136,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Naslednji (Učite se iz svojih napak)';
-
-  @override
   String get keyNextBlunder => 'Naslednji spodrsljaj';
 
   @override
@@ -4328,6 +4425,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get brightness => 'Svetlost';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Odtenek';

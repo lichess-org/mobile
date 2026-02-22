@@ -21,7 +21,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Checkout mobile code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install dependencies
         run: flutter pub get
@@ -33,7 +33,7 @@ jobs:
         run: flutter build apk --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
 
       - name: Upload the APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: build/app/outputs/flutter-apk/app-release.apk
 
