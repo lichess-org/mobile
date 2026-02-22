@@ -502,7 +502,7 @@ class _BottomBar extends ConsumerWidget {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
                   context,
-                  AnalysisOptions.standalone(
+                  AnalysisOptions.pgn(
                     id: puzzleState.puzzle.puzzle.id,
                     orientation: puzzleState.pov,
                     pgn: ref.read(ctrlProvider.notifier).makePgn(),

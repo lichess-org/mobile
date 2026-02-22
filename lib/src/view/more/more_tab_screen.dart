@@ -84,7 +84,7 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
+                    const AnalysisOptions.pgn(
                       id: StringId('standalone'),
                       orientation: Side.white,
                       pgn: '',
@@ -104,8 +104,8 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   OpeningExplorerScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
-                      id: StringId('standalone'),
+                    const AnalysisOptions.pgn(
+                      id: StringId('standalone_opening_explorer'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: false,

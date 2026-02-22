@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -30,6 +31,7 @@ class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorag
 void main() {
   registerFallbackValue(
     OverTheBoardGame(
+      id: const StringId('otb_test00'),
       steps: [const GameStep(position: Chess.initial)].lock,
       meta: GameMeta(
         createdAt: DateTime.now(),
@@ -209,6 +211,7 @@ void main() {
       when(() => gameStorage.fetchOngoingGame()).thenAnswer(
         (_) async => SavedOtbGame(
           game: OverTheBoardGame(
+            id: const StringId('otb_test01'),
             steps: [
               const GameStep(position: Chess.initial),
               GameStep(

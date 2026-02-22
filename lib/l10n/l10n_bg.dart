@@ -2823,7 +2823,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get signupUsernameHint => 'Изберете прилично потребителско име. Няма да можете да го смените по-късно и всички регистрации с нецензурни имена биват затворени!';
 
   @override
-  String get signupEmailHint => 'Ще го използваме само за възстановяване на паролата.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Парола';
@@ -4078,15 +4078,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Поискайте компютърен анализ, Учете се от грешките си';
-
-  @override
-  String get keyNextBlunder => 'Следваща груба грешка';
-
-  @override
-  String get keyNextMistake => 'Следваща грешка';
-
-  @override
-  String get keyNextInaccuracy => 'Следваща неточност';
 
   @override
   String get keyPreviousBranch => 'Предишно разклонение';

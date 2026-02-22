@@ -555,7 +555,6 @@
   "changeUsernameNotSame": "Sadəcə istifadəçi adınızdakı böyük/kiçik hərfləri dəyişdirə bilərsiniz. Məsələn \"johndoe\" ilə \"JohnDoe\" kimi.",
   "changeUsernameDescription": "İstifadəçi adını dəyişdir. Bu prosesi sadəcə bir dəfə edə bilərsən və sadəcə mövcud istifadəçi adındakı hərfləri böyük və ya kiçik edə bilərsən.",
   "signupUsernameHint": "Ailə dostu bir istifadəçi adı seçdiyinizdən əmin olun. Siz onu daha sonra dəyişə bilməzsiniz və uyğun olmayan istifadəçi adları olan hesablar bağlanacaq!",
-  "signupEmailHint": "Biz onu yalnız parol sıfırlanması üçün istifadə edəcəyik.",
   "password": "Şifrə",
   "changePassword": "Şifrəni dəyiş",
   "changeEmail": "E-poçtu dəyiş",

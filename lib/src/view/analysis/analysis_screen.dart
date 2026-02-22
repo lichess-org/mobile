@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -187,14 +188,16 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: false,
-            title: _Title(variant: value.variant),
-            actions: appBarActions,
+        return WakelockWidget(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              centerTitle: false,
+              title: _Title(variant: value.variant),
+              actions: appBarActions,
+            ),
+            body: _Body(options: widget.options, controller: _tabController),
           ),
-          body: _Body(options: widget.options, controller: _tabController),
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);

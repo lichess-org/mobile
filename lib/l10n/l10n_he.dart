@@ -2875,7 +2875,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get signupUsernameHint => 'ודאו ששם המשתמש שלכם מתאים גם לילדים. לא תוכלו לשנות אותו מאוחר יותר וחשבונות עם שמות משתמש לא הולמים יסגרו!';
 
   @override
-  String get signupEmailHint => 'רק לצורך איפוס הסיסמה.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'סיסמה';
@@ -4130,15 +4130,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'בקשו ניתוח ממוחשב, למדו מטעויותיכם';
-
-  @override
-  String get keyNextBlunder => 'הטעות הגסה הבאה';
-
-  @override
-  String get keyNextMistake => 'הטעות הבאה';
-
-  @override
-  String get keyNextInaccuracy => 'אי־הדיוק הבא';
 
   @override
   String get keyPreviousBranch => 'הענף הקודם';

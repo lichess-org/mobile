@@ -2823,7 +2823,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get signupUsernameHint => 'Nimeä käyttäjätunnuksesi niin, että se sopii kaikenikäisten nähtäväksi. Et voi muuttaa tunnusta myöhemmin. Kaikki epäasiallisesti nimetyt käyttäjätunnukset suljetaan!';
 
   @override
-  String get signupEmailHint => 'Käytämme sitä vain, jos pyydät uutta salasanaa.';
+  String get signupEmailPromise => 'Lähetämme sinulle vain käyttäjätunnustasi koskevia sähköposteja emmekä koskaan jaa sähköpostiosoitettasi muille.';
 
   @override
   String get password => 'Salasana';
@@ -4078,15 +4078,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Pyydä tietokoneanalyysiä, opi virheistäsi';
-
-  @override
-  String get keyNextBlunder => 'Seuraava vakava virhe';
-
-  @override
-  String get keyNextMistake => 'Seuraava virhe';
-
-  @override
-  String get keyNextInaccuracy => 'Seuraava epätarkkuus';
 
   @override
   String get keyPreviousBranch => 'Edellinen haara';

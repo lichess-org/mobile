@@ -1159,7 +1159,7 @@ sealed class GameState with _$GameState {
           initialMoveCursor: stepCursor,
           gameFullId: gameFullId,
         )
-      : AnalysisOptions.standalone(
+      : AnalysisOptions.pgn(
           id: gameFullId.gameId,
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,

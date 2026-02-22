@@ -2823,7 +2823,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get signupUsernameHint => 'Vali kasutajanimi mis oleks kõigile sobilik, isegi lastele. Seda ei saa hiljem muuta, ning kõik sobimatute nimedega kontod suletakse!';
 
   @override
-  String get signupEmailHint => 'Seda kasutatakse ainult parooli lähtestamiseks.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Parool';
@@ -4078,15 +4078,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextBlunder => 'Next blunder';
-
-  @override
-  String get keyNextMistake => 'Järgmine viga';
-
-  @override
-  String get keyNextInaccuracy => 'Järgmine ebatäpsus';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

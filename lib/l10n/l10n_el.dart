@@ -2823,7 +2823,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get signupUsernameHint => 'Eπιλέξτε ένα φιλικό προς την οικογένεια όνομα χρήστη, καθώς δε θα έχετε τη δυνατότητα να το αλλάξετε αργότερα. Τονίζουμε πως λογαριασμοί με ακατάλληλα ονόματα χρήστη θα απενεργοποιούνται!';
 
   @override
-  String get signupEmailHint => 'Θα τη χρησιμοποιήσουμε μόνο για την επαναφορά του κωδικού πρόσβασης.';
+  String get signupEmailPromise => 'Το email σας θα χρησιμοποιηθεί αποκλειστικά για ενημερώσεις σχετικά με τον λογαριασμό σας και ποτέ δεν θα κοινοποιηθεί σε τρίτους.';
 
   @override
   String get password => 'Κωδικός';
@@ -4078,15 +4078,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Ζητήστε ανάλυση της παρτίδας από υπολογιστή (Μάθετε από τα λάθη σας)';
-
-  @override
-  String get keyNextBlunder => 'Επόμενο σοβαρό σφάλμα';
-
-  @override
-  String get keyNextMistake => 'Επόμενο λάθος';
-
-  @override
-  String get keyNextInaccuracy => 'Επόμενη ανακρίβεια';
 
   @override
   String get keyPreviousBranch => 'Προηγούμενος κλάδος';

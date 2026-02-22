@@ -2823,7 +2823,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get signupUsernameHint => 'Asegúrate de escoller un nome de usuario axeitado pra todas as idades. Non poderás cambialo máis tarde e calquera conta con nome de usuario inadecuado será pechada!';
 
   @override
-  String get signupEmailHint => 'Usarémolo só pra o restablecemento do contrasinal e a activación da conta.';
+  String get signupEmailPromise => 'Só che enviaremos correos relacionados coa túa conta e nunca compartiremos o teu enderezo electrónico.';
 
   @override
   String get password => 'Contrasinal';
@@ -3667,7 +3667,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'A túa denuncia será procesada máis rápido se está escrita en Inglés.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Por favor, proporciona cando menos unha ligazón a unha partida na que sospeites que se fixeron trampas.';
+  String get error_provideOneCheatedGameLink => 'Por favor, proporciona cando menos unha ligazón a unha partida para a súa revisión.';
 
   @override
   String by(String param) {
@@ -4078,15 +4078,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicitar unha análise por computador, Aprende dos teus erros';
-
-  @override
-  String get keyNextBlunder => 'Seguinte metida de zoca';
-
-  @override
-  String get keyNextMistake => 'Seguinte erro';
-
-  @override
-  String get keyNextInaccuracy => 'Seguinte imprecisión';
 
   @override
   String get keyPreviousBranch => 'Rama anterior';

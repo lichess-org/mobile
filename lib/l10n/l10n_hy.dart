@@ -2823,7 +2823,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get signupUsernameHint => 'Համոզվեք, որ ընտրել եք պարկեշտ մասնակցային անուն։ Հետագայում այն փոխել չեք կարողանա, ընդ որում, անպարկեշտ անուններով մասնակցային հաշիվները կփակվեն։';
 
   @override
-  String get signupEmailHint => 'Մենք այն օգտագործելու ենք միայն գաղտնաբառը չեղարկելու համար։';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Գաղտնաբառ';
@@ -4078,15 +4078,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Պատվիրեք համակարգչային վերլուծություն, սովորեք սեփական սխալներից';
-
-  @override
-  String get keyNextBlunder => 'Հաջորդ վրիպումը';
-
-  @override
-  String get keyNextMistake => 'Հաջորդ սխալը';
-
-  @override
-  String get keyNextInaccuracy => 'Հաջորդ անճշտությունը';
 
   @override
   String get keyPreviousBranch => 'Նախորդ ճյուղ';

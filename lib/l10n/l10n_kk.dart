@@ -2823,7 +2823,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get signupUsernameHint => 'Тіркеулі атты таңдағанда, өз үйіңізде айтуға лайықты болатындай болсын. Оны кейін өзгерте алмайсыз. Орынсыз, ұятсыз сөздері болса, тіркелгіңіз толықтай жабылады!';
 
   @override
-  String get signupEmailHint => 'Құпиясөзді қайта орнату үшін ғана керек.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Құпиясөз';
@@ -4078,15 +4078,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Компьютерлік талдауды бастаңыз, Әр қателіктен сабақ алыңыз';
-
-  @override
-  String get keyNextBlunder => 'Келесі өрескел қателік';
-
-  @override
-  String get keyNextMistake => 'Келесі қателік';
-
-  @override
-  String get keyNextInaccuracy => 'Келесі ағаттық';
 
   @override
   String get keyPreviousBranch => 'Алдынғы тармақ';

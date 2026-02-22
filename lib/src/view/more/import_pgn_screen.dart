@@ -38,8 +38,8 @@ class ImportPgnScreen extends StatelessWidget {
         Navigator.of(context, rootNavigator: true).push(
           AnalysisScreen.buildRoute(
             context,
-            AnalysisOptions.standalone(
-              id: const StringId('standalone'),
+            AnalysisOptions.pgn(
+              id: const StringId('pgn_import_single_game'),
               orientation: .white,
               pgn: text,
               isComputerAnalysisAllowed: true,

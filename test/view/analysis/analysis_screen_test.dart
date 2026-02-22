@@ -48,7 +48,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
-          options: AnalysisOptions.standalone(
+          options: AnalysisOptions.pgn(
             id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
@@ -75,7 +75,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
-          options: AnalysisOptions.standalone(
+          options: AnalysisOptions.pgn(
             id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,
@@ -115,7 +115,7 @@ void main() {
         final app = await makeTestProviderScopeApp(
           tester,
           home: AnalysisScreen(
-            options: AnalysisOptions.standalone(
+            options: AnalysisOptions.pgn(
               id: const StringId('standalone'),
               orientation: Side.white,
               pgn: pgn,
@@ -181,7 +181,7 @@ void main() {
         home: AnalysisScreen(
           options:
               options ??
-              AnalysisOptions.standalone(
+              AnalysisOptions.pgn(
                 id: const StringId('standalone'),
                 orientation: Side.white,
                 pgn: pgn,
@@ -923,7 +923,7 @@ void main() {
             ),
           },
           home: const AnalysisScreen(
-            options: AnalysisOptions.standalone(
+            options: AnalysisOptions.pgn(
               id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
@@ -972,7 +972,7 @@ void main() {
           },
           home: AnalysisScreen(
             key: ValueKey(castlingMethod),
-            options: const AnalysisOptions.standalone(
+            options: const AnalysisOptions.pgn(
               id: StringId('standalone'),
               orientation: Side.white,
               pgn: castlingSetupPgn,
@@ -1180,7 +1180,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
-          options: AnalysisOptions.standalone(
+          options: AnalysisOptions.pgn(
             id: const StringId('standalone'),
             orientation: Side.white,
             pgn: sanMoves,

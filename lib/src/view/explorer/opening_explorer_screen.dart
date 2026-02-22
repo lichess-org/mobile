@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -46,19 +47,21 @@ class OpeningExplorerScreen extends ConsumerWidget {
       ),
       _ => const CenterLoadingIndicator(),
     };
-    return Scaffold(
-      body: body,
-      appBar: AppBar(
-        title: Text(context.l10n.openingExplorer),
-        actions: [
-          if (boardState != null)
-            SemanticIconButton(
-              semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-              onPressed: () => launchShareDialog(context, ShareParams(text: boardState.fen)),
-              icon: const PlatformShareIcon(),
-            ),
-        ],
-        bottom: _MoveList(options: options),
+    return WakelockWidget(
+      child: Scaffold(
+        body: body,
+        appBar: AppBar(
+          title: Text(context.l10n.openingExplorer),
+          actions: [
+            if (boardState != null)
+              SemanticIconButton(
+                semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+                onPressed: () => launchShareDialog(context, ShareParams(text: boardState.fen)),
+                icon: const PlatformShareIcon(),
+              ),
+          ],
+          bottom: _MoveList(options: options),
+        ),
       ),
     );
   }

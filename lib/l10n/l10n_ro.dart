@@ -2851,7 +2851,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get signupUsernameHint => 'Asigurați-vă că alegeți un nume de utilizator decent. Nu îl puteți schimba mai târziu și orice cont cu nume de utilizator indecent va fi închis!';
 
   @override
-  String get signupEmailHint => 'Îl vom folosi doar pentru resetarea parolei.';
+  String get signupEmailPromise => 'Îți vom trimite doar e-mailuri despre contul tău și niciodată nu îți vom distribui e-mailul.';
 
   @override
   String get password => 'Parolă';
@@ -4106,15 +4106,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicită analiza calculatorului, Învață din greșelile tale';
-
-  @override
-  String get keyNextBlunder => 'Următoarea greșeală gravă';
-
-  @override
-  String get keyNextMistake => 'Următoarea greșeală';
-
-  @override
-  String get keyNextInaccuracy => 'Următoarea neacuratețe';
 
   @override
   String get keyPreviousBranch => 'Ramura precedentă';

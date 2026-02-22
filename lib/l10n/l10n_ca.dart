@@ -9,7 +9,7 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Preferencies del compte';
+  String get mobileAccountPreferences => 'Preferències del compte';
 
   @override
   String get mobileAccountPreferencesHelp => 'Aquestes configuracions s\'apliquen al teu compte de Lichess i s\'utilitzaran en tots els dispositius.';
@@ -1853,7 +1853,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeBalestraMate => 'Mat de la balestra';
 
   @override
-  String get puzzleThemeBalestraMateDescription => 'A bishop delivers the checkmate, while a queen blocks the remaining escape squares';
+  String get puzzleThemeBalestraMateDescription => 'Un alfil fa el mat, mentre una dama bloqueja les caselles d\'escapada restants';
 
   @override
   String get puzzleThemeBlindSwineMate => 'Mat del porc cec';
@@ -1910,7 +1910,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => 'Dos alfils atacant en diagonals adjacents fan mat a un rei que queda obstruït per peces amigues.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Mat de la coça';
+  String get puzzleThemeDovetailMate => 'Mat de la cua de colom';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'Una dama fa mat a un rei adjacent que té les dues caselles adjacents ocupades per peces amigues.';
@@ -2823,7 +2823,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get signupUsernameHint => 'Assegureu-vos d\'escollir un nom d\'usuari amigable. No el podreu canviar més tard i qualsevol compte amb nom d\'usuaris inapropiats es tancarà!';
 
   @override
-  String get signupEmailHint => 'Només s\'utilitzarà per restablir la contrasenya.';
+  String get signupEmailPromise => 'Només t\'enviarem correus sobre el teu compte i mai compartirem el teu correu electrònic.';
 
   @override
   String get password => 'Contrasenya';
@@ -4080,15 +4080,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Demana una anàlisi computeritzada, aprèn dels teus errors';
 
   @override
-  String get keyNextBlunder => 'Següent errada';
-
-  @override
-  String get keyNextMistake => 'Següent errada greu';
-
-  @override
-  String get keyNextInaccuracy => 'Següent imprecisió';
-
-  @override
   String get keyPreviousBranch => 'Branca anterior';
 
   @override
@@ -4241,7 +4232,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get analysisShapesHowTo => 'Pitja la tecla Shift + clic o feu clic dret per dibuixar cercles i fletxes al tauler.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl o majúscules = vermell; comandament, alt o meta = blau; una tecla de cada = groc.';
 
   @override
   String get letOtherPlayersMessageYou => 'Deixa que altres jugadors t\'envïin missatges';

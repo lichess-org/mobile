@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
@@ -32,8 +31,31 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+
+extension _MoveVerdictDisplay on MoveVerdict {
+  IconData get icon => switch (this) {
+    .goodMove => Icons.check_circle,
+    .notBest => Icons.info,
+    .inaccuracy => Icons.help,
+    .mistake => Icons.error,
+    .blunder => Icons.cancel,
+  };
+
+  Color get color => switch (this) {
+    .goodMove || .notBest => Colors.lightGreen,
+    .inaccuracy => innacuracyColor,
+    .mistake => mistakeColor,
+    .blunder => blunderColor,
+  };
+}
+
+extension _PracticeCommentDisplay on PracticeComment {
+  IconData get icon => isBookMove ? Icons.menu_book : verdict.icon;
+  Color get color => verdict.color;
+}
 
 class OfflineComputerGameScreen extends ConsumerWidget {
   const OfflineComputerGameScreen({this.initialFen, super.key});
@@ -115,14 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
     final state = ref.read(offlineComputerGameControllerProvider);
     await ref
         .read(offlineComputerGameStorageProvider)
-        .save(
-          SavedOfflineComputerGame(
-            game: state.game,
-            gameSessionId: state.gameSessionId.value,
-            lastPracticeComment: state.practiceComment,
-            lastEvalString: state.cachedEvalString,
-          ),
-        );
+        .save(SavedOfflineComputerGame(game: state.game));
   }
 
   @override
@@ -137,7 +152,6 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => OfflineComputerGameResultDialog(
                 game: newGameState.game,
-                gameSessionId: newGameState.gameSessionId,
                 onNewGame: () {
                   Navigator.pop(context);
                   _showNewGameDialog();
@@ -349,8 +363,8 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  id: gameState.gameSessionId,
+                AnalysisOptions.pgn(
+                  id: gameState.game.id,
                   orientation: gameState.game.playerSide,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
@@ -465,10 +479,11 @@ class _Player extends ConsumerWidget {
       );
     }
 
-    // Human player - just show captured pieces and practice comment
     final practiceStatusLabel = !game.practiceMode
         ? null
-        : gameState.isEngineThinking || gameState.isEvaluatingMove
+        : gameState.isEvaluatingMove
+        ? context.l10n.evaluatingYourMove
+        : gameState.isEngineThinking
         ? context.l10n.computerThinking
         : !gameState.finished && gameState.turn == game.playerSide
         ? context.l10n.yourTurn
@@ -502,20 +517,39 @@ class _Player extends ConsumerWidget {
   }
 }
 
-class _PracticeCommentCard extends ConsumerWidget {
+class _PracticeCommentCard extends ConsumerStatefulWidget {
   const _PracticeCommentCard({required this.gameState});
 
   final OfflineComputerGameState gameState;
 
+  @override
+  ConsumerState<_PracticeCommentCard> createState() => _PracticeCommentCardState();
+}
+
+class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
   static const _cardHeight = 54.0;
 
+  // Last non-null comment, kept so we can show it with opacity while a new evaluation is in
+  // progress and no new comment has arrived yet.
+  PracticeComment? _previousComment;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void didUpdateWidget(_PracticeCommentCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.gameState.practiceComment != null && widget.gameState.practiceComment == null) {
+      _previousComment = oldWidget.gameState.practiceComment;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final prefs = ref.watch(offlineComputerGamePreferencesProvider);
     final hideBestMove = prefs.hideBestMove;
     final hideEvaluation = prefs.hideEvaluation;
+    final gameState = widget.gameState;
     final isEvaluatingMove = gameState.isEvaluatingMove;
-    final practiceComment = gameState.practiceComment;
+    final practiceComment =
+        gameState.practiceComment ?? (isEvaluatingMove ? _previousComment : null);
     final showingSuggestedMove = gameState.showingSuggestedMove;
     final evalTextStyle = TextStyle(
       fontWeight: FontWeight.w600,
@@ -528,7 +562,9 @@ class _PracticeCommentCard extends ConsumerWidget {
     Color? iconColor;
     IconData? icon;
 
-    if (practiceComment != null) {
+    if (gameState.finished) {
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
+    } else if (practiceComment != null) {
       final verdict = practiceComment.verdict;
       icon = practiceComment.icon;
       iconColor = practiceComment.color;
@@ -603,13 +639,7 @@ class _PracticeCommentCard extends ConsumerWidget {
             Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
-    } else if (isEvaluatingMove) {
-      content = Text(context.l10n.evaluatingYourMove);
-    } else if (gameState.finished) {
-      // Game is over
-      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
     } else if (gameState.turn == gameState.game.playerSide) {
-      // Player's turn
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
@@ -622,15 +652,19 @@ class _PracticeCommentCard extends ConsumerWidget {
       content = const SizedBox.shrink();
     }
 
-    return Container(
-      height: _cardHeight,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
+    return AnimatedOpacity(
+      opacity: isEvaluatingMove && gameState.practiceComment == null ? 0.5 : 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        height: _cardHeight,
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Align(alignment: Alignment.centerLeft, child: content),
       ),
-      child: Align(alignment: Alignment.centerLeft, child: content),
     );
   }
 }
@@ -823,15 +857,9 @@ class _PracticeSettingsSheet extends ConsumerWidget {
 }
 
 class OfflineComputerGameResultDialog extends StatelessWidget {
-  const OfflineComputerGameResultDialog({
-    required this.game,
-    required this.gameSessionId,
-    required this.onNewGame,
-    super.key,
-  });
+  const OfflineComputerGameResultDialog({required this.game, required this.onNewGame, super.key});
 
   final OfflineComputerGame game;
-  final StringId gameSessionId;
   final VoidCallback onNewGame;
 
   @override
@@ -871,8 +899,8 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  id: gameSessionId,
+                AnalysisOptions.pgn(
+                  id: game.id,
                   orientation: game.playerSide,
                   pgn: game.makePgn(),
                   isComputerAnalysisAllowed: true,

@@ -2823,7 +2823,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get signupUsernameHint => 'Sigurohuni se zgjidhni një emër përdoruesi të përshtatshëm për familje. S’mund ta ndryshoni më vonë dhe cilado llogari me emra përdoruesish të papërshtatshëm do të mbyllet!';
 
   @override
-  String get signupEmailHint => 'Do ta përdorim vetëm për ricaktim fjalëkalimi.';
+  String get signupEmailPromise => 'Do t’ju dërgojmë email-e vetëm rreth llogarisë tuaj dhe s’do ta japim kurrë email-in tuaj gjetkë.';
 
   @override
   String get password => 'Fjalëkalim';
@@ -4078,15 +4078,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kërkoni analizim nga kompjuteri, Mësoni nga gabimet tuaja';
-
-  @override
-  String get keyNextBlunder => 'Gafa pasuese';
-
-  @override
-  String get keyNextMistake => 'Gabimi pasues';
-
-  @override
-  String get keyNextInaccuracy => 'Pasaktësia pasuese';
 
   @override
   String get keyPreviousBranch => 'Dega e mëparshme';

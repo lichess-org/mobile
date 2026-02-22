@@ -2821,7 +2821,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signupUsernameHint => 'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
 
   @override
-  String get signupEmailHint => 'We will only use it for password reset and account activation.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Password';
@@ -3665,7 +3665,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game with suspected cheating.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -4076,15 +4076,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextBlunder => 'Next blunder';
-
-  @override
-  String get keyNextMistake => 'Next mistake';
-
-  @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
 
   @override
   String get keyPreviousBranch => 'Previous branch';
@@ -6556,6 +6547,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'No results';
 
   @override
@@ -7386,6 +7380,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastScore => 'Score';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'All teams';
 
   @override
@@ -7428,6 +7425,21 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String broadcastCreatedAndManagedBy(String param) {
     return 'Created and managed by $param.';
   }
+
+  @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -8435,6 +8447,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Exposed king';
 
   @override
@@ -8487,6 +8505,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangle mate';
@@ -9270,7 +9294,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get signupUsernameHint => 'Be sure to choose a family-friendly username. You cannot change it later, and any accounts with inappropriate usernames will be closed!';
 
   @override
-  String get signupEmailHint => 'We will only use it for password reset.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Password';
@@ -10525,15 +10549,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextBlunder => 'Next blunder';
-
-  @override
-  String get keyNextMistake => 'Next mistake';
-
-  @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

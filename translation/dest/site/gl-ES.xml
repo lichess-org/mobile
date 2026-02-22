@@ -237,7 +237,7 @@
   <string name="changeUsernameNotSame">Só poden cambiar as letras entre minúsculas e maiúsculas. Por exemplo de \"xoanninguen\" a \"XoanNinguen\".</string>
   <string name="changeUsernameDescription">Cambia o teu nome de usuario. Só o poderás facer unha vez e só está permitido cambiar de entre minúsculas e maiúsculas as letras do teu nome de usuario.</string>
   <string name="signupUsernameHint">Asegúrate de escoller un nome de usuario axeitado pra todas as idades. Non poderás cambialo máis tarde e calquera conta con nome de usuario inadecuado será pechada!</string>
-  <string name="signupEmailHint">Usarémolo só pra o restablecemento do contrasinal e a activación da conta.</string>
+  <string name="signupEmailPromise">Só che enviaremos correos relacionados coa túa conta e nunca compartiremos o teu enderezo electrónico.</string>
   <string name="password">Contrasinal</string>
   <string name="changePassword">Cambiar contrasinal</string>
   <string name="changeEmail">Cambiar correo</string>
@@ -583,7 +583,7 @@
   <string name="reportCheatBoostHelp">Pega a ligazón á(s) partida(s) e explica que ten de malo o comportamento deste usuario. Non digas soamente \"fai trampas\", mais cóntanos como chegaches a esta conclusión.</string>
   <string name="reportUsernameHelp">Explica que ten de ofensivo este nome de usuario. Non digas soamente \"é ofensivo/inadecuado\". Cóntanos como chegaches a esta conclusión, especialmente se o insulto está camuflado, non está en inglés, é xerga ou é unha referencia histórica ou cultural.</string>
   <string name="reportProcessedFasterInEnglish">A túa denuncia será procesada máis rápido se está escrita en Inglés.</string>
-  <string name="error.provideOneCheatedGameLink">Por favor, proporciona cando menos unha ligazón a unha partida na que sospeites que se fixeron trampas.</string>
+  <string name="error.provideOneCheatedGameLink">Por favor, proporciona cando menos unha ligazón a unha partida para a súa revisión.</string>
   <string name="by">por %s</string>
   <string name="importedByX">Importado por %s</string>
   <string name="thisTopicIsNowClosed">Este tema xa está pechado.</string>
@@ -722,9 +722,6 @@
   <string name="keyShowOrHideComments">mostrar/ocultar comentarios</string>
   <string name="keyEnterOrExitVariation">Entrar/saír da variante</string>
   <string name="keyRequestComputerAnalysis">Solicitar unha análise por computador, Aprende dos teus erros</string>
-  <string name="keyNextBlunder">Seguinte metida de zoca</string>
-  <string name="keyNextMistake">Seguinte erro</string>
-  <string name="keyNextInaccuracy">Seguinte imprecisión</string>
   <string name="keyPreviousBranch">Rama anterior</string>
   <string name="keyNextBranch">Rama seguinte</string>
   <string name="toggleVariationArrows">Activar/desactivar as frechas das variantes</string>

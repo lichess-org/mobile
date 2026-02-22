@@ -2849,7 +2849,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get signupUsernameHint => 'Obavezno odaberi obiteljsko korisničko ime. Ne možeš ga kasnije promijeniti i svi računi s neprikladnim korisničkim imenima bit će zatvoreni!';
 
   @override
-  String get signupEmailHint => 'Koristiti ćemo ga samo za ponovno postavljanje lozinke.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Lozinka';
@@ -4104,15 +4104,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Zatraži računalnu analizu, Uči na svojim greškama';
-
-  @override
-  String get keyNextBlunder => 'Sljedeća velika pogreška';
-
-  @override
-  String get keyNextMistake => 'Sljedeća pogreška';
-
-  @override
-  String get keyNextInaccuracy => 'Sljedeća sitna pogreška';
 
   @override
   String get keyPreviousBranch => 'Prethodna grana';

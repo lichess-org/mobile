@@ -2821,7 +2821,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get signupUsernameHint => 'कृपया उचित यूज़रनेम ही चुनें। आप इसे बाद में बदल नहीं पाएंगे और अनुचित यूज़रनेम वाले कोई भी खाते बंद कर दिए जाएंगे।';
 
   @override
-  String get signupEmailHint => 'हम इस का इस्तेमाल सिर्फ़ पासवर्ड रीसेट के लिए करेंगे।';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'पासवर्ड';
@@ -4076,15 +4076,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'कंप्यूटर विश्लेषण का अनुरोध करें, अपनी गलतियों से सीखें';
-
-  @override
-  String get keyNextBlunder => 'अगली बड़ी गलती';
-
-  @override
-  String get keyNextMistake => 'अगली गलती';
-
-  @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

@@ -880,7 +880,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastScore => '점수';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => '순위는 방송된 게임을 통해 계산되며 공식 결과와는 차이가 있을 수 있습니다.';
 
   @override
   String get broadcastAllTeams => '모든 팀';
@@ -927,19 +927,19 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => '시합 점수';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => '게임 점수';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => '경기';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => '경기 기록';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => '팀 결과';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -2795,7 +2795,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get signupUsernameHint => '사용자 이름이 어린이를 포함해 모두에게 적절한지 확인하세요. 나중에 변경할 수 없으며 부적절한 사용자 이름을 가진 계정은 폐쇄됩니다!';
 
   @override
-  String get signupEmailHint => '비밀번호 초기화를 위해서만 사용됩니다.';
+  String get signupEmailPromise => '저희는 귀하의 계정에 대한 이메일만을 전송할 것이며 귀하의 이메일을 공유하지 않을 것입니다.';
 
   @override
   String get password => '비밀번호';
@@ -4050,15 +4050,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => '컴퓨터 분석 요청, 실수에서 배우기';
-
-  @override
-  String get keyNextBlunder => '다음 블런더';
-
-  @override
-  String get keyNextMistake => '다음 실수';
-
-  @override
-  String get keyNextInaccuracy => '다음 부정확한 수';
 
   @override
   String get keyPreviousBranch => '이전 부';

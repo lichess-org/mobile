@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -14,6 +17,8 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
+
+final _random = Random();
 
 final overTheBoardGameControllerProvider =
     NotifierProvider.autoDispose<OverTheBoardGameController, OverTheBoardGameState>(
@@ -164,8 +169,10 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     final position = variant == Variant.chess960
         ? randomChess960Position()
         : variant.initialPosition;
+    final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OverTheBoardGameState(
       game: OverTheBoardGame(
+        id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
         initialFen: position.fen,

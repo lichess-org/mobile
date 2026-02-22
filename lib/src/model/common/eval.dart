@@ -171,6 +171,8 @@ sealed class PvData with _$PvData {
 
   String get evalString => _evalString(cp, mate);
 
+  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+
   Side? get winningSide {
     if (mate != null) {
       return mate! > 0 ? Side.white : Side.black;

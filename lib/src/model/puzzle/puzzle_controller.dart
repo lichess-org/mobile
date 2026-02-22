@@ -424,7 +424,7 @@ sealed class PuzzleState with _$PuzzleState {
   }
 
   AnalysisOptions makeAnalysisOptions(String Function() makePgn) {
-    return AnalysisOptions.standalone(
+    return AnalysisOptions.pgn(
       id: puzzle.puzzle.id,
       orientation: pov,
       pgn: makePgn(),

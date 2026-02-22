@@ -2795,7 +2795,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signupUsernameHint => '请务必选择一个和谐的用户名，用户名设置后无法更改，并且不合规的用户名会导致账户被封禁！';
 
   @override
-  String get signupEmailHint => '该邮箱仅用于密码重置和账户激活';
+  String get signupEmailPromise => '我们只会向您发送与您账户相关的邮件，绝不会将您的邮箱共享给第三方！';
 
   @override
   String get password => '密码';
@@ -4050,15 +4050,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => '请求电脑分析，并从失误中学习';
-
-  @override
-  String get keyNextBlunder => '下一个败着';
-
-  @override
-  String get keyNextMistake => '下一个错着';
-
-  @override
-  String get keyNextInaccuracy => '下一个失准';
 
   @override
   String get keyPreviousBranch => '上一个分支';
@@ -8948,9 +8939,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get signupUsernameHint => '請選擇一個妥當的使用者名稱。請注意使用者名稱無法再次更改，並且不妥當的名稱會導致帳號被封禁！';
 
   @override
-  String get signupEmailHint => '僅用於密碼重置';
-
-  @override
   String get password => '密碼';
 
   @override
@@ -10182,15 +10170,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get keyRequestComputerAnalysis => '請求引擎分析，從你的失誤中學習';
-
-  @override
-  String get keyNextBlunder => '下一個漏著';
-
-  @override
-  String get keyNextMistake => '下一個錯誤';
-
-  @override
-  String get keyNextInaccuracy => '下一個輕微失誤';
 
   @override
   String get keyPreviousBranch => '上一個分支';

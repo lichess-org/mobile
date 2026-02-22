@@ -151,7 +151,7 @@ Future<void> makeEngineTestApp(
         : AnalysisScreen(
             options: gameId != null
                 ? AnalysisOptions.archivedGame(orientation: Side.white, gameId: gameId)
-                : AnalysisOptions.standalone(
+                : AnalysisOptions.pgn(
                     id: const StringId('standalone'),
                     orientation: Side.white,
                     pgn: '',

@@ -2823,7 +2823,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get signupUsernameHint => 'Edonorentzako bezalako erabiltzaile-izena aukeratu. Ezingo duzu aldatu. Desegokiak diren erabiltzaile-izenak dituzten kontuak itxi egingo ditugu!';
 
   @override
-  String get signupEmailHint => 'Pasahitza berrezartzeko erabiliko dugu bakarrik.';
+  String get signupEmailPromise => 'Zure kontuari buruzko e-mailak bidaliko dizkizugu bakarrik eta ez dugu zure helbidea inorekin partekatuko.';
 
   @override
   String get password => 'Pasahitza';
@@ -4078,15 +4078,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Ordenagailuaren analisia eskatu. Ikasi zure akatsak aztertuz';
-
-  @override
-  String get keyNextBlunder => 'Hurrengo hanka-sartzea';
-
-  @override
-  String get keyNextMistake => 'Hurrengo akatsa';
-
-  @override
-  String get keyNextInaccuracy => 'Hurrengo akats arina';
 
   @override
   String get keyPreviousBranch => 'Aurreko adarra';

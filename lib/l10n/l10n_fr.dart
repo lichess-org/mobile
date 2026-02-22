@@ -2281,7 +2281,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameSetup => 'Paramètres de la partie';
 
   @override
-  String get challengeAFriend => 'Défi';
+  String get challengeAFriend => 'Défier un ami';
 
   @override
   String get playAgainstComputer => 'Jouer contre l\'ordinateur';
@@ -2823,7 +2823,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get signupUsernameHint => 'Assurez-vous de choisir un nom d\'utilisateur convenable. Vous ne pourrez pas le modifier par la suite et tout nom d\'utilisateur inapproprié entraînera la fermeture du compte !';
 
   @override
-  String get signupEmailHint => 'Nous l\'utiliserons uniquement pour la réinitialisation du mot de passe.';
+  String get signupEmailPromise => 'Nous ne vous enverrons que des courriels concernant votre compte et ne partagerons jamais votre adresse courriel.';
 
   @override
   String get password => 'Mot de passe';
@@ -4080,15 +4080,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Demandez une analyse informatique, apprenez de vos erreurs';
 
   @override
-  String get keyNextBlunder => 'Gaffe suivante';
-
-  @override
-  String get keyNextMistake => 'Erreur suivante';
-
-  @override
-  String get keyNextInaccuracy => 'Imprécision suivante';
-
-  @override
   String get keyPreviousBranch => 'Branche précédente';
 
   @override
@@ -5006,7 +4997,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tags => 'Étiquettes';
 
   @override
-  String get enPassant => 'En passant rights';
+  String get enPassant => 'Prise en passant ?';
 
   @override
   String opponentLeftCounter(int count) {

@@ -2823,7 +2823,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get signupUsernameHint => 'পছন্দ অনুযায়ী নিজের ইউজারনেম তৈরি করুন কারন পরে এটি পরিবর্তন করতে পারবেন না এবং অনুপযুক্ত ইউজারনেমের যেকোনো অ্যাকাউন্ট পরবর্বতিতে বন্ধ করা হতে পারে!';
 
   @override
-  String get signupEmailHint => 'আমরা এটি শুধুমাত্র পাসওয়ার্ড রিসেটের জন্য ব্যবহার করব.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'পাসওয়ার্ড';
@@ -4078,15 +4078,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অনুরোধ করুন, আপনার ভুলগুলো থেকে শিখুন';
-
-  @override
-  String get keyNextBlunder => 'পরবর্তী সাঙ্ঘাতিক ভুল';
-
-  @override
-  String get keyNextMistake => 'পরবর্তী ভুল';
-
-  @override
-  String get keyNextInaccuracy => 'পরবর্তী নির্ভুলতা';
 
   @override
   String get keyPreviousBranch => 'আগের শাখা';

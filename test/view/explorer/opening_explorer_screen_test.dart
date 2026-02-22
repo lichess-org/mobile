@@ -40,7 +40,7 @@ void main() {
     return mockResponse('', 404);
   });
 
-  const options = AnalysisOptions.standalone(
+  const options = AnalysisOptions.pgn(
     id: StringId('standalone'),
     orientation: Side.white,
     pgn: '',
