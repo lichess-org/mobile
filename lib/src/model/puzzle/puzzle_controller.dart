@@ -310,7 +310,7 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (isForward) {
         final isCheck = sanMove.isCheck;
         if (sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref.read(moveFeedbackServiceProvider).captureFeedback(Variant.standard, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }

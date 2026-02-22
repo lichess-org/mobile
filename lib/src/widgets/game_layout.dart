@@ -22,6 +22,20 @@ typedef InteractiveBoardParams = ({
   Premovable? premovable,
 });
 
+Side variantBoardOrientation({
+  required Variant variant,
+  required Side youAre,
+  required bool isBoardTurned,
+}) {
+  // In racing kings, both side's pieces move in the same direction,
+  // so always orient the board as "white" regardless of who is playing, unless the board is explicitly turned.
+  if (variant == Variant.racingKings) {
+    return isBoardTurned ? Side.black : Side.white;
+  }
+
+  return isBoardTurned ? youAre.opposite : youAre;
+}
+
 /// Layout for game screens that adapts to screen size and aspect ratio
 ///
 /// On portrait mode, the board will be displayed in the middle of the screen,

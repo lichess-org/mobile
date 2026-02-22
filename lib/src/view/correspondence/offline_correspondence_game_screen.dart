@@ -183,7 +183,11 @@ class _BodyState extends ConsumerState<_Body> {
         Expanded(
           child: SafeArea(
             child: GameLayout(
-              orientation: isBoardTurned ? youAre!.opposite : youAre!,
+              orientation: variantBoardOrientation(
+                variant: game.meta.variant,
+                youAre: youAre!,
+                isBoardTurned: isBoardTurned,
+              ),
               lastMove: game.moveAt(stepCursor),
               interactiveBoardParams: (
                 variant: game.meta.variant,
@@ -411,7 +415,7 @@ class _BodyState extends ConsumerState<_Body> {
   void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      ref.read(moveFeedbackServiceProvider).captureFeedback(game.variant, check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
     }

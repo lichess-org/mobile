@@ -254,7 +254,11 @@ class GameBody extends ConsumerWidget {
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
                 blindfoldMode: blindfoldMode,
               ),
-              orientation: isBoardTurned ? youAre.opposite : youAre,
+              orientation: variantBoardOrientation(
+                variant: gameState.game.meta.variant,
+                youAre: youAre,
+                isBoardTurned: isBoardTurned,
+              ),
               lastMove: gameState.game.moveAt(gameState.stepCursor),
               interactiveBoardParams: (
                 variant: gameState.game.meta.variant,
