@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../model/engine/fake_stockfish.dart';
@@ -127,6 +128,8 @@ void main() {
 
         await tester.pumpWidget(app);
 
+        expect(find.byType(PocketsMenu), findsNothing);
+
         await tester.tap(find.bySemanticsLabel('Menu'));
         await tester.pumpAndSettle(); // wait for menu to open
 
@@ -146,16 +149,62 @@ void main() {
           expect(find.textContaining('Atomic'), findsNothing);
           expect(find.textContaining('Horde'), findsOneWidget);
           expect(find.textContaining('Racing Kings'), findsOneWidget);
-          expect(find.textContaining('Crazyhouse'), findsNothing);
+          expect(find.textContaining('Crazyhouse'), findsOneWidget);
 
           await tester.tap(find.textContaining('Horde'));
           await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
+          expect(find.byType(PocketsMenu), findsNothing);
+
           // Horde starting position should be loaded:
           expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+
+          // Change to crazhouse, pockets should be displayed:
+          await tester.tap(find.bySemanticsLabel('Menu'));
+          await tester.pumpAndSettle(); // wait for menu to open
+          await tester.tap(find.text('Variant'));
+          await tester.pumpAndSettle(); // wait for dialog to open
+          await tester.tap(find.textContaining('Crazyhouse'));
+          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+          // One for white, one for black
+          expect(find.byType(PocketsMenu), findsNWidgets(2));
         }
       });
     }
+
+    testWidgets('Crazyhouse support DropMoves for both sides', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.standalone(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '''
+              [Variant "Crazyhouse"]
+              [FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1"]
+              1. e4 d5 2. exd5 Qxd5
+            ''',
+            isComputerAnalysisAllowed: false,
+            variant: Variant.crazyhouse,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      await playDropMove(tester, Side.white, Role.pawn, 'a4');
+      expect(find.byKey(const ValueKey('a4-whitepawn')), findsOneWidget);
+
+      // Illegal drop move for black, should not be played
+      await playDropMove(tester, Side.black, Role.queen, 'h5');
+      expect(find.byKey(const ValueKey('h5-blackqueen')), findsNothing);
+
+      await playDropMove(tester, Side.black, Role.pawn, 'h5');
+      expect(find.byKey(const ValueKey('h5-blackpawn')), findsOneWidget);
+    });
   });
 
   group('Analysis Tree View', () {

@@ -111,6 +111,24 @@ Future<void> playMove(
   await tester.pump();
 }
 
+/// Plays a drop move on the board.
+Future<void> playDropMove(
+  WidgetTester tester,
+  Side side,
+  Role role,
+  String to, {
+  Rect? boardRect,
+  Side orientation = Side.white,
+}) async {
+  final rect = boardRect ?? tester.getRect(find.byType(Chessboard));
+  final fromOffset = tester.getCenter(find.byKey(ValueKey('pocket-${side.name}${role.name}')));
+  await tester.dragFrom(
+    fromOffset,
+    squareOffset(Square.fromName(to), rect, orientation: orientation) - fromOffset,
+  );
+  await tester.pumpAndSettle();
+}
+
 // --
 
 class _SameRequest extends Matcher {

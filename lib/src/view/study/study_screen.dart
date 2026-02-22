@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -77,6 +78,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -113,6 +115,7 @@ class _StudyScreenLoader extends ConsumerWidget {
             length: 1,
             child: AnalysisLayout(
               pov: Side.white,
+              sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
                 settings: boardPrefs.toBoardSettings().copyWith(
@@ -182,9 +185,19 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    final variant = widget.studyState.variant;
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (variant != Variant.standard && variant != Variant.fromPosition) ...[
+              Icon(variant.icon),
+              const SizedBox(width: 5.0),
+            ],
+            Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
+          ],
+        ),
         actions: [
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
@@ -399,6 +412,7 @@ class _Body extends ConsumerWidget {
         length: 1,
         child: AnalysisLayout(
           pov: Side.white,
+          sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
             child: Center(child: Text('${variant.label} is not supported yet.')),
@@ -423,6 +437,7 @@ class _Body extends ConsumerWidget {
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
+      sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
@@ -444,6 +459,7 @@ class _Body extends ConsumerWidget {
             )
           : null,
       bottomBar: StudyBottomBar(id: id),
+      pockets: studyState.currentPosition?.pockets,
       children: tabs.map((tab) {
         switch (tab) {
           case AnalysisTab.explorer:

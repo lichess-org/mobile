@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
@@ -129,11 +130,13 @@ class AnalysisLayout extends StatelessWidget {
     required this.boardBuilder,
     required this.children,
     required this.pov,
+    required this.sideToMove,
     this.boardHeader,
     this.boardFooter,
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
+    this.pockets,
     super.key,
   });
 
@@ -145,6 +148,9 @@ class AnalysisLayout extends StatelessWidget {
 
   /// The side the board is displayed from.
   final Side pov;
+
+  /// The side to move. In crazyhouse, this enables the [PocketsMenu] of this side.
+  final Side? sideToMove;
 
   /// A widget to show above the board.
   ///
@@ -172,6 +178,11 @@ class AnalysisLayout extends StatelessWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
+
+  /// Current state of the pockets, in variants like crazyhouse.
+  ///
+  /// If not null, will render a [PocketsMenu] for each player.
+  final Pockets? pockets;
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +213,7 @@ class AnalysisLayout extends StatelessWidget {
                           : constraints.biggest.longestSide / kGoldenRatio -
                                 (kTabletBoardTableSidePadding * 2)) -
                       headerAndFooterHeight;
+
                   return Padding(
                     padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                     child: Row(
@@ -269,6 +281,19 @@ class AnalysisLayout extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               if (engineLines != null) engineLines!,
+                              if (pockets != null)
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: PocketsMenu(
+                                    side: pov.opposite,
+                                    sideToMove: sideToMove,
+                                    pockets: pockets!,
+                                    squareSize: pocketSquareSize(
+                                      boardSize: boardSize,
+                                      isTablet: isTablet,
+                                    ),
+                                  ),
+                                ),
                               Expanded(
                                 child: Card(
                                   clipBehavior: Clip.hardEdge,
@@ -276,6 +301,19 @@ class AnalysisLayout extends StatelessWidget {
                                   child: TabBarView(controller: tabController, children: children),
                                 ),
                               ),
+                              if (pockets != null)
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: PocketsMenu(
+                                    side: pov,
+                                    sideToMove: sideToMove,
+                                    pockets: pockets!,
+                                    squareSize: pocketSquareSize(
+                                      boardSize: boardSize,
+                                      isTablet: isTablet,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),
@@ -289,7 +327,10 @@ class AnalysisLayout extends StatelessWidget {
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
                   final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
                   final boardSize = isTablet || isSmallScreen
-                      ? defaultBoardSize - evalGaugeSize - kTabletBoardTableSidePadding * 2
+                      ? defaultBoardSize -
+                            evalGaugeSize -
+                            kTabletBoardTableSidePadding * 2 -
+                            (pockets != null ? kAdditionalBoardSidePaddingForPockets : 0.0)
                       : defaultBoardSize - evalGaugeSize;
 
                   return Column(
@@ -304,6 +345,16 @@ class AnalysisLayout extends StatelessWidget {
                             : EdgeInsets.zero,
                         child: Column(
                           children: [
+                            if (pockets != null)
+                              PocketsMenu(
+                                side: pov.opposite,
+                                sideToMove: sideToMove,
+                                pockets: pockets!,
+                                squareSize: pocketSquareSize(
+                                  boardSize: boardSize,
+                                  isTablet: isTablet,
+                                ),
+                              ),
                             if (boardHeader != null)
                               // This key is used to preserve the state of the board header when the pov changes
                               Container(
@@ -321,6 +372,7 @@ class AnalysisLayout extends StatelessWidget {
                                 child: boardHeader,
                               ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 boardBuilder(
                                   context,
@@ -348,6 +400,16 @@ class AnalysisLayout extends StatelessWidget {
                                 clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
                                 child: boardFooter,
+                              ),
+                            if (pockets != null)
+                              PocketsMenu(
+                                side: pov,
+                                sideToMove: sideToMove,
+                                pockets: pockets!,
+                                squareSize: pocketSquareSize(
+                                  boardSize: boardSize,
+                                  isTablet: isTablet,
+                                ),
                               ),
                           ],
                         ),
