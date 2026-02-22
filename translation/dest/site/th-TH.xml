@@ -218,7 +218,6 @@
   <string name="changeUsernameNotSame">เฉพาะตัวอักษรพิมพ์ใหญ่พิมพ์เล็กที่เปลี่ยนได้ เช่น \"johndoe\" เป็น \"JohnDoe\"</string>
   <string name="changeUsernameDescription">เปลี่ยนชื่อผู้ใช้ของคุณ สามารถทำได้เพียงครั้งเดียวเท่านั้น และอนุญาตให้เปลี่ยนได้เฉพาะตัวอักษรพิมพ์ใหญ่พิมพ์เล็ก</string>
   <string name="signupUsernameHint">กรุณาใช้ชื่อที่สุภาพและเป็นมิตรต่อทุกวัย คุณไม่สามารถเปลี่ยนมันได้หลังจากนี้ ชื่อบัญชีที่ไม่มีความเหมาะสมจะถูกปิด</string>
-  <string name="signupEmailHint">เราจะใช้อีเมลนี้เพื่อการรีเซทรหัสผ่านเท่านั้น</string>
   <string name="password">รหัสผ่าน</string>
   <string name="changePassword">เปลี่ยนรหัสผ่าน</string>
   <string name="changeEmail">เปลี่ยนอีเมล</string>
@@ -678,9 +677,6 @@
   <string name="keyShowOrHideComments">แสดง/ซ่อนความคิดเห็น</string>
   <string name="keyEnterOrExitVariation">เข้าสู่/ออกจากตัวแปรกติกา</string>
   <string name="keyRequestComputerAnalysis">ข้อการวิเคราะห์ด้วยคอมพิวเตอร์</string>
-  <string name="keyNextBlunder">ตาเดินที่ผิดมหันต์ต่อไป</string>
-  <string name="keyNextMistake">ตาเดินที่ผิดพลาดต่อไป</string>
-  <string name="keyNextInaccuracy">ตาเดินที่ไม่แม่นยำต่อไป</string>
   <string name="keyPreviousBranch">แขนงก่อนหน้า</string>
   <string name="keyNextBranch">แขนงต่อไป</string>
   <string name="toggleVariationArrows">ควบคุมศรตาเดินแขนงอื่น</string>

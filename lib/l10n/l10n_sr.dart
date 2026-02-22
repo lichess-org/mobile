@@ -2839,7 +2839,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get signupUsernameHint => 'Постарај се да одабереш пристојно корисничко име. Касније га нећеш моћи променити, а налози са непристојним корисничким именима биће затворени!';
 
   @override
-  String get signupEmailHint => 'Биће коришћено само аз ресетовање лозинке.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Лозинка';
@@ -4094,15 +4094,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Затражите компјутерску анализу, научите из својих грешака';
-
-  @override
-  String get keyNextBlunder => 'Следећа тешка грешка';
-
-  @override
-  String get keyNextMistake => 'Следећа грешка';
-
-  @override
-  String get keyNextInaccuracy => 'Следећа непрецизност';
 
   @override
   String get keyPreviousBranch => 'Претходна грана';

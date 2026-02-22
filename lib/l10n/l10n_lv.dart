@@ -2847,7 +2847,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get signupUsernameHint => 'Atcerieties izvēlēties pieklājīgu lietotājvārdu. To nav iespējams mainīt, un konti ar nepiedienīgiem lietotājvārdiem tiks slēgti!';
 
   @override
-  String get signupEmailHint => 'Mēs to izmantosim tikai paroles atiestatīšanai.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Parole';
@@ -4102,15 +4102,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Pieprasi datora analīzi, Mācies no savām kļūdām';
-
-  @override
-  String get keyNextBlunder => 'Nākamā rupjā kļūda';
-
-  @override
-  String get keyNextMistake => 'Nākamā kļūda';
-
-  @override
-  String get keyNextInaccuracy => 'Nākamā neprecizitāte';
 
   @override
   String get keyPreviousBranch => 'Iepriekšējais zars';

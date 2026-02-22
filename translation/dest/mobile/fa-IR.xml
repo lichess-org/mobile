@@ -75,4 +75,7 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">در انتظار آمدن حریف...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تماشا</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">به نرم‌افزار lichess خوش آمدید</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">پیشین</string>
 </resources>

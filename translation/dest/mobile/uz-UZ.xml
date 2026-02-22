@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Akkaunt sozlamalari</string>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Hisob sozlamalari</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ushbu sozlamalar Lichess hisobingizga qoʻllanadi va barcha qurilmalaringizda ishlatiladi.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Barcha o\'yinlar</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taxta sozlamalari</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cheklov taklifi</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Yurishni qaytarishni bekor qilish</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tozalash</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Saqlangan harakatni tozalash</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">O\'yinga qo\'shiling</string>
@@ -15,47 +16,76 @@
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Variantni yashirish</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Uy</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Jonli translyatorlar</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Efirdagi strimerlar</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ushbu sahifani ko\'rish uchun tizimga kirgan bo\'lishingiz kerak.</string>
+  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Yangi oʻyin</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Natija yoʻq</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Hozircha eski ilova yoki veb-saytdagi barcha funksiyalar mavjud emas, ammo funksiyalar doimiy qo‘shib borilmoqda.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Siz hech qanday foydalanuvchiga obuna bo‘lmagansiz.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Xo\'p</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Shahmat taxtasini sozlash</string>
-  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">“%s” bilan oʻyinchilar</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Ismida “%s” bor oʻyinchilar</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Chap</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">O‘ng</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Olingan qismni kattalashtirish</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Bu yugurishni tugatmoqchimisiz?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Hech narsa ko\'rsatilmagan, filtrlarni o\'zgartiring</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ko\'rsatish uchun hech narsa. Puzzle Stormning bir nechta yugurishlarini o\'ynang.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 daqiqada iloji boricha ko\'proq jumboqlarni yeching.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 daqiqa ichida iloji boricha koʻproq boshqotirma yeching.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Siz joriy seriyangizni yo\'qotasiz va balingiz saqlanib qoladi.</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Sevimli ochilishlaringizdan jumboqlarni o\'ynang yoki mavzuni tanlang.</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Masalalar</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Sevimli debyutlaringizdan boshqotirmalarni oʻynang yoki mavzu tanlang.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Boshqt-lar</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Oxirgi qidiruvlar</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Xatchoʻpni oʻchirish</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server tahlili</string>
-  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Soatlar joylashuvi</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Soat joylashuvi</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Mavjud orqa fonlar</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Surilgan sipoh moʻljali</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Aylana</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Uy ekrani vidjetlari</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiv rejim</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oʻyin davomida tizim interfeysini yashirish. Ekran chetidagi tizim navigatsiyasi sizni bezovta qiladigan boʻlsa shu sozlamani yoqing. Oʻyin va boshqotirma ekranlariga qoʻllaniladi.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Olingan sipohlar</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Rasm tanlang</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Maxsus orqa fon faqat qorongʻu rejimda ishlaydi. Qorongʻu rasm tavsiya etiladi.</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Tasvirni xiralashtirish</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Taxtani yashirish</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Taxtani koʻrsatish</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Boshqa orqa fonlarni koʻrish uchun suring</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Bosing yoki suring</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Ikkita katakni bosing</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Shakl chizish</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Ikki barmoq yordamida shakllarni chizish: bir barmogʻingizni boʻsh katakda ushlab turing va shaklni chizish uchun boshqa barmogʻingizni suring.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ramkani koʻrsatish</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Bosganda vibratsiya</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Yoqilgan boʻlsa, yurish qilganingizda yoki sipohni olganingizda qurilmangiz vibratsiya beradi.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sozlamalar</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN-ni baham ko\'ring</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin URL manzilini baham koʻring</string>
-  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN sifatida pozitsiyani baham ko\'ring</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ushbu jumboqni baham ko\'ring</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin havolasini ulashing</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Pozitsiyani FEN sifatida ulashing</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ushbu boshqotirmani ulashing</string>
   <string name="showComments" comment="Shown in the analysis screen.">Fikrlarni ko\'rsatish</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Natijani ko\'rsatish</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Variantlarni ko\'rsatish</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Nimadir xato ketdi.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Tizim ranglari</string>
-  <string name="theme" comment="Graphic theme section in the global app settings.">Mavzu</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Asboblar</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s variant ushbu talqinda qo‘llab quvvatlanmaydi.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Raqibning qoʻshilishi kutilmoqda...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ko\'rish</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess ilovasiga xush kelibsiz!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Oʻyinni koʻrish</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Maslahat: Uy ekraniga vidjet qoʻshishingiz yoki kerakmaslarni olib tashlashingiz mumkin!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Oʻtkazib yuborish</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Moshlashtirish</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Tahdidni yashirish</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Tugagan</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Meni sahifamga oʻtish</string>
+  <string name="displayModeCompact" comment="">Ixcham</string>
+  <string name="displayModeDetailed" comment="">Batafsil</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Oflayn rejimda debyutlar bazasi ishlamaydi.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUy boʻlimidan kirishingiz mumkin.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Oldingi</string>
 </resources>

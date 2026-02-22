@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
@@ -32,8 +31,31 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+
+extension _MoveVerdictDisplay on MoveVerdict {
+  IconData get icon => switch (this) {
+    .goodMove => Icons.check_circle,
+    .notBest => Icons.info,
+    .inaccuracy => Icons.help,
+    .mistake => Icons.error,
+    .blunder => Icons.cancel,
+  };
+
+  Color get color => switch (this) {
+    .goodMove || .notBest => Colors.lightGreen,
+    .inaccuracy => innacuracyColor,
+    .mistake => mistakeColor,
+    .blunder => blunderColor,
+  };
+}
+
+extension _PracticeCommentDisplay on PracticeComment {
+  IconData get icon => isBookMove ? Icons.menu_book : verdict.icon;
+  Color get color => verdict.color;
+}
 
 class OfflineComputerGameScreen extends ConsumerWidget {
   const OfflineComputerGameScreen({this.initialFen, super.key});
@@ -55,7 +77,22 @@ class OfflineComputerGameScreen extends ConsumerWidget {
         : context.l10n.playAgainstComputer;
 
     return Scaffold(
-      appBar: AppBar(title: AppBarTitleText(title)),
+      appBar: AppBar(
+        title: AppBarTitleText(title),
+        actions: [
+          if (practiceMode)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Practice settings',
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => const _PracticeSettingsSheet(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -100,14 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
     final state = ref.read(offlineComputerGameControllerProvider);
     await ref
         .read(offlineComputerGameStorageProvider)
-        .save(
-          SavedOfflineComputerGame(
-            game: state.game,
-            gameSessionId: state.gameSessionId.value,
-            lastPracticeComment: state.practiceComment,
-            lastEvalString: state.cachedEvalString,
-          ),
-        );
+        .save(SavedOfflineComputerGame(game: state.game));
   }
 
   @override
@@ -122,7 +152,6 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => OfflineComputerGameResultDialog(
                 game: newGameState.game,
-                gameSessionId: newGameState.gameSessionId,
                 onNewGame: () {
                   Navigator.pop(context);
                   _showNewGameDialog();
@@ -204,7 +233,11 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
-                    orientation: isBoardFlipped ? orientation.opposite : orientation,
+                    orientation: variantBoardOrientation(
+                      variant: gameState.game.meta.variant,
+                      youAre: orientation,
+                      isBoardTurned: isBoardFlipped,
+                    ),
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
                     shapes: _buildBoardShapes(gameState),
@@ -330,8 +363,8 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  id: gameState.gameSessionId,
+                AnalysisOptions.pgn(
+                  id: gameState.game.id,
                   orientation: gameState.game.playerSide,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
@@ -446,13 +479,26 @@ class _Player extends ConsumerWidget {
       );
     }
 
-    // Human player - just show captured pieces and practice comment
+    final practiceStatusLabel = !game.practiceMode
+        ? null
+        : gameState.isEvaluatingMove
+        ? context.l10n.evaluatingYourMove
+        : gameState.isEngineThinking
+        ? context.l10n.computerThinking
+        : !gameState.finished && gameState.turn == game.playerSide
+        ? context.l10n.yourTurn
+        : null;
+
     return Column(
       crossAxisAlignment: .stretch,
       mainAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
         if (game.practiceMode) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(practiceStatusLabel ?? ''),
+          ),
           _PracticeCommentCard(gameState: gameState),
           const SizedBox(height: 8),
         ],
@@ -471,17 +517,39 @@ class _Player extends ConsumerWidget {
   }
 }
 
-class _PracticeCommentCard extends ConsumerWidget {
+class _PracticeCommentCard extends ConsumerStatefulWidget {
   const _PracticeCommentCard({required this.gameState});
 
   final OfflineComputerGameState gameState;
 
+  @override
+  ConsumerState<_PracticeCommentCard> createState() => _PracticeCommentCardState();
+}
+
+class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
   static const _cardHeight = 54.0;
 
+  // Last non-null comment, kept so we can show it with opacity while a new evaluation is in
+  // progress and no new comment has arrived yet.
+  PracticeComment? _previousComment;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void didUpdateWidget(_PracticeCommentCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.gameState.practiceComment != null && widget.gameState.practiceComment == null) {
+      _previousComment = oldWidget.gameState.practiceComment;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final hideBestMove = prefs.hideBestMove;
+    final hideEvaluation = prefs.hideEvaluation;
+    final gameState = widget.gameState;
     final isEvaluatingMove = gameState.isEvaluatingMove;
-    final practiceComment = gameState.practiceComment;
+    final practiceComment =
+        gameState.practiceComment ?? (isEvaluatingMove ? _previousComment : null);
     final showingSuggestedMove = gameState.showingSuggestedMove;
     final evalTextStyle = TextStyle(
       fontWeight: FontWeight.w600,
@@ -494,18 +562,8 @@ class _PracticeCommentCard extends ConsumerWidget {
     Color? iconColor;
     IconData? icon;
 
-    if (isEvaluatingMove) {
-      content = Row(
-        children: [
-          const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          Text(context.l10n.evaluatingYourMove),
-        ],
-      );
+    if (gameState.finished) {
+      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
     } else if (practiceComment != null) {
       final verdict = practiceComment.verdict;
       icon = practiceComment.icon;
@@ -522,7 +580,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       Widget? suggestedMoveWidget;
       final suggestedMove = practiceComment.suggestedMove;
-      if (suggestedMove != null) {
+      if (suggestedMove != null && !hideBestMove) {
         final moveText = suggestedMove.san;
         final labelText = practiceComment.isShowingAlternative
             ? context.l10n.anotherWasX('')
@@ -577,44 +635,36 @@ class _PracticeCommentCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (practiceComment.evalAfter != null)
+          if (practiceComment.evalAfter != null && !hideEvaluation)
             Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
-    } else if (gameState.finished) {
-      // Game is over
-      content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
     } else if (gameState.turn == gameState.game.playerSide) {
-      // Player's turn
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
-          Expanded(
-            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
-          ),
-          if (cachedEval != null)
-            Text(cachedEval, style: evalTextStyle)
-          else
-            const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-            ),
+          const Spacer(),
+          if (!hideEvaluation)
+            if (cachedEval != null) Text(cachedEval, style: evalTextStyle),
         ],
       );
     } else {
       content = const SizedBox.shrink();
     }
 
-    return Container(
-      height: _cardHeight,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
+    return AnimatedOpacity(
+      opacity: isEvaluatingMove && gameState.practiceComment == null ? 0.5 : 1.0,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        height: _cardHeight,
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Align(alignment: Alignment.centerLeft, child: content),
       ),
-      child: Align(alignment: Alignment.centerLeft, child: content),
     );
   }
 }
@@ -772,16 +822,44 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   }
 }
 
+class _PracticeSettingsSheet extends ConsumerWidget {
+  const _PracticeSettingsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListSection(
+          header: const Text('Practice settings'),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.hideBestMove),
+              value: prefs.hideBestMove,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Hide evaluation'),
+              value: prefs.hideEvaluation,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class OfflineComputerGameResultDialog extends StatelessWidget {
-  const OfflineComputerGameResultDialog({
-    required this.game,
-    required this.gameSessionId,
-    required this.onNewGame,
-    super.key,
-  });
+  const OfflineComputerGameResultDialog({required this.game, required this.onNewGame, super.key});
 
   final OfflineComputerGame game;
-  final StringId gameSessionId;
   final VoidCallback onNewGame;
 
   @override
@@ -821,8 +899,8 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  id: gameSessionId,
+                AnalysisOptions.pgn(
+                  id: game.id,
                   orientation: game.playerSide,
                   pgn: game.makePgn(),
                   isComputerAnalysisAllowed: true,

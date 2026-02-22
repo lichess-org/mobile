@@ -900,7 +900,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastScore => 'Pontuação';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'As classificações são calculadas com base nos jogos transmitidos e podem diferir dos resultados oficiais.';
 
   @override
   String get broadcastAllTeams => 'Todas as equipas';
@@ -947,23 +947,23 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Pontos de jogo';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Pontos do Jogo';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Partidas';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Histórico de Jogos';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Resultados das Equipas';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'O(s) seguinte(s) termo(s) será(ão) traduzido(s) automaticamente: $param.';
   }
 
   @override
@@ -975,54 +975,54 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastDefaultRoundNameHelp => 'Manter o nome padrão irá traduzi-lo automaticamente para todas as outras línguas.';
 
   @override
-  String get broadcastOpenTournament => 'Open';
+  String get broadcastOpenTournament => 'Absoluto';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Feminino';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Masculino';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Feminino';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Rapazes';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
-    return 'Open U$param';
+    return 'Absoluto Sub$param';
   }
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'Girls U$param';
+    return 'Feminino Sub$param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Boys U$param';
+    return 'Rapazes Sub$param';
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Quartos de final';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Meias-finais';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Finais';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Desempates';
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Jogo $param';
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'Eliminatórias';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2648,13 +2648,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get visualMotifs => 'Visual motifs';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Peças não defendidas';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Peças pregadas';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Rei checável';
 
   @override
   String get multipleLines => 'Múltiplas continuações';
@@ -2823,7 +2823,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get signupUsernameHint => 'Certifique-se que escolhe um nome de utilizador decoroso. Não poderá alterá-lo mais tarde e quaisquer contas com nomes de utilizador inapropriados serão fechadas!';
 
   @override
-  String get signupEmailHint => 'Só o usaremos para redefinir a palavra-passe.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Palavra-passe';
@@ -3253,10 +3253,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get gameAsGIF => 'Jogo como GIF';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Nomes dos jogadores';
 
   @override
-  String get moveAnnotations => 'Move annotations';
+  String get moveAnnotations => 'Anotação de movimentos';
 
   @override
   String get pasteTheFenStringHere => 'Coloca a notação FEN aqui';
@@ -4080,15 +4080,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
-  String get keyNextBlunder => 'Próxima gafe';
-
-  @override
-  String get keyNextMistake => 'Próximo erro';
-
-  @override
-  String get keyNextInaccuracy => 'Próxima imprecisão';
-
-  @override
   String get keyPreviousBranch => 'Ramo anterior';
 
   @override
@@ -4371,7 +4362,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get brightness => 'Brilho';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Contraste';
 
   @override
   String get hue => 'Tonalidade';
@@ -9314,7 +9305,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get signupUsernameHint => 'Escolha um nome de usuário apropriado. Não será possível mudá-lo, e qualquer conta que tiver um nome ofensivo ou inapropriado será excluída!';
 
   @override
-  String get signupEmailHint => 'Vamos usar apenas para redefinir a sua senha.';
+  String get signupEmailPromise => 'Enviaremos apenas e-mails relacionados à sua conta e jamais compartilharemos o seu email.';
 
   @override
   String get password => 'Senha';
@@ -10569,15 +10560,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
-
-  @override
-  String get keyNextBlunder => 'Próximo erro grave';
-
-  @override
-  String get keyNextMistake => 'Próximo erro';
-
-  @override
-  String get keyNextInaccuracy => 'Próxima imprecisão';
 
   @override
   String get keyPreviousBranch => 'Branch anterior';

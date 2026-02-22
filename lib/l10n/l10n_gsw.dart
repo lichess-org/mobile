@@ -2823,7 +2823,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get signupUsernameHint => 'Wähl bitte en aschtändige Benutzername. Du chasch en nachträglich nöd ändere und jedes Konto mit untolerierbarem Name wird gschlosse!';
 
   @override
-  String get signupEmailHint => 'Mir benutzed sie nur zum s\'Passwort zruggsetze.';
+  String get signupEmailPromise => 'Mir schicked dir nur E-Mail, wo dis Konto beträffed und gänd dini E-Mail-Adrässe niemals und niemerem witer.';
 
   @override
   String get password => 'Passwort';
@@ -4078,15 +4078,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Computeranalyse afordere, Lern us dine Fähler';
-
-  @override
-  String get keyNextBlunder => 'Nächschte Patzer';
-
-  @override
-  String get keyNextMistake => 'Nächschte Fähler';
-
-  @override
-  String get keyNextInaccuracy => 'Nächschti Ungnauigkeit';
 
   @override
   String get keyPreviousBranch => 'Vorherige Variante';

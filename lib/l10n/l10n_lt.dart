@@ -2877,7 +2877,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get signupUsernameHint => 'Įsitikinkite, kad jūsų vartotojo vardas yra tinkamas visų amžių auditorijai. Jo vėliau pasikeisti negalėsite. Bet kokie netinkami vartotojų vardai bus uždaryti!';
 
   @override
-  String get signupEmailHint => 'Jį naudosime tik atkurti slaptažodžiui.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Slaptažodis';
@@ -4132,15 +4132,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Paprašyti kompiuterio analizės, pasimokykite iš savo klaidų';
-
-  @override
-  String get keyNextBlunder => 'Kita šiurkšti klaida';
-
-  @override
-  String get keyNextMistake => 'Kita klaida';
-
-  @override
-  String get keyNextInaccuracy => 'Kitas netiklsumas';
 
   @override
   String get keyPreviousBranch => 'Praeita atšaka';

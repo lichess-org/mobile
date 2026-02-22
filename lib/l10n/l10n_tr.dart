@@ -1967,10 +1967,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Başlangıçta iki kare ileri giden kurnaz piyonun, rakip piyon ile yan yana geldikten sonra geçerken alma kuralı sebebiyle helvasının yendiği taktikler.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Apolet matı';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Şahın kaçabileceği iki bitişik kare, diğer taşlar tarafından kullanılmaktadır.';
 
   @override
   String get puzzleThemeExposedKing => 'Savunmasız şah';
@@ -2027,7 +2027,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Kale şahı sınırlarken, fil matı gerçekleştirir.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Kırlangıç kuyruğu matı';
 
   @override
   String get puzzleThemeSwallowstailMateDescription => 'Görsel olarak V şekline benzer bir kırlangıç kuyruğu görünümünü andıran bir şah mat deseni.';
@@ -2823,7 +2823,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get signupUsernameHint => 'Aile dostu bir kullanıcı adı seçtiğinizden emin olun. Kullanıcı adı daha sonra değiştirilemez ve uygunsuz kullanıcı adına sahip hesaplar kapatılır!';
 
   @override
-  String get signupEmailHint => 'Bunu yalnızca şifre sıfırlaması için kullanacağız.';
+  String get signupEmailPromise => 'Size yalnızca hesabınızla ilgili e-postalar göndereceğiz ve e-posta adresinizi asla paylaşmayacağız.';
 
   @override
   String get password => 'Şifre';
@@ -4078,15 +4078,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
-
-  @override
-  String get keyNextBlunder => 'Sonraki vahim hata';
-
-  @override
-  String get keyNextMistake => 'Sonraki hata';
-
-  @override
-  String get keyNextInaccuracy => 'Sonraki kusurlu hamle';
 
   @override
   String get keyPreviousBranch => 'Önceki dal';

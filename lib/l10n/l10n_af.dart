@@ -2823,7 +2823,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get signupUsernameHint => 'Kies asseblief \'n aanvaarbare gebruikersnaam. Dit kan nie later verander word nie, en enige onaanvaarbare gebruikersname sal gesluit word!';
 
   @override
-  String get signupEmailHint => 'Dit sal slegs gebruik word om wagwoorde te herstel.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Wagwoord';
@@ -4078,15 +4078,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Vra rekenaaranalise aan, Leer uit jou foute';
-
-  @override
-  String get keyNextBlunder => 'Volgende flater';
-
-  @override
-  String get keyNextMistake => 'Volgende fout';
-
-  @override
-  String get keyNextInaccuracy => 'Volgende onakkuraatheid';
 
   @override
   String get keyPreviousBranch => 'Vorige tak';

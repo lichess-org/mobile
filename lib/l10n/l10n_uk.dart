@@ -2879,7 +2879,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get signupUsernameHint => 'Переконайтесь, що ви вибрали хороше ім\'я. Ви не можете змінити його потім, а профілі з непристойними іменами будуть заблоковані!';
 
   @override
-  String get signupEmailHint => 'Ми використаємо її лише для скидання пароля.';
+  String get signupEmailPromise => 'Ми надсилатимемо вам листи лише щодо вашого облікового запису та ніколи не будемо ділитися вашою електронною поштою.';
 
   @override
   String get password => 'Пароль';
@@ -4134,15 +4134,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Зробити запит на комп\'ютерний аналіз, Учіться на своїх помилках';
-
-  @override
-  String get keyNextBlunder => 'Наступна груба помилка';
-
-  @override
-  String get keyNextMistake => 'Наступна помилка';
-
-  @override
-  String get keyNextInaccuracy => 'Наступна неточність';
 
   @override
   String get keyPreviousBranch => 'Попередній варіант';

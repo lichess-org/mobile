@@ -2026,7 +2026,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeEpauletteMate => 'Эполетный мат';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Две соседние клетки для спасения короля, оказавшегося под шахом, заняты другими фигурами.';
 
   @override
   String get puzzleThemeExposedKing => 'Открытый король';
@@ -2083,10 +2083,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Слон ставит мат, в то время как ладья контролирует соседнюю вертикаль.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Мат \"Ласточкин хвост\"';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Матовая конструкция, напоминающая собой хвост ласточки; также напоминает букву \"V\".';
 
   @override
   String get puzzleThemeTriangleMate => 'Треугольный мат';
@@ -2361,7 +2361,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Или позвольте вашему сопернику отсканировать этот QR-код';
 
   @override
-  String get reusableChallengeUrl => 'Постоянная ссылка на вызов на игру';
+  String get reusableChallengeUrl => 'Многоразовая ссылка на вызов на игру';
 
   @override
   String get permanentLinkForAnyoneToChallengeYou => 'Постоянная ссылка на игру с заданными настройками.';
@@ -2642,7 +2642,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get openingExplorer => 'База дебютов';
 
   @override
-  String get openingEndgameExplorer => 'База дебютов/окончаний';
+  String get openingEndgameExplorer => 'База дебютов/эндшпилей';
 
   @override
   String xOpeningExplorer(String param) {
@@ -2650,7 +2650,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Играть первый ход изучения дебютов/эндшпилей';
+  String get playFirstOpeningEndgameExplorerMove => 'Играть первый ход дебюта/эндшпиля';
 
   @override
   String get winPreventedBy50MoveRule => 'Не удаётся победить из-за правила 50 ходов';
@@ -2879,7 +2879,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get signupUsernameHint => 'Убедитесь, что вы выбрали благопристойное имя пользователя. Вы не сможете изменить его позже, при этом все учётные записи с неприличными именами будут закрыты!';
 
   @override
-  String get signupEmailHint => 'Мы будем использовать его только для сброса пароля.';
+  String get signupEmailPromise => 'Мы будем только отправлять вам письма, касающиеся вашей учётной записи, и никогда не передадим ваш адрес кому-либо.';
 
   @override
   String get password => 'Пароль';
@@ -3179,13 +3179,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get whiteAcceptsTakeback => 'Белые принимают возврат хода';
 
   @override
-  String get blackAcceptsTakeback => 'Чёрные принимают возврат хода';
+  String get blackAcceptsTakeback => 'Чёрные согласны вернуть ход';
 
   @override
-  String get whiteCancelsTakeback => 'Белые отменили просьбу вернуть ход';
+  String get whiteCancelsTakeback => 'Белые отказались вернуть ход';
 
   @override
-  String get blackCancelsTakeback => 'Чёрные отменили просьбу вернуть ход';
+  String get blackCancelsTakeback => 'Чёрные отказались вернуть ход';
 
   @override
   String get yourOpponentProposesATakeback => 'Ваш соперник просит вас вернуть ход';
@@ -3220,7 +3220,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Игра на рейтинг повысит стабильность.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Играя в рейтинговые игры, вы повысите стабильность вашего рейтинга.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3274,7 +3274,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get startedStreaming => 'начал(-а) стрим';
+  String get startedStreaming => 'начал трансляцию';
 
   @override
   String xStartedStreaming(String param) {
@@ -4134,15 +4134,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь над своими ошибками';
-
-  @override
-  String get keyNextBlunder => 'Следующий зевок';
-
-  @override
-  String get keyNextMistake => 'Следующая ошибка';
-
-  @override
-  String get keyNextInaccuracy => 'Следующая неточность';
 
   @override
   String get keyPreviousBranch => 'Предыдущая ветка';

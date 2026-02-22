@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 import '../test_helpers.dart';
@@ -127,4 +128,58 @@ void main() {
       }
     }
   }, variant: kPlatformVariant);
+
+  test('variantBoardOrientation', () {
+    for (final variant in Variant.values.where((v) => v != Variant.racingKings)) {
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.white, isBoardTurned: false),
+        Side.white,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.black, isBoardTurned: false),
+        Side.black,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.white, isBoardTurned: true),
+        Side.black,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.black, isBoardTurned: true),
+        Side.white,
+      );
+    }
+
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.white,
+        isBoardTurned: false,
+      ),
+      Side.white,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.black,
+        isBoardTurned: false,
+      ),
+      Side.white,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.white,
+        isBoardTurned: true,
+      ),
+      Side.black,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.black,
+        isBoardTurned: true,
+      ),
+      Side.black,
+    );
+  });
 }

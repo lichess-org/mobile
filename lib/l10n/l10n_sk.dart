@@ -2879,7 +2879,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get signupUsernameHint => 'Uistite sa, že si vyberáte rodinne prijateľné používateľské meno! Neskôr ho už nemôžete zmeniť a akýkoľvek účet s nevhodným užívateľským menom bude uzavretý.';
 
   @override
-  String get signupEmailHint => 'Použijeme ho iba pri znovunastavení hesla.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Heslo';
@@ -4134,15 +4134,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Požadujte analýzu počítačom, Poučte sa zo svojich chýb';
-
-  @override
-  String get keyNextBlunder => 'Ďalšia hrubá chyba';
-
-  @override
-  String get keyNextMistake => 'Ďalšia chyba';
-
-  @override
-  String get keyNextInaccuracy => 'Ďalšia nepresnosť';
 
   @override
   String get keyPreviousBranch => 'Predchádzajúca vetva';

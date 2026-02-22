@@ -5174,11 +5174,11 @@ abstract class AppLocalizations {
   /// **'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!'**
   String get signupUsernameHint;
 
-  /// No description provided for @signupEmailHint.
+  /// No description provided for @signupEmailPromise.
   ///
   /// In en, this message translates to:
-  /// **'We will only use it for password reset and account activation.'**
-  String get signupEmailHint;
+  /// **'We will only send you emails about your account and never share your email.'**
+  String get signupEmailPromise;
 
   /// No description provided for @password.
   ///
@@ -6749,7 +6749,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_provideOneCheatedGameLink.
   ///
   /// In en, this message translates to:
-  /// **'Please provide at least one link to a game with suspected cheating.'**
+  /// **'Please provide at least one link to a game for review.'**
   String get error_provideOneCheatedGameLink;
 
   /// No description provided for @by.
@@ -7507,24 +7507,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Request computer analysis, Learn from your mistakes'**
   String get keyRequestComputerAnalysis;
-
-  /// No description provided for @keyNextBlunder.
-  ///
-  /// In en, this message translates to:
-  /// **'Next blunder'**
-  String get keyNextBlunder;
-
-  /// No description provided for @keyNextMistake.
-  ///
-  /// In en, this message translates to:
-  /// **'Next mistake'**
-  String get keyNextMistake;
-
-  /// No description provided for @keyNextInaccuracy.
-  ///
-  /// In en, this message translates to:
-  /// **'Next inaccuracy'**
-  String get keyNextInaccuracy;
 
   /// No description provided for @keyPreviousBranch.
   ///

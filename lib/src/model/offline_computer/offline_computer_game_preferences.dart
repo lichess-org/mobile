@@ -46,6 +46,14 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
   Future<void> setPracticeMode(bool practiceMode) {
     return save(state.copyWith(practiceMode: practiceMode));
   }
+
+  Future<void> toggleHideBestMove() {
+    return save(state.copyWith(hideBestMove: !state.hideBestMove));
+  }
+
+  Future<void> toggleHideEvaluation() {
+    return save(state.copyWith(hideEvaluation: !state.hideEvaluation));
+  }
 }
 
 /// Represents the player's color choice for offline computer games.
@@ -76,6 +84,8 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
     required SideChoice sideChoice,
     @Default(true) bool casual,
     @Default(false) bool practiceMode,
+    @Default(false) bool hideBestMove,
+    @Default(false) bool hideEvaluation,
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
@@ -83,6 +93,8 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
     sideChoice: SideChoice.random,
     casual: true,
     practiceMode: false,
+    hideBestMove: false,
+    hideEvaluation: false,
   );
 
   factory OfflineComputerGamePrefs.fromJson(Map<String, dynamic> json) {

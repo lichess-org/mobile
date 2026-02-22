@@ -2879,7 +2879,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get signupUsernameHint => 'Ne pozabite izbrati družini prijaznega uporabniškega imena. Pozneje ga ne morete spremeniti in vsa neprimerna uporabniška imena bodo zaprta!';
 
   @override
-  String get signupEmailHint => 'Uporabljali ga bomo samo za ponastavitev gesla.';
+  String get signupEmailPromise => 'Poslali vam bomo le e-poštna sporočila o vašem računu in nikoli ne bomo delili vašega e-poštnega naslova.';
 
   @override
   String get password => 'Geslo';
@@ -4134,15 +4134,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
-
-  @override
-  String get keyNextBlunder => 'Naslednji spodrsljaj';
-
-  @override
-  String get keyNextMistake => 'Naslednja napaka';
-
-  @override
-  String get keyNextInaccuracy => 'Naslednja nepravilnost';
 
   @override
   String get keyPreviousBranch => 'Prejšnja veja';

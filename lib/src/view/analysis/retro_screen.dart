@@ -279,7 +279,8 @@ class _BottomBar extends ConsumerWidget {
           if (state.feedback != RetroFeedback.done)
             BottomBarButton(
               icon: Icons.play_arrow,
-              label: context.l10n.keyNextMistake,
+              // TODO: translate
+              label: 'Next mistake',
               showLabel: true,
               onTap: ref.read(retroControllerProvider(options).notifier).nextMistake,
             ),

@@ -2935,7 +2935,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signupUsernameHint => 'تأكد من اختيار اسم مستخدم صديق للعائلة. لا يمكنك تغييره لاحقًا وأي حسابات تحتوي على أسماء مستخدمين غير ملائمة سيتم إغلاقها!';
 
   @override
-  String get signupEmailHint => 'سوف نستخدمه فقط لإعادة تعيين كلمة المرور.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'كلمة السر';
@@ -4190,15 +4190,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'اطلب تحليل الحاسوب وتعلم من أخطائك';
-
-  @override
-  String get keyNextBlunder => 'الخطأ الفادح التالي';
-
-  @override
-  String get keyNextMistake => 'الخطأ التالي';
-
-  @override
-  String get keyNextInaccuracy => 'النقلة غير الدقيقة التالية';
 
   @override
   String get keyPreviousBranch => 'التفريع السابق';

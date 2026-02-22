@@ -373,8 +373,8 @@ class _BottomBar extends ConsumerWidget {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
                       context,
-                      AnalysisOptions.standalone(
-                        id: const StringId('standalone'),
+                      AnalysisOptions.pgn(
+                        id: const StringId('board_editor_position'),
                         orientation: editorState.orientation,
                         pgn: editorState.pgn!,
                         isComputerAnalysisAllowed: true,

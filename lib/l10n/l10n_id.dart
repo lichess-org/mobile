@@ -2799,7 +2799,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get signupUsernameHint => 'Pastikan username Anda senonoh. Anda tidak dapat menggantinya lagi dan akun dengan username tidak senonoh akan di tutup!';
 
   @override
-  String get signupEmailHint => 'Ini hanya akan digunakan untuk setel ulang password.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Kata sandi';
@@ -4054,15 +4054,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Minta analisis komputer, belajar dari kesalahan anda';
-
-  @override
-  String get keyNextBlunder => 'Blunder selanjutnya';
-
-  @override
-  String get keyNextMistake => 'Kesalahan berikutnya';
-
-  @override
-  String get keyNextInaccuracy => 'Ketidakakuratan selanjutnya';
 
   @override
   String get keyPreviousBranch => 'Cabang sebelumnya';

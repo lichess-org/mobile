@@ -547,7 +547,9 @@ class GameController extends AsyncNotifier<GameState> {
   void _moveFeedback(SanMove sanMove) {
     final isCheck = sanMove.san.contains('+');
     if (sanMove.san.contains('x')) {
-      ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+      ref
+          .read(moveFeedbackServiceProvider)
+          .captureFeedback(state.requireValue.game.meta.variant, check: isCheck);
     } else {
       ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
     }
@@ -1157,7 +1159,7 @@ sealed class GameState with _$GameState {
           initialMoveCursor: stepCursor,
           gameFullId: gameFullId,
         )
-      : AnalysisOptions.standalone(
+      : AnalysisOptions.pgn(
           id: gameFullId.gameId,
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,

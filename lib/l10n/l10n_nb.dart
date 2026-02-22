@@ -2823,7 +2823,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get signupUsernameHint => 'Velg et sømmelig brukernavn. Det kan ikke endres, og alle kontoer med usømmelige brukernavn vil bli avsluttet.';
 
   @override
-  String get signupEmailHint => 'Vi bruker den bare når du tilbakestiller passordet ditt.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Passord';
@@ -4078,15 +4078,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Be om maskinanalyse, lær av feilene dine';
-
-  @override
-  String get keyNextBlunder => 'Neste bukk';
-
-  @override
-  String get keyNextMistake => 'Neste feil';
-
-  @override
-  String get keyNextInaccuracy => 'Neste unøyaktighet';
 
   @override
   String get keyPreviousBranch => 'Forrige gren';

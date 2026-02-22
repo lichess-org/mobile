@@ -2795,7 +2795,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get signupUsernameHint => 'ユーザー名は無難なものにしてください。後で変えることはできないし、ユーザー名が不適切だとアカウントが閉鎖されます！';
 
   @override
-  String get signupEmailHint => 'この情報はパスワードのリセットにのみ使用します。';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'パスワード';
@@ -4050,15 +4050,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'コンピュータ解析の要請、自分の悪手に学ぶ';
-
-  @override
-  String get keyNextBlunder => '次の大悪手';
-
-  @override
-  String get keyNextMistake => '次の悪手';
-
-  @override
-  String get keyNextInaccuracy => '次のやや悪手';
 
   @override
   String get keyPreviousBranch => '前の変化手順';

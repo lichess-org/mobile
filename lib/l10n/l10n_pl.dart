@@ -1829,10 +1829,10 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count zadanń szachowych znalezionych w partiach przez $param2',
-      many: '$count zadanń szachowych znalezionych w partiach przez $param2',
-      few: '$count zadania szachowe znalezione w partiach przez $param2',
-      one: 'Jedna zadanie szachowe znalezione w partiach przez $param2',
+      other: '$count zadań szachowych znalezionych w partiach gracza $param2',
+      many: '$count zadań szachowych znalezionych w partiach gracza $param2',
+      few: '$count zadania szachowe znalezione w partiach gracza $param2',
+      one: 'Jedno zadanie szachowe znalezione w partiach gracza $param2',
     );
     return '$_temp0';
   }
@@ -2879,7 +2879,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get signupUsernameHint => 'Pamiętaj, aby wybrać nazwę użytkownika odpowiednią dla osób w każdym wieku. Nie będziesz mógł jej później zmienić, a nieodpowiednia nazwa użytkownika spowoduje zamknięcie konta!';
 
   @override
-  String get signupEmailHint => 'Użyjemy go tylko do resetowania hasła.';
+  String get signupEmailPromise => 'Twojego adresu e-mail użyjemy wyłącznie do kontaktu w sprawie konta, nigdy nikomu go nie udostępnimy.';
 
   @override
   String get password => 'Hasło';
@@ -4134,15 +4134,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Poproś o analizę komputerową, ucz się na swoich błędach';
-
-  @override
-  String get keyNextBlunder => 'Następny błąd';
-
-  @override
-  String get keyNextMistake => 'Następna pomyłka';
-
-  @override
-  String get keyNextInaccuracy => 'Następna niedokładność';
 
   @override
   String get keyPreviousBranch => 'Poprzedni wariant';

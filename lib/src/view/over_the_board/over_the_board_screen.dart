@@ -367,8 +367,8 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions.standalone(
-                  id: const StringId('standalone'),
+                AnalysisOptions.pgn(
+                  id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,

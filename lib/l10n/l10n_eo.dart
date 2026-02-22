@@ -2823,7 +2823,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get signupUsernameHint => 'Certigi, ke vi elektas uzantnomon, ke estas adekvata por ĉiu-aĝaj spektantoj. Vi ne povas ŝanĝi ĝin poste, kaj la administrantoj fermas ĉiujn ajn kontojn, kiuj havas malbonimpresajn uzantnomojn!';
 
   @override
-  String get signupEmailHint => 'Ni nur uzos ĝin por pasvorta restarigo.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Pasvorto';
@@ -4078,15 +4078,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Peti komputilan analizon, Lerni de viaj eraroj';
-
-  @override
-  String get keyNextBlunder => 'Sekva erarego';
-
-  @override
-  String get keyNextMistake => 'Sekva eraro';
-
-  @override
-  String get keyNextInaccuracy => 'Sekva erareto';
 
   @override
   String get keyPreviousBranch => 'Antaŭa branĉo';

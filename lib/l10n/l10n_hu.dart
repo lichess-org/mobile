@@ -2823,7 +2823,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get signupUsernameHint => 'Mindenképpen családbarát felhasználónevet válassz. Később már nem tudod megváltoztatni, a nem helyénvaló felhasználónevek fiókját zároljuk!';
 
   @override
-  String get signupEmailHint => 'Csak jelszó-visszaállításhoz használjuk.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Jelszó';
@@ -4078,15 +4078,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kérelmezz számítógépes elemzést és tanulj a hibáidból';
-
-  @override
-  String get keyNextBlunder => 'Következő baklövés';
-
-  @override
-  String get keyNextMistake => 'Következő hiba';
-
-  @override
-  String get keyNextInaccuracy => 'Következő pontatlanság';
 
   @override
   String get keyPreviousBranch => 'Előző elágazás';

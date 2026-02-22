@@ -2877,7 +2877,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get signupUsernameHint => 'Zvolte si vhodné a nezávadné uživatelské jméno. Později ho nelze změnit a účty s nevhodnými uživatelskými jmény budou uzavřeny!';
 
   @override
-  String get signupEmailHint => 'Bude použit pouze pro obnovení hesla.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Heslo';
@@ -4132,15 +4132,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Vyžádejte si počítačovou analýzu, poučte se ze svých chyb';
-
-  @override
-  String get keyNextBlunder => 'Další hrubá chyba';
-
-  @override
-  String get keyNextMistake => 'Další chyba';
-
-  @override
-  String get keyNextInaccuracy => 'Další nepřesnost';
 
   @override
   String get keyPreviousBranch => 'Předchozí větev';

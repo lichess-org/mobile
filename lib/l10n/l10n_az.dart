@@ -2821,7 +2821,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get signupUsernameHint => 'Ailə dostu bir istifadəçi adı seçdiyinizdən əmin olun. Siz onu daha sonra dəyişə bilməzsiniz və uyğun olmayan istifadəçi adları olan hesablar bağlanacaq!';
 
   @override
-  String get signupEmailHint => 'Biz onu yalnız parol sıfırlanması üçün istifadə edəcəyik.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Şifrə';
@@ -4076,15 +4076,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextBlunder => 'Next blunder';
-
-  @override
-  String get keyNextMistake => 'Next mistake';
-
-  @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

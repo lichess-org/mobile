@@ -65,8 +65,9 @@ class PgnGamesListScreen extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
                   context,
-                  AnalysisOptions.standalone(
-                    id: const StringId('standalone'),
+                  AnalysisOptions.pgn(
+                    // TODO generate unique id for each game, maybe based on the PGN headers?
+                    id: const StringId('pgn_import_game'),
                     orientation: .white,
                     pgn: game.makePgn(),
                     variant: gameData.variant,

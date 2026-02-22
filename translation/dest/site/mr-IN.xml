@@ -237,7 +237,6 @@
   <string name="changeUsernameNotSame">केवळ अक्षरे छोटी मोठी करता येतील. उदाहरणार्थ \"johndoe\" ते \"JohnDoe\".</string>
   <string name="changeUsernameDescription">नाव बदला. केवळ अक्षरे छोटी मोठी करता येतील.</string>
   <string name="signupUsernameHint">तुमचं वापरकर्तानाव छोट्या मुलांसाठी अनुकूल असलेलं पाहिजे. तुम्ही ते नंतर बदलू शकत नाही, आणि अयोग्य वापरकर्तानाव बंद होतील!</string>
-  <string name="signupEmailHint">आम्ही फक्त पासवर्ड रेसेट साठि वापरू.</string>
   <string name="password">परवलीचा शब्द</string>
   <string name="changePassword">परवलीचा शब्द बदला</string>
   <string name="changeEmail">ई-मेल बदला</string>
@@ -722,9 +721,6 @@
   <string name="keyShowOrHideComments">प्रतिक्रिया दाखवा/लपवा</string>
   <string name="keyEnterOrExitVariation">variation च्या आत/बाहेर</string>
   <string name="keyRequestComputerAnalysis">संगणक विश्लेषणासाठी विनतंती करा, तुमच्या चुकांपासून शिका</string>
-  <string name="keyNextBlunder">पुढील घोडचूक</string>
-  <string name="keyNextMistake">पुढील चूक</string>
-  <string name="keyNextInaccuracy">पुढील अयोग्य चाल</string>
   <string name="keyPreviousBranch">मागील शाखा</string>
   <string name="keyNextBranch">पुढील शाखा</string>
   <string name="toggleVariationArrows">भिन्नतेंचे बाण निवडा</string>

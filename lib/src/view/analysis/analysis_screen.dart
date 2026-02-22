@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -36,6 +37,7 @@ import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_s
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -186,14 +188,16 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: false,
-            title: _Title(variant: value.variant),
-            actions: appBarActions,
+        return WakelockWidget(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              centerTitle: false,
+              title: _Title(variant: value.variant),
+              actions: appBarActions,
+            ),
+            body: _Body(options: widget.options, controller: _tabController),
           ),
-          body: _Body(options: widget.options, controller: _tabController),
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);
@@ -581,13 +585,52 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        if (options case Standalone())
+        if (options case Standalone(:final pgn)) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.clearSavedMoves),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),
           ),
+          // Only allow changing the variant if this is standalone analysis entered from the home screen,
+          // but not for any other case like puzzle analysis or an active correspondence game.
+          if (pgn.isEmpty)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.variant),
+              onPressed: () => showChoicePicker<Variant>(
+                context,
+                choices: readSupportedVariants
+                    .where(
+                      (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
+                    )
+                    .toList(),
+                selectedItem: analysisState.variant,
+                labelBuilder: (Variant variant) => Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
+                      const WidgetSpan(child: SizedBox(width: 8)),
+                      TextSpan(text: variant.label),
+                    ],
+                  ),
+                ),
+                onSelectedItemChanged: (Variant variant) =>
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .clearSavedStandaloneAnalysis();
+                      Navigator.of(context, rootNavigator: true).pushReplacement(
+                        PageRouteBuilder<dynamic>(
+                          pageBuilder: (context, animation, secondaryAnimation) => AnalysisScreen(
+                            options: (options as Standalone).copyWith(variant: variant),
+                          ),
+                          transitionDuration: Duration.zero,
+                        ),
+                      );
+                    }),
+              ),
+            ),
+        ],
         if (analysisState.isEngineAvailable(evalPrefs))
           BottomSheetAction(
             makeLabel: (context) => Text(

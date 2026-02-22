@@ -52,6 +52,11 @@ void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
   final testGameSocketUri = GameController.socketUri(testGameFullId);
 
+  setUpAll(() {
+    registerFallbackValue(Variant.standard);
+    registerFallbackValue(Sound.error);
+  });
+
   group('Loading', () {
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
@@ -174,6 +179,43 @@ void main() {
         initialBoardPosition,
         reason: 'board position should not change',
       );
+    });
+  });
+
+  group('Plays sound for', () {
+    testWidgets('move', (WidgetTester tester) async {
+      final mockSoundService = MockSoundService();
+      when(() => mockSoundService.play(any())).thenAnswer((_) async {});
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+        },
+      );
+
+      await playMove(tester, 'd2', 'd4');
+      await tester.pumpAndSettle();
+
+      verify(() => mockSoundService.play(Sound.move));
+    });
+
+    testWidgets('captures', (WidgetTester tester) async {
+      final mockSoundService = MockSoundService();
+      when(() => mockSoundService.playCaptureSound(any())).thenAnswer((_) async {});
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 d5',
+        overrides: {
+          soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
+        },
+      );
+
+      await playMove(tester, 'e4', 'd5');
+
+      verify(() => mockSoundService.playCaptureSound(Variant.standard));
     });
   });
 

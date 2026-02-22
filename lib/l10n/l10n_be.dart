@@ -2875,7 +2875,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get signupUsernameHint => 'Пераканайцеся, што выбралі імя карыстальніка, зручнае для сям\'і. Вы не можаце змяніць яго пазней, і любыя ўліковыя запісы з неадпаведнымі імёнамі карыстальнікаў будуць зачынены!';
 
   @override
-  String get signupEmailHint => 'Мы будзем выкарыстоўваць яго толькі для скіду пароля.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Пароль';
@@ -4130,15 +4130,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextBlunder => 'Наступны зявок';
-
-  @override
-  String get keyNextMistake => 'Наступная памылка';
-
-  @override
-  String get keyNextInaccuracy => 'Наступная недакладнасць';
 
   @override
   String get keyPreviousBranch => 'Папярэдні варыянт';

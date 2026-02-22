@@ -41,6 +41,9 @@ final _sfVersionPattern = RegExp(r'Stockfish\s+(\d+)');
 /// Returns null if the engine name is null or doesn't match the expected pattern.
 String? engineShortLabel(String? engineName) {
   if (engineName == null) return null;
+  if (engineName.startsWith('Fairy-Stockfish')) {
+    return 'Fairy SF';
+  }
   final match = _sfVersionPattern.firstMatch(engineName);
   if (match == null) return null;
   return 'SF ${match.group(1)}';

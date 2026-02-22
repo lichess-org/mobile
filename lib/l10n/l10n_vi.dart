@@ -1882,10 +1882,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => 'Hai quân Tượng tấn công trên các đường chéo liền kề chiếu hết một quân vua bị cản trở bởi quân cờ.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Chiếu hết kiểu Đuôi én';
+  String get puzzleThemeDovetailMate => 'Chiếu hết kiểu đuôi chim bồ câu';
 
   @override
-  String get puzzleThemeDovetailMateDescription => 'Một Hậu chiếu hết vua ở ô liền kề, hai ô duy nhất quân vua có thể chạy được lúc này đều bị chặn.';
+  String get puzzleThemeDovetailMateDescription => 'Một Hậu chiếu hết vua ở ô liền kề, trong khi hai ô trốn thoát duy nhất của vua đã bị chặn bởi quân đồng minh.';
 
   @override
   String get puzzleThemeEquality => 'Cân bằng';
@@ -1939,10 +1939,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Một đòn chiến thuật bao gồm luật bắt tốt qua đường, khi một quân tốt có thể ăn một quân tốt đối phương đi qua mặt nó khi đi 2 ô từ vị trí ban đầu của nó.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => '\"Epaulette\" không phải là danh từ riêng, mà là thuật ngữ chỉ phần trang trí trên vai áo quân phục: https://en.wikipedia.org/wiki/Epaulette\n\nMô tả cho kiểu chiếu tướng này (có thể dịch riêng):\nHai ô thoát hiểm liền kề của vua bị chiếu đều bị các quân cờ khác chiếm giữ.';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Hai ô trốn thoát liền kề của vua bị chiếu bị các quân cờ khác chiếm kiểm soát.';
 
   @override
   String get puzzleThemeExposedKing => 'Vua bị hở';
@@ -1999,10 +1999,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Dùng quân tượng để chiếu vua, trong khi quân xe giúp kìm hãm vua.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Chiếu hết kiểu đuôi chim én';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Một kiểu chiếu tướng có hình dáng trực quan giống đuôi chim én, tương tự như hình chữ V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Chiếu hết kiểu tam giác';
@@ -2795,7 +2795,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get signupUsernameHint => 'Hãy đảm bảo chọn tên người dùng thân thiện với mọi người. Bạn sẽ không thể thay đổi nó và bất kỳ tài khoản nào có tên người dùng không phù hợp sẽ bị đóng!';
 
   @override
-  String get signupEmailHint => 'Chúng tôi chỉ sử dụng nó cho việc khôi phục mật khẩu.';
+  String get signupEmailPromise => 'Chúng tôi chỉ gửi tin nhắn qua email về tài khoản của bạn và sẽ không bao giờ chia sẻ địa chỉ email của bạn với người khác.';
 
   @override
   String get password => 'Mật khẩu';
@@ -4050,15 +4050,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Yêu cầu máy tính phân tích, Học từ sai lầm của bạn';
-
-  @override
-  String get keyNextBlunder => 'Nước đi sai nghiêm trọng tiếp theo';
-
-  @override
-  String get keyNextMistake => 'Nước đi sai lầm tiếp theo';
-
-  @override
-  String get keyNextInaccuracy => 'Nước đi không chính xác tiếp theo';
 
   @override
   String get keyPreviousBranch => 'Nhánh trước';

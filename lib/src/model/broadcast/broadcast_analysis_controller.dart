@@ -460,7 +460,9 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       if (!isNavigating && isForward) {
         final isCheck = currentNode.sanMove.isCheck;
         if (currentNode.sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref
+              .read(moveFeedbackServiceProvider)
+              .captureFeedback(state.requireValue.variant, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -469,7 +471,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       else {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
-          soundService.play(Sound.capture);
+          soundService.playCaptureSound(state.requireValue.variant);
         } else {
           soundService.play(Sound.move);
         }
