@@ -237,7 +237,6 @@
   <string name="changeUsernameNotSame">Du kan bare endre små bokstaver til store eller store til små. For eksempel \"olanordmann\" til \"OlaNordmann\".</string>
   <string name="changeUsernameDescription">Endre brukernavnet ditt. Dette kan bare gjøres én gang, og du bare kan endre små bokstaver til store eller store til små.</string>
   <string name="signupUsernameHint">Velg et sømmelig brukernavn. Det kan ikke endres, og alle kontoer med usømmelige brukernavn vil bli avsluttet.</string>
-  <string name="signupEmailHint">Vi bruker den bare når du tilbakestiller passordet ditt.</string>
   <string name="password">Passord</string>
   <string name="changePassword">Bytt passord</string>
   <string name="changeEmail">Endre e-postadresse</string>
@@ -722,9 +721,6 @@
   <string name="keyShowOrHideComments">Vis/skjul kommentarer</string>
   <string name="keyEnterOrExitVariation">Gå inn i/ut av variant</string>
   <string name="keyRequestComputerAnalysis">Be om maskinanalyse, lær av feilene dine</string>
-  <string name="keyNextBlunder">Neste bukk</string>
-  <string name="keyNextMistake">Neste feil</string>
-  <string name="keyNextInaccuracy">Neste unøyaktighet</string>
   <string name="keyPreviousBranch">Forrige gren</string>
   <string name="keyNextBranch">Neste gren</string>
   <string name="toggleVariationArrows">Skru variantpiler av eller på</string>

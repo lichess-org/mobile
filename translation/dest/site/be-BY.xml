@@ -250,7 +250,6 @@
   <string name="changeUsernameNotSame">Можна мяняць толькі рэгістр літар, да прыкладу, \"janlucevich\" na \"JanLucevich\".</string>
   <string name="changeUsernameDescription">Вы можаце змяніць рэгістр літар у вашым імені карыстальніка. Зрабіць гэта можна толькі адзін раз.</string>
   <string name="signupUsernameHint">Пераканайцеся, што выбралі імя карыстальніка, зручнае для сям\'і. Вы не можаце змяніць яго пазней, і любыя ўліковыя запісы з неадпаведнымі імёнамі карыстальнікаў будуць зачынены!</string>
-  <string name="signupEmailHint">Мы будзем выкарыстоўваць яго толькі для скіду пароля.</string>
   <string name="password">Пароль</string>
   <string name="changePassword">Змяніць пароль</string>
   <string name="changeEmail">Змяніць адрас электроннай пошты</string>
@@ -746,9 +745,6 @@
   <string name="keyGoToStartOrEnd">да пачатку/канцу</string>
   <string name="keyShowOrHideComments">паказаць/схаваць каментары</string>
   <string name="keyEnterOrExitVariation">увайсці/выйсці з варыянту</string>
-  <string name="keyNextBlunder">Наступны зявок</string>
-  <string name="keyNextMistake">Наступная памылка</string>
-  <string name="keyNextInaccuracy">Наступная недакладнасць</string>
   <string name="keyPreviousBranch">Папярэдні варыянт</string>
   <string name="keyNextBranch">Наступны варыянт</string>
   <string name="newTournament">Новы турнір</string>

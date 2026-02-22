@@ -222,7 +222,6 @@
   <string name="changeUsernameNotSame">Slegs die hoof-/kleinletters kan verander. Byvoorbeeld \"pietsmit\" na \"PietSmit\".</string>
   <string name="changeUsernameDescription">Verander jou gebruikersnaam. Dit kan slegs een keer gedoen word, en jy kan net die hoof-/kleinletters in die gebruikersnaam verander.</string>
   <string name="signupUsernameHint">Kies asseblief \'n aanvaarbare gebruikersnaam. Dit kan nie later verander word nie, en enige onaanvaarbare gebruikersname sal gesluit word!</string>
-  <string name="signupEmailHint">Dit sal slegs gebruik word om wagwoorde te herstel.</string>
   <string name="password">Wagwoord</string>
   <string name="changePassword">Verander wagwoord</string>
   <string name="changeEmail">Verander e-pos</string>
@@ -688,9 +687,6 @@ rekenaar analise, kletskamer en deelbare URL te kry.</string>
   <string name="keyShowOrHideComments">vertoon/versteek kommentaar</string>
   <string name="keyEnterOrExitVariation">betree/verlaat variasie</string>
   <string name="keyRequestComputerAnalysis">Vra rekenaaranalise aan, Leer uit jou foute</string>
-  <string name="keyNextBlunder">Volgende flater</string>
-  <string name="keyNextMistake">Volgende fout</string>
-  <string name="keyNextInaccuracy">Volgende onakkuraatheid</string>
   <string name="keyPreviousBranch">Vorige tak</string>
   <string name="keyNextBranch">Volgende tak</string>
   <string name="toggleVariationArrows">Wissel variasie pyle</string>

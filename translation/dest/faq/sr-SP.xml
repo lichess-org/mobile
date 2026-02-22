@@ -5,7 +5,7 @@
   <string name="whyIsLichessCalledLichess">Зашто се Lichess зове Lichess?</string>
   <string name="lichessCombinationLiveLightLibrePronounced">Lichess је комбинација речи live/light/libre (уживо/лако/слободно) и chess (шах). Изговара се %1$s.</string>
   <string name="leechess">ли-чес</string>
-  <string name="hearItPronouncedBySpecialist">Послушај како то стручњак изговара.</string>
+  <string name="hearItPronouncedBySpecialist">Послушај како то изговара стручњак.</string>
   <string name="whyLiveLightLibre">Уживо, јер се партије играју и гледају у стварном времену 24/7; лако и слободно због чињенице да је Lichess отвореног изворног кода и неоптерећен власничким смећем које мучи друге вебсајтове.</string>
   <string name="whyIsLilaCalledLila">Слично, изворни код за Lichess, %1$s, значи li[chess in sca]la, гледајући да је велики део Lichess-а написан у %2$s, интуитивном програмску језику.</string>
   <string name="howCanIContributeToLichess">Како могу допринети Lichess-у?</string>
@@ -15,6 +15,7 @@
   <string name="breakdownOfOurCosts">поделу наших трошкова</string>
   <string name="otherWaysToHelp">други начини да помогнеш</string>
   <string name="areThereWebsitesBasedOnLichess">Да ли постоје вебсајтови засновани на Lichess-у?</string>
+  <string name="yesLichessInspiredOtherOpenSourceWebsites">Да. Lichess је заиста инспирисао друге сајтове отвореног изворног кода који користе наш %1$s, %2$s или нашу %3$s.</string>
   <string name="fairPlay">Поштена Игра</string>
   <string name="whenAmIEligibleRatinRefund">Када имам право за аутоматско враћање рејтинга од варалица?</string>
   <string name="ratingRefundExplanation">Један минут након што је играч означен, узима се њихових последњих 40 партија у последња 3 дана. Ако си ти био један од њихових противника у тим партијама, и изгубио си рејтинг (због пораза или ремија), то добијаш свој рејтинг назад. Повраћај рејтинга је ограничен твојим максималним рејтингом и прогресом рејтинга након те партије.
@@ -35,12 +36,20 @@
   <string name="whatVariantsCanIplay">Које варијанте могу играти на Lichess-у?</string>
   <string name="lichessSupportChessAnd">Lichess подржава стандардни шах и %1$s.</string>
   <string name="eightVariants">8 шаховских варијаната</string>
+  <string name="whatIsACPL">Шта је просечан центипешачки губитак (ACPL)?</string>
+  <string name="acplExplanation">Центипешак је јединица мере коришћена у шаху као приказ предности. Центипешак је једнак 1/100. пешака. Због тога 100 центипешака = 1 пешак. Ове вредности не играју никакву формалну улогу у партији али су корисни играчима и кључне у рачунарском шаху за процену позиција.
+
+Најбољи рачунарски потез ће изгубити нула центипешака, али слабији потези ће резултирати у погоршању позиције, мереног у центипешацима.
+
+Ова вредност може бити коришжена као показатељ квалитета игре. Што мање центипешака један изгуби по потезу, то боље игра.
+
+Рачунарску анализу на Lichess-у покреће Stockfish.</string>
   <string name="insufficientMaterial">Губљење на време, ремизирање и недовољан материјал</string>
-  <string name="lichessFollowFIDErules">У случају да играчу истекне време, тај играч најчешће губи партију. Ипак, игра се завршава ремијем ако је позиција таква да противник не може да матира играчевог краља ниједном серијум легалних потеза (%1$s).
+  <string name="lichessFollowFIDErules">У случају да играчу истекне време, тај играч ће најчешће изгубити партију. Ипак, партија је ремизирана ако је позиција таква да противник не може матирати играчевог краља ниједном низом легалних потеза (%1$s).
 
-У ретким случајевима, ово може бити тешко за одлучити аутоматски (форсиране линије, тврђаве). Ми смо аутоматски на страни играча којем није истекло време.
+У ретким случајевима ово може бити тешко за одлучити аутоматски (форсиране линије, тврђаве). По подразумевању ми увек станемо на страну играча којем није истекло време.
 
-Битно је знати да је могуће матирати и са једним коњем или ловцем ако противник има фигуру која може блокирати краља.</string>
+Имајте на уму да може бити могуће матирати са једним скакачем или ловцем ако противник има фигуру која би могла блокирати краља.</string>
   <string name="fideHandbookX">FIDE приручник %s</string>
   <string name="discoveringEnPassant">Зашто пешак може узети другог пешака када је он већ прошао? (ан пасан)</string>
   <string name="explainingEnPassant">Ово је легалан потез познак као \"ан пасан\". Википедија чланак даје %1$s.
@@ -82,7 +91,7 @@
   <string name="aHourlyBulletTournament">сатни муњевити турнир</string>
   <string name="goldenZeeExplanation">ZuggAddict је стримовао и за последња 2 сата покушавао да порази вештачку интелингецију нивоа 8 у 1+0 партији, без успеха. Thibault му је рекао да ако то успешно уради на стриму, добиће јединствени трофеј. Сат времена касније, победио је Стокфиш и обећање је испоштовано.</string>
   <string name="lichessRatings">Lichess рејтинзи</string>
-  <string name="whichRatingSystemUsedByLichess">Који рејтинг систем користи Личес?</string>
+  <string name="whichRatingSystemUsedByLichess">Који рејтинг систем користи Lichess?</string>
   <string name="ratingSystemUsedByLichess">Рејтинзи се рачунају помоћо Глико-2 рејтинг методе коју је осмислио Марк Гликман. Ово је врло популарна метода и користи се у значајном броју шаховских организација (ФИДЕ је знаменит супротан пример јер и даље користе застарели Ело рејтинг систем).
 
 У суштини, Глико рејтинг користи \"интервале поузданости\" када рачуна и преставља твој рејтинг. Када тек почнеш користити сајт, твој рејтинг започиње на 1500 ± 700. Тбој рејтинг је 1500, а 700 представља твој интервал поузданости.
@@ -91,26 +100,30 @@
 
 Такође је битно напоменути да се, како време пролази, твој интервал поузданости повећава. Ово ти омогућава да добијаш/губиш поене брже како би у том периоду боље пратио промене у свом нивоу игре.</string>
   <string name="whatIsProvisionalRating">Зашто упитник (?) стоји поред рејтинга?</string>
-  <string name="provisionalRatingExplanation">Упитник означава рејтинге који су привремени. Ово може бити из следећих разлога:</string>
-  <string name="notPlayedEnoughRatedGamesAgainstX">Играч није завршио довољно рангираних партија против %1$s у рангираној категорији.</string>
+  <string name="provisionalRatingExplanation">Упитник значи да је рејтинг пробни. Разлози укључују:</string>
+  <string name="notPlayedEnoughRatedGamesAgainstX">Играч још увек није завршио довољно рангираних партија против %1$s у рангираној категорији.</string>
   <string name="similarOpponents">противника сличне јачине</string>
-  <string name="notPlayedRecently">Играч није одиграо довољно скоријих партија. Узев у обзир број одиграних партија, може бити потребно око годину дана неактивности како би твој рејтинг поново постао привремени.</string>
-  <string name="ratingDeviationMorethanOneHundredTen">Конкретно, то значи да је Глико-2 девијација већа од 110. Девијација је ниво поузданости коју систем има у рејтинг. Што је мања девијација, то је рејтинг стабилнији.</string>
+  <string name="notPlayedRecently">Играч није одиграо довољно скоријих партија. У зависности од броја одиграних партија, може бити потребно око годину дана неактивности да твој рејтинг поново постане пробни.</string>
+  <string name="ratingDeviationMorethanOneHundredTen">Конкретно, то значи да је Glicko-2 девијација већа од 110. Девијација је ниво поузданости коју систем има у рејтинг. Што је мања девијација, то је рејтинг стабилнији.</string>
   <string name="howDoLeaderoardsWork">Како раде рангови и ранг листе?</string>
-  <string name="inOrderToAppearsYouMust">Како би се пласирао на %1$s, мораш:</string>
+  <string name="inOrderToAppearsYouMust">Како би ушао на %1$s, мораш:</string>
   <string name="ratingLeaderboards">рејтинг ранг листа</string>
   <string name="havePlayedMoreThanThirtyGamesInThatRating">одиграти барем 30 рангираних партија у одређеном рејтингу,</string>
-  <string name="havePlayedARatedGameAtLeastOneWeekAgo">одиграти рангирану игру у овом рејтингу унутар једне недеље,</string>
-  <string name="ratingDeviationLowerThanXinChessYinVariants">имати девијацију рејтинга мању од %1$s, у стандардном шаху, и мању од %2$s у варијантама,</string>
-  <string name="beInTopTen">бити у топ 10 у овом рејтингу.</string>
-  <string name="secondRequirementToStopOldPlayersTrustingLeaderboards">Друга неопходност постоји како би неактивни налози престали да попуњавају ранг листе.</string>
-  <string name="whyAreRatingHigher">Зашто су рејтинзи виши у поређењу са другим сајтовима и организацијама као што су ФИДЕ, УСЦФ и ИЦЦ?</string>
+  <string name="havePlayedARatedGameAtLeastOneWeekAgo">одиграти рангирану партију у току прошле недеље за овај рејтинг,</string>
+  <string name="ratingDeviationLowerThanXinChessYinVariants">имати рејтинг девијацију мању од %1$s, у стандардном шаху, и мању од %2$s у варијантама,</string>
+  <string name="beInTopTen">бити у првих 10 у овом рејтингу.</string>
+  <string name="secondRequirementToStopOldPlayersTrustingLeaderboards">2. захтев је такав како би играчи који више не користе своје налоге престали попуњавати ранг листе.</string>
+  <string name="whyAreRatingHigher">Зашто су рејтинзи виши у поређењу са другим сајтовима и организацијама као што су ФИДЕ, USCF и ICC?</string>
   <string name="whyAreRatingHigherExplanation">Најбоље је не гледати на рејтинга као апсолутне бројеве, нити их поредити са другим организацијама. Друге организације имају разне нивое играча, друге рејтинг системе (Ело, Глико, Глико-2, или модификовану верзију неких од ових). Ови фактори драстично утичу на апсолутне бројеве (рејтинг).
 
 Најбоље је гледати рејтинге као \"релативне\" бројеве (а не \"апсолутне\" бројеве): унутар једног скупа играча, њихове релативне разлике у рејтингу ће ти помоћи да одредиш ко ће победити/изгубити и колико често. Реченица \"Ја имам Х рејтинг\" не значи ништа ако немаш остале играче са којима можеш поредити тај рејтинг.</string>
-  <string name="howToHideRatingWhilePlaying">Како сакрити рејтинге током игре?</string>
+  <string name="howToHideRatingWhilePlaying">Како сакрити рејтинге током играња?</string>
+  <string name="displayPreferences">преференсама за приказ</string>
+  <string name="connexionLostCanIGetMyRatingBack">Изгубио/ла сам партију због кочења/прекида везе. Да ли могу вратити своје рејтинг бодове?</string>
+  <string name="weCannotDoThatEvenIfItIsServerSideButThatsRare">Нажалост, не можемо вратити рејтинг бодове за партије изгубљене због споре или прекинуте конекције, без обзира да ли је проблем био на твојој или нашој страни. Ово последње је веома ретко, додуше. Такође имај на уму да када се Lichess рестартује и ти изгубиш на времену због тога, ми прекидамо партију како бисмо спречили неправедан пораз.</string>
   <string name="howToThreeDots">Како...</string>
-  <string name="enableDisableNotificationPopUps">Укључити или искључити поп-ап обавештења?</string>
+  <string name="enableDisableNotificationPopUps">Укључити или искључити искочуће прозоре са обавештењима?</string>
+  <string name="viewSiteInformationPopUp">Погледај искачући прозор са информацијама сајта</string>
   <string name="lichessCanOptionnalySendPopUps">Личес може да шаље поп-ап обавештења, на пример када је твој потез у партији или када примиш приватну поруку.
 
 Притисни икону катанца поред lichess.org адресе у URL бару свог претраживача.

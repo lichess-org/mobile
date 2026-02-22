@@ -230,7 +230,6 @@
   <string name="changeUsernameNotSame">Just Grouss-/Klengschreiwung kann geännert ginn. Zum Beispill \"johndoe\" zu \"JohnDoe\".</string>
   <string name="changeUsernameDescription">Änner däin Benotzernumm. Dat kann just eemol gemaach ginn an just d\'Grouss-/Klengschreiwung vun den Buschtawen am Benotzernumm kann geännert ginn.</string>
   <string name="signupUsernameHint">Wiel wgl. e familljefrëndleche Benotzernumm. Den Numm kann duerno net méi geännert ginn a Konte mat onubruechte Benotzernimm ginn zougemaach!</string>
-  <string name="signupEmailHint">Mir benotzen se just fir Passwierder zeréckzesetzen.</string>
   <string name="password">Passwuert</string>
   <string name="changePassword">Passwuert änneren</string>
   <string name="changeEmail">Email änneren</string>
@@ -707,9 +706,6 @@
   <string name="keyShowOrHideComments">Kommentarer weisen/verstoppen</string>
   <string name="keyEnterOrExitVariation">Variant wielen/verloossen</string>
   <string name="keyRequestComputerAnalysis">Computeranalys ufroen, léier aus denge Feeler</string>
-  <string name="keyNextBlunder">Nächst Gaffe</string>
-  <string name="keyNextMistake">Nächsten Feeler</string>
-  <string name="keyNextInaccuracy">Nächst Ongenauegkeet</string>
   <string name="playSelectedMove">den ausgewielten Zuch spillen</string>
   <string name="newTournament">Neien Turnéier</string>
   <string name="tournamentHomeTitle">Schachturnéiere mat verschiddene Kadenzen a Schachvarianten</string>
@@ -780,7 +776,7 @@
   <string name="quickPairing">Schnellpaarung</string>
   <string name="lobby">Lobby</string>
   <string name="anonymous">Anonym</string>
-  <string name="yourScore">Däin Score: %s</string>
+  <string name="yourScore">Däi Score: %s</string>
   <string name="language">Sprooch</string>
   <string name="allLanguages">All Sproochen</string>
   <string name="background">Hannergrond</string>
@@ -863,6 +859,7 @@
   <string name="playVariationToCreateConditionalPremoves">Variant spillen fir bedingt Virauszich ze kreéieren</string>
   <string name="noConditionalPremoves">Keng bedingt Virauszich</string>
   <string name="playX">Spill %s</string>
+  <string name="challengeX">%s erausfuerderen</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">an späicher %s bedingten Virauszuch</item>
     <item quantity="other">an späicher %s bedingt Virauszich</item>
