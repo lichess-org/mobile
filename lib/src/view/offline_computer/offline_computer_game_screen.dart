@@ -55,7 +55,22 @@ class OfflineComputerGameScreen extends ConsumerWidget {
         : context.l10n.playAgainstComputer;
 
     return Scaffold(
-      appBar: AppBar(title: AppBarTitleText(title)),
+      appBar: AppBar(
+        title: AppBarTitleText(title),
+        actions: [
+          if (practiceMode)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Practice settings',
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (_) => const _PracticeSettingsSheet(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _Body(initialFen: initialFen),
     );
   }
@@ -204,7 +219,11 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
-                    orientation: isBoardFlipped ? orientation.opposite : orientation,
+                    orientation: variantBoardOrientation(
+                      variant: gameState.game.meta.variant,
+                      youAre: orientation,
+                      isBoardTurned: isBoardFlipped,
+                    ),
                     fen: gameState.currentPosition.fen,
                     lastMove: gameState.lastMove,
                     shapes: _buildBoardShapes(gameState),
@@ -447,12 +466,24 @@ class _Player extends ConsumerWidget {
     }
 
     // Human player - just show captured pieces and practice comment
+    final practiceStatusLabel = !game.practiceMode
+        ? null
+        : gameState.isEngineThinking || gameState.isEvaluatingMove
+        ? context.l10n.computerThinking
+        : !gameState.finished && gameState.turn == game.playerSide
+        ? context.l10n.yourTurn
+        : null;
+
     return Column(
       crossAxisAlignment: .stretch,
       mainAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
         if (game.practiceMode) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(practiceStatusLabel ?? ''),
+          ),
           _PracticeCommentCard(gameState: gameState),
           const SizedBox(height: 8),
         ],
@@ -480,6 +511,9 @@ class _PracticeCommentCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final hideBestMove = prefs.hideBestMove;
+    final hideEvaluation = prefs.hideEvaluation;
     final isEvaluatingMove = gameState.isEvaluatingMove;
     final practiceComment = gameState.practiceComment;
     final showingSuggestedMove = gameState.showingSuggestedMove;
@@ -494,19 +528,7 @@ class _PracticeCommentCard extends ConsumerWidget {
     Color? iconColor;
     IconData? icon;
 
-    if (isEvaluatingMove) {
-      content = Row(
-        children: [
-          const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          Text(context.l10n.evaluatingYourMove),
-        ],
-      );
-    } else if (practiceComment != null) {
+    if (practiceComment != null) {
       final verdict = practiceComment.verdict;
       icon = practiceComment.icon;
       iconColor = practiceComment.color;
@@ -522,7 +544,7 @@ class _PracticeCommentCard extends ConsumerWidget {
 
       Widget? suggestedMoveWidget;
       final suggestedMove = practiceComment.suggestedMove;
-      if (suggestedMove != null) {
+      if (suggestedMove != null && !hideBestMove) {
         final moveText = suggestedMove.san;
         final labelText = practiceComment.isShowingAlternative
             ? context.l10n.anotherWasX('')
@@ -577,10 +599,12 @@ class _PracticeCommentCard extends ConsumerWidget {
               ],
             ),
           ),
-          if (practiceComment.evalAfter != null)
+          if (practiceComment.evalAfter != null && !hideEvaluation)
             Text(practiceComment.evalAfter!, style: evalTextStyle),
         ],
       );
+    } else if (isEvaluatingMove) {
+      content = Text(context.l10n.evaluatingYourMove);
     } else if (gameState.finished) {
       // Game is over
       content = Text(context.l10n.gameOver, style: const TextStyle(fontStyle: .italic));
@@ -589,17 +613,9 @@ class _PracticeCommentCard extends ConsumerWidget {
       final cachedEval = gameState.cachedEvalString;
       content = Row(
         children: [
-          Expanded(
-            child: Text(context.l10n.yourTurn, style: const TextStyle(fontStyle: .italic)),
-          ),
-          if (cachedEval != null)
-            Text(cachedEval, style: evalTextStyle)
-          else
-            const SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-            ),
+          const Spacer(),
+          if (!hideEvaluation)
+            if (cachedEval != null) Text(cachedEval, style: evalTextStyle),
         ],
       );
     } else {
@@ -766,6 +782,40 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             },
             child: Text(context.l10n.play, style: Styles.bold),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PracticeSettingsSheet extends ConsumerWidget {
+  const _PracticeSettingsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListSection(
+          header: const Text('Practice settings'),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.hideBestMove),
+              value: prefs.hideBestMove,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Hide evaluation'),
+              value: prefs.hideEvaluation,
+              onChanged: (_) {
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+              },
+            ),
+          ],
         ),
       ],
     );

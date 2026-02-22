@@ -1464,7 +1464,7 @@ void main() {
       final work = makeMoveWork(level: .level6);
       await service.findMove(work);
 
-      expect(delayedStockfish.options['Skill Level'], equals('6'));
+      expect(delayedStockfish.options['Skill Level'], equals('8'));
     });
 
     test('findMove uses multiPv scaled by level', () async {
@@ -1545,7 +1545,7 @@ void main() {
       final moveWork = makeMoveWork(level: .level6);
       await service.findMove(moveWork);
 
-      expect(delayedStockfish.options['Skill Level'], equals('6'));
+      expect(delayedStockfish.options['Skill Level'], equals('8'));
 
       // Now do an evaluate
       final evalWork = makeWork();
