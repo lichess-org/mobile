@@ -19,9 +19,9 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class OpeningExplorerScreen extends ConsumerStatefulWidget {
   const OpeningExplorerScreen({required this.options, super.key});
