@@ -52,7 +52,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
           title: Text(context.l10n.openingExplorer),
           actions: [
             SemanticIconButton(
-              semanticsLabel: 'Share game',
+              semanticsLabel: context.l10n.mobileShareGame,
               onPressed: () => _showShareMenu(context, ref),
               icon: const PlatformShareIcon(),
             ),
