@@ -281,6 +281,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePreviousPage => 'پیشین';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'فعالیت';
 
   @override

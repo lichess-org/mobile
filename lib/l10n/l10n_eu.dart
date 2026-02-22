@@ -281,6 +281,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobilePreviousPage => 'Aurrekoa';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Jarduera';
 
   @override

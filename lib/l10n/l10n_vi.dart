@@ -281,6 +281,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trang trước';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Hoạt động';
 
   @override

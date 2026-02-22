@@ -281,6 +281,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Aktivitás';
 
   @override

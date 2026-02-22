@@ -281,6 +281,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobilePreviousPage => 'Προηγούμενη';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Δραστηριότητα';
 
   @override

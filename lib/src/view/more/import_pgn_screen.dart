@@ -66,7 +66,10 @@ class _BodyState extends State<_Body> {
           ),
           Padding(
             padding: Styles.bodySectionBottomPadding,
-            child: FilledButton(onPressed: _pickPgnFile, child: Text(context.l10n.orUploadPgnFile)),
+            child: FilledButton(
+              onPressed: _pickPgnFile,
+              child: Text(context.l10n.mobileOrImportPgnFile),
+            ),
           ),
         ],
       ),

@@ -281,6 +281,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePreviousPage => 'Предыдущие';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Активность';
 
   @override

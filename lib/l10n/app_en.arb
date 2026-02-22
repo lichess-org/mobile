@@ -115,6 +115,7 @@
   "mobileOpeningExplorerNotAvailableOffline": "Opening Explorer is not available offline.",
   "mobileChallengeCreated": "Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.",
   "mobilePreviousPage": "Previous",
+  "mobileOrImportPgnFile": "Or import a PGN file",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",

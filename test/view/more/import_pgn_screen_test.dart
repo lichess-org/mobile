@@ -203,7 +203,7 @@ void main() {
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
 
-      await tester.tap(find.widgetWithText(FilledButton, 'Or upload a PGN file'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));
       await tester.pumpAndSettle();
 
       expect(find.textContaining('e5'), findsOneWidget);
@@ -239,7 +239,7 @@ void main() {
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
 
-      await tester.tap(find.widgetWithText(FilledButton, 'Or upload a PGN file'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));
       await tester.pumpAndSettle();
 
       expect(find.text('2 games'), findsOneWidget);

@@ -281,6 +281,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePreviousPage => '上一页';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => '动态';
 
   @override

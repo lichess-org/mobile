@@ -281,6 +281,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override

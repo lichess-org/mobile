@@ -722,6 +722,12 @@ abstract class AppLocalizations {
   /// **'Previous'**
   String get mobilePreviousPage;
 
+  /// No description provided for @mobileOrImportPgnFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Or import a PGN file'**
+  String get mobileOrImportPgnFile;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:

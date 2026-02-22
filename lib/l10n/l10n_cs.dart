@@ -281,6 +281,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePreviousPage => 'Předchozí';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override
