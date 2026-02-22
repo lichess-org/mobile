@@ -267,7 +267,7 @@
   <string name="changeUsernameNotSame">Można zmienić tylko wielkość liter, np. „JanNowak” zamiast „jannowak”.</string>
   <string name="changeUsernameDescription">Zmiana nazwy użytkownika może być wykonana tylko raz i dotyczy tylko wielkości liter w nazwie.</string>
   <string name="signupUsernameHint">Pamiętaj, aby wybrać nazwę użytkownika odpowiednią dla osób w każdym wieku. Nie będziesz mógł jej później zmienić, a nieodpowiednia nazwa użytkownika spowoduje zamknięcie konta!</string>
-  <string name="signupEmailHint">Użyjemy go tylko do resetowania hasła.</string>
+  <string name="signupEmailPromise">Twojego adresu e-mail użyjemy wyłącznie do kontaktu w sprawie konta, nigdy nikomu go nie udostępnimy.</string>
   <string name="password">Hasło</string>
   <string name="changePassword">Zmień hasło</string>
   <string name="changeEmail">Zmień adres e-mail</string>
@@ -800,9 +800,6 @@
   <string name="keyShowOrHideComments">pokaż/ukryj komentarze</string>
   <string name="keyEnterOrExitVariation">wejdź/opuść wariant</string>
   <string name="keyRequestComputerAnalysis">Poproś o analizę komputerową, ucz się na swoich błędach</string>
-  <string name="keyNextBlunder">Następny błąd</string>
-  <string name="keyNextMistake">Następna pomyłka</string>
-  <string name="keyNextInaccuracy">Następna niedokładność</string>
   <string name="keyPreviousBranch">Poprzedni wariant</string>
   <string name="keyNextBranch">Następny wariant</string>
   <string name="toggleVariationArrows">Pokaż strzałki wariantów</string>

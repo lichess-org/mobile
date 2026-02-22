@@ -230,7 +230,6 @@
   <string name="changeUsernameNotSame">Puoi cambiare solamente il maiuscolo/minuscolo delle lettere (per esempio da \"mariorossi\" a \"MarioRossi\").</string>
   <string name="changeUsernameDescription">Cambia il tuo nome utente. Questa operazione può essere effettuata una sola volta e consente di modificare solamente il maiuscolo/minuscolo del tuo nome utente.</string>
   <string name="signupUsernameHint">Assicurati di scegliere un nome utente appropriato. Non potrai cambiarlo successivamente e gli account con nomi inappropriati saranno cancellati!</string>
-  <string name="signupEmailHint">Lo useremo solamente per reimpostare la tua password.</string>
   <string name="password">Password</string>
   <string name="changePassword">Cambia password</string>
   <string name="changeEmail">Cambia email</string>
@@ -713,9 +712,6 @@ analizzarla con il computer, commentarla in chat, e condividerla tramite un indi
   <string name="keyShowOrHideComments">mostra/nascondi i commenti</string>
   <string name="keyEnterOrExitVariation">entra/esci dalla variante</string>
   <string name="keyRequestComputerAnalysis">Richiedi analisi del computer, Impara dai tuoi errori</string>
-  <string name="keyNextBlunder">Prossimo grave errore</string>
-  <string name="keyNextMistake">Prossimo errore</string>
-  <string name="keyNextInaccuracy">Prossima imprecisione</string>
   <string name="keyPreviousBranch">Variante precedente</string>
   <string name="keyNextBranch">Variante successiva</string>
   <string name="toggleVariationArrows">Mostra le frecce delle varianti</string>

@@ -230,7 +230,6 @@
   <string name="changeUsernameNotSame">Aðeins er hægt að víxla á hástöfum og lágstöfum. Til dæmis „ómarragnarsson” í „ÓmarraGNARsson”.</string>
   <string name="changeUsernameDescription">Skiptu um notendanafn. Þú getur aðeins gert þetta einu sinni og þú mátt bara víxla á hástöfum og lágstöfum.</string>
   <string name="signupUsernameHint">Veldu notandanafn sem er viðeigandi fyrir alla, jafnvel börn. Ekki er hægt að breyta því síðar og allir aðgangar með óviðeigandi notendanöfn verða lokaðir!</string>
-  <string name="signupEmailHint">Við munum eingöngu nota það til að endursetja lykilorð.</string>
   <string name="password">Lykilorð</string>
   <string name="changePassword">Breyta lykilorði</string>
   <string name="changeEmail">Breyta tölvupóstfangi</string>
@@ -712,9 +711,6 @@
   <string name="keyShowOrHideComments">sýna/fela athugasemd</string>
   <string name="keyEnterOrExitVariation">fara í/úr afbrigði</string>
   <string name="keyRequestComputerAnalysis">Biðja um tölvugreiningu, Lærðu af mistökum þínum</string>
-  <string name="keyNextBlunder">Næsti afleikur</string>
-  <string name="keyNextMistake">Næstu mistök</string>
-  <string name="keyNextInaccuracy">Næsta ónákvæmni</string>
   <string name="keyPreviousBranch">Fyrri grein</string>
   <string name="keyNextBranch">Næsta grein</string>
   <string name="toggleVariationArrows">Víxla afbrigðisörvum</string>
