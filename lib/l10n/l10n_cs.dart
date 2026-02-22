@@ -198,6 +198,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsTab => 'Nastavení';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Sdílet PGN';
 
   @override

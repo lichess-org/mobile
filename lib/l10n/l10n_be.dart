@@ -198,6 +198,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsTab => 'Налады';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Падзяліцца PGN';
 
   @override

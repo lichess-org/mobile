@@ -198,6 +198,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsTab => 'Nastavenia';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Zdieľať PGN';
 
   @override

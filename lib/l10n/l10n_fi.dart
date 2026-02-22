@@ -198,6 +198,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsTab => 'Asetukset';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Jaa PGN';
 
   @override

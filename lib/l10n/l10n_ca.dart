@@ -198,6 +198,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsTab => 'Configuració';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Comparteix PGN';
 
   @override

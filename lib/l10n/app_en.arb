@@ -81,6 +81,7 @@
   "mobileSettingsTouchFeedback": "Touch feedback",
   "mobileSettingsTouchFeedbackSubtitle": "When enabled, the device will vibrate shortly when you move or capture a piece.",
   "mobileSettingsTab": "Settings",
+  "mobileShareGame": "Share game",
   "mobileShareGamePGN": "Share PGN",
   "mobileShareGameURL": "Share game URL",
   "mobileSharePositionAsFEN": "Share position as FEN",

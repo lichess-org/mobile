@@ -198,6 +198,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSettingsTab => 'সেটিংস';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'PGN শেয়ার করুন';
 
   @override

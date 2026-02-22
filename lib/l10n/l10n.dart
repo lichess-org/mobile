@@ -560,6 +560,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get mobileSettingsTab;
 
+  /// No description provided for @mobileShareGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Share game'**
+  String get mobileShareGame;
+
   /// No description provided for @mobileShareGamePGN.
   ///
   /// In en, this message translates to:

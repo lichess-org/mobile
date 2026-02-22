@@ -198,6 +198,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileSettingsTab => 'Postavke';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'Podijeli PGN';
 
   @override

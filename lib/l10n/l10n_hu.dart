@@ -198,6 +198,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsTab => 'Beállítás';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => 'PGN megosztása';
 
   @override

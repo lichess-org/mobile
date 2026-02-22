@@ -198,6 +198,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsTab => '设置';
 
   @override
+  String get mobileShareGame => 'Share game';
+
+  @override
   String get mobileShareGamePGN => '分享 PGN';
 
   @override
