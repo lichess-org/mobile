@@ -98,6 +98,15 @@ enum Variant {
   final String label;
   final IconData icon;
 
+  bool sideCanCastle(Side side) {
+    if (this == Variant.racingKings) return false;
+    if (this == Variant.antichess) return false;
+    if (side == Side.white && this == Variant.horde) return false;
+    return true;
+  }
+
+  bool get hasEnPassant => this != Variant.racingKings;
+
   bool get isReadSupported => readSupportedVariants.contains(this);
 
   bool get isPlaySupported => playSupportedVariants.contains(this);

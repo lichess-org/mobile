@@ -3,26 +3,34 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess960.dart';
 
 part 'board_editor_controller.freezed.dart';
 
+typedef BoardEditorControllerParams = ({Variant initialVariant, String? initialFen});
+
 /// A provider for [BoardEditorController].
 final boardEditorControllerProvider = NotifierProvider.autoDispose
-    .family<BoardEditorController, BoardEditorState, String?>(
+    .family<BoardEditorController, BoardEditorState, BoardEditorControllerParams?>(
       BoardEditorController.new,
       name: 'BoardEditorControllerProvider',
     );
 
 class BoardEditorController extends Notifier<BoardEditorState> {
-  BoardEditorController(this.initialFen);
+  BoardEditorController(this.params);
 
-  final String? initialFen;
+  final BoardEditorControllerParams? params;
 
   @override
   BoardEditorState build() {
-    final setup = Setup.parseFen(initialFen ?? kInitialFEN);
-    final position = Chess.fromSetup(setup, ignoreImpossibleCheck: true);
-    final pieces = readFen(initialFen ?? kInitialFEN).lock;
+    final variant = params?.initialVariant ?? Variant.standard;
+    final fen =
+        params?.initialFen ??
+        (variant == Variant.chess960 ? randomChess960Position() : variant.initialPosition).fen;
+    final setup = Setup.parseFen(fen);
+    final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
+    final pieces = readFen(fen).lock;
 
     final castlingRights = IMap({
       CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
@@ -33,6 +41,7 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     return BoardEditorState(
       orientation: Side.white,
       sideToPlay: setup.turn,
+      variant: variant,
       pieces: pieces,
       castlingRights: castlingRights,
       editorPointerMode: EditorPointerMode.drag,
@@ -131,6 +140,10 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     state = state.copyWith(enPassantSquare: state.enPassantSquare == square ? null : square);
   }
 
+  void setVariant(Variant variant) {
+    state = state.copyWith(variant: variant);
+  }
+
   void _updatePosition(IMap<Square, Piece> pieces) {
     state = state.copyWith(
       pieces: pieces,
@@ -175,6 +188,7 @@ sealed class BoardEditorState with _$BoardEditorState {
   const factory BoardEditorState({
     required Side orientation,
     required Side sideToPlay,
+    required Variant variant,
     required IMap<Square, Piece> pieces,
     required IMap<CastlingRight, bool> castlingRights,
     required EditorPointerMode editorPointerMode,
@@ -261,9 +275,9 @@ sealed class BoardEditorState with _$BoardEditorState {
   /// Returns `null` if the position is invalid.
   String? get pgn {
     try {
-      final position = Chess.fromSetup(Setup.parseFen(fen));
+      final position = Position.setupPosition(variant.rule, Setup.parseFen(fen));
       return PgnGame(
-        headers: {'FEN': position.fen},
+        headers: {'FEN': position.fen, 'Variant': variant.label},
         moves: PgnNode<PgnNodeData>(),
         comments: [],
       ).makePgn();

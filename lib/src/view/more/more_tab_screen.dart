@@ -120,10 +120,12 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.boardEditor),
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(BoardEditorScreen.buildRoute(context)),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  BoardEditorScreen.buildRoute(context, (
+                    initialVariant: Variant.standard,
+                    initialFen: null,
+                  )),
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.alarm_outlined),
