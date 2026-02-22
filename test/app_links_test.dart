@@ -88,6 +88,21 @@ void main() {
       );
     });
 
+    test('resolves /gameid link', () {
+      // lichess.org/gameid -> Opens analysis at the first move
+      final uri = Uri.parse('https://lichess.org/qwertyui');
+      expect(
+        resolveAppLinkUri(mockContext, uri)!.first,
+        isA<MaterialScreenRoute>().having(
+          (r) => r.screen,
+          'screen',
+          isA<AnalysisScreen>()
+              .having((s) => s.options.gameId, 'id', 'qwertyui')
+              .having((s) => s.options.initialMoveCursor, 'move number', 0),
+        ),
+      );
+    });
+
     test('resolves /gameid analysis link with ply fragment', () {
       // lichess.org/gameid#20 -> Opens analysis at move 20
       final uri = Uri.parse('https://lichess.org/qwertyui#20');
