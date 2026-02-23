@@ -203,7 +203,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     var preMoveAnalysis = state.currentAnalysis;
     final wasLoadingHint = state.isLoadingHint;
 
-    final positionBeforeFen = state.currentPosition.fen;
+    final positionBefore = state.currentPosition;
     final plyBeforeMove = state.currentPosition.ply;
 
     state = state.copyWith(isEvaluatingMove: true);
@@ -250,26 +250,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // Fire-and-forget master database check (only in opening phase).
-    // Updates the comment verdict to goodMove if the move is a known book move.
-    final currentPosition = state.currentPosition;
+    // Makes or updates the comment verdict to goodMove if the move is a known book move.
     if (plyBeforeMove < _kOpeningPlyThreshold) {
-      _fetchMasterDatabase(positionBeforeFen).then((masterEntry) {
-        if (!ref.mounted || masterEntry == null) return;
-        if (state.currentPosition != currentPosition) return;
-        final currentComment =
-            state.game.steps[stepCursorAfterMove].computerAnalysis?.practiceComment;
-        if (currentComment == null || currentComment.isBookMove) return;
-        final isBookMove = masterEntry.moves.any(
-          (m) => _normalizeUci(m.uci) == normalizedMoveUci && m.games > 1,
-        );
-        if (!isBookMove) return;
-        final updatedComment = currentComment.copyWith(
-          verdict: MoveVerdict.goodMove,
-          isBookMove: true,
-          bestMove: null,
-        );
-        _saveCommentToStep(stepCursorAfterMove, updatedComment);
-      });
+      _makeCommentFromOpeningDb(
+        move,
+        stepCursor: stepCursorAfterMove,
+        positionBefore: positionBefore,
+        fromPosition: state.currentPosition,
+      );
     }
 
     // Fast path: move was in the pre-move PVs.
@@ -284,7 +272,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         playerSide: playerSide,
       );
 
-      _saveCommentToStep(stepCursorAfterMove, comment);
+      _setComment(stepCursorAfterMove, comment);
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
@@ -337,7 +325,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           playerSide: playerSide,
         );
 
-        _saveCommentToStep(stepCursorAfterMove, comment);
+        _setComment(stepCursorAfterMove, comment);
       }
 
       state = state.copyWith(isEvaluatingMove: false);
@@ -397,7 +385,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
 
     SanMove? bestMoveSan;
-    if (!isGoodMove && !playedMoveIsBest && bestMove != null) {
+    if (!playedMoveIsBest && bestMove != null) {
       if (positionBeforeMove.isLegal(bestMove)) {
         final (_, san) = positionBeforeMove.makeSan(bestMove);
         bestMoveSan = SanMove(san, bestMove);
@@ -414,13 +402,39 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     return PracticeComment(
       verdict: verdict,
-      bestMove: bestMoveSan,
-      alternativeGoodMove: alternativeGoodMoveSan,
-      winningChancesBefore: winningChancesBefore,
-      winningChancesAfter: winningChancesAfter,
+      moveSuggestion: bestMoveSan ?? alternativeGoodMoveSan,
       evalAfter: evalAfterString,
       isBookMove: false,
     );
+  }
+
+  Future<void> _makeCommentFromOpeningDb(
+    Move move, {
+    required int stepCursor,
+    required Position positionBefore,
+    required Position fromPosition,
+  }) async {
+    final masterEntry = await _fetchMasterDatabase(positionBefore.fen);
+    if (!ref.mounted || masterEntry == null) return;
+    if (state.currentPosition != fromPosition) return;
+    final currentComment = state.game.steps[stepCursor].computerAnalysis?.practiceComment;
+    if (currentComment?.isBookMove == true) return;
+    final isBookMove = masterEntry.moves.any(
+      (m) => _normalizeUci(m.uci) == _normalizeUci(move.uci) && m.games > 1,
+    );
+    if (!isBookMove) return;
+    if (currentComment != null) {
+      final updatedComment = currentComment.copyWith(
+        verdict: MoveVerdict.goodMove,
+        isBookMove: true,
+      );
+      _setComment(stepCursor, updatedComment);
+    } else {
+      _setComment(
+        stepCursor,
+        const PracticeComment(verdict: MoveVerdict.goodMove, isBookMove: true),
+      );
+    }
   }
 
   /// Fetch the master database for the given FEN.
@@ -648,7 +662,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   /// Saves a practice comment on the game step at [stepIndex].
-  void _saveCommentToStep(int stepIndex, PracticeComment comment) {
+  void _setComment(int stepIndex, PracticeComment comment) {
     _setStepAnalysis(stepIndex, ComputerAnalysis(practiceComment: comment));
   }
 }

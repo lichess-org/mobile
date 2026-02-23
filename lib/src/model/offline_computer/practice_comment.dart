@@ -83,17 +83,8 @@ sealed class PracticeComment with _$PracticeComment {
     /// The verdict for the move.
     required MoveVerdict verdict,
 
-    /// The best move that was available in SAN format (shown if verdict is not goodMove).
-    SanMove? bestMove,
-
-    /// An alternative good move in SAN format (shown if verdict is goodMove and there was another good option).
-    SanMove? alternativeGoodMove,
-
-    /// The winning chances before the move was made.
-    required double winningChancesBefore,
-
-    /// The winning chances after the move was made.
-    required double winningChancesAfter,
+    /// The move suggestion to display as an alternative to the move played.
+    SanMove? moveSuggestion,
 
     /// The evaluation string after the move (e.g., "+0.5", "-1.2", "#3").
     String? evalAfter,
@@ -101,21 +92,4 @@ sealed class PracticeComment with _$PracticeComment {
     /// Whether the move is a book move (found in the master database).
     @Default(false) bool isBookMove,
   }) = _PracticeComment;
-
-  /// The shift in winning chances (how much the position deteriorated).
-  double get shift => winningChancesBefore - winningChancesAfter;
-
-  /// Whether to show a suggested move.
-  bool get hasSuggestedMove => bestMove != null || alternativeGoodMove != null;
-
-  /// The move to show as suggestion.
-  ///
-  /// For good moves, prefer showing an alternative good move if available,
-  /// otherwise fall back to the best move.
-  SanMove? get suggestedMove => verdict == .goodMove ? (alternativeGoodMove ?? bestMove) : bestMove;
-
-  /// Whether the suggested move is an alternative (vs the best move).
-  ///
-  /// Used to determine which label to show ("Another was" vs "Best was").
-  bool get isShowingAlternative => verdict == .goodMove && alternativeGoodMove != null;
 }

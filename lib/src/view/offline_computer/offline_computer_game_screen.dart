@@ -579,10 +579,10 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
       };
 
       Widget? suggestedMoveWidget;
-      final suggestedMove = practiceComment.suggestedMove;
+      final suggestedMove = practiceComment.moveSuggestion;
       if (suggestedMove != null && !hideBestMove) {
         final moveText = suggestedMove.san;
-        final labelText = practiceComment.isShowingAlternative
+        final labelText = practiceComment.verdict == MoveVerdict.goodMove
             ? context.l10n.anotherWasX('')
             : context.l10n.bestWasX('');
         final label = labelText.replaceAll(' ', '').isEmpty

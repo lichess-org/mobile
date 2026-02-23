@@ -1159,12 +1159,8 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    PracticeComment makeComment(MoveVerdict verdict, {bool isBookMove = false}) => PracticeComment(
-      verdict: verdict,
-      winningChancesBefore: 0.3,
-      winningChancesAfter: verdict == .goodMove ? 0.27 : 0.1,
-      isBookMove: isBookMove,
-    );
+    PracticeComment makeComment(MoveVerdict verdict, {bool isBookMove = false}) =>
+        PracticeComment(verdict: verdict, isBookMove: isBookMove);
 
     // --- icons ---
 
@@ -1271,9 +1267,7 @@ void main() {
         tester,
         PracticeComment(
           verdict: MoveVerdict.mistake,
-          bestMove: SanMove('e5', Move.parse('e7e5')!),
-          winningChancesBefore: 0.3,
-          winningChancesAfter: 0.05,
+          moveSuggestion: SanMove('e5', Move.parse('e7e5')!),
         ),
       );
       expect(find.textContaining('Best was'), findsOneWidget);
@@ -1285,9 +1279,7 @@ void main() {
         tester,
         PracticeComment(
           verdict: MoveVerdict.goodMove,
-          alternativeGoodMove: SanMove('d4', Move.parse('d2d4')!),
-          winningChancesBefore: 0.3,
-          winningChancesAfter: 0.27,
+          moveSuggestion: SanMove('d4', Move.parse('d2d4')!),
         ),
       );
       expect(find.textContaining('Another was'), findsOneWidget);
@@ -1306,9 +1298,7 @@ void main() {
         _stateWithPracticeComment(
           PracticeComment(
             verdict: MoveVerdict.mistake,
-            bestMove: SanMove('e5', Move.parse('e7e5')!),
-            winningChancesBefore: 0.3,
-            winningChancesAfter: 0.05,
+            moveSuggestion: SanMove('e5', Move.parse('e7e5')!),
           ),
         ),
         prefs: OfflineComputerGamePrefs.defaults.copyWith(hideBestMove: true),
@@ -1321,12 +1311,7 @@ void main() {
     testWidgets('evalAfter is displayed in the card', (tester) async {
       await pumpWithComment(
         tester,
-        const PracticeComment(
-          verdict: MoveVerdict.mistake,
-          winningChancesBefore: 0.3,
-          winningChancesAfter: 0.05,
-          evalAfter: '+0.3',
-        ),
+        const PracticeComment(verdict: MoveVerdict.mistake, evalAfter: '+0.3'),
       );
       expect(find.text('+0.3'), findsOneWidget);
     });
@@ -1335,12 +1320,7 @@ void main() {
       await _pumpWithState(
         tester,
         _stateWithPracticeComment(
-          const PracticeComment(
-            verdict: MoveVerdict.mistake,
-            winningChancesBefore: 0.3,
-            winningChancesAfter: 0.05,
-            evalAfter: '+0.3',
-          ),
+          const PracticeComment(verdict: MoveVerdict.mistake, evalAfter: '+0.3'),
         ),
         prefs: OfflineComputerGamePrefs.defaults.copyWith(hideEvaluation: true),
       );
