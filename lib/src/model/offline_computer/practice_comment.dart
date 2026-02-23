@@ -5,13 +5,13 @@ part 'practice_comment.freezed.dart';
 part 'practice_comment.g.dart';
 
 /// Maximum winning chances shift for a move to be considered good.
-const kGoodMoveThreshold = 0.04;
+const kGoodMoveThreshold = 0.05;
 
 /// Maximum winning chances shift for a move to be considered an inaccuracy.
-const kInaccuracyThreshold = 0.08;
+const kInaccuracyThreshold = 0.11;
 
 /// Maximum winning chances shift for a move to be considered a mistake.
-const kMistakeThreshold = 0.18;
+const kMistakeThreshold = 0.24;
 
 /// Winning chances threshold above which a position is considered winning.
 ///

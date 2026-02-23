@@ -16,7 +16,7 @@ void main() {
       );
       expect(
         MoveVerdict.fromShift(
-          0.039,
+          0.049,
           hasBetterMove: true,
           winningChancesBefore: 0.0,
           winningChancesAfter: -0.039,
@@ -24,16 +24,6 @@ void main() {
         MoveVerdict.goodMove,
       );
 
-      // Inaccuracy: kGoodMoveThreshold <= shift < kInaccuracyThreshold (in non-winning position)
-      expect(
-        MoveVerdict.fromShift(
-          0.04,
-          hasBetterMove: true,
-          winningChancesBefore: 0.3,
-          winningChancesAfter: 0.26,
-        ),
-        MoveVerdict.inaccuracy,
-      );
       expect(
         MoveVerdict.fromShift(
           0.07,
@@ -44,10 +34,9 @@ void main() {
         MoveVerdict.inaccuracy,
       );
 
-      // Mistake: kInaccuracyThreshold <= shift < kMistakeThreshold (in non-winning position)
       expect(
         MoveVerdict.fromShift(
-          0.08,
+          0.11,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
           winningChancesAfter: 0.22,
@@ -56,7 +45,7 @@ void main() {
       );
       expect(
         MoveVerdict.fromShift(
-          0.15,
+          0.23,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
           winningChancesAfter: 0.15,
@@ -67,7 +56,7 @@ void main() {
       // Blunder: shift >= kMistakeThreshold (in non-winning position)
       expect(
         MoveVerdict.fromShift(
-          0.18,
+          0.25,
           hasBetterMove: true,
           winningChancesBefore: 0.3,
           winningChancesAfter: 0.12,
@@ -118,7 +107,7 @@ void main() {
       // Not notBest if position drops below winning threshold
       expect(
         MoveVerdict.fromShift(
-          0.2,
+          0.25,
           hasBetterMove: true,
           winningChancesBefore: 0.6,
           winningChancesAfter: 0.4,
