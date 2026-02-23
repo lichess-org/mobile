@@ -198,9 +198,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsTab => 'Rregullime';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Ndani PGN me të tjerë';
 
   @override

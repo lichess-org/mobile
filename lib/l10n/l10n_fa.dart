@@ -198,9 +198,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsTab => 'تنظیمات';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'همرسانی PGN';
 
   @override

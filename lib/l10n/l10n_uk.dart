@@ -198,9 +198,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsTab => 'Налашт.';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Поділитися PGN';
 
   @override

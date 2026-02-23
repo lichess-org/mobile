@@ -198,9 +198,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileSettingsTab => 'Nuostatos';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Dalintis PGN';
 
   @override

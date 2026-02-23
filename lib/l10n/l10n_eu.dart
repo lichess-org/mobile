@@ -198,9 +198,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileSettingsTab => 'Ezarpenak';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Partekatu PGNa';
 
   @override

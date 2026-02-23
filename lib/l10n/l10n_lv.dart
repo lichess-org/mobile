@@ -198,9 +198,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get mobileSettingsTab => 'Settings';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Dalies ar PGN';
 
   @override

@@ -198,9 +198,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSettingsTab => 'Pengaturan';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Bagikan PGN';
 
   @override

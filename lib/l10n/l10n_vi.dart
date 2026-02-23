@@ -198,9 +198,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsTab => 'Cài đặt';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Chia sẻ tập tin PGN';
 
   @override

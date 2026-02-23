@@ -198,9 +198,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsTab => 'Подешавања';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Подели PNG';
 
   @override

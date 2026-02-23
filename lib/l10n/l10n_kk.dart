@@ -198,9 +198,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsTab => 'Баптау';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'PGN тарату';
 
   @override

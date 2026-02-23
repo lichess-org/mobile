@@ -198,9 +198,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsTab => '설정';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'PGN 공유';
 
   @override

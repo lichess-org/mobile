@@ -198,9 +198,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsTab => 'Agordoj';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Kunhavigi PGN-on';
 
   @override

@@ -198,9 +198,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileSettingsTab => 'Inställn.';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Dela PGN';
 
   @override

@@ -198,9 +198,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsTab => 'Valg';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Del PGN';
 
   @override

@@ -198,9 +198,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsTab => 'Ischtelle';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Teil s\'PGN';
 
   @override

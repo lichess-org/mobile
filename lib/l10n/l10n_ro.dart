@@ -198,9 +198,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsTab => 'Setări';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Distribuie PGN';
 
   @override

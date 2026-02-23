@@ -198,9 +198,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSettingsTab => 'Indstillinger';
 
   @override
-  String get mobileShareGame => 'Share game';
-
-  @override
   String get mobileShareGamePGN => 'Del PGN';
 
   @override
