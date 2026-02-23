@@ -61,7 +61,6 @@
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Touch feedback</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">When enabled, the device will vibrate shortly when you move or capture a piece.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>
-  <string name="shareGame" comment="Generic call to action to share a game">Share game</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Share PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Share game URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Share position as FEN</string>
