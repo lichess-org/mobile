@@ -1,5 +1,5 @@
 <resources>
-    <style name="SplashTheme" parent="Theme.SplashScreen">
+    <style name="SplashTheme" parent="SplashTheme.NightAdjusted">
         <item name="windowSplashScreenBackground">@color/bg_splash</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
         <item name="windowSplashScreenAnimationDuration">1500</item>
