@@ -39,18 +39,15 @@ final _logger = Logger('OfflineComputerGameController');
 /// The number of CPU cores to use for engine evaluation.
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
-/// Minimum depth required for a move evaluation in practice mode.
-const _kMinEvalDepth = kDebugMode ? 12 : 15;
-
-/// Search time for evaluations in practice mode.
-const _kSearchTime = Duration(seconds: 2);
-
-/// Number of multi-PV lines to request for evaluation.
-const _kEvaluationMultivpv = 3;
+/// Max search time for hints evaluation.
+const _kHintsMaxSearchTime = Duration(milliseconds: 3000);
 
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
 const _kOpeningPlyThreshold = 30;
+
+/// Minimum depth for which we consider the practice mode evaluation usable.
+const _kEvalMinDepth = kDebugMode ? 12 : 16;
 
 /// Stockfish flavor to use for the engine opponent and hint generation.
 ///
@@ -222,9 +219,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     // If hints were still loading when we made the move, wait for them to complete
     // so we can get the "before" evaluation for comparison.
-    // Wait time must be longer than _kSearchTime to account for engine startup overhead.
+    // Wait time must be longer than _kHintsMaxSearchTime to account for engine startup overhead.
     if (wasLoadingHint || preMoveAnalysis?.eval == null) {
-      const maxWaitTime = Duration(seconds: 4);
+      final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
       while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
@@ -313,14 +310,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: _kSearchTime,
-        multiPv: _kEvaluationMultivpv,
+        searchTime: const Duration(milliseconds: 2000),
+        // We want the fastest search here and we only need the eval
+        multiPv: 1,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: stepsAfter,
       );
 
-      final evalAfter = await evaluationService.findEval(workAfter, minDepth: _kMinEvalDepth);
+      final evalAfter = await evaluationService.findEval(
+        workAfter,
+        depthThreshold: _kEvalMinDepth,
+        minSearchTime: const Duration(milliseconds: 500),
+      );
 
       if (!ref.mounted) return;
 
@@ -583,14 +585,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: _kSearchTime,
-        multiPv: _kEvaluationMultivpv,
+        searchTime: _kHintsMaxSearchTime,
+        // Good balance between fast search and more lines
+        multiPv: 3,
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: steps,
       );
 
-      final finalEval = await evaluationService.findEval(work, minDepth: _kMinEvalDepth);
+      final finalEval = await evaluationService.findEval(
+        work,
+        depthThreshold: _kEvalMinDepth,
+        // Let's use a longer minimal search here because of the multipv and because it is computed
+        // during player's turn
+        minSearchTime: const Duration(milliseconds: 1500),
+      );
 
       if (!ref.mounted) return;
 

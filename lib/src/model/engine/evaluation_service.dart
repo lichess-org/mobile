@@ -212,34 +212,37 @@ class EvaluationService {
   /// Returns a [Future] that completes with the evaluation, or `null` if no evaluation
   /// could be obtained (e.g. the engine fails).
   ///
-  /// The [work] must have a [EvalWork.searchTime] set.
+  /// The [EvalWork.searchTime] will be overridden with the provided [maxSearchTime].
   ///
-  /// If [minDepth] is provided, the evaluation will stop early once this depth is reached.
-  /// Otherwise, it will run for the full [EvalWork.searchTime].
-  Future<LocalEval?> findEval(EvalWork work, {int? minDepth}) async {
-    assert(work.searchTime != Duration.zero, 'searchTime must be set for findEval');
+  /// If provided, the evaluation will stop at [depthThreshold], if the [minSearchTime] has passed.
+  /// This allows for better evaluations in high end devices while still providing quick responses in low end devices.
+  /// Even if [depthThreshold] is not reached, the evaluation will still stop at [EvalWork.searchTime].
+  Future<LocalEval?> findEval(EvalWork work, {int? depthThreshold, Duration? minSearchTime}) async {
+    _setEval(null);
 
-    final stream = evaluate(work);
-    if (stream == null) {
-      // do we have a cached eval?
-      switch (work.evalCache) {
-        case final LocalEval localEval:
-          return localEval;
-        case CloudEval _:
-          return null;
-        case _:
-          return null;
-      }
-    }
+    _logger.info(
+      'Finding evaluation at ply ${work.position.ply} with options: '
+      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
+    );
+
+    _startWork(work);
 
     LocalEval? finalEval;
+
     try {
-      await for (final (_, eval) in stream.timeout(
-        work.searchTime + const Duration(milliseconds: 500),
-      )) {
+      await for (final (_, eval)
+          in evalStream
+              .where((result) => result.$1 == work)
+              .timeout(work.searchTime + const Duration(milliseconds: 500))) {
         finalEval = eval;
-        if (minDepth != null && eval.depth >= minDepth) {
+        // if depth threshold is reached quickly, let's still wait min search time (but skip for
+        // higher depths)
+        if ((eval.depth >= 25 || minSearchTime == null || eval.searchTime >= minSearchTime) &&
+            (depthThreshold != null && eval.depth >= depthThreshold)) {
           stop();
+          break;
+        } else if (eval.searchTime >= work.searchTime) {
           break;
         }
       }
