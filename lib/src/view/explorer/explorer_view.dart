@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
@@ -40,10 +41,7 @@ class ExplorerView extends ConsumerWidget {
   final Opening? opening;
   final void Function(NormalMove) onMoveSelected;
 
-  bool get tablebaseRelevant {
-    final pieceCount = position.board.pieces.length;
-    return pieceCount <= 9;
-  }
+  bool get tablebaseRelevant => isTablebaseRelevant(position);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,7 +54,6 @@ class ExplorerView extends ConsumerWidget {
     if (position.isInsufficientMaterial) {
       return Center(child: Text(context.l10n.insufficientMaterial));
     }
-    // Tablebase is only relevant for positions with 9 or fewer pieces and not allowed for Correspondence games.
     if (tablebaseRelevant && isComputerAnalysisAllowed) {
       return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }
