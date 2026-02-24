@@ -19,6 +19,8 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart';
+import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
+import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -346,6 +348,11 @@ class _BottomBar extends ConsumerWidget {
                   );
                 },
               ),
+              if (editorState.pgn != null && pieceCount > 0 && pieceCount <= 32)
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.continueFromHere),
+                  onPressed: () => _showContinueFromHereMenu(context, editorState.fen),
+                ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
@@ -395,6 +402,25 @@ class _BottomBar extends ConsumerWidget {
             constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
           ),
           icon: Icons.tune,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showContinueFromHereMenu(BuildContext context, String fen) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: fen)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
+          onPressed: () =>
+              Navigator.of(context).push(OverTheBoardScreen.buildRoute(context, initialFen: fen)),
         ),
       ],
     );
