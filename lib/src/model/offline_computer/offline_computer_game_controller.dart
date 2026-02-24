@@ -257,7 +257,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // Makes or updates the comment verdict to goodMove if the move is a known book move.
-    if (plyBeforeMove < _kOpeningPlyThreshold) {
+    if (state.game.meta.variant == Variant.standard && plyBeforeMove < _kOpeningPlyThreshold) {
       _makeCommentFromOpeningDb(
         sanMove,
         stepCursor: stepCursorAfterMove,
