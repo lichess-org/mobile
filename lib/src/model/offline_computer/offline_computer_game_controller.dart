@@ -565,10 +565,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     switch (entry.category) {
       case .win || .syzygyWin:
-        mate = turn == .white ? 10 : -10;
+        // Use dtm (distance to mate in half-moves) if available, fall back to 10.
+        final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
+        mate = turn == .white ? mateN : -mateN;
         cp = null;
       case .loss || .syzygyLoss:
-        mate = turn == .white ? -10 : 10;
+        final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
+        // Opponent wins.
+        mate = turn == .white ? -mateN : mateN;
         cp = null;
       case .draw || .cursedWin || .blessedLoss:
         mate = null;
@@ -577,11 +581,15 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         return null;
     }
 
+    // Include the best tablebase move as the first PV move if available.
+    final bestMoveUci = entry.moves.firstOrNull?.uci;
+    final pvMoves = bestMoveUci != null ? [bestMoveUci].lock : IList<UCIMove>();
+
     return CloudEval(
       position: position,
       depth: 99,
       nodes: 0,
-      pvs: [PvData(moves: IList(), mate: mate, cp: cp)].lock,
+      pvs: [PvData(moves: pvMoves, mate: mate, cp: cp)].lock,
     );
   }
 
@@ -837,7 +845,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
         id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: initialFen ?? kInitialFEN,
+        initialFen: initialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
