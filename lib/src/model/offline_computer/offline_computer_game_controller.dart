@@ -23,6 +23,8 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -31,6 +33,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
@@ -307,7 +310,22 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: stepsAfter,
       );
 
-      final evalAfter = await _getEval(workAfter, minSearchTime: const Duration(milliseconds: 500));
+      final positionAfterMove = state.currentPosition;
+      final Completer<ClientEval?> evalCompleter = Completer();
+
+      // Launch engine eval and tablebase lookup in parallel.
+      _getEval(workAfter, minSearchTime: const Duration(milliseconds: 500)).then((eval) {
+        if (!evalCompleter.isCompleted) evalCompleter.complete(eval);
+      });
+      if (isTablebaseRelevant(positionAfterMove)) {
+        _fetchTablebaseEval(positionAfterMove).then((tablebaseEval) {
+          if (!evalCompleter.isCompleted && tablebaseEval != null) {
+            evalCompleter.complete(tablebaseEval);
+          }
+        });
+      }
+
+      final evalAfter = await evalCompleter.future;
 
       if (!ref.mounted) return;
 
@@ -509,6 +527,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   /// Fetch the master database for the given FEN.
+  ///
   /// Returns null if the request fails (e.g., no connectivity) or times out.
   Future<OpeningExplorerEntry?> _fetchMasterDatabase(String fen) async {
     try {
@@ -520,6 +539,50 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.fine('Failed to fetch master database: $e');
       return null;
     }
+  }
+
+  /// Fetches the tablebase eval for the given position.
+  ///
+  /// Returns null if the network request fails or the entry is not conclusive.
+  Future<ClientEval?> _fetchTablebaseEval(Position position) async {
+    try {
+      final client = ref.read(defaultClientProvider);
+      final entry = await TablebaseRepository(client).getTablebaseEntry(position.fen);
+      return _tablebaseEntryToCloudEval(entry, position);
+    } catch (e) {
+      _logger.fine('Could not get tablebase eval: $e');
+      return null;
+    }
+  }
+
+  /// Converts a tablebase entry to a [CloudEval].
+  ///
+  /// Returns null for non-conclusive entries (unknown, maybeWin, maybeLoss).
+  CloudEval? _tablebaseEntryToCloudEval(TablebaseEntry entry, Position position) {
+    final turn = position.turn;
+    final int? mate;
+    final int? cp;
+
+    switch (entry.category) {
+      case .win || .syzygyWin:
+        mate = turn == .white ? 10 : -10;
+        cp = null;
+      case .loss || .syzygyLoss:
+        mate = turn == .white ? -10 : 10;
+        cp = null;
+      case .draw || .cursedWin || .blessedLoss:
+        mate = null;
+        cp = 0;
+      default:
+        return null;
+    }
+
+    return CloudEval(
+      position: position,
+      depth: 99,
+      nodes: 0,
+      pvs: [PvData(moves: IList(), mate: mate, cp: cp)].lock,
+    );
   }
 
   Future<void> _playEngineMove() async {
