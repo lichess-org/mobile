@@ -54,14 +54,6 @@ const _kEvalMinDepth = kDebugMode ? 12 : 16;
 /// We use Fairy-Stockfish here for the negative skill levels and variant support.
 const _kComputerStockfishFlavor = StockfishFlavor.variant;
 
-/// Normalizes a UCI move string for comparison by converting alternate castling
-/// notations to standard notation.
-///
-/// This handles the case where moves may use either:
-/// - Standard notation: e1g1 (king moves to destination)
-/// - Alternate notation: e1h1 (king captures rook, used by engines)
-String _normalizeUci(String uci) => altCastles[uci] ?? uci;
-
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -154,7 +146,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  void _applyMove(Move move) {
+  SanMove _applyMove(Move move) {
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -187,6 +179,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
 
     _moveFeedback(sanMove);
+
+    return sanMove;
   }
 
   /// Make a player move with practice mode evaluation.
@@ -201,14 +195,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (!state.game.practiceMode || !state.game.playable) return;
 
     var preMoveAnalysis = state.currentAnalysis;
-    final wasLoadingHint = state.isLoadingHint;
-
     final positionBefore = state.currentPosition;
     final plyBeforeMove = state.currentPosition.ply;
 
     state = state.copyWith(isEvaluatingMove: true);
 
-    _applyMove(move);
+    final sanMove = _applyMove(move);
 
     final stepCursorAfterMove = state.stepCursor;
 
@@ -220,7 +212,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // If hints were still loading when we made the move, wait for them to complete
     // so we can get the "before" evaluation for comparison.
     // Wait time must be longer than _kHintsMaxSearchTime to account for engine startup overhead.
-    if (wasLoadingHint || preMoveAnalysis?.eval == null) {
+    if (preMoveAnalysis?.eval == null) {
       final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
       while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
@@ -244,16 +236,15 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
 
     final playerSide = state.game.playerSide;
-    final normalizedMoveUci = _normalizeUci(move.uci);
+    final normalizedMoveUci = sanMove.isCastles ? normalizeUci(move.uci) : move.uci;
     final matchingPv = preMoveEval.pvs.firstWhereOrNull(
-      (pv) => pv.moves.isNotEmpty && _normalizeUci(pv.moves.first) == normalizedMoveUci,
+      (pv) => pv.moves.isNotEmpty && pv.moves.first == normalizedMoveUci,
     );
 
-    // Fire-and-forget master database check (only in opening phase).
     // Makes or updates the comment verdict to goodMove if the move is a known book move.
     if (plyBeforeMove < _kOpeningPlyThreshold) {
       _makeCommentFromOpeningDb(
-        move,
+        sanMove,
         stepCursor: stepCursorAfterMove,
         positionBefore: positionBefore,
         fromPosition: state.currentPosition,
@@ -265,7 +256,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.info('Using PV for move: ${move.uci}');
 
       final comment = _createPracticeComment(
-        move: move,
+        sanMove: sanMove,
         preMoveEval: preMoveEval,
         winningChancesAfter: matchingPv.winningChances(playerSide),
         evalAfterString: matchingPv.evalString,
@@ -318,7 +309,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _logger.info('Move eval: depth=${evalAfter.depth}, score=${evalAfter.evalString}');
 
         final comment = _createPracticeComment(
-          move: move,
+          sanMove: sanMove,
           preMoveEval: preMoveEval,
           winningChancesAfter: -evalAfter.winningChances(playerSide.opposite),
           evalAfterString: evalAfter.evalString,
@@ -346,19 +337,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Creates a practice comment based on pre-move PV data and the post-move eval.
   PracticeComment _createPracticeComment({
-    required Move move,
+    required SanMove sanMove,
     required ClientEval preMoveEval,
     required double winningChancesAfter,
     required String? evalAfterString,
     required Side playerSide,
   }) {
-    final normalizedMoveUci = _normalizeUci(move.uci);
     final winningChancesBefore = preMoveEval.winningChances(playerSide);
     final shift = winningChancesBefore - winningChancesAfter;
 
     final bestPv = preMoveEval.pvs.first;
     final bestMove = bestPv.moves.isNotEmpty ? Move.parse(bestPv.moves.first) : null;
-    final playedMoveIsBest = bestMove != null && _normalizeUci(bestMove.uci) == normalizedMoveUci;
+    final playedMoveIsBest =
+        bestMove != null && bestMove.uci == sanMove.normalizeUci(state.game.meta.variant);
 
     final isGoodMove = shift < kGoodMoveThreshold;
 
@@ -368,7 +359,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       for (final pv in preMoveEval.pvs.skip(1)) {
         if (pv.moves.isEmpty) continue;
         if (winningChancesBefore - pv.winningChances(playerSide) < kGoodMoveThreshold &&
-            _normalizeUci(pv.moves.first) != normalizedMoveUci) {
+            pv.moves.first != sanMove.normalizeUci(state.game.meta.variant)) {
           alternativeGoodMove = Move.parse(pv.moves.first);
           break;
         }
@@ -409,7 +400,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   Future<void> _makeCommentFromOpeningDb(
-    Move move, {
+    SanMove sanMove, {
     required int stepCursor,
     required Position positionBefore,
     required Position fromPosition,
@@ -420,7 +411,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final currentComment = state.game.steps[stepCursor].computerAnalysis?.practiceComment;
     if (currentComment?.isBookMove == true) return;
     final isBookMove = masterEntry.moves.any(
-      (m) => _normalizeUci(m.uci) == _normalizeUci(move.uci) && m.games > 1,
+      (m) => m.uci == sanMove.normalizeUci(state.game.meta.variant) && m.games > 1,
     );
     if (!isBookMove) return;
     if (currentComment != null) {

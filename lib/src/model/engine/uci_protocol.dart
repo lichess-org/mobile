@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -241,16 +240,14 @@ class UCIProtocol {
           setOption('Skill Level', '20');
       }
 
-      final positionCommand = switch (_work) {
+      final positionCommand = switch (_work!) {
         final EvalWork evalWork when evalWork.threatMode =>
           'position fen ${evalWork.threatModePosition.fen}',
         _ => [
           'position fen',
           _work!.initialPosition.fen,
           'moves',
-          ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-          ),
+          ..._work!.steps.map((s) => s.sanMove.normalizeUci(_work!.variant)),
         ].join(' '),
       };
 

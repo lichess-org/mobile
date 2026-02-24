@@ -471,7 +471,7 @@ void main() {
       });
     });
 
-    group('convert alternative castling move', () {
+    group('normalize alternative castling move', () {
       void makeTestAltCastlingMove(String pgn, String alt1, String alt2) {
         final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
         final initialPath = root.mainlinePath;
@@ -480,7 +480,7 @@ void main() {
         final move = Move.parse(alt1);
         expect(move, isNotNull);
 
-        final newMove = root.convertAltCastlingMove(move!);
+        final newMove = root.normalizeMove(root.position, move!);
         expect(newMove, isNotNull);
         expect(newMove, Move.parse(alt2));
         expect(root.mainline.last.sanMove.move, newMove);
