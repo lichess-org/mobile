@@ -3,16 +3,20 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -27,6 +31,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -61,11 +66,18 @@ final offlineComputerGameControllerProvider =
     );
 
 class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
+  late SocketClient socketClient;
+  StreamSubscription<SocketEvent>? _socketSubscription;
+
   @override
   OfflineComputerGameState build() {
+    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    _socketSubscription?.cancel();
+    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
     final evaluationService = ref.watch(evaluationServiceProvider);
     ref.onDispose(() {
       evaluationService.quit();
+      _socketSubscription?.cancel();
     });
     return OfflineComputerGameState.initial(
       stockfishLevel: StockfishLevel.defaultLevel,
@@ -253,8 +265,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
     // Fast path: move was in the pre-move PVs.
     if (matchingPv != null) {
-      _logger.info('Using PV for move: ${move.uci}');
-
       final comment = _createPracticeComment(
         sanMove: sanMove,
         preMoveEval: preMoveEval,
@@ -272,8 +282,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    // Slow path: move not in PVs, evaluate the resulting position.
-    _logger.info('Move not in PVs, evaluating: ${move.uci}');
+    // Slow path: move not in computed hints PVs, evaluate the resulting position.
+    _logger.info('Move not in computed hints PVs, evaluating: ${move.uci}');
 
     try {
       final evaluationService = ref.read(evaluationServiceProvider);
@@ -297,11 +307,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: stepsAfter,
       );
 
-      final evalAfter = await evaluationService.findEval(
-        workAfter,
-        depthThreshold: _kEvalMinDepth,
-        minSearchTime: const Duration(milliseconds: 500),
-      );
+      final evalAfter = await _getEval(workAfter, minSearchTime: const Duration(milliseconds: 500));
 
       if (!ref.mounted) return;
 
@@ -333,6 +339,80 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         }
       }
     }
+  }
+
+  /// Gets an evaluation by requesting at the same time the local engine and a cloud eval.
+  Future<ClientEval?> _getEval(EvalWork work, {Duration? minSearchTime}) {
+    final evaluationService = ref.read(evaluationServiceProvider);
+    final Completer<ClientEval?> completer = Completer();
+    evaluationService
+        .findEval(work, depthThreshold: _kEvalMinDepth, minSearchTime: minSearchTime)
+        .then((eval) {
+          if (!completer.isCompleted) {
+            completer.complete(eval);
+          }
+        });
+
+    if (state.currentPosition.ply < _kOpeningPlyThreshold) {
+      _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
+        if (!completer.isCompleted && cloudEval != null) {
+          completer.complete(cloudEval);
+        }
+      });
+    }
+
+    return completer.future;
+  }
+
+  void _handleSocketEvent(SocketEvent event) {
+    // not handling any events for now, but we keep the connection open
+    _logger.finer('Received socket event: ${event.topic}');
+  }
+
+  Future<CloudEval?> _getCloudEval(EvalWork work, {required int numEvalLines}) async {
+    CloudEval? eval;
+    try {
+      final uciPath = UciPath.fromUciMoves(work.steps.map((s) => s.sanMove.move.uci));
+
+      _logger.fine(
+        'Requesting cloud eval for ply ${work.position.ply} and fen ${work.position.fen}',
+      );
+
+      socketClient.send('evalGet', {
+        'fen': work.position.fen,
+        'path': uciPath.value,
+        'mpv': numEvalLines,
+      });
+      await for (final event
+          in socketClient.stream
+              .where((e) => e.topic == 'evalHit')
+              .timeout(const Duration(seconds: 2))) {
+        final path = pick(event.data, 'path').asStringOrThrow();
+        if (path != uciPath.value) {
+          continue;
+        }
+        final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
+        final depth = pick(event.data, 'depth').asIntOrThrow();
+        final pvs = pick(event.data, 'pvs')
+            .asListOrThrow(
+              (pv) => PvData(
+                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+                cp: pv('cp').asIntOrNull(),
+                mate: pv('mate').asIntOrNull(),
+              ),
+            )
+            .toIList();
+
+        _logger.fine('Got a cloud eval at ply ${work.position.ply} with depth $depth');
+
+        eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: work.position);
+        break;
+      }
+    } catch (e) {
+      _logger.fine('Could not get cloud eval: $e');
+    }
+
+    return eval;
   }
 
   /// Creates a practice comment based on pre-move PV data and the post-move eval.
@@ -598,9 +678,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         steps: steps,
       );
 
-      final finalEval = await evaluationService.findEval(
+      final finalEval = await _getEval(
         work,
-        depthThreshold: _kEvalMinDepth,
         // Let's use a longer minimal search here because of the multipv and because it is computed
         // during player's turn
         minSearchTime: const Duration(milliseconds: 1500),
