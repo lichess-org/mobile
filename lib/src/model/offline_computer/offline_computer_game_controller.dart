@@ -71,6 +71,7 @@ final offlineComputerGameControllerProvider =
 class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   late SocketClient socketClient;
   StreamSubscription<SocketEvent>? _socketSubscription;
+  Timer? _getEvalTimer;
 
   @override
   OfflineComputerGameState build() {
@@ -81,6 +82,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     ref.onDispose(() {
       evaluationService.quit();
       _socketSubscription?.cancel();
+      _getEvalTimer?.cancel();
     });
     return OfflineComputerGameState.initial(
       stockfishLevel: StockfishLevel.defaultLevel,
@@ -314,8 +316,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       final Completer<ClientEval?> evalCompleter = Completer();
 
       // Launch engine eval and tablebase lookup in parallel.
+      // Fallback: if neither engine nor tablebase provide an eval in time, complete with null so
+      // the await below always finishes.
+      Timer(const Duration(seconds: 3), () {
+        if (!evalCompleter.isCompleted) {
+          evalCompleter.complete(null);
+        }
+      });
       _getEval(workAfter, minSearchTime: const Duration(milliseconds: 500)).then((eval) {
-        if (!evalCompleter.isCompleted) evalCompleter.complete(eval);
+        if (!evalCompleter.isCompleted && eval != null) {
+          evalCompleter.complete(eval);
+        }
       });
       if (isTablebaseRelevant(positionAfterMove)) {
         _fetchTablebaseEval(positionAfterMove).then((tablebaseEval) {
@@ -363,15 +374,23 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<ClientEval?> _getEval(EvalWork work, {Duration? minSearchTime}) {
     final evaluationService = ref.read(evaluationServiceProvider);
     final Completer<ClientEval?> completer = Completer();
+    // Fallback timer in case neither engine nor cloud eval return in time (should not happen for
+    // engine).
+    _getEvalTimer?.cancel();
+    _getEvalTimer = Timer(work.searchTime + const Duration(seconds: 2), () {
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    });
     evaluationService
         .findEval(work, depthThreshold: _kEvalMinDepth, minSearchTime: minSearchTime)
         .then((eval) {
-          if (!completer.isCompleted) {
+          if (!completer.isCompleted && eval != null) {
             completer.complete(eval);
           }
         });
 
-    if (state.currentPosition.ply < _kOpeningPlyThreshold) {
+    if (state.game.meta.variant == Variant.standard && work.position.ply < _kOpeningPlyThreshold) {
       _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
         if (!completer.isCompleted && cloudEval != null) {
           completer.complete(cloudEval);
@@ -390,7 +409,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<CloudEval?> _getCloudEval(EvalWork work, {required int numEvalLines}) async {
     CloudEval? eval;
     try {
-      final uciPath = UciPath.fromUciMoves(work.steps.map((s) => s.sanMove.move.uci));
+      final uciPath = UciPath.fromUciMoves(
+        work.steps.map((s) => s.sanMove.normalizeUci(state.game.meta.variant)),
+      );
 
       _logger.fine(
         'Requesting cloud eval for ply ${work.position.ply} and fen ${work.position.fen}',

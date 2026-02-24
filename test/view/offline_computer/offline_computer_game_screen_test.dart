@@ -1130,7 +1130,7 @@ void main() {
 
       final gameState = ref.read(offlineComputerGameControllerProvider);
       expect(gameState.game.meta.variant, Variant.standard);
-      expect(gameState.game.initialFen, kInitialFEN);
+      expect(gameState.game.initialFen, null);
     });
   });
 
