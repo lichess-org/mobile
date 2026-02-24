@@ -212,8 +212,6 @@ class EvaluationService {
   /// Returns a [Future] that completes with the evaluation, or `null` if no evaluation
   /// could be obtained (e.g. the engine fails).
   ///
-  /// The [EvalWork.searchTime] will be overridden with the provided [maxSearchTime].
-  ///
   /// If provided, the evaluation will stop at [depthThreshold], if the [minSearchTime] has passed.
   /// This allows for better evaluations in high end devices while still providing quick responses in low end devices.
   /// Even if [depthThreshold] is not reached, the evaluation will still stop at [EvalWork.searchTime].
