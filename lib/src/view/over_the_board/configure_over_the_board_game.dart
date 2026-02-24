@@ -1,3 +1,5 @@
+import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -5,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -14,7 +17,11 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-void showConfigureGameSheet(BuildContext context, {required bool isDismissible}) {
+void showConfigureGameSheet(
+  BuildContext context, {
+  required bool isDismissible,
+  String? initialFen,
+}) {
   final double screenHeight = MediaQuery.sizeOf(context).height;
   showModalBottomSheet<void>(
     context: context,
@@ -22,13 +29,15 @@ void showConfigureGameSheet(BuildContext context, {required bool isDismissible})
     isDismissible: isDismissible,
     constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
     builder: (BuildContext context) {
-      return const _ConfigureOverTheBoardGameSheet();
+      return _ConfigureOverTheBoardGameSheet(initialFen: initialFen);
     },
   );
 }
 
 class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
-  const _ConfigureOverTheBoardGameSheet();
+  const _ConfigureOverTheBoardGameSheet({this.initialFen});
+
+  final String? initialFen;
 
   @override
   ConsumerState<_ConfigureOverTheBoardGameSheet> createState() =>
@@ -50,6 +59,8 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
     super.initState();
   }
+
+  bool get _hasInitialFen => widget.initialFen != null;
 
   void _setTimeControlType(TimeControlType type) {
     ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
@@ -77,8 +88,31 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 
   @override
   Widget build(BuildContext context) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+
     return BottomSheetScrollableContainer(
       children: [
+        if (_hasInitialFen)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Center(
+              child: SizedBox(
+                width: 150,
+                height: 150,
+                child: StaticChessboard(
+                  size: 150,
+                  fen: widget.initialFen!,
+                  orientation: Side.white,
+                  pieceAssets: boardPrefs.pieceSet.assets,
+                  colorScheme: boardPrefs.boardTheme.colors,
+                  brightness: boardPrefs.brightness,
+                  hue: boardPrefs.hue,
+                  enableCoordinates: false,
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                ),
+              ),
+            ),
+          ),
         ListSection(
           materialFilledCard: true,
           children: [
@@ -171,7 +205,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
               ref
                   .read(overTheBoardGameControllerProvider.notifier)
-                  .startNewGame(chosenVariant, timeIncrement);
+                  .startNewGame(chosenVariant, timeIncrement, initialFen: widget.initialFen);
               Navigator.pop(context);
             },
             child: Text(context.l10n.play, style: Styles.bold),

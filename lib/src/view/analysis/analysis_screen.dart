@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
+import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -685,12 +686,7 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.continueFromHere),
-            onPressed: () {
-              final boardFen = analysisState.currentPosition.fen;
-              Navigator.of(
-                context,
-              ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: boardFen));
-            },
+            onPressed: () => _showContinueFromHereMenu(context, ref),
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
@@ -723,6 +719,28 @@ class _BottomBar extends ConsumerWidget {
               launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
             },
           ),
+      ],
+    );
+  }
+
+  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final boardFen = analysisState.currentPosition.fen;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: boardFen)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OverTheBoardScreen.buildRoute(context, initialFen: boardFen)),
+        ),
       ],
     );
   }

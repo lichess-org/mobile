@@ -30,10 +30,13 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({super.key});
+  const OverTheBoardScreen({this.initialFen, super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OverTheBoardScreen());
+  /// Optional initial FEN to start the game from a custom position.
+  final String? initialFen;
+
+  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
+    return buildScreenRoute(context, screen: OverTheBoardScreen(initialFen: initialFen));
   }
 
   @override
@@ -49,13 +52,15 @@ class OverTheBoardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const _Body(),
+      body: _Body(initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body();
+  const _Body({this.initialFen});
+
+  final String? initialFen;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -71,6 +76,13 @@ class _BodyState extends ConsumerState<_Body> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // If we have an initial FEN, always show the new game dialog
+      if (widget.initialFen != null) {
+        if (!mounted) return;
+        showConfigureGameSheet(context, isDismissible: true, initialFen: widget.initialFen);
+        return;
+      }
+
       final ongoingGame = await ref.read(overTheBoardGameStorageProvider).fetchOngoingGame();
       if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
         ref.read(overTheBoardGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);

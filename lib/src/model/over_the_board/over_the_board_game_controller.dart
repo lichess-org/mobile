@@ -33,8 +33,12 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
   );
 
-  void startNewGame(Variant variant, TimeIncrement timeIncrement) {
-    state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
+  void startNewGame(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
+    state = OverTheBoardGameState.fromVariant(
+      variant,
+      Speed.fromTimeIncrement(timeIncrement),
+      initialFen: initialFen,
+    );
   }
 
   void loadOngoingGame(OverTheBoardGame game) {
@@ -42,7 +46,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   }
 
   void rematch() {
-    state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
+    state = OverTheBoardGameState.fromVariant(
+      state.game.meta.variant,
+      state.game.meta.speed,
+      initialFen: state.game.initialFen,
+    );
   }
 
   void resign() {
@@ -165,23 +173,32 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     @Default(null) NormalMove? promotionMove,
   }) = _OverTheBoardGameState;
 
-  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed) {
-    final position = variant == Variant.chess960
-        ? randomChess960Position()
-        : variant.initialPosition;
+  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed, {String? initialFen}) {
+    final Position position;
+    final Variant effectiveVariant;
+    if (initialFen != null) {
+      position = Chess.fromSetup(Setup.parseFen(initialFen));
+      effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+    } else if (variant == Variant.chess960) {
+      position = randomChess960Position();
+      effectiveVariant = variant;
+    } else {
+      position = variant.initialPosition;
+      effectiveVariant = variant;
+    }
     final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OverTheBoardGameState(
       game: OverTheBoardGame(
         id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: position.fen,
+        initialFen: initialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
-          variant: variant,
+          variant: effectiveVariant,
           speed: speed,
-          perf: Perf.fromVariantAndSpeed(variant, speed),
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
         ),
       ),
     );
