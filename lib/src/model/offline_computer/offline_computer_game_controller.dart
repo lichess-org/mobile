@@ -57,7 +57,7 @@ const _kHintsMaxSearchTime = Duration(milliseconds: 5000);
 /// Depth threshold for using an engine evaluation for hints.
 ///
 /// Lower end devices will probably not reach it so the evaluation will run for the full search time
-/// but it help to get faster feedback on move quality and hints on higher end devices.
+/// but it helps to get faster feedback on move quality and hints on higher end devices.
 // TODO: consider using searched nodes instead of depth
 const _kHintsEvalMinDepth = kDebugMode ? 14 : 18;
 
