@@ -265,15 +265,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       preMoveAnalysis = state.game.steps[cursorBeforeMove].computerAnalysis;
     } else if (preMoveAnalysis?.eval == null) {
       // Not loading hints and hints are null? Let's run a quick evaluation
-      final evalAfter = await _getEval(
+      final evalBefore = await _getEval(
         _makeMoveEvalWork(stepsBeforeMove),
         minSearchTime: _kMoveEvalMinSearchTime,
         depthThreshold: _kMoveEvalMinDepth,
         tablebaseLookupPosition: positionBefore,
       );
+      _logger.info(
+        'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes} score=${evalBefore?.evalString}',
+      );
+      print(
+        'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes}',
+      );
       if (!ref.mounted) return;
-      if (evalAfter != null) {
-        preMoveAnalysis = ComputerAnalysis(eval: evalAfter);
+      if (evalBefore != null) {
+        preMoveAnalysis = ComputerAnalysis(eval: evalBefore);
         _setStepAnalysis(cursorBeforeMove, preMoveAnalysis);
       }
     }
@@ -350,9 +356,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _logger.info(
           'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes} score=${evalAfter.evalString}',
         );
-        // print(
-        //   'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes}',
-        // );
+        print(
+          'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes}',
+        );
 
         final comment = _createPracticeComment(
           sanMove: sanMove,
@@ -834,9 +840,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.info(
         'Hints computed: depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
       );
-      // print(
-      //   'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
-      // );
+      print(
+        'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
+      );
 
       if (finalEval != null) {
         _setStepAnalysis(hintStepCursor, ComputerAnalysis(eval: finalEval));
