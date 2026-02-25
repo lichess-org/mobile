@@ -85,6 +85,7 @@ class OpeningExplorerRepository {
   Future<OpeningExplorerEntry> getMasterDatabase(String fen, {int? since}) {
     return client.readJson(
       Uri.https(kLichessOpeningExplorerHost, '/masters', {
+        'source': 'mobile',
         'fen': fen,
         if (since != null) 'since': since.toString(),
       }),
@@ -100,6 +101,7 @@ class OpeningExplorerRepository {
   }) {
     return client.readJson(
       Uri.https(kLichessOpeningExplorerHost, '/lichess', {
+        'source': 'mobile',
         'fen': fen,
         if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
         if (ratings.isNotEmpty) 'ratings': ratings.join(','),
@@ -119,6 +121,7 @@ class OpeningExplorerRepository {
   }) {
     return client.readNdJsonStream(
       Uri.https(kLichessOpeningExplorerHost, '/player', {
+        'source': 'mobile',
         'fen': fen,
         'player': usernameOrId,
         'color': color.name,
