@@ -1,6 +1,6 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -65,7 +65,7 @@ class _Body extends ConsumerWidget {
                 );
               },
               orientation: game.orientation,
-              fen: game.fen ?? kEmptyFen,
+              fen: game.fen ?? kEmptyFEN,
               lastMove: game.lastMove,
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

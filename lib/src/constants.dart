@@ -61,7 +61,6 @@ final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
-const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
 
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.

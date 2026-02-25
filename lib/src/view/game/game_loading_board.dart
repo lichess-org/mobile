@@ -2,7 +2,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -226,7 +225,7 @@ class StandaloneGameLoadingContent extends StatelessWidget {
         child: GameLayout(
           orientation: position?.orientation ?? Side.white,
           boardParams: GameBoardParams.readonly(
-            fen: position?.fen ?? kEmptyFen,
+            fen: position?.fen ?? kEmptyFEN,
             variant: Variant.standard,
             pockets: null,
           ),
