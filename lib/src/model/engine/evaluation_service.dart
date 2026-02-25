@@ -232,7 +232,7 @@ class EvaluationService {
       await for (final (_, eval)
           in evalStream
               .where((result) => result.$1 == work)
-              .timeout(work.searchTime + const Duration(milliseconds: 500))) {
+              .timeout(work.searchTime + const Duration(milliseconds: 1000))) {
         finalEval = eval;
         // if depth threshold is reached quickly, let's still wait min search time (but skip for
         // higher depths)

@@ -47,15 +47,32 @@ final _logger = Logger('OfflineComputerGameController');
 /// The number of CPU cores to use for engine evaluation.
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
-/// Max search time for hints evaluation.
-const _kHintsMaxSearchTime = Duration(milliseconds: 3000);
-
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
 const _kOpeningPlyThreshold = 30;
 
-/// Minimum depth for which we consider the practice mode evaluation usable.
-const _kEvalMinDepth = kDebugMode ? 12 : 16;
+/// Max search time for hints evaluation.
+const _kHintsMaxSearchTime = Duration(milliseconds: 5000);
+
+/// Depth threshold for using an engine evaluation for hints.
+///
+/// Lower end devices will probably not reach it so the evaluation will run for the full search time
+/// but it help to get faster feedback on move quality and hints on higher end devices.
+// TODO: consider using searched nodes instead of depth
+const _kHintsEvalMinDepth = kDebugMode ? 14 : 18;
+
+/// Min search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
+const _kMoveEvalMinSearchTime = Duration(milliseconds: 1000);
+
+/// Max search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
+///
+/// We want a fast feedback here, and since multipv=1 the search should be fast.
+const _kMoveEvalMaxSearchTime = Duration(milliseconds: 2000);
+
+/// Depth threshold for using an engine evaluation for move evaluation in practice mode.
+///
+/// The search is done with multipv=1 here, so we can reach higher depths.
+const _kMoveEvalMinDepth = kDebugMode ? 18 : 20;
 
 /// Stockfish flavor to use for the engine opponent and hint generation.
 ///
@@ -212,6 +229,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (!state.game.practiceMode || !state.game.playable) return;
 
     var preMoveAnalysis = state.currentAnalysis;
+    final cursorBeforeMove = state.stepCursor;
     final positionBefore = state.currentPosition;
     final plyBeforeMove = state.currentPosition.ply;
 
@@ -232,13 +250,15 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (preMoveAnalysis?.eval == null) {
       final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
-      while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
+      while (state.game.steps[cursorBeforeMove].computerAnalysis?.eval == null &&
+          ref.mounted &&
+          DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
       }
 
       if (!ref.mounted) return;
 
-      preMoveAnalysis = state.game.steps[stepCursorAfterMove - 1].computerAnalysis;
+      preMoveAnalysis = state.game.steps[cursorBeforeMove].computerAnalysis;
     }
 
     final preMoveEval = preMoveAnalysis?.eval;
@@ -304,7 +324,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         variant: Variant.standard,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
-        searchTime: const Duration(milliseconds: 2000),
+        searchTime: _kMoveEvalMaxSearchTime,
         // We want the fastest search here and we only need the eval
         multiPv: 1,
         threatMode: false,
@@ -323,7 +343,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           evalCompleter.complete(null);
         }
       });
-      _getEval(workAfter, minSearchTime: const Duration(milliseconds: 500)).then((eval) {
+      _getEval(
+        workAfter,
+        minSearchTime: _kMoveEvalMinSearchTime,
+        depthThreshold: _kMoveEvalMinDepth,
+      ).then((eval) {
         if (!evalCompleter.isCompleted && eval != null) {
           evalCompleter.complete(eval);
         }
@@ -341,7 +365,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (!ref.mounted) return;
 
       if (evalAfter != null) {
-        _logger.info('Move eval: depth=${evalAfter.depth}, score=${evalAfter.evalString}');
+        _logger.info(
+          'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes} score=${evalAfter.evalString}',
+        );
+        // print(
+        //   'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes}',
+        // );
 
         final comment = _createPracticeComment(
           sanMove: sanMove,
@@ -371,19 +400,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   /// Gets an evaluation by requesting at the same time the local engine and a cloud eval.
-  Future<ClientEval?> _getEval(EvalWork work, {Duration? minSearchTime}) {
+  Future<ClientEval?> _getEval(EvalWork work, {int? depthThreshold, Duration? minSearchTime}) {
     final evaluationService = ref.read(evaluationServiceProvider);
     final Completer<ClientEval?> completer = Completer();
     // Fallback timer in case neither engine nor cloud eval return in time (should not happen for
     // engine).
     _getEvalTimer?.cancel();
-    _getEvalTimer = Timer(work.searchTime + const Duration(seconds: 2), () {
+    _getEvalTimer = Timer(work.searchTime + const Duration(seconds: 3), () {
       if (!completer.isCompleted) {
         completer.complete(null);
       }
     });
     evaluationService
-        .findEval(work, depthThreshold: _kEvalMinDepth, minSearchTime: minSearchTime)
+        .findEval(work, depthThreshold: depthThreshold, minSearchTime: minSearchTime)
         .then((eval) {
           if (!completer.isCompleted && eval != null) {
             completer.complete(eval);
@@ -394,6 +423,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
         if (!completer.isCompleted && cloudEval != null) {
           completer.complete(cloudEval);
+          if (evaluationService.evaluationState.value.currentWork == work) {
+            evaluationService.stop();
+          }
         }
       });
     }
@@ -775,20 +807,22 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         // Let's use a longer minimal search here because of the multipv and because it is computed
         // during player's turn
         minSearchTime: const Duration(milliseconds: 1500),
+        depthThreshold: _kHintsEvalMinDepth,
       );
 
       if (!ref.mounted) return;
 
-      if (finalEval == null || !state.game.playable) {
-        state = state.copyWith(isLoadingHint: false);
-        return;
+      _logger.info(
+        'Hints computed: depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
+      );
+      // print(
+      //   'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
+      // );
+
+      if (finalEval != null) {
+        _setStepAnalysis(hintStepCursor, ComputerAnalysis(eval: finalEval));
       }
-
-      _logger.info('Hints computed: depth=${finalEval.depth}, score=${finalEval.evalString}');
-
-      _setStepAnalysis(hintStepCursor, ComputerAnalysis(eval: finalEval));
-      state = state.copyWith(isLoadingHint: false);
-    } catch (e) {
+    } finally {
       if (ref.mounted) {
         state = state.copyWith(isLoadingHint: false);
       }
