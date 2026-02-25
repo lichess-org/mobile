@@ -803,6 +803,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (!state.game.playable || state.turn != state.game.playerSide) return;
 
     final hintStepCursor = state.stepCursor;
+    final hintPosition = state.currentPosition;
     state = state.copyWith(isLoadingHint: true, hintIndex: null);
 
     try {
@@ -844,7 +845,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
       );
 
-      if (finalEval != null) {
+      // Guard against a stale call: a takeback may have removed steps so the cursor is
+      // out of bounds, or the position at that cursor has changed.
+      if (finalEval != null &&
+          hintStepCursor < state.game.steps.length &&
+          state.game.steps[hintStepCursor].position == hintPosition) {
         _setStepAnalysis(hintStepCursor, ComputerAnalysis(eval: finalEval));
       }
     } finally {
