@@ -245,7 +245,9 @@ class EvaluationService {
         }
       }
     } on TimeoutException {
-      stop();
+      if (_evaluationState.value.currentWork == work) {
+        stop();
+      }
     }
 
     _logger.info(
