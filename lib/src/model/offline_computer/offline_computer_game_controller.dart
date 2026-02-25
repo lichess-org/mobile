@@ -232,6 +232,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final cursorBeforeMove = state.stepCursor;
     final positionBefore = state.currentPosition;
     final plyBeforeMove = state.currentPosition.ply;
+    final stepsBeforeMove = state.game.steps
+        .skip(1)
+        .map((s) => Step(position: s.position, sanMove: s.sanMove!))
+        .toIList();
 
     state = state.copyWith(isEvaluatingMove: true);
 
@@ -247,7 +251,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // If hints were still loading when we made the move, wait for them to complete
     // so we can get the "before" evaluation for comparison.
     // Wait time must be longer than _kHintsMaxSearchTime to account for engine startup overhead.
-    if (preMoveAnalysis?.eval == null) {
+    if (state.isLoadingHint && preMoveAnalysis?.eval == null) {
       final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
       while (state.game.steps[cursorBeforeMove].computerAnalysis?.eval == null &&
@@ -259,6 +263,19 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (!ref.mounted) return;
 
       preMoveAnalysis = state.game.steps[cursorBeforeMove].computerAnalysis;
+    } else if (preMoveAnalysis?.eval == null) {
+      // Not loading hints and hints are null? Let's run a quick evaluation
+      final evalAfter = await _getEval(
+        _makeMoveEvalWork(stepsBeforeMove),
+        minSearchTime: _kMoveEvalMinSearchTime,
+        depthThreshold: _kMoveEvalMinDepth,
+        tablebaseLookupPosition: positionBefore,
+      );
+      if (!ref.mounted) return;
+      if (evalAfter != null) {
+        preMoveAnalysis = ComputerAnalysis(eval: evalAfter);
+        _setStepAnalysis(cursorBeforeMove, preMoveAnalysis);
+      }
     }
 
     final preMoveEval = preMoveAnalysis?.eval;
@@ -311,56 +328,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _logger.info('Move not in computed hints PVs, evaluating: ${move.uci}');
 
     try {
-      final evaluationService = ref.read(evaluationServiceProvider);
-
       final stepsAfter = state.game.steps
           .skip(1)
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
-      final workAfter = EvalWork(
-        id: state.game.id,
-        stockfishFlavor: _kComputerStockfishFlavor,
-        variant: Variant.standard,
-        threads: numberOfCoresForEvaluation,
-        hashSize: evaluationService.maxMemory,
-        searchTime: _kMoveEvalMaxSearchTime,
-        // We want the fastest search here and we only need the eval
-        multiPv: 1,
-        threatMode: false,
-        initialPosition: state.game.initialPosition,
-        steps: stepsAfter,
-      );
+      final workAfter = _makeMoveEvalWork(stepsAfter);
 
       final positionAfterMove = state.currentPosition;
-      final Completer<ClientEval?> evalCompleter = Completer();
 
-      // Launch engine eval and tablebase lookup in parallel.
-      // Fallback: if neither engine nor tablebase provide an eval in time, complete with null so
-      // the await below always finishes.
-      Timer(const Duration(seconds: 3), () {
-        if (!evalCompleter.isCompleted) {
-          evalCompleter.complete(null);
-        }
-      });
-      _getEval(
+      final evalAfter = await _getEval(
         workAfter,
         minSearchTime: _kMoveEvalMinSearchTime,
         depthThreshold: _kMoveEvalMinDepth,
-      ).then((eval) {
-        if (!evalCompleter.isCompleted && eval != null) {
-          evalCompleter.complete(eval);
-        }
-      });
-      if (isTablebaseRelevant(positionAfterMove)) {
-        _fetchTablebaseEval(positionAfterMove).then((tablebaseEval) {
-          if (!evalCompleter.isCompleted && tablebaseEval != null) {
-            evalCompleter.complete(tablebaseEval);
-          }
-        });
-      }
-
-      final evalAfter = await evalCompleter.future;
+        tablebaseLookupPosition: positionAfterMove,
+      );
 
       if (!ref.mounted) return;
 
@@ -399,8 +381,33 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  /// Gets an evaluation by requesting at the same time the local engine and a cloud eval.
-  Future<ClientEval?> _getEval(EvalWork work, {int? depthThreshold, Duration? minSearchTime}) {
+  EvalWork _makeMoveEvalWork(IList<Step> steps) {
+    return EvalWork(
+      id: state.game.id,
+      stockfishFlavor: _kComputerStockfishFlavor,
+      variant: Variant.standard,
+      threads: numberOfCoresForEvaluation,
+      hashSize: ref.read(evaluationServiceProvider).maxMemory,
+      searchTime: _kMoveEvalMaxSearchTime,
+      // We want the fastest search here and we only need the eval
+      multiPv: 1,
+      threatMode: false,
+      initialPosition: state.game.initialPosition,
+      steps: steps,
+    );
+  }
+
+  /// Gets an evaluation by requesting at the same time the local engine and a cloud eval and optionnally doing a tablebase lookup.
+  ///
+  /// Returns the first eval that comes back with a valid score.
+  Future<ClientEval?> _getEval(
+    EvalWork work, {
+    int? depthThreshold,
+    Duration? minSearchTime,
+
+    /// Optional position for doing a tablebase lookup in parallel. If provided, the tablebase eval will be returned if it's conclusive and returned before the engine eval.
+    Position? tablebaseLookupPosition,
+  }) {
     final evaluationService = ref.read(evaluationServiceProvider);
     final Completer<ClientEval?> completer = Completer();
     // Fallback timer in case neither engine nor cloud eval return in time (should not happen for
@@ -428,6 +435,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           }
         }
       });
+    }
+    if (tablebaseLookupPosition != null) {
+      if (isTablebaseRelevant(tablebaseLookupPosition)) {
+        _fetchTablebaseEval(tablebaseLookupPosition).then((tablebaseEval) {
+          if (!completer.isCompleted && tablebaseEval != null) {
+            completer.complete(tablebaseEval);
+            if (evaluationService.evaluationState.value.currentWork == work) {
+              evaluationService.stop();
+            }
+          }
+        });
+      }
     }
 
     return completer.future;
