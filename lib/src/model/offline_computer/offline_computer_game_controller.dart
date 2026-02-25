@@ -274,9 +274,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.info(
         'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes} score=${evalBefore?.evalString}',
       );
-      print(
-        'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes}',
-      );
+      // print(
+      //   'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes}',
+      // );
       if (!ref.mounted) return;
       if (evalBefore != null) {
         preMoveAnalysis = ComputerAnalysis(eval: evalBefore);
@@ -356,9 +356,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _logger.info(
           'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes} score=${evalAfter.evalString}',
         );
-        print(
-          'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes}',
-        );
+        // print(
+        //   'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes}',
+        // );
 
         final comment = _createPracticeComment(
           sanMove: sanMove,
@@ -841,9 +841,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _logger.info(
         'Hints computed: depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
       );
-      print(
-        'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
-      );
+      // print(
+      //   'Hints computed: depth = ${finalEval?.depth}, searchTime = ${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes}',
+      // );
 
       // Guard against a stale call: a takeback may have removed steps so the cursor is
       // out of bounds, or the position at that cursor has changed.
