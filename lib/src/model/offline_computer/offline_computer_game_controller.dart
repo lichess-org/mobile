@@ -254,7 +254,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (state.isLoadingHint && preMoveAnalysis?.eval == null) {
       final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
-      while (state.game.steps[cursorBeforeMove].computerAnalysis?.eval == null &&
+      while (state.isLoadingHint &&
+          state.game.steps[cursorBeforeMove].computerAnalysis?.eval == null &&
           ref.mounted &&
           DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
