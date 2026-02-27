@@ -602,8 +602,9 @@ class _BottomBar extends ConsumerWidget {
                           .read(analysisControllerProvider(options).notifier)
                           .clearSavedStandaloneAnalysis();
                       Navigator.of(context, rootNavigator: true).pushReplacement(
-                        PageRouteBuilder<dynamic>(
-                          pageBuilder: (context, animation, secondaryAnimation) => AnalysisScreen(
+                        buildScreenRoute<dynamic>(
+                          context,
+                          screen: AnalysisScreen(
                             options: (options as Standalone).copyWith(variant: variant),
                           ),
                           transitionDuration: Duration.zero,
