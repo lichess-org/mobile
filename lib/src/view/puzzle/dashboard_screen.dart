@@ -303,14 +303,14 @@ enum Metric {
     final all = themes.where((e) => e.nb > minNb).sortedByCompare((e) => e.performance, (a, b) {
       final perfCmp = a.compareTo(b);
       return perfCmp;
-    }).toList(); // now it's a List, so .reversed works
+    }).toList();
 
     return switch (this) {
       strength =>
         all
             .where((e) => e.firstWins >= 3 && e.performance > dashboard.global.performance)
             .toList()
-            .reversed // .reversed on List returns Iterable, so chain .toList()
+            .reversed
             .take(_itemsToShow)
             .toList(),
       improvementArea =>
