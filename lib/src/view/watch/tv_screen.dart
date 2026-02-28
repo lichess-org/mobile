@@ -1,3 +1,4 @@
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +152,15 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           : null,
                       materialDiff: game.materialDiffAt(gameState.stepCursor, Side.white),
                     );
-
+                    final spectatorParams = (
+                      variant: game.meta.variant,
+                      position: position,
+                      playerSide: PlayerSide.none,
+                      promotionMove: null,
+                      onMove: (_, {isDrop}) {},
+                      onPromotionSelection: (_) {},
+                      premovable: null,
+                    );
                     return GameLayout(
                       orientation: variantBoardOrientation(
                         variant: gameState.game.meta.variant,
@@ -159,6 +168,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         isBoardTurned: false,
                       ),
                       fen: position.fen,
+                      interactiveBoardParams: spectatorParams,
+
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,
                       ),
