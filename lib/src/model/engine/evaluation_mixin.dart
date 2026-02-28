@@ -267,6 +267,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       'fen': curPosition.fen,
       'path': state.requireValue.currentPath.value,
       'mpv': numEvalLines,
+      if (curPosition.rule != Rule.chess) 'variant': Variant.fromRule(curPosition.rule).name,
       'up': true,
     });
   }

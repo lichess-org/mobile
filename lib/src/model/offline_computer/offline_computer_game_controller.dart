@@ -469,6 +469,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       socketClient.send('evalGet', {
         'fen': work.position.fen,
         'path': uciPath.value,
+        if (work.position.rule != Rule.chess) 'variant': Variant.fromRule(work.position.rule).name,
         'mpv': numEvalLines,
       });
       await for (final event
