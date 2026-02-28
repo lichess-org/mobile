@@ -204,9 +204,9 @@ class _PerformanceSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(metric.title(context.l10n)), // #4: logic on enum
+                    Text(metric.title(context.l10n)),
                     Text(
-                      metric.subtitle(context.l10n), // #4: logic on enum
+                      metric.subtitle(context.l10n),
                       style: Styles.subtitle.copyWith(
                         color: textShade(context, Styles.subtitleOpacity),
                       ),
