@@ -193,6 +193,7 @@ class _PerformanceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themes = metric.sort(dashboard.themes, dashboard);
+    if (themes.isEmpty) return const SizedBox.shrink();
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
