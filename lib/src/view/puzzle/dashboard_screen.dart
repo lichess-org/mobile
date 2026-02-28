@@ -407,7 +407,6 @@ class PuzzleThemeRow extends ConsumerWidget {
             ),
             StatCardRow([
               StatCard(context.l10n.performance, value: data.performance.toString()),
-              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
               StatCard(
                 context.l10n
                     .puzzleNbPlayed(data.nb)
@@ -416,6 +415,7 @@ class PuzzleThemeRow extends ConsumerWidget {
                     .capitalize(),
                 value: data.nb.toString().localizeNumbers(),
               ),
+              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
             ]),
           ],
         ),
