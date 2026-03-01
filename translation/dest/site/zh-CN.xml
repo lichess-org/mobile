@@ -404,7 +404,7 @@
   <string name="moveAnnotations">着法评注</string>
   <string name="pasteTheFenStringHere">在此处粘贴 FEN 文本</string>
   <string name="pasteThePgnStringHere">在此处粘贴 PGN 文本</string>
-  <string name="orUploadPgnFile">或上传 PGN 文件</string>
+  <string name="orUploadPgnFile">或者上传 PGN 文件</string>
   <string name="continueFromHere">从此处继续</string>
   <string name="toStudy">研习</string>
   <string name="importGame">导入对局</string>
@@ -682,7 +682,6 @@
   <string name="keyCycleSelectedVariation">选择变着</string>
   <string name="keyShowOrHideComments">显示/隐藏评论</string>
   <string name="keyEnterOrExitVariation">进入/退出变着</string>
-  <string name="keyRequestComputerAnalysis">请求电脑分析，并从失误中学习</string>
   <string name="keyPreviousBranch">上一个分支</string>
   <string name="keyNextBranch">下一个分支</string>
   <string name="toggleVariationArrows">开启变着箭头</string>

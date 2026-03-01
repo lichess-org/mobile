@@ -641,7 +641,7 @@
   <string name="mobileApp">모바일 앱</string>
   <string name="webmasters">웹마스터</string>
   <string name="about">Lichess 개요</string>
-  <string name="aboutX">%s에 대해</string>
+  <string name="aboutX">%s 정보</string>
   <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s는 무료(%2$s)이고, 자유로우며, 광고가 없는 오픈 소스 체스 서버입니다.</string>
   <string name="really">정말입니다!</string>
   <string name="contribute">기여하기</string>
@@ -682,7 +682,6 @@
   <string name="keyCycleSelectedVariation">선택된 라인 순환하기</string>
   <string name="keyShowOrHideComments">댓글 표시/숨기기</string>
   <string name="keyEnterOrExitVariation">라인 들어가기/나오기</string>
-  <string name="keyRequestComputerAnalysis">컴퓨터 분석 요청, 실수에서 배우기</string>
   <string name="keyPreviousBranch">이전 부</string>
   <string name="keyNextBranch">다음 부</string>
   <string name="toggleVariationArrows">라인 화살표 켜기/끄기</string>
