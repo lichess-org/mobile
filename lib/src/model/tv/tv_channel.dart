@@ -16,7 +16,7 @@ enum TvChannel {
   // atomic('Atomic', LichessIcons.atom),
   horde('Horde', LichessIcons.horde),
   racingKings('Racing Kings', LichessIcons.racing_kings),
-  // crazyhouse('Crazyhouse', LichessIcons.h_square),
+  crazyhouse('Crazyhouse', LichessIcons.h_square),
   ultraBullet('UltraBullet', LichessIcons.ultrabullet),
   bot('Bot', LichessIcons.cogs),
   computer('Computer', LichessIcons.cogs);

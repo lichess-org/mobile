@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
@@ -253,7 +252,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
               expand: preferences.variant == Variant.fromPosition,
               child: SmallBoardPreview(
                 orientation: preferences.sideChoice == SideChoice.black ? Side.black : Side.white,
-                fen: fromPositionFenInput ?? kEmptyFen,
+                fen: fromPositionFenInput ?? kEmptyFEN,
                 description: TextField(
                   maxLines: 5,
                   decoration: InputDecoration(

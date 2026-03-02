@@ -361,6 +361,7 @@ class _Body extends ConsumerWidget {
       child: AnalysisLayout(
         tabController: controller,
         pov: pov,
+        sideToMove: analysisState.currentPosition.turn,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
         boardHeader: boardHeader,
@@ -379,6 +380,7 @@ class _Body extends ConsumerWidget {
               )
             : null,
         bottomBar: _BottomBar(options: options),
+        pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
             pov: pov,

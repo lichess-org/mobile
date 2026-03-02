@@ -395,7 +395,7 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFen);
+                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
                 },
               ),
             ],

@@ -94,6 +94,7 @@ const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.threeCheck,
   Variant.racingKings,
   Variant.horde,
+  Variant.crazyhouse,
 });
 
 /// Set of supported variants for playing a game.
@@ -132,6 +133,8 @@ enum Variant {
   bool get isReadSupported => readSupportedVariants.contains(this);
 
   bool get isPlaySupported => playSupportedVariants.contains(this);
+
+  bool get hasDropMoves => this == Variant.crazyhouse;
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 
