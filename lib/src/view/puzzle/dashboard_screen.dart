@@ -192,7 +192,8 @@ class _PerformanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themes = metric.sort(dashboard.themes);
+    final themes = metric.sort(dashboard.themes, dashboard);
+    if (themes.isEmpty) return const SizedBox.shrink();
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,9 +205,9 @@ class _PerformanceSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(metric.title(context.l10n)), // #4: logic on enum
+                    Text(metric.title(context.l10n)),
                     Text(
-                      metric.subtitle(context.l10n), // #4: logic on enum
+                      metric.subtitle(context.l10n),
                       style: Styles.subtitle.copyWith(
                         color: textShade(context, Styles.subtitleOpacity),
                       ),
@@ -293,14 +294,35 @@ enum Metric {
 
   static const _itemsToShow = 3;
 
-  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes) => switch (this) {
-    strength =>
-      themes
-          .sortedByCompare((e) => e.performance, (a, b) => b.compareTo(a))
-          .take(_itemsToShow)
-          .toList(),
-    improvementArea => themes.sortedBy((e) => e.performance).take(_itemsToShow).toList(),
-  };
+  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes, PuzzleDashboard dashboard) {
+    // Themes are filtered to those with enough plays (nb > global.nb / 40),
+    // then sorted ascending by performance. Improvement areas are taken from
+    // the bottom (lowest performance), strengths from the top (highest performance).
+    final minNb = dashboard.global.nb / 40;
+
+    final all = themes.where((e) => e.nb > minNb).sortedByCompare((e) => e.performance, (a, b) {
+      final perfCmp = a.compareTo(b);
+      return perfCmp;
+    }).toList();
+
+    return switch (this) {
+      strength =>
+        all
+            .where((e) => e.firstWins >= 3 && e.performance > dashboard.global.performance)
+            .toList()
+            .reversed
+            .take(_itemsToShow)
+            .toList(),
+      improvementArea =>
+        all
+            .where((e) {
+              final failed = e.nb - e.firstWins; // fixed + unfixed = nb - firstWins
+              return failed >= 3 && e.performance < dashboard.global.performance;
+            })
+            .take(_itemsToShow)
+            .toList(),
+    };
+  }
 
   String title(AppLocalizations l10n) => switch (this) {
     strength => l10n.puzzleStrengths,
@@ -377,7 +399,6 @@ class PuzzleThemeRow extends ConsumerWidget {
             ),
             StatCardRow([
               StatCard(context.l10n.performance, value: data.performance.toString()),
-              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
               StatCard(
                 context.l10n
                     .puzzleNbPlayed(data.nb)
@@ -386,6 +407,7 @@ class PuzzleThemeRow extends ConsumerWidget {
                     .capitalize(),
                 value: data.nb.toString().localizeNumbers(),
               ),
+              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
             ]),
           ],
         ),

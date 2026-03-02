@@ -121,8 +121,8 @@ void main() {
 
       expect(find.byType(MaterialApp), findsOneWidget, reason: 'app loads with locale: $locale');
 
-      // TODO find the reason why home does not load
-      // expect(find.byType(HomeTabScreen), findsOneWidget, reason: 'app loads with locale: $locale');
+      // TODO find the reason why home does not load with eo
+      // expect(find.byType(HomeTabScreen), findsOneWidget, reason: 'Home loads with locale: $locale');
     }
   }, variant: kPlatformVariant);
 }

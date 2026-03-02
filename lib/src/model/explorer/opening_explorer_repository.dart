@@ -32,15 +32,16 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
     await ref.debounce(const Duration(milliseconds: 300));
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
-    final client = ref.read(defaultClientProvider);
+    final repository = ref.read(openingExplorerRepositoryProvider);
     switch (prefs.db) {
       case OpeningDatabase.master:
-        final openingExplorer = await OpeningExplorerRepository(
-          client,
-        ).getMasterDatabase(fen, since: prefs.masterDb.sinceYear);
+        final openingExplorer = await repository.getMasterDatabase(
+          fen,
+          since: prefs.masterDb.sinceYear,
+        );
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.lichess:
-        final openingExplorer = await OpeningExplorerRepository(client).getLichessDatabase(
+        final openingExplorer = await repository.getLichessDatabase(
           fen,
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
@@ -48,7 +49,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
         );
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.player:
-        final openingExplorerStream = await OpeningExplorerRepository(client).getPlayerDatabase(
+        final openingExplorerStream = await repository.getPlayerDatabase(
           fen,
           // null check handled by widget
           usernameOrId: prefs.playerDb.username!,
@@ -74,7 +75,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
 
 /// A provider for [OpeningExplorerRepository].
 final openingExplorerRepositoryProvider = Provider<OpeningExplorerRepository>((Ref ref) {
-  return OpeningExplorerRepository(ref.read(defaultClientProvider));
+  return OpeningExplorerRepository(ref.watch(lichessClientProvider));
 }, name: 'OpeningExplorerRepositoryProvider');
 
 class OpeningExplorerRepository {

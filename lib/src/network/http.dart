@@ -320,9 +320,10 @@ class _RegisterCallbackClient extends BaseClient {
 
 /// Lichess HTTP client.
 ///
-/// * All requests made with [head], [get], [post], [put], [patch], [delete] target
-/// the lichess server, defined in [kLichessHost]. It does not apply to the low-level
-/// [send] method.
+/// * Requests made with [head], [get], [post], [put], [patch], [delete] that contain
+/// only a path (no host or scheme) are automatically routed to the lichess server
+/// defined in [kLichessHost]. If the URL already contains a host and scheme, it is
+/// used as-is. It does not apply to the low-level [send] method.
 /// * Sets the Authorization header when a token has been stored.
 /// * Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
 /// * Logs all requests and responses with status code >= 400.
@@ -443,7 +444,7 @@ class LichessClient implements Client {
   ]) async {
     final request = Request(
       method,
-      lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
+      url.host.isNotEmpty ? url : lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
     );
 
     if (headers != null) request.headers.addAll(headers);

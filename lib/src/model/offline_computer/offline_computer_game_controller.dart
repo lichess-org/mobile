@@ -33,7 +33,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
@@ -52,7 +52,7 @@ final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 const _kOpeningPlyThreshold = 30;
 
 /// Max search time for hints evaluation.
-const _kHintsMaxSearchTime = Duration(milliseconds: 5000);
+const _kHintsMaxSearchTime = Duration(milliseconds: 3000);
 
 /// Depth threshold for using an engine evaluation for hints.
 ///
@@ -72,7 +72,7 @@ const _kMoveEvalMaxSearchTime = Duration(milliseconds: 2000);
 /// Depth threshold for using an engine evaluation for move evaluation in practice mode.
 ///
 /// The search is done with multipv=1 here, so we can reach higher depths.
-const _kMoveEvalMinDepth = kDebugMode ? 18 : 20;
+const _kMoveEvalMinDepth = kDebugMode ? 14 : 18;
 
 /// Stockfish flavor to use for the engine opponent and hint generation.
 ///
@@ -248,16 +248,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    // If hints were still loading when we made the move, wait for them to complete
-    // so we can get the "before" evaluation for comparison.
+    // If hints were still loading when we made the move, wait for them to complete so we can get
+    // the "before" evaluation for comparison.
     // Wait time must be longer than _kHintsMaxSearchTime to account for engine startup overhead.
-    if (state.isLoadingHint && preMoveAnalysis?.eval == null) {
+    if (state.isLoadingHint) {
       final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
       final deadline = DateTime.now().add(maxWaitTime);
-      while (state.isLoadingHint &&
-          state.game.steps[cursorBeforeMove].computerAnalysis?.eval == null &&
-          ref.mounted &&
-          DateTime.now().isBefore(deadline)) {
+      while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
         await Future<void>.delayed(const Duration(milliseconds: 50));
       }
 
@@ -352,7 +349,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       if (evalAfter != null) {
         _logger.info(
-          'Move eval computed: depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes} score=${evalAfter.evalString}',
+          'Move eval computed for ply=${workAfter.position.ply} depth=${evalAfter.depth}, searchTime=${evalAfter is LocalEval ? evalAfter.searchTime : null} nodes=${evalAfter.nodes} score=${evalAfter.evalString}',
         );
 
         final comment = _createPracticeComment(
@@ -472,6 +469,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       socketClient.send('evalGet', {
         'fen': work.position.fen,
         'path': uciPath.value,
+        if (work.position.rule != Rule.chess) 'variant': Variant.fromRule(work.position.rule).name,
         'mpv': numEvalLines,
       });
       await for (final event
@@ -619,51 +617,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// Returns null if the network request fails or the entry is not conclusive.
   Future<ClientEval?> _fetchTablebaseEval(Position position) async {
     try {
-      final client = ref.read(defaultClientProvider);
-      final entry = await TablebaseRepository(client).getTablebaseEntry(position.fen);
-      return _tablebaseEntryToCloudEval(entry, position);
+      final entry = await ref.read(tablebaseRepositoryProvider).getTablebaseEntry(position.fen);
+      return tablebaseEntryToCloudEval(entry, position);
     } catch (e) {
       _logger.fine('Could not get tablebase eval: $e');
       return null;
     }
-  }
-
-  /// Converts a tablebase entry to a [CloudEval].
-  ///
-  /// Returns null for non-conclusive entries (unknown, maybeWin, maybeLoss).
-  CloudEval? _tablebaseEntryToCloudEval(TablebaseEntry entry, Position position) {
-    final turn = position.turn;
-    final int? mate;
-    final int? cp;
-
-    switch (entry.category) {
-      case .win || .syzygyWin:
-        // Use dtm (distance to mate in half-moves) if available, fall back to 10.
-        final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
-        mate = turn == .white ? mateN : -mateN;
-        cp = null;
-      case .loss || .syzygyLoss:
-        final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
-        // Opponent wins.
-        mate = turn == .white ? -mateN : mateN;
-        cp = null;
-      case .draw || .cursedWin || .blessedLoss:
-        mate = null;
-        cp = 0;
-      default:
-        return null;
-    }
-
-    // Include the best tablebase move as the first PV move if available.
-    final bestMoveUci = entry.moves.firstOrNull?.uci;
-    final pvMoves = bestMoveUci != null ? [bestMoveUci].lock : IList<UCIMove>();
-
-    return CloudEval(
-      position: position,
-      depth: 99,
-      nodes: 0,
-      pvs: [PvData(moves: pvMoves, mate: mate, cp: cp)].lock,
-    );
   }
 
   Future<void> _playEngineMove() async {
@@ -796,6 +755,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<void> _computeHints() async {
     if (!state.game.casual && !state.game.practiceMode) return;
     if (!state.game.playable || state.turn != state.game.playerSide) return;
+    if (state.currentAnalysis?.eval != null) return;
 
     final hintStepCursor = state.stepCursor;
     final hintPosition = state.currentPosition;
@@ -816,8 +776,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: _kHintsMaxSearchTime,
-        // Good balance between fast search and more lines
-        multiPv: 3,
+        multiPv: 2, // 2 lines of hints to show an alternative move
         threatMode: false,
         initialPosition: state.game.initialPosition,
         steps: steps,
@@ -834,7 +793,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (!ref.mounted) return;
 
       _logger.info(
-        'Hints computed: depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
+        'Hints computed for ply=${work.position.ply} depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
       );
 
       // Guard against a stale call: a takeback may have removed steps so the cursor is
@@ -949,9 +908,6 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
       (game.steps.length >= 2
           ? game.steps[game.steps.length - 2].computerAnalysis?.practiceComment
           : null);
-
-  /// The cached evaluation string for the current position.
-  String? get cachedEvalString => currentAnalysis?.evalString;
 
   /// The hint moves for the current position.
   IList<Move>? get hintMoves => currentAnalysis?.hintMoves;

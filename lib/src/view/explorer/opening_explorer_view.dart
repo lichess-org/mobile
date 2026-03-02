@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
@@ -53,6 +54,11 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   Widget build(BuildContext context) {
     if (widget.position.ply >= 50) {
       return Center(child: Text(context.l10n.maxDepthReached));
+    }
+
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+    if (!isLoggedIn) {
+      return Center(child: Text(context.l10n.youNeedAnAccountToDoThat));
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);

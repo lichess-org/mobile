@@ -183,16 +183,19 @@ class _Body extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      OpeningExplorerView(
-                        pov: options.orientation,
-                        position: state.currentPosition,
-                        opening: state.currentNode.isRoot
-                            ? LightOpening(eco: '', name: context.l10n.startPosition)
-                            : state.currentNode.opening ?? state.currentBranchOpening,
-                        onMoveSelected: (move) {
-                          ref.read(analysisControllerProvider(options).notifier).onUserMove(move);
-                        },
-                        scrollable: false,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: remainingHeight),
+                        child: OpeningExplorerView(
+                          pov: options.orientation,
+                          position: state.currentPosition,
+                          opening: state.currentNode.isRoot
+                              ? LightOpening(eco: '', name: context.l10n.startPosition)
+                              : state.currentNode.opening ?? state.currentBranchOpening,
+                          onMoveSelected: (move) {
+                            ref.read(analysisControllerProvider(options).notifier).onUserMove(move);
+                          },
+                          scrollable: false,
+                        ),
                       ),
                     ],
                   );

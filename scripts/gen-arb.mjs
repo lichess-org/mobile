@@ -105,6 +105,7 @@ const locales = [
   'sv-SE',
   'tr-TR',
   'uk-UA',
+  'uz-UZ',
   'vi-VN',
   'zh-CN',
   'zh-TW',

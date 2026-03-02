@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -54,6 +55,12 @@ class ExplorerView extends ConsumerWidget {
     if (position.isInsufficientMaterial) {
       return Center(child: Text(context.l10n.insufficientMaterial));
     }
+
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+    if (!isLoggedIn) {
+      return Center(child: Text(context.l10n.youNeedAnAccountToDoThat));
+    }
+
     if (tablebaseRelevant && isComputerAnalysisAllowed) {
       return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }

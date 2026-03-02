@@ -5,7 +5,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -82,9 +81,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
 
-      final repo = OpeningExplorerRepository(client);
+      final repo = container.read(openingExplorerRepositoryProvider);
 
       final result = await repo.getMasterDatabase('fen');
       expect(result, isA<OpeningExplorerEntry>());
@@ -144,9 +142,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
 
-      final repo = OpeningExplorerRepository(client);
+      final repo = container.read(openingExplorerRepositoryProvider);
 
       final result = await repo.getLichessDatabase(
         'fen',
@@ -213,9 +210,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
 
-      final repo = OpeningExplorerRepository(client);
+      final repo = container.read(openingExplorerRepositoryProvider);
 
       final results = await repo.getPlayerDatabase(
         'fen',
