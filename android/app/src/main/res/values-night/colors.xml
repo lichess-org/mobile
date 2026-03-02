@@ -2,4 +2,5 @@
 <resources>
     <color name="bg_splash">#000000</color>
     <color name="ic_splash">#FFFFFF</color>
+    <color name="ic_splash_grey">#565656</color>
 </resources>
