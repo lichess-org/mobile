@@ -807,9 +807,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                 onTap: () {
                   showChoicePicker(
                     context,
-                    choices: playSupportedVariants
-                        .where((v) => v != Variant.fromPosition)
-                        .toList(),
+                    choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
                     selectedItem: _selectedVariant,
                     labelBuilder: (Variant variant) => Text(variant.label),
                     onSelectedItemChanged: (Variant variant) {
@@ -819,9 +817,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                           _practiceMode = false;
                         }
                       });
-                      ref
-                          .read(offlineComputerGamePreferencesProvider.notifier)
-                          .setVariant(variant);
+                      ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
                     },
                   );
                 },
