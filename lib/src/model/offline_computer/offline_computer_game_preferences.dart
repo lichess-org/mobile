@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
@@ -37,6 +38,10 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
 
   Future<void> setSideChoice(SideChoice sideChoice) {
     return save(state.copyWith(sideChoice: sideChoice));
+  }
+
+  Future<void> setVariant(Variant variant) {
+    return save(state.copyWith(variant: variant));
   }
 
   Future<void> setCasual(bool casual) {
@@ -82,6 +87,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   const factory OfflineComputerGamePrefs({
     required StockfishLevel stockfishLevel,
     required SideChoice sideChoice,
+    @Default(Variant.standard) Variant variant,
     @Default(true) bool casual,
     @Default(false) bool practiceMode,
     @Default(false) bool hideBestMove,
@@ -91,6 +97,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   static const defaults = OfflineComputerGamePrefs(
     stockfishLevel: StockfishLevel.defaultLevel,
     sideChoice: SideChoice.random,
+    variant: Variant.standard,
     casual: true,
     practiceMode: false,
     hideBestMove: false,
