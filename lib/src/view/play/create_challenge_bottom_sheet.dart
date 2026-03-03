@@ -237,7 +237,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 onPressed: () {
                   showChoicePicker(
                     context,
-                    choices: [Variant.standard, Variant.chess960, Variant.fromPosition],
+                    choices: playSupportedVariants.toList(),
                     selectedItem: preferences.variant,
                     labelBuilder: (Variant variant) => Text(variant.label),
                     onSelectedItemChanged: (Variant variant) {
