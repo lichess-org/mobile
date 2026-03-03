@@ -22,6 +22,43 @@ class ImportPgnScreen extends StatelessWidget {
     return buildScreenRoute(context, screen: const ImportPgnScreen());
   }
 
+  static void handlePgnText(BuildContext context, String text) {
+    try {
+      final games = PgnGame.parseMultiGamePgn(text);
+
+      if (games.isEmpty) {
+        showSnackBar(context, context.l10n.invalidPgn, type: .error);
+        return;
+      }
+
+      if (games.length == 1) {
+        final game = games.first;
+        final rule = Rule.fromPgn(game.headers['Variant']);
+
+        Navigator.of(context, rootNavigator: true).push(
+          AnalysisScreen.buildRoute(
+            context,
+            AnalysisOptions.pgn(
+              id: const StringId('pgn_import_single_game'),
+              orientation: .white,
+              pgn: text,
+              isComputerAnalysisAllowed: true,
+              initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
+              variant: rule != null ? Variant.fromRule(rule) : .standard,
+            ),
+          ),
+        );
+      } else {
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(PgnGamesListScreen.buildRoute(context, games.lock));
+      }
+    } catch (_) {
+      showSnackBar(context, context.l10n.invalidPgn, type: .error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,43 +113,6 @@ class _BodyState extends State<_Body> {
     );
   }
 
-  void _handlePgnText(String text) {
-    try {
-      final games = PgnGame.parseMultiGamePgn(text);
-
-      if (games.isEmpty) {
-        showSnackBar(context, context.l10n.invalidPgn, type: SnackBarType.error);
-        return;
-      }
-
-      if (games.length == 1) {
-        final game = games.first;
-        final rule = Rule.fromPgn(game.headers['Variant']);
-
-        Navigator.of(context, rootNavigator: true).push(
-          AnalysisScreen.buildRoute(
-            context,
-            AnalysisOptions.pgn(
-              id: const StringId('pgn_import_single_game'),
-              orientation: Side.white,
-              pgn: text,
-              isComputerAnalysisAllowed: true,
-              initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
-              variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
-            ),
-          ),
-        );
-      } else {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PgnGamesListScreen.buildRoute(context, games.lock));
-      }
-    } catch (_) {
-      showSnackBar(context, context.l10n.invalidPgn, type: SnackBarType.error);
-    }
-  }
-
   Future<void> _getClipboardData() async {
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
     if (data?.text == null) return;
@@ -121,7 +121,7 @@ class _BodyState extends State<_Body> {
     final text = data!.text!.trim();
     if (text.isEmpty) return;
 
-    _handlePgnText(text);
+    ImportPgnScreen.handlePgnText(context, text);
   }
 
   Future<void> _pickPgnFile() async {
@@ -135,7 +135,7 @@ class _BodyState extends State<_Body> {
       if (result != null && result.files.single.bytes != null) {
         final content = utf8.decode(result.files.single.bytes!);
         if (mounted) {
-          _handlePgnText(content);
+          ImportPgnScreen.handlePgnText(context, content);
         }
       }
     } catch (e) {
