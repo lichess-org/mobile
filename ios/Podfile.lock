@@ -168,6 +168,8 @@ PODS:
     - PromisesObjC (= 2.4.0)
   - quick_actions_ios (0.0.1):
     - Flutter
+  - receive_sharing_intent (1.8.1):
+    - Flutter
   - SDWebImage (5.21.5):
     - SDWebImage/Core (= 5.21.5)
   - SDWebImage/Core (5.21.5)
@@ -208,6 +210,7 @@ DEPENDENCIES:
   - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
+  - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sound_effect (from `.symlinks/plugins/sound_effect/ios`)
@@ -278,6 +281,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   quick_actions_ios:
     :path: ".symlinks/plugins/quick_actions_ios/ios"
+  receive_sharing_intent:
+    :path: ".symlinks/plugins/receive_sharing_intent/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
@@ -329,6 +334,7 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   quick_actions_ios: 500fcc11711d9f646739093395c4ae8eec25f779
+  receive_sharing_intent: 222384f00ffe7e952bbfabaa9e3967cb87e5fe00
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
