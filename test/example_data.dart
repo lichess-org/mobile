@@ -77,7 +77,7 @@ IList<GameStep> makeSteps(String pgn) {
       GameStep(
         position: position,
         sanMove: SanMove(san, move),
-        diff: MaterialDiff.fromBoard(position.board),
+        diff: MaterialDiff.fromPosition(position),
       ),
     );
   }

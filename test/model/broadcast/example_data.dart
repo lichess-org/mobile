@@ -21,7 +21,7 @@ const Map<(BroadcastTournamentId, BroadcastRoundId), String> broadcastRoundMockR
       "players": "Yılmaz, Şanal, Daştan, Yılmazyerli",
       "location": "Kemer, Turkey",
       "tc": "90 min + 30 sec / move",
-      "fideTc": "standard",
+      "fideTC": "standard",
       "timeZone": "Turkey",
       "standings": "https://chess-results.com/tnr1080829.aspx?art=1",
       "format": "16-player knockout"
@@ -169,4 +169,12 @@ const Map<BroadcastGameId, String> broadcastGamePgnResponses = {
 
 1. e4 { [%eval 0.18] [%clk 1:30:54] } 1... e5 { [%eval 0.21] [%clk 1:30:54] } 2. Nf3 { [%eval 0.13] [%clk 1:31:20] } 2... Nc6 { [%eval 0.17] [%clk 1:31:20] } 3. Bb5 { [%eval 0.08] [%clk 1:31:42] } 3... Nf6 { [%eval 0.17] [%clk 1:31:46] } 4. O-O { [%eval 0.06] [%clk 1:32:02] } 4... Nxe4 { [%eval 0.23] [%clk 1:31:20] } 5. Re1 { [%eval 0.15] [%clk 1:31:54] } 5... Nd6 { [%eval 0.18] [%clk 1:31:44] } 6. Nxe5 { [%eval 0.14] [%clk 1:32:10] } 6... Be7 { [%eval 0.17] [%clk 1:32:08] } 7. Bf1 { [%eval 0.13] [%clk 1:32:27] } 7... Nxe5 { [%eval 0.1] [%clk 1:32:33] } 8. Rxe5 { [%eval 0.15] [%clk 1:32:52] } 8... O-O { [%eval 0.15] [%clk 1:32:55] } 9. d4 { [%eval 0.18] [%clk 1:32:31] } 9... Bf6 { [%eval 0.17] [%clk 1:33:11] } 10. Re1 { [%eval 0.13] [%clk 1:32:19] } 10... Re8 { [%eval 0.13] [%clk 1:32:08] } 11. Bf4 { [%eval 0.11] [%clk 1:32:15] } 11... Rxe1 { [%eval 0.13] [%clk 1:32:30] } 12. Qxe1 { [%eval 0.11] [%clk 1:32:41] } 12... Ne8 { [%eval 0.18] [%clk 1:32:51] } 13. Nc3 { [%eval 0.0] [%clk 1:31:51] } 13... Bxd4 { [%eval 0.01] [%clk 1:32:44] } 14. Nd5 { [%eval 0.07] [%clk 1:32:08] } 14... d6 { [%eval 0.09] [%clk 1:31:57] } 15. Bg5 { [%eval 0.08] [%clk 1:29:59] } 15... f6 { [%eval 0.08] [%clk 1:30:41] } 16. Bh4 { [%eval 0.0] [%clk 1:30:16] } 16... g5 { [%eval 0.0] [%clk 1:30:45] } 17. Qe4 { [%eval 0.0] [%clk 1:30:26] } 17... Bxb2 { [%eval 0.0] [%clk 1:31:01] } 18. Re1 { [%eval 0.0] [%clk 1:30:47] } 18... Be5 { [%eval 0.0] [%clk 1:31:10] } 19. f4 { [%eval 0.0] [%clk 1:31:08] } 19... gxh4 { [%eval 0.0] [%clk 1:31:09] } 20. fxe5 { [%eval 0.0] [%clk 1:31:31] } 20... dxe5 { [%eval 0.0] [%clk 1:31:28] } 21. Bd3 { [%eval -0.03] [%clk 1:31:56] } 21... Bf5 { [%eval 0.0] [%clk 1:29:28] } 22. Qxf5 { [%eval 0.0] [%clk 1:32:19] } 22... Qxd5 { [%eval 0.0] [%clk 1:29:54] } 23. Qxh7+ { [%eval 0.0] [%clk 1:32:41] } 23... Kf8 { [%eval 0.0] [%clk 1:30:18] } 24. Qh6+ { [%eval 0.0] [%clk 1:32:33] } 24... Ke7 { [%eval 0.0] [%clk 1:30:35] } 25. Qh7+ { [%eval 0.0] [%clk 1:32:57] } 25... Kf8 { [%eval 0.0] [%clk 1:31:00] } 26. Qh6+ { [%eval 0.0] [%clk 1:33:23] } 26... Ke7 { [%eval 0.0] [%clk 1:31:26] } 27. Qh7+ { [%eval 0.0] [%clk 1:33:49] } 1/2-1/2
 ''',
+};
+
+const analysisSummaryJson = {
+  'summary': {
+    'white': {'inaccuracy': 4, 'mistake': 1, 'blunder': 6, 'acpl': 117, 'accuracy': 61},
+    'black': {'inaccuracy': 2, 'mistake': 1, 'blunder': 4, 'acpl': 78, 'accuracy': 72},
+  },
+  'division': {'middle': 18, 'end': 42},
 };

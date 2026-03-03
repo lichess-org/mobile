@@ -106,10 +106,13 @@ class TournamentRepository {
     );
   }
 
-  Future<void> join(TournamentId id, {TeamId? teamId}) async {
+  Future<void> join(TournamentId id, {TeamId? teamId, String? entryCode}) async {
     await client.postRead(
       Uri(path: '/api/tournament/$id/join'),
-      body: teamId != null ? {'team': teamId} : null,
+      body: {
+        if (teamId != null) 'team': teamId.value,
+        if (entryCode != null) 'password': entryCode,
+      },
     );
   }
 

@@ -366,7 +366,7 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: puzzleState.promotionMove,
-      onMove: (move, {isDrop}) {
+      onMove: (move, {viaDragAndDrop}) {
         ref.read(ctrlProvider.notifier).onUserMove(move);
       },
       onPromotionSelection: (role) {
@@ -414,11 +414,12 @@ class _BodyState extends ConsumerState<_Body> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     BoardWidget(
+                      boardKey: widget.boardKey,
                       size: boardSize,
                       fen: puzzleState.currentPosition.fen,
                       orientation: puzzleState.pov,
                       gameData: gameData,
-                      lastMove: puzzleState.lastMove as NormalMove?,
+                      lastMove: puzzleState.lastMove,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -504,11 +505,12 @@ class _BodyState extends ConsumerState<_Body> {
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                         : EdgeInsets.zero,
                     child: BoardWidget(
+                      boardKey: widget.boardKey,
                       size: boardSize,
                       fen: puzzleState.currentPosition.fen,
                       orientation: puzzleState.pov,
                       gameData: gameData,
-                      lastMove: puzzleState.lastMove as NormalMove?,
+                      lastMove: puzzleState.lastMove,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -536,7 +538,7 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: widget.boardKey,
-            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldExcludeGesturesOnFocusGained: puzzleState.mode != PuzzleMode.view,
             shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
@@ -776,8 +778,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) =>
-              Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
+          makeLabel: (context) => Text(context.l10n.mobileViewGame),
           onPressed: () async {
             try {
               final game = await ref

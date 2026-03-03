@@ -266,24 +266,21 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 ),
               ),
             ),
-            ExpandedSection(
-              expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
-              child: ListTile(
-                title: Text(context.l10n.side),
-                trailing: TextButton(
-                  onPressed: () {
-                    showChoicePicker<SideChoice>(
-                      context,
-                      choices: SideChoice.values,
-                      selectedItem: preferences.sideChoice,
-                      labelBuilder: (SideChoice side) => Text(side.label(context.l10n)),
-                      onSelectedItemChanged: (SideChoice side) {
-                        ref.read(challengePreferencesProvider.notifier).setSideChoice(side);
-                      },
-                    );
-                  },
-                  child: Text(preferences.sideChoice.label(context.l10n)),
-                ),
+            ListTile(
+              title: Text(context.l10n.side),
+              trailing: TextButton(
+                onPressed: () {
+                  showChoicePicker<SideChoice>(
+                    context,
+                    choices: SideChoice.values,
+                    selectedItem: preferences.sideChoice,
+                    labelBuilder: (SideChoice side) => Text(side.label(context.l10n)),
+                    onSelectedItemChanged: (SideChoice side) {
+                      ref.read(challengePreferencesProvider.notifier).setSideChoice(side);
+                    },
+                  );
+                },
+                child: Text(preferences.sideChoice.label(context.l10n)),
               ),
             ),
             if (account != null)
@@ -385,12 +382,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          // TODO l10n
-                                          'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
-                                        ),
-                                      ),
+                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
                                     );
                                   }
                                 } catch (e) {

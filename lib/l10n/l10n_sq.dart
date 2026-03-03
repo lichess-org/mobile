@@ -67,6 +67,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
+  String get mobileNewGame => 'Lojë e re';
+
+  @override
   String get mobileNoSearchResults => 'Nuk ka rezultate';
 
   @override
@@ -240,6 +243,45 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileWelcomeToLichessApp => 'Mirë se vini te aplikacioni Lichess!';
+
+  @override
+  String get mobileViewGame => 'Shihni Lojën';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Hidhe tej';
+
+  @override
+  String get mobileCustomizeButton => 'Përshtateni';
+
+  @override
+  String get mobileStopShowingThreat => 'Resht së shfaquri kërcënimin';
+
+  @override
+  String get mobileTournamentCompleted => 'Të plotësuar';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Kalo te faqja ime';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompakte';
+
+  @override
+  String get mobileDisplayModeDetailed => 'E hollësishme';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Hapja e Explorer-it s’bëhet dot jashtë linje.';
+
+  @override
+  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\\nMund ta përdorni që nga skeda shtëpi.';
+
+  @override
+  String get mobilePreviousPage => 'E mëparshmja';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -861,6 +903,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastScore => 'Përfundim';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Krejt ekipet';
 
   @override
@@ -905,12 +950,82 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Pikë Ndeshjeje';
+
+  @override
+  String get broadcastGamePoints => 'Pikë Loje';
+
+  @override
+  String get broadcastMatches => 'Ndeshje';
+
+  @override
+  String get broadcastMatchHistory => 'Historik Ndeshjesh';
+
+  @override
+  String get broadcastTeamResults => 'Përfundime Ekipi';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Termi(at) vijues do të përkthehen automatikisht: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Raundi $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Mbajtja e emrit parazgjedhje do ta përkthejë automatikisht në krejt gjuhët e tjera.';
+
+  @override
+  String get broadcastOpenTournament => 'I hapur';
+
+  @override
+  String get broadcastWomenTournament => 'Femra';
+
+  @override
+  String get broadcastMenTournament => 'Meshkuj';
+
+  @override
+  String get broadcastGirlsTournament => 'Vajza';
+
+  @override
+  String get broadcastBoysTournament => 'Djem';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'I hapur për U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Vajzat U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Djem U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Çerekfinale';
+
+  @override
+  String get broadcastSemifinals => 'Gjysmëfinale';
+
+  @override
+  String get broadcastFinals => 'Fiale';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Loja $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1383,7 +1498,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Transmetime te të cilat jeni pajtuar';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
@@ -1407,7 +1522,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesBlindfold => 'Me sytë lidhur';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Shfaqe në të majtë të pajisjesh celulare';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -1855,6 +1970,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat spaletë';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Dy katrorë shpëtimi ngjitur njëri me tjetrin, për një mbret nën shah, janë të zënë nga gurë të tjerë.';
+
+  @override
   String get puzzleThemeExposedKing => 'Mbreti i ekspozuar';
 
   @override
@@ -1907,6 +2028,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Përdorni oficerin për t’i dhënë shah mbretit, teksa torreja juaj ndihmon të kufohet ai.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat bisht harabeli';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Një model shah-mati që nga ana pamore ngjan me bishtin e një harabeli, e ngjashme me një formë V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat trekëndësh';
@@ -2169,9 +2296,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get createLobbyGame => 'Krijoni lojë holli';
 
   @override
-  String get youPlayAs => 'Ju luani si';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Për të ftuar dikë të luajë, jepni këtë URL';
 
   @override
@@ -2182,6 +2306,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ose lëreni kundërshtarin tuaj të skanojë këtë kod QR';
+
+  @override
+  String get reusableChallengeUrl => 'URL e ripërdorshme sfide';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Një lidhje e përhershme, për këdo që dëshiron t’ju sfidojë me saktësisht këto rregullime.';
 
   @override
   String get waiting => 'Në pritje';
@@ -2518,6 +2648,18 @@ class AppLocalizationsSq extends AppLocalizations {
   String get evaluationGauge => 'Matësi i vlerësimit';
 
   @override
+  String get visualMotifs => 'Motive pamore';
+
+  @override
+  String get undefendedPieces => 'Gurë të pambrojtur';
+
+  @override
+  String get pinnedPieces => 'Gurë të fiksuar';
+
+  @override
+  String get checkableKing => 'Mbret të cilit mund t’i jepet shah';
+
+  @override
   String get multipleLines => 'Linja të shumta';
 
   @override
@@ -2639,6 +2781,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get variants => 'Variante';
 
   @override
+  String get variantsDescription => 'Më tepër mënyra për luajtje';
+
+  @override
   String get timeControl => 'Kontroll kohe';
 
   @override
@@ -2681,7 +2826,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get signupUsernameHint => 'Sigurohuni se zgjidhni një emër përdoruesi të përshtatshëm për familje. S’mund ta ndryshoni më vonë dhe cilado llogari me emra përdoruesish të papërshtatshëm do të mbyllet!';
 
   @override
-  String get signupEmailHint => 'Do ta përdorim vetëm për ricaktim fjalëkalimi.';
+  String get signupEmailPromise => 'Do t’ju dërgojmë email-e vetëm rreth llogarisë tuaj dhe s’do ta japim kurrë email-in tuaj gjetkë.';
 
   @override
   String get password => 'Fjalëkalim';
@@ -2865,6 +3010,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get unlimited => 'E pakufizuar';
+
+  @override
+  String get unlimitedDescription => 'Mendohuni aq kohë sa ju duhet';
 
   @override
   String get mode => 'Lloji';
@@ -3108,6 +3256,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get gameAsGIF => 'GIF i lojës';
 
   @override
+  String get playerNames => 'Emra lojtarësh';
+
+  @override
+  String get moveAnnotations => 'Shënime lëvizjesh';
+
+  @override
   String get pasteTheFenStringHere => 'Ngjitni këtu tekstin FEN';
 
   @override
@@ -3115,9 +3269,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ose ngarkoni një kartelë PGN';
-
-  @override
-  String get fromPosition => 'Nga pozicioni';
 
   @override
   String get continueFromHere => 'Vazhdoni nga këtu';
@@ -3845,7 +3996,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get hostANewSimul => 'Organizoni një simultane të re';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Regjistrohu për të pritur ose bashkuar një simul';
+  String get signUpToHostOrJoinASimul => 'Regjistrohuni që të organizoni, ose të merrni pjesë, në një simultane';
 
   @override
   String get noSimulFound => 'S’u gjet simultane';
@@ -3930,18 +4081,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Kërkoni analizim nga kompjuteri, Mësoni nga gabimet tuaja';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Pasuesi (Mësoni nga gabimet tuaja)';
-
-  @override
-  String get keyNextBlunder => 'Gafa pasuese';
-
-  @override
-  String get keyNextMistake => 'Gabimi pasues';
-
-  @override
-  String get keyNextInaccuracy => 'Pasaktësia pasuese';
 
   @override
   String get keyPreviousBranch => 'Dega e mëparshme';
@@ -4224,6 +4363,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get brightness => 'Ndriçim';
+
+  @override
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Ngjyrim';
@@ -4858,7 +5000,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tags => 'Etiketa';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'En passant rights';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6143,6 +6285,9 @@ class AppLocalizationsSq extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Kod hyrjeje i pasaktë.';
 
   @override
   String teamBattleOfNbTeams(int count) {

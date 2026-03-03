@@ -14,8 +14,14 @@ const kEngineLineHeight = 24.0;
 const kEngineLineFontSize = 11.0;
 
 class EngineLines extends ConsumerStatefulWidget {
-  const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
+  const EngineLines({
+    required this.filters,
+    required this.onTapMove,
+    required this.savedEval,
+    required this.isGameOver,
+  });
 
+  final EngineEvaluationFilters filters;
   final void Function(NormalMove move) onTapMove;
   final ClientEval? savedEval;
   final bool isGameOver;
@@ -32,7 +38,7 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
     final numEvalLines = ref.watch(
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
-    final localEval = ref.watch(engineEvaluationProvider).eval;
+    final localEval = ref.watch(engineEvaluationProvider(widget.filters)).eval;
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;

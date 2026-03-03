@@ -6,7 +6,7 @@
   <string name="progressX">Rivojlar: %s</string>
   <string name="resetMyProgress">Mening rivojlarimni yangitdan boshlash</string>
   <string name="youWillLoseAllYourProgress">Siz xamma rivojlaringizni yo\'qotasiz!</string>
-  <string name="play" comment="play&#10;&#10;A small ribbon that appears on your current chapter in the Chess Basics course. Please keep this string short.">o\'yna!</string>
+  <string name="play">o\'yna!</string>
   <string name="chessPieces">Shahmat sipohlari</string>
   <string name="theRook">To\'ra</string>
   <string name="itMovesInStraightLines">To\'g\'ri chiziq bo\'yicha harakat qiladi</string>
@@ -115,7 +115,6 @@ Yuring va yulduzlarni tering!</string>
   <string name="findAWayToCastleKingSide">Qirol tomondan rakirovka qilish yo\'lini toping!</string>
   <string name="findAWayToCastleQueenSide">Farzin tomonidan rakirovka qilish uchun yo\'l toping!</string>
   <string name="castlingComplete">Tabriklaymiz! Siz o\'yinda deyarli har doim rakirovka qilishingiz kerak.</string>
-  <string name="enPassant">Yo\'lakda olish</string>
   <string name="theSpecialPawnMove">Piyoda maxsus yurishi</string>
   <string name="enPassantIntro">Agar piyoda ikkita katakka yursa siz uni bitta katakka yurganday olishingiz mumkin.</string>
   <string name="blackJustMovedThePawnByTwoSquares">Qoralar piyodani ikkita katakka yurdi! Uni yo\'lakda olish yo\'li bilan oling.</string>
@@ -123,9 +122,9 @@ Yuring va yulduzlarni tering!</string>
   <string name="enPassantOnlyWorksOnFifthRank">Yo\'lakda yurib olish faqat agar sizni piyodangiz beshinchi katakda turgan bo\'lsa ishlaydi.</string>
   <string name="takeAllThePawnsEnPassant">Barcha piyodalarni yo\'lakda yurib olish bilan oling!</string>
   <string name="enPassantComplete">Tabriklaymiz! Siz xozir yo\'lakda yurib olish usuli bilan olishni bildingiz.</string>
-  <string name="stalemate">Pat, durrang</string>
-  <string name="theGameIsADraw">O\'yin - durrang</string>
-  <string name="stalemateIntro">Qachonki shoh berilmagan bo\'lsa va o\'yinchining yurish yo\'llari qolmagan bo\'lsa o\'yin pat hisoblanadi. Durrang natija: g\'olib ham mag\'lub ham yo\'q.</string>
+  <string name="stalemate">Pat</string>
+  <string name="theGameIsADraw">Oʻyin — durang</string>
+  <string name="stalemateIntro">Agar oʻyinchiga shoh berilmagan boʻlsa va yurishga yoʻllari qolmagan boʻlsa — bu pat hisoblanadi. Oʻyin durang bilan tugaydi: gʻolib ham magʻlub ham yoʻq.</string>
   <string name="stalemateGoal">Qoralar uchun pat:
 - Qoralarda yurish uchun yo\'l yo\'q
 - Shoh ham olishmagan.</string>

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,8 +19,11 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+
+export 'package:lichess_mobile/src/widgets/material_diff.dart';
 
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
@@ -355,50 +357,3 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
         : const Text('');
   }
 }
-
-class MaterialDifferenceDisplay extends StatelessWidget {
-  const MaterialDifferenceDisplay({
-    required this.materialDiff,
-    this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
-  });
-
-  final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
-
-  @override
-  Widget build(BuildContext context) {
-    final IMap<Role, int> piecesToRender = materialDiff != null
-        ? (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
-              ? materialDiff!.capturedPieces
-              : materialDiff!.pieces)
-        : IMap();
-
-    return materialDifferenceFormat?.visible ?? true
-        ? Row(
-            children: [
-              for (final role in Role.values)
-                for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++)
-                  Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
-              const SizedBox(width: 3),
-              Text(
-                // a text font size of 14 is used to ensure that the text will take more vertical space
-                // than the icons
-                // this is a trick to make sure the player name widget will not shift, since the text
-                // widget is always present (contrary to the icons)
-                style: TextStyle(fontSize: 14, color: textShade(context, 0.5)),
-                materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
-              ),
-            ],
-          )
-        : const SizedBox.shrink();
-  }
-}
-
-const Map<Role, IconData> _iconByRole = {
-  Role.king: LichessIcons.chess_king,
-  Role.queen: LichessIcons.chess_queen,
-  Role.rook: LichessIcons.chess_rook,
-  Role.bishop: LichessIcons.chess_bishop,
-  Role.knight: LichessIcons.chess_knight,
-  Role.pawn: LichessIcons.chess_pawn,
-};

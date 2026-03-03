@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -45,7 +44,6 @@ class StudyController extends AsyncNotifier<StudyState>
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
-  Timer? _sendMoveToSocketTimer;
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
@@ -63,7 +61,6 @@ class StudyController extends AsyncNotifier<StudyState>
   Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
-      _sendMoveToSocketTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
     });
@@ -138,6 +135,7 @@ class StudyController extends AsyncNotifier<StudyState>
         // EvaluationContext needs an initial posiiton, but it doesn't matter what we pass here,
         // since the position is illegal and `isComputerAnalysisAllowed` is false anyway.
         evaluationContext: EvaluationContext(
+          id: study.chapter.id,
           variant: variant,
           initialPosition: Variant.standard.initialPosition,
         ),
@@ -162,7 +160,11 @@ class StudyController extends AsyncNotifier<StudyState>
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
-      evaluationContext: EvaluationContext(variant: variant, initialPosition: _root.position),
+      evaluationContext: EvaluationContext(
+        id: study.chapter.id,
+        variant: variant,
+        initialPosition: _root.position,
+      ),
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: orientation,
@@ -210,9 +212,6 @@ class StudyController extends AsyncNotifier<StudyState>
             study: state.requireValue.study.copyWith(liked: meLiked, likes: likes),
           ),
         );
-      case 'node':
-        // let's just ack the node for now
-        _sendMoveToSocketTimer?.cancel();
     }
   }
 
@@ -230,12 +229,13 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  void onUserMove(NormalMove move) {
+  void onUserMove(Move move) {
     if (!state.hasValue || state.requireValue.currentPosition == null) return;
 
     if (!state.requireValue.currentPosition!.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
+    if (move case NormalMove()
+        when isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -278,7 +278,7 @@ class StudyController extends AsyncNotifier<StudyState>
   }
 
   void showGamebookSolution() {
-    onUserMove(state.requireValue.currentNode.children.first as NormalMove);
+    onUserMove(state.requireValue.currentNode.children.first);
   }
 
   void userPrevious() {
@@ -396,21 +396,27 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  void _sendMoveToSocket(NormalMove move) {
+  void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 
-    _sendMoveToSocketTimer?.cancel();
-    _recordChange('anaMove', {
-      'orig': move.from.name,
-      'dest': move.to.name,
-      'fen': state.requireValue.currentPosition!.fen,
-      'path': state.requireValue.currentPath.value,
-    });
-
-    _sendMoveToSocketTimer = Timer(const Duration(seconds: 3), () {
-      // resend the move in case it was lost
-      _sendMoveToSocket(move);
-    });
+    switch (move) {
+      case NormalMove():
+        _recordChange('anaMove', {
+          'orig': move.from.name,
+          'dest': move.to.name,
+          'variant': state.requireValue.variant.name,
+          'fen': state.requireValue.currentPosition!.fen,
+          'path': state.requireValue.currentPath.value,
+        });
+      case DropMove():
+        _recordChange('anaDrop', {
+          'role': move.role.name,
+          'pos': move.to.name,
+          'variant': state.requireValue.variant.name,
+          'fen': state.requireValue.currentPosition!.fen,
+          'path': state.requireValue.currentPath.value,
+        });
+    }
   }
 
   void _recordChange(String socketEvent, Map<String, dynamic> data) {
@@ -452,7 +458,7 @@ class StudyController extends AsyncNotifier<StudyState>
       if (!isNavigating && isForward) {
         final isCheck = currentNode.sanMove.isCheck;
         if (currentNode.sanMove.isCapture) {
-          ref.read(moveFeedbackServiceProvider).captureFeedback(check: isCheck);
+          ref.read(moveFeedbackServiceProvider).captureFeedback(state.variant, check: isCheck);
         } else {
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
@@ -570,7 +576,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
   /// Whether the engine is available for evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant) && prefs.isEnabled;
+      isComputerAnalysisAllowed && prefs.isEnabled;
 
   bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
 
@@ -581,6 +587,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
           position: currentPosition!,
           savedEval: currentNode.eval,
           serverEval: null,
+          filters: (id: evaluationContext.id, path: currentPath),
         )
       : null;
 

@@ -24,8 +24,8 @@ analyzer:
     - lib/l10n/*.dart
   errors:
     invalid_annotation_target: ignore
-  plugins:
-    - riverpod_lint
+  # plugins:
+  #   - riverpod_lint
 
 formatter:
   page_width: 100

@@ -140,7 +140,7 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: puzzleState.promotionMove,
-      onMove: (move, {isDrop, captured}) {
+      onMove: (move, {viaDragAndDrop}) {
         ref.read(ctrlProvider.notifier).onUserMove(move);
       },
       onPromotionSelection: (role) {
@@ -215,7 +215,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: puzzleState.lastMove as NormalMove?,
+                                lastMove: puzzleState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -348,7 +348,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: puzzleState.lastMove as NormalMove?,
+                                lastMove: puzzleState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -420,7 +420,7 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldExcludeGesturesOnFocusGained: puzzleState.mode != PuzzleMode.view,
             shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
@@ -502,7 +502,8 @@ class _BottomBar extends ConsumerWidget {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
                   context,
-                  AnalysisOptions.standalone(
+                  AnalysisOptions.pgn(
+                    id: puzzleState.puzzle.puzzle.id,
                     orientation: puzzleState.pov,
                     pgn: ref.read(ctrlProvider.notifier).makePgn(),
                     isComputerAnalysisAllowed: true,

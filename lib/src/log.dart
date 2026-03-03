@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,11 +29,15 @@ class AppLogService {
   Iterable<LogRecord> get logs => _logs.values;
 
   void start() {
-    ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
-      if (next != prev) {
-        Logger.root.level = next;
-      }
-    }, fireImmediately: true);
+    if (kDebugMode) {
+      Logger.root.level = Level.ALL;
+    } else {
+      ref.listen(logPreferencesProvider.select((prefs) => prefs.level), (prev, next) {
+        if (next != prev) {
+          Logger.root.level = next;
+        }
+      }, fireImmediately: true);
+    }
 
     Logger.root.onRecord.listen((record) {
       if (kDebugMode) {
@@ -45,7 +50,9 @@ class AppLogService {
           stackTrace: record.stackTrace,
         );
 
-        if (_loggersToShowInTerminal.contains(record.loggerName) && record.level >= Level.FINE) {
+        if (_loggersToShowInTerminal.contains(record.loggerName) &&
+            record.level >= Level.FINE &&
+            !Platform.environment.containsKey('FLUTTER_TEST')) {
           debugPrint('[${record.loggerName}] ${record.message}');
         }
       } else {

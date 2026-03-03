@@ -1,0 +1,12 @@
+<resources>
+    <style name="SplashTheme" parent="SplashTheme.NightAdjusted">
+        <item name="windowSplashScreenBackground">@color/bg_splash</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
+        <item name="windowSplashScreenAnimationDuration">750</item>
+        <item name="postSplashScreenTheme">@style/NormalTheme</item>
+    </style>
+
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+    </style>
+</resources>

@@ -228,7 +228,7 @@ class StandaloneGameLoadingContent extends StatelessWidget {
         child: GameLayout(
           orientation: position?.orientation ?? Side.white,
           fen: position?.fen ?? kEmptyFen,
-          lastMove: position?.lastMove as NormalMove?,
+          lastMove: position?.lastMove,
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],

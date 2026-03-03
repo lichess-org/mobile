@@ -67,6 +67,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Vous devez être connecté pour voir cette page.';
 
   @override
+  String get mobileNewGame => 'Nouvelle partie';
+
+  @override
   String get mobileNoSearchResults => 'Aucun résultat';
 
   @override
@@ -240,6 +243,45 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileWelcomeToLichessApp => 'Bienvenue dans l\'application Lichess !';
+
+  @override
+  String get mobileViewGame => 'Voir la partie';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Astuce : Vous pouvez ajouter des widgets à l\'écran d\'accueil ou supprimer ceux dont vous n\'avez pas besoin.';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Ignorer';
+
+  @override
+  String get mobileCustomizeButton => 'Personnaliser';
+
+  @override
+  String get mobileStopShowingThreat => 'Ne pas afficher la menace';
+
+  @override
+  String get mobileTournamentCompleted => 'Terminé';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Aller à ma page';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compact';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Affichage détaillé';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorateur d\'ouvertures n\'est pas accessible hors ligne.';
+
+  @override
+  String get mobileChallengeCreated => 'Défi créé : Vous recevrez une notification lorsque la partie commencera.\\nVous pouvez y accéder depuis l’onglet Accueil.';
+
+  @override
+  String get mobilePreviousPage => 'Précédent';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
   String get activityActivity => 'Activité';
@@ -861,6 +903,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastScore => 'Résultat';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Les résultats sont fondés sur les parties diffusées et pourraient différer des résultats officiels.';
+
+  @override
   String get broadcastAllTeams => 'Toutes les équipes';
 
   @override
@@ -905,12 +950,82 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Points de matchs';
+
+  @override
+  String get broadcastGamePoints => 'Points de parties';
+
+  @override
+  String get broadcastMatches => 'Matchs';
+
+  @override
+  String get broadcastMatchHistory => 'Historique des matchs';
+
+  @override
+  String get broadcastTeamResults => 'Résultats des équipes';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'Les termes suivants seront automatiquement traduits : $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Ronde : $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Si le nom par défaut est conservé, il sera automatiquement traduit dans les autres langues.';
+
+  @override
+  String get broadcastOpenTournament => 'Ouvert';
+
+  @override
+  String get broadcastWomenTournament => 'Femmes';
+
+  @override
+  String get broadcastMenTournament => 'Hommes';
+
+  @override
+  String get broadcastGirlsTournament => 'Filles';
+
+  @override
+  String get broadcastBoysTournament => 'Garçons';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Ouvert – moins de $param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Filles – moins de $param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Garçons – moins de $param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarts de finale';
+
+  @override
+  String get broadcastSemifinals => 'Demi-finales';
+
+  @override
+  String get broadcastFinals => 'Finales';
+
+  @override
+  String get broadcastTiebreaks => 'Bris d\'égalité';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Partie $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Éliminatoires';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1855,6 +1970,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Une tactique impliquant la règle de la prise en passant, où un pion peut capturer un pion adverse qui l\'a croisé lors de son déplacement initial de deux cases.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Mat des épaulettes';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Deux cases de fuite des deux côtés du roi en échec sont occupées par des pièces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Roi exposé';
 
   @override
@@ -1907,6 +2028,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Le fou met le roi adverse échec et mat avec l\'aide de la tour.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Mat du guéridon';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'Motif de mat qui ressemble visuellement à un guéridon (une petite table soutenue par un pied central).';
 
   @override
   String get puzzleThemeTriangleMate => 'Mat du triangle';
@@ -2157,7 +2284,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameSetup => 'Paramètres de la partie';
 
   @override
-  String get challengeAFriend => 'Défi';
+  String get challengeAFriend => 'Défier un ami';
 
   @override
   String get playAgainstComputer => 'Jouer contre l\'ordinateur';
@@ -2167,9 +2294,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createLobbyGame => 'Créer une partie dans le salon';
-
-  @override
-  String get youPlayAs => 'Couleur';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pour inviter quelqu\'un à jouer, donnez-lui ce lien';
@@ -2182,6 +2306,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ou laissez votre adversaire scanner ce code QR';
+
+  @override
+  String get reusableChallengeUrl => 'URL réutilisable pour les défis';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'Lien permanent qui permet à quiconque de vous défier avec ces paramètres';
 
   @override
   String get waiting => 'En attente';
@@ -2518,6 +2648,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get evaluationGauge => 'Jauge d\'évaluation';
 
   @override
+  String get visualMotifs => 'Motifs visuels';
+
+  @override
+  String get undefendedPieces => 'Pièces non défendues';
+
+  @override
+  String get pinnedPieces => 'Pièces clouées';
+
+  @override
+  String get checkableKing => 'Roi pouvant être mis en échec';
+
+  @override
   String get multipleLines => 'Lignes d\'analyse';
 
   @override
@@ -2639,6 +2781,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get variants => 'Variantes';
 
   @override
+  String get variantsDescription => 'Autres façons de jouer';
+
+  @override
   String get timeControl => 'Cadence';
 
   @override
@@ -2681,7 +2826,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get signupUsernameHint => 'Assurez-vous de choisir un nom d\'utilisateur convenable. Vous ne pourrez pas le modifier par la suite et tout nom d\'utilisateur inapproprié entraînera la fermeture du compte !';
 
   @override
-  String get signupEmailHint => 'Nous l\'utiliserons uniquement pour la réinitialisation du mot de passe.';
+  String get signupEmailPromise => 'Nous ne vous enverrons que des courriels concernant votre compte et ne partagerons jamais votre adresse courriel.';
 
   @override
   String get password => 'Mot de passe';
@@ -2865,6 +3010,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get unlimited => 'Illimité';
+
+  @override
+  String get unlimitedDescription => 'Prenez tout le temps dont vous avez besoin.';
 
   @override
   String get mode => 'Mode';
@@ -3108,6 +3256,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameAsGIF => 'Enregistrer la partie en GIF';
 
   @override
+  String get playerNames => 'Noms des joueurs';
+
+  @override
+  String get moveAnnotations => 'Annotations';
+
+  @override
   String get pasteTheFenStringHere => 'Coller le FEN ici';
 
   @override
@@ -3115,9 +3269,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Ou téléverser un fichier PGN';
-
-  @override
-  String get fromPosition => 'Depuis une position';
 
   @override
   String get continueFromHere => 'Continuer depuis cette position';
@@ -3932,18 +4083,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get keyRequestComputerAnalysis => 'Demandez une analyse informatique, apprenez de vos erreurs';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Suivant (apprenez de vos erreurs)';
-
-  @override
-  String get keyNextBlunder => 'Gaffe suivante';
-
-  @override
-  String get keyNextMistake => 'Erreur suivante';
-
-  @override
-  String get keyNextInaccuracy => 'Imprécision suivante';
-
-  @override
   String get keyPreviousBranch => 'Branche précédente';
 
   @override
@@ -4224,6 +4363,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get brightness => 'Luminosité';
+
+  @override
+  String get contrast => 'Contraste';
 
   @override
   String get hue => 'Teinte';
@@ -4858,7 +5000,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tags => 'Étiquettes';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Prise en passant ?';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6143,6 +6285,9 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Mot de passe incorrect.';
 
   @override
   String teamBattleOfNbTeams(int count) {

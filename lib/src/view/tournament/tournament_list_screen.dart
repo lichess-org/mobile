@@ -37,8 +37,7 @@ enum _ViewMode {
   String l10n(BuildContext context) {
     switch (this) {
       case _ViewMode.completed:
-        // TODO l10n
-        return 'Completed';
+        return context.l10n.mobileTournamentCompleted;
       case _ViewMode.ongoing:
         return context.l10n.broadcastOngoing;
       case _ViewMode.upcoming:

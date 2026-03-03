@@ -4,8 +4,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -15,7 +17,8 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:meta/meta.dart';
+
+part 'evaluation_mixin.freezed.dart';
 
 /// The debounce delay for requesting an eval.
 ///
@@ -29,6 +32,16 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
 const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
+
+@freezed
+sealed class EvaluationContext with _$EvaluationContext {
+  const factory EvaluationContext({
+    /// Identifier to associate the evaluation with a game, puzzle, study, etc.
+    required StringId id,
+    required Variant variant,
+    required Position initialPosition,
+  }) = _EvaluationContext;
+}
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -88,13 +101,13 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
   @override
   void runBuild() {
-    _evaluationService = ref.read(evaluationServiceProvider);
+    _evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
       _socketSubscription?.cancel();
-      _evaluationService.disposeEngine();
+      _evaluationService.quit();
     });
 
     super.runBuild();
@@ -108,9 +121,9 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
     await _evaluationPreferencesNotifier.toggle();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      requestEval(forceRestart: true);
+      requestEval();
     } else {
-      await _evaluationService.disposeEngine();
+      _evaluationService.quit();
     }
   }
 
@@ -122,27 +135,21 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
 
     _evaluationPreferencesNotifier.setNumEvalLines(numEvalLines);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineCores(int numEngineCores) {
     _evaluationPreferencesNotifier.setEngineCores(numEngineCores);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   @mustCallSuper
   void setEngineSearchTime(Duration searchTime) {
     _evaluationPreferencesNotifier.setEngineSearchTime(searchTime);
 
-    _evaluationService.options = evaluationPrefs.evaluationOptions;
-
-    requestEval(forceRestart: true);
+    requestEval();
   }
 
   /// Requests an engine evaluation if available.
@@ -161,7 +168,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval({bool goDeeper = false, bool forceRestart = false}) {
+  void requestEval({bool goDeeper = false}) {
     if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
 
     final delayLocalEngine =
@@ -172,13 +179,13 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       _sendEvalGetEvent();
 
       if (!delayLocalEngine) {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       }
     });
 
     if (delayLocalEngine) {
       _localEngineAfterDelayDebounce(() {
-        _startEngineEval(goDeeper: goDeeper, forceRestart: forceRestart);
+        _startEngineEval(goDeeper: goDeeper);
       });
     }
   }
@@ -260,69 +267,72 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       'fen': curPosition.fen,
       'path': state.requireValue.currentPath.value,
       'mpv': numEvalLines,
+      if (curPosition.rule != Rule.chess) 'variant': Variant.fromRule(curPosition.rule).name,
       'up': true,
     });
   }
 
-  Future<void> _startEngineEval({bool goDeeper = false, bool forceRestart = false}) async {
+  void _startEngineEval({bool goDeeper = false}) {
     final curState = state.requireValue;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
-    await _evaluationService.ensureEngineInitialized(
-      state.requireValue.evaluationContext,
-      initOptions: evaluationPrefs.evaluationOptions,
+
+    final searchTime = goDeeper ? kMaxEngineSearchTime : evaluationPrefs.engineSearchTime;
+
+    final work = EvalWork(
+      id: curState.evaluationContext.id,
+      stockfishFlavor: evaluationPrefs.enginePref.flavor,
+      variant: curState.evaluationContext.variant,
+      threads: evaluationPrefs.numEngineCores,
+      hashSize: _evaluationService.maxMemory,
+      path: curState.currentPath,
+      searchTime: searchTime,
+      multiPv: evaluationPrefs.numEvalLines,
+      threatMode: curState.engineInThreatMode,
+      isDeeper: goDeeper ? true : null,
+      initialPosition: curState.evaluationContext.initialPosition,
+      steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
-    _evaluationService
-        .start(
-          curState.currentPath,
-          positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: positionTree.eval,
-          shouldEmit: _shouldEmit,
-          goDeeper: goDeeper,
-          forceRestart: forceRestart,
-          threatMode: curState.engineInThreatMode,
-        )
-        ?.forEach((event) {
-          if (curState.engineInThreatMode) {
+
+    _evaluationService.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
+      if (curState.engineInThreatMode) {
+        return;
+      }
+      final (evalWork, eval) = event;
+      // Path is always set in EvaluationMixin context since we use a node tree.
+      final path = evalWork.path!;
+
+      bool isSameEvalString = true;
+      positionTree.updateAt(path, (node) {
+        final nodeEval = node.eval;
+        if (nodeEval is CloudEval) {
+          if (nodeEval.depth >= eval.depth &&
+              evalWork.isDeeper != true &&
+              evalWork.searchTime != kMaxEngineSearchTime) {
+            final targetTime = evalWork.searchTime;
+            final evalSearchTime = eval.searchTime;
+            final likelyNodes =
+                ((targetTime.inMilliseconds * eval.nodes) / evalSearchTime.inMilliseconds).round();
+            // if the cloud eval is likely better, stop the local engine
+            // nps varies with positional complexity so this is rough, but save planet earth
+            if (likelyNodes < nodeEval.nodes) {
+              _evaluationService.stop();
+            }
             return;
           }
-          final (work, eval) = event;
-          bool isSameEvalString = true;
-          positionTree.updateAt(work.path, (node) {
-            final nodeEval = node.eval;
-            if (nodeEval is CloudEval) {
-              if (nodeEval.depth >= eval.depth &&
-                  work.isDeeper != true &&
-                  work.searchTime != kMaxEngineSearchTime) {
-                final targetTime = work.searchTime;
-                final searchTime = eval.searchTime;
-                final likelyNodes =
-                    ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
-                // if the cloud eval is likely better, stop the local engine
-                // nps varies with positional complexity so this is rough, but save planet earth
-                if (likelyNodes < nodeEval.nodes) {
-                  _evaluationService.stop();
-                }
-                return;
-              }
-            } else if (nodeEval is LocalEval) {
-              if (nodeEval.isBetter(eval)) {
-                return;
-              }
-            }
-            isSameEvalString = eval.evalString == nodeEval?.evalString;
-            node.eval = eval;
-          });
-
-          if (!ref.mounted) return;
-
-          if (work.path == state.requireValue.currentPath) {
-            onCurrentPathEvalChanged(isSameEvalString);
+        } else if (nodeEval is LocalEval) {
+          if (nodeEval.isBetter(eval)) {
+            return;
           }
-        });
-  }
+        }
+        isSameEvalString = eval.evalString == nodeEval?.evalString;
+        node.eval = eval;
+      });
 
-  bool _shouldEmit(Work work) {
-    if (!ref.mounted) return false;
-    return work.path == state.requireValue.currentPath;
+      if (!ref.mounted) return;
+
+      if (path == state.requireValue.currentPath) {
+        onCurrentPathEvalChanged(isSameEvalString);
+      }
+    });
   }
 }

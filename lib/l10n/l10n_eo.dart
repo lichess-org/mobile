@@ -67,6 +67,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Vi devas esti ensalutata por spekti ĉi tiun paĝon.';
 
   @override
+  String get mobileNewGame => 'New game';
+
+  @override
   String get mobileNoSearchResults => 'Neniu rezultoj';
 
   @override
@@ -240,6 +243,45 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+
+  @override
+  String get mobileViewGame => 'View Game';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileCustomizeButton => 'Customize';
+
+  @override
+  String get mobileStopShowingThreat => 'Stop showing threat';
+
+  @override
+  String get mobileTournamentCompleted => 'Completed';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compact';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detailed';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+
+  @override
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+
+  @override
+  String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
   String get activityActivity => 'Aktiveco';
@@ -861,6 +903,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastScore => 'Score';
 
   @override
+  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+
+  @override
   String get broadcastAllTeams => 'Ĉiuj teamoj';
 
   @override
@@ -905,12 +950,82 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMatchPoints => 'Match Points';
+
+  @override
+  String get broadcastGamePoints => 'Game Points';
+
+  @override
+  String get broadcastMatches => 'Matches';
+
+  @override
+  String get broadcastMatchHistory => 'Match History';
+
+  @override
+  String get broadcastTeamResults => 'Team Results';
+
+  @override
+  String broadcastTermsAutomaticallyTranslated(String param) {
+    return 'The following term(s) will be automatically translated: $param.';
+  }
+
+  @override
   String broadcastRoundX(String param) {
     return 'Round $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+
+  @override
+  String get broadcastOpenTournament => 'Open';
+
+  @override
+  String get broadcastWomenTournament => 'Women';
+
+  @override
+  String get broadcastMenTournament => 'Men';
+
+  @override
+  String get broadcastGirlsTournament => 'Girls';
+
+  @override
+  String get broadcastBoysTournament => 'Boys';
+
+  @override
+  String broadcastOpenUnderXAgeTournament(String param) {
+    return 'Open U$param';
+  }
+
+  @override
+  String broadcastGirlsUnderXAgeTournament(String param) {
+    return 'Girls U$param';
+  }
+
+  @override
+  String broadcastBoysUnderXAgeTournament(String param) {
+    return 'Boys U$param';
+  }
+
+  @override
+  String get broadcastQuarterfinals => 'Quarterfinals';
+
+  @override
+  String get broadcastSemifinals => 'Semifinals';
+
+  @override
+  String get broadcastFinals => 'Finals';
+
+  @override
+  String get broadcastTiebreaks => 'Tiebreaks';
+
+  @override
+  String broadcastGameX(String param) {
+    return 'Game $param';
+  }
+
+  @override
+  String get broadcastKnockouts => 'Knockouts';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1855,6 +1970,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktiko kiu temas pri la preterpasa prena regulo, per kiu soldato povas kapti kontraŭan soldaton kiu preterpasis ĝin dum sia komenca du-ĉela movo.';
 
   @override
+  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+
+  @override
   String get puzzleThemeExposedKing => 'Neprotektita reĝo';
 
   @override
@@ -1907,6 +2028,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+
+  @override
+  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
 
   @override
   String get puzzleThemeTriangleMate => 'Triangula mato';
@@ -2169,9 +2296,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get createLobbyGame => 'Krei ludon en atendejo';
 
   @override
-  String get youPlayAs => 'Koloro de viaj pecoj';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Por inviti iun al ludo, donu ĉi tiun ligilon';
 
   @override
@@ -2182,6 +2306,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get orLetYourOpponentScanQrCode => 'Aŭ lasi vian kontraŭulon skani ĉi tiun QR-kodon per la app';
+
+  @override
+  String get reusableChallengeUrl => 'Reusable challenge URL';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
 
   @override
   String get waiting => 'Atendante';
@@ -2518,6 +2648,18 @@ class AppLocalizationsEo extends AppLocalizations {
   String get evaluationGauge => 'Gaŭĝo de rangado';
 
   @override
+  String get visualMotifs => 'Visual motifs';
+
+  @override
+  String get undefendedPieces => 'Nedefenditaj pecoj';
+
+  @override
+  String get pinnedPieces => 'Fiksitaj pecoj';
+
+  @override
+  String get checkableKing => 'Ŝakigebla reĝo';
+
+  @override
   String get multipleLines => 'Pluraj linioj';
 
   @override
@@ -2639,6 +2781,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get variants => 'Variaĵoj';
 
   @override
+  String get variantsDescription => 'Aliaj manieroj ludi';
+
+  @override
   String get timeControl => 'Temporegado';
 
   @override
@@ -2681,7 +2826,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get signupUsernameHint => 'Certigi, ke vi elektas uzantnomon, ke estas adekvata por ĉiu-aĝaj spektantoj. Vi ne povas ŝanĝi ĝin poste, kaj la administrantoj fermas ĉiujn ajn kontojn, kiuj havas malbonimpresajn uzantnomojn!';
 
   @override
-  String get signupEmailHint => 'Ni nur uzos ĝin por pasvorta restarigo.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Pasvorto';
@@ -2865,6 +3010,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get unlimited => 'Senlime';
+
+  @override
+  String get unlimitedDescription => 'Tiel longe, kiel vi bezonas';
 
   @override
   String get mode => 'Modo';
@@ -3108,6 +3256,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get gameAsGIF => 'Ludo kiel GIF';
 
   @override
+  String get playerNames => 'Player names';
+
+  @override
+  String get moveAnnotations => 'Move annotations';
+
+  @override
   String get pasteTheFenStringHere => 'Glui la FEN-ĉenon ĉi tie';
 
   @override
@@ -3115,9 +3269,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Aŭ alŝuti PGN-dosieron';
-
-  @override
-  String get fromPosition => 'De pozicio';
 
   @override
   String get continueFromHere => 'Daŭrigi de ĉi tie';
@@ -3806,7 +3957,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 estas senpaga ($param2), libera, ne-reklamoj, malferma-kodo ŝaka servilo.';
+    return '$param1 estas senpaga ($param2), libera, senreklama, malfermitkoda ŝaka servilo.';
   }
 
   @override
@@ -3930,18 +4081,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get keyRequestComputerAnalysis => 'Peti komputilan analizon, Lerni de viaj eraroj';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'Sekvo (Lerni de viaj eraroj)';
-
-  @override
-  String get keyNextBlunder => 'Sekva erarego';
-
-  @override
-  String get keyNextMistake => 'Sekva eraro';
-
-  @override
-  String get keyNextInaccuracy => 'Sekva erareto';
 
   @override
   String get keyPreviousBranch => 'Antaŭa branĉo';
@@ -4096,7 +4235,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get analysisShapesHowTo => 'Premu shift+click aŭ rekt-klaki por desegni cirklojn kaj sagojn sur la tabulo.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl aŭ Maj = ruĝa; Ordono, Alt aŭ Meta = blua; unu klavo el ĉiu grupo = flava.';
 
   @override
   String get letOtherPlayersMessageYou => 'Lasu aliajn ludantojn mesaĝi vin';
@@ -4224,6 +4363,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get brightness => 'Lumeco';
+
+  @override
+  String get contrast => 'Contrast';
 
   @override
   String get hue => 'Kolortono';
@@ -4858,7 +5000,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get tags => 'Etikedoj';
 
   @override
-  String get enPassant => 'En passant';
+  String get enPassant => 'Preterpasa kapto';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6002,7 +6144,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Dividita kaj konservita';
 
   @override
   String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
@@ -6041,7 +6183,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Dankon pro via tempo';
 
   @override
   String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
@@ -6053,13 +6195,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Ekde komenca pozicio';
 
   @override
   String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Personecigita pozicio';
 
   @override
   String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
@@ -6077,7 +6219,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'El ludo en PNG';
 
   @override
   String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
@@ -6143,6 +6285,9 @@ class AppLocalizationsEo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamIncorrectEntryCode => 'Malĝusta enirkodo.';
 
   @override
   String teamBattleOfNbTeams(int count) {

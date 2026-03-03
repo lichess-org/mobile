@@ -48,7 +48,7 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'team': ['nbLeadersPerTeam','battleOfNbTeams'],
+  'team': ['nbLeadersPerTeam','battleOfNbTeams','incorrectEntryCode'],
   'tfa': ['twoFactorAuth']
 }
 
@@ -105,6 +105,7 @@ const locales = [
   'sv-SE',
   'tr-TR',
   'uk-UA',
+  'uz-UZ',
   'vi-VN',
   'zh-CN',
   'zh-TW',

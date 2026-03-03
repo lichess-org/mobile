@@ -55,6 +55,8 @@ Eden od vaših kmetov je globoko na nasprotnikovem področju in ima morda možno
   <string name="endgame">Končnica</string>
   <string name="endgameDescription">Taktika v zadnji fazi partije.</string>
   <string name="enPassantDescription">Taktika, ki vključuje pravilo en passant, kjer lahko kmet zajame nasprotnega kmeta, ki ga je z napredovanjem za dve polji zaobšel.</string>
+  <string name="epauletteMate" comment="&quot;Epaulette&quot; is not a proper noun, it is a reference to the shoulder decoration on military uniforms: https://en.wikipedia.org/wiki/Epaulette&#10;&#10;Description for this mating pattern (translatable separately):&#10;Two adjacent escape squares for a checked king are occupied by other pieces.">Epoleta mat</string>
+  <string name="epauletteMateDescription" comment="Description for &quot;Epaulette mate&quot; (translatable separately).">Dve sosednji polji za pobeg pri šahovskem kralju sta zasedeni z drugimi figurami.</string>
   <string name="exposedKing">Izpostavljeni kralj</string>
   <string name="exposedKingDescription">Taktika, ki vključuje kralja s premalo obrambe, kar pogosto vodi v mat.</string>
   <string name="fork">Dvojni napad (vilice)</string>
@@ -73,6 +75,8 @@ Eden od vaših kmetov je globoko na nasprotnikovem področju in ima morda možno
   <string name="pillsburysMateDescription">Top daje mat, lovec pa pomaga omejiti mat.</string>
   <string name="morphysMate">Morphyjev mat</string>
   <string name="morphysMateDescription">S lovcem šahiraj kralja, medtem ko ti trdnjava pomaga omejiti napad.</string>
+  <string name="swallowstailMate" comment="Description of this mating pattern (translatable separately):&#10;A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.&#10;&#10;If &quot;V shape&quot; does not have an equivalent in your language, or if your language uses a different script/alphabet, you can leave that part out.">Mat lastovičinega repa</string>
+  <string name="swallowstailMateDescription" comment="Description for &quot;Swallow's tail mate&quot; (translatable separately).">Vzorec šaha in mata, ki vizualno spominja na lastovičji rep, podoben obliki črke V.</string>
   <string name="triangleMate">Trikotni mat</string>
   <string name="triangleMateDescription">Kraljica in trdnjava, eno polje stran od sovražnega kralja, sta v isti vrsti ali liniji, ločeni z enim poljem in tvorita trikotnik.</string>
   <string name="vukovicMate">Vukovic mat</string>

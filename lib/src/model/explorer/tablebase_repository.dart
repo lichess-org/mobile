@@ -14,11 +14,14 @@ final tablebaseProvider = FutureProvider.autoDispose.family<TablebaseEntry?, Str
 ) async {
   await ref.debounce(const Duration(milliseconds: 300));
 
-  final client = ref.read(defaultClientProvider);
-
-  final tablebaseEntry = await TablebaseRepository(client).getTablebaseEntry(fen);
+  final tablebaseEntry = await ref.read(tablebaseRepositoryProvider).getTablebaseEntry(fen);
   return tablebaseEntry;
 }, name: 'TablebaseProvider');
+
+final tablebaseRepositoryProvider = Provider<TablebaseRepository>((ref) {
+  final client = ref.watch(lichessClientProvider);
+  return TablebaseRepository(client);
+}, name: 'TablebaseRepositoryProvider');
 
 class TablebaseRepository {
   const TablebaseRepository(this.client);
@@ -27,7 +30,7 @@ class TablebaseRepository {
 
   Future<TablebaseEntry> getTablebaseEntry(String fen) {
     return client.readJson(
-      Uri.https(kLichessTablebaseHost, '/standard', {'fen': fen}),
+      Uri.https(kLichessTablebaseHost, '/standard', {'source': 'mobile', 'fen': fen}),
       mapper: TablebaseEntry.fromJson,
     );
   }

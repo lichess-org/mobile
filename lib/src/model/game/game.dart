@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 part 'game.freezed.dart';
@@ -23,9 +24,9 @@ part 'game.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
-/// Common interface for playable and exported games.
+/// Common interface for all games.
 abstract mixin class BaseGame {
-  GameId get id;
+  StringId get id;
 
   GameMeta get meta;
 
@@ -173,7 +174,7 @@ abstract mixin class BaseGame {
     final pgn = node.makePgn(
       IMap({
         'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
-        'Site': lichessUri('/$id').toString(),
+        if (id is GameId) 'Site': lichessUri('/$id').toString(),
         'Date': _dateFormat.format(meta.createdAt),
         'White':
             white.user?.name ??
@@ -206,6 +207,18 @@ abstract mixin class BaseGame {
     );
     return pgn;
   }
+}
+
+/// Common interface for playable and exported games from the server.
+abstract mixin class ServerGame implements BaseGame {
+  @override
+  GameId get id;
+}
+
+/// Common interface for local games (imported from PGN or created offline).
+abstract mixin class LocalGame implements BaseGame {
+  @override
+  StringId get id;
 }
 
 /// A mixin that provides methods to access game data at a specific step.
@@ -373,6 +386,9 @@ sealed class GameStep with _$GameStep {
     /// The remaining black clock time at this step. Only available when the
     /// game is finished.
     Duration? archivedBlackClock,
+
+    /// The computer analysis data for this step (only used in offline computer mode).
+    ComputerAnalysis? computerAnalysis,
   }) = _GameStep;
 }
 
@@ -385,6 +401,7 @@ String stepsToJson(IList<GameStep> steps) {
           if (i == 0) 'rule': e.position.rule.name,
           'uci': e.sanMove?.move.uci,
           'san': e.sanMove?.san,
+          ...?e.computerAnalysis?.toStepJson(),
         },
       )
       .toList(growable: false);
@@ -412,7 +429,8 @@ IList<GameStep> stepsFromJson(String json) {
       GameStep(
         position: position,
         sanMove: SanMove(san, move),
-        diff: MaterialDiff.fromBoard(position.board),
+        diff: MaterialDiff.fromPosition(position),
+        computerAnalysis: ComputerAnalysis.fromStepJson(step),
       ),
     );
   }

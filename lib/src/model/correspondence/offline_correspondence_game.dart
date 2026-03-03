@@ -19,8 +19,8 @@ part 'offline_correspondence_game.g.dart';
 /// are always guaranteed to be non-null.
 @Freezed(fromJson: true, toJson: true)
 sealed class OfflineCorrespondenceGame
-    with _$OfflineCorrespondenceGame, BaseGame, IndexableSteps
-    implements BaseGame {
+    with BaseGame, _$OfflineCorrespondenceGame, ServerGame, IndexableSteps
+    implements ServerGame {
   const OfflineCorrespondenceGame._();
 
   @Assert('steps.isNotEmpty')

@@ -17,10 +17,24 @@ typedef InteractiveBoardParams = ({
   Position position,
   PlayerSide playerSide,
   NormalMove? promotionMove,
-  void Function(NormalMove, {bool? isDrop}) onMove,
+  void Function(Move, {bool? viaDragAndDrop}) onMove,
   void Function(Role? role) onPromotionSelection,
   Premovable? premovable,
 });
+
+Side variantBoardOrientation({
+  required Variant variant,
+  required Side youAre,
+  required bool isBoardTurned,
+}) {
+  // In racing kings, both side's pieces move in the same direction,
+  // so always orient the board as "white" regardless of who is playing, unless the board is explicitly turned.
+  if (variant == Variant.racingKings) {
+    return isBoardTurned ? Side.black : Side.white;
+  }
+
+  return isBoardTurned ? youAre.opposite : youAre;
+}
 
 /// Layout for game screens that adapts to screen size and aspect ratio
 ///
@@ -42,6 +56,8 @@ class GameLayout extends ConsumerStatefulWidget {
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.topTableFlex = 1,
+    this.bottomTableFlex = 1,
     this.shapes,
     this.moves,
     this.currentMoveIndex = 0,
@@ -66,6 +82,8 @@ class GameLayout extends ConsumerStatefulWidget {
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
+      topTableFlex = 1,
+      bottomTableFlex = 1,
       shapes = null,
       currentMoveIndex = 0,
       onSelectMove = null,
@@ -96,6 +114,12 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
+
+  /// Flex factor for the top table in portrait mode (default: 1).
+  final int topTableFlex;
+
+  /// Flex factor for the bottom table in portrait mode (default: 1).
+  final int bottomTableFlex;
 
   /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
@@ -229,21 +253,23 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
-          final double boardSize = isTablet
+          double effectiveBoarSize = isTablet
               ? defaultBoardSize - kTabletBoardTableSidePadding * 2
               : defaultBoardSize;
 
           // vertical space left on portrait mode to check if we can display the
           // move list
-          final verticalSpaceLeftBoardOnPortrait = constraints.biggest.height - boardSize;
+          final isShortScreen = isShortVerticalScreen(context);
+
+          if (isShortScreen) {
+            effectiveBoarSize -= 16;
+          }
 
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (boardPrefs.moveListDisplay &&
-                  slicedMoves != null &&
-                  verticalSpaceLeftBoardOnPortrait >= kSmallHeightMinusBoard)
+              if (boardPrefs.moveListDisplay && slicedMoves != null && !isShortScreen)
                 if (widget.zenMode)
                   // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
@@ -255,6 +281,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     onSelectMove: widget.onSelectMove,
                   ),
               Expanded(
+                flex: widget.topTableFlex,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
@@ -267,7 +294,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                     : EdgeInsets.zero,
                 child: BoardWidget(
-                  size: boardSize,
+                  size: effectiveBoarSize,
                   fen: fen,
                   orientation: widget.orientation,
                   gameData: gameData,
@@ -280,6 +307,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 ),
               ),
               Expanded(
+                flex: widget.bottomTableFlex,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,

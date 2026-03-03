@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -15,9 +17,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 final _dateFormatter = DateFormat.yMMMd();
 
 class UserActivityWidget extends ConsumerWidget {
-  const UserActivityWidget({required this.activity, super.key});
+  const UserActivityWidget({required this.activity, required this.user, super.key});
 
   final AsyncValue<IList<UserActivity>> activity;
+  final LightUser user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +35,7 @@ class UserActivityWidget extends ConsumerWidget {
           hasLeading: true,
           children: nonEmptyActivities
               .take(10)
-              .map((entry) => UserActivityEntry(entry: entry))
+              .map((entry) => UserActivityEntry(entry: entry, user: user))
               .toList(),
         );
       },
@@ -51,9 +54,10 @@ class UserActivityWidget extends ConsumerWidget {
 }
 
 class UserActivityEntry extends ConsumerWidget {
-  const UserActivityEntry({required this.entry, super.key});
+  const UserActivityEntry({required this.entry, required this.user, super.key});
 
   final UserActivity entry;
+  final LightUser user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -117,6 +121,9 @@ class UserActivityEntry extends ConsumerWidget {
                 draw: gameEntry.value.draw,
                 loss: gameEntry.value.loss,
               ),
+              onTap: () => Navigator.of(context).push(
+                GameHistoryScreen.buildRoute(context, user: user, isOnline: user.isOnline == true),
+              ),
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
@@ -155,6 +162,7 @@ class UserActivityEntry extends ConsumerWidget {
               draw: 0,
               loss: entry.puzzles!.loss,
             ),
+            onTap: () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context)),
           ),
         if (entry.streak != null)
           _UserActivityListTile(
@@ -229,12 +237,19 @@ class UserActivityEntry extends ConsumerWidget {
 }
 
 class _UserActivityListTile extends StatelessWidget {
-  const _UserActivityListTile({required this.title, this.subtitle, this.trailing, this.leading});
+  const _UserActivityListTile({
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.leading,
+    this.onTap,
+  });
 
   final String title;
   final Widget? subtitle;
   final Widget? trailing;
   final Widget? leading;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +258,7 @@ class _UserActivityListTile extends StatelessWidget {
       title: Text(title, maxLines: 2),
       subtitle: subtitle,
       trailing: trailing,
+      onTap: onTap,
     );
   }
 }

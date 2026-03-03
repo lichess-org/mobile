@@ -20,7 +20,7 @@ void main() {
   });
 
   group('LichessClient', () {
-    test('sends requests to lichess host', () async {
+    test('sends requests to lichess host when only path is provided', () async {
       final container = await makeContainer(
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
@@ -38,6 +38,47 @@ void main() {
             .having((r) => r.url.path, 'path', '/test')
             .having((r) => r.url.host, 'host', 'lichess.dev')
             .having((r) => r.url.scheme, 'scheme', 'https'),
+      );
+    });
+
+    test('uses full URL as-is when host is provided', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      final response = await client.get(Uri.https('explorer.lichess.org', '/test'));
+      expect(response.statusCode, 200);
+      final requests = FakeClient.verifyRequests();
+      expect(
+        requests.first,
+        isA<http.BaseRequest>()
+            .having((r) => r.url.path, 'path', '/test')
+            .having((r) => r.url.host, 'host', 'explorer.lichess.org')
+            .having((r) => r.url.scheme, 'scheme', 'https'),
+      );
+    });
+
+    test('uses full URL as-is with query parameters when host is provided', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      final response = await client.get(Uri.https('explorer.lichess.org', '/test', {'foo': 'bar'}));
+      expect(response.statusCode, 200);
+      final requests = FakeClient.verifyRequests();
+      expect(
+        requests.first,
+        isA<http.BaseRequest>()
+            .having((r) => r.url.host, 'host', 'explorer.lichess.org')
+            .having((r) => r.url.queryParameters['foo'], 'query param', 'bar'),
       );
     });
 

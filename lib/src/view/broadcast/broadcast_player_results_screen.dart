@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -331,8 +332,7 @@ class _OverallStatPlayer extends StatelessWidget {
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.broadcastScore,
-                      value:
-                          '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                      value: '${NumberFormat('0.#').format(score)} / $played',
                     ),
                   ),
                 if (performance != null)
@@ -385,9 +385,7 @@ class _TieBreaksSection extends StatelessWidget {
                   dense: true,
                   title: Text(tieBreak.description),
                   trailing: Text(
-                    tieBreak.points.toStringAsFixed(
-                      (tieBreak.points == tieBreak.points.roundToDouble()) ? 0 : 1,
-                    ),
+                    NumberFormat('0.##').format(tieBreak.points),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -417,7 +415,7 @@ class _GameResultListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
         playerGameResult;
-    final BroadcastPlayer(:federation, :title, :name, :rating) = opponent;
+    final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
 
     return ListTile(
@@ -440,58 +438,71 @@ class _GameResultListTile extends StatelessWidget {
             ? Image.asset('assets/images/anon-engine.webp', width: 40, height: 40)
             : Image.asset('assets/images/anon-face.webp', width: 40, height: 40),
       ),
-      title: Row(
-        mainAxisSize: .min,
-        children: [
-          if (title != null) ...[
-            Text(
-              title,
-              style: TextStyle(
-                color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Flexible(child: Text(name ?? '', overflow: TextOverflow.ellipsis)),
-        ],
-      ),
+      title: BroadcastPlayerWidget(player: opponent, showFederation: false, showRating: false),
       subtitle: federation != null
           ? Row(
               mainAxisSize: .min,
               children: [
                 Image.asset('assets/images/fide-fed/$federation.png', height: 12),
                 const SizedBox(width: 5),
-                if (opponent.rating != null) Text(opponent.rating.toString()),
+                if (rating != null) Text(rating.toString()),
               ],
             )
           : null,
       trailing: SizedBox(
-        width: 40,
-        child: Column(
+        width: 60,
+        child: Row(
           mainAxisSize: .min,
-          crossAxisAlignment: .end,
+          mainAxisAlignment: .center,
           children: [
-            Row(
-              mainAxisSize: .min,
-              children: [
-                Text(
-                  switch (points) {
-                    BroadcastPoints.one => '1',
-                    BroadcastPoints.half => '½',
-                    BroadcastPoints.zero => '0',
-                    _ => '*',
-                  },
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            SizedBox(
+              width: 30,
+              child: Center(
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    border:
+                        (Theme.of(context).brightness == .light && color == .white ||
+                            Theme.of(context).brightness == .dark && color == .black)
+                        ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
+                        : null,
+                    shape: .circle,
+                    color: switch (color) {
+                      .white => Colors.white.withValues(alpha: 0.9),
+                      .black => Colors.black.withValues(alpha: 0.9),
+                    },
+                  ),
                 ),
-              ],
+              ),
             ),
-            if (showRatingDiff &&
-                playerGameResult.ratingDiff != null &&
-                playerGameResult.ratingDiff != 0)
-              ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 12),
+            SizedBox(
+              width: 30,
+              child: Column(
+                mainAxisSize: .min,
+                crossAxisAlignment: .end,
+                children: [
+                  Row(
+                    mainAxisSize: .min,
+                    children: [
+                      Text(
+                        switch (points) {
+                          .one => '1',
+                          .half => '½',
+                          .zero => '0',
+                          _ => '*',
+                        },
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
+                      ),
+                    ],
+                  ),
+                  if (showRatingDiff &&
+                      playerGameResult.ratingDiff != null &&
+                      playerGameResult.ratingDiff != 0)
+                    ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 12),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -96,9 +97,10 @@ class _AddVariationButton extends ConsumerWidget {
                     ],
                   )
                 : Center(
-                    child: Text(
+                    child: AutoSizeText(
                       context.l10n.playVariationToCreateConditionalPremoves,
                       maxLines: 1,
+                      minFontSize: 12,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

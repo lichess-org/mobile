@@ -21,10 +21,16 @@ class MaterialScreenRoute<T extends Object?> extends MaterialPageRoute<T>
     super.maintainState,
     super.fullscreenDialog,
     super.allowSnapshotting,
+    this.overrideTransitionDuration,
   }) : super(builder: (_) => FullScreenBackground(child: screen));
 
   @override
   final Widget screen;
+
+  final Duration? overrideTransitionDuration;
+
+  @override
+  Duration get transitionDuration => overrideTransitionDuration ?? super.transitionDuration;
 }
 
 /// Builds a new route for the [screen] based on the platform.
@@ -38,10 +44,12 @@ Route<T> buildScreenRoute<T>(
   required Widget screen,
   bool fullscreenDialog = false,
   RouteSettings? settings,
+  Duration? transitionDuration,
 }) {
   return MaterialScreenRoute<T>(
     screen: screen,
     fullscreenDialog: fullscreenDialog,
     settings: settings,
+    overrideTransitionDuration: transitionDuration,
   );
 }

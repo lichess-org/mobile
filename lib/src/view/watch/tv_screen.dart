@@ -153,7 +153,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     );
 
                     return GameLayout(
-                      orientation: gameState.orientation,
+                      orientation: variantBoardOrientation(
+                        variant: gameState.game.meta.variant,
+                        youAre: gameState.orientation,
+                        isBoardTurned: false,
+                      ),
                       fen: position.fen,
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,

@@ -86,11 +86,11 @@ class StormController extends Notifier<StormState> {
     return newState;
   }
 
-  Future<void> onUserMove(NormalMove move) async {
+  Future<void> onUserMove(Move move) async {
     if (state.clock.endAt != null) return;
     state.clock.start();
 
-    if (isPromotionPawnMove(state.position, move)) {
+    if (move case NormalMove() when isPromotionPawnMove(state.position, move)) {
       state = state.copyWith(promotionMove: move);
       return;
     }
@@ -234,7 +234,9 @@ class StormController extends Notifier<StormState> {
     );
     Future<void>.delayed(userMove ? Duration.zero : const Duration(milliseconds: 250), () {
       if (pos.board.pieceAt(move.to) != null) {
-        ref.read(moveFeedbackServiceProvider).captureFeedback(check: state.position.isCheck);
+        ref
+            .read(moveFeedbackServiceProvider)
+            .captureFeedback(Variant.standard, check: state.position.isCheck);
       } else {
         ref.read(moveFeedbackServiceProvider).moveFeedback(check: state.position.isCheck);
       }

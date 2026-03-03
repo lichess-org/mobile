@@ -215,16 +215,11 @@ abstract class Node {
   }) {
     final pos = nodeAt(path).position;
 
-    final potentialAltCastlingMove =
-        move is NormalMove &&
-        pos.board.roleAt(move.from) == Role.king &&
-        pos.board.roleAt(move.to) != Role.rook;
+    final normalizedMove = normalizeMove(pos, move);
 
-    final convertedMove = potentialAltCastlingMove ? convertAltCastlingMove(move) ?? move : move;
-
-    final (newPos, newSan) = pos.makeSan(convertedMove);
+    final (newPos, newSan) = pos.makeSan(normalizedMove);
     final newNode = Branch(
-      sanMove: SanMove(newSan, convertedMove),
+      sanMove: SanMove(newSan, normalizedMove),
       position: newPos,
       comments: (clock != null) ? [PgnComment(clock: clock)] : null,
     );
@@ -239,11 +234,15 @@ abstract class Node {
     return newPath != null ? addMovesAt(newPath, moves.skip(1), prepend: prepend) : null;
   }
 
-  /// The function `convertAltCastlingMove` checks if a move is an alternative
-  /// castling move and converts it to the corresponding standard castling move if so.
-  Move? convertAltCastlingMove(Move move) {
-    return altCastles.containsValue(move.uci)
-        ? Move.parse(altCastles.entries.firstWhere((e) => e.value == move.uci).key)
+  /// Normalizes the move to the king takes rook castling notation if it is an alternate castling move.
+  Move normalizeMove(Position pos, Move move) {
+    final potentialAltCastlingMove =
+        move is NormalMove &&
+        pos.board.roleAt(move.from) == Role.king &&
+        pos.board.roleAt(move.to) != Role.rook;
+    if (!potentialAltCastlingMove) return move;
+    return kingTakesRookCastles[move.uci] != null
+        ? NormalMove.fromUci(kingTakesRookCastles[move.uci]!)
         : move;
   }
 

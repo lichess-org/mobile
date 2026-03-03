@@ -535,6 +535,11 @@ class SocketPool {
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
 
+  /// Whether the pool is disposed.
+  ///
+  /// If true, the clients cannot be reconnected. And the clients `onStreamListen` and `onStreamCancel` callbacks are no-ops.
+  bool _isDisposed = false;
+
   /// The current socket route.
   Uri _currentRoute = Uri(path: kDefaultSocketRoute);
 
@@ -556,6 +561,10 @@ class SocketPool {
     bool? forceReconnect,
     VoidCallback? onEventGapFailure,
   }) {
+    if (_isDisposed) {
+      throw StateError('SocketPool is disposed, cannot open new socket.');
+    }
+
     _currentRoute = route;
 
     if (_pool[route] == null) {
@@ -568,9 +577,11 @@ class SocketPool {
         deviceInfo: _ref.read(preloadedDataProvider).requireValue.deviceInfo,
         sri: _ref.read(preloadedDataProvider).requireValue.sri,
         onStreamListen: () {
+          if (_isDisposed) return;
           _disposeTimers[route]?.cancel();
         },
         onStreamCancel: () {
+          if (_isDisposed) return;
           // Schedule the socket to be closed if idle, after a short delay to
           // avoid unnecessary reconnections.
           _disposeTimers[route]?.cancel();
@@ -615,6 +626,10 @@ class SocketPool {
 
   /// Disposes the pool and all its clients and resources.
   void dispose() {
+    if (_isDisposed) {
+      return;
+    }
+    _isDisposed = true;
     _averageLag.dispose();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());

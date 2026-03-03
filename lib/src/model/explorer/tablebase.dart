@@ -1,8 +1,23 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart' show Variant;
 
 part 'tablebase.freezed.dart';
+
+int _tablebasePieces(Variant variant) {
+  return switch (variant) {
+    Variant.standard || Variant.fromPosition || Variant.chess960 => 8,
+    Variant.atomic || Variant.antichess => 6,
+    _ => 0,
+  };
+}
+
+bool isTablebaseRelevant(Position pos) {
+  final pieceCount = pos.board.pieces.length;
+  return pieceCount <= _tablebasePieces(Variant.fromRule(pos.rule));
+}
 
 enum TablebaseCategory {
   win,

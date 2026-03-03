@@ -291,7 +291,7 @@ const watchEndpointResponse = '''
               "id": "AT6gq5Uq",
               "image": "https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:AT6gq5Uq:fKNqk30j.webp&w=800&sig=a1771f12984ee59439dd6edd4c15ed3c980e34c5",
               "info": {
-                  "fideTc": "standard",
+                  "fideTC": "standard",
                   "format": "10-player round-robin",
                   "location": "Chennai, India",
                   "players": "Arjun, Giri, Keymer, Vidit, Van Foreest, Liang",

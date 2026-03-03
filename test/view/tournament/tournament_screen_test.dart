@@ -84,6 +84,7 @@ String makeTournamentJson({
   required int nbPlayers,
   String? verdictsJson,
   TournamentMe? me,
+  bool isPrivate = false,
   String featuredGameJson = '',
 }) {
   final verdicts =
@@ -117,6 +118,7 @@ String makeTournamentJson({
     "players": [ ${standingPlayersToJson(standings)} ]
   },
   $kFeaturedGame,
+  "private": $isPrivate,
   "id": "82QbxlJb",
   "socketVersion": 0,
   "createdBy": "lichess",
@@ -1227,6 +1229,202 @@ void main() {
       expect(find.text('Team one'), findsOneWidget);
       expect(find.text('Team six'), findsOneWidget);
       expect(find.text('Team twelve'), findsOneWidget);
+    });
+  });
+  group('Joining Private Tournament', () {
+    testWidgets('shows entry code dialog when joining private tournament', (
+      WidgetTester tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tournament/82QbxlJb') {
+          return mockResponse(
+            makeTournamentJson(
+              standings: [],
+              nbPlayers: 5,
+              verdictsJson: '''
+    "verdicts": {
+      "list": [],
+      "accepted": true
+    },
+  ''',
+              isPrivate: true,
+            ),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      const name = 'testuser';
+      final user = LightUser(id: UserId.fromUserName(name), name: name);
+      final authUser = AuthUser(user: user, token: 'test-token');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        authUser: authUser,
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      // Tap Join button
+      expect(find.text('Join'), findsOneWidget);
+      await tester.tap(find.text('Join'));
+      await tester.pump();
+
+      // Verify entry code dialog appears
+      expect(find.text('Tournament entry code'), findsOneWidget);
+    });
+
+    testWidgets('successfully joins with correct entry code', (WidgetTester tester) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tournament/82QbxlJb') {
+          return mockResponse(
+            makeTournamentJson(
+              standings: [],
+              nbPlayers: 5,
+              verdictsJson: '''
+    "verdicts": {
+      "list": [],
+      "accepted": true
+    },
+  ''',
+              isPrivate: true,
+            ),
+            200,
+          );
+        }
+        if (request.url.path == '/api/tournament/82QbxlJb/join') {
+          if (request.body == 'password=correctEntryCode') {
+            return mockResponse('{}', 200);
+          } else {
+            return mockResponse('{"error": "Wrong entry code"}', 400);
+          }
+        }
+        if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
+            request.url.queryParameters['partial'] == 'true') {
+          return mockResponse(
+            makeReloadedTournamentJson(
+              me: (gameId: null, pauseDelay: null, rank: 1, withdraw: null),
+              standings: [],
+              page: 1,
+              nbPlayers: 6,
+            ),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      const name = 'testuser';
+      const tournamentId = TournamentId('82QbxlJb');
+      final user = LightUser(id: UserId.fromUserName(name), name: name);
+      final authUser = AuthUser(user: user, token: 'test-token');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: tournamentId),
+        authUser: authUser,
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      // Tap Join button
+      expect(find.text('Join'), findsOneWidget);
+      await tester.tap(find.text('Join'));
+      await tester.pump();
+
+      // Enter correct entry code
+      await tester.enterText(find.byType(TextField), 'correctEntryCode');
+      await tester.pump();
+
+      // Tap Join in dialog
+      await tester.tap(find.text('Join').last);
+      await tester.pump();
+
+      // Trigger reload
+      sendServerSocketMessages(TournamentController.socketUri(tournamentId), ['{"t": "reload"}']);
+      await tester.pump();
+
+      // Verify joined successfully
+      expect(find.text('Pause'), findsOneWidget);
+      expect(find.text('Join'), findsNothing);
+    });
+
+    testWidgets('shows error for incorrect entry code', (WidgetTester tester) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tournament/82QbxlJb') {
+          return mockResponse(
+            makeTournamentJson(
+              standings: [],
+              nbPlayers: 5,
+              verdictsJson: '''
+    "verdicts": {
+      "list": [],
+      "accepted": true
+    },
+  ''',
+              isPrivate: true,
+            ),
+            200,
+          );
+        }
+        if (request.url.path == '/api/tournament/82QbxlJb/join') {
+          if (request.body == 'password=correctEntryCode') {
+            return mockResponse('{}', 200);
+          } else {
+            return mockResponse('{"error": "Wrong entry code"}', 400);
+          }
+        }
+        return mockResponse('', 404);
+      });
+
+      const name = 'testuser';
+      final user = LightUser(id: UserId.fromUserName(name), name: name);
+      final authUser = AuthUser(user: user, token: 'test-token');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        authUser: authUser,
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      // Tap Join button
+      expect(find.text('Join'), findsOneWidget);
+      await tester.tap(find.text('Join'));
+      await tester.pump();
+
+      // Enter incorrect entry code
+      await tester.enterText(find.byType(TextField), 'wrongEntryCode');
+      await tester.pump();
+
+      // Tap Join in dialog
+      await tester.tap(find.text('Join').last);
+      await tester.pump();
+
+      // Verify error message appears
+      expect(find.text('Incorrect entry code.'), findsOneWidget);
+
+      // Verify still not joined
+      expect(find.text('Join'), findsOneWidget);
+      expect(find.text('Pause'), findsNothing);
     });
   });
 }

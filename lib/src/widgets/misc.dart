@@ -108,9 +108,11 @@ class _LichessMessageState extends State<LichessMessage> {
       spans.add(TextSpan(text: trans));
     }
 
-    return Text.rich(
-      TextSpan(style: widget.style, children: spans),
-      textAlign: widget.textAlign,
+    return MergeSemantics(
+      child: Text.rich(
+        TextSpan(style: widget.style, children: spans),
+        textAlign: widget.textAlign,
+      ),
     );
   }
 }

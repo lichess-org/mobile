@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
@@ -53,6 +54,11 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   Widget build(BuildContext context) {
     if (widget.position.ply >= 50) {
       return Center(child: Text(context.l10n.maxDepthReached));
+    }
+
+    final isLoggedIn = ref.watch(isLoggedInProvider);
+    if (!isLoggedIn) {
+      return Center(child: Text(context.l10n.youNeedAnAccountToDoThat));
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
@@ -156,10 +162,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       case AsyncError(:final error):
         debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
-        // TODO l10n
         final message = connectivity.whenIs(
           online: () => 'Could not load opening explorer data.',
-          offline: () => 'Opening Explorer is not available offline.',
+          offline: () => context.l10n.mobileOpeningExplorerNotAvailableOffline,
         );
         return Center(
           child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),

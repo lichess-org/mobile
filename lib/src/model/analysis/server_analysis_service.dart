@@ -154,12 +154,11 @@ class ServerAnalysisService {
     }
     for (final c in children) {
       final n2child = c as Map<String, dynamic>;
-      final id = n2child['id'] as String;
-      final n1child = n1.childById(UciCharPair.fromStringId(id));
+      final uci = n2child['uci'] as String;
+      final n1child = n1.childById(UciCharPair.fromUci(uci));
       if (n1child != null) {
         mergeOngoingAnalysis(n1child, n2child);
       } else {
-        final uci = n2child['uci'] as String;
         final san = n2child['san'] as String;
         final move = Move.parse(uci)!;
         n1.addChild(

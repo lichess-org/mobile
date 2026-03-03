@@ -43,16 +43,18 @@ class OverTheBoardClock extends Notifier<OverTheBoardClockState> {
       }
     });
 
-    return OverTheBoardClockState.fromTimeIncrement(
-      TimeIncrement(const Duration(minutes: 5).inSeconds, const Duration(seconds: 3).inSeconds),
-    );
+    return OverTheBoardClockState.fromTimeIncrement(TimeIncrement.blitzDefault());
   }
 
-  void setupClock(TimeIncrement timeIncrement) {
+  void setupClock(TimeIncrement timeIncrement, {Duration? whiteTimeLeft, Duration? blackTimeLeft}) {
     _stopwatch.stop();
     _stopwatch.reset();
 
-    state = OverTheBoardClockState.fromTimeIncrement(timeIncrement);
+    state = OverTheBoardClockState.fromTimeIncrement(
+      timeIncrement,
+      whiteTimeLeft: whiteTimeLeft,
+      blackTimeLeft: blackTimeLeft,
+    );
   }
 
   void restart() {
@@ -111,15 +113,19 @@ sealed class OverTheBoardClockState with _$OverTheBoardClockState {
     required Side? flagSide,
   }) = _OverTheBoardClockState;
 
-  factory OverTheBoardClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
+  factory OverTheBoardClockState.fromTimeIncrement(
+    TimeIncrement timeIncrement, {
+    Duration? whiteTimeLeft,
+    Duration? blackTimeLeft,
+  }) {
     final initialTime = timeIncrement.isInfinite
         ? null
         : Duration(seconds: max(timeIncrement.time, timeIncrement.increment));
 
     return OverTheBoardClockState(
       timeIncrement: timeIncrement,
-      whiteTimeLeft: initialTime,
-      blackTimeLeft: initialTime,
+      whiteTimeLeft: whiteTimeLeft ?? initialTime,
+      blackTimeLeft: blackTimeLeft ?? initialTime,
       activeClock: null,
       flagSide: null,
     );

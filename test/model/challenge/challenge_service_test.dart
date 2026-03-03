@@ -79,8 +79,13 @@ void main() {
 
   test('Listen to socket and show a notification for any new challenge', () async {
     when(
-      () =>
-          notificationDisplayMock.show(any(), any(), any(), any(), payload: any(named: 'payload')),
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
     ).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
@@ -115,10 +120,10 @@ void main() {
 
       final result = verify(
         () => notificationDisplayMock.show(
-          const ChallengeId('H9fIRZUk').hashCode,
-          'Bot1 challenges you!',
-          'Random side • Rated • 10+0',
-          captureAny(),
+          id: const ChallengeId('H9fIRZUk').hashCode,
+          title: 'Bot1 challenges you!',
+          body: 'Random side • Rated • 10+0',
+          notificationDetails: captureAny(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       );
@@ -143,10 +148,10 @@ void main() {
       // same notification should not be shown again
       verifyNever(
         () => notificationDisplayMock.show(
-          any(),
-          any(),
-          any(),
-          any(),
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       );
@@ -159,11 +164,18 @@ void main() {
 
   test('Cancels the notification for any missing challenge', () async {
     when(
-      () =>
-          notificationDisplayMock.show(any(), any(), any(), any(), payload: any(named: 'payload')),
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
     ).thenAnswer((_) => Future.value());
 
-    when(() => notificationDisplayMock.cancel(any())).thenAnswer((_) => Future.value());
+    when(
+      () => notificationDisplayMock.cancel(id: any(named: 'id')),
+    ).thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
       authUser: fakeAuthUser,
@@ -197,10 +209,10 @@ void main() {
 
       verify(
         () => notificationDisplayMock.show(
-          any(),
-          any(),
-          any(),
-          captureAny(),
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       );
@@ -214,7 +226,7 @@ void main() {
       async.flushMicrotasks();
 
       verify(
-        () => notificationDisplayMock.cancel(const ChallengeId('H9fIRZUk').hashCode),
+        () => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode),
       ).called(1);
 
       // closing the socket client to be able to flush the timers

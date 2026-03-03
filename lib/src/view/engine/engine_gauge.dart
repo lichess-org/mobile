@@ -33,6 +33,9 @@ typedef EngineGaugeParams = ({
 
   /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
   ExternalEval? serverEval,
+
+  /// Filters to identify the correct engine evaluation provider instance.
+  EngineEvaluationFilters filters,
 });
 
 class EngineGauge extends ConsumerWidget {
@@ -52,7 +55,7 @@ class EngineGauge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localEval = params.isLocalEngineAvailable
-        ? ref.watch(engineEvaluationProvider).eval
+        ? ref.watch(engineEvaluationProvider(params.filters)).eval
         : null;
     final eval = pickBestEval(
       localEval: localEval,

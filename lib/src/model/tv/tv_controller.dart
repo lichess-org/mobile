@@ -213,7 +213,7 @@ class TvController extends AsyncNotifier<TvState> {
         final newStep = GameStep(
           sanMove: sanMove,
           position: newPos,
-          diff: MaterialDiff.fromBoard(newPos.board),
+          diff: MaterialDiff.fromPosition(newPos),
         );
 
         TvState newState = curState.copyWith(

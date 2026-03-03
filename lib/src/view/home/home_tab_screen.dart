@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
@@ -56,9 +55,11 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+/// Number of cold app starts before hiding the home customization tip.
+const kColdAppStartsHideCustomizationTipThreshold = 5;
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key, this.editModeEnabled = false});
@@ -94,6 +95,9 @@ class _IsEditingHome extends InheritedWidget {
   }
 }
 
+const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
+const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
+
 class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -107,8 +111,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   void initState() {
     super.initState();
     _loadImageWorker();
-
-    showWelcomeMessage();
   }
 
   Future<void> _loadImageWorker() async {
@@ -116,68 +118,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     if (mounted) {
       setState(() {
         _worker = worker;
-      });
-    }
-  }
-
-  Future<bool> shouldDisplayWelcomeMessage() async {
-    if (LichessBinding.instance.sharedPreferences.getBool('app_welcome_message_shown') == true) {
-      return false;
-    }
-
-    if (ref.read(authControllerProvider) != null) {
-      return false;
-    }
-
-    final hasPlayedGames =
-        await (await ref.read(gameStorageProvider.future)).count(userId: null) > 0;
-
-    return !hasPlayedGames;
-  }
-
-  Future<void> showWelcomeMessage() async {
-    final prefs = LichessBinding.instance.sharedPreferences;
-    if (await shouldDisplayWelcomeMessage()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) return;
-        showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog.adaptive(
-            content: Container(
-              color:
-                  DialogTheme.of(context).backgroundColor ??
-                  ColorScheme.of(context).surfaceContainerHigh,
-              padding: const EdgeInsets.all(8.0),
-              child: Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    TextSpan(
-                      text: context.l10n.mobileNotAllFeaturesAreAvailable,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              PlatformDialogAction(
-                child: Text(context.l10n.ok),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        ).then((_) {
-          prefs.setBool('app_welcome_message_shown', true);
-        });
       });
     }
   }
@@ -227,36 +167,44 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
         if (shouldShowWelcomeScreen) {
           final welcomeWidgets = [
-            const _GreetingWidget(),
-            Padding(
-              padding: Styles.bodySectionPadding,
-              child: LichessMessage(style: TextTheme.of(context).bodyLarge),
+            const _EditableWidget(
+              widget: HomeEditableWidget.hello,
+              shouldShow: true,
+              child: _GreetingWidget(),
             ),
-            const SizedBox(height: 8.0),
-            if (authUser == null) ...[
-              const Center(child: _SignInWidget()),
-              const SizedBox(height: 16.0),
-            ],
-            if (Theme.of(context).platform != TargetPlatform.iOS &&
-                (authUser == null || authUser.user.isPatron != true)) ...[
+            if (!widget.editModeEnabled) ...[
+              Padding(
+                padding: Styles.bodySectionPadding,
+                child: LichessMessage(style: TextTheme.of(context).bodyLarge),
+              ),
+              const SizedBox(height: 8.0),
+              if (authUser == null) ...[
+                const Center(child: _SignInWidget()),
+                const SizedBox(height: 16.0),
+              ],
+              if (Theme.of(context).platform != TargetPlatform.iOS &&
+                  (authUser == null || authUser.user.isPatron != true)) ...[
+                Center(
+                  child: FilledButton.tonal(
+                    onPressed: () {
+                      launchUrl(Uri.parse('https://lichess.org/patron'));
+                    },
+                    child: Text(context.l10n.patronDonate),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+              ],
               Center(
                 child: FilledButton.tonal(
                   onPressed: () {
-                    launchUrl(Uri.parse('https://lichess.org/patron'));
+                    launchUrl(Uri.parse('https://lichess.org/about'));
                   },
-                  child: Text(context.l10n.patronDonate),
+                  child: Text(context.l10n.aboutX('Lichess...')),
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const _WelcomeMessageCard(),
+              const _HomeCustomizationTip(),
             ],
-            Center(
-              child: FilledButton.tonal(
-                onPressed: () {
-                  launchUrl(Uri.parse('https://lichess.org/about'));
-                },
-                child: Text(context.l10n.aboutX('Lichess...')),
-              ),
-            ),
           ];
 
           widgets = [
@@ -305,6 +253,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
+            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
             if (status.isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
@@ -361,6 +310,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
+            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
               shouldShow: authUser != null && status.isOnline,
@@ -452,7 +402,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text('OK'),
+                            child: Text(context.l10n.ok),
                           ),
                         ],
                       ),
@@ -987,5 +937,144 @@ class _ChallengeScreenButton extends ConsumerWidget {
         onPressed: null,
       ),
     };
+  }
+}
+
+class _WelcomeMessageCard extends StatefulWidget {
+  const _WelcomeMessageCard();
+
+  @override
+  State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
+}
+
+class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
+  bool _shouldDisplay() {
+    return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
+  }
+
+  void _dismiss() {
+    LichessBinding.instance.sharedPreferences.setBool(kWelcomeMessageShownKey, true);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_shouldDisplay()) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      TextSpan(
+                        text: context.l10n.mobileNotAllFeaturesAreAvailable,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeCustomizationTip extends StatefulWidget {
+  const _HomeCustomizationTip();
+
+  @override
+  State<_HomeCustomizationTip> createState() => _HomeCustomizationTipState();
+}
+
+class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
+  bool _shouldDisplayHomeWidgetCustomizationTip() {
+    final prefs = LichessBinding.instance.sharedPreferences;
+
+    return prefs.getBool(kHideHomeWidgetCustomizationTip) != true &&
+        LichessBinding.instance.numAppStarts <= kColdAppStartsHideCustomizationTipThreshold;
+  }
+
+  void _setHideHomeWidgetCustomizationTip(BuildContext context) {
+    LichessBinding.instance.sharedPreferences.setBool(kHideHomeWidgetCustomizationTip, true);
+
+    // trigger rebuild to hide the tip
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_shouldDisplayHomeWidgetCustomizationTip()) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_circle_outlined,
+                      size: 25.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Flexible(child: Text(context.l10n.mobileCustomizeHomeTip)),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+
+                      _setHideHomeWidgetCustomizationTip(context);
+                    },
+                    child: Text(context.l10n.mobileCustomizeButton),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      _setHideHomeWidgetCustomizationTip(context);
+                    },
+                    child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -225,7 +225,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required Position position,
     required PlayerSide playerSide,
     required NormalMove? promotionMove,
-    required void Function(NormalMove, {bool? isDrop}) onMove,
+    required void Function(Move, {bool? viaDragAndDrop}) onMove,
     required void Function(Role? role) onPromotionSelection,
     Premovable? premovable,
   }) {

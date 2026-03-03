@@ -15,7 +15,7 @@ final logPreferencesProvider = NotifierProvider<LogPreferencesNotifier, LogPrefs
 class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<LogPrefs> {
   @override
   @protected
-  PrefCategory get prefCategory => PrefCategory.overTheBoard;
+  PrefCategory get prefCategory => PrefCategory.log;
 
   @override
   @protected
@@ -32,7 +32,7 @@ class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<
   }
 }
 
-const _kDefaultLevel = kDebugMode ? Level.FINE : Level.WARNING;
+const _kDefaultLevel = Level.WARNING;
 
 @Freezed(fromJson: true, toJson: true)
 sealed class LogPrefs with _$LogPrefs implements Serializable {

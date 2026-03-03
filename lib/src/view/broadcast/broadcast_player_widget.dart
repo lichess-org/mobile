@@ -23,7 +23,10 @@ class BroadcastPlayerWidget extends ConsumerWidget {
     return Row(
       children: [
         if (federation != null && showFederation) ...[
-          Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+          Image.asset(
+            'assets/images/fide-fed/$federation.png',
+            height: ((textStyle ?? DefaultTextStyle.of(context).style).fontSize ?? 14) - 2,
+          ),
           const SizedBox(width: 5),
         ],
         if (title != null) ...[
@@ -31,17 +34,22 @@ class BroadcastPlayerWidget extends ConsumerWidget {
             title,
             style: TextStyle(
               color: (title == 'BOT') ? context.lichessColors.fancy : context.lichessColors.brag,
-              fontWeight: FontWeight.bold,
+              fontWeight: .bold,
+              fontSize: textStyle?.fontSize,
             ),
           ),
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text(name ?? '', style: textStyle, overflow: TextOverflow.ellipsis),
+          child: Text(name ?? '', style: textStyle, overflow: .ellipsis),
         ),
         if (rating != null && showRating) ...[
           const SizedBox(width: 5),
-          Text(rating.toString(), overflow: TextOverflow.ellipsis),
+          Text(
+            rating.toString(),
+            overflow: .ellipsis,
+            style: TextStyle(fontSize: textStyle?.fontSize),
+          ),
         ],
       ],
     );

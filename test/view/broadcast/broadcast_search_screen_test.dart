@@ -97,7 +97,7 @@ const nonEmptyResponse = '''
           "players": "Ju Wenjun vs Tan Zhongyi",
           "location": "Shanghai & Chongqing, China",
           "tc": "90 min / 40 moves + 30 min + 30 sec / move",
-          "fideTc": "standard",
+          "fideTC": "standard",
           "timeZone": "Asia/Shanghai"
         },
         "createdAt": 1742172004819,

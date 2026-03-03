@@ -26,6 +26,21 @@ sealed class SanMove with _$SanMove {
   // It's sufficient to check for O-O here, because that of course also covers O-O-O.
   bool get isCastles => san.startsWith('O-O');
 
+  /// Normalize UCI to a "king takes rook" UCI notation.
+  ///
+  /// Returns the original notation in chess960 variant where this notation is already forced and
+  /// where the normalized notation could conflict with the actual move.
+  UCIMove normalizeUci(Variant variant) {
+    if (variant == Variant.chess960) {
+      return move.uci;
+    }
+    if (isCastles) {
+      return kingTakesRookCastles[move.uci] ?? move.uci;
+    } else {
+      return move.uci;
+    }
+  }
+
   bool isIrreversible(Variant variant) {
     if (isCheck) return true;
     if (variant == Variant.crazyhouse) return false;
@@ -46,8 +61,15 @@ class MoveConverter implements JsonConverter<Move, String> {
   String toJson(Move object) => object.uci;
 }
 
-/// Alternative castling uci notations.
+/// Get alternate castling notations from king takes rook notation, e.g. e1c1 for O-O-O and e1g1 for O-O.
 const altCastles = {'e1a1': 'e1c1', 'e1h1': 'e1g1', 'e8a8': 'e8c8', 'e8h8': 'e8g8'};
+
+/// Get king takes rook castling notations from alternate notation, e.g. e1a1 for O-O-O and e1h1 for O-O.
+const kingTakesRookCastles = {'e1c1': 'e1a1', 'e1g1': 'e1h1', 'e8c8': 'e8a8', 'e8g8': 'e8h8'};
+
+/// Normalizes a UCI move string for comparison by converting alternate castling notations to
+/// "king takes rook" notation (e.g. e1c1 → e1a1).
+String normalizeUci(String uci) => kingTakesRookCastles[uci] ?? uci;
 
 /// Returns `true` if the move is a pawn promotion move that is not yet promoted.
 bool isPromotionPawnMove(Position position, NormalMove move) {
@@ -97,6 +119,15 @@ enum Variant {
 
   final String label;
   final IconData icon;
+
+  bool sideCanCastle(Side side) {
+    if (this == Variant.racingKings) return false;
+    if (this == Variant.antichess) return false;
+    if (side == Side.white && this == Variant.horde) return false;
+    return true;
+  }
+
+  bool get hasEnPassant => this != Variant.racingKings;
 
   bool get isReadSupported => readSupportedVariants.contains(this);
 

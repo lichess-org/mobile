@@ -1,13 +1,27 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 
 import '../../test_provider_scope.dart';
+
+void _mockClipboard(String text) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (methodCall) async {
+      if (methodCall.method == 'Clipboard.getData') {
+        return {'text': text};
+      }
+      return null;
+    },
+  );
+}
 
 void main() {
   group('Board Editor', () {
@@ -20,7 +34,52 @@ void main() {
       expect(editor.orientation, Side.white);
       expect(editor.pointerMode, EditorPointerMode.drag);
 
-      // Legal position, so allowed top open analysis board
+      // Legal position, so allowed to open analysis board
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
+        isNotNull,
+      );
+    });
+
+    testWidgets('Opening with variant loads its starting position', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BoardEditorScreen(params: (initialVariant: Variant.horde, initialFen: null)),
+      );
+      await tester.pumpWidget(app);
+
+      final editor = tester.widget<ChessboardEditor>(find.byType(ChessboardEditor));
+      expect(editor.pieces, readFen(Variant.horde.initialPosition.fen));
+    });
+
+    testWidgets('Changing variant', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for variant selection dialog to open
+      await tester.tap(find.textContaining('Horde'));
+      await tester.pumpAndSettle(); // wait for variant to change
+
+      // After changing variant, pieces are not reset to that Variant's initial position
+      expect(
+        tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces,
+        readFen(Chess.initial.fen),
+      );
+
+      /// But when explicitly resetting to the starting position, we now load the Horde starting position
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Starting position'));
+      await tester.pumpAndSettle(); // wait for position to reset
+      expect(
+        tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces,
+        readFen(Horde.initial.fen),
+      );
+
+      // Legal position, so allowed to open analysis board
       expect(
         tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
         isNotNull,
@@ -289,6 +348,56 @@ void main() {
         container.read(controllerProvider).fen,
         'Qnbqkbnr/Qppppppp/Q7/Q7/Q7/Q6r/QPPPPPPP/QNBQKBNr w k - 0 1',
       );
+    });
+
+    group('FEN dialog', () {
+      tearDown(() {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        );
+      });
+
+      testWidgets('Pasting valid FEN loads position and closes dialog', (tester) async {
+        // Spanish Opening after 1.e4 e5 2.Nf3 Nc6 3.Bb5: bishop on c4, not f1
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 3';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        // Dialog is gone, board editor is still on screen
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.byType(BoardEditorScreen), findsOneWidget);
+
+        // Board reflects the new position
+        expect(find.byKey(const Key('c4-whitebishop')), findsOneWidget);
+        expect(find.byKey(const Key('f1-whitebishop')), findsNothing);
+      });
+
+      testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
+        _mockClipboard('not a valid fen');
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.text('Invalid FEN'), findsOneWidget);
+      });
     });
 
     testWidgets('Drag pieces onto the board', (tester) async {

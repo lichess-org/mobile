@@ -10,6 +10,8 @@ typedef ColorSchemes = ({ColorScheme light, ColorScheme dark});
 
 ColorSchemes? _dynamicColorSchemes;
 
+// TODO migrate
+// ignore_for_file: deprecated_member_use
 CorePalette? _corePalette;
 
 ChessboardColorScheme? _boardColorScheme;

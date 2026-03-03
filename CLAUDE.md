@@ -265,6 +265,35 @@ All data structures must be immutable (all fields `final` or `late final`):
 ### Strong Typing
 Prefer strong types over primitives (e.g., `Duration` instead of `int`).
 
+### Dot Shorthand Syntax (Dart 3.10+)
+Use dot shorthand syntax (`.foo`) to write more concise code when the type can be inferred from context. This is especially useful for enums, named constructors, and static members.
+
+```dart
+// Enums - use shorthand
+Status current = .running;           // Good
+Status current = Status.running;     // Verbose
+
+// Switch statements
+switch (status) {
+  case .running: ...
+  case .stopped: ...
+}
+
+// Named constructors
+Point p = .origin();                 // Good
+Point p = Point.origin();            // Verbose
+
+// Widget properties
+MainAxisAlignment: .center,          // Good
+MainAxisAlignment: MainAxisAlignment.center,  // Verbose
+
+// Equality checks (shorthand on right side)
+if (color == .red) ...               // Good
+if (.red == color) ...               // Won't work
+```
+
+**Note**: Shorthand requires clear context type inference and cannot start expression statements.
+
 ### Functional Style
 Prefer functional constructs over imperative:
 ```dart

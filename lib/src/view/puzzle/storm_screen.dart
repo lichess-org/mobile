@@ -124,7 +124,7 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: stormState.promotionMove,
-      onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
+      onMove: (move, {viaDragAndDrop}) => ref.read(ctrlProvider.notifier).onUserMove(move),
       onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       premovable: null,
     );
@@ -197,7 +197,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: stormState.position.fen,
                                 orientation: stormState.pov,
                                 gameData: gameData,
-                                lastMove: stormState.lastMove as NormalMove?,
+                                lastMove: stormState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -316,7 +316,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 fen: stormState.position.fen,
                                 orientation: stormState.pov,
                                 gameData: gameData,
-                                lastMove: stormState.lastMove as NormalMove?,
+                                lastMove: stormState.lastMove,
                                 shapes: userShapes,
                                 settings: defaultSettings,
                               ),
@@ -346,7 +346,7 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: () =>
+            shouldExcludeGesturesOnFocusGained:
                 stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
             shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
@@ -696,10 +696,7 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.delete,
           label: context.l10n.stormNewRun.split('(').first.trimRight(),
           showLabel: true,
-          onTap: () {
-            stormState.clock.reset();
-            ref.invalidate(stormProvider);
-          },
+          onTap: () => ref.invalidate(stormProvider),
         ),
         if (stormState.mode == StormMode.running)
           BottomBarButton(
@@ -820,8 +817,10 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
             padding: Styles.horizontalBodyPadding,
             child: FilledButton(
               onPressed: () {
-                ref.invalidate(stormProvider);
                 Navigator.of(context).pop();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref.invalidate(stormProvider);
+                });
               },
               child: Text(context.l10n.stormPlayAgain),
             ),

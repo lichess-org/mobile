@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -26,7 +27,7 @@ void main() {
   // );
 
   final mockClient = MockClient((request) {
-    if (request.url.host == 'explorer.lichess.ovh') {
+    if (request.url.host == kLichessOpeningExplorerHost) {
       if (request.url.path == '/masters') {
         return mockResponse(mastersOpeningExplorerResponse, 200);
       }
@@ -40,7 +41,8 @@ void main() {
     return mockResponse('', 404);
   });
 
-  const options = AnalysisOptions.standalone(
+  const options = AnalysisOptions.pgn(
+    id: StringId('standalone'),
     orientation: Side.white,
     pgn: '',
     isComputerAnalysisAllowed: false,
@@ -58,6 +60,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
+        authUser: authUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
@@ -97,13 +100,17 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const OpeningExplorerScreen(options: options),
+        authUser: authUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
         },
         defaultPreferences: {
-          SessionPreferencesStorage.key(PrefCategory.openingExplorer.storageKey, null): jsonEncode(
+          SessionPreferencesStorage.key(
+            PrefCategory.openingExplorer.storageKey,
+            authUser,
+          ): jsonEncode(
             OpeningExplorerPrefs.defaults().copyWith(db: OpeningDatabase.lichess).toJson(),
           ),
         },

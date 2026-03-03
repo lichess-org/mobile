@@ -122,8 +122,8 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final showEvaluationBar = ref.watch(
-      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+    final showEvaluationGauges = ref.watch(
+      broadcastPreferencesProvider.select((value) => value.showRoundEvaluationGauges),
     );
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
@@ -184,7 +184,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
             delegate: SliverChildBuilderDelegate((context, index) {
               final boardSize =
                   boardWithMaybeEvalBarWidth -
-                  (showEvaluationBar
+                  (showEvaluationGauges
                       ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
                       : 0);
 
@@ -206,7 +206,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                 tournamentId: widget.tournamentId,
                 tournamentSlug: widget.tournamentSlug,
                 roundSlug: widget.roundSlug,
-                showEvaluationBar: showEvaluationBar,
+                showEvaluationGauge: showEvaluationGauges,
                 boardSize: boardSize,
                 boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
                 playingSide: playingSide,
@@ -234,7 +234,7 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
     required this.tournamentId,
     required this.tournamentSlug,
     required this.roundSlug,
-    required this.showEvaluationBar,
+    required this.showEvaluationGauge,
     required this.boardSize,
     required this.boardWithMaybeEvalBarWidth,
     required this.playingSide,
@@ -246,7 +246,7 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
   final BroadcastTournamentId tournamentId;
   final String tournamentSlug;
   final String roundSlug;
-  final bool showEvaluationBar;
+  final bool showEvaluationGauge;
   final double boardSize;
   final double boardWithMaybeEvalBarWidth;
   final Side playingSide;
@@ -300,7 +300,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         },
         orientation: Side.white,
         fen: widget.game.fen,
-        showEvaluationBar: widget.showEvaluationBar,
+        showEvaluationGauge: widget.showEvaluationGauge,
         whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
             ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
             : null,

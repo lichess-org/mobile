@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -31,15 +33,18 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
+import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -184,14 +189,16 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: false,
-            title: _Title(variant: value.variant),
-            actions: appBarActions,
+        return WakelockWidget(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              centerTitle: false,
+              title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
+              actions: appBarActions,
+            ),
+            body: _Body(options: widget.options, controller: _tabController),
           ),
-          body: _Body(options: widget.options, controller: _tabController),
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);
@@ -201,7 +208,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             centerTitle: false,
-            title: const _Title(variant: Variant.standard),
+            title: VariantAppBarTitle(variant: Variant.standard, title: context.l10n.analysis),
             actions: appBarActions,
           ),
           body: const Center(child: CircularProgressIndicator.adaptive()),
@@ -269,25 +276,6 @@ class _AnalysisMenu extends ConsumerWidget {
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title({required this.variant});
-
-  final Variant variant;
-
-  static const excludedIcons = [Variant.standard, Variant.fromPosition];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (!excludedIcons.contains(variant)) ...[Icon(variant.icon), const SizedBox(width: 5.0)],
-        Flexible(child: AppBarTitleText(context.l10n.analysis)),
-      ],
-    );
-  }
-}
-
 class _Body extends ConsumerWidget {
   const _Body({required this.options, required this.controller});
 
@@ -341,6 +329,27 @@ class _Body extends ConsumerWidget {
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
         result: result?.resultToString(pov.opposite),
       );
+    } else if (options case Standalone()) {
+      // Standalone analysis - try to get player info from PGN headers
+      final footerPlayer = analysisState.playerFromPgnHeaders(pov);
+      final headerPlayer = analysisState.playerFromPgnHeaders(pov.opposite);
+
+      if (footerPlayer != null || headerPlayer != null) {
+        final resultString = analysisState.pgnHeaders.get('Result');
+        final result = resultString != null
+            ? AnalysisGameResult.resultFromPgnResult(resultString)
+            : null;
+
+        boardFooter = footerPlayer != null
+            ? _AnalysisPlayerWidget(player: footerPlayer, result: result?.resultToString(pov))
+            : null;
+        boardHeader = headerPlayer != null
+            ? _AnalysisPlayerWidget(
+                player: headerPlayer,
+                result: result?.resultToString(pov.opposite),
+              )
+            : null;
+      }
     }
 
     return FocusDetector(
@@ -363,6 +372,7 @@ class _Body extends ConsumerWidget {
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
             ? EngineLines(
+                filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
                 savedEval: currentNode.eval,
                 isGameOver: currentNode.position.isGameOver,
@@ -493,6 +503,10 @@ class _BottomBar extends ConsumerWidget {
                 future: toggleFuture,
                 builder: (context, snapshot) {
                   return EngineButton(
+                    filters: (
+                      id: analysisState.evaluationContext.id,
+                      path: analysisState.currentPath,
+                    ),
                     savedEval: analysisState.currentNode.eval,
                     onTap:
                         analysisState.isEngineAllowed &&
@@ -553,18 +567,58 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        if (options case Standalone())
+        if (options case Standalone(:final pgn)) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.clearSavedMoves),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),
           ),
+          // Only allow changing the variant if this is standalone analysis entered from the home screen,
+          // but not for any other case like puzzle analysis or an active correspondence game.
+          if (pgn.isEmpty)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.variant),
+              onPressed: () => showChoicePicker<Variant>(
+                context,
+                choices: readSupportedVariants
+                    .where(
+                      (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
+                    )
+                    .toList(),
+                selectedItem: analysisState.variant,
+                labelBuilder: (Variant variant) => Text.rich(
+                  TextSpan(
+                    children: [
+                      WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
+                      const WidgetSpan(child: SizedBox(width: 8)),
+                      TextSpan(text: variant.label),
+                    ],
+                  ),
+                ),
+                onSelectedItemChanged: (Variant variant) =>
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .clearSavedStandaloneAnalysis();
+                      Navigator.of(context, rootNavigator: true).pushReplacement(
+                        buildScreenRoute<dynamic>(
+                          context,
+                          screen: AnalysisScreen(
+                            options: (options as Standalone).copyWith(variant: variant),
+                          ),
+                          transitionDuration: Duration.zero,
+                        ),
+                      );
+                    }),
+              ),
+            ),
+        ],
         if (analysisState.isEngineAvailable(evalPrefs))
           BottomSheetAction(
             makeLabel: (context) => Text(
               analysisState.engineInThreatMode
-                  ? 'Stop showing threat' // TODO l10n
+                  ? context.l10n.mobileStopShowingThreat
                   : context.l10n.showThreat,
             ),
             onPressed: () =>
@@ -575,8 +629,7 @@ class _BottomBar extends ConsumerWidget {
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
         if (options case ArchivedGame())
-          if (analysisState.isComputerAnalysisAllowed &&
-              engineSupportedVariants.contains(analysisState.variant))
+          if (analysisState.isComputerAnalysisAllowed)
             if (mySide != null)
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
@@ -607,10 +660,18 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: () {
               final boardFen = analysisState.currentPosition.fen;
-              Navigator.of(
-                context,
-              ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
+              Navigator.of(context).push(
+                BoardEditorScreen.buildRoute(context, (
+                  initialVariant: analysisState.variant,
+                  initialFen: boardFen,
+                )),
+              );
             },
+          ),
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.continueFromHere),
+            onPressed: () => _showContinueFromHereMenu(context, ref),
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
@@ -644,6 +705,79 @@ class _BottomBar extends ConsumerWidget {
             },
           ),
       ],
+    );
+  }
+
+  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final boardFen = analysisState.currentPosition.fen;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: boardFen)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OverTheBoardScreen.buildRoute(context, initialFen: boardFen)),
+        ),
+      ],
+    );
+  }
+}
+
+/// Player widget for PGN imports, displaying analysis player info
+class _AnalysisPlayerWidget extends StatelessWidget {
+  const _AnalysisPlayerWidget({required this.player, this.result});
+
+  final AnalysisPlayer player;
+  final String? result;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kAnalysisBoardHeaderOrFooterHeight,
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Row(
+        children: [
+          if (result != null) ...[
+            Text(result!, style: const TextStyle(fontWeight: .bold)),
+            const SizedBox(width: 16.0),
+          ],
+          if (player.title != null) ...[
+            Text(
+              player.title!,
+              style: TextStyle(
+                color: (player.title == 'BOT')
+                    ? context.lichessColors.fancy
+                    : context.lichessColors.brag,
+                fontWeight: .bold,
+              ),
+            ),
+            const SizedBox(width: 5),
+          ],
+          Flexible(
+            child: Text(
+              player.name,
+              style: const TextStyle(fontWeight: .bold),
+              overflow: .ellipsis,
+            ),
+          ),
+          if (player.rating != null) ...[
+            const SizedBox(width: 5),
+            Text(
+              player.rating.toString(),
+              overflow: .ellipsis,
+              style: TextStyle(fontWeight: FontWeight.w400, color: textShade(context, 0.8)),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

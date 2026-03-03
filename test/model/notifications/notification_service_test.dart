@@ -155,10 +155,10 @@ void main() {
 
       when(
         () => notificationDisplayMock.show(
-          any(),
-          any(),
-          any(),
-          any(),
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
           payload: any(named: 'payload'),
         ),
       ).thenAnswer((_) => Future.value());
@@ -188,10 +188,10 @@ void main() {
 
         final result = verify(
           () => notificationDisplayMock.show(
-            fullId.hashCode,
-            'It is your turn!',
-            'Dr-Alaakour played a move',
-            captureAny(),
+            id: fullId.hashCode,
+            title: 'It is your turn!',
+            body: 'Dr-Alaakour played a move',
+            notificationDetails: captureAny(named: 'notificationDetails'),
             payload: jsonEncode(expectedNotif.payload),
           ),
         );

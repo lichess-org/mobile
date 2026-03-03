@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 import '../test_helpers.dart';
@@ -90,11 +91,16 @@ void main() {
       final boardSize = tester.getSize(find.byType(Chessboard));
 
       if (isPortrait) {
-        final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+        // isShortVerticalScreen uses viewPadding=0 in tests, kToolbarHeight=56, kBottomBarHeight=56
+        final isShortScreen =
+            surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
+            kSmallHeightMinusBoard;
+        final baseBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+        final expectedBoardSize = isShortScreen ? baseBoardSize - 16.0 : baseBoardSize;
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
-          reason: 'Board size should match surface width on $surface',
+          reason: 'Board size should be $expectedBoardSize on $surface',
         );
       } else {
         final topTableSize = tester.getSize(find.byKey(const ValueKey('top_table')));
@@ -127,4 +133,58 @@ void main() {
       }
     }
   }, variant: kPlatformVariant);
+
+  test('variantBoardOrientation', () {
+    for (final variant in Variant.values.where((v) => v != Variant.racingKings)) {
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.white, isBoardTurned: false),
+        Side.white,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.black, isBoardTurned: false),
+        Side.black,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.white, isBoardTurned: true),
+        Side.black,
+      );
+      expect(
+        variantBoardOrientation(variant: variant, youAre: Side.black, isBoardTurned: true),
+        Side.white,
+      );
+    }
+
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.white,
+        isBoardTurned: false,
+      ),
+      Side.white,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.black,
+        isBoardTurned: false,
+      ),
+      Side.white,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.white,
+        isBoardTurned: true,
+      ),
+      Side.black,
+    );
+    expect(
+      variantBoardOrientation(
+        variant: Variant.racingKings,
+        youAre: Side.black,
+        isBoardTurned: true,
+      ),
+      Side.black,
+    );
+  });
 }

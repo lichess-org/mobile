@@ -72,7 +72,7 @@ class SmallBoardPreview extends ConsumerWidget {
                     size: boardSize,
                     fen: fen,
                     orientation: orientation,
-                    lastMove: lastMove as NormalMove?,
+                    lastMove: lastMove,
                     pieceAssets: boardPrefs.pieceSet.assets,
                     colorScheme: boardPrefs.boardTheme.colors,
                     brightness: boardPrefs.brightness,

@@ -160,16 +160,16 @@ class ListSection extends StatelessWidget {
     bool cupertinoHasLeading = false,
     double? cupertinoLeadingIndent,
   }) {
-    tiles = tiles.toList();
+    final tilesList = tiles.toList();
 
-    if (tiles.isEmpty || tiles.length == 1) {
+    if (tilesList.isEmpty || tilesList.length == 1) {
       return tiles;
     }
 
     final List<Widget> result = [];
-    for (int i = 0; i < tiles.length; i++) {
-      result.add(tiles.elementAt(i));
-      if (i != tiles.length - 1) {
+    for (int i = 0; i < tilesList.length; i++) {
+      result.add(tilesList.elementAt(i));
+      if (i != tilesList.length - 1) {
         result.add(
           PlatformDivider(
             height: 0,
