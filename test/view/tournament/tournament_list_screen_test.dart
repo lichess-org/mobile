@@ -33,8 +33,8 @@ void main() {
       // Should display ongoing tournaments by default
       expect(find.text('<=2000 SuperBlitz Arena'), findsOneWidget);
 
-      // Should not display unsupported variants
-      expect(find.text('Hourly Crazyhouse Arena'), findsNothing);
+      // Should display supported variants
+      expect(find.text('Hourly Crazyhouse Arena'), findsOneWidget);
 
       // Should display team battle tournaments
       expect(find.text('Team Battle Arena'), findsOneWidget);
