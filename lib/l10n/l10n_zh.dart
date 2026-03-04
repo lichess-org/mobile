@@ -248,7 +248,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileViewGame => '查看对局';
 
   @override
-  String get mobileCustomizeHomeTip => '提示：您可以在主屏幕上添加更多小组件，或移除不需要的';
+  String get mobileCustomizeHomeTip => '提示：您可以在主屏幕上添加更多小组件，或移除不需要的！';
 
   @override
   String get mobileCustomizeHomeTipDismiss => '取消';
@@ -275,13 +275,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
 
   @override
-  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\\n您可以在首页选项卡中访问它。';
 
   @override
   String get mobilePreviousPage => '上一页';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
   String get activityActivity => '动态';
@@ -1861,6 +1861,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '消除保护另一个棋子的防御子，使得接下来可以吃掉那个失去保护的棋子。';
 
   @override
+  String get puzzleThemeCollinearMove => '共线移动';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => '两枚对立的棋子彼此面对，其中一枚棋子沿攻击线移动但不吃子。';
+
+  @override
   String get puzzleThemeCornerMate => '角落将杀';
 
   @override
@@ -1885,7 +1891,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => '两条相邻斜线上的两个进攻象，在己方棋子阻挡下将杀对方的王。';
 
   @override
-  String get puzzleThemeDovetailMate => '燕尾杀王';
+  String get puzzleThemeDovetailMate => '鸽尾杀王';
 
   @override
   String get puzzleThemeDovetailMateDescription => '后将军紧邻的对方王，而对方王仅有的两个逃跑格被己方棋子阻挡。';
@@ -3240,7 +3246,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pasteThePgnStringHere => '在此处粘贴 PGN 文本';
 
   @override
-  String get orUploadPgnFile => '或上传 PGN 文件';
+  String get orUploadPgnFile => '或者上传 PGN 文件';
 
   @override
   String get continueFromHere => '从此处继续';
@@ -4050,9 +4056,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => '进入/退出变着';
-
-  @override
-  String get keyRequestComputerAnalysis => '请求电脑分析，并从失误中学习';
 
   @override
   String get keyPreviousBranch => '上一个分支';
@@ -10170,9 +10173,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get keyEnterOrExitVariation => '進入/退出變體';
-
-  @override
-  String get keyRequestComputerAnalysis => '請求引擎分析，從你的失誤中學習';
 
   @override
   String get keyPreviousBranch => '上一個分支';

@@ -1905,6 +1905,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Уклањање фигуре која је критична за одбрану друге фигуре, што омогућава да сада небрањена фигура буде однета на следећем потезу.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4094,9 +4100,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'уђи/изађи из варијације';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Затражите компјутерску анализу, научите из својих грешака';
 
   @override
   String get keyPreviousBranch => 'Претходна грана';

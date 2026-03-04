@@ -281,7 +281,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePreviousPage => 'Înapoi';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
   String get activityActivity => 'Activitate';
@@ -1915,6 +1915,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Mutare coliniară';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Două piese opuse se înfruntă una pe cealaltă, iar una mută de-a lungul liniei de atac fără a captura piesa inamică.';
 
   @override
   String get puzzleThemeCornerMate => 'Mat în colț';
@@ -4106,9 +4112,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'acceptă/respinge variație';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicită analiza calculatorului, Învață din greșelile tale';
 
   @override
   String get keyPreviousBranch => 'Ramura precedentă';

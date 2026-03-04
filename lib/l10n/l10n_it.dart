@@ -1889,6 +1889,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Matto nell\'angolo';
 
   @override
@@ -4080,9 +4086,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get keyEnterOrExitVariation => 'entra/esci dalla variante';
 
   @override
-  String get keyRequestComputerAnalysis => 'Richiedi analisi del computer, Impara dai tuoi errori';
-
-  @override
   String get keyPreviousBranch => 'Variante precedente';
 
   @override
@@ -5000,7 +5003,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tags => 'Tag';
 
   @override
-  String get enPassant => 'En passant rights';
+  String get enPassant => 'Regole En passant';
 
   @override
   String opponentLeftCounter(int count) {

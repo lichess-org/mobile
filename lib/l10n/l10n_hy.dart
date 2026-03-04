@@ -1889,6 +1889,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'բացել/փակել տարբերակը';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Պատվիրեք համակարգչային վերլուծություն, սովորեք սեփական սխալներից';
 
   @override
   String get keyPreviousBranch => 'Նախորդ ճյուղ';

@@ -1889,6 +1889,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Forprenu ŝakpecon, kiu estas grava por defendo de alia ŝakpeco, ebligante la kapto de la nun nedefendata ŝakpeco dum sekva movo.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'eniru/forlasu variaĵon';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Peti komputilan analizon, Lerni de viaj eraroj';
 
   @override
   String get keyPreviousBranch => 'Antaŭa branĉo';

@@ -281,7 +281,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePreviousPage => 'Попередня';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
   String get activityActivity => 'Активність';
@@ -1943,6 +1943,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Захоплення фігури, що захищає іншу фігуру, дозволяє захопити незахищену фігуру наступним ходом.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
 
   @override
   String get puzzleThemeCornerMate => 'Кутовий мат';
@@ -4134,9 +4140,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'зайти/вийти з варіанту';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Зробити запит на комп\'ютерний аналіз, Учіться на своїх помилках';
 
   @override
   String get keyPreviousBranch => 'Попередній варіант';

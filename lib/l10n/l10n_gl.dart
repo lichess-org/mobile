@@ -281,7 +281,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
   String get activityActivity => 'Actividade';
@@ -1887,6 +1887,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar unha peza fundamental para a defensa doutra, permitindo capturar a peza, agora indefensa, no seguinte movemento.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Movemento colineal';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Dúas pezas rivais enfróntanse entre si e unha delas desprázase pola liña de ataque sen capturar á rival.';
 
   @override
   String get puzzleThemeCornerMate => 'Mate do curruncho';
@@ -4078,9 +4084,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Entrar/saír da variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicitar unha análise por computador, Aprende dos teus erros';
 
   @override
   String get keyPreviousBranch => 'Rama anterior';

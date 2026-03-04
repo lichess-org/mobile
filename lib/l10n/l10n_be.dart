@@ -1941,6 +1941,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Адцягненне або ўзяцце фігуры, якая з\'яўляца крытычнай для абароны іншай фігуры, што дазваляе ўзяце неабароненую фігуру наступным ходам.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4130,9 +4136,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'увайсці/выйсці з варыянту';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Папярэдні варыянт';

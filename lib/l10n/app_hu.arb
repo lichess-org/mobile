@@ -1161,7 +1161,6 @@
   "keyCycleSelectedVariation": "A választott változatok váltogatása",
   "keyShowOrHideComments": "kommentek megjelenítése/elrejtése",
   "keyEnterOrExitVariation": "ki/belépés változatba",
-  "keyRequestComputerAnalysis": "Kérelmezz számítógépes elemzést és tanulj a hibáidból",
   "keyPreviousBranch": "Előző elágazás",
   "keyNextBranch": "Következő elágazás",
   "toggleVariationArrows": "Változatnyilak ki-be",

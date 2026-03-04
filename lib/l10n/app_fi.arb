@@ -1217,7 +1217,6 @@
   "keyCycleSelectedVariation": "Vaihda valittu muunnelma",
   "keyShowOrHideComments": "näytä/piilota kommentit",
   "keyEnterOrExitVariation": "lisää/poista muunnelma",
-  "keyRequestComputerAnalysis": "Pyydä tietokoneanalyysiä, opi virheistäsi",
   "keyPreviousBranch": "Edellinen haara",
   "keyNextBranch": "Seuraava haara",
   "toggleVariationArrows": "Muunnelmanuolet päälle/pois",

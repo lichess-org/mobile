@@ -281,7 +281,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobilePreviousPage => 'Prejšnji';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -1943,6 +1943,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Odstranitev figure, ki je ključna za obrambo druge figure, kar omogoča, da se nezaščitena figura zajame z naslednjo potezo.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Kolinearna poteza';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Dve nasprotni figuri se soočita druga z drugo, ena pa drsi vzdolž napadalne linije, ne da bi zajela sovražnikovo figuro.';
 
   @override
   String get puzzleThemeCornerMate => 'Mat v kotu';
@@ -4134,9 +4140,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vstopi/izstopi v varianto';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
 
   @override
   String get keyPreviousBranch => 'Prejšnja veja';

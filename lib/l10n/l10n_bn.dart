@@ -1889,6 +1889,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'একটা গুটিকে খাওয়া যা আরেকটার প্রতিরক্ষা করে, যা পরের একটি চালে যেই গুটিকে রক্ষা করা হচ্ছিল তাকে খাওয়ার সুযোগ করে দেয়।';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'প্রবেশ করান/বেরিয়ে যান';
-
-  @override
-  String get keyRequestComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অনুরোধ করুন, আপনার ভুলগুলো থেকে শিখুন';
 
   @override
   String get keyPreviousBranch => 'আগের শাখা';

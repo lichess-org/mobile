@@ -281,7 +281,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePreviousPage => 'Önceki';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -1644,7 +1644,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'Maçın linki: $param';
+    return '$param oyunundan';
   }
 
   @override
@@ -1859,7 +1859,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder.';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine matı';
+  String get puzzleThemeBlindSwineMate => 'Kör Dana matı';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2x2 bir alanda işbirliği yapıyorlar.';
@@ -1887,6 +1887,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Bir taşı savunan diğer bir taşı ortadan kaldırarak savunmasız kalan taşı sonraki hamlede ele geçir.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Doğrusal hamle';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Karşılıklı duran iki taştan biri, düşman taşını ele geçirmeden saldırı hattı boyunca kayar.';
 
   @override
   String get puzzleThemeCornerMate => 'Köşe matı';
@@ -4078,9 +4084,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'varyasyona gir/çık';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
 
   @override
   String get keyPreviousBranch => 'Önceki dal';

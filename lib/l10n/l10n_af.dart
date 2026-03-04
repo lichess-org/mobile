@@ -1889,6 +1889,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Verwyder \'n stuk wat van kritieke belang is vir die verdediging van \'n ander stuk, sodat die nou onverdedigde stuk op \'n volgende skuif vasgevang kan word.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'betree/verlaat variasie';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Vra rekenaaranalise aan, Leer uit jou foute';
 
   @override
   String get keyPreviousBranch => 'Vorige tak';

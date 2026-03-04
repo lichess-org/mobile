@@ -281,7 +281,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1887,6 +1887,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Tag en brik som er kritisk i forsvaret af en anden brik, så det er muligt at tage den uforsvarede brik på et efterfølgende træk.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Kollineært træk';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'To modspillende brikker står over for hinanden, og den ene glider langs angrebslinjen uden at slå den fjendtlige brik.';
 
   @override
   String get puzzleThemeCornerMate => 'Hjørnemat';
@@ -4078,9 +4084,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Start/slut variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Anmod om computeranalyse, Lær af dine fejl';
 
   @override
   String get keyPreviousBranch => 'Forrige gren';

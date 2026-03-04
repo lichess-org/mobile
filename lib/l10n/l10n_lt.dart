@@ -1943,6 +1943,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Pašalinkite figūrą, kuri yra kritiškai svarbi kitos figūros gynybai, paruošdami naujai neapsaugotą figūrą kirtimui kitu ėjimu.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4132,9 +4138,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'įeiti/išeiti iš variacijos';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Paprašyti kompiuterio analizės, pasimokykite iš savo klaidų';
 
   @override
   String get keyPreviousBranch => 'Praeita atšaka';

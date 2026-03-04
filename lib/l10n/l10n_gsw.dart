@@ -281,7 +281,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePreviousPage => 'Vorher';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
   String get activityActivity => 'Aktivitäte';
@@ -1887,6 +1887,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Kollineare Zug';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Zwei gägnerischi Figure stöhnd sich gägenüber, und eini gaht entlang vu de Agriffslinie, ohni die Ander z\'schlah.';
 
   @override
   String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
@@ -4078,9 +4084,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Variante ischtige/verlah';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Computeranalyse afordere, Lern us dine Fähler';
 
   @override
   String get keyPreviousBranch => 'Vorherige Variante';

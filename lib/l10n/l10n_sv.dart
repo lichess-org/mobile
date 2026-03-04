@@ -1889,6 +1889,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en pjäs som försvarar en annan pjäs, så att du kan ta den nu oförsvarade pjäsen i nästa drag.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'påbörja/avsluta variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Begär datoranalys, lär av dina misstag';
 
   @override
   String get keyPreviousBranch => 'Föregående gren';

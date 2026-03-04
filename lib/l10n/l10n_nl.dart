@@ -281,7 +281,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePreviousPage => 'Vorige';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -1887,6 +1887,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Collineaire zet';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Twee vijandige stukken staan tegenover elkaar, en één glipt langs de lijn van aanval zonder het stuk van de vijand te slaan.';
 
   @override
   String get puzzleThemeCornerMate => 'Mat in een hoek';
@@ -4078,9 +4084,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vermeld/stop variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
 
   @override
   String get keyPreviousBranch => 'Vorige vertakking';

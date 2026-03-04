@@ -281,7 +281,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trang trước';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -1861,6 +1861,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Loại bỏ một quân cực kỳ quan trọng đối với việc bảo vệ một quân cờ khác, khiến cho quân cờ hiện không được bảo vệ có thể bị ăn vào một nước sau đó.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Nước cờ trên cùng một đường thẳng';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Hai quân cờ đối diện nhau, và một quân di chuyển dọc theo đường tấn công mà không bắt được quân cờ đối phương.';
+
+  @override
   String get puzzleThemeCornerMate => 'Góc chiếu hết chết chóc';
 
   @override
@@ -1942,7 +1948,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Một đòn chiến thuật bao gồm luật bắt tốt qua đường, khi một quân tốt có thể ăn một quân tốt đối phương đi qua mặt nó khi đi 2 ô từ vị trí ban đầu của nó.';
 
   @override
-  String get puzzleThemeEpauletteMate => '\"Epaulette\" không phải là danh từ riêng, mà là thuật ngữ chỉ phần trang trí trên vai áo quân phục: https://en.wikipedia.org/wiki/Epaulette\n\nMô tả cho kiểu chiếu tướng này (có thể dịch riêng):\nHai ô thoát hiểm liền kề của vua bị chiếu đều bị các quân cờ khác chiếm giữ.';
+  String get puzzleThemeEpauletteMate => 'Chiếu hết kiểu cầu vai';
 
   @override
   String get puzzleThemeEpauletteMateDescription => 'Hai ô trốn thoát liền kề của vua bị chiếu bị các quân cờ khác chiếm kiểm soát.';
@@ -4050,9 +4056,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vào/thoát biến';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Yêu cầu máy tính phân tích, Học từ sai lầm của bạn';
 
   @override
   String get keyPreviousBranch => 'Nhánh trước';

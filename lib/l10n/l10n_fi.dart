@@ -1889,6 +1889,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Kulmamatti';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'lisää/poista muunnelma';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Pyydä tietokoneanalyysiä, opi virheistäsi';
 
   @override
   String get keyPreviousBranch => 'Edellinen haara';

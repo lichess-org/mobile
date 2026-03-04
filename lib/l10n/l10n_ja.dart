@@ -281,7 +281,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePreviousPage => '前';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
 
   @override
   String get activityActivity => '活動';
@@ -1861,6 +1861,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'コーナー・メイト';
 
   @override
@@ -1942,10 +1948,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => '肩章（エポレット）のメイト';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'チェックされたキングの両脇のマスが味方の駒でふさがっている形。';
 
   @override
   String get puzzleThemeExposedKing => '危険なキング';
@@ -2002,10 +2008,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => '燕尾のメイト';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => '駒がツバメの尾に似た V 字型を作るメイト。';
 
   @override
   String get puzzleThemeTriangleMate => '三角のメイト';
@@ -2798,7 +2804,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get signupUsernameHint => 'ユーザー名は無難なものにしてください。後で変えることはできないし、ユーザー名が不適切だとアカウントが閉鎖されます！';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => '送信されるのはあなたのアカウントについてのメールだけで、メールアドレスを他と共有することはありません。';
 
   @override
   String get password => 'パスワード';
@@ -4050,9 +4056,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => '変化に入る/出る';
-
-  @override
-  String get keyRequestComputerAnalysis => 'コンピュータ解析の要請、自分の悪手に学ぶ';
 
   @override
   String get keyPreviousBranch => '前の変化手順';

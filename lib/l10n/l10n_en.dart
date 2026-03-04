@@ -1887,6 +1887,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4076,9 +4082,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'enter/exit variation';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Previous branch';
@@ -6764,6 +6767,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
   String get activityActivity => 'Activity';
 
   @override
@@ -8367,6 +8373,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defense of another piece, allowing the now undefended piece to be captured on a following move.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
 
   @override
   String get puzzleThemeCornerMate => 'Corner mate';
@@ -10549,9 +10561,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get keyEnterOrExitVariation => 'enter/exit variation';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

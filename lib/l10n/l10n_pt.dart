@@ -1889,6 +1889,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Remove uma peça que seja crítica para a defesa de outra peça, permitindo que esta seja capturada na próxima jogada.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'entrar/sair da variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
   String get keyPreviousBranch => 'Ramo anterior';
@@ -6766,6 +6769,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePreviousPage => 'Anterior';
 
   @override
+  String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
+
+  @override
   String get activityActivity => 'Atividade';
 
   @override
@@ -8369,6 +8375,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Remover uma peça que seja importante na defesa de outra, permitindo que agora a peça indefesa seja capturada na jogada seguinte.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Lance colinear';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Duas peças opostas se encaram, e uma desliza ao longo da linha de ataque sem capturar a peça inimiga.';
 
   @override
   String get puzzleThemeCornerMate => 'Mate de canto';
@@ -10560,9 +10572,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get keyEnterOrExitVariation => 'entrar/sair da variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
   String get keyPreviousBranch => 'Branch anterior';

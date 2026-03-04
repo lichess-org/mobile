@@ -281,7 +281,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobilePreviousPage => 'Aurrekoa';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
   String get activityActivity => 'Jarduera';
@@ -1887,6 +1887,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
 
   @override
   String get puzzleThemeCornerMate => 'Bazterreko matea';
@@ -4078,9 +4084,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Aldaerara sartu/atera';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Ordenagailuaren analisia eskatu. Ikasi zure akatsak aztertuz';
 
   @override
   String get keyPreviousBranch => 'Aurreko adarra';

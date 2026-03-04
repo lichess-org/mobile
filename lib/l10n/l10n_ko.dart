@@ -281,7 +281,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePreviousPage => '이전';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
   String get activityActivity => '활동';
@@ -1859,6 +1859,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 지켜지지 않는 기물을 잡을 수 있게 됩니다.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
 
   @override
   String get puzzleThemeCornerMate => '코너 메이트';
@@ -3924,7 +3930,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String aboutX(String param) {
-    return '$param에 대해';
+    return '$param 정보';
   }
 
   @override
@@ -4050,9 +4056,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => '라인 들어가기/나오기';
-
-  @override
-  String get keyRequestComputerAnalysis => '컴퓨터 분석 요청, 실수에서 배우기';
 
   @override
   String get keyPreviousBranch => '이전 부';

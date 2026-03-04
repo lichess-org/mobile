@@ -3340,6 +3340,18 @@ abstract class AppLocalizations {
   /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
   String get puzzleThemeCapturingDefenderDescription;
 
+  /// No description provided for @puzzleThemeCollinearMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Collinear move'**
+  String get puzzleThemeCollinearMove;
+
+  /// No description provided for @puzzleThemeCollinearMoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.'**
+  String get puzzleThemeCollinearMoveDescription;
+
   /// No description provided for @puzzleThemeCornerMate.
   ///
   /// In en, this message translates to:
@@ -7509,12 +7521,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'enter/exit variation'**
   String get keyEnterOrExitVariation;
-
-  /// No description provided for @keyRequestComputerAnalysis.
-  ///
-  /// In en, this message translates to:
-  /// **'Request computer analysis, Learn from your mistakes'**
-  String get keyRequestComputerAnalysis;
 
   /// No description provided for @keyPreviousBranch.
   ///

@@ -1889,6 +1889,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Премахване на главната защита на фигура, което позволява на вече незащитената фигура да бъде взета на следващия ход.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Мат в ъгъла';
 
   @override
@@ -4078,9 +4084,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'влез/излез от вариацията';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Поискайте компютърен анализ, Учете се от грешките си';
 
   @override
   String get keyPreviousBranch => 'Предишно разклонение';

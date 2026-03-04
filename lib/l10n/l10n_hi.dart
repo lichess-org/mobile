@@ -1887,6 +1887,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'एक टुकड़े को निकालना जो दूसरे टुकड़े की रक्षा के लिए महत्वपूर्ण है, जिससे अब अपरिभाषित टुकड़ा को निम्नलिखित चाल पर कब्जा करने की अनुमति मिलती है।';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4076,9 +4082,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'अंदर बाहर करे';
-
-  @override
-  String get keyRequestComputerAnalysis => 'कंप्यूटर विश्लेषण का अनुरोध करें, अपनी गलतियों से सीखें';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

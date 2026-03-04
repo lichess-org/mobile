@@ -1945,6 +1945,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Rohový mat';
 
   @override
@@ -4134,9 +4140,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'zvoliť/opustiť variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Požadujte analýzu počítačom, Poučte sa zo svojich chýb';
 
   @override
   String get keyPreviousBranch => 'Predchádzajúca vetva';

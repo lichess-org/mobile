@@ -1865,6 +1865,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Memakan bidak yang sangat penting untuk menjaga bidak lain, memungkinkan bagian yang sekarang tidak terlindungi untuk ditangkap pada langkah berikut.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -4054,9 +4060,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'masuk/keluar dari variasi';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Minta analisis komputer, belajar dari kesalahan anda';
 
   @override
   String get keyPreviousBranch => 'Cabang sebelumnya';
