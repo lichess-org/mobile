@@ -527,6 +527,9 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
   Position get currentPosition => currentNode.position;
 
   @override
+  ISet<Square>? get explosionSquares => null;
+
+  @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => true;
 
   bool get hasMistakes => mistakes.isNotEmpty;

@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -242,6 +243,12 @@ class _BodyState extends ConsumerState<_Body> {
                       isBoardTurned: isBoardFlipped,
                     ),
                     lastMove: gameState.lastMove,
+                    explosionSquares: gameState.stepCursor > 0
+                        ? atomicExplosionSquares(
+                            gameState.game.stepAt(gameState.stepCursor - 1).position,
+                            gameState.lastMove,
+                          )
+                        : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,

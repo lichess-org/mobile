@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -178,6 +179,12 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         ref.read(_tvGameCtrl.notifier).goToMove(index);
                       },
                       lastMove: game.moveAt(gameState.stepCursor),
+                      explosionSquares: gameState.stepCursor > 0
+                          ? atomicExplosionSquares(
+                              game.positionAt(gameState.stepCursor - 1),
+                              game.moveAt(gameState.stepCursor),
+                            )
+                          : null,
                       userActionsBar: BottomBar(
                         children: [
                           BottomBarButton(

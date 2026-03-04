@@ -506,8 +506,13 @@ class StudyController extends AsyncNotifier<StudyState>
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState with _$StudyState implements EvaluationMixinState, CommonAnalysisState {
+sealed class StudyState
+    with _$StudyState, AnalysisExplosionMixin
+    implements EvaluationMixinState, CommonAnalysisState {
   const StudyState._();
+
+  @override
+  ViewRoot? get analysisRoot => root;
 
   const factory StudyState({
     UserId? myId,

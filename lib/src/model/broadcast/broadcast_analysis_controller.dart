@@ -556,9 +556,12 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
 @freezed
 sealed class BroadcastAnalysisState
-    with _$BroadcastAnalysisState
+    with _$BroadcastAnalysisState, AnalysisExplosionMixin
     implements EvaluationMixinState, CommonAnalysisState {
   const BroadcastAnalysisState._();
+
+  @override
+  ViewRoot get analysisRoot => root;
 
   const factory BroadcastAnalysisState({
     /// Broadcast game ID

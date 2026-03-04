@@ -104,7 +104,7 @@ const ISet<Variant> playSupportedVariants = ISetConst({
   Variant.chess960,
   Variant.fromPosition,
   Variant.antichess,
-  // Variant.atomic,
+  Variant.atomic,
   Variant.kingOfTheHill,
   Variant.threeCheck,
   Variant.racingKings,
