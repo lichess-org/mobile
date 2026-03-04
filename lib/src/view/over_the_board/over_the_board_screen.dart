@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_cont
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -236,6 +237,12 @@ class _BodyState extends ConsumerState<_Body> {
                         overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
                     lastMove: gameState.lastMove,
+                    explosionSquares: gameState.stepCursor > 0
+                        ? atomicExplosionSquares(
+                            gameState.game.stepAt(gameState.stepCursor - 1).position,
+                            gameState.lastMove,
+                          )
+                        : null,
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,

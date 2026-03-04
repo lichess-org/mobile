@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -112,6 +113,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     required Side playerSide,
     required bool casual,
     required bool practiceMode,
+    Variant variant = Variant.standard,
     String? initialFen,
   }) {
     state = OfflineComputerGameState.initial(
@@ -119,6 +121,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       playerSide: playerSide,
       casual: casual,
       practiceMode: practiceMode,
+      variant: variant,
       initialFen: initialFen,
     );
 
@@ -383,7 +386,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     return EvalWork(
       id: state.game.id,
       stockfishFlavor: _kComputerStockfishFlavor,
-      variant: Variant.standard,
+      variant: state.game.meta.variant,
       threads: numberOfCoresForEvaluation,
       hashSize: ref.read(evaluationServiceProvider).maxMemory,
       searchTime: _kMoveEvalMaxSearchTime,
@@ -640,7 +643,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final work = MoveWork(
         id: state.game.id,
-        variant: Variant.standard,
+        variant: state.game.meta.variant,
         hashSize: evaluationService.maxMemory,
         initialPosition: state.game.initialPosition,
         steps: steps,
@@ -772,7 +775,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       final work = EvalWork(
         id: state.game.id,
         stockfishFlavor: _kComputerStockfishFlavor,
-        variant: Variant.standard,
+        variant: state.game.meta.variant,
         threads: numberOfCoresForEvaluation,
         hashSize: evaluationService.maxMemory,
         searchTime: _kHintsMaxSearchTime,
@@ -868,26 +871,42 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   factory OfflineComputerGameState.initial({
     required StockfishLevel stockfishLevel,
     required Side playerSide,
+    Variant variant = Variant.standard,
     bool casual = true,
     bool practiceMode = false,
     String? initialFen,
   }) {
-    final position = initialFen != null
-        ? Chess.fromSetup(Setup.parseFen(initialFen))
-        : Chess.initial;
+    final Position position;
+    final Variant effectiveVariant;
+    final String? effectiveInitialFen;
+
+    if (initialFen != null) {
+      position = Chess.fromSetup(Setup.parseFen(initialFen));
+      effectiveVariant = Variant.fromPosition;
+      effectiveInitialFen = initialFen;
+    } else if (variant == Variant.chess960) {
+      position = randomChess960Position();
+      effectiveVariant = Variant.chess960;
+      effectiveInitialFen = position.fen;
+    } else {
+      position = variant.initialPosition;
+      effectiveVariant = variant;
+      effectiveInitialFen = null;
+    }
+
     final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OfflineComputerGameState(
       game: OfflineComputerGame(
         id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: initialFen,
+        initialFen: effectiveInitialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
-          variant: initialFen != null ? Variant.fromPosition : Variant.standard,
+          variant: effectiveVariant,
           speed: Speed.classical,
-          perf: Perf.classical,
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, Speed.classical),
         ),
         playerSide: playerSide,
         stockfishLevel: stockfishLevel,

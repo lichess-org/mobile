@@ -90,6 +90,7 @@ const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.chess960,
   Variant.fromPosition,
   Variant.antichess,
+  Variant.atomic,
   Variant.kingOfTheHill,
   Variant.threeCheck,
   Variant.racingKings,
@@ -102,6 +103,13 @@ const ISet<Variant> playSupportedVariants = ISetConst({
   Variant.standard,
   Variant.chess960,
   Variant.fromPosition,
+  Variant.antichess,
+  Variant.atomic,
+  Variant.kingOfTheHill,
+  Variant.threeCheck,
+  Variant.racingKings,
+  Variant.horde,
+  Variant.crazyhouse,
 });
 
 enum Variant {

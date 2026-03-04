@@ -861,9 +861,12 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
 @freezed
 sealed class AnalysisState
-    with _$AnalysisState
+    with _$AnalysisState, AnalysisExplosionMixin
     implements EvaluationMixinState, CommonAnalysisState {
   const AnalysisState._();
+
+  @override
+  ViewRoot get analysisRoot => root;
 
   const factory AnalysisState({
     /// The ID of the game if it's a lichess game.

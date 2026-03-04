@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -242,9 +243,15 @@ class _BodyState extends ConsumerState<_Body> {
                       isBoardTurned: isBoardFlipped,
                     ),
                     lastMove: gameState.lastMove,
+                    explosionSquares: gameState.stepCursor > 0
+                        ? atomicExplosionSquares(
+                            gameState.game.stepAt(gameState.stepCursor - 1).position,
+                            gameState.lastMove,
+                          )
+                        : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
                     boardParams: GameBoardParams.interactive(
-                      variant: Variant.standard,
+                      variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
                       playerSide: gameState.game.finished
                           ? PlayerSide.none
@@ -376,7 +383,7 @@ class _BottomBar extends ConsumerWidget {
                   orientation: gameState.game.playerSide,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
-                  variant: Variant.standard,
+                  variant: gameState.game.meta.variant,
                 ),
               ),
             ),
@@ -703,6 +710,7 @@ class _NewGameSheet extends ConsumerStatefulWidget {
 class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   late StockfishLevel _selectedLevel;
   late SideChoice _selectedSideChoice;
+  late Variant _selectedVariant;
   late bool _casual;
   late bool _practiceMode;
 
@@ -718,6 +726,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
+    _selectedVariant = prefs.variant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
   }
@@ -798,14 +807,40 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                 );
               },
             ),
+            if (widget.initialFen == null)
+              SettingsListTile(
+                settingsLabel: Text(context.l10n.variant),
+                settingsValue: _selectedVariant.label,
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
+                    selectedItem: _selectedVariant,
+                    labelBuilder: (Variant variant) => Text(variant.label),
+                    onSelectedItemChanged: (Variant variant) {
+                      setState(() {
+                        _selectedVariant = variant;
+                        if (variant == Variant.crazyhouse) {
+                          _practiceMode = false;
+                        }
+                      });
+                      ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
+                    },
+                  );
+                },
+              ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),
               value: _practiceMode,
-              onChanged: (value) {
-                setState(() => _practiceMode = value);
-                ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
-              },
+              onChanged: _selectedVariant == Variant.crazyhouse
+                  ? null
+                  : (value) {
+                      setState(() => _practiceMode = value);
+                      ref
+                          .read(offlineComputerGamePreferencesProvider.notifier)
+                          .setPracticeMode(value);
+                    },
             ),
             SwitchSettingTile(
               title: Text(context.l10n.casual),
@@ -832,6 +867,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                     playerSide: side,
                     casual: _practiceMode || _casual,
                     practiceMode: _practiceMode,
+                    variant: _selectedVariant,
                     initialFen: widget.initialFen,
                   );
               Navigator.pop(context);
@@ -926,7 +962,7 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
                   orientation: game.playerSide,
                   pgn: game.makePgn(),
                   isComputerAnalysisAllowed: true,
-                  variant: Variant.standard,
+                  variant: game.meta.variant,
                 ),
               ),
             );
