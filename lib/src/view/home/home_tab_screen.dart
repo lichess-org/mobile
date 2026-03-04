@@ -17,6 +17,8 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -45,6 +47,7 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
@@ -253,7 +256,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
-            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
+            if (!widget.editModeEnabled) ...[
+              const _HomeCustomizationTip(),
+              const _NNUEFilesOutdatedTip(),
+            ],
             if (status.isOnline)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
@@ -310,7 +316,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
-            if (!widget.editModeEnabled) const _HomeCustomizationTip(),
+            if (!widget.editModeEnabled) ...[
+              const _HomeCustomizationTip(),
+              const _NNUEFilesOutdatedTip(),
+            ],
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
               shouldShow: authUser != null && status.isOnline,
@@ -995,6 +1004,98 @@ class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
+  const _NNUEFilesOutdatedTip();
+
+  @override
+  ConsumerState<_NNUEFilesOutdatedTip> createState() => _NNUEFilesOutdatedTipState();
+}
+
+class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
+  bool _openedSettings = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final chessEnginePref = ref.watch(engineEvaluationPreferencesProvider).enginePref;
+    if (chessEnginePref != ChessEnginePref.sfLatest) {
+      return const SizedBox.shrink();
+    }
+
+    final nnueService = ref.watch(nnueServiceProvider);
+    if (nnueService.isDownloadingNNUEFiles) {
+      return const SizedBox.shrink();
+    }
+
+    return FocusDetector(
+      // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
+      onFocusRegained: () {
+        if (_openedSettings) {
+          setState(() {});
+        }
+      },
+      child: FutureBuilder(
+        future: nnueService.hasOutdatedNNUEFiles(),
+        builder: (context, snapshot) {
+          final hasOutdatedNNUEFiles = snapshot.data ?? false;
+          if (!hasOutdatedNNUEFiles) {
+            return const SizedBox.shrink();
+          }
+
+          return Padding(
+            padding: Styles.bodyPadding,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.warning,
+                            size: 25.0,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8.0),
+                          const Flexible(
+                            child: Text(
+                              // TODO l10n
+                              'New Stockfish version available! Go to the settings to download the updated NNUE files.',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _openedSettings = true;
+                            });
+                            Navigator.of(
+                              context,
+                              rootNavigator: true,
+                            ).push(EngineSettingsScreen.buildRoute(context));
+                          },
+                          // TODO l10n
+                          child: const Text('Open settings'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
