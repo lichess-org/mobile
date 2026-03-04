@@ -6,7 +6,7 @@
   <string name="willBeNotified">Turnir boshlanganda sizga xabar beriladi, shuning uchun ushbu sahifani ochiq holda qoldirib, boshqa ishlar bilan shugʻullanishingiz mumkin.</string>
   <string name="isRated">Bu turnir reytingli va sizni reytingingizga ta\'sir etadi.</string>
   <string name="isNotRated">Bu turnir reytingli *emas* va sizni reytingingizga taʼsir *qilmaydi*.</string>
-  <string name="someRated">Baʼzi turnirlar reytingli va sizni reytingingizga tasir etadi.</string>
+  <string name="someRated">Baʼzi turnirlar reytingli va sizni reytingingizga taʼsir qiladi.</string>
   <string name="howAreScoresCalculated">Ochkolar qanday hisoblanadi?</string>
   <string name="howAreScoresCalculatedAnswer">Gʻalaba uchun 2 ochko, durang uchun 1 ochko beriladi, magʻlubiyat uchun esa ochko berilmaydi.
 Agar ketma-ket ikki marta gʻalaba qozonsangiz, sizda olov belgisi bilan koʻrsatiladigan “ikki karrali ochkolar seriyasi” boshlanadi.
@@ -28,8 +28,8 @@ Boshlangʻich vaqti nolga teng boʻlgan (0+1, 0+2) oʻyinlarda “Berserk” qil
 Kamida ikkita oʻyinchi bir xil natija qayd etsa turnir natijalari tay-breyk vazifasini oʻtaydi.</string>
   <string name="howDoesPairingWork">Qura tashlash qanday amalga oshadi?</string>
   <string name="howDoesPairingWorkAnswer">Turnir boshida oʻyinchilar oʻz reytingiga mos ravishda bir biriga qarshi keladilar. 
-Oʻyin tugagach turnir sahifasiga qayting: siz turnirda toʻplagan reytingingizga mos raqib bilan bellashasiz. Bu sizga minimal vaqt ichida raqib topib beradi-yu, lekin siz turnirdagi barcha oʻyinchilar bilan oʻynashga ulgurmasligingiz mumkin.
-Koʻproq oʻyin oʻtkazish va koʻproq ochko jamlash uchun tez oʻynang va lobbiga qayting.</string>
+Oʻyin tugagach turnir kutish zaliga qayting: siz turnirda toʻplagan reytingingizga mos raqib bilan bellashasiz. Bu sizga minimal vaqt ichida raqib topib beradi-yu, lekin siz turnirdagi barcha oʻyinchilar bilan oʻynashga ulgurmasligingiz mumkin.
+Tezroq gʻalaba qozonib, kutish zaliga qayting — koʻproq oʻyin oʻynang va koʻproq ball toʻplang.</string>
   <string name="howDoesItEnd">Turnir qanday yakunlanadi?</string>
   <string name="howDoesItEndAnswer">Turnirni taymeri bor. Qachonki taymer vaqti tugasa, turnir natijalari muzlatiladi va gʻolib eʼlon qilinadi. Davom etayotgan oʻyinlar oxirigacha oʻynalishi kerak, biroq ular turnir natijalari uchun hisobga olinmaydi.</string>
   <string name="otherRules">Boshqa muhim qoidalar</string>
@@ -44,12 +44,12 @@ Koʻproq oʻyin oʻtkazish va koʻproq ochko jamlash uchun tez oʻynang va lobbi
   <string name="drawStreakVariants">Durang oʻyinlar uchun ochko beriladigan minimal yurishlar soni shaxmat variantiga qarab farq qiladi. Quyidagi jadvalda har bir variant uchun belgilangan qiymatlar koʻrsatilgan.</string>
   <string name="variant">Variant</string>
   <string name="minimumGameLength">Minimum yurishlar soni</string>
-  <string name="history">Arena jurnali</string>
+  <string name="history">Arenalar tarixi</string>
   <plurals name="viewAllXTeams" comment="viewAllXTeams [one] [other]&#10;&#10;%s is the number of teams that can be viewed">
     <item quantity="one">Jamoani koʻrish</item>
     <item quantity="other">Barcha %s ta jamoani koʻrish</item>
   </plurals>
-  <string name="newTeamBattle">Yangi jamoalararo turnir</string>
+  <string name="newTeamBattle">Yangi jamoalar jangi</string>
   <string name="customStartDate">Boshlanish sanasini tanlash</string>
   <string name="customStartDateHelp">Mahalliy vaqtingiz boʻyicha. Bu \"Turnir boshlanishigacha bo‘lgan vaqt\" sozlashini oʻzgartiradi</string>
   <string name="allowBerserk">Berserkka ruhsat berish</string>
@@ -63,10 +63,10 @@ Koʻproq oʻyin oʻtkazish va koʻproq ochko jamlash uchun tez oʻynang va lobbi
   <string name="averageScore">O‘rtacha to‘plangan bal</string>
   <string name="myTournaments">Mening turnirlarim</string>
   <string name="editTournament">Turnirni tahrirlash</string>
-  <string name="editTeamBattle">Jamoa jangini tahrirlash</string>
+  <string name="editTeamBattle">Jamoalar jangini tahrirlash</string>
   <string name="defender">Himoyachi</string>
   <string name="pickYourTeam">Jamoangizni tanlang</string>
-  <string name="whichTeamWillYouRepresentInThisBattle">Ushbu jangda qaysi jamoa vakili bo\'lasiz?</string>
+  <string name="whichTeamWillYouRepresentInThisBattle">Ushbu jangda qaysi jamoa nomidan qatnashasiz?</string>
   <string name="youMustJoinOneOfTheseTeamsToParticipate">Ishtirok etish uchun siz ushbu jamoalardan biriga qo\'shilishingiz kerak!</string>
   <string name="created">Yaratilgan</string>
   <string name="recentlyPlayed">Yaqinda o\'ynadi</string>

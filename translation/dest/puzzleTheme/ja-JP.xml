@@ -53,6 +53,8 @@
   <string name="endgame">エンドゲーム</string>
   <string name="endgameDescription">ゲームの終盤でのタクティクス。</string>
   <string name="enPassantDescription">アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。</string>
+  <string name="epauletteMate">肩章（エポレット）のメイト</string>
+  <string name="epauletteMateDescription">チェックされたキングの両脇のマスが味方の駒でふさがっている形。</string>
   <string name="exposedKing">危険なキング</string>
   <string name="exposedKingDescription">守り駒の少ないキングを攻める問題、多くの場合メイトにつながる。</string>
   <string name="fork">フォーク（両取り）</string>
@@ -71,6 +73,8 @@
   <string name="pillsburysMateDescription">ルークがチェックをかけ、ビショップがルークを守っているメイト。</string>
   <string name="morphysMate">モーフィのメイト</string>
   <string name="morphysMateDescription">ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。</string>
+  <string name="swallowstailMate">燕尾のメイト</string>
+  <string name="swallowstailMateDescription">駒がツバメの尾に似た V 字型を作るメイト。</string>
   <string name="triangleMate">三角のメイト</string>
   <string name="triangleMateDescription">同じランクかファイル上で空きマスを挟んだクイーンとルーク、そして相手のキングが三角形を作るメイト。</string>
   <string name="vukovicMate">ヴコヴィッチのメイト</string>
