@@ -184,7 +184,7 @@ class UCIProtocol {
 
     if (multiPv == 1) {
       _currentEval = LocalEval(
-        position: work.threatMode ? work.threatModePosition : work.position,
+        position: work.threatMode ? threatModePosition(work.position) : work.position,
         searchTime: Duration(milliseconds: elapsedMs),
         depth: depth,
         nodes: nodes,
@@ -242,7 +242,7 @@ class UCIProtocol {
 
       final positionCommand = switch (_work!) {
         final EvalWork evalWork when evalWork.threatMode =>
-          'position fen ${evalWork.threatModePosition.fen}',
+          'position fen ${threatModePosition(evalWork.position).fen}',
         _ => [
           'position fen',
           _work!.initialPosition.fen,

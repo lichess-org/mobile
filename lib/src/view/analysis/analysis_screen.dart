@@ -616,7 +616,7 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
         ],
-        if (analysisState.isEngineAvailable(evalPrefs))
+        if (analysisState.isEngineAvailable(evalPrefs) && analysisState.canShowThreat)
           BottomSheetAction(
             makeLabel: (context) => Text(
               analysisState.engineInThreatMode
