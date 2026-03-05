@@ -38,6 +38,8 @@ abstract class CommonAnalysisState {
   /// Returns `null` if the variant is not atomic, there is no last move, or the
   /// last move was not a capture (no explosion occurs).
   ISet<Square>? get explosionSquares;
+
+  bool get engineInThreatMode;
 }
 
 /// Mixin that computes [CommonAnalysisState.explosionSquares] for states that

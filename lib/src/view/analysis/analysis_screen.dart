@@ -375,8 +375,7 @@ class _Body extends ConsumerWidget {
             ? EngineLines(
                 filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                savedEval: currentNode.eval,
-                isGameOver: currentNode.position.isGameOver,
+                analyisState: analysisState,
               )
             : null,
         bottomBar: _BottomBar(options: options),
