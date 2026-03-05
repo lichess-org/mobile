@@ -159,6 +159,33 @@ void main() {
       });
     });
 
+    group('hasOutdatedNNUEFiles', () {
+      test('returns false when appSupportDirectory is null', () async {
+        final container = await makeNnueTestContainer(appSupportDirectory: null);
+        addTearDown(container.dispose);
+
+        final service = container.read(nnueServiceProvider);
+        final result = await service.hasOutdatedNNUEFiles();
+
+        expect(result, isFalse);
+      });
+
+      test('returns true if we have outdated nnue files', () async {
+        final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
+        addTearDown(() => tempDir.delete(recursive: true));
+
+        File('${tempDir.path}/someOldFile.nnue').create();
+
+        final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
+        addTearDown(container.dispose);
+
+        final service = container.read(nnueServiceProvider);
+        final result = await service.hasOutdatedNNUEFiles();
+
+        expect(result, isTrue);
+      });
+    });
+
     group('deleteNNUEFiles', () {
       test('throws exception when appSupportDirectory is null', () async {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
