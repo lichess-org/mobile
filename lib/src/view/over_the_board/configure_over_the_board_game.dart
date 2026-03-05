@@ -53,7 +53,8 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
   @override
   void initState() {
     final gameState = ref.read(overTheBoardGameControllerProvider);
-    chosenVariant = gameState.game.meta.variant;
+    final savedVariant = gameState.game.meta.variant;
+    chosenVariant = savedVariant == Variant.fromPosition ? Variant.standard : savedVariant;
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
     chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;

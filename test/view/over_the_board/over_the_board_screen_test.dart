@@ -491,6 +491,58 @@ void main() {
       expect(gameState.game.initialFen, _customFen);
     });
 
+    testWidgets('Starting a new standard game after a fromPosition game does not crash', (
+      tester,
+    ) async {
+      // Regression test: after playing a game from a custom FEN (which stores
+      // Variant.fromPosition in the game metadata), opening the configure sheet
+      // for a normal new game and pressing Play used to throw:
+      // "Invalid argument(s): This variant has no defined initial position!"
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OverTheBoardScreen(initialFen: _customFen);
+          },
+        ),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start a game from the custom FEN — variant is stored as Variant.fromPosition
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      expect(ref.read(overTheBoardGameControllerProvider).game.meta.variant, Variant.fromPosition);
+
+      // Now open the configure sheet again without an initialFen (normal new game).
+      // The sheet must not crash and must default to Variant.standard.
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+
+      // Pressing Play must not throw even though the previous game used Variant.fromPosition
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(overTheBoardGameControllerProvider);
+      expect(gameState.game.meta.variant, Variant.standard);
+      expect(gameState.game.initialFen, isNull);
+      expect(gameState.game.steps.length, 1);
+      expect(gameState.game.steps.first.position, Chess.initial);
+    });
+
     testWidgets('Rematch from custom position restarts from same FEN', (tester) async {
       final gameStorage = MockOverTheBoardGameStorage();
       when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
