@@ -266,7 +266,6 @@ class _Body extends ConsumerWidget {
 
         final engineGaugeParams = state.engineGaugeParams(enginePrefs);
         final isLocalEvaluationEnabled = state.isEngineAvailable(enginePrefs);
-        final currentNode = state.currentNode;
         final pov = state.pov;
 
         return AnalysisLayout(
@@ -300,8 +299,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
               ? EngineLines(
                   filters: (id: state.evaluationContext.id, path: state.currentPath),
-                  savedEval: currentNode.eval,
-                  isGameOver: currentNode.position.isGameOver,
+                  analyisState: state,
                   onTapMove: ref
                       .read(
                         broadcastAnalysisControllerProvider((

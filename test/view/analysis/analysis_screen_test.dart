@@ -956,6 +956,87 @@ void main() {
         expect(find.byType(BoardShapeWidget), findsOne);
       });
     });
+
+    group('show threat button', () {
+      testWidgets('is visible when engine is available and position is normal', (tester) async {
+        await makeEngineTestApp(tester, pgn: 'e4 e5');
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
+      });
+
+      testWidgets('is hidden when king is in check', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          // Ends with Qxe5+: black king is in check
+          pgn: 'e4 e5 Qh5 Nf6 Qxe5+',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is checkmate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: sanMoves, // ends with checkmate
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when opponent would be in stalemate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR w KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is stalemate for both sides', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "8/8/8/pp6/qp6/kp6/1p6/1K6 b - - 0 1"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is visible when position is stalemate but opponent can move', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR b KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
+      });
+    });
   });
 
   group('Castling', () {

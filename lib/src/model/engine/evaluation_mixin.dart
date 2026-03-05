@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -44,7 +45,7 @@ sealed class EvaluationContext with _$EvaluationContext {
 }
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
-abstract class EvaluationMixinState {
+mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
   /// Returns `true` if the engine evaluation is available (for both local and cloud).
   ///
   /// This value may depend on the current state and the user preferences.
@@ -65,6 +66,18 @@ abstract class EvaluationMixinState {
 
   /// Whether the engine is in threat mode, i.e. pretending it's the the opposite side's turn.
   bool get engineInThreatMode;
+
+  /// Whether the "show threat" feature can be used in the current position.
+  ///
+  /// Threat mode makes the engine analyze from the opponent's perspective, which
+  /// is invalid when the king is in check (including checkmate)
+  /// or if the opponent would be in stalemate if it was their turn.
+  bool get canShowThreat =>
+      currentPosition != null &&
+      currentPosition!.isCheck == false &&
+      threatModePosition(currentPosition!).isStalemate == false;
+
+  State withThreatMode(bool engineInThreatMode);
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -76,7 +89,7 @@ abstract class EvaluationMixinState {
 ///
 /// The parent can implement:
 /// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation.
-mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<AsyncValue<T>, T> {
+mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<AsyncValue<T>, T> {
   late EvaluationService _evaluationService;
 
   SocketClient? get socketClient;
@@ -124,6 +137,17 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState> on AnyNotifier<Async
       requestEval();
     } else {
       _evaluationService.quit();
+    }
+  }
+
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (!curState.engineInThreatMode && !curState.canShowThreat) {
+        return;
+      }
+      state = AsyncData(state.requireValue.withThreatMode(!curState.engineInThreatMode));
+      requestEval();
     }
   }
 

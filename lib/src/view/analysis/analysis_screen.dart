@@ -375,8 +375,7 @@ class _Body extends ConsumerWidget {
             ? EngineLines(
                 filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                savedEval: currentNode.eval,
-                isGameOver: currentNode.position.isGameOver,
+                analyisState: analysisState,
               )
             : null,
         bottomBar: _BottomBar(options: options),
@@ -616,7 +615,7 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
         ],
-        if (analysisState.isEngineAvailable(evalPrefs))
+        if (analysisState.isEngineAvailable(evalPrefs) && analysisState.canShowThreat)
           BottomSheetAction(
             makeLabel: (context) => Text(
               analysisState.engineInThreatMode

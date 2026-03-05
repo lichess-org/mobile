@@ -692,15 +692,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -861,12 +852,16 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
 @freezed
 sealed class AnalysisState
-    with _$AnalysisState, AnalysisExplosionMixin
-    implements EvaluationMixinState, CommonAnalysisState {
+    with _$AnalysisState, AnalysisExplosionMixin, EvaluationMixinState<AnalysisState>
+    implements CommonAnalysisState {
   const AnalysisState._();
 
   @override
   ViewRoot get analysisRoot => root;
+
+  @override
+  AnalysisState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory AnalysisState({
     /// The ID of the game if it's a lichess game.

@@ -303,15 +303,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _showMistake(int index) {
     final mistake = state.requireValue.mistakes.getOrNull(index);
     final lastMistake = state.requireValue.mistakes.lastOrNull;
@@ -490,9 +481,13 @@ enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, do
 
 @freezed
 sealed class RetroState
-    with _$RetroState, AnalysisExplosionMixin
-    implements EvaluationMixinState, CommonAnalysisState {
+    with _$RetroState, AnalysisExplosionMixin, EvaluationMixinState<RetroState>
+    implements CommonAnalysisState {
   const RetroState._();
+
+  @override
+  RetroState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory RetroState({
     required bool serverAnalysisAvailable,
