@@ -148,16 +148,17 @@ class UCIProtocol {
     for (int i = 1; i < parts.length; i++) {
       switch (parts[i]) {
         case 'depth':
-          depth = int.parse(parts[++i]);
+          depth = int.tryParse(parts[++i]) ?? depth;
         case 'nodes':
-          nodes = int.parse(parts[++i]);
+          nodes = int.tryParse(parts[++i]) ?? nodes;
         case 'multipv':
-          multiPv = int.parse(parts[++i]);
+          multiPv = int.tryParse(parts[++i]) ?? multiPv;
         case 'time':
-          elapsedMs = int.parse(parts[++i]);
+          elapsedMs = int.tryParse(parts[++i]) ?? elapsedMs;
         case 'score':
           isMate = parts[++i] == 'mate';
-          povEv = int.parse(parts[++i]);
+          povEv = int.tryParse(parts[++i]);
+          if (povEv == null) return;
           if (i + 1 < parts.length &&
               (parts[i + 1] == 'lowerbound' || parts[i + 1] == 'upperbound')) {
             evalType = parts[++i];
