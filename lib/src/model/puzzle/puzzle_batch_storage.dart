@@ -67,7 +67,7 @@ class PuzzleBatchStorage {
       'angle': angle.key,
       'data': jsonEncode(data.toJson()),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
-    _ref.invalidateSelf();
+    if (_ref.mounted) _ref.invalidateSelf();
   }
 
   Future<void> delete({
@@ -82,7 +82,7 @@ class PuzzleBatchStorage {
     ''',
       whereArgs: [userId ?? _anonUserKey, angle.key],
     );
-    _ref.invalidateSelf();
+    if (_ref.mounted) _ref.invalidateSelf();
   }
 
   /// Fetches all saved puzzles batches (except mix) for the given user.
