@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -278,9 +279,15 @@ enum BroadcastFideTC {
     BroadcastFideTC.rapid => LichessIcons.rapid,
     BroadcastFideTC.blitz => LichessIcons.blitz,
   };
+
+  String i18nName(BuildContext context) => switch (this) {
+    BroadcastFideTC.standard => context.l10n.classical,
+    BroadcastFideTC.rapid => context.l10n.rapid,
+    BroadcastFideTC.blitz => context.l10n.blitz,
+  };
 }
 
-typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
+typedef BroadcastFideData = ({StatByFideTC ratings, int? birthYear});
 
 typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,

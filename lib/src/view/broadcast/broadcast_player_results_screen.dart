@@ -212,7 +212,6 @@ class _OverallStatPlayer extends StatelessWidget {
     final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
         playerWithGameResults;
     final birthYear = fideData.birthYear;
-    final (:standard, :rapid, :blitz) = fideData.ratings;
     final BroadcastPlayerWithOverallResult(
       :player,
       :score,
@@ -303,27 +302,22 @@ class _OverallStatPlayer extends StatelessWidget {
               ),
             ],
           ),
-          if (standard != null || rapid != null || blitz != null)
+          if (fideData.ratings.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: cardSpacing,
-              children: [
-                if (standard != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.classical, value: standard.toString()),
-                  ),
-                if (rapid != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.rapid, value: rapid.toString()),
-                  ),
-                if (blitz != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.blitz, value: blitz.toString()),
-                  ),
-              ],
+              children: BroadcastFideTC.values
+                  .map((tc) {
+                    final rating = fideData.ratings.get(tc);
+                    if (rating != null) {
+                      return SizedBox(
+                        width: statWidth,
+                        child: _StatCard(tc.i18nName(context), value: rating.toString()),
+                      );
+                    }
+                  })
+                  .nonNulls
+                  .toList(),
             ),
           if (score != null || performances != null || ratingDiffs != null)
             Row(

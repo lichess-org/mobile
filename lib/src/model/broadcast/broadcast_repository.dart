@@ -361,11 +361,7 @@ BroadcastPlayerWithGameResults _makePlayerWithGameResultsFromJson(Map<String, dy
 
 BroadcastFideData _fideDataFromPick(Pick pick) {
   return (
-    ratings: (
-      standard: pick('ratings', 'standard').asIntOrNull(),
-      rapid: pick('ratings', 'rapid').asIntOrNull(),
-      blitz: pick('ratings', 'blitz').asIntOrNull(),
-    ),
+    ratings: pick('ratings').letOrNull(pickStats) ?? const IMap.empty(),
     birthYear: pick('year').asIntOrNull(),
   );
 }
