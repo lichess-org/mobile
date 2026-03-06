@@ -201,6 +201,14 @@ BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
   return (id: id, name: name, active: active, live: live);
 }
 
+BroadcastCustomPointsPerColor _customPointsPerColorFromPick(RequiredPick pick) =>
+    (win: pick('win').asDoubleOrThrow(), draw: pick('draw').asDoubleOrThrow());
+
+BroadcastCustomScoring _customScoringFromPick(RequiredPick pick) => {
+  Side.white: _customPointsPerColorFromPick(pick('white').required()),
+  Side.black: _customPointsPerColorFromPick(pick('black').required()),
+}.lock;
+
 BroadcastRound _roundFromPick(RequiredPick pick) {
   final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
@@ -218,6 +226,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
     finishedAt: pick('finishedAt').asDateTimeFromMillisecondsOrNull(),
     startsAfterPrevious: pick('startsAfterPrevious').asBoolOrFalse(),
+    customScoring: pick('customScoring').letOrNull(_customScoringFromPick),
   );
 }
 
@@ -360,6 +369,20 @@ BroadcastFideData _fideDataFromPick(Pick pick) {
   );
 }
 
+BroadcastFideTC _fideTCFromString(RequiredPick pick) {
+  final tc = pick.asStringOrNull();
+  switch (tc) {
+    case 'standard':
+      return BroadcastFideTC.standard;
+    case 'rapid':
+      return BroadcastFideTC.rapid;
+    case 'blitz':
+      return BroadcastFideTC.blitz;
+    default:
+      throw PickException('Unknown FIDE time control: $tc');
+  }
+}
+
 BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
   final pointsString = pick('points').asStringOrNull();
   BroadcastPoints? points;
@@ -375,8 +398,10 @@ BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
     roundId: pick('round').asBroadcastRoundIdOrThrow(),
     gameId: pick('id').asBroadcastGameIdOrThrow(),
     color: pick('color').asSideOrThrow(),
+    fideTC: _fideTCFromString(pick('fideTC').required()),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
+    customPoints: pick('customPoints').asDoubleOrNull(),
     opponent: _playerFromPick(pick('opponent').required()),
   );
 }

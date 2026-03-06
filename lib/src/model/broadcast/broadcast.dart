@@ -1,8 +1,12 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -51,6 +55,12 @@ enum BroadcastResult {
     newOrOngoing => false,
     noResultPgnTag => false,
     _ => true,
+  };
+
+  Color? colorFor(Side side, BuildContext context) => switch (this) {
+    whiteWins => side == Side.white ? context.lichessColors.good : context.lichessColors.error,
+    blackWins => side == Side.white ? context.lichessColors.error : context.lichessColors.good,
+    _ => null,
   };
 }
 
@@ -119,6 +129,28 @@ typedef BroadcastTournamentGroup = ({
   bool live,
 });
 
+typedef BroadcastCustomPointsPerColor = ({double win, double draw});
+typedef BroadcastCustomScoring = IMap<Side, BroadcastCustomPointsPerColor>;
+
+String customScoreForResult(BroadcastCustomScoring scoring, Side side, BroadcastResult result) {
+  final customScore =
+      (side == Side.white
+          ? switch (result) {
+              BroadcastResult.whiteWins => scoring[side]?.win,
+              BroadcastResult.draw || BroadcastResult.whiteHalfWins => scoring[side]?.draw,
+              _ => 0.0,
+            }
+          : switch (result) {
+              BroadcastResult.blackWins => scoring[side]?.win,
+              BroadcastResult.draw || BroadcastResult.blackHalfWins => scoring[side]?.draw,
+              _ => 0.0,
+            }) ??
+      0.0;
+  return customScore == customScore.roundToDouble()
+      ? NumberFormat('0').format(customScore)
+      : NumberFormat('0.##').format(customScore);
+}
+
 @freezed
 sealed class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
@@ -129,6 +161,7 @@ sealed class BroadcastRound with _$BroadcastRound {
     required DateTime? startsAt,
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
+    required BroadcastCustomScoring? customScoring,
   }) = _BroadcastRound;
 }
 
@@ -230,6 +263,18 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
 
 typedef BroadcastTieBreakDetail = ({String extendedCode, String description, double points});
 
+enum BroadcastFideTC {
+  standard,
+  rapid,
+  blitz;
+
+  IconData get icon => switch (this) {
+    BroadcastFideTC.standard => LichessIcons.classical,
+    BroadcastFideTC.rapid => LichessIcons.rapid,
+    BroadcastFideTC.blitz => LichessIcons.blitz,
+  };
+}
+
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
 typedef BroadcastPlayerWithGameResults = ({
@@ -238,7 +283,19 @@ typedef BroadcastPlayerWithGameResults = ({
   IList<BroadcastPlayerGameResult> games,
 });
 
-enum BroadcastPoints { one, half, zero }
+enum BroadcastPoints {
+  one,
+  half,
+  zero;
+
+  BroadcastResult resultFor(Side side) => switch (this) {
+    BroadcastPoints.one =>
+      side == Side.white ? BroadcastResult.whiteWins : BroadcastResult.blackWins,
+    BroadcastPoints.zero =>
+      side == Side.white ? BroadcastResult.blackWins : BroadcastResult.whiteWins,
+    BroadcastPoints.half => BroadcastResult.draw,
+  };
+}
 
 @freezed
 sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
@@ -246,7 +303,9 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
+    required BroadcastFideTC fideTC,
     required BroadcastPoints? points,
+    required double? customPoints,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
   }) = _BroadcastPlayerGameResult;

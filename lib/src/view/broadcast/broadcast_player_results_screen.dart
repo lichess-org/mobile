@@ -139,6 +139,7 @@ class _Body extends ConsumerWidget {
         final BroadcastPlayerWithOverallResult(:tieBreaks) = playerWithOverallResult;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
+        final showTCIcon = games.map((g) => g.fideTC).toSet().length > 1;
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
         final gamesSectionHeader = ColoredBox(
@@ -188,6 +189,7 @@ class _Body extends ConsumerWidget {
               index: index,
               indexWidth: indexWidth,
               showRatingDiff: showRatingDiff,
+              showTCIcon: showTCIcon,
             );
           },
         );
@@ -403,6 +405,7 @@ class _GameResultListTile extends StatelessWidget {
     required this.index,
     required this.indexWidth,
     required this.showRatingDiff,
+    required this.showTCIcon,
   });
 
   final BroadcastPlayerGameResult playerGameResult;
@@ -410,11 +413,20 @@ class _GameResultListTile extends StatelessWidget {
   final int index;
   final double indexWidth;
   final bool showRatingDiff;
+  final bool showTCIcon;
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
-        playerGameResult;
+    final BroadcastPlayerGameResult(
+      :roundId,
+      :gameId,
+      :color,
+      :points,
+      :customPoints,
+      :ratingDiff,
+      :opponent,
+      :fideTC,
+    ) = playerGameResult;
     final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
 
@@ -450,7 +462,7 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: 60,
+        width: showTCIcon ? 72 : 60,
         child: Row(
           mainAxisSize: .min,
           mainAxisAlignment: .center,
@@ -476,6 +488,7 @@ class _GameResultListTile extends StatelessWidget {
                 ),
               ),
             ),
+            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 14)),
             SizedBox(
               width: 30,
               child: Column(
@@ -486,13 +499,18 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        switch (points) {
-                          .one => '1',
-                          .half => '½',
-                          .zero => '0',
-                          _ => '*',
-                        },
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
+                        customPoints != null && customPoints != 0.5
+                            ? NumberFormat('0.##').format(customPoints)
+                            : switch (points) {
+                                .one => '1',
+                                .half => '½',
+                                .zero => '0',
+                                _ => '*',
+                              },
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: .bold,
+                          color: points?.resultFor(color).colorFor(color, context),
+                        ),
                       ),
                     ],
                   ),
