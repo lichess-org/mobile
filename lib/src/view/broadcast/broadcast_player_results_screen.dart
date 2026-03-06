@@ -344,7 +344,7 @@ class _OverallStatPlayer extends StatelessWidget {
                       context.l10n.performance,
                       child: performances.length <= 1
                           ? Text(
-                              performances.values.first.toString(),
+                              '${performances.values.first}${games.count((g) => g.fideTC == performances.keys.first) < 4 ? '?' : ''}',
                               style: const TextStyle(fontSize: 18),
                             )
                           : Column(
@@ -353,7 +353,13 @@ class _OverallStatPlayer extends StatelessWidget {
                                   .mapTo(
                                     (tc, p) => Row(
                                       mainAxisAlignment: .center,
-                                      children: [Icon(tc.icon, size: 16), Text(p.toString(), style: const TextStyle(fontSize: 16))],
+                                      children: [
+                                        Icon(tc.icon, size: 16),
+                                        Text(
+                                          '$p${games.count((g) => g.fideTC == tc) < 4 ? '?' : ''}',
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      ],
                                     ),
                                   )
                                   .toList(),
