@@ -420,16 +420,35 @@ class BroadcastPlayerRow extends StatelessWidget {
       ),
       subtitle: Row(
         mainAxisSize: .min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (federation != null) Image.asset('assets/images/fide-fed/$federation.png', height: 12),
-          const SizedBox(width: 5),
-          if (ratingsMap != null && ratingsMap.isNotEmpty)
-            Text(
-              rating.toString(),
-              style: const TextStyle(fontSize: 13, fontFeatures: [FontFeature.tabularFigures()]),
+          if (ratingsMap != null)
+            Column(
+              mainAxisAlignment: .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: ratingsMap
+                  .mapTo(
+                    (tc, rating) => Row(
+                      mainAxisAlignment: .start,
+                      spacing: 4.0,
+                      children: [
+                        const SizedBox(width: 4),
+                        if (ratingsMap.length > 1) Icon(tc.icon, size: 14),
+                        Text(
+                          rating.toString(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
+                        ),
+                        if (ratingDiffs != null && ratingDiffs.get(tc) != null)
+                          ProgressionWidget(ratingDiffs.get(tc)!, fontSize: 13),
+                      ],
+                    ),
+                  )
+                  .toList(),
             ),
-          const SizedBox(width: 4),
-          if (ratingDiffs != null) ProgressionWidget(ratingDiffs.values.first, fontSize: 13),
         ],
       ),
       trailing: rating != null || score != null
