@@ -367,6 +367,7 @@ class BroadcastPlayerRow extends StatelessWidget {
     final BroadcastPlayerWithOverallResult(
       :player,
       :ratingDiffs,
+      :ratingsMap,
       :score,
       :played,
       :rank,
@@ -417,25 +418,20 @@ class BroadcastPlayerRow extends StatelessWidget {
           ),
         ],
       ),
-      subtitle: federation != null
-          ? Row(
-              mainAxisSize: .min,
-              children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
-                const SizedBox(width: 5),
-                if (rating != null)
-                  Text(
-                    rating.toString(),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontFeatures: [FontFeature.tabularFigures()],
-                    ),
-                  ),
-                const SizedBox(width: 4),
-                if (ratingDiffs != null) ProgressionWidget(ratingDiffs.values.first, fontSize: 13),
-              ],
-            )
-          : null,
+      subtitle: Row(
+        mainAxisSize: .min,
+        children: [
+          if (federation != null) Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+          const SizedBox(width: 5),
+          if (ratingsMap != null && ratingsMap.isNotEmpty)
+            Text(
+              rating.toString(),
+              style: const TextStyle(fontSize: 13, fontFeatures: [FontFeature.tabularFigures()]),
+            ),
+          const SizedBox(width: 4),
+          if (ratingDiffs != null) ProgressionWidget(ratingDiffs.values.first, fontSize: 13),
+        ],
+      ),
       trailing: rating != null || score != null
           ? SizedBox(
               width: 35,
