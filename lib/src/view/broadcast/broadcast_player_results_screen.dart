@@ -534,12 +534,7 @@ class _GameResultListTile extends StatelessWidget {
                       Text(
                         customPoints != null && customPoints != 0.5
                             ? NumberFormat('0.##').format(customPoints)
-                            : switch (points) {
-                                .one => '1',
-                                .half => '½',
-                                .zero => '0',
-                                _ => '*',
-                              },
+                            : points?.resultFor(color).resultToString(color) ?? '*',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: .bold,
                           color: points?.resultFor(color).colorFor(color, context),

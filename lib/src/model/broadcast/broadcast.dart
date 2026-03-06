@@ -147,9 +147,7 @@ String customScoreForResult(BroadcastCustomScoring scoring, Side side, Broadcast
               _ => 0.0,
             }) ??
       0.0;
-  return customScore == customScore.roundToDouble()
-      ? NumberFormat('0').format(customScore)
-      : customScore == 0.5
+  return customScore == 0.5
       ? result.resultToString(side) // '½' looks nicer than '0.5'
       : NumberFormat('0.##').format(customScore);
 }
