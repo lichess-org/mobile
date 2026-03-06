@@ -337,28 +337,24 @@ class _OverallStatPlayer extends StatelessWidget {
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.performance,
-                      child: performances.length <= 1
-                          ? Text(
-                              '${performances.values.first}${games.count((g) => g.fideTC == performances.keys.first) < 4 ? '?' : ''}',
-                              style: const TextStyle(fontSize: 18),
+                      child: Column(
+                        mainAxisSize: .min,
+                        children: performances
+                            .mapTo(
+                              (tc, p) => Row(
+                                mainAxisAlignment: .center,
+                                spacing: 4.0,
+                                children: [
+                                  Icon(tc.icon, size: 16),
+                                  Text(
+                                    '$p${games.count((g) => g.fideTC == tc) < 4 ? '?' : ''}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
                             )
-                          : Column(
-                              mainAxisSize: .min,
-                              children: performances
-                                  .mapTo(
-                                    (tc, p) => Row(
-                                      mainAxisAlignment: .center,
-                                      children: [
-                                        Icon(tc.icon, size: 16),
-                                        Text(
-                                          '$p${games.count((g) => g.fideTC == tc) < 4 ? '?' : ''}',
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
+                            .toList(),
+                      ),
                     ),
                   ),
                 if (ratingDiffs != null)
@@ -366,26 +362,25 @@ class _OverallStatPlayer extends StatelessWidget {
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.broadcastRatingDiff,
-                      child: ratingDiffs.length <= 1
-                          ? ProgressionWidget(ratingDiffs.values.first, fontSize: 18.0)
-                          : Column(
-                              mainAxisSize: .min,
-                              children: ratingDiffs
-                                  .mapTo(
-                                    (tc, diff) => Row(
-                                      mainAxisAlignment: .center,
-                                      children: [
-                                        Icon(tc.icon, size: 16),
-                                        Text(
-                                          ratingsMap?.get(tc)?.toString() ?? '',
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                        ProgressionWidget(diff, fontSize: 16.0),
-                                      ],
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
+                      child: Column(
+                        mainAxisSize: .min,
+                        children: ratingDiffs
+                            .mapTo(
+                              (tc, diff) => Row(
+                                mainAxisAlignment: .center,
+                                spacing: 4.0,
+                                children: [
+                                  Icon(tc.icon, size: 16),
+                                  Text(
+                                    ratingsMap?.get(tc)?.toString() ?? '',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  ProgressionWidget(diff, fontSize: 16.0),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
               ],
