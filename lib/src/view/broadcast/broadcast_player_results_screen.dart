@@ -217,8 +217,8 @@ class _OverallStatPlayer extends StatelessWidget {
       :player,
       :score,
       :played,
-      :performance,
-      :ratingDiff,
+      :performances,
+      :ratingDiffs,
       :team,
     ) = playerWithOverallResult;
     final BroadcastPlayer(:federation, :fideId) = player;
@@ -324,7 +324,7 @@ class _OverallStatPlayer extends StatelessWidget {
                   ),
               ],
             ),
-          if (score != null || performance != null || ratingDiff != null)
+          if (score != null || performances != null || ratingDiffs != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: cardSpacing,
@@ -337,17 +337,50 @@ class _OverallStatPlayer extends StatelessWidget {
                       value: '${NumberFormat('0.#').format(score)} / $played',
                     ),
                   ),
-                if (performance != null)
+                if (performances != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(context.l10n.performance, value: performance.toString()),
+                    child: _StatCard(
+                      context.l10n.performance,
+                      child: performances.length <= 1
+                          ? Text(
+                              performances.values.first.toString(),
+                              style: const TextStyle(fontSize: 18),
+                            )
+                          : Column(
+                              mainAxisSize: .min,
+                              children: performances
+                                  .mapTo(
+                                    (tc, p) => Row(
+                                      mainAxisAlignment: .center,
+                                      children: [Icon(tc.icon, size: 16), Text(p.toString(), style: const TextStyle(fontSize: 16))],
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                    ),
                   ),
-                if (ratingDiff != null)
+                if (ratingDiffs != null)
                   SizedBox(
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.broadcastRatingDiff,
-                      child: ProgressionWidget(ratingDiff, fontSize: 18.0),
+                      child: ratingDiffs.length <= 1
+                          ? ProgressionWidget(ratingDiffs.values.first, fontSize: 18.0)
+                          : Column(
+                              mainAxisSize: .min,
+                              children: ratingDiffs
+                                  .mapTo(
+                                    (tc, diff) => Row(
+                                      mainAxisAlignment: .center,
+                                      children: [
+                                        Icon(tc.icon, size: 16),
+                                        ProgressionWidget(diff, fontSize: 16.0),
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                     ),
                   ),
               ],
@@ -488,7 +521,7 @@ class _GameResultListTile extends StatelessWidget {
                 ),
               ),
             ),
-            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 14)),
+            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 15)),
             SizedBox(
               width: 30,
               child: Column(

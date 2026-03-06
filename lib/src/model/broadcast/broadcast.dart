@@ -256,14 +256,16 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
     required int played,
     required double? score,
     required int? rank,
-    required int? ratingDiff,
-    required int? performance,
+    required StatByFideTC? ratingDiffs,
+    required StatByFideTC? performances,
     required IList<BroadcastTieBreakDetail>? tieBreaks,
     required String? team,
   }) = _BroadcastPlayerWithOverallResult;
 }
 
 typedef BroadcastTieBreakDetail = ({String extendedCode, String description, double points});
+
+typedef StatByFideTC = IMap<BroadcastFideTC, int>;
 
 enum BroadcastFideTC {
   standard,

@@ -335,8 +335,8 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
     rank: pick('rank').asIntOrNull(),
-    ratingDiff: pick('ratingDiff').asIntOrNull(),
-    performance: pick('performance').asIntOrNull(),
+    ratingDiffs: pick('ratingDiffs').letOrNull(pickStats),
+    performances: pick('performances').letOrNull(pickStats),
     tieBreaks: pick('tiebreaks').asListOrNull(_tieBreakDetailFromPick)?.toIList(),
     team: pick('team').asStringOrNull(),
   );
@@ -381,6 +381,17 @@ BroadcastFideTC _fideTCFromString(RequiredPick pick) {
     default:
       throw PickException('Unknown FIDE time control: $tc');
   }
+}
+
+StatByFideTC pickStats(RequiredPick pick) {
+  final standard = pick('standard').asIntOrNull();
+  final rapid = pick('rapid').asIntOrNull();
+  final blitz = pick('blitz').asIntOrNull();
+  return {
+    if (standard != null) BroadcastFideTC.standard: standard,
+    if (rapid != null) BroadcastFideTC.rapid: rapid,
+    if (blitz != null) BroadcastFideTC.blitz: blitz,
+  }.lock;
 }
 
 BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {

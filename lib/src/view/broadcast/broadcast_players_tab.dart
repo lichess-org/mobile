@@ -366,7 +366,7 @@ class BroadcastPlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerWithOverallResult(
       :player,
-      :ratingDiff,
+      :ratingDiffs,
       :score,
       :played,
       :rank,
@@ -432,7 +432,7 @@ class BroadcastPlayerRow extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(width: 4),
-                if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
+                if (ratingDiffs != null) ProgressionWidget(ratingDiffs.values.first, fontSize: 13),
               ],
             )
           : null,
