@@ -335,6 +335,7 @@ BroadcastPlayerWithOverallResult _playerWithOverallResultFromPick(RequiredPick p
     played: pick('played').asIntOrThrow(),
     score: pick('score').asDoubleOrNull(),
     rank: pick('rank').asIntOrNull(),
+    ratingsMap: pick('ratingsMap').letOrNull(pickStats),
     ratingDiffs: pick('ratingDiffs').letOrNull(pickStats),
     performances: pick('performances').letOrNull(pickStats),
     tieBreaks: pick('tiebreaks').asListOrNull(_tieBreakDetailFromPick)?.toIList(),

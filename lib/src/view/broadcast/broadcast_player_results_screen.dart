@@ -218,6 +218,7 @@ class _OverallStatPlayer extends StatelessWidget {
       :score,
       :played,
       :performances,
+      :ratingsMap,
       :ratingDiffs,
       :team,
     ) = playerWithOverallResult;
@@ -381,6 +382,10 @@ class _OverallStatPlayer extends StatelessWidget {
                                       mainAxisAlignment: .center,
                                       children: [
                                         Icon(tc.icon, size: 16),
+                                        Text(
+                                          ratingsMap?.get(tc)?.toString() ?? '',
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
                                         ProgressionWidget(diff, fontSize: 16.0),
                                       ],
                                     ),

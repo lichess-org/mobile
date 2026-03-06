@@ -256,6 +256,7 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
     required int played,
     required double? score,
     required int? rank,
+    required StatByFideTC? ratingsMap,
     required StatByFideTC? ratingDiffs,
     required StatByFideTC? performances,
     required IList<BroadcastTieBreakDetail>? tieBreaks,
