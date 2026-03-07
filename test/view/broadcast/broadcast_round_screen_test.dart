@@ -482,7 +482,22 @@ void main() {
       expect(find.text('Team C'), findsOneWidget);
       expect(find.text('Team D'), findsOneWidget);
 
-      expect(find.text('1 - 0'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((widget) {
+          if (widget is Row) {
+            final children = widget.children;
+            return children.length == 3 &&
+                children[0] is Text &&
+                (children[0] as Text).data == '1' &&
+                children[1] is Text &&
+                (children[1] as Text).data == ' - ' &&
+                children[2] is Text &&
+                (children[2] as Text).data == '0';
+          }
+          return false;
+        }),
+        findsOneWidget,
+      );
 
       expect(find.byType(Card), findsNWidgets(2));
     });
