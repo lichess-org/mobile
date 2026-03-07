@@ -74,7 +74,7 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
   Widget build(BuildContext context) {
     final showSearchBar = widget.games.length > 5;
     final filteredIndices = _searchQuery.isEmpty
-        ? List.generate(widget.games.length, (i) => i)
+        ? List.generate(widget.games.length, (i) => i, growable: false)
         : List.generate(
             widget.games.length,
             (i) => i,
