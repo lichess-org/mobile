@@ -133,24 +133,29 @@ typedef BroadcastTournamentGroup = ({
 typedef BroadcastCustomPointsPerColor = ({double win, double draw});
 typedef BroadcastCustomScoring = BySide<BroadcastCustomPointsPerColor>;
 
-String customScoreForResult(BroadcastCustomScoring scoring, Side side, BroadcastResult result) {
-  final customScore =
-      (side == Side.white
-          ? switch (result) {
-              BroadcastResult.whiteWins => scoring[side]?.win,
-              BroadcastResult.draw || BroadcastResult.whiteHalfWins => scoring[side]?.draw,
-              _ => 0.0,
-            }
-          : switch (result) {
-              BroadcastResult.blackWins => scoring[side]?.win,
-              BroadcastResult.draw || BroadcastResult.blackHalfWins => scoring[side]?.draw,
-              _ => 0.0,
-            }) ??
-      0.0;
-  return customScore == 0.5
-      ? result.resultToString(side) // '½' looks nicer than '0.5'
-      : NumberFormat('0.##').format(customScore);
+extension BroadcastCustomScoringExt on BroadcastCustomScoring {
+  String pointsForResult(Side side, BroadcastResult result) {
+    final customScore =
+        (side == Side.white
+            ? switch (result) {
+                BroadcastResult.whiteWins => this[side]?.win,
+                BroadcastResult.draw || BroadcastResult.whiteHalfWins => this[side]?.draw,
+                _ => 0.0,
+              }
+            : switch (result) {
+                BroadcastResult.blackWins => this[side]?.win,
+                BroadcastResult.draw || BroadcastResult.blackHalfWins => this[side]?.draw,
+                _ => 0.0,
+              }) ??
+        0.0;
+    return customScore == 0.5
+        ? result.resultToString(side) // '½' looks nicer than '0.5'
+        : NumberFormat('0.##').format(customScore);
+  }
 }
+
+String resultString(BroadcastCustomScoring? customScoring, Side side, BroadcastResult result) =>
+    customScoring?.pointsForResult(side, result) ?? result.resultToString(side);
 
 @freezed
 sealed class BroadcastRound with _$BroadcastRound {

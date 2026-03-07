@@ -388,9 +388,7 @@ class _PlayerWidget extends StatelessWidget {
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
-                  customScoring != null
-                      ? customScoreForResult(customScoring!, side, game.status)
-                      : game.status.resultToString(side),
+                  resultString(customScoring, side, game.status),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: .bold,
                     color: game.status.colorFor(side, context),

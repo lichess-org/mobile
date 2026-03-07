@@ -351,10 +351,10 @@ class _GameRowState extends ConsumerState<_GameRow> {
       return [const Text('*')];
     }
     Text povResult(BroadcastGame game, Side pov, BroadcastCustomScoring? customScoring) {
-      final resultString = (customScoring != null)
-          ? customScoreForResult(customScoring, pov, game.status)
-          : game.status.resultToString(pov);
-      return Text(resultString, style: TextStyle(color: game.status.colorFor(pov, context)));
+      return Text(
+        resultString(customScoring, pov, game.status),
+        style: TextStyle(color: game.status.colorFor(pov, context)),
+      );
     }
 
     final team1Result = povResult(game, teamPov, customScoring);

@@ -508,9 +508,7 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    customScoring != null
-                        ? customScoreForResult(customScoring, side, game.status)
-                        : game.status.resultToString(side),
+                    resultString(customScoring, side, game.status),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: .bold,
                       color: game.status.colorFor(side, context),
