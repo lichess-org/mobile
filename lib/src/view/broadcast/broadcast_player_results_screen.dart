@@ -345,7 +345,7 @@ class _OverallStatPlayer extends StatelessWidget {
                                 mainAxisAlignment: .center,
                                 spacing: 4.0,
                                 children: [
-                                  Icon(tc.icon, size: 16),
+                                  if (performances.length > 1) Icon(tc.icon, size: 16),
                                   Text(
                                     '$p${games.count((g) => g.fideTC == tc) < 4 ? '?' : ''}',
                                     style: const TextStyle(fontSize: 16),
@@ -370,7 +370,7 @@ class _OverallStatPlayer extends StatelessWidget {
                                 mainAxisAlignment: .center,
                                 spacing: 4.0,
                                 children: [
-                                  Icon(tc.icon, size: 16),
+                                  if (ratingDiffs.length > 1) Icon(tc.icon, size: 16),
                                   Text(
                                     ratingsMap?.get(tc)?.toString() ?? '',
                                     style: const TextStyle(fontSize: 16),
