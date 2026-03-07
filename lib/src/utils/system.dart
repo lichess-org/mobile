@@ -41,6 +41,24 @@ class System {
 
     throw UnimplementedError('This method is only available on Android');
   }
+
+  /// Returns whether animations are enabled in Android system settings.
+  ///
+  /// Only available on Android. On other platforms, returns true (animations enabled).
+  Future<bool> areAnimationsEnabled() async {
+    if (Platform.isAndroid) {
+      try {
+        final result = await _channel.invokeMethod<bool>('areAnimationsEnabled');
+        return result ?? true;
+      } on PlatformException catch (e) {
+        debugPrint('Failed to get animation settings: ${e.message}');
+        return true;
+      } on MissingPluginException catch (_) {
+        return true;
+      }
+    }
+    return true;
+  }
 }
 
 /// A provider that returns OS version of an Android device.
@@ -50,4 +68,9 @@ final androidVersionProvider = FutureProvider<AndroidBuildVersion?>((ref) async 
   }
   final info = await DeviceInfoPlugin().androidInfo;
   return info.version;
+});
+
+/// A provider that returns whether animations are enabled in Android system settings.
+final androidAnimationsProvider = FutureProvider<bool>((ref) async {
+  return await System.instance.areAnimationsEnabled();
 });
