@@ -6,11 +6,12 @@ If you get stuck during the installation process the most suitable place to seek
 
 ## Installing Flutter
 
-This project uses Flutter.
+This project uses the latest **Flutter stable** release. The minimum required version is defined in `pubspec.yaml`.
 
 1. Follow [the flutter install guide](https://docs.flutter.dev/get-started/install).
    This project is meant to run on iOS and Android, so you need to follow the "Platform setup" section of that guide to
    install the iOS and/or Android platform.
+   Make sure to install the latest Flutter stable release.
 
 > [!WARNING]
 > Installing on Linux using `snapd` might cause some [problems](https://github.com/lichess-org/mobile/issues/123) building stockfish.
