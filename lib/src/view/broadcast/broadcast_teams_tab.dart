@@ -255,7 +255,7 @@ class _GameRowState extends ConsumerState<_GameRow> {
     final team1Player = widget.teamGame.pov == Side.white ? whitePlayer : blackPlayer;
     final team2Player = widget.teamGame.pov == Side.white ? blackPlayer : whitePlayer;
 
-    final result = _getGameResult(widget.game, widget.teamGame.pov, widget.customScoring);
+    final result = _getGameResultTexts(widget.game, widget.teamGame.pov, widget.customScoring);
 
     final whiteWinningChances =
         widget.game.isOngoing && (widget.game.cp != null || widget.game.mate != null)
@@ -342,7 +342,7 @@ class _GameRowState extends ConsumerState<_GameRow> {
     );
   }
 
-  List<Text> _getGameResult(
+  List<Text> _getGameResultTexts(
     BroadcastGame game,
     Side teamPov,
     BroadcastCustomScoring? customScoring,
