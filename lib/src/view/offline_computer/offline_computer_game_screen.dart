@@ -942,6 +942,8 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       subtitle = context.l10n.resign;
     } else if (game.status == GameStatus.stalemate) {
       subtitle = context.l10n.stalemate;
+    } else if (game.status == GameStatus.variantEnd) {
+      subtitle = context.l10n.variantEnding;
     } else {
       subtitle = context.l10n.draw;
     }

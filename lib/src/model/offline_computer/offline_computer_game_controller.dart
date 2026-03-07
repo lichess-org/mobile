@@ -213,6 +213,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     } else if (state.currentPosition.isInsufficientMaterial) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
+    } else if (state.currentPosition.isVariantEnd) {
+      state = state.copyWith(
+        game: state.game.copyWith(
+          status: GameStatus.variantEnd,
+          winner: state.currentPosition.variantOutcome?.winner,
+        ),
+      );
     }
 
     _moveFeedback(sanMove);
