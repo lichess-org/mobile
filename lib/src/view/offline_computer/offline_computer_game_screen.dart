@@ -718,6 +718,8 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     SideChoice.white => context.l10n.white,
     SideChoice.random => context.l10n.randomColor,
     SideChoice.black => context.l10n.black,
+    // TODO: replace with a translated string once the feature is stable
+    SideChoice.nextToPlay => 'Next to play',
   };
 
   @override
@@ -725,7 +727,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     super.initState();
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
-    _selectedSideChoice = prefs.sideChoice;
+    _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
     _selectedVariant = prefs.variant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
@@ -747,7 +749,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                 child: StaticChessboard(
                   size: 150,
                   fen: widget.initialFen!,
-                  orientation: _selectedSideChoice.toSide() ?? Side.white,
+                  orientation: _selectedSideChoice.toSide(fen: widget.initialFen) ?? Side.white,
                   pieceAssets: boardPrefs.pieceSet.assets,
                   colorScheme: boardPrefs.boardTheme.colors,
                   brightness: boardPrefs.brightness,
@@ -797,7 +799,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               onTap: () {
                 showChoicePicker(
                   context,
-                  choices: SideChoice.values,
+                  choices: widget.initialFen != null
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
                   selectedItem: _selectedSideChoice,
                   labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
                   onSelectedItemChanged: (SideChoice choice) {
@@ -859,7 +863,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
             onPressed: () {
-              final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
+              final side =
+                  _selectedSideChoice.toSide(fen: widget.initialFen) ??
+                  Side.values[Random().nextInt(2)];
               ref
                   .read(offlineComputerGameControllerProvider.notifier)
                   .startNewGame(

@@ -1132,6 +1132,123 @@ void main() {
       expect(gameState.game.meta.variant, Variant.standard);
       expect(gameState.game.initialFen, null);
     });
+
+    testWidgets('Side defaults to "Next to play" when initialFen is provided', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(initialFen: customFen),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Verify the side selection defaults to "Next to play"
+      expect(find.text('Next to play'), findsOneWidget);
+    });
+
+    testWidgets('"Next to play" resolves to white when FEN has white to move', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // White to move
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default is "Next to play", just tap Play
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.white);
+      expect(gameState.turn, Side.white);
+    });
+
+    testWidgets('"Next to play" resolves to black when FEN has black to move', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // Black to move
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default is "Next to play", just tap Play
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.black);
+    });
+
+    testWidgets('"Next to play" is not shown in side picker without initialFen', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default should be "Random side", not "Next to play"
+      expect(find.text('Random side'), findsOneWidget);
+      expect(find.text('Next to play'), findsNothing);
+
+      // Open side picker
+      await tester.tap(find.byType(SettingsListTile).first);
+      await tester.pumpAndSettle();
+
+      // "Next to play" should not be in the picker
+      expect(find.text('Next to play'), findsNothing);
+    });
   });
 
   group('Practice comment card', () {
