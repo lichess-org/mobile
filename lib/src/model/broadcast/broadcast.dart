@@ -131,7 +131,7 @@ typedef BroadcastTournamentGroup = ({
 });
 
 typedef BroadcastCustomPointsPerColor = ({double win, double draw});
-typedef BroadcastCustomScoring = IMap<Side, BroadcastCustomPointsPerColor>;
+typedef BroadcastCustomScoring = BySide<BroadcastCustomPointsPerColor>;
 
 String customScoreForResult(BroadcastCustomScoring scoring, Side side, BroadcastResult result) {
   final customScore =
@@ -187,7 +187,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required IMap<Side, BroadcastPlayerWithClock> players,
+    required BySide<BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
