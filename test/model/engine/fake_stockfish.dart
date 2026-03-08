@@ -10,6 +10,18 @@ String _engineName(StockfishFlavor flavor) => switch (flavor) {
   StockfishFlavor.variant => 'Fairy-Stockfish',
 };
 
+Rule ruleFromUciVariant(String uciVariant) => switch (uciVariant) {
+  'chess' => Rule.chess,
+  'antichess' => Rule.antichess,
+  'kingofthehill' => Rule.kingofthehill,
+  '3check' => Rule.threecheck,
+  'atomic' => Rule.atomic,
+  'horde' => Rule.horde,
+  'racingkings' => Rule.racingKings,
+  'crazyhouse' => Rule.crazyhouse,
+  _ => throw ArgumentError('Unexpected uci variant: $uciVariant'),
+};
+
 /// A fake implementation of [Stockfish] for testing.
 class FakeStockfish implements Stockfish {
   FakeStockfish();
@@ -79,7 +91,7 @@ class FakeStockfish implements Stockfish {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
           if (parts.length > 2) {
             _position = Position.setupPosition(
-              Rule.chess,
+              _variant != null ? ruleFromUciVariant(_variant!) : Rule.chess,
               Setup.parseFen(
                 parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
               ),

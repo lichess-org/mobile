@@ -111,67 +111,78 @@ void main() {
       );
     });
 
-    for (final pgn in ['', sanMoves]) {
-      testWidgets('change variant if PGN is empty, pgn: $pgn', (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: AnalysisScreen(
-            options: AnalysisOptions.pgn(
-              id: const StringId('standalone'),
-              orientation: Side.white,
-              pgn: pgn,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+    testWidgets('change variant in standalone analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(options: AnalysisOptions.standalone(variant: Variant.standard)),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+
+      expect(find.text('Variant'), findsOneWidget);
+
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      expect(find.textContaining('Standard'), findsOneWidget);
+      expect(find.textContaining('Chess960'), findsNothing);
+      expect(find.textContaining('From Position'), findsNothing);
+      expect(find.textContaining('Antichess'), findsOneWidget);
+      expect(find.textContaining('King of the Hill'), findsOneWidget);
+      expect(find.textContaining('Three Check'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
+      expect(find.textContaining('Horde'), findsOneWidget);
+      expect(find.textContaining('Racing Kings'), findsOneWidget);
+      expect(find.textContaining('Crazyhouse'), findsOneWidget);
+
+      await tester.tap(find.textContaining('Horde'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      // Horde starting position should be loaded:
+      expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+
+      // Change to crazhouse, pockets should be displayed:
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+      await tester.tap(find.textContaining('Crazyhouse'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      // One for white, one for black
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+    });
+
+    testWidgets('Cannot change variant in PGN analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            pgn: '',
+            isComputerAnalysisAllowed: false,
+            orientation: Side.white,
+            variant: Variant.standard,
           ),
-        );
+        ),
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        expect(find.byType(PocketsMenu), findsNothing);
+      expect(find.byType(PocketsMenu), findsNothing);
 
-        await tester.tap(find.bySemanticsLabel('Menu'));
-        await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
 
-        final canChangeVariant = pgn.isEmpty;
-        expect(find.text('Variant'), canChangeVariant ? findsOneWidget : findsNothing);
-
-        if (canChangeVariant) {
-          await tester.tap(find.text('Variant'));
-          await tester.pumpAndSettle(); // wait for dialog to open
-
-          expect(find.textContaining('Standard'), findsOneWidget);
-          expect(find.textContaining('Chess960'), findsNothing);
-          expect(find.textContaining('From Position'), findsNothing);
-          expect(find.textContaining('Antichess'), findsOneWidget);
-          expect(find.textContaining('King of the Hill'), findsOneWidget);
-          expect(find.textContaining('Three Check'), findsOneWidget);
-          expect(find.textContaining('Atomic'), findsOneWidget);
-          expect(find.textContaining('Horde'), findsOneWidget);
-          expect(find.textContaining('Racing Kings'), findsOneWidget);
-          expect(find.textContaining('Crazyhouse'), findsOneWidget);
-
-          await tester.tap(find.textContaining('Horde'));
-          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
-
-          expect(find.byType(PocketsMenu), findsNothing);
-
-          // Horde starting position should be loaded:
-          expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
-
-          // Change to crazhouse, pockets should be displayed:
-          await tester.tap(find.bySemanticsLabel('Menu'));
-          await tester.pumpAndSettle(); // wait for menu to open
-          await tester.tap(find.text('Variant'));
-          await tester.pumpAndSettle(); // wait for dialog to open
-          await tester.tap(find.textContaining('Crazyhouse'));
-          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
-
-          // One for white, one for black
-          expect(find.byType(PocketsMenu), findsNWidgets(2));
-        }
-      });
-    }
+      expect(find.text('Variant'), findsNothing);
+    });
 
     testWidgets('Crazyhouse support DropMoves for both sides', (tester) async {
       final app = await makeTestProviderScopeApp(

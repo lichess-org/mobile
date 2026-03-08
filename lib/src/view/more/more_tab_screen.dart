@@ -84,13 +84,7 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    const AnalysisOptions.pgn(
-                      id: StringId('standalone'),
-                      orientation: Side.white,
-                      pgn: '',
-                      isComputerAnalysisAllowed: true,
-                      variant: Variant.standard,
-                    ),
+                    const AnalysisOptions.standalone(variant: Variant.standard),
                   ),
                 ),
               ),

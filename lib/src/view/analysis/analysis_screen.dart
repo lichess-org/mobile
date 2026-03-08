@@ -329,8 +329,8 @@ class _Body extends ConsumerWidget {
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
         result: result?.resultToString(pov.opposite),
       );
-    } else if (options case Standalone()) {
-      // Standalone analysis - try to get player info from PGN headers
+    } else if (options case Pgn()) {
+      // PGN analysis - try to get player info from PGN headers
       final footerPlayer = analysisState.playerFromPgnHeaders(pov);
       final headerPlayer = analysisState.playerFromPgnHeaders(pov.opposite);
 
@@ -569,7 +569,7 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        if (options case Standalone(:final pgn)) ...[
+        if (options case Standalone()) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.clearSavedMoves),
             onPressed: () => ref
@@ -578,43 +578,42 @@ class _BottomBar extends ConsumerWidget {
           ),
           // Only allow changing the variant if this is standalone analysis entered from the home screen,
           // but not for any other case like puzzle analysis or an active correspondence game.
-          if (pgn.isEmpty)
-            BottomSheetAction(
-              makeLabel: (context) => Text(context.l10n.variant),
-              onPressed: () => showChoicePicker<Variant>(
-                context,
-                choices: readSupportedVariants
-                    .where(
-                      (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
-                    )
-                    .toList(),
-                selectedItem: analysisState.variant,
-                labelBuilder: (Variant variant) => Text.rich(
-                  TextSpan(
-                    children: [
-                      WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
-                      const WidgetSpan(child: SizedBox(width: 8)),
-                      TextSpan(text: variant.label),
-                    ],
-                  ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.variant),
+            onPressed: () => showChoicePicker<Variant>(
+              context,
+              choices: readSupportedVariants
+                  .where(
+                    (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
+                  )
+                  .toList(),
+              selectedItem: analysisState.variant,
+              labelBuilder: (Variant variant) => Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
+                    const WidgetSpan(child: SizedBox(width: 8)),
+                    TextSpan(text: variant.label),
+                  ],
                 ),
-                onSelectedItemChanged: (Variant variant) =>
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ref
-                          .read(analysisControllerProvider(options).notifier)
-                          .clearSavedStandaloneAnalysis();
-                      Navigator.of(context, rootNavigator: true).pushReplacement(
-                        buildScreenRoute<dynamic>(
-                          context,
-                          screen: AnalysisScreen(
-                            options: (options as Standalone).copyWith(variant: variant),
-                          ),
-                          transitionDuration: Duration.zero,
-                        ),
-                      );
-                    }),
               ),
+              onSelectedItemChanged: (Variant variant) =>
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ref
+                        .read(analysisControllerProvider(options).notifier)
+                        .clearSavedStandaloneAnalysis();
+                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                      buildScreenRoute<dynamic>(
+                        context,
+                        screen: AnalysisScreen(
+                          options: (options as Standalone).copyWith(variant: variant),
+                        ),
+                        transitionDuration: Duration.zero,
+                      ),
+                    );
+                  }),
             ),
+          ),
         ],
         if (analysisState.isEngineAvailable(evalPrefs))
           BottomSheetAction(
