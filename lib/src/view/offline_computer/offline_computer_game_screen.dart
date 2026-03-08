@@ -940,6 +940,8 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       variant: game.meta.variant,
       status: game.status,
       lastPosition: game.lastPosition,
+      winner: game.winner,
+      isThreefoldRepetition: game.isThreefoldRepetition,
     );
 
     return AlertDialog.adaptive(

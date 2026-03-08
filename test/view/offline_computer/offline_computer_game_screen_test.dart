@@ -223,7 +223,7 @@ void main() {
 
       // Verify result dialog is shown
       expect(find.text('Game Over'), findsOneWidget);
-      expect(find.text('Resign'), findsOneWidget);
+      expect(find.text('White resigned'), findsOneWidget);
       expect(find.text('Close'), findsOneWidget);
       expect(find.text('New game'), findsWidgets);
     });
