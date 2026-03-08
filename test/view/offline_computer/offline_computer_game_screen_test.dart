@@ -1132,6 +1132,38 @@ void main() {
       expect(gameState.game.meta.variant, Variant.standard);
       expect(gameState.game.initialFen, null);
     });
+
+    testWidgets('A given initial variant is selected by default', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialVariant: Variant.atomic);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await selectSide(tester, Side.white);
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.meta.variant, Variant.atomic);
+      expect(gameState.game.initialFen, null);
+    });
   });
 
   group('Practice comment card', () {

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
@@ -32,13 +33,23 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({this.initialFen, super.key});
+  const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
 
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
-    return buildScreenRoute(context, screen: OverTheBoardScreen(initialFen: initialFen));
+  /// Initial variant to be preselected in the "New Game" dialog.
+  final Variant? initialVariant;
+
+  static Route<void> buildRoute(
+    BuildContext context, {
+    Variant? initialVariant,
+    String? initialFen,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
+    );
   }
 
   @override
@@ -54,13 +65,15 @@ class OverTheBoardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _Body(initialFen: initialFen),
+      body: _Body(initialVariant: initialVariant ?? Variant.standard, initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({this.initialFen});
+  const _Body({required this.initialVariant, this.initialFen});
+
+  final Variant initialVariant;
 
   final String? initialFen;
 
@@ -81,7 +94,12 @@ class _BodyState extends ConsumerState<_Body> {
       // If we have an initial FEN, always show the new game dialog
       if (widget.initialFen != null) {
         if (!mounted) return;
-        showConfigureGameSheet(context, isDismissible: true, initialFen: widget.initialFen);
+        showConfigureGameSheet(
+          context,
+          isDismissible: true,
+          initialVariant: widget.initialVariant,
+          initialFen: widget.initialFen,
+        );
         return;
       }
 
@@ -98,7 +116,7 @@ class _BodyState extends ConsumerState<_Body> {
             );
       } else {
         if (!mounted) return;
-        showConfigureGameSheet(context, isDismissible: true);
+        showConfigureGameSheet(context, initialVariant: widget.initialVariant, isDismissible: true);
       }
     });
   }
@@ -378,7 +396,11 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileNewGame),
-          onPressed: () => showConfigureGameSheet(context, isDismissible: true),
+          onPressed: () => showConfigureGameSheet(
+            context,
+            initialVariant: gameState.game.meta.variant,
+            isDismissible: true,
+          ),
         ),
         if (gameState.game.finished)
           BottomSheetAction(

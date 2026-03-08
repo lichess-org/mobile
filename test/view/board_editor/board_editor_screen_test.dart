@@ -428,6 +428,50 @@ void main() {
         'rnbqkbnr/pppppppp/8/8/8/3P4/PPPPPPPP/RNBPKBNR w KQkq - 0 1',
       );
     });
+
+    testWidgets('Continue against computer', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for variant selection dialog to open
+      await tester.tap(find.textContaining('Atomic'));
+      await tester.pumpAndSettle(); // wait for variant to change
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Play against computer'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
+
+    testWidgets('Continue OTB', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for variant selection dialog to open
+      await tester.tap(find.textContaining('Atomic'));
+      await tester.pumpAndSettle(); // wait for variant to change
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Over the board'));
+      await tester.pumpAndSettle(); // wait for over the board menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
   });
 }
 
