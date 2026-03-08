@@ -994,6 +994,12 @@ sealed class AnalysisState
     return forecast!.isCandidate(candidate) ? candidate : null;
   }
 
+  IList<PgnCommentShape> get pgnShapes => IList(
+    (currentNode.isRoot ? pgnRootComments : currentNode.comments)
+        ?.map((comment) => comment.shapes)
+        .flattened,
+  );
+
   /// If it's our turn and we have branched off from the main line, this is the move we would play
   /// if we to save the entire current path as a premove line.
   SanMove? get pendingMove => forecast?.onMyTurn == true && branchedOffFromLiveMove

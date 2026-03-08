@@ -1,8 +1,11 @@
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 
 class GameAnalysisBoard extends AnalysisBoard {
@@ -48,4 +51,25 @@ class _GameAnalysisBoardState
   @override
   void onPromotionSelection(Role? role) =>
       ref.read(analysisControllerProvider(widget.options).notifier).onPromotionSelection(role);
+
+  @override
+  ISet<Shape> get extraShapes {
+    final analysisState = ref.watch(analysisControllerProvider(widget.options)).requireValue;
+    final pgnShapes = ISet(analysisState.pgnShapes.map((shape) => shape.chessground));
+    return pgnShapes;
+  }
+}
+
+extension on PgnCommentShape {
+  Shape get chessground {
+    final shapeColor = switch (color) {
+      CommentShapeColor.green => ShapeColor.green,
+      CommentShapeColor.red => ShapeColor.red,
+      CommentShapeColor.blue => ShapeColor.blue,
+      CommentShapeColor.yellow => ShapeColor.yellow,
+    };
+    return from != to
+        ? Arrow(color: shapeColor.color, orig: from, dest: to)
+        : Circle(color: shapeColor.color, orig: from);
+  }
 }
