@@ -88,4 +88,5 @@
   <string name="openingExplorerNotAvailableOffline" comment="">Avausselain ei ole käytettävissä offline-tilassa.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Edellinen</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Tai tuo PGN-tiedosto</string>
 </resources>

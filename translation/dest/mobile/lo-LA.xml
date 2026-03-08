@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ໜ້າຫຼັກ</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ຜູ້ຖ່າຍທອດສົດ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ທ່ານຕ້ອງ​ລົງ​ຊື່​ເຂົ້າ​ໃຊ້ເພື່ອເຂົ້າ​ສູ່​ໜ້ານີ້.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">ເກມໃໝ່</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ບໍ່ມີຜົນໄດ້ຮັບ</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">ກະລຸນາຮັບຊາບວ່າບໍ່ແມ່ນຄຸນສົມບັດທັງໝົດຈາກແອັບຯເກົ່າ ຫຼືເວັບໄຊທ໌ທີ່ມີຢູ່ໃນປັດຈຸບັນ, ແຕ່ພວກເຮົາກຳລັງເພີ່ມຄຸນສົມບັດຢູ່ຕະຫຼອດເວລາ</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ເຈົ້າຍັງບໍ່ໄດ້ຕິດຕາມຜູ້ໃຊ້ໃດໆ</string>
@@ -75,4 +76,17 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ກຳລັງລໍຖ້າຄູ່ແຂ່ງເຂົ້າຮ່ວມ...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ເບິ່ງ</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">ຍິນ​ດີ​ຕ້ອນ​ຮັບ​ກັບແອັບ Lichess​!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">ເບິ່ງເກມ</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">ເຄັດ​ລັບ​: ທ່ານ​ສາ​ມາດ​ເພີ່ມວິດເຈັດຫຼາຍ​ໃນ​ຫນ້າ​ຈໍ​ທໍາ​ອິດ​ຫຼື​ລົບ​ສິ່ງ​ທີ່​ທ່ານ​ບໍ່​ຕ້ອງ​ການ​</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">ຍົກ​ເລີກ</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">ປັບແຕ່ງ</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">ຢຸດ​ສະ​ແດງ​ຄວາມສ່ຽງ</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">ສຳເລັດແລ້ວ</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">ໄປຫາໜ້າຂອງຂ້ອຍ</string>
+  <string name="displayModeCompact" comment="">ກະທັດຮັດ</string>
+  <string name="displayModeDetailed" comment="">ລະອຽດ</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">ຕາຕະລາງການສໍາຫຼວດເປີດເກມແມ່ນບໍ່ສາມາດໃຊ້ໄດ້ໂດຍບໍ່ມີການເຊື່ອມຕໍ່ອິນເຕີເນັດ</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">ເກມສ້າງແລ້ວ: ທ່ານຈະໄດ້ຮັບການແຈ້ງເຕືອນເມື່ອເກມເລີ່ມຕົ້ນ\nທ່ານສາມາດເຂົ້າເຖິງມັນໄດ້ຈາກແຖບຫຼັກ</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">ກ່ອນໜ້າ</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">ຫຼືນໍາເຂົ້າໄຟລ໌ PGN</string>
 </resources>

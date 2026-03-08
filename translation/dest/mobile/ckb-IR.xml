@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەرەتا</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">پەخشکەرە ڕاستەوخۆکان</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">بۆ بینینی ئەم لاپەڕەیە پێویستە بچیتە ژوورەوە.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">یاریی نوێ</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ھیچ ئەنجامێک نەدۆزرایەوە</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشە</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">لەسەر تەختە</string>
