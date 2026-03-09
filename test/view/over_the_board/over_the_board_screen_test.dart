@@ -479,15 +479,16 @@ void main() {
       // Change variant to Chess960
       await tester.tap(find.text('Standard'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Chess960'));
+      await tester.tap(find.text('Atomic'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
       final gameState = ref.read(overTheBoardGameControllerProvider);
-      // Chess960 is not standard, so the variant should be preserved as-is
-      expect(gameState.game.meta.variant, Variant.chess960);
+      // Atomic is not standard, so the variant should be preserved as-is
+      expect(gameState.game.meta.variant, Variant.atomic);
+      expect(gameState.game.lastPosition.rule, Rule.atomic);
       expect(gameState.game.initialFen, _customFen);
     });
 

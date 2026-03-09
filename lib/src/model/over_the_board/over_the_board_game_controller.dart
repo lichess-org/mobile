@@ -177,8 +177,8 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     final Position position;
     final Variant effectiveVariant;
     if (initialFen != null) {
-      position = Chess.fromSetup(Setup.parseFen(initialFen));
       effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+      position = Position.setupPosition(effectiveVariant.rule, Setup.parseFen(initialFen));
     } else if (variant == Variant.chess960) {
       position = randomChess960Position();
       effectiveVariant = variant;
