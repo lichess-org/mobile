@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
@@ -185,6 +186,42 @@ void main() {
       //   findsOneWidget,
       // );
     }, variant: kPlatformVariant);
+
+    // regression test for #2726
+    testWidgets('opening explorer does not use standalone analysis', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const MoreTabScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+        authUser: authUser,
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Analysis board'));
+      await tester.pumpAndSettle(); // wait for analysis screen to open
+
+      await playMove(tester, 'e2', 'e4');
+      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+
+      // Go back to "more" screen and open opening explorer
+      await tester.pageBack();
+      await tester.pump();
+
+      await tester.tap(find.text('Opening explorer'));
+      await tester.pumpAndSettle(); // wait for opening explorer screen to open
+
+      // Should not use saved standalone analysis here
+      expect(find.byKey(const ValueKey('e2-whitepawn')), findsOneWidget);
+
+      // There was a bug where the opening explorer would partially load saved analysis,
+      // leading to not being to move any pieces.
+      await playMove(tester, 'd2', 'd4');
+      expect(find.byKey(const ValueKey('d4-whitepawn')), findsOneWidget);
+    });
   });
 }
 
