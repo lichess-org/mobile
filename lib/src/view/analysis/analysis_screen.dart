@@ -466,7 +466,7 @@ class _Clock extends StatelessWidget {
       color: isSideToMove ? colorScheme.secondaryContainer : null,
       child: Center(
         child: Text(
-          timeLeft.toHoursMinutesSeconds(),
+          timeLeft.toHoursMinutesSeconds(showTenths: timeLeft < const Duration(minutes: 1)),
           style: TextStyle(
             color: isSideToMove ? colorScheme.onSecondaryContainer : null,
             fontFeatures: const [FontFeature.tabularFigures()],
