@@ -1889,10 +1889,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Menjar una peça que és vital per defensar una altra, fent que es pugui menjar la peça que ara ja no està defensada.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Moviment col·lineal';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Dues peces oposades es miren l\'una a l\'altra i una de les dues s\'aparta de la línia d\'atac sense captura la peça enemiga.';
 
   @override
   String get puzzleThemeCornerMate => 'Mat de la cantonada';
@@ -2669,10 +2669,31 @@ class AppLocalizationsCa extends AppLocalizations {
   String get multipleLines => 'Múltiples línies';
 
   @override
+  String get multipleLinesDescription => 'Estableix el nombre de línies i moviments avaluar al tauler';
+
+  @override
+  String get searchTime => 'Temps de cerca';
+
+  @override
+  String get searchTimeDescription => 'Estableix un temps per avaluar les posicions fresques';
+
+  @override
+  String get threads => 'Fils';
+
+  @override
+  String get threadsDescription => 'Establiu el valor per sota del vostre nombre de fils del CPUs. La marca és un bon valor segur';
+
+  @override
+  String get threadsDescriptionMobile => 'Més fils utilitzarà més bateria per millors anàlisis';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Memòria';
+
+  @override
+  String get memoryDescription => 'Valors més alts pot millorar el rendiment';
 
   @override
   String get infiniteAnalysis => 'Anàlisi il·limitada';

@@ -4876,6 +4876,42 @@ abstract class AppLocalizations {
   /// **'Multiple lines'**
   String get multipleLines;
 
+  /// No description provided for @multipleLinesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set number of evaluation lines and move arrows on the board'**
+  String get multipleLinesDescription;
+
+  /// No description provided for @searchTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Search time'**
+  String get searchTime;
+
+  /// No description provided for @searchTimeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set time to evaluate fresh positions'**
+  String get searchTimeDescription;
+
+  /// No description provided for @threads.
+  ///
+  /// In en, this message translates to:
+  /// **'Threads'**
+  String get threads;
+
+  /// No description provided for @threadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set this below your CPU\'s thread count, the ticks mark a good safe choice'**
+  String get threadsDescription;
+
+  /// No description provided for @threadsDescriptionMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'More threads will use more battery for better analysis'**
+  String get threadsDescriptionMobile;
+
   /// No description provided for @cpus.
   ///
   /// In en, this message translates to:
@@ -4887,6 +4923,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Memory'**
   String get memory;
+
+  /// No description provided for @memoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher values may improve performance'**
+  String get memoryDescription;
 
   /// No description provided for @infiniteAnalysis.
   ///

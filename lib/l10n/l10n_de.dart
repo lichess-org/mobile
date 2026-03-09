@@ -2669,10 +2669,31 @@ class AppLocalizationsDe extends AppLocalizations {
   String get multipleLines => 'Mehrere Varianten';
 
   @override
+  String get multipleLinesDescription => 'Anzahl der besten Züge und Zug-Pfeile auf dem Brett festlegen';
+
+  @override
+  String get searchTime => 'Suchzeit';
+
+  @override
+  String get searchTimeDescription => 'Zeit für die Bewertung neuer Positionen';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Setze sie unterhalb deiner CPU-Kernanzahl fest, die Ticks markieren eine gute und sichere Wahl';
+
+  @override
+  String get threadsDescriptionMobile => 'Mehr Threads verbrauchen mehr Akku für eine bessere Analyse';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Arbeitsspeicher';
+
+  @override
+  String get memoryDescription => 'Höhere Werte können die Leistung verbessern';
 
   @override
   String get infiniteAnalysis => 'Endlose Analyse';

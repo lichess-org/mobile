@@ -2669,10 +2669,31 @@ class AppLocalizationsSq extends AppLocalizations {
   String get multipleLines => 'Linja të shumta';
 
   @override
+  String get multipleLinesDescription => 'Caktoni numër rreshtash vleftësimi dhe kalojini shigjetat te fusha';
+
+  @override
+  String get searchTime => 'Kohë kërkimi';
+
+  @override
+  String get searchTimeDescription => 'Caktoni kohën për vleftësim pozicionesh të freskëta';
+
+  @override
+  String get threads => 'Rrjedha';
+
+  @override
+  String get threadsDescription => 'Vëreni këtë nën numër rrjedhash të CPU-së tuaj, shenjat tregojnë një zgjedhje të mirë të parrezik';
+
+  @override
+  String get threadsDescriptionMobile => 'Më tepër rrjedha do të përdorin më tepër bateri për analizim më të mirë';
+
+  @override
   String get cpus => 'Procesorë';
 
   @override
   String get memory => 'Kujtesë';
+
+  @override
+  String get memoryDescription => 'Vlera më të mëdha mund të përmirësojnë funksionimin';
 
   @override
   String get infiniteAnalysis => 'Analizë e pafundme';

@@ -2725,10 +2725,31 @@ class AppLocalizationsPl extends AppLocalizations {
   String get multipleLines => 'Analizowane warianty';
 
   @override
+  String get multipleLinesDescription => 'Ustaw liczbę linii ewaluacji i przesuń strzałki na szachownicy';
+
+  @override
+  String get searchTime => 'Czas wyszukiwania';
+
+  @override
+  String get searchTimeDescription => 'Ustaw czas dla ewaluacji nowych pozycji';
+
+  @override
+  String get threads => 'Wątki';
+
+  @override
+  String get threadsDescription => 'Ustaw to na wartość mniejszą od liczby wątków Twojego procesora, wskazana wartość oznacza bezpieczny wybór';
+
+  @override
+  String get threadsDescriptionMobile => 'Więcej wątków zużyje więcej baterii, ale analiza będzie głębsza';
+
+  @override
   String get cpus => 'Procesory';
 
   @override
   String get memory => 'Pamięć RAM';
+
+  @override
+  String get memoryDescription => 'Wyższe wartości mogą poprawić wydajność';
 
   @override
   String get infiniteAnalysis => 'Nieskończona analiza';
@@ -4019,7 +4040,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 jest darmowym ($param2), wolnym, bez reklam, otwartym serwerem szachowym.';
+    return '$param1 jest $param2 darmowym, wolnym, pozbawionym reklam, otwartym serwisem szachowym.';
   }
 
   @override

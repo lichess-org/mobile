@@ -2725,10 +2725,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get multipleLines => 'Множество вариантов';
 
   @override
+  String get multipleLinesDescription => 'Задаёт число строк вариантов и стрелок ходов на доске';
+
+  @override
+  String get searchTime => 'Время поиска';
+
+  @override
+  String get searchTimeDescription => 'Задаёт время для оценки новой позиции';
+
+  @override
+  String get threads => 'Потоки';
+
+  @override
+  String get threadsDescription => 'Установите количество не больше числа потоков процессора, лучше на предлагаемой отметке';
+
+  @override
+  String get threadsDescriptionMobile => 'Больше потоков быстрее расходует заряд батареи, но лучше для анализа';
+
+  @override
   String get cpus => 'Потоки';
 
   @override
   String get memory => 'Память';
+
+  @override
+  String get memoryDescription => 'Более высокие значения могут повысить производительность';
 
   @override
   String get infiniteAnalysis => 'Бесконечный анализ';

@@ -1889,10 +1889,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Mugimendu kolinearra';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Elkarren aurrean bi pieza dadude, eta bata eraso lerroan zehar mugitzen da aurkariaren pieza harrapatu gabe.';
 
   @override
   String get puzzleThemeCornerMate => 'Bazterreko matea';
@@ -1976,10 +1976,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Igarotzean harrapatzeko arauarekin zerikusia duen taktika.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Txarratelaren matea';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Xakean dagoen erregearen alde bietako laukietan beste pieza batzuk daude.';
 
   @override
   String get puzzleThemeExposedKing => 'Babesik gabeko erregea';
@@ -2036,10 +2036,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Erabili alfila erregeari mate emateko gazteluak erregea baztertuta mantentzen duen artean.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Enara-buztanaren matea';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Enara-buztanaren itxura hartzen duen mate patroia, V baten itxuraren atzekoa.';
 
   @override
   String get puzzleThemeTriangleMate => 'Hirukiaren matea';
@@ -2669,10 +2669,31 @@ class AppLocalizationsEu extends AppLocalizations {
   String get multipleLines => 'Linea anitz';
 
   @override
+  String get multipleLinesDescription => 'Ezarri zenbat ebaluazio linea, eta taulan mugimendu geziak erakutsiko diren';
+
+  @override
+  String get searchTime => 'Bilaketa denbora';
+
+  @override
+  String get searchTimeDescription => 'Ezarri posizio berriak ebaluatzeko denbora';
+
+  @override
+  String get threads => 'Hari-kopurua';
+
+  @override
+  String get threadsDescription => 'Ezarri hau zure ordenagailuaren PUZaren hari kopurua baino balio txikiagoan, markatxoak balio egokia adierazten du';
+
+  @override
+  String get threadsDescriptionMobile => 'Hari kopuru gehiagok analisi hobea lortzeko bateria gehiago erabiliko du';
+
+  @override
   String get cpus => 'CPU';
 
   @override
   String get memory => 'Memoria';
+
+  @override
+  String get memoryDescription => 'Balio handiagoek agian errendimendua hobetu dezakete';
 
   @override
   String get infiniteAnalysis => 'Analisi infinitua';

@@ -2669,10 +2669,31 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get multipleLines => 'Mehreri Variantä';
 
   @override
+  String get multipleLinesDescription => 'Beschtimm d\'Anzahl Bewertigslinie und verschieb d\'Pfil uf em Brätt';
+
+  @override
+  String get searchTime => 'Suech Zit';
+
+  @override
+  String get searchTimeDescription => 'De Zitpunkt für d\'Bewertig vu neue Positione bestimme';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'De Wert underhalb vu de Thread-Azahl i de CPU ischtelle; die Fette sind e gueti und sicheri Wahl';
+
+  @override
+  String get threadsDescriptionMobile => 'Meh Threads verbruched meh Akku für e besseri Analyse';
+
+  @override
   String get cpus => 'Prozässore';
 
   @override
   String get memory => 'Arbetsschpeicher';
+
+  @override
+  String get memoryDescription => 'Höcheri Wert chönd d\'Leischtig verbessere';
 
   @override
   String get infiniteAnalysis => 'Unändlichi Analyse';

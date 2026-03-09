@@ -2669,10 +2669,31 @@ class AppLocalizationsGl extends AppLocalizations {
   String get multipleLines => 'Liñas múltiples';
 
   @override
+  String get multipleLinesDescription => 'Indica o número de liñas analizadas e de frechas das variantes no taboleiro';
+
+  @override
+  String get searchTime => 'Tempo de procura';
+
+  @override
+  String get searchTimeDescription => 'Indica o tempo de análise de posicións novas';
+
+  @override
+  String get threads => 'Fíos';
+
+  @override
+  String get threadsDescription => 'Axusta este valor por debaixo do número de fíos do teu procesador. A marca indica unha elección segura';
+
+  @override
+  String get threadsDescriptionMobile => 'Cantos máis fíos, maior uso de batería para unha mellor análise';
+
+  @override
   String get cpus => 'Procesadores';
 
   @override
   String get memory => 'Memoria';
+
+  @override
+  String get memoryDescription => 'Os valores altos poden mellorar o rendemento';
 
   @override
   String get infiniteAnalysis => 'Análise infinita';

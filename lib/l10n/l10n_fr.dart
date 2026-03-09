@@ -2669,10 +2669,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get multipleLines => 'Lignes d\'analyse';
 
   @override
+  String get multipleLinesDescription => 'Définir le nombre de lignes d\'analyse et de flèches sur l\'échiquier';
+
+  @override
+  String get searchTime => 'Temps d\'analyse';
+
+  @override
+  String get searchTimeDescription => 'Établir le temps d\'analyse des nouvelles positions';
+
+  @override
+  String get threads => 'Coeurs';
+
+  @override
+  String get threadsDescription => 'Sélectionnez une valeur en dessous du nombre de coeurs de votre processeur. Les flèches indiquent le choix optimal.';
+
+  @override
+  String get threadsDescriptionMobile => 'Utiliser plus de coeurs consomme plus d\'énergie, mais permet une meilleure analyse.';
+
+  @override
   String get cpus => 'Processeurs';
 
   @override
   String get memory => 'Mémoire';
+
+  @override
+  String get memoryDescription => 'Des valeurs plus élevées pourraient améliorer les performances.';
 
   @override
   String get infiniteAnalysis => 'Analyse infinie';

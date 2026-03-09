@@ -281,7 +281,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePreviousPage => 'Edellinen';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -1889,10 +1889,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Kollineaarinen siirto';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Kaksi eriväristä nappulaa ovat hyökkäyssuunnissaan kohdakkain, ja toinen niistä siirtyy tätä hyökkäyssuuntaa pitkin lyömättä kuitenkaan vastustajan nappulaa.';
 
   @override
   String get puzzleThemeCornerMate => 'Kulmamatti';
@@ -2669,10 +2669,31 @@ class AppLocalizationsFi extends AppLocalizations {
   String get multipleLines => 'Muunnelmien määrä';
 
   @override
+  String get multipleLinesDescription => 'Aseta analyysirivien sekä laudalla näytettävien siirtonuolien määrä';
+
+  @override
+  String get searchTime => 'Hakuaika';
+
+  @override
+  String get searchTimeDescription => 'Aseta uusien asemien arvioimisaika';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Suorittimia';
 
   @override
   String get memory => 'Muistia';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Loputon analyysi';

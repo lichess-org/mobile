@@ -2669,10 +2669,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get multipleLines => 'Çoklu varyantlar';
 
   @override
+  String get multipleLinesDescription => 'Değerlendirme satırlarının sayısını belirleyin ve tahtadaki okları hareket ettirin';
+
+  @override
+  String get searchTime => 'Arama süresi';
+
+  @override
+  String get searchTimeDescription => 'Yeni pozisyonları değerlendirmek için zamanı ayarlayın';
+
+  @override
+  String get threads => 'Çekirdek';
+
+  @override
+  String get threadsDescription => 'Bunu işlemcinizin çekirdek sayısının altına ayarlayın, işaretler iyi ve güvenli bir seçimi gösterir';
+
+  @override
+  String get threadsDescriptionMobile => 'Daha fazla çekirdek, daha iyi analiz için daha fazla pil tüketecektir';
+
+  @override
   String get cpus => 'İşlemci';
 
   @override
   String get memory => 'Hafıza';
+
+  @override
+  String get memoryDescription => 'Daha yüksek değerler performansı artırabilir';
 
   @override
   String get infiniteAnalysis => 'Sonsuz analiz';

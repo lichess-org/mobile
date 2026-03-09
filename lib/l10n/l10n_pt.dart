@@ -2669,10 +2669,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get multipleLines => 'Múltiplas continuações';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Memória';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Análise infinita';
@@ -9157,10 +9178,31 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get multipleLines => 'Linhas de análise';
 
   @override
+  String get multipleLinesDescription => 'Definir o número de linhas de análise e setas de movimento no tabuleiro';
+
+  @override
+  String get searchTime => 'Tempo de busca';
+
+  @override
+  String get searchTimeDescription => 'Defina o tempo para avaliar novas posições';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Defina isso abaixo da contagem de threads do seu processador, a marca indica uma escolha segura';
+
+  @override
+  String get threadsDescriptionMobile => 'Usar mais threads consume mais bateria para uma análise melhor';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Memória';
+
+  @override
+  String get memoryDescription => 'Valores mais altos podem melhorar o desempenho';
 
   @override
   String get infiniteAnalysis => 'Análise infinita';

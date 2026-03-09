@@ -2725,10 +2725,31 @@ class AppLocalizationsSl extends AppLocalizations {
   String get multipleLines => 'Več variant';
 
   @override
+  String get multipleLinesDescription => 'Nastavite število vrstic za ocenjevanje in premaknite puščice na tabli';
+
+  @override
+  String get searchTime => 'Čas iskanja';
+
+  @override
+  String get searchTimeDescription => 'Določite čas za oceno novih pozicij';
+
+  @override
+  String get threads => 'Teme';
+
+  @override
+  String get threadsDescription => 'Nastavite to pod število niti vašega procesorja, kljukice označujejo dobro in varno izbiro';
+
+  @override
+  String get threadsDescriptionMobile => 'Več niti bo porabilo več baterije za boljšo analizo';
+
+  @override
   String get cpus => 'CPU-ji';
 
   @override
   String get memory => 'Spomin';
+
+  @override
+  String get memoryDescription => 'Višje vrednosti lahko izboljšajo delovanje';
 
   @override
   String get infiniteAnalysis => 'Neskončna analiza';

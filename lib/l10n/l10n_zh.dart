@@ -2641,10 +2641,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String get multipleLines => '多线分析';
 
   @override
+  String get multipleLinesDescription => '设置棋盘上评估线路的数量并移动箭头';
+
+  @override
+  String get searchTime => '搜索时间';
+
+  @override
+  String get searchTimeDescription => '设置评估新局面的时间';
+
+  @override
+  String get threads => '线程数';
+
+  @override
+  String get threadsDescription => '请将该值设置为低于 CPU 线程数，勾选标记处为安全选择';
+
+  @override
+  String get threadsDescriptionMobile => '更多线程将消耗更多电量以提升分析能力';
+
+  @override
   String get cpus => 'CPU';
 
   @override
   String get memory => '内存';
+
+  @override
+  String get memoryDescription => '较高的数值可能提升性能';
 
   @override
   String get infiniteAnalysis => '无限分析';

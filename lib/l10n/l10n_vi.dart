@@ -2641,10 +2641,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get multipleLines => 'Số hàng phân tích';
 
   @override
+  String get multipleLinesDescription => 'Đặt số dòng tính toán và các mũi tên nước đi trên bàn cờ';
+
+  @override
+  String get searchTime => 'Thời gian tìm kiếm';
+
+  @override
+  String get searchTimeDescription => 'Dành thời gian để tính toán các thế cờ mới';
+
+  @override
+  String get threads => 'Số luồng';
+
+  @override
+  String get threadsDescription => 'Hãy đặt giá trị này thấp hơn số luồng của CPU, giá trị có dấu tick là một lựa chọn an toàn và hợp lý';
+
+  @override
+  String get threadsDescriptionMobile => 'Càng nhiều luồng xử lý sẽ càng tiêu hao nhiều pin để phân tích tốt hơn';
+
+  @override
   String get cpus => 'CPU';
 
   @override
   String get memory => 'Bộ nhớ';
+
+  @override
+  String get memoryDescription => 'Giá trị cao hơn có thể cải thiện hiệu suất';
 
   @override
   String get infiniteAnalysis => 'Phân tích vô hạn';

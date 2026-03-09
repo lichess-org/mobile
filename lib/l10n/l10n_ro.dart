@@ -2697,10 +2697,31 @@ class AppLocalizationsRo extends AppLocalizations {
   String get multipleLines => 'Mutări multiple';
 
   @override
+  String get multipleLinesDescription => 'Setaţi numărul de linii de evaluare şi de săgeţi pe tablă';
+
+  @override
+  String get searchTime => 'Timp de căutare';
+
+  @override
+  String get searchTimeDescription => 'Setează timpul pentru evaluarea pozițiilor noi';
+
+  @override
+  String get threads => 'Fire de execuție';
+
+  @override
+  String get threadsDescription => 'Setați această valoare sub numărul maxim de fire de execuție al procesorului, bifele marchează o alegere sigură';
+
+  @override
+  String get threadsDescriptionMobile => 'Mai multe fire de execuţie vor folosi mai multă baterie pentru o analiză mai bună';
+
+  @override
   String get cpus => 'Procesoare';
 
   @override
   String get memory => 'Memorie';
+
+  @override
+  String get memoryDescription => 'Valorile mai mari pot îmbunătăți performanța';
 
   @override
   String get infiniteAnalysis => 'Analiză infinită';

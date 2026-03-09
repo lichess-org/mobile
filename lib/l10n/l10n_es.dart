@@ -2669,10 +2669,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get multipleLines => 'Múltiples líneas';
 
   @override
+  String get multipleLinesDescription => 'Establece la cantidad de líneas de evaluación y de flechas de movimiento en el tablero';
+
+  @override
+  String get searchTime => 'Tiempo de búsqueda';
+
+  @override
+  String get searchTimeDescription => 'Establece el tiempo para evaluar posiciones nuevas';
+
+  @override
+  String get threads => 'Hilos';
+
+  @override
+  String get threadsDescription => 'Establecer número inferior de hilos de la CPU; las marcas dan una elección segura';
+
+  @override
+  String get threadsDescriptionMobile => 'Más hilos darán un mejor análisis, aunque usará más batería';
+
+  @override
   String get cpus => 'Procesadores';
 
   @override
   String get memory => 'Memoria';
+
+  @override
+  String get memoryDescription => 'Valores más altos pueden mejorar el rendimiento';
 
   @override
   String get infiniteAnalysis => 'Análisis infinito';

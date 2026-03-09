@@ -1861,10 +1861,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'コリニア（共線）ムーブ';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => '同種の駒が向き合っている時に、一方が両者を結ぶ線上を動く手。';
 
   @override
   String get puzzleThemeCornerMate => 'コーナー・メイト';
@@ -2641,10 +2641,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get multipleLines => '解析ライン数';
 
   @override
+  String get multipleLinesDescription => '評価手順とボード上に表示される矢印の数を設定';
+
+  @override
+  String get searchTime => '検索時間';
+
+  @override
+  String get searchTimeDescription => '新しい局面を評価するための時間を設定';
+
+  @override
+  String get threads => 'スレッド数';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'スレッド数が多いと解析精度が上がりますがバッテリー消費も増えます';
+
+  @override
   String get cpus => 'スレッド数';
 
   @override
   String get memory => 'メモリ';
+
+  @override
+  String get memoryDescription => '値が大きいほどパフォーマンスが高くなりやすい';
 
   @override
   String get infiniteAnalysis => '無限解析';

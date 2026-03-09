@@ -2669,10 +2669,31 @@ class AppLocalizationsDa extends AppLocalizations {
   String get multipleLines => 'Flere linjer';
 
   @override
+  String get multipleLinesDescription => 'Angiv antal evalueringslinjer og trækpile på brættet';
+
+  @override
+  String get searchTime => 'Søgetid';
+
+  @override
+  String get searchTimeDescription => 'Indstil tid til evaluering af friske positioner';
+
+  @override
+  String get threads => 'Tråde';
+
+  @override
+  String get threadsDescription => 'Indstil dette til under din CPU\'s trådantal, afkrydsningerne markerer er et godt og sikkert valg';
+
+  @override
+  String get threadsDescriptionMobile => 'Flere tråde vil bruge mere batteri til bedre analyse';
+
+  @override
   String get cpus => 'CPU\'er';
 
   @override
   String get memory => 'Hukommelse';
+
+  @override
+  String get memoryDescription => 'Højere værdier kan forbedre ydeevnen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
