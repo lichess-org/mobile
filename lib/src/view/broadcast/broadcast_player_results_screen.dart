@@ -139,6 +139,7 @@ class _Body extends ConsumerWidget {
         final BroadcastPlayerWithOverallResult(:tieBreaks) = playerWithOverallResult;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
+        final showTCIcon = games.map((g) => g.fideTC).toSet().length > 1;
         final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
         final gamesSectionHeader = ColoredBox(
@@ -188,6 +189,7 @@ class _Body extends ConsumerWidget {
               index: index,
               indexWidth: indexWidth,
               showRatingDiff: showRatingDiff,
+              showTCIcon: showTCIcon,
             );
           },
         );
@@ -210,13 +212,13 @@ class _OverallStatPlayer extends StatelessWidget {
     final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
         playerWithGameResults;
     final birthYear = fideData.birthYear;
-    final (:standard, :rapid, :blitz) = fideData.ratings;
     final BroadcastPlayerWithOverallResult(
       :player,
       :score,
       :played,
-      :performance,
-      :ratingDiff,
+      :performances,
+      :ratingsMap,
+      :ratingDiffs,
       :team,
     ) = playerWithOverallResult;
     final BroadcastPlayer(:federation, :fideId) = player;
@@ -300,29 +302,24 @@ class _OverallStatPlayer extends StatelessWidget {
               ),
             ],
           ),
-          if (standard != null || rapid != null || blitz != null)
+          if (fideData.ratings.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: cardSpacing,
-              children: [
-                if (standard != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.classical, value: standard.toString()),
-                  ),
-                if (rapid != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.rapid, value: rapid.toString()),
-                  ),
-                if (blitz != null)
-                  SizedBox(
-                    width: statWidth,
-                    child: _StatCard(context.l10n.blitz, value: blitz.toString()),
-                  ),
-              ],
+              children: BroadcastFideTC.values
+                  .map((tc) {
+                    final rating = fideData.ratings.get(tc);
+                    if (rating != null) {
+                      return SizedBox(
+                        width: statWidth,
+                        child: _StatCard(tc.i18nName(context), value: rating.toString()),
+                      );
+                    }
+                  })
+                  .nonNulls
+                  .toList(),
             ),
-          if (score != null || performance != null || ratingDiff != null)
+          if (score != null || performances != null || ratingDiffs != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: cardSpacing,
@@ -335,17 +332,55 @@ class _OverallStatPlayer extends StatelessWidget {
                       value: '${NumberFormat('0.#').format(score)} / $played',
                     ),
                   ),
-                if (performance != null)
+                if (performances != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(context.l10n.performance, value: performance.toString()),
+                    child: _StatCard(
+                      context.l10n.performance,
+                      child: Column(
+                        mainAxisSize: .min,
+                        children: performances
+                            .mapTo(
+                              (tc, p) => Row(
+                                mainAxisAlignment: .center,
+                                spacing: 4.0,
+                                children: [
+                                  if (performances.length > 1) Icon(tc.icon, size: 16),
+                                  Text(
+                                    '$p${games.count((g) => g.fideTC == tc) < 4 ? '?' : ''}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
-                if (ratingDiff != null)
+                if (ratingDiffs != null)
                   SizedBox(
                     width: statWidth,
                     child: _StatCard(
                       context.l10n.broadcastRatingDiff,
-                      child: ProgressionWidget(ratingDiff, fontSize: 18.0),
+                      child: Column(
+                        mainAxisSize: .min,
+                        children: ratingDiffs
+                            .mapTo(
+                              (tc, diff) => Row(
+                                mainAxisAlignment: .center,
+                                spacing: 4.0,
+                                children: [
+                                  if (ratingDiffs.length > 1) Icon(tc.icon, size: 16),
+                                  Text(
+                                    ratingsMap?.get(tc)?.toString() ?? '',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  ProgressionWidget(diff, fontSize: 16.0),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
               ],
@@ -403,6 +438,7 @@ class _GameResultListTile extends StatelessWidget {
     required this.index,
     required this.indexWidth,
     required this.showRatingDiff,
+    required this.showTCIcon,
   });
 
   final BroadcastPlayerGameResult playerGameResult;
@@ -410,11 +446,20 @@ class _GameResultListTile extends StatelessWidget {
   final int index;
   final double indexWidth;
   final bool showRatingDiff;
+  final bool showTCIcon;
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
-        playerGameResult;
+    final BroadcastPlayerGameResult(
+      :roundId,
+      :gameId,
+      :color,
+      :points,
+      :customPoints,
+      :ratingDiff,
+      :opponent,
+      :fideTC,
+    ) = playerGameResult;
     final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
 
@@ -450,7 +495,7 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: 60,
+        width: showTCIcon ? 72 : 60,
         child: Row(
           mainAxisSize: .min,
           mainAxisAlignment: .center,
@@ -476,6 +521,7 @@ class _GameResultListTile extends StatelessWidget {
                 ),
               ),
             ),
+            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 15)),
             SizedBox(
               width: 30,
               child: Column(
@@ -486,13 +532,13 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        switch (points) {
-                          .one => '1',
-                          .half => '½',
-                          .zero => '0',
-                          _ => '*',
-                        },
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
+                        customPoints != null && customPoints != 0.5
+                            ? NumberFormat('0.##').format(customPoints)
+                            : points?.resultFor(color).resultToString(color) ?? '*',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: .bold,
+                          color: points?.resultFor(color).colorFor(color, context),
+                        ),
                       ),
                     ],
                   ),

@@ -45,6 +45,7 @@ class BroadcastListTile extends StatelessWidget {
           startsAt: null,
           finishedAt: null,
           startsAfterPrevious: false,
+          customScoring: null,
         ),
         group: null,
         roundToLinkId: BroadcastRoundId(''),
