@@ -44,6 +44,8 @@ Color? _nagColor(BuildContext context, int nag) {
 String moveAnnotationChar(Iterable<int> nags) {
   return nags
       .map(
+        //sources: https://github.com/lichess-org/scalachess/blob/3f96a2935ee2ee670def67632171ffcea7c96b6d/core/src/main/scala/format/pgn/Glyph.scala
+        //https://en.wikipedia.org/wiki/Portable_Game_Notation
         (nag) => switch (nag) {
           1 => '!',
           2 => '?',
@@ -51,6 +53,24 @@ String moveAnnotationChar(Iterable<int> nags) {
           4 => '??',
           5 => '!?',
           6 => '?!',
+          8 => '□',
+          10 => '=',
+          11 => '=',
+          13 => '∞',
+          14 => '⩲',
+          15 => '⩱',
+          16 => '±',
+          17 => '∓',
+          18 => '+-',
+          19 => '-+',
+          22 => '⨀',
+          32 => '⟳',
+          36 => '↑',
+          44 => '=∞',
+          132 => '⇆',
+          138 => '⊕',
+          140 => '∆',
+          146 => 'N',
           int() => '',
         },
       )
@@ -69,6 +89,24 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
     6 => const Annotation(symbol: '?!', color: LichessColors.cyan),
     2 => const Annotation(symbol: '?', color: mistakeColor),
     4 => const Annotation(symbol: '??', color: blunderColor),
+    8 => const Annotation(symbol: '□', color: Colors.grey),
+    10 => const Annotation(symbol: '=', color: Colors.grey),
+    11 => const Annotation(symbol: '=', color: Colors.grey),
+    13 => const Annotation(symbol: '∞', color: Colors.grey),
+    14 => const Annotation(symbol: '⩲', color: Colors.grey),
+    15 => const Annotation(symbol: '⩱', color: Colors.grey),
+    16 => const Annotation(symbol: '±', color: Colors.grey),
+    17 => const Annotation(symbol: '∓', color: Colors.grey),
+    18 => const Annotation(symbol: '+-', color: Colors.grey),
+    19 => const Annotation(symbol: '-+', color: Colors.grey),
+    22 => const Annotation(symbol: '⨀', color: Colors.grey),
+    32 => const Annotation(symbol: '⟳', color: Colors.grey),
+    36 => const Annotation(symbol: '↑', color: Colors.grey),
+    44 => const Annotation(symbol: '=∞', color: Colors.grey),
+    132 => const Annotation(symbol: '⇆', color: Colors.grey),
+    138 => const Annotation(symbol: '⊕', color: Colors.grey),
+    140 => const Annotation(symbol: '∆', color: Colors.grey),
+    146 => const Annotation(symbol: 'N', color: Colors.grey),
     int() => null,
   };
 }
