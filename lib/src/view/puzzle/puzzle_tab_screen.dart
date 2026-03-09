@@ -515,10 +515,11 @@ class PuzzleAnglePreview extends ConsumerWidget {
                     onPressed: (context) async {
                       final service = await ref.read(puzzleServiceProvider.future);
                       if (context.mounted) {
-                        service.deleteBatch(
+                        await service.deleteBatch(
                           userId: ref.read(authControllerProvider)?.user.id,
                           angle: angle,
                         );
+                        ref.invalidate(savedBatchesProvider);
                       }
                     },
                     spacing: 8.0,
