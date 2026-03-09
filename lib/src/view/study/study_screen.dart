@@ -429,7 +429,6 @@ class _Body extends ConsumerWidget {
     final engineGaugeParams = studyState.engineGaugeParams(enginePrefs);
     final isComputerAnalysisAllowed = studyState.isComputerAnalysisAllowed;
     final isLocalEvaluationEnabled = studyState.isEngineAvailable(enginePrefs);
-    final currentNode = studyState.currentNode;
     final pov = studyState.pov;
 
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
@@ -453,8 +452,7 @@ class _Body extends ConsumerWidget {
               numEvalLines > 0
           ? EngineLines(
               filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
-              savedEval: currentNode.eval,
-              isGameOver: currentNode.position?.isGameOver ?? false,
+              analyisState: studyState,
               onTapMove: ref.read(studyControllerProvider(id).notifier).onUserMove,
             )
           : null,

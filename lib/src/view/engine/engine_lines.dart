@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -14,17 +15,11 @@ const kEngineLineHeight = 24.0;
 const kEngineLineFontSize = 11.0;
 
 class EngineLines extends ConsumerStatefulWidget {
-  const EngineLines({
-    required this.filters,
-    required this.onTapMove,
-    required this.savedEval,
-    required this.isGameOver,
-  });
+  const EngineLines({required this.filters, required this.onTapMove, required this.analyisState});
 
   final EngineEvaluationFilters filters;
   final void Function(NormalMove move) onTapMove;
-  final ClientEval? savedEval;
-  final bool isGameOver;
+  final CommonAnalysisState analyisState;
 
   @override
   ConsumerState<EngineLines> createState() => _EngineLinesState();
@@ -39,7 +34,10 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
     final localEval = ref.watch(engineEvaluationProvider(widget.filters)).eval;
-    final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
+    final eval = pickBestClientEval(
+      localEval: localEval,
+      savedEval: widget.analyisState.currentNode.eval,
+    );
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;
 
@@ -47,7 +45,9 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
 
     final evalOrLastEval = eval ?? lastEval;
 
-    final content = widget.isGameOver
+    final content =
+        widget.analyisState.currentPosition?.isGameOver != false &&
+            !widget.analyisState.engineInThreatMode
         ? emptyLines
         : (evalOrLastEval != null
               ? evalOrLastEval.pvs

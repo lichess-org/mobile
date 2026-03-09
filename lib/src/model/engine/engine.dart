@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -57,3 +58,10 @@ String? engineVersion(String? engineName) {
   final match = _sfVersionPattern.firstMatch(engineName);
   return match?.group(1);
 }
+
+/// The (fake) position to use in threat mode searches.
+Position threatModePosition(Position position) => position.copyWith(
+  turn: position.turn.opposite,
+  halfmoves: position.halfmoves + 1,
+  fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
+);
