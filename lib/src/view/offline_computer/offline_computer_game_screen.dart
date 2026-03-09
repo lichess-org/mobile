@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
@@ -25,6 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -935,16 +935,14 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
       title = context.l10n.gameOver;
     }
 
-    final String subtitle;
-    if (game.status == GameStatus.mate) {
-      subtitle = context.l10n.checkmate;
-    } else if (game.status == GameStatus.resign) {
-      subtitle = context.l10n.resign;
-    } else if (game.status == GameStatus.stalemate) {
-      subtitle = context.l10n.stalemate;
-    } else {
-      subtitle = context.l10n.draw;
-    }
+    final subtitle = gameStatusL10n(
+      context,
+      variant: game.meta.variant,
+      status: game.status,
+      lastPosition: game.lastPosition,
+      winner: game.winner,
+      isThreefoldRepetition: game.isThreefoldRepetition,
+    );
 
     return AlertDialog.adaptive(
       title: Text(title),
