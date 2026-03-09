@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
 import '../../test_provider_scope.dart';
 
@@ -251,6 +252,93 @@ void main() {
 
       expect(find.textContaining('e5'), findsOneWidget);
       expect(find.text('Zuferi, Enis'), findsOneWidget);
+    });
+    testWidgets('Search bar shows if there are more than 5 games and filters correctly', (
+      tester,
+    ) async {
+      const pgn =
+          '[Event "BWL2025/26 Heilbronn-Deizisau II"]\n'
+          '[White "Zuferi, Enis"]\n'
+          '[Black "Klek, Hanna Marie"]\n'
+          '[Result "1-0"]\n'
+          '[WhiteElo "2317"]\n'
+          '[BlackElo "2338"]\n'
+          '\n'
+          '1. c4 e5 2. Nc3 Bb4 3. Nd5 a5 1-0\n'
+          '\n'
+          '[Event "BWL2025/26 Heilbronn-Deizisau II"]\n'
+          '[White "Dabo-Peranic, Robert"]\n'
+          '[Black "Neukirchner, Pascal"]\n'
+          '[Result "0-1"]\n'
+          '[WhiteElo "2324"]\n'
+          '[BlackElo "2325"]\n'
+          '\n'
+          '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n'
+          '\n'
+          '[Event "World Teams"]\n'
+          '[White "Magnus Carlsen"]\n'
+          '[Black "Fabiano Caruana"]\n'
+          '[Result "1-0"]\n'
+          '[WhiteElo "2860"]\n'
+          '[BlackElo "2815"]\n'
+          '\n'
+          '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n'
+          '\n'
+          '[Event "World Championship"]\n'
+          '[White "Ding, Liren"]\n'
+          '[Black "Gukesh, D"]\n'
+          '[Result "0-1"]\n'
+          '[WhiteElo "2781"]\n'
+          '[BlackElo "2761"]\n'
+          '\n'
+          '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n'
+          '\n'
+          '[Event "Grand Swiss"]\n'
+          '[White "Keymer, Vincent"]\n'
+          '[Black "Esipenko, Andrey"]\n'
+          '[Result "0-1"]\n'
+          '[WhiteElo "2786"]\n'
+          '[BlackElo "2685"]\n'
+          '\n'
+          '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n'
+          '\n'
+          '[Event "Grand Swiss"]\n'
+          '[White "Svidler, Peter"]\n'
+          '[Black "Gustaffson, Jan"]\n'
+          '[Result "0.5-0.5"]\n'
+          '[WhiteElo "2701"]\n'
+          '[BlackElo "2599"]\n'
+          '\n'
+          '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n';
+
+      final pgnBytes = utf8.encode(pgn);
+      FilePicker.platform = _MockFilePicker(
+        FilePickerResult([PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes)]),
+      );
+
+      final app = await _makeApp(tester);
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));
+      await tester.pumpAndSettle();
+
+      // 6 games, search bar is visible
+      expect(find.text('6 games'), findsOneWidget);
+      expect(find.byType(PlatformSearchBar), findsOneWidget);
+      // All games are shown before searching
+      expect(find.textContaining('Zuferi, Enis'), findsOneWidget);
+      expect(find.textContaining('Magnus'), findsOneWidget);
+      // Entering search query filters the list
+      await tester.tap(find.byType(PlatformSearchBar));
+      await tester.enterText(find.byType(PlatformSearchBar), 'Carlsen');
+      await tester.pump();
+      // Only Carlsen's game is shown
+      expect(find.textContaining('Magnus'), findsOneWidget);
+      expect(find.textContaining('Zuferi, Enis'), findsNothing);
+      // Tapping the game navigates to analysis with correct game
+      await tester.tap(find.textContaining('Magnus'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Carlsen'), findsOneWidget);
     });
   });
 }
