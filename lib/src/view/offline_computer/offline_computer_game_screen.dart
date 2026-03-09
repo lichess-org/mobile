@@ -61,13 +61,25 @@ extension _PracticeCommentDisplay on PracticeComment {
 }
 
 class OfflineComputerGameScreen extends ConsumerWidget {
-  const OfflineComputerGameScreen({this.initialFen, super.key});
+  const OfflineComputerGameScreen({this.initialVariant, this.initialFen, super.key});
+
+  /// Optional initial variant to be preselected in the "New Game" dialog.
+  ///
+  /// If null, the variant from the last game against the computer will be used.
+  final Variant? initialVariant;
 
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(BuildContext context, {String? initialFen}) {
-    return buildScreenRoute(context, screen: OfflineComputerGameScreen(initialFen: initialFen));
+  static Route<void> buildRoute(
+    BuildContext context, {
+    Variant? initialVariant,
+    String? initialFen,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
+    );
   }
 
   @override
@@ -96,13 +108,15 @@ class OfflineComputerGameScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: _Body(initialFen: initialFen),
+      body: _Body(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({this.initialFen});
+  const _Body({required this.initialVariant, this.initialFen});
+
+  final Variant? initialVariant;
 
   final String? initialFen;
 
@@ -121,7 +135,7 @@ class _BodyState extends ConsumerState<_Body> {
       // If we have an initial FEN, always show the new game dialog
       if (widget.initialFen != null) {
         if (!mounted) return;
-        _showNewGameDialog();
+        _showNewGameDialog(initialVariant: widget.initialVariant);
         return;
       }
 
@@ -130,7 +144,7 @@ class _BodyState extends ConsumerState<_Body> {
         ref.read(offlineComputerGameControllerProvider.notifier).loadGame(savedGame);
       } else {
         if (!mounted) return;
-        _showNewGameDialog();
+        _showNewGameDialog(initialVariant: widget.initialVariant);
       }
     });
   }
@@ -158,7 +172,7 @@ class _BodyState extends ConsumerState<_Body> {
                 game: newGameState.game,
                 onNewGame: () {
                   Navigator.pop(context);
-                  _showNewGameDialog();
+                  _showNewGameDialog(initialVariant: gameState.game.meta.variant);
                 },
               ),
               barrierDismissible: true,
@@ -269,7 +283,10 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
-                    userActionsBar: _BottomBar(onNewGame: _showNewGameDialog),
+                    userActionsBar: _BottomBar(
+                      onNewGame: () =>
+                          _showNewGameDialog(initialVariant: gameState.game.meta.variant),
+                    ),
                   ),
                 ),
               ),
@@ -280,13 +297,14 @@ class _BodyState extends ConsumerState<_Body> {
     );
   }
 
-  void _showNewGameDialog() {
+  void _showNewGameDialog({required Variant? initialVariant}) {
     final double screenHeight = MediaQuery.sizeOf(context).height;
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
-      builder: (context) => _NewGameSheet(initialFen: widget.initialFen),
+      builder: (context) =>
+          _NewGameSheet(initialVariant: initialVariant, initialFen: widget.initialFen),
     );
   }
 
@@ -699,7 +717,9 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
 }
 
 class _NewGameSheet extends ConsumerStatefulWidget {
-  const _NewGameSheet({this.initialFen});
+  const _NewGameSheet({required this.initialVariant, this.initialFen});
+
+  final Variant? initialVariant;
 
   final String? initialFen;
 
@@ -726,7 +746,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = prefs.sideChoice;
-    _selectedVariant = prefs.variant;
+    _selectedVariant = widget.initialVariant ?? prefs.variant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
   }
@@ -807,28 +827,27 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                 );
               },
             ),
-            if (widget.initialFen == null)
-              SettingsListTile(
-                settingsLabel: Text(context.l10n.variant),
-                settingsValue: _selectedVariant.label,
-                onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
-                    selectedItem: _selectedVariant,
-                    labelBuilder: (Variant variant) => Text(variant.label),
-                    onSelectedItemChanged: (Variant variant) {
-                      setState(() {
-                        _selectedVariant = variant;
-                        if (variant == Variant.crazyhouse) {
-                          _practiceMode = false;
-                        }
-                      });
-                      ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
-                    },
-                  );
-                },
-              ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.variant),
+              settingsValue: _selectedVariant.label,
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
+                  selectedItem: _selectedVariant,
+                  labelBuilder: (Variant variant) => Text(variant.label),
+                  onSelectedItemChanged: (Variant variant) {
+                    setState(() {
+                      _selectedVariant = variant;
+                      if (variant == Variant.crazyhouse) {
+                        _practiceMode = false;
+                      }
+                    });
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
+                  },
+                );
+              },
+            ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),

@@ -716,15 +716,23 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: boardFen)),
+          onPressed: () => Navigator.of(context).push(
+            OfflineComputerGameScreen.buildRoute(
+              context,
+              initialVariant: analysisState.variant,
+              initialFen: boardFen,
+            ),
+          ),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(OverTheBoardScreen.buildRoute(context, initialFen: boardFen)),
+          onPressed: () => Navigator.of(context).push(
+            OverTheBoardScreen.buildRoute(
+              context,
+              initialVariant: analysisState.variant,
+              initialFen: boardFen,
+            ),
+          ),
         ),
       ],
     );

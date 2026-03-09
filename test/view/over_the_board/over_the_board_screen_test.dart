@@ -544,7 +544,9 @@ void main() {
       expect(gameState.game.steps.first.position, Chess.initial);
     });
 
-    testWidgets('Rematch from custom position restarts from same FEN', (tester) async {
+    testWidgets('Rematch from custom position and variant restarts from same FEN and variant', (
+      tester,
+    ) async {
       final gameStorage = MockOverTheBoardGameStorage();
       when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
       when(
@@ -558,7 +560,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const OverTheBoardScreen(initialFen: _customFen),
+        home: const OverTheBoardScreen(initialVariant: Variant.atomic, initialFen: _customFen),
         overrides: {
           overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
             (_) => gameStorage,
@@ -589,7 +591,7 @@ void main() {
 
       // Rematch should restart from the same custom FEN
       expect(gameState.game.initialFen, _customFen);
-      expect(gameState.game.meta.variant, Variant.fromPosition);
+      expect(gameState.game.meta.variant, Variant.atomic);
       expect(gameState.game.steps.length, 1);
       expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
       expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);

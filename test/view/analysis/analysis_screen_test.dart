@@ -216,6 +216,60 @@ void main() {
       await playDropMove(tester, Side.black, Role.pawn, 'h5');
       expect(find.byKey(const ValueKey('h5-blackpawn')), findsOneWidget);
     });
+
+    testWidgets('Continue against computer', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Play against computer'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
+
+    testWidgets('Continue OTB', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Over the board'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
   });
 
   group('Analysis Tree View', () {
