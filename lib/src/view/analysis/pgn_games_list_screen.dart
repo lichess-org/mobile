@@ -81,61 +81,61 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
           ).where((i) => _matchesSearchQuery(_gameData[i], _searchQuery)).toList(growable: false);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.nbGames(widget.games.length))),
-      body: Column(
-        children: [
-          if (showSearchBar)
-            Padding(
-              padding: Styles.bodyPadding.copyWith(bottom: 8.0),
-              child: PlatformSearchBar(
-                controller: _searchController,
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-                onClear: () {
-                  _searchController.clear();
-                  setState(() {
-                    _searchQuery = '';
-                  });
-                },
-              ),
-            ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: filteredIndices.length,
-              addAutomaticKeepAlives: false,
-              addRepaintBoundaries: false,
-              separatorBuilder: (context, index) =>
-                  const Divider(height: 1, thickness: 1, indent: 16, endIndent: 16),
-              itemBuilder: (context, index) {
-                final game = widget.games[filteredIndices[index]];
-                final gameData = _gameData[filteredIndices[index]];
-                return ListTile(
-                  title: Text(gameData.title, maxLines: 2, overflow: .ellipsis),
-                  subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions.pgn(
-                          // TODO generate unique id for each game, maybe based on the PGN headers?
-                          id: const StringId('pgn_import_game'),
-                          orientation: .white,
-                          pgn: game.makePgn(),
-                          variant: gameData.variant,
-                          isComputerAnalysisAllowed: true,
-                          initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.nbGames(widget.games.length)),
+        bottom: showSearchBar
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(56),
+                child: Padding(
+                  padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8)),
+                  child: PlatformSearchBar(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
+                    },
+                    onClear: () {
+                      _searchController.clear();
+                      setState(() {
+                        _searchQuery = '';
+                      });
+                    },
+                  ),
+                ),
+              )
+            : null,
+      ),
+      body: ListView.separated(
+        itemCount: filteredIndices.length,
+        addAutomaticKeepAlives: false,
+        addRepaintBoundaries: false,
+        separatorBuilder: (context, index) =>
+            const Divider(height: 1, thickness: 1, indent: 16, endIndent: 16),
+        itemBuilder: (context, index) {
+          final game = widget.games[filteredIndices[index]];
+          final gameData = _gameData[filteredIndices[index]];
+          return ListTile(
+            title: Text(gameData.title, maxLines: 2, overflow: .ellipsis),
+            subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).push(
+                AnalysisScreen.buildRoute(
+                  context,
+                  AnalysisOptions.pgn(
+                    // TODO generate unique id for each game, maybe based on the PGN headers?
+                    id: const StringId('pgn_import_game'),
+                    orientation: .white,
+                    pgn: game.makePgn(),
+                    variant: gameData.variant,
+                    isComputerAnalysisAllowed: true,
+                    initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
