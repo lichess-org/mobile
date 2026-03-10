@@ -40,7 +40,7 @@ class ExplorerView extends ConsumerWidget {
   final Position position;
   final bool isComputerAnalysisAllowed;
   final Opening? opening;
-  final void Function(NormalMove) onMoveSelected;
+  final void Function(Move) onMoveSelected;
 
   bool get tablebaseRelevant => isTablebaseRelevant(position);
 

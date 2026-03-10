@@ -13,7 +13,7 @@ class TablebaseView extends ConsumerWidget {
   const TablebaseView({required this.position, this.onMoveSelected, super.key});
 
   final Position position;
-  final void Function(NormalMove)? onMoveSelected;
+  final void Function(Move)? onMoveSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -221,7 +221,7 @@ class _TablebaseMoveRow extends StatelessWidget {
   final TablebaseMove move;
   final Color color;
   final bool? isWinningForWhite;
-  final void Function(NormalMove)? onMoveSelected;
+  final void Function(Move)? onMoveSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +291,7 @@ class _TablebaseMoveRow extends StatelessWidget {
       metricsWidget = Wrap(spacing: 8.0, runSpacing: 4.0, children: metricBoxes);
     }
     return InkWell(
-      onTap: onMoveSelected != null ? () => onMoveSelected!(NormalMove.fromUci(move.uci)) : null,
+      onTap: onMoveSelected != null ? () => onMoveSelected!(Move.parse(move.uci)!) : null,
       child: Container(
         color: color,
         padding: kExplorerTableRowPadding,
