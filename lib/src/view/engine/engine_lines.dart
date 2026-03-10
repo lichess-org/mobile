@@ -18,7 +18,7 @@ class EngineLines extends ConsumerStatefulWidget {
   const EngineLines({required this.filters, required this.onTapMove, required this.analyisState});
 
   final EngineEvaluationFilters filters;
-  final void Function(NormalMove move) onTapMove;
+  final void Function(Move move) onTapMove;
   final CommonAnalysisState analyisState;
 
   @override
@@ -84,7 +84,7 @@ class Engineline extends ConsumerWidget {
       pvData = const PvData(moves: IListConst([])),
       fromPosition = Chess.initial;
 
-  final void Function(NormalMove move)? onTapMove;
+  final void Function(Move move)? onTapMove;
   final Position fromPosition;
   final PvData pvData;
 
@@ -114,7 +114,7 @@ class Engineline extends ConsumerWidget {
     final evalString = pvData.evalString;
 
     return InkWell(
-      onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
+      onTap: () => onTapMove?.call(Move.parse(pvData.moves[0])!),
       child: SizedBox(
         height: kEngineLineHeight,
         child: Padding(
