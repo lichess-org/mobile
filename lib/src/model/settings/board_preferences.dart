@@ -237,6 +237,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       promotionMove: promotionMove,
       sideToMove: position.turn,
       validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
+      validDropSquares: position.legalDrops.squares.toISet(),
       isCheck: boardHighlights && position.isCheck,
       canPromoteToKing: variant == Variant.antichess,
     );
