@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_s
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -132,6 +133,22 @@ void main() {
 
       // Engine should have responded - at least 2 moves now
       expect(find.byType(InlineMoveItem), findsAtLeast(2));
+    });
+
+    testWidgets('Can play drop moves in crazyhouse', (tester) async {
+      await initOfflineComputerGame(
+        tester,
+        variant: Variant.crazyhouse,
+        fen: 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3',
+      );
+
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
     });
 
     testWidgets('Engine responds after player move', (tester) async {
@@ -1939,13 +1956,18 @@ Future<void> selectSide(WidgetTester tester, Side side) async {
 }
 
 /// Initialize an offline computer game and return the board rect.
-Future<Rect> initOfflineComputerGame(WidgetTester tester, {Side side = Side.white}) async {
+Future<Rect> initOfflineComputerGame(
+  WidgetTester tester, {
+  Variant? variant,
+  String? fen,
+  Side side = Side.white,
+}) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const OfflineComputerGameScreen(),
+    home: OfflineComputerGameScreen(initialVariant: variant, initialFen: fen),
     overrides: {
       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
         (_) => gameStorage,
