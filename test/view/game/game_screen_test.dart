@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
@@ -982,6 +983,53 @@ void main() {
         await tester.pump();
         verifyNever(() => mockSoundService.play(Sound.confirmation));
       });
+    });
+  });
+
+  group('Crazyhouse', () {
+    testWidgets('displays pockets and handles player drop moves', (tester) async {
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.white,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // White drops a pawn to c4
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pumpAndSettle();
+
+      // Pawn should appear on c4 (transient move before server ack)
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+    });
+
+    testWidgets('correctly handles opponent drop move received from server', (tester) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.black,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // Server sends white's drop move P@c4 (ply 5 after the 4 pgn moves)
+      sendServerSocketMessages(gameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 5, "uci": "P@c4", "san": "P@c4", "clock": {"white": 176, "black": 180}}}',
+      ]);
+      await tester.pump();
+
+      // White pawn should appear on c4
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
     });
   });
 

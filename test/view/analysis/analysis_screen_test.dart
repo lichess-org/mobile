@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
@@ -30,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:multistockfish/multistockfish.dart';
 
+import '../../binding.dart';
 import '../../model/engine/fake_stockfish.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -938,6 +940,58 @@ void main() {
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsNothing);
+      });
+
+      testWidgets('can be tapped to play a drop move in crazyhouse', (tester) async {
+        final binding = TestLichessBinding.ensureInitialized();
+        final stockfish = FakeCrazyhouseDropMoveStockfish();
+        binding.stockfish = stockfish;
+        addTearDown(() => binding.stockfish = FakeStockfish());
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.engineEvaluation.storageKey: jsonEncode(
+              EngineEvaluationPrefState.defaults
+                  .copyWith(numEvalLines: 1, isEnabled: true)
+                  .toJson(),
+            ),
+          },
+          home: const AnalysisScreen(
+            options: AnalysisOptions.pgn(
+              id: StringId('standalone'),
+              orientation: Side.white,
+              // Position after 1.e4 d5 2.exd5 Qxd5: white has a pawn in pocket
+              pgn: '''
+                [Variant "Crazyhouse"]
+                [FEN "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3"]
+              ''',
+              isComputerAnalysisAllowed: true,
+              variant: Variant.crazyhouse,
+            ),
+          ),
+          overrides: {
+            webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith(
+              (_) => FakeWebSocketChannelFactory(
+                (uri) => FakeWebSocketChannel(uri, serverHandlers: {}),
+              ),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // Wait for engine to start and emit eval
+        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+        // Engine line starting with a drop move should be displayed
+        expect(find.byType(Engineline), findsOneWidget);
+
+        // Tapping the engine line plays P@c4 (drop move)
+        await tester.tap(find.byType(Engineline));
+        await tester.pumpAndSettle();
+
+        // White pawn should appear on c4 after the drop move
+        expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
       });
     });
 
