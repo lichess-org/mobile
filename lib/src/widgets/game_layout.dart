@@ -172,7 +172,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             onClearShapes: _onClearShapes,
             newShapeColor: boardPrefs.shapeColor.color,
           ),
-          enableDropMoves: widget.boardParams.variant.hasDropMoves == true,
         );
 
         final settings = widget.boardSettingsOverrides != null
