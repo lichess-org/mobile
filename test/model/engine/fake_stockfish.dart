@@ -557,6 +557,7 @@ class LegalMoveFakeStockfish implements Stockfish {
 
   StockfishFlavor _flavor = StockfishFlavor.sf16;
   Position? _position;
+  String? _variant;
 
   void _emit(String line) {
     if (!_stdoutController.isClosed) {
@@ -568,7 +569,7 @@ class LegalMoveFakeStockfish implements Stockfish {
   StockfishFlavor get flavor => _flavor;
 
   @override
-  String? get variant => null;
+  String? get variant => _variant;
 
   @override
   String? get bigNetPath => null;
@@ -584,6 +585,7 @@ class LegalMoveFakeStockfish implements Stockfish {
     String? bigNetPath,
   }) async {
     _flavor = flavor;
+    _variant = variant;
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
@@ -609,7 +611,7 @@ class LegalMoveFakeStockfish implements Stockfish {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
           if (parts.length > 2) {
             _position = Position.setupPosition(
-              Rule.chess,
+              _variant != null ? ruleFromUciVariant(_variant!) : Rule.chess,
               Setup.parseFen(
                 parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
               ),

@@ -658,17 +658,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       );
 
       final uciMove = await evaluationService.findMove(work);
-      final move = NormalMove.fromUci(uciMove);
+      final move = Move.parse(uciMove);
 
       if (state.game.playable) {
-        _applyMove(move);
+        _applyMove(move!);
         // After engine move, precompute hints for player's turn (in casual or practice mode)
         if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
           _computeHints();
         }
       }
-    } catch (e) {
-      // Engine was stopped or error occurred, ignore
+    } on MoveRequestCancelledException {
+      // Expected cancellation when evaluationService.stop() is called; ignore.
+      return;
+    } catch (e, s) {
+      // Unexpected engine error occurred.
+      _logger.warning('Failed to play engine move!', e, s);
     } finally {
       if (state.game.playable || state.game.finished) {
         state = state.copyWith(isEngineThinking: false);
@@ -888,8 +892,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     final String? effectiveInitialFen;
 
     if (initialFen != null) {
-      position = Chess.fromSetup(Setup.parseFen(initialFen));
-      effectiveVariant = Variant.fromPosition;
+      effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+      position = Position.setupPosition(effectiveVariant.rule, Setup.parseFen(initialFen));
       effectiveInitialFen = initialFen;
     } else if (variant == Variant.chess960) {
       position = randomChess960Position();
@@ -942,8 +946,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
 
-  NormalMove? get lastMove =>
-      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
+  Move? get lastMove =>
+      stepCursor > 0 ? Move.parse(game.steps[stepCursor].sanMove!.move.uci) : null;
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);
