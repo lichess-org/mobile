@@ -69,5 +69,5 @@ jobs:
 
       - name: Install Firebase CLI
         run: curl -sL https://firebase.tools | bash
-      - name: Deploy symbols to Firebase Crashlytics
-        run: firebase --token="${{ secrets.FIREBASE_CI }}" crashlytics:symbols:upload --app="${{ secrets.FIREBASE_ANDROID_APP_ID }}" ./build/app/outputs/bundle/release/symbols
+      - name: Deploy debug symbols to Firebase Crashlytics
+        run: firebase --token="${{ secrets.FIREBASE_CI }}" crashlytics:symbols:upload --app="${{ secrets.FIREBASE_ANDROID_APP_ID }}" ./build/app/outputs/bundle/release/native-debug-symbols/native-debug-symbols.zip
