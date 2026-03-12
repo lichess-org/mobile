@@ -47,6 +47,16 @@ import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
+extension _AnalysisGameResultColor on AnalysisGameResult {
+  Color? colorFor(Side side, BuildContext context) => switch (this) {
+    AnalysisGameResult.whiteWins =>
+      side == Side.white ? context.lichessColors.good : context.lichessColors.error,
+    AnalysisGameResult.blackWins =>
+      side == Side.white ? context.lichessColors.error : context.lichessColors.good,
+    _ => null,
+  };
+}
+
 final _logger = Logger('AnalysisScreen');
 
 class AnalysisScreen extends StatelessWidget {
@@ -245,12 +255,14 @@ class _Body extends ConsumerWidget {
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
         result: result?.resultToString(pov),
+        resultColor: result?.colorFor(pov, context),
       );
       boardHeader = _PlayerWidget(
         player: headerPlayer,
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
         result: result?.resultToString(pov.opposite),
+        resultColor: result?.colorFor(pov.opposite, context),
       );
     } else if (options case Pgn()) {
       // PGN analysis - try to get player info from PGN headers
@@ -264,12 +276,17 @@ class _Body extends ConsumerWidget {
             : null;
 
         boardFooter = footerPlayer != null
-            ? _AnalysisPlayerWidget(player: footerPlayer, result: result?.resultToString(pov))
+            ? _AnalysisPlayerWidget(
+                player: footerPlayer,
+                result: result?.resultToString(pov),
+                resultColor: result?.colorFor(pov, context),
+              )
             : null;
         boardHeader = headerPlayer != null
             ? _AnalysisPlayerWidget(
                 player: headerPlayer,
                 result: result?.resultToString(pov.opposite),
+                resultColor: result?.colorFor(pov.opposite, context),
               )
             : null;
       }
@@ -334,11 +351,13 @@ class _PlayerWidget extends StatelessWidget {
     required this.clock,
     required this.isSideToMove,
     this.result,
+    this.resultColor,
   });
 
   final Player player;
   final Duration? clock;
   final String? result;
+  final Color? resultColor;
   final bool isSideToMove;
 
   @override
@@ -349,7 +368,10 @@ class _PlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: FontWeight.bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.user != null)
@@ -664,10 +686,11 @@ class _BottomBar extends ConsumerWidget {
 
 /// Player widget for PGN imports, displaying analysis player info
 class _AnalysisPlayerWidget extends StatelessWidget {
-  const _AnalysisPlayerWidget({required this.player, this.result});
+  const _AnalysisPlayerWidget({required this.player, this.result, this.resultColor});
 
   final AnalysisPlayer player;
   final String? result;
+  final Color? resultColor;
 
   @override
   Widget build(BuildContext context) {
@@ -677,7 +700,10 @@ class _AnalysisPlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: .bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: .bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.title != null) ...[
