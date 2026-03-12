@@ -326,11 +326,12 @@ class AnalysisLayout extends StatelessWidget {
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
                   final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
-                  final boardSize = isTablet || isSmallScreen
+                  final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
+                  final boardSize = isTablet || isSmallScreen || pockets != null
                       ? defaultBoardSize -
                             evalGaugeSize -
                             kTabletBoardTableSidePadding * 2 -
-                            (pockets != null ? kAdditionalBoardSidePaddingForPockets : 0.0)
+                            (pockets != null ? additionalBoardSidePaddingForPockets : 0.0)
                       : defaultBoardSize - evalGaugeSize;
 
                   return Column(

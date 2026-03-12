@@ -14,6 +14,9 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
+/// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
+const _kAdditionalBoardSidePaddingForPockets = 70.0;
+
 Side variantBoardOrientation({
   required Variant variant,
   required Side youAre,
@@ -312,7 +315,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           final isShortScreen = isShortVerticalScreen(context);
 
           final pocketsPadding = (pockets != null && (isTablet || isShortScreen))
-              ? kAdditionalBoardSidePaddingForPockets
+              ? _kAdditionalBoardSidePaddingForPockets
               : 0;
 
           double effectiveBoardSize =
