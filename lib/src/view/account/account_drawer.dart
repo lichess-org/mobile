@@ -438,6 +438,10 @@ class AboutScreen extends ConsumerWidget {
               ),
             ],
           ),
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
+          ),
         ],
       ),
     );
