@@ -470,7 +470,7 @@ void main() {
       await tester.tap(find.text('Over the board'));
       await tester.pumpAndSettle(); // wait for over the board menu to open
       // Variant we set previously should be preselected
-      expect(find.text('Atomic'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
     });
   });
 }

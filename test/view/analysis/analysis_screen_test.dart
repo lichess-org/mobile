@@ -243,7 +243,7 @@ void main() {
       await tester.tap(find.text('Play against computer'));
       await tester.pumpAndSettle(); // wait for play menu to open
       // Variant we set previously should be preselected
-      expect(find.text('Atomic'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
     });
 
     testWidgets('Continue OTB', (tester) async {

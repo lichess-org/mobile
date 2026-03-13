@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 void showConfigureGameSheet(
   BuildContext context, {
@@ -133,7 +134,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                       .where((variant) => variant != Variant.fromPosition)
                       .toList(),
                   selectedItem: chosenVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) => setState(() {
                     chosenVariant = variant;
                   }),
