@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -96,6 +97,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   data: (gameState) {
                     final game = gameState.game;
                     final position = gameState.game.positionAt(gameState.stepCursor);
+                    final clockTenths = ref.watch(
+                      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+                    );
 
                     // If Stockfish is playing, user is null
                     final crosstable = game.white.user != null && game.black.user != null
@@ -125,6 +129,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                                 return Clock(
                                   timeLeft: timeLeft,
                                   active: gameState.activeClockSide == Side.black,
+                                  clockTenths: clockTenths,
                                 );
                               },
                             )
@@ -146,6 +151,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                                 return Clock(
                                   timeLeft: timeLeft,
                                   active: gameState.activeClockSide == Side.white,
+                                  clockTenths: clockTenths,
                                 );
                               },
                             )
