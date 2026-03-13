@@ -96,6 +96,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     autoThreefold: AutoThreefold.fromInt(pick('autoThreefold').asIntOrThrow()),
     takeback: Takeback.fromInt(pick('takeback').asIntOrThrow()),
     moretime: Moretime.fromInt(pick('moretime').asIntOrThrow()),
+    clockTenths: ClockTenths.fromInt(pick('clockTenths').asIntOrThrow()),
     clockSound: BooleanPref(pick('clockSound').asBoolOrThrow()),
     confirmResign: BooleanPref.fromInt(pick('confirmResign').asIntOrThrow()),
     submitMove: SubmitMove.fromInt(pick('submitMove').asIntOrThrow()),
