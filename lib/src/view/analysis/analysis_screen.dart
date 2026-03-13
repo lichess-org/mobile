@@ -535,7 +535,15 @@ class _BottomBar extends ConsumerWidget {
               labelBuilder: (Variant variant) => Text.rich(
                 TextSpan(
                   children: [
-                    WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Builder(
+                        builder: (context) {
+                          final style = DefaultTextStyle.of(context).style;
+                          return Icon(variant.icon, size: style.fontSize, color: style.color);
+                        },
+                      ),
+                    ),
                     const WidgetSpan(child: SizedBox(width: 8)),
                     TextSpan(text: variant.label),
                   ],

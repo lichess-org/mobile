@@ -97,7 +97,23 @@ class CreateGameWidget extends ConsumerWidget {
                             .where((v) => v != Variant.fromPosition)
                             .toList(),
                         selectedItem: playPrefs.customVariant,
-                        labelBuilder: (Variant variant) => Text(variant.label),
+                        labelBuilder: (Variant variant) => Text.rich(
+                          TextSpan(
+                            children: [
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: Builder(
+                                  builder: (context) {
+                                    final style = DefaultTextStyle.of(context).style;
+                                    return Icon(variant.icon, size: style.fontSize, color: style.color);
+                                  },
+                                ),
+                              ),
+                              const WidgetSpan(child: SizedBox(width: 8)),
+                              TextSpan(text: variant.label),
+                            ],
+                          ),
+                        ),
                         onSelectedItemChanged: (Variant variant) {
                           ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                         },

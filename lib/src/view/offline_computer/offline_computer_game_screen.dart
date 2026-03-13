@@ -850,7 +850,23 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                   context,
                   choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
                   selectedItem: _selectedVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
+                  labelBuilder: (Variant variant) => Text.rich(
+                    TextSpan(
+                      children: [
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Builder(
+                            builder: (context) {
+                              final style = DefaultTextStyle.of(context).style;
+                              return Icon(variant.icon, size: style.fontSize, color: style.color);
+                            },
+                          ),
+                        ),
+                        const WidgetSpan(child: SizedBox(width: 8)),
+                        TextSpan(text: variant.label),
+                      ],
+                    ),
+                  ),
                   onSelectedItemChanged: (Variant variant) {
                     setState(() {
                       _selectedVariant = variant;
