@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateGameWidget extends ConsumerWidget {
   const CreateGameWidget();
@@ -97,23 +98,7 @@ class CreateGameWidget extends ConsumerWidget {
                             .where((v) => v != Variant.fromPosition)
                             .toList(),
                         selectedItem: playPrefs.customVariant,
-                        labelBuilder: (Variant variant) => Text.rich(
-                          TextSpan(
-                            children: [
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: Builder(
-                                  builder: (context) {
-                                    final style = DefaultTextStyle.of(context).style;
-                                    return Icon(variant.icon, size: style.fontSize, color: style.color);
-                                  },
-                                ),
-                              ),
-                              const WidgetSpan(child: SizedBox(width: 8)),
-                              TextSpan(text: variant.label),
-                            ],
-                          ),
-                        ),
+                        labelBuilder: (variant) => VariantLabel(variant),
                         onSelectedItemChanged: (Variant variant) {
                           ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                         },
