@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 
 /// A widget that displays a variant [Icon] followed by [variant.label], sized and colored to match
-/// the surrounding text style. Intended for use as a [labelBuilder] in [showChoicePicker].
+/// the surrounding text style, with a description below. Intended for use as a [labelBuilder] in
+/// [showChoicePicker].
 class VariantLabel extends StatelessWidget {
   const VariantLabel(this.variant, {super.key});
 
@@ -12,17 +15,29 @@ class VariantLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = DefaultTextStyle.of(context).style;
-    return Text.rich(
-      TextSpan(
-        children: [
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Icon(variant.icon, size: style.fontSize, color: style.color),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(variant.icon, size: style.fontSize, color: style.color),
+              ),
+              const WidgetSpan(child: SizedBox(width: 8)),
+              TextSpan(text: variant.label),
+            ],
           ),
-          const WidgetSpan(child: SizedBox(width: 8)),
-          TextSpan(text: variant.label),
-        ],
-      ),
+        ),
+        Text(
+          variant.description(context.l10n),
+          style: Styles.subtitle.copyWith(
+                        color: textShade(context, Styles.subtitleOpacity),
+                      ),
+        ),
+      ],
     );
   }
 }
