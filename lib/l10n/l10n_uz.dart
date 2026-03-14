@@ -284,6 +284,36 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Yoki PGN faylini import qiling';
 
   @override
+  String get variantStandardTitle => 'Standart shaxmat qoidalari (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
+
+  @override
+  String get variantThreeCheckTitle => 'Gʻalaba qozonish uchun raqibingizga 3 marta shoh bering.';
+
+  @override
+  String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
+
+  @override
+  String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibni shohini portlating.';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
+
+  @override
+  String get variantRacingKingsTitle => 'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
+
+  @override
+  String get variantFromPositionTitle => 'Belgilangan pozitsiyadan standart shaxmat';
+
+  @override
   String get activityActivity => 'Faollik';
 
   @override

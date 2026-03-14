@@ -284,6 +284,36 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
+  String get variantStandardTitle => 'Стандартні правила шахів (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Початкова позиція фігур задається випадково.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Перемістіть свого короля до центру, щоб перемогти.';
+
+  @override
+  String get variantThreeCheckTitle => 'Поставте шах супернику 3 рази, щоб перемогти.';
+
+  @override
+  String get variantAntichessTitle => 'Утратьте всі свої фігури (або хай вам поставлять пат), щоб перемогти.';
+
+  @override
+  String get variantAtomicTitle => 'Підірвіть короля суперника, щоб перемогти.';
+
+  @override
+  String get variantHordeTitle => 'Одна сторона має багато пішаків, а інша — звичайну армію.';
+
+  @override
+  String get variantRacingKingsTitle => 'Перемістіть короля на інший бік дошки, щоб перемогти.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Замість звичайного ходу можна поставити захоплену ворожу фігуру.';
+
+  @override
+  String get variantFromPositionTitle => 'Звичайні шахи із власної позиції';
+
+  @override
   String get activityActivity => 'Активність';
 
   @override

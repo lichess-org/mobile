@@ -284,6 +284,36 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
 
   @override
+  String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
+
+  @override
+  String get variantChess960Title => '1 段目の駒の配置がランダムになります。';
+
+  @override
+  String get variantKingOfTheHillTitle => 'キングを中央のマスに進めると勝ち。';
+
+  @override
+  String get variantThreeCheckTitle => '先に 3 回チェックした方が勝ち。';
+
+  @override
+  String get variantAntichessTitle => 'すべての駒を取られる（またはステイルメイトされる）と勝ち。';
+
+  @override
+  String get variantAtomicTitle => '相手のキングを「吹き飛ばす」と勝ち。';
+
+  @override
+  String get variantHordeTitle => '一方はポーンだけ、他方はふつうの駒で戦う。';
+
+  @override
+  String get variantRacingKingsTitle => 'キングをボードの向こうの端まで進めると勝ち。';
+
+  @override
+  String get variantCrazyhouseTitle => '取った駒を自分の手番に盤上に打つことができる。';
+
+  @override
+  String get variantFromPositionTitle => '指定した局面からのふつうのチェス';
+
+  @override
   String get activityActivity => '活動';
 
   @override

@@ -284,6 +284,36 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get variantStandardTitle => 'Reguli de șah standard (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Poziţia de început a pieselor din prima linie este randomizată.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Adu-ți regele în centru pentru a câștiga jocul.';
+
+  @override
+  String get variantThreeCheckTitle => 'Dă-i șah de 3 ori adversarului pentru a câștiga jocul.';
+
+  @override
+  String get variantAntichessTitle => 'Pierde-ți toate piesele (sau intră în pat) pentru a câștiga jocul.';
+
+  @override
+  String get variantAtomicTitle => 'Spulberă regele adversarului pentru a câștiga.';
+
+  @override
+  String get variantHordeTitle => 'O parte are un număr mare de pioni, cealaltă parte are o armată normală.';
+
+  @override
+  String get variantRacingKingsTitle => 'Adu-ți regele în cealaltă parte a tablei pentru a câștiga.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Piesele capturate pot fi așezate înapoi pe tablă în loc de a mișca o piesă.';
+
+  @override
+  String get variantFromPositionTitle => 'Șah standard dintr-o poziție personalizată';
+
+  @override
   String get activityActivity => 'Activitate';
 
   @override
