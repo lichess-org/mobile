@@ -87,8 +87,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    await _socketClient.firstConnection;
-
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       if (state.value?.isNewOrOngoing == true) {
         _syncDebouncer(() {
@@ -96,6 +94,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
         });
       }
     });
+
+    await _socketClient.firstConnection;
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
