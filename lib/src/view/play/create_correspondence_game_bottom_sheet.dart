@@ -86,9 +86,20 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                 onPressed: () {
                   showChoicePicker(
                     context,
-                    choices: [Variant.standard, Variant.chess960],
+                    choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
                     selectedItem: preferences.customVariant,
-                    labelBuilder: (Variant variant) => Text(variant.label),
+                    labelBuilder: (Variant variant) => Text.rich(
+                      TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(variant.icon),
+                            alignment: PlaceholderAlignment.middle,
+                          ),
+                          const WidgetSpan(child: SizedBox(width: 8)),
+                          TextSpan(text: variant.label),
+                        ],
+                      ),
+                    ),
                     onSelectedItemChanged: (Variant variant) {
                       ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                     },
