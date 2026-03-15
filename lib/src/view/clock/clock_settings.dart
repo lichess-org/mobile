@@ -106,10 +106,7 @@ class ClockSettings extends ConsumerWidget {
         Expanded(
           child: RotatedBox(
             quarterTurns: clockOrientation.quarterTurns,
-            child: _LowTimeWarningButton(
-              iconSize: _iconSize,
-              enabled: buttonsEnabled,
-            ),
+            child: _LowTimeWarningButton(iconSize: _iconSize, enabled: buttonsEnabled),
           ),
         ),
         Expanded(
@@ -154,9 +151,7 @@ class _LowTimeWarningButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final warning = ref.watch(
-      clockToolPreferencesProvider.select((p) => p.lowTimeWarning),
-    );
+    final warning = ref.watch(clockToolPreferencesProvider.select((p) => p.lowTimeWarning));
 
     return IconButton(
       padding: _kIconPadding,
@@ -181,9 +176,7 @@ class _LowTimeWarningModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final current = ref.watch(
-      clockToolPreferencesProvider.select((p) => p.lowTimeWarning),
-    );
+    final current = ref.watch(clockToolPreferencesProvider.select((p) => p.lowTimeWarning));
     final notifier = ref.read(clockToolPreferencesProvider.notifier);
     const options = LowTimeWarning.values;
 
@@ -258,9 +251,11 @@ class _LowTimeChip extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: Styles.timeControl.merge(Styles.bold).copyWith(
-                color: selected ? colorScheme.onPrimaryContainer : colorScheme.onSurfaceVariant,
-              ),
+              style: Styles.timeControl
+                  .merge(Styles.bold)
+                  .copyWith(
+                    color: selected ? colorScheme.onPrimaryContainer : colorScheme.onSurfaceVariant,
+                  ),
             ),
           ),
         ),

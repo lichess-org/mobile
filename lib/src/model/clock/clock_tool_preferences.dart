@@ -6,10 +6,9 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 part 'clock_tool_preferences.freezed.dart';
 part 'clock_tool_preferences.g.dart';
 
-final clockToolPreferencesProvider =
-    NotifierProvider<ClockToolPreferencesNotifier, ClockToolPrefs>(
-      ClockToolPreferencesNotifier.new,
-    );
+final clockToolPreferencesProvider = NotifierProvider<ClockToolPreferencesNotifier, ClockToolPrefs>(
+  ClockToolPreferencesNotifier.new,
+);
 
 class ClockToolPreferencesNotifier extends Notifier<ClockToolPrefs>
     with PreferencesStorage<ClockToolPrefs> {
@@ -52,9 +51,8 @@ enum LowTimeWarning {
   /// or null if the warning is disabled.
   Duration? threshold(Duration initialTime) => switch (this) {
     .off => null,
-    .tenPercent => initialTime > Duration.zero
-        ? Duration(milliseconds: initialTime.inMilliseconds ~/ 10)
-        : null,
+    .tenPercent =>
+      initialTime > Duration.zero ? Duration(milliseconds: initialTime.inMilliseconds ~/ 10) : null,
     .tenSeconds => const Duration(seconds: 10),
     .twentySeconds => const Duration(seconds: 20),
     .thirtySeconds => const Duration(seconds: 30),
@@ -66,15 +64,11 @@ sealed class ClockToolPrefs with _$ClockToolPrefs implements Serializable {
   const ClockToolPrefs._();
 
   const factory ClockToolPrefs({
-    @JsonKey(
-      unknownEnumValue: LowTimeWarning.tenPercent,
-      defaultValue: LowTimeWarning.tenPercent,
-    )
+    @JsonKey(unknownEnumValue: LowTimeWarning.tenPercent, defaultValue: LowTimeWarning.tenPercent)
     required LowTimeWarning lowTimeWarning,
   }) = _ClockToolPrefs;
 
   static const defaults = ClockToolPrefs(lowTimeWarning: LowTimeWarning.tenPercent);
 
-  factory ClockToolPrefs.fromJson(Map<String, dynamic> json) =>
-      _$ClockToolPrefsFromJson(json);
+  factory ClockToolPrefs.fromJson(Map<String, dynamic> json) => _$ClockToolPrefsFromJson(json);
 }

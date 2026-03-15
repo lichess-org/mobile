@@ -68,8 +68,9 @@ class ClockToolController extends Notifier<ClockState> {
     if (activeSide == null) return;
     if (_hasPlayedLowTimeSound[activeSide]!) return;
     final warning = ref.read(clockToolPreferencesProvider).lowTimeWarning;
-    final initialTime =
-        activeSide == ClockSide.top ? state.options.topTime : state.options.bottomTime;
+    final initialTime = activeSide == ClockSide.top
+        ? state.options.topTime
+        : state.options.bottomTime;
     final threshold = warning.threshold(initialTime);
     if (threshold == null) return;
     final activeSideTime = activeSide == ClockSide.top
