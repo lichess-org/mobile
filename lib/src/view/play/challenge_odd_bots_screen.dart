@@ -55,6 +55,8 @@ final Map<String, List<_BotFen>> _botFens = {
   'leelaknightodds': [
     _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq', side: Side.black),
     _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
   ],
   'leelaqueenodds': [
     _BotFen(fen: 'rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
