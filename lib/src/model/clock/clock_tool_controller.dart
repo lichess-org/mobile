@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
@@ -29,13 +30,11 @@ class ClockToolController extends Notifier<ClockState> {
     ClockSide.top: false,
     ClockSide.bottom: false,
   };
-  late Duration _emergencyThreshold;
 
   @override
   ClockState build() {
     const time = Duration(minutes: 10);
     const increment = Duration.zero;
-    _emergencyThreshold = _calculateEmergencyThreshold(time);
     const options = ClockOptions(
       topTime: time,
       bottomTime: time,
@@ -64,19 +63,19 @@ class ClockToolController extends Notifier<ClockState> {
     );
   }
 
-  // Emergency threshold is set to 10% of the total time
-  Duration _calculateEmergencyThreshold(Duration initialTime) {
-    return Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
-  }
-
   void onClockEmergency() {
     final activeSide = state.activeSide;
     if (activeSide == null) return;
     if (_hasPlayedLowTimeSound[activeSide]!) return;
+    final warning = ref.read(clockToolPreferencesProvider).lowTimeWarning;
+    final initialTime =
+        activeSide == ClockSide.top ? state.options.topTime : state.options.bottomTime;
+    final threshold = warning.threshold(initialTime);
+    if (threshold == null) return;
     final activeSideTime = activeSide == ClockSide.top
         ? _clock.blackTime.value
         : _clock.whiteTime.value;
-    if (activeSideTime <= _emergencyThreshold) {
+    if (activeSideTime <= threshold) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
       _hasPlayedLowTimeSound[activeSide] = true;
     }
@@ -130,7 +129,6 @@ class ClockToolController extends Notifier<ClockState> {
 
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement);
-    _emergencyThreshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
     _hasPlayedLowTimeSound[ClockSide.top] = false;
     _hasPlayedLowTimeSound[ClockSide.bottom] = false;
     _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
