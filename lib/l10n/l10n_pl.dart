@@ -5077,6 +5077,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get clearSearch => 'Wyczyść wyszukiwanie';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Brak wyników dla \"$param\"';
+  }
+
+  @override
   String get tags => 'Tagi';
 
   @override

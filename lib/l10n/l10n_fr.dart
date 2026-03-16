@@ -5021,6 +5021,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearSearch => 'Réinitialiser la recherche';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Aucun résultat pour \"$param\"';
+  }
+
+  @override
   String get tags => 'Étiquettes';
 
   @override

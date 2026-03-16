@@ -5021,6 +5021,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get clearSearch => 'Tøm søk';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Merkelapper';
 
   @override

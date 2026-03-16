@@ -165,7 +165,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Сховати дошку';
+  String get mobileSettingsPickAnImageHideBoard => 'Заховати дошку';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Показати дошку';
@@ -1584,7 +1584,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleMotifs => 'Мотиви';
 
   @override
-  String get puzzleAdvanced => 'Просунутий';
+  String get puzzleAdvanced => 'Просунуті Мотиви';
 
   @override
   String get puzzleLengths => 'Довжина';
@@ -2074,7 +2074,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замість очікуваного ходу, спочатку робиться інший хід з безпосередньою атакою, на яку суперник має відповісти. Також відомий як \"Zwischenzug\" або \"In between\".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Мат: Смертельна коробка';
+  String get puzzleThemeKillBoxMate => 'Мат \"Смертельна коробка\"';
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
@@ -2086,7 +2086,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Тура ставить мат королю, поки слон закриває поля для втечі.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Мат Мерфі';
+  String get puzzleThemeMorphysMate => 'Мат Морфі';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
@@ -5075,6 +5075,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистити пошук';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Нічого не знайдено для «$param»';
+  }
 
   @override
   String get tags => 'Теги';

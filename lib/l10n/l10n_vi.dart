@@ -4993,6 +4993,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get clearSearch => 'Xóa nội dung tìm kiếm';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Không có kết quả nào cho \"$param\"';
+  }
+
+  @override
   String get tags => 'Thẻ';
 
   @override

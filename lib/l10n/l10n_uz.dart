@@ -1657,7 +1657,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleNormal => 'Normal';
 
   @override
-  String get puzzleEasier => 'Onsonroq';
+  String get puzzleEasier => 'Osonroq';
 
   @override
   String get puzzleEasiest => 'Eng Oson';
@@ -5019,6 +5019,11 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get clearSearch => 'Qidiruvni tozalash';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '\"$param\" boʻyicha natija yoʻq';
+  }
 
   @override
   String get tags => 'Teglar';

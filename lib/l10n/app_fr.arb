@@ -1503,6 +1503,7 @@
   "offline": "hors ligne",
   "search": "Rechercher",
   "clearSearch": "Réinitialiser la recherche",
+  "thereAreNoResultsForX": "Aucun résultat pour \"{param}\"",
   "tags": "Étiquettes",
   "enPassant": "Prise en passant ?",
   "opponentLeftCounter": "{count, plural, =1{Votre adversaire a quitté la partie. Vous pourrez revendiquer la victoire dans {count} seconde.} other{Votre adversaire a quitté la partie. Vous pourrez revendiquer la victoire dans {count} secondes.}}",

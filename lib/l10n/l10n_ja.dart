@@ -4993,6 +4993,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get clearSearch => '検索をクリア';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'タグ';
 
   @override

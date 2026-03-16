@@ -5021,6 +5021,11 @@ class AppLocalizationsSq extends AppLocalizations {
   String get clearSearch => 'Spastro kërkimin';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'S’ka përfundime për “$param”';
+  }
+
+  @override
   String get tags => 'Etiketa';
 
   @override

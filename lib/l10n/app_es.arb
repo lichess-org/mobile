@@ -1503,6 +1503,7 @@
   "offline": "desconectado",
   "search": "Buscar",
   "clearSearch": "Borrar búsqueda",
+  "thereAreNoResultsForX": "Sin resultados para \"{param}\"",
   "tags": "Etiquetas",
   "enPassant": "Al paso",
   "opponentLeftCounter": "{count, plural, =1{Tu oponente ha salido de la partida. Podrás reclamar la victoria en {count} segundo.} other{Tu oponente ha salido de la partida. Podrás reclamar la victoria en {count} segundos.}}",

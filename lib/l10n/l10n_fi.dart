@@ -2678,13 +2678,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get searchTimeDescription => 'Aseta uusien asemien arvioimisaika';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Säikeitä';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Aseta tähän prosessorisi säikeiden määrää pienempi luku, rastit osoittavat hyvän ja turvallisen valinnan';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Mitä enemmän säikeitä, sitä enemmän akku kuluu analyysin parantamiseksi';
 
   @override
   String get cpus => 'Suorittimia';
@@ -2693,7 +2693,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get memory => 'Muistia';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Korkeammat arvot saattavat parantaa suorituskykyä';
 
   @override
   String get infiniteAnalysis => 'Loputon analyysi';
@@ -5019,6 +5019,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Tunnisteet';

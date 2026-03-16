@@ -5021,6 +5021,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get clearSearch => 'Zoekopdracht wissen';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Geen resultaten voor \"$param\"';
+  }
+
+  @override
   String get tags => 'Labels';
 
   @override

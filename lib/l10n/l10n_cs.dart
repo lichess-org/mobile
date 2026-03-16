@@ -5075,6 +5075,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get clearSearch => 'Vymazat vyhledávání';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Štítky';
 
   @override

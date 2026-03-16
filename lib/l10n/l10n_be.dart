@@ -5073,6 +5073,11 @@ class AppLocalizationsBe extends AppLocalizations {
   String get clearSearch => 'Ачысціць пошук';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Тэгі';
 
   @override

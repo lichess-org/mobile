@@ -5021,6 +5021,11 @@ class AppLocalizationsEu extends AppLocalizations {
   String get clearSearch => 'Garbitu bilaketa';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ez dago emaitzarik honetarako: \"$param\"';
+  }
+
+  @override
   String get tags => 'Etiketak';
 
   @override

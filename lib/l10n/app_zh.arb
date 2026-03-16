@@ -1503,6 +1503,7 @@
   "offline": "离线",
   "search": "搜索",
   "clearSearch": "清除搜索",
+  "thereAreNoResultsForX": "未找到“{param}”的结果",
   "tags": "标签",
   "enPassant": "吃过路兵",
   "opponentLeftCounter": "{count, plural, other{您的对手已离开对局，您可以在 {count} 秒后宣布胜利。}}",

@@ -1503,6 +1503,7 @@
   "offline": "deskonektatuta",
   "search": "Bilatu",
   "clearSearch": "Garbitu bilaketa",
+  "thereAreNoResultsForX": "Ez dago emaitzarik honetarako: \"{param}\"",
   "tags": "Etiketak",
   "enPassant": "Igarotzean harrapatzea",
   "opponentLeftCounter": "{count, plural, =1{Zure aurkariak partida utzi egin du. Partida irabaztea eskatu dezakezu segundo {count}en.} other{Zure aurkariak partida utzi egin du. Partida irabaztea eskatu dezakezu {count} segundotan.}}",

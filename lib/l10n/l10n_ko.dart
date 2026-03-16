@@ -4993,6 +4993,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get clearSearch => '검색 초기화';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => '태그';
 
   @override

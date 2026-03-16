@@ -5073,6 +5073,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get clearSearch => 'ניקוי החיפוש';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'תגיות';
 
   @override

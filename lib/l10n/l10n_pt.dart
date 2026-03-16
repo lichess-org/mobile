@@ -5021,6 +5021,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearSearch => 'Limpar pesquisa';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Etiquetas';
 
   @override
@@ -11528,6 +11533,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get clearSearch => 'Limpar busca';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Nenhum resultado para \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';

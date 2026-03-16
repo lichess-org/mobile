@@ -5021,6 +5021,11 @@ class AppLocalizationsGl extends AppLocalizations {
   String get clearSearch => 'Borrar a procura';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Non hai resultados para \"$param\"';
+  }
+
+  @override
   String get tags => 'Etiquetas';
 
   @override

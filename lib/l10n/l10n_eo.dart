@@ -5021,6 +5021,11 @@ class AppLocalizationsEo extends AppLocalizations {
   String get clearSearch => 'Viŝi serĉon';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Etikedoj';
 
   @override

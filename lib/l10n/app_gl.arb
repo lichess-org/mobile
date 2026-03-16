@@ -1503,6 +1503,7 @@
   "offline": "desconectado",
   "search": "Buscar",
   "clearSearch": "Borrar a procura",
+  "thereAreNoResultsForX": "Non hai resultados para \"{param}\"",
   "tags": "Etiquetas",
   "enPassant": "Captura ao paso",
   "opponentLeftCounter": "{count, plural, =1{O teu opoñente saíu da partida. Poderás reclamar a vitoria en {count} segundo.} other{O teu opoñente saíu da partida. Poderás reclamar a vitoria en {count} segundos.}}",

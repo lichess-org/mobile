@@ -5021,6 +5021,11 @@ class AppLocalizationsSv extends AppLocalizations {
   String get clearSearch => 'Rensa sökning';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Taggar';
 
   @override

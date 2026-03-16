@@ -5021,6 +5021,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get clearSearch => 'Neteja la cerca';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No hi ha resultats per \"$param\"';
+  }
+
+  @override
   String get tags => 'Etiquetes';
 
   @override

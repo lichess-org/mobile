@@ -5075,6 +5075,11 @@ class AppLocalizationsLt extends AppLocalizations {
   String get clearSearch => 'Išvalyti paiešką';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Žymos';
 
   @override
