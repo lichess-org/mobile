@@ -387,15 +387,6 @@ class StudyController extends AsyncNotifier<StudyState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 
@@ -506,8 +497,17 @@ class StudyController extends AsyncNotifier<StudyState>
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState with _$StudyState implements EvaluationMixinState, CommonAnalysisState {
+sealed class StudyState
+    with _$StudyState, AnalysisExplosionMixin, EvaluationMixinState<StudyState>
+    implements CommonAnalysisState {
   const StudyState._();
+
+  @override
+  ViewRoot? get analysisRoot => root;
+
+  @override
+  StudyState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory StudyState({
     UserId? myId,

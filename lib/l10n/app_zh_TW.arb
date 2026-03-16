@@ -1135,7 +1135,6 @@
   "keyCycleSelectedVariation": "循環已選取的變體",
   "keyShowOrHideComments": "顯示/隱藏評論",
   "keyEnterOrExitVariation": "進入/退出變體",
-  "keyRequestComputerAnalysis": "請求引擎分析，從你的失誤中學習",
   "keyPreviousBranch": "上一個分支",
   "keyNextBranch": "下一個分支",
   "toggleVariationArrows": "顯示變體箭頭",

@@ -138,6 +138,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
         currentNode: RetroCurrentNode.fromNode(_root),
         variant: _game.meta.variant,
         currentPath: UciPath.empty,
+        root: _root.view,
         evaluationContext: EvaluationContext(
           id: options.id,
           variant: _game.meta.variant,
@@ -229,6 +230,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       currentNode: RetroCurrentNode.fromNode(mistakes.firstOrNull?.branch.branch ?? _root),
       lastMove: mistakes.firstOrNull?.branch.sanMove.move,
       variant: _game.meta.variant,
+      root: _root.view,
       evaluationContext: EvaluationContext(
         id: options.id,
         variant: _game.meta.variant,
@@ -301,15 +303,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _showMistake(int index) {
     final mistake = state.requireValue.mistakes.getOrNull(index);
     final lastMistake = state.requireValue.mistakes.lastOrNull;
@@ -370,6 +363,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
           currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
           promotionMove: null,
+          root: isNavigating ? state.root : _root.view,
         ),
       );
     } else {
@@ -379,6 +373,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
           currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: null,
           promotionMove: null,
+          root: isNavigating ? state.root : _root.view,
         ),
       );
     }
@@ -485,8 +480,14 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, done }
 
 @freezed
-sealed class RetroState with _$RetroState implements EvaluationMixinState, CommonAnalysisState {
+sealed class RetroState
+    with _$RetroState, AnalysisExplosionMixin, EvaluationMixinState<RetroState>
+    implements CommonAnalysisState {
   const RetroState._();
+
+  @override
+  RetroState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory RetroState({
     required bool serverAnalysisAvailable,
@@ -502,6 +503,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
     required Variant variant,
     required UciPath currentPath,
     required EvaluationContext evaluationContext,
+    required ViewRoot root,
     DateTime? evalRequestedAt,
     Move? lastMove,
     NormalMove? promotionMove,
@@ -525,6 +527,9 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
 
   @override
   Position get currentPosition => currentNode.position;
+
+  @override
+  ViewRoot get analysisRoot => root;
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => true;

@@ -281,7 +281,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobilePreviousPage => 'Précédent';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Importer un fichier PGN';
 
   @override
   String get activityActivity => 'Activité';
@@ -1889,6 +1889,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Retire une pièce essentielle à la défense d\'une autre pièce, permettant à la pièce non protégée d\'être capturée au coup suivant.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Coup colinéaire';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Deux pièces opposées se font face et l\'une des deux se déplace sur la même ligne sans capturer l\'autre pièce.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat en coin';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get multipleLines => 'Lignes d\'analyse';
 
   @override
+  String get multipleLinesDescription => 'Définir le nombre de lignes d\'analyse et de flèches sur l\'échiquier';
+
+  @override
+  String get searchTime => 'Temps d\'analyse';
+
+  @override
+  String get searchTimeDescription => 'Établir le temps d\'analyse des nouvelles positions';
+
+  @override
+  String get threads => 'Coeurs';
+
+  @override
+  String get threadsDescription => 'Sélectionnez une valeur en dessous du nombre de coeurs de votre processeur. Les flèches indiquent le choix optimal.';
+
+  @override
+  String get threadsDescriptionMobile => 'Utiliser plus de coeurs consomme plus d\'énergie, mais permet une meilleure analyse.';
+
+  @override
   String get cpus => 'Processeurs';
 
   @override
   String get memory => 'Mémoire';
+
+  @override
+  String get memoryDescription => 'Des valeurs plus élevées pourraient améliorer les performances.';
 
   @override
   String get infiniteAnalysis => 'Analyse infinie';
@@ -4078,9 +4105,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'entrer dans/sortir d\'une variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Demandez une analyse informatique, apprenez de vos erreurs';
 
   @override
   String get keyPreviousBranch => 'Branche précédente';

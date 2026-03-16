@@ -281,7 +281,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobilePreviousPage => 'Prejšnji';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -1945,6 +1945,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstranitev figure, ki je ključna za obrambo druge figure, kar omogoča, da se nezaščitena figura zajame z naslednjo potezo.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kolinearna poteza';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Dve nasprotni figuri se soočita druga z drugo, ena pa drsi vzdolž napadalne linije, ne da bi zajela sovražnikovo figuro.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat v kotu';
 
   @override
@@ -2719,10 +2725,31 @@ class AppLocalizationsSl extends AppLocalizations {
   String get multipleLines => 'Več variant';
 
   @override
+  String get multipleLinesDescription => 'Nastavite število vrstic za ocenjevanje in premaknite puščice na tabli';
+
+  @override
+  String get searchTime => 'Čas iskanja';
+
+  @override
+  String get searchTimeDescription => 'Določite čas za oceno novih pozicij';
+
+  @override
+  String get threads => 'Teme';
+
+  @override
+  String get threadsDescription => 'Nastavite to pod število niti vašega procesorja, kljukice označujejo dobro in varno izbiro';
+
+  @override
+  String get threadsDescriptionMobile => 'Več niti bo porabilo več baterije za boljšo analizo';
+
+  @override
   String get cpus => 'CPU-ji';
 
   @override
   String get memory => 'Spomin';
+
+  @override
+  String get memoryDescription => 'Višje vrednosti lahko izboljšajo delovanje';
 
   @override
   String get infiniteAnalysis => 'Neskončna analiza';
@@ -4134,9 +4161,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vstopi/izstopi v varianto';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
 
   @override
   String get keyPreviousBranch => 'Prejšnja veja';

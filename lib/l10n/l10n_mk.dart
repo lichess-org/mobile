@@ -1889,6 +1889,12 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsMk extends AppLocalizations {
   String get multipleLines => 'Број на варијанти';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Процесори';
 
   @override
   String get memory => 'Меморија';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Бесконечна анализа';
@@ -4078,9 +4105,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'отвори/затвори ја варијантата';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Побарајте компјутерска анализа, Учете од Вашите грешки';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

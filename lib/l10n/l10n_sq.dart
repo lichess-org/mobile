@@ -281,7 +281,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobilePreviousPage => 'E mëparshmja';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -1889,6 +1889,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Heqja e një pjese që është kritike për mbrojtjen e një pjese tjetër, çka tani lejon që pjesa e pambrojtur të merret me një lëvizje vijuese.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat qosheje';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsSq extends AppLocalizations {
   String get multipleLines => 'Linja të shumta';
 
   @override
+  String get multipleLinesDescription => 'Caktoni numër rreshtash vleftësimi dhe kalojini shigjetat te fusha';
+
+  @override
+  String get searchTime => 'Kohë kërkimi';
+
+  @override
+  String get searchTimeDescription => 'Caktoni kohën për vleftësim pozicionesh të freskëta';
+
+  @override
+  String get threads => 'Rrjedha';
+
+  @override
+  String get threadsDescription => 'Vëreni këtë nën numër rrjedhash të CPU-së tuaj, shenjat tregojnë një zgjedhje të mirë të parrezik';
+
+  @override
+  String get threadsDescriptionMobile => 'Më tepër rrjedha do të përdorin më tepër bateri për analizim më të mirë';
+
+  @override
   String get cpus => 'Procesorë';
 
   @override
   String get memory => 'Kujtesë';
+
+  @override
+  String get memoryDescription => 'Vlera më të mëdha mund të përmirësojnë funksionimin';
 
   @override
   String get infiniteAnalysis => 'Analizë e pafundme';
@@ -4078,9 +4105,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'hyr/dil nga varianti';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Kërkoni analizim nga kompjuteri, Mësoni nga gabimet tuaja';
 
   @override
   String get keyPreviousBranch => 'Dega e mëparshme';

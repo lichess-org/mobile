@@ -1182,7 +1182,6 @@
   "keyCycleSelectedVariation": "Превключи избрания вариант",
   "keyShowOrHideComments": "покажи/скрий коментарите",
   "keyEnterOrExitVariation": "влез/излез от вариацията",
-  "keyRequestComputerAnalysis": "Поискайте компютърен анализ, Учете се от грешките си",
   "keyPreviousBranch": "Предишно разклонение",
   "keyNextBranch": "Следващо разклонение",
   "toggleVariationArrows": "Превключване на стрелките за варианти",

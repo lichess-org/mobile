@@ -67,15 +67,6 @@ sealed class EvalWork extends Work with _$EvalWork {
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The (fake) position to use in threat mode searches.
-  Position get threatModePosition {
-    return position.copyWith(
-      turn: position.turn.opposite,
-      halfmoves: position.halfmoves + 1,
-      fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
-    );
-  }
-
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
 }

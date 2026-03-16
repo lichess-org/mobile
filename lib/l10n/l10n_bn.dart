@@ -1889,6 +1889,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'একটা গুটিকে খাওয়া যা আরেকটার প্রতিরক্ষা করে, যা পরের একটি চালে যেই গুটিকে রক্ষা করা হচ্ছিল তাকে খাওয়ার সুযোগ করে দেয়।';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsBn extends AppLocalizations {
   String get multipleLines => 'বহু রেখা';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'সিপিইউএস';
 
   @override
   String get memory => 'মেমরি';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'অনন্ত বিশ্লেষণ';
@@ -4078,9 +4105,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'প্রবেশ করান/বেরিয়ে যান';
-
-  @override
-  String get keyRequestComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অনুরোধ করুন, আপনার ভুলগুলো থেকে শিখুন';
 
   @override
   String get keyPreviousBranch => 'আগের শাখা';

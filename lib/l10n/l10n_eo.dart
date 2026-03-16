@@ -1889,6 +1889,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Forprenu ŝakpecon, kiu estas grava por defendo de alia ŝakpeco, ebligante la kapto de la nun nedefendata ŝakpeco dum sekva movo.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsEo extends AppLocalizations {
   String get multipleLines => 'Pluraj linioj';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Ĉefprocesoroj';
 
   @override
   String get memory => 'Memoro';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Senfina analizo';
@@ -4078,9 +4105,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'eniru/forlasu variaĵon';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Peti komputilan analizon, Lerni de viaj eraroj';
 
   @override
   String get keyPreviousBranch => 'Antaŭa branĉo';

@@ -281,7 +281,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePreviousPage => 'Vorige';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -1889,6 +1889,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collineaire zet';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Twee vijandige stukken staan tegenover elkaar, en één glipt langs de lijn van aanval zonder het stuk van de vijand te slaan.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat in een hoek';
 
   @override
@@ -2293,7 +2299,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameMode => 'Spelmodus';
 
   @override
-  String get createLobbyGame => 'Maak een lobby spel aan';
+  String get createLobbyGame => 'Maak een lobbypartij aan';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Deel deze link als u iemand wil uitnodigen om met u te spelen';
@@ -2663,10 +2669,31 @@ class AppLocalizationsNl extends AppLocalizations {
   String get multipleLines => 'Meerdere varianten';
 
   @override
+  String get multipleLinesDescription => 'Stel het aantal evaluatievariaties en zetpijlen in op het bord';
+
+  @override
+  String get searchTime => 'Zoektijd';
+
+  @override
+  String get searchTimeDescription => 'Stel tijd in om nieuwe stellingen te evalueren';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Stel dit in onder het aantal threads van uw CVE, de pijltjes markeren een goede veilige keuze';
+
+  @override
+  String get threadsDescriptionMobile => 'Meer threads zullen meer accu gebruiken voor een betere analyse';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Geheugen';
+
+  @override
+  String get memoryDescription => 'Hogere waarden kunnen de prestaties verbeteren';
 
   @override
   String get infiniteAnalysis => 'Oneindige analyse';
@@ -4078,9 +4105,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vermeld/stop variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
 
   @override
   String get keyPreviousBranch => 'Vorige vertakking';

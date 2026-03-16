@@ -1889,6 +1889,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Remove uma peça que seja crítica para a defesa de outra peça, permitindo que esta seja capturada na próxima jogada.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get multipleLines => 'Múltiplas continuações';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Memória';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Análise infinita';
@@ -4078,9 +4105,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'entrar/sair da variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
   String get keyPreviousBranch => 'Ramo anterior';
@@ -6766,6 +6790,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePreviousPage => 'Anterior';
 
   @override
+  String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
+
+  @override
   String get activityActivity => 'Atividade';
 
   @override
@@ -8371,6 +8398,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeCapturingDefenderDescription => 'Remover uma peça que seja importante na defesa de outra, permitindo que agora a peça indefesa seja capturada na jogada seguinte.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Lance colinear';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Duas peças opostas se encaram, e uma desliza ao longo da linha de ataque sem capturar a peça inimiga.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mate de canto';
 
   @override
@@ -9145,10 +9178,31 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get multipleLines => 'Linhas de análise';
 
   @override
+  String get multipleLinesDescription => 'Definir o número de linhas de análise e setas de movimento no tabuleiro';
+
+  @override
+  String get searchTime => 'Tempo de busca';
+
+  @override
+  String get searchTimeDescription => 'Defina o tempo para avaliar novas posições';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Defina isso abaixo da contagem de threads do seu processador, a marca indica uma escolha segura';
+
+  @override
+  String get threadsDescriptionMobile => 'Usar mais threads consume mais bateria para uma análise melhor';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Memória';
+
+  @override
+  String get memoryDescription => 'Valores mais altos podem melhorar o desempenho';
 
   @override
   String get infiniteAnalysis => 'Análise infinita';
@@ -10560,9 +10614,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get keyEnterOrExitVariation => 'entrar/sair da variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicite análise do computador, Aprenda com seus erros';
 
   @override
   String get keyPreviousBranch => 'Branch anterior';

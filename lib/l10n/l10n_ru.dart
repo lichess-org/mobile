@@ -1945,6 +1945,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Взятие или размен фигуры, защищающей другую фигуру, с последующим взятием фигуры, оставшейся без защиты.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Угловой мат';
 
   @override
@@ -2719,10 +2725,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get multipleLines => 'Множество вариантов';
 
   @override
+  String get multipleLinesDescription => 'Задаёт число строк вариантов и стрелок ходов на доске';
+
+  @override
+  String get searchTime => 'Время поиска';
+
+  @override
+  String get searchTimeDescription => 'Задаёт время для оценки новой позиции';
+
+  @override
+  String get threads => 'Потоки';
+
+  @override
+  String get threadsDescription => 'Установите количество не больше числа потоков процессора, лучше на предлагаемой отметке';
+
+  @override
+  String get threadsDescriptionMobile => 'Больше потоков быстрее расходует заряд батареи, но лучше для анализа';
+
+  @override
   String get cpus => 'Потоки';
 
   @override
   String get memory => 'Память';
+
+  @override
+  String get memoryDescription => 'Более высокие значения могут повысить производительность';
 
   @override
   String get infiniteAnalysis => 'Бесконечный анализ';
@@ -4134,9 +4161,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'ввести/закрыть вариант';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Запросите компьютерный анализ, Учитесь над своими ошибками';
 
   @override
   String get keyPreviousBranch => 'Предыдущая ветка';

@@ -137,6 +137,7 @@ abstract class AnalysisBoardState<
       orientation: analysisState.pov,
       fen: fen,
       lastMove: analysisState.lastMove,
+      explosionSquares: analysisState.explosionSquares,
       game: (interactive && currentPosition != null)
           ? boardPrefs.toGameData(
               variant: analysisState.variant,

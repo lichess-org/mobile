@@ -1889,6 +1889,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Бір тасты қорғап тұрған басқа тасты басып алсаңыз, әлгі тас қорғаусыз қалып, оны басып алуға жол ашылады.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsKk extends AppLocalizations {
   String get multipleLines => 'Бірнеше жол';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Процессор';
 
   @override
   String get memory => 'Жад';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Шектеусіз талдау';
@@ -4078,9 +4105,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'тармаққа кіру/шығу';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Компьютерлік талдауды бастаңыз, Әр қателіктен сабақ алыңыз';
 
   @override
   String get keyPreviousBranch => 'Алдынғы тармақ';

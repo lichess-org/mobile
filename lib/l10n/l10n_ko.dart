@@ -281,7 +281,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePreviousPage => '이전';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
   String get activityActivity => '활동';
@@ -1861,6 +1861,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 지켜지지 않는 기물을 잡을 수 있게 됩니다.';
 
   @override
+  String get puzzleThemeCollinearMove => '일직선 위 수';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => '마주 보는 두 기물이 있을 때, 한 말이 공격선을 따라 이동하되 상대 말을 잡지 않는 수입니다.';
+
+  @override
   String get puzzleThemeCornerMate => '코너 메이트';
 
   @override
@@ -2635,10 +2641,31 @@ class AppLocalizationsKo extends AppLocalizations {
   String get multipleLines => '다중 라인 수';
 
   @override
+  String get multipleLinesDescription => '평가 라인과 보드에 그릴 화살표의 개수 설정';
+
+  @override
+  String get searchTime => '검색 시간';
+
+  @override
+  String get searchTimeDescription => '새로운 포지션을 평가할 시간 설정';
+
+  @override
+  String get threads => '스레드';
+
+  @override
+  String get threadsDescription => '이 값을 CPU 스레드 수보다 낮게 설정하세요. 안전하고 적절한 값을 표시해 두었습니다';
+
+  @override
+  String get threadsDescriptionMobile => '스레드가 많을수록 더 나은 분석을 위해 배터리를 많이 소모합니다';
+
+  @override
   String get cpus => 'CPU 수';
 
   @override
   String get memory => '메모리';
+
+  @override
+  String get memoryDescription => '값이 클수록 성능이 개선될 수 있습니다';
 
   @override
   String get infiniteAnalysis => '무한 분석';
@@ -3924,7 +3951,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String aboutX(String param) {
-    return '$param에 대해';
+    return '$param 정보';
   }
 
   @override
@@ -4050,9 +4077,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => '라인 들어가기/나오기';
-
-  @override
-  String get keyRequestComputerAnalysis => '컴퓨터 분석 요청, 실수에서 배우기';
 
   @override
   String get keyPreviousBranch => '이전 부';

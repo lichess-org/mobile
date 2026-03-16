@@ -1941,6 +1941,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Адцягненне або ўзяцце фігуры, якая з\'яўляца крытычнай для абароны іншай фігуры, што дазваляе ўзяце неабароненую фігуру наступным ходам.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2715,10 +2721,31 @@ class AppLocalizationsBe extends AppLocalizations {
   String get multipleLines => 'Дадатковыя хады';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Працэсары';
 
   @override
   String get memory => 'Памяць';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Бясконцы аналіз';
@@ -4130,9 +4157,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'увайсці/выйсці з варыянту';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Папярэдні варыянт';

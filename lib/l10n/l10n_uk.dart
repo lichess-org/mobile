@@ -281,7 +281,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePreviousPage => 'Попередня';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
   String get activityActivity => 'Активність';
@@ -1945,6 +1945,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Захоплення фігури, що захищає іншу фігуру, дозволяє захопити незахищену фігуру наступним ходом.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Паралельний хід';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Дві протилежні фігури знаходяться на одній лінії та одна з них пересувається по лінії без взяття фігури.';
+
+  @override
   String get puzzleThemeCornerMate => 'Кутовий мат';
 
   @override
@@ -2719,10 +2725,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get multipleLines => 'Кількість стрілок';
 
   @override
+  String get multipleLinesDescription => 'Укажіть кількість стрілок аналізу на дошці';
+
+  @override
+  String get searchTime => 'Час пошуку';
+
+  @override
+  String get searchTimeDescription => 'Установити час для оцінки нових позицій';
+
+  @override
+  String get threads => 'Потоки';
+
+  @override
+  String get threadsDescription => 'Установіть значення нижче за вашу кількість потоків процесора. Галочки позначають безпечний вибір';
+
+  @override
+  String get threadsDescriptionMobile => 'Більше потоків буде споживати більше заряду акумулятора, але надаватиме кращий аналіз';
+
+  @override
   String get cpus => 'Потоки';
 
   @override
   String get memory => 'Пам\'ять';
+
+  @override
+  String get memoryDescription => 'Вищі значення можуть підвищити продуктивність';
 
   @override
   String get infiniteAnalysis => 'Нескінченний аналіз';
@@ -4134,9 +4161,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'зайти/вийти з варіанту';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Зробити запит на комп\'ютерний аналіз, Учіться на своїх помилках';
 
   @override
   String get keyPreviousBranch => 'Попередній варіант';

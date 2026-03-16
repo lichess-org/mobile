@@ -132,8 +132,15 @@
   <string name="pinnedPieces">Peças cravadas</string>
   <string name="checkableKing">Rei possível de xeque</string>
   <string name="multipleLines">Linhas de análise</string>
+  <string name="multipleLinesDescription">Definir o número de linhas de análise e setas de movimento no tabuleiro</string>
+  <string name="searchTime">Tempo de busca</string>
+  <string name="searchTimeDescription">Defina o tempo para avaliar novas posições</string>
+  <string name="threads">Threads</string>
+  <string name="threadsDescription">Defina isso abaixo da contagem de threads do seu processador, a marca indica uma escolha segura</string>
+  <string name="threadsDescriptionMobile">Usar mais threads consume mais bateria para uma análise melhor</string>
   <string name="cpus">CPUs</string>
   <string name="memory">Memória</string>
+  <string name="memoryDescription">Valores mais altos podem melhorar o desempenho</string>
   <string name="infiniteAnalysis">Análise infinita</string>
   <string name="removesTheDepthLimit">Remove o limite de profundidade, o que aquece seu computador</string>
   <string name="blunder">Capivarada</string>
@@ -721,7 +728,6 @@
   <string name="keyCycleSelectedVariation">Alternar entre as variantes</string>
   <string name="keyShowOrHideComments">mostrar/ocultar comentários</string>
   <string name="keyEnterOrExitVariation">entrar/sair da variante</string>
-  <string name="keyRequestComputerAnalysis">Solicite análise do computador, Aprenda com seus erros</string>
   <string name="keyPreviousBranch">Branch anterior</string>
   <string name="keyNextBranch">Próximo branch</string>
   <string name="toggleVariationArrows">Ativar/desativar setas</string>

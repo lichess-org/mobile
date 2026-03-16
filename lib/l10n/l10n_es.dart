@@ -281,7 +281,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'O importa un archivo PGN';
 
   @override
   String get activityActivity => 'Actividad';
@@ -1889,6 +1889,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminar una pieza fundamental para la defensa de otra, permitiendo capturar la pieza, ahora indefensa, en el futuro.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Movimiento colinear';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Dos piezas opuestas se enfrentan entre sí, y una se desliza a lo largo de la línea de ataque sin capturar la pieza enemiga.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mate de la esquina';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get multipleLines => 'Múltiples líneas';
 
   @override
+  String get multipleLinesDescription => 'Establece la cantidad de líneas de evaluación y de flechas de movimiento en el tablero';
+
+  @override
+  String get searchTime => 'Tiempo de búsqueda';
+
+  @override
+  String get searchTimeDescription => 'Establece el tiempo para evaluar posiciones nuevas';
+
+  @override
+  String get threads => 'Hilos';
+
+  @override
+  String get threadsDescription => 'Establecer número inferior de hilos de la CPU; las marcas dan una elección segura';
+
+  @override
+  String get threadsDescriptionMobile => 'Más hilos darán un mejor análisis, aunque usará más batería';
+
+  @override
   String get cpus => 'Procesadores';
 
   @override
   String get memory => 'Memoria';
+
+  @override
+  String get memoryDescription => 'Valores más altos pueden mejorar el rendimiento';
 
   @override
   String get infiniteAnalysis => 'Análisis infinito';
@@ -4078,9 +4105,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'entrar/salir de la variante';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicitar análisis del ordenador, aprende de tus errores';
 
   @override
   String get keyPreviousBranch => 'Rama anterior';

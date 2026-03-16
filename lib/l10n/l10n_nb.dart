@@ -281,7 +281,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -962,7 +962,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastMatchHistory => 'Match History';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Lagresultater';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1017,7 +1017,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastFinals => 'Finaler';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Kvalitet';
 
   @override
   String broadcastGameX(String param) {
@@ -1889,6 +1889,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Hjørnematt';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsNb extends AppLocalizations {
   String get multipleLines => 'Flere varianter';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Prosessorer';
 
   @override
   String get memory => 'Minne';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -2826,7 +2853,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get signupUsernameHint => 'Velg et sømmelig brukernavn. Det kan ikke endres, og alle kontoer med usømmelige brukernavn vil bli avsluttet.';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Vi sender deg bare e-poster om kontoen din og vil aldri dele e-postadressen din.';
 
   @override
   String get password => 'Passord';
@@ -4078,9 +4105,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Gå inn i/ut av variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Be om maskinanalyse, lær av feilene dine';
 
   @override
   String get keyPreviousBranch => 'Forrige gren';

@@ -1889,6 +1889,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsEt extends AppLocalizations {
   String get multipleLines => 'Mitu liini';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPU-d';
 
   @override
   String get memory => 'Mälu';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Lõputu analüüs';
@@ -4078,9 +4105,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'lisa/eemalda variatsioon';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

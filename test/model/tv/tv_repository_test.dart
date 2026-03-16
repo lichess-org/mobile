@@ -23,8 +23,7 @@ void main() {
 
       expect(result, isA<TvChannels>());
 
-      // supported channels only
-      expect(result.length, 13);
+      expect(result.length, 16);
 
       expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
     });

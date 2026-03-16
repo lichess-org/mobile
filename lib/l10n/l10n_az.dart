@@ -1887,6 +1887,12 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Bir fiquru müdafiə edən başqa bir fiquru ələ keçirərək, müdafiəsiz qalan digər fiquru da növbəti gedişdə ələ keçirin.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2661,10 +2667,31 @@ class AppLocalizationsAz extends AppLocalizations {
   String get multipleLines => 'Oxların sayı';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPU sayı';
 
   @override
   String get memory => 'RAM';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Sonsuz təhlil';
@@ -4076,9 +4103,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'giriş/çıxış variasiyası';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
   String get keyPreviousBranch => 'Previous branch';

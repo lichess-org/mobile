@@ -3340,6 +3340,18 @@ abstract class AppLocalizations {
   /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
   String get puzzleThemeCapturingDefenderDescription;
 
+  /// No description provided for @puzzleThemeCollinearMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Collinear move'**
+  String get puzzleThemeCollinearMove;
+
+  /// No description provided for @puzzleThemeCollinearMoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.'**
+  String get puzzleThemeCollinearMoveDescription;
+
   /// No description provided for @puzzleThemeCornerMate.
   ///
   /// In en, this message translates to:
@@ -4864,6 +4876,42 @@ abstract class AppLocalizations {
   /// **'Multiple lines'**
   String get multipleLines;
 
+  /// No description provided for @multipleLinesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set number of evaluation lines and move arrows on the board'**
+  String get multipleLinesDescription;
+
+  /// No description provided for @searchTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Search time'**
+  String get searchTime;
+
+  /// No description provided for @searchTimeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set time to evaluate fresh positions'**
+  String get searchTimeDescription;
+
+  /// No description provided for @threads.
+  ///
+  /// In en, this message translates to:
+  /// **'Threads'**
+  String get threads;
+
+  /// No description provided for @threadsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set this below your CPU\'s thread count, the ticks mark a good safe choice'**
+  String get threadsDescription;
+
+  /// No description provided for @threadsDescriptionMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'More threads will use more battery for better analysis'**
+  String get threadsDescriptionMobile;
+
   /// No description provided for @cpus.
   ///
   /// In en, this message translates to:
@@ -4875,6 +4923,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Memory'**
   String get memory;
+
+  /// No description provided for @memoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher values may improve performance'**
+  String get memoryDescription;
 
   /// No description provided for @infiniteAnalysis.
   ///
@@ -7509,12 +7563,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'enter/exit variation'**
   String get keyEnterOrExitVariation;
-
-  /// No description provided for @keyRequestComputerAnalysis.
-  ///
-  /// In en, this message translates to:
-  /// **'Request computer analysis, Learn from your mistakes'**
-  String get keyRequestComputerAnalysis;
 
   /// No description provided for @keyPreviousBranch.
   ///

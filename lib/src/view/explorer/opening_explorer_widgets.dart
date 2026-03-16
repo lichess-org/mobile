@@ -73,7 +73,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final void Function(NormalMove)? onMoveSelected;
+  final void Function(Move)? onMoveSelected;
   final bool isIndexing;
 
   final bool _isLoading;
@@ -136,18 +136,18 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
             children: [
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(padding: kExplorerTableRowPadding, child: Text(move.san)),
               ),
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(
                   padding: kExplorerTableRowPadding,
                   child: Text('${formatNum(move.games)} ($percentGames%)'),
                 ),
               ),
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(
                   padding: kExplorerTableRowPadding,
                   child: _WinPercentageChart(

@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 void showConfigureGameSheet(
   BuildContext context, {
   required bool isDismissible,
+  required Variant initialVariant,
   String? initialFen,
 }) {
   final double screenHeight = MediaQuery.sizeOf(context).height;
@@ -29,13 +30,18 @@ void showConfigureGameSheet(
     isDismissible: isDismissible,
     constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
     builder: (BuildContext context) {
-      return _ConfigureOverTheBoardGameSheet(initialFen: initialFen);
+      return _ConfigureOverTheBoardGameSheet(
+        initialVariant: initialVariant,
+        initialFen: initialFen,
+      );
     },
   );
 }
 
 class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
-  const _ConfigureOverTheBoardGameSheet({this.initialFen});
+  const _ConfigureOverTheBoardGameSheet({required this.initialVariant, this.initialFen});
+
+  final Variant initialVariant;
 
   final String? initialFen;
 
@@ -52,8 +58,9 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 
   @override
   void initState() {
-    final gameState = ref.read(overTheBoardGameControllerProvider);
-    chosenVariant = gameState.game.meta.variant;
+    chosenVariant = widget.initialVariant == Variant.fromPosition
+        ? Variant.standard
+        : widget.initialVariant;
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
     chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;

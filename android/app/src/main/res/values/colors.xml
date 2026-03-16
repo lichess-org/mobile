@@ -3,4 +3,5 @@
     <color name="ic_launcher_background">#131416</color>
     <color name="bg_splash">#FFFFFF</color>
     <color name="ic_splash">#000000</color>
+    <color name="ic_splash_grey">#AAAAAA</color>
 </resources>

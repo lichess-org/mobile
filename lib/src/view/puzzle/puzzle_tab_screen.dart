@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -516,10 +515,11 @@ class PuzzleAnglePreview extends ConsumerWidget {
                     onPressed: (context) async {
                       final service = await ref.read(puzzleServiceProvider.future);
                       if (context.mounted) {
-                        service.deleteBatch(
+                        await service.deleteBatch(
                           userId: ref.read(authControllerProvider)?.user.id,
                           angle: angle,
                         );
+                        ref.invalidate(savedBatchesProvider);
                       }
                     },
                     spacing: 8.0,
@@ -531,7 +531,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
               ),
               child: SmallBoardPreview(
                 orientation: preview?.orientation ?? Side.white,
-                fen: preview?.initialFen ?? kEmptyFen,
+                fen: preview?.initialFen ?? kEmptyFEN,
                 lastMove: preview?.initialMove,
                 description: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

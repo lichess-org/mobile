@@ -2,12 +2,13 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -158,7 +159,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         youAre: gameState.orientation,
                         isBoardTurned: false,
                       ),
-                      fen: position.fen,
+                      boardParams: GameBoardParams.readonly(
+                        fen: position.fen,
+                        variant: gameState.game.meta.variant,
+                        pockets: position.pockets,
+                      ),
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,
                       ),
@@ -174,6 +179,12 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         ref.read(_tvGameCtrl.notifier).goToMove(index);
                       },
                       lastMove: game.moveAt(gameState.stepCursor),
+                      explosionSquares: gameState.stepCursor > 0
+                          ? atomicExplosionSquares(
+                              game.positionAt(gameState.stepCursor - 1),
+                              game.moveAt(gameState.stepCursor),
+                            )
+                          : null,
                       userActionsBar: BottomBar(
                         children: [
                           BottomBarButton(
@@ -218,7 +229,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       topTable: LoadingPlayerWidget(),
                       bottomTable: LoadingPlayerWidget(),
                       orientation: Side.white,
-                      fen: kEmptyFEN,
+                      boardParams: GameBoardParams.emptyBoard,
                       moves: [],
                       userActionsBar: BottomBar.empty(),
                     ),
@@ -226,10 +237,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
                     return const GameLayout(
-                      topTable: kEmptyWidget,
-                      bottomTable: kEmptyWidget,
                       orientation: Side.white,
-                      fen: kEmptyFEN,
+                      boardParams: GameBoardParams.emptyBoard,
                       errorMessage: 'Could not load TV stream.',
                       moves: [],
                     );

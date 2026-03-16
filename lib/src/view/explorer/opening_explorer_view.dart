@@ -33,7 +33,7 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
   final Side pov;
   final Position position;
   final Opening? opening;
-  final void Function(NormalMove) onMoveSelected;
+  final void Function(Move) onMoveSelected;
   final bool scrollable;
 
   /// Whether to display recent and top games in the explorer.

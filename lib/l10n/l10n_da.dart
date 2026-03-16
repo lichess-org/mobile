@@ -281,7 +281,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1889,6 +1889,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Tag en brik som er kritisk i forsvaret af en anden brik, så det er muligt at tage den uforsvarede brik på et efterfølgende træk.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kollineært træk';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'To modspillende brikker står over for hinanden, og den ene glider langs angrebslinjen uden at slå den fjendtlige brik.';
+
+  @override
   String get puzzleThemeCornerMate => 'Hjørnemat';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsDa extends AppLocalizations {
   String get multipleLines => 'Flere linjer';
 
   @override
+  String get multipleLinesDescription => 'Angiv antal evalueringslinjer og trækpile på brættet';
+
+  @override
+  String get searchTime => 'Søgetid';
+
+  @override
+  String get searchTimeDescription => 'Indstil tid til evaluering af friske positioner';
+
+  @override
+  String get threads => 'Tråde';
+
+  @override
+  String get threadsDescription => 'Indstil dette til under din CPU\'s trådantal, afkrydsningerne markerer er et godt og sikkert valg';
+
+  @override
+  String get threadsDescriptionMobile => 'Flere tråde vil bruge mere batteri til bedre analyse';
+
+  @override
   String get cpus => 'CPU\'er';
 
   @override
   String get memory => 'Hukommelse';
+
+  @override
+  String get memoryDescription => 'Højere værdier kan forbedre ydeevnen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -4078,9 +4105,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Start/slut variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Anmod om computeranalyse, Lær af dine fejl';
 
   @override
   String get keyPreviousBranch => 'Forrige gren';

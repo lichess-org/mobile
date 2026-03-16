@@ -1941,6 +1941,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'הסרת כלי קריטי להגנה על כלי אחר, המאפשרת להכות את הכלי החשוף כעת במסע הבא.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2715,10 +2721,31 @@ class AppLocalizationsHe extends AppLocalizations {
   String get multipleLines => 'המשכים מקבילים';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'מעבדים';
 
   @override
   String get memory => 'זיכרון';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'ניתוח אינסופי';
@@ -4130,9 +4157,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'כנס לגרסה או צא ממנה';
-
-  @override
-  String get keyRequestComputerAnalysis => 'בקשו ניתוח ממוחשב, למדו מטעויותיכם';
 
   @override
   String get keyPreviousBranch => 'הענף הקודם';

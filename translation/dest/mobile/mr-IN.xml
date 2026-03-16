@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">मुखपृष्ठ</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">थेट प्रसारक</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">हे पृष्ठ पाहण्यासाठी तुम्हाला लॉग इन करावे लागेल.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">नवीन खेळ</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">कोणताही निकाल नाही</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">कृपया ह्याची नोंद घ्यावी की जुन्या अँप व वेबसाईटचे वैशिष्ट्ये सध्या उपलब्ध नाही आहेत, पण आम्ही नेहमी नवीन 
 वैशिष्ट्यांचे आगमन करत असतो.</string>
@@ -49,7 +50,7 @@
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">पकडलेल्या सोंगट्या</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">प्रतिमा निवडा</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">दस्तुरी पार्श्वभूमी फक्त कृष्णरीतात काम करते. एक गडद चित्र शिफारसीत आहे.</string>
-  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">चित्राला अस्पष्ट करा</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">चित्राला अंधुक करा</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">पट लपवा</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">पट दाखवा</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">इतर पार्श्वभूमी प्रदर्शित करण्यासाठी बाजूला जा</string>
@@ -86,4 +87,7 @@
   <string name="displayModeCompact" comment="">संक्षिप्त</string>
   <string name="displayModeDetailed" comment="">तपशीलवार</string>
   <string name="openingExplorerNotAvailableOffline" comment="">ओपनिंग अन्वेषक ऑफलाईन उपलब्ध नाही.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">आव्हान बनवले गेले आहे. खेळ चालू झ्हाल्यावर तुम्हाला सूचित केले जाईल. \nतुम्ही गृहविभागातून इथे प्रवेश करू शकतात</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">अगोदरचा्‌</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">किंवा एक PGN संचिका आयात करा</string>
 </resources>

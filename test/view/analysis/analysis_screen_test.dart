@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
@@ -27,8 +28,10 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:multistockfish/multistockfish.dart';
 
+import '../../binding.dart';
 import '../../model/engine/fake_stockfish.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -110,52 +113,165 @@ void main() {
       );
     });
 
-    for (final pgn in ['', sanMoves]) {
-      testWidgets('change variant if PGN is empty, pgn: $pgn', (tester) async {
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: AnalysisScreen(
-            options: AnalysisOptions.pgn(
-              id: const StringId('standalone'),
-              orientation: Side.white,
-              pgn: pgn,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+    testWidgets('change variant in standalone analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(options: AnalysisOptions.standalone(variant: Variant.standard)),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+
+      expect(find.text('Variant'), findsOneWidget);
+
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      expect(find.textContaining('Standard'), findsOneWidget);
+      expect(find.textContaining('Chess960'), findsNothing);
+      expect(find.textContaining('From Position'), findsNothing);
+      expect(find.textContaining('Antichess'), findsOneWidget);
+      expect(find.textContaining('King of the Hill'), findsOneWidget);
+      expect(find.textContaining('Three Check'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
+      expect(find.textContaining('Horde'), findsOneWidget);
+      expect(find.textContaining('Racing Kings'), findsOneWidget);
+      expect(find.textContaining('Crazyhouse'), findsOneWidget);
+
+      await tester.tap(find.textContaining('Horde'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      expect(find.byType(PocketsMenu), findsNothing);
+
+      // Horde starting position should be loaded:
+      expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+
+      // Change to crazhouse, pockets should be displayed:
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Variant'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+      await tester.tap(find.textContaining('Crazyhouse'));
+      await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+
+      // One for white, one for black
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+    });
+
+    testWidgets('Cannot change variant in PGN analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            pgn: '',
+            isComputerAnalysisAllowed: false,
+            orientation: Side.white,
+            variant: Variant.standard,
           ),
-        );
+        ),
+      );
 
-        await tester.pumpWidget(app);
+      await tester.pumpWidget(app);
 
-        await tester.tap(find.bySemanticsLabel('Menu'));
-        await tester.pumpAndSettle(); // wait for menu to open
+      expect(find.byType(PocketsMenu), findsNothing);
 
-        final canChangeVariant = pgn.isEmpty;
-        expect(find.text('Variant'), canChangeVariant ? findsOneWidget : findsNothing);
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
 
-        if (canChangeVariant) {
-          await tester.tap(find.text('Variant'));
-          await tester.pumpAndSettle(); // wait for dialog to open
+      expect(find.text('Variant'), findsNothing);
+    });
 
-          expect(find.textContaining('Standard'), findsOneWidget);
-          expect(find.textContaining('Chess960'), findsNothing);
-          expect(find.textContaining('From Position'), findsNothing);
-          expect(find.textContaining('Antichess'), findsOneWidget);
-          expect(find.textContaining('King of the Hill'), findsOneWidget);
-          expect(find.textContaining('Three Check'), findsOneWidget);
-          expect(find.textContaining('Atomic'), findsNothing);
-          expect(find.textContaining('Horde'), findsOneWidget);
-          expect(find.textContaining('Racing Kings'), findsOneWidget);
-          expect(find.textContaining('Crazyhouse'), findsNothing);
+    testWidgets('Crazyhouse support DropMoves for both sides', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '''
+              [Variant "Crazyhouse"]
+              [FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR[] w KQkq - 0 1"]
+              1. e4 d5 2. exd5 Qxd5
+            ''',
+            isComputerAnalysisAllowed: false,
+            variant: Variant.crazyhouse,
+          ),
+        ),
+      );
 
-          await tester.tap(find.textContaining('Horde'));
-          await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
+      await tester.pumpWidget(app);
 
-          // Horde starting position should be loaded:
-          expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
-        }
-      });
-    }
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      await playDropMove(tester, Side.white, Role.pawn, 'a4');
+      expect(find.byKey(const ValueKey('a4-whitepawn')), findsOneWidget);
+
+      // Illegal drop move for black, should not be played
+      await playDropMove(tester, Side.black, Role.queen, 'h5');
+      expect(find.byKey(const ValueKey('h5-blackqueen')), findsNothing);
+
+      await playDropMove(tester, Side.black, Role.pawn, 'h5');
+      expect(find.byKey(const ValueKey('h5-blackpawn')), findsOneWidget);
+    });
+
+    testWidgets('Continue against computer', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Play against computer'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
+
+    testWidgets('Continue OTB', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.atomic,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Continue from here'));
+      await tester.pumpAndSettle(); // wait for dialog to open
+
+      await tester.tap(find.text('Over the board'));
+      await tester.pumpAndSettle(); // wait for play menu to open
+      // Variant we set previously should be preselected
+      expect(find.text('Atomic'), findsOneWidget);
+    });
   });
 
   group('Analysis Tree View', () {
@@ -825,6 +941,58 @@ void main() {
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsNothing);
       });
+
+      testWidgets('can be tapped to play a drop move in crazyhouse', (tester) async {
+        final binding = TestLichessBinding.ensureInitialized();
+        final stockfish = FakeCrazyhouseDropMoveStockfish();
+        binding.stockfish = stockfish;
+        addTearDown(() => binding.stockfish = FakeStockfish());
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          defaultPreferences: {
+            PrefCategory.engineEvaluation.storageKey: jsonEncode(
+              EngineEvaluationPrefState.defaults
+                  .copyWith(numEvalLines: 1, isEnabled: true)
+                  .toJson(),
+            ),
+          },
+          home: const AnalysisScreen(
+            options: AnalysisOptions.pgn(
+              id: StringId('standalone'),
+              orientation: Side.white,
+              // Position after 1.e4 d5 2.exd5 Qxd5: white has a pawn in pocket
+              pgn: '''
+                [Variant "Crazyhouse"]
+                [FEN "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3"]
+              ''',
+              isComputerAnalysisAllowed: true,
+              variant: Variant.crazyhouse,
+            ),
+          ),
+          overrides: {
+            webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith(
+              (_) => FakeWebSocketChannelFactory(
+                (uri) => FakeWebSocketChannel(uri, serverHandlers: {}),
+              ),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // Wait for engine to start and emit eval
+        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+        // Engine line starting with a drop move should be displayed
+        expect(find.byType(Engineline), findsOneWidget);
+
+        // Tapping the engine line plays P@c4 (drop move)
+        await tester.tap(find.byType(Engineline));
+        await tester.pumpAndSettle();
+
+        // White pawn should appear on c4 after the drop move
+        expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+      });
     });
 
     group('Engine gauge', () {
@@ -905,6 +1073,87 @@ void main() {
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(BoardShapeWidget), findsOne);
+      });
+    });
+
+    group('show threat button', () {
+      testWidgets('is visible when engine is available and position is normal', (tester) async {
+        await makeEngineTestApp(tester, pgn: 'e4 e5');
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
+      });
+
+      testWidgets('is hidden when king is in check', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          // Ends with Qxe5+: black king is in check
+          pgn: 'e4 e5 Qh5 Nf6 Qxe5+',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is checkmate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: sanMoves, // ends with checkmate
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when opponent would be in stalemate', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR w KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is hidden when position is stalemate for both sides', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "8/8/8/pp6/qp6/kp6/1p6/1K6 b - - 0 1"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsNothing);
+      });
+
+      testWidgets('is visible when position is stalemate but opponent can move', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          pgn: '''
+[Variant "From Position"]
+[FEN "5bnr/4p1pq/4Qpkr/7p/7P/4P3/PPPP1PP1/RNB1KBNR b KQ - 2 10"]
+''',
+        );
+
+        await tester.tap(find.bySemanticsLabel('Menu'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Show threat'), findsOneWidget);
       });
     });
   });
@@ -1302,7 +1551,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1394,7 +1642,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1538,7 +1785,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1607,7 +1853,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      await tester.pump();
 
       await switchToPremoveTab(tester);
 

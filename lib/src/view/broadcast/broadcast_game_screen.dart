@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -266,11 +267,11 @@ class _Body extends ConsumerWidget {
 
         final engineGaugeParams = state.engineGaugeParams(enginePrefs);
         final isLocalEvaluationEnabled = state.isEngineAvailable(enginePrefs);
-        final currentNode = state.currentNode;
         final pov = state.pov;
 
         return AnalysisLayout(
           pov: pov,
+          sideToMove: state.currentPosition.turn,
           tabController: tabController,
           boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
             roundId: roundId,
@@ -299,8 +300,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
               ? EngineLines(
                   filters: (id: state.evaluationContext.id, path: state.currentPath),
-                  savedEval: currentNode.eval,
-                  isGameOver: currentNode.position.isGameOver,
+                  analyisState: state,
                   onTapMove: ref
                       .read(
                         broadcastAnalysisControllerProvider((
@@ -475,7 +475,10 @@ class _PlayerWidget extends ConsumerWidget {
 
         final pastClocks = broadcastAnalysisState.clocks;
         final pastClock = (sideToMove == side) ? pastClocks?.parentClock : pastClocks?.clock;
-
+        final customScoring = switch (ref.watch(broadcastRoundCustomScoringProvider(roundId))) {
+          AsyncValue(value: final customScoring?, hasValue: true) => customScoring,
+          _ => null,
+        };
         return GestureDetector(
           onTap: () {
             if (player.id != null) {
@@ -503,8 +506,11 @@ class _PlayerWidget extends ConsumerWidget {
               children: [
                 if (game.isOver) ...[
                   Text(
-                    game.status.resultToString(side),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    resultString(customScoring, side, game.status),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: .bold,
+                      color: game.status.colorFor(side, context),
+                    ),
                   ),
                   const SizedBox(width: 16.0),
                 ],

@@ -281,7 +281,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePreviousPage => 'Önceki';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -1644,7 +1644,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'Maçın linki: $param';
+    return '$param oyunundan';
   }
 
   @override
@@ -1859,7 +1859,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder.';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine matı';
+  String get puzzleThemeBlindSwineMate => 'Kör Dana matı';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2x2 bir alanda işbirliği yapıyorlar.';
@@ -1887,6 +1887,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Bir taşı savunan diğer bir taşı ortadan kaldırarak savunmasız kalan taşı sonraki hamlede ele geçir.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Doğrusal hamle';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Karşılıklı duran iki taştan biri, düşman taşını ele geçirmeden saldırı hattı boyunca kayar.';
 
   @override
   String get puzzleThemeCornerMate => 'Köşe matı';
@@ -2663,10 +2669,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get multipleLines => 'Çoklu varyantlar';
 
   @override
+  String get multipleLinesDescription => 'Değerlendirme satırlarının sayısını belirleyin ve tahtadaki okları hareket ettirin';
+
+  @override
+  String get searchTime => 'Arama süresi';
+
+  @override
+  String get searchTimeDescription => 'Yeni pozisyonları değerlendirmek için zamanı ayarlayın';
+
+  @override
+  String get threads => 'Çekirdek';
+
+  @override
+  String get threadsDescription => 'Bunu işlemcinizin çekirdek sayısının altına ayarlayın, işaretler iyi ve güvenli bir seçimi gösterir';
+
+  @override
+  String get threadsDescriptionMobile => 'Daha fazla çekirdek, daha iyi analiz için daha fazla pil tüketecektir';
+
+  @override
   String get cpus => 'İşlemci';
 
   @override
   String get memory => 'Hafıza';
+
+  @override
+  String get memoryDescription => 'Daha yüksek değerler performansı artırabilir';
 
   @override
   String get infiniteAnalysis => 'Sonsuz analiz';
@@ -4078,9 +4105,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'varyasyona gir/çık';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
 
   @override
   String get keyPreviousBranch => 'Önceki dal';

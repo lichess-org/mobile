@@ -281,7 +281,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobilePreviousPage => 'Προηγούμενη';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
   String get activityActivity => 'Δραστηριότητα';
@@ -1889,6 +1889,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Συγγραμμική κίνηση';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Ματ στη γωνία';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsEl extends AppLocalizations {
   String get multipleLines => 'Πολλαπλές γραμμές';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Μνήμη';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Άπειρη ανάλυση';
@@ -4078,9 +4105,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'είσοδος / έξοδος εκδοχής';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Ζητήστε ανάλυση της παρτίδας από υπολογιστή (Μάθετε από τα λάθη σας)';
 
   @override
   String get keyPreviousBranch => 'Προηγούμενος κλάδος';

@@ -33,6 +33,11 @@ class FakeNnueService implements NnueService {
   }
 
   @override
+  Future<bool> hasOutdatedNNUEFiles() async {
+    return false;
+  }
+
+  @override
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
     return false;
   }
@@ -46,6 +51,7 @@ class FakeNnueService implements NnueService {
 /// A fake [NnueService] that simulates missing/unavailable NNUE files.
 ///
 /// - Always returns false for [checkNNUEFiles]
+/// - Always returns true for [hasOutdatedNNUEFiles]
 /// - All other behaviour is identical to [FakeNnueService]
 class FakeNnueServiceUnavailable implements NnueService {
   FakeNnueServiceUnavailable();
@@ -66,6 +72,11 @@ class FakeNnueServiceUnavailable implements NnueService {
   @override
   Future<bool> checkNNUEFiles() async {
     return false;
+  }
+
+  @override
+  Future<bool> hasOutdatedNNUEFiles() async {
+    return true;
   }
 
   @override

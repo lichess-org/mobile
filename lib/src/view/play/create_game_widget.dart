@@ -93,7 +93,9 @@ class CreateGameWidget extends ConsumerWidget {
                       showChoicePicker(
                         context,
                         title: Text(context.l10n.variant),
-                        choices: [Variant.standard, Variant.chess960],
+                        choices: playSupportedVariants
+                            .where((v) => v != Variant.fromPosition)
+                            .toList(),
                         selectedItem: playPrefs.customVariant,
                         labelBuilder: (Variant variant) => Text(variant.label),
                         onSelectedItemChanged: (Variant variant) {

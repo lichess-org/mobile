@@ -67,7 +67,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Nuova partita';
 
   @override
   String get mobileNoSearchResults => 'Nessun risultato';
@@ -245,43 +245,43 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Benvenuto nell\'app Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Visualizza Partita';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Suggerimento: Puoi aggiungere altri widget alla schermata Home o rimuovere quelli che non ti servono!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Annulla';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Personalizza';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Smetti di mostrare la minaccia';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Completati';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Vai alla mia pagina';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Compatto';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Dettagliato';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'L\'Esploratore di apertura non è disponibile offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Sfida creata: Sarai avvisato quando inizierà la partita.\\nPotrai accedervi dalla scheda Home.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Precedente';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
   String get activityActivity => 'Attività';
@@ -1889,6 +1889,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Matto nell\'angolo';
 
   @override
@@ -2663,10 +2669,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get multipleLines => 'Varianti multiple';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Processori';
 
   @override
   String get memory => 'Memoria';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Analisi infinita';
@@ -4080,9 +4107,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get keyEnterOrExitVariation => 'entra/esci dalla variante';
 
   @override
-  String get keyRequestComputerAnalysis => 'Richiedi analisi del computer, Impara dai tuoi errori';
-
-  @override
   String get keyPreviousBranch => 'Variante precedente';
 
   @override
@@ -5000,7 +5024,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tags => 'Tag';
 
   @override
-  String get enPassant => 'En passant rights';
+  String get enPassant => 'Regole En passant';
 
   @override
   String opponentLeftCounter(int count) {

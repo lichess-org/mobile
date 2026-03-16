@@ -390,12 +390,13 @@ class _BottomBar extends ConsumerWidget {
               if (editorState.pgn != null && pieceCount > 0 && pieceCount <= 32)
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.continueFromHere),
-                  onPressed: () => _showContinueFromHereMenu(context, editorState.fen),
+                  onPressed: () =>
+                      _showContinueFromHereMenu(context, editorState.variant, editorState.fen),
                 ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFen);
+                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
                 },
               ),
             ],
@@ -447,20 +448,21 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
-  Future<void> _showContinueFromHereMenu(BuildContext context, String fen) {
+  Future<void> _showContinueFromHereMenu(BuildContext context, Variant variant, String fen) {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(OfflineComputerGameScreen.buildRoute(context, initialFen: fen)),
+          onPressed: () => Navigator.of(context).push(
+            OfflineComputerGameScreen.buildRoute(context, initialVariant: variant, initialFen: fen),
+          ),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () =>
-              Navigator.of(context).push(OverTheBoardScreen.buildRoute(context, initialFen: fen)),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OverTheBoardScreen.buildRoute(context, initialVariant: variant, initialFen: fen)),
         ),
       ],
     );

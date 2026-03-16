@@ -281,7 +281,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePreviousPage => 'Înapoi';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
   String get activityActivity => 'Activitate';
@@ -1917,6 +1917,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Mutare coliniară';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Două piese opuse se înfruntă una pe cealaltă, iar una mută de-a lungul liniei de atac fără a captura piesa inamică.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat în colț';
 
   @override
@@ -2691,10 +2697,31 @@ class AppLocalizationsRo extends AppLocalizations {
   String get multipleLines => 'Mutări multiple';
 
   @override
+  String get multipleLinesDescription => 'Setaţi numărul de linii de evaluare şi de săgeţi pe tablă';
+
+  @override
+  String get searchTime => 'Timp de căutare';
+
+  @override
+  String get searchTimeDescription => 'Setează timpul pentru evaluarea pozițiilor noi';
+
+  @override
+  String get threads => 'Fire de execuție';
+
+  @override
+  String get threadsDescription => 'Setați această valoare sub numărul maxim de fire de execuție al procesorului, bifele marchează o alegere sigură';
+
+  @override
+  String get threadsDescriptionMobile => 'Mai multe fire de execuţie vor folosi mai multă baterie pentru o analiză mai bună';
+
+  @override
   String get cpus => 'Procesoare';
 
   @override
   String get memory => 'Memorie';
+
+  @override
+  String get memoryDescription => 'Valorile mai mari pot îmbunătăți performanța';
 
   @override
   String get infiniteAnalysis => 'Analiză infinită';
@@ -4106,9 +4133,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'acceptă/respinge variație';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Solicită analiza calculatorului, Învață din greșelile tale';
 
   @override
   String get keyPreviousBranch => 'Ramura precedentă';

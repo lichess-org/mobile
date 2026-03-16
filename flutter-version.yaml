@@ -1,4 +1,4 @@
 # This file specifies the Flutter version used by the GitHub job and by F-Droid for releases
 
 environment:
-  flutter: 3.41.3
+  flutter: 3.41.4

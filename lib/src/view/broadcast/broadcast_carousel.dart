@@ -175,6 +175,7 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
           startsAt: null,
           finishedAt: null,
           startsAfterPrevious: false,
+          customScoring: null,
         ),
         group: null,
         roundToLinkId: BroadcastRoundId(''),

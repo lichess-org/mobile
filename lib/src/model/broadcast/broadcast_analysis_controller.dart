@@ -417,15 +417,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -556,9 +547,19 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
 @freezed
 sealed class BroadcastAnalysisState
-    with _$BroadcastAnalysisState
-    implements EvaluationMixinState, CommonAnalysisState {
+    with
+        _$BroadcastAnalysisState,
+        AnalysisExplosionMixin,
+        EvaluationMixinState<BroadcastAnalysisState>
+    implements CommonAnalysisState {
   const BroadcastAnalysisState._();
+
+  @override
+  ViewRoot get analysisRoot => root;
+
+  @override
+  BroadcastAnalysisState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory BroadcastAnalysisState({
     /// Broadcast game ID
