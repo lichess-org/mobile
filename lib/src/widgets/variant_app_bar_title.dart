@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -15,9 +16,17 @@ class VariantLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = DefaultTextStyle.of(context).style;
+    final alignment = Platform.isAndroid ? CrossAxisAlignment.start : CrossAxisAlignment.center;
+    final descriptionStyle = Platform.isAndroid
+        ? TextStyle(
+            height: 1.2,
+            fontSize: 12.0,
+            color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+          )
+        : Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity));
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: alignment,
       children: [
         Text.rich(
           TextSpan(
@@ -31,12 +40,7 @@ class VariantLabel extends StatelessWidget {
             ],
           ),
         ),
-        Text(
-          variant.description(context.l10n),
-          style: Styles.subtitle.copyWith(
-            color: textShade(context, Styles.subtitleOpacity),
-          ),
-        ),
+        Text(variant.description(context.l10n), style: descriptionStyle),
       ],
     );
   }
