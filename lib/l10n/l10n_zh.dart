@@ -5023,6 +5023,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clearSearch => '清除搜索';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return '未找到“$param”的结果';
+  }
+
+  @override
   String get tags => '标签';
 
   @override

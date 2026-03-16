@@ -5051,6 +5051,11 @@ class AppLocalizationsHu extends AppLocalizations {
   String get clearSearch => 'Keresési előzmények törlése';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Címkék';
 
   @override

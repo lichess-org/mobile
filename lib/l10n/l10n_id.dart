@@ -5027,6 +5027,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get clearSearch => 'Bersihkan pencarian';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Label';
 
   @override

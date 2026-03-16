@@ -5051,6 +5051,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get clearSearch => 'پاکیدنِ جستجو';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'برچسب‌ها';
 
   @override

@@ -5079,6 +5079,11 @@ class AppLocalizationsBs extends AppLocalizations {
   String get clearSearch => 'Obriši pretragu';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Oznake';
 
   @override

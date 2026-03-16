@@ -1513,6 +1513,7 @@
   "offline": "deconectat",
   "search": "Căutare",
   "clearSearch": "Șterge căutarea",
+  "thereAreNoResultsForX": "Niciun rezultat pentru \"{param}\"",
   "tags": "Etichete",
   "enPassant": "En passant legale",
   "opponentLeftCounter": "{count, plural, =1{Adversarul tău a părăsit jocul. Poți revendica victoria peste o secundă.} few{Adversarul tău a părăsit jocul. Poți revendica victoria peste {count} secunde.} other{Adversarul tău a părăsit jocul. Poți revendica victoria peste {count} de secunde.}}",

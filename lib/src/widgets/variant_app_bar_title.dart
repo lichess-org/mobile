@@ -34,8 +34,8 @@ class VariantLabel extends StatelessWidget {
         Text(
           variant.description(context.l10n),
           style: Styles.subtitle.copyWith(
-                        color: textShade(context, Styles.subtitleOpacity),
-                      ),
+            color: textShade(context, Styles.subtitleOpacity),
+          ),
         ),
       ],
     );

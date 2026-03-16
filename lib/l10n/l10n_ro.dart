@@ -5079,6 +5079,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get clearSearch => 'Șterge căutarea';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Niciun rezultat pentru \"$param\"';
+  }
+
+  @override
   String get tags => 'Etichete';
 
   @override

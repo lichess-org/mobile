@@ -1975,10 +1975,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Взятие или размен фигуры, защищающей другую фигуру, с последующим взятием фигуры, оставшейся без защиты.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Коллинеарный ход';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Две противоположные фигуры видят друг друга, и одна передвигается по линии боя, не снимая фигуру противника.';
 
   @override
   String get puzzleThemeCornerMate => 'Угловой мат';
@@ -5105,6 +5105,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистить поиск';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Нет результатов для «$param»';
+  }
 
   @override
   String get tags => 'Теги';

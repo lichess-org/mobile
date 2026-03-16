@@ -5107,6 +5107,11 @@ class AppLocalizationsSl extends AppLocalizations {
   String get clearSearch => 'Počisti iskanje';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'Oznake';
 
   @override

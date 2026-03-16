@@ -5051,6 +5051,11 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get clearSearch => 'Suechi lösche';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Kei Resultat für \"$param\"';
+  }
+
+  @override
   String get tags => 'Tags';
 
   @override

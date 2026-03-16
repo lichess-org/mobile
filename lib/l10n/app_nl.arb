@@ -1513,6 +1513,7 @@
   "offline": "offline",
   "search": "Zoeken",
   "clearSearch": "Zoekopdracht wissen",
+  "thereAreNoResultsForX": "Geen resultaten voor \"{param}\"",
   "tags": "Labels",
   "enPassant": "En passant",
   "opponentLeftCounter": "{count, plural, =1{Je tegenstander heeft het spel verlaten. Je kan de overwinning opeisen over {count} seconde.} other{Je tegenstander speelt niet verder. Je kunt de overwinning opeisen over {count} seconden.}}",

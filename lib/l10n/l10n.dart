@@ -9280,6 +9280,12 @@ abstract class AppLocalizations {
   /// **'Clear search'**
   String get clearSearch;
 
+  /// No description provided for @thereAreNoResultsForX.
+  ///
+  /// In en, this message translates to:
+  /// **'No results for \"{param}\"'**
+  String thereAreNoResultsForX(String param);
+
   /// No description provided for @tags.
   ///
   /// In en, this message translates to:

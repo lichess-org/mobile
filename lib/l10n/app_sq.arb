@@ -1468,6 +1468,7 @@
   "offline": "jashtë linje",
   "search": "Kërko",
   "clearSearch": "Spastro kërkimin",
+  "thereAreNoResultsForX": "S’ka përfundime për “{param}”",
   "tags": "Etiketa",
   "opponentLeftCounter": "{count, plural, =1{Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas {count} sekondash.} other{Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas {count} sekondash.}}",
   "mateInXHalfMoves": "{count, plural, =1{Mat në {count} gjysmë lëvizje} other{Mat në {count} gjysmë lëvizje}}",

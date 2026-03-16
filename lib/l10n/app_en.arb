@@ -2816,6 +2816,14 @@
   "offline": "offline",
   "search": "Search",
   "clearSearch": "Clear search",
+  "thereAreNoResultsForX": "No results for \"{param}\"",
+  "@thereAreNoResultsForX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "tags": "Tags",
   "enPassant": "En passant rights",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",

@@ -5051,6 +5051,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get clearSearch => 'Εκκαθάριση πεδίου αναζήτησης';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Δε βρέθηκαν αποτελέσματα για το \"$param\"';
+  }
+
+  @override
   String get tags => 'Ετικέτες';
 
   @override

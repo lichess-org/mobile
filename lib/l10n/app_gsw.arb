@@ -1513,6 +1513,7 @@
   "offline": "offline",
   "search": "Suechi",
   "clearSearch": "Suechi lösche",
+  "thereAreNoResultsForX": "Kei Resultat für \"{param}\"",
   "tags": "Tags",
   "enPassant": "En passant",
   "opponentLeftCounter": "{count, plural, =1{Din Gägner hät s'Schpiel verlah. Du chasch in {count} Sekunde de Sieg beaschpruche} other{Din Gägner hät d'Partie verlah, du chasch in {count} Sekunde din Sieg beaschpruche}}",

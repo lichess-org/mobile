@@ -1510,6 +1510,7 @@
   "offline": "offline",
   "search": "Szukaj",
   "clearSearch": "Wyczyść wyszukiwanie",
+  "thereAreNoResultsForX": "Brak wyników dla \"{param}\"",
   "tags": "Tagi",
   "enPassant": "Bicie w przelocie",
   "opponentLeftCounter": "{count, plural, =1{Przeciwnik opuścił grę. Możesz ogłosić wygraną za {count} sekundę.} few{Przeciwnik opuścił grę. Możesz ogłosić wygraną za {count} sekundy.} many{Przeciwnik opuścił grę. Możesz ogłosić wygraną za {count} sekund.} other{Przeciwnik opuścił grę. Możesz ogłosić wygraną za {count} sekund.}}",

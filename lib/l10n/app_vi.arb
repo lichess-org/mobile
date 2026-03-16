@@ -1513,6 +1513,7 @@
   "offline": "ngoại tuyến",
   "search": "Tìm kiếm",
   "clearSearch": "Xóa nội dung tìm kiếm",
+  "thereAreNoResultsForX": "Không có kết quả nào cho \"{param}\"",
   "tags": "Thẻ",
   "enPassant": "Bắt tốt qua đường",
   "opponentLeftCounter": "{count, plural, other{Đối thủ đã rời khỏi ván cờ. Bạn có thể tuyên bố thắng cuộc trong {count} giây.}}",

@@ -5163,6 +5163,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearSearch => 'مسح البحث';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
+
+  @override
   String get tags => 'تصنيفات';
 
   @override

@@ -1513,6 +1513,7 @@
   "offline": "fora de línia",
   "search": "Cerca",
   "clearSearch": "Neteja la cerca",
+  "thereAreNoResultsForX": "No hi ha resultats per \"{param}\"",
   "tags": "Etiquetes",
   "enPassant": "Captura al pas",
   "opponentLeftCounter": "{count, plural, =1{El teu contrincant ha abandonat la partida. Pots reclamar la victòria en {count} segon.} other{El teu contrincant ha abandonat la partida. Pots reclamar la victòria en {count} segons.}}",

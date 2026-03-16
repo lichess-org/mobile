@@ -5051,6 +5051,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get clearSearch => 'Ryd søgning';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for \"$param\"';
+  }
+
+  @override
   String get tags => 'Etiketter';
 
   @override

@@ -1509,6 +1509,7 @@
   "offline": "offline",
   "search": "Søg",
   "clearSearch": "Ryd søgning",
+  "thereAreNoResultsForX": "Ingen resultater for \"{param}\"",
   "tags": "Etiketter",
   "enPassant": "En passant",
   "opponentLeftCounter": "{count, plural, =1{Din modstander har forladt partiet. Du kan kræve at få tildelt sejren om {count} sekund.} other{Din modstander har forladt partiet. Du kan kræve at få tildelt sejren om {count} sekunder.}}",

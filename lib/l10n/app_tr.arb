@@ -1513,6 +1513,7 @@
   "offline": "çevrimdışı",
   "search": "Ara",
   "clearSearch": "Aramayı temizle",
+  "thereAreNoResultsForX": "\"{param}\" için sonuç bulunamadı",
   "tags": "Etiketler",
   "enPassant": "Geçerken alma",
   "opponentLeftCounter": "{count, plural, =1{Rakibiniz oyundan ayrıldı. {count} saniye sonra galibiyet talep edebilirsiniz.} other{Rakibiniz oyundan ayrıldı. {count} saniye sonra galibiyet talep edebilirsiniz.}}",

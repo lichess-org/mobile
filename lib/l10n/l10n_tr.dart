@@ -5051,6 +5051,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get clearSearch => 'Aramayı temizle';
 
   @override
+  String thereAreNoResultsForX(String param) {
+    return '\"$param\" için sonuç bulunamadı';
+  }
+
+  @override
   String get tags => 'Etiketler';
 
   @override
