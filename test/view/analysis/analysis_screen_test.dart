@@ -131,7 +131,7 @@ void main() {
       await tester.tap(find.text('Variant'));
       await tester.pumpAndSettle(); // wait for dialog to open
 
-      expect(find.textContaining('Standard'), findsOneWidget);
+      expect(find.textContaining('Standard'), findsNWidgets(2)); // title and description
       expect(find.textContaining('Chess960'), findsNothing);
       expect(find.textContaining('From Position'), findsNothing);
       expect(find.textContaining('Antichess'), findsOneWidget);
