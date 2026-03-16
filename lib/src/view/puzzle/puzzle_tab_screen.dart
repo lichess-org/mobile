@@ -456,10 +456,14 @@ class DailyPuzzle extends ConsumerWidget {
                     color: context.lichessColors.brag.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    data.puzzle.sideToMove == Side.white
-                        ? context.l10n.whitePlays
-                        : context.l10n.blackPlays,
+                  Expanded(
+                    child: Text(
+                      data.puzzle.sideToMove == Side.white
+                          ? context.l10n.whitePlays
+                          : context.l10n.blackPlays,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: textShade(context, 0.8)),
+                    ),
                   ),
                 ],
               ),
@@ -602,10 +606,14 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ),
                         const SizedBox(width: 8),
                         if (puzzle != null)
-                          Text(
-                            puzzle.puzzle.sideToMove == Side.white
-                                ? context.l10n.whitePlays
-                                : context.l10n.blackPlays,
+                          Flexible(
+                            child: Text(
+                              puzzle.puzzle.sideToMove == Side.white
+                                  ? context.l10n.whitePlays
+                                  : context.l10n.blackPlays,
+                              style: TextStyle(color: textShade(context, 0.8)),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           )
                         else
                           const Flexible(
