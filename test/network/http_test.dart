@@ -210,6 +210,106 @@ void main() {
       );
     });
 
+    test('retries once on SocketException then succeeds', () async {
+      int callCount = 0;
+      final retryClient = MockClient((request) async {
+        callCount++;
+        if (callCount == 1) {
+          throw const SocketException('no internet');
+        }
+        return http.Response('{"ok": true}', 200);
+      });
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => retryClient);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      fakeAsync((async) {
+        late http.Response response;
+        client.get(Uri(path: '/test')).then((r) => response = r);
+        async.flushTimers();
+        expect(response.statusCode, 200);
+        expect(callCount, 2);
+      });
+    });
+
+    test('retries once on 500 then succeeds', () async {
+      int callCount = 0;
+      final retryClient = MockClient((request) async {
+        callCount++;
+        if (callCount == 1) {
+          return http.Response('error', 500);
+        }
+        return http.Response('{"ok": true}', 200);
+      });
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => retryClient);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      fakeAsync((async) {
+        late http.Response response;
+        client.get(Uri(path: '/test')).then((r) => response = r);
+        async.flushTimers();
+        expect(response.statusCode, 200);
+        expect(callCount, 2);
+      });
+    });
+
+    test('does not retry on 4xx errors', () async {
+      int callCount = 0;
+      final retryClient = MockClient((request) async {
+        callCount++;
+        return http.Response('not found', 404);
+      });
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => retryClient);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      fakeAsync((async) {
+        late http.Response response;
+        client.get(Uri(path: '/test')).then((r) => response = r);
+        async.flushTimers();
+        expect(response.statusCode, 404);
+        expect(callCount, 1);
+      });
+    });
+
+    test('propagates SocketException after retry exhausted', () async {
+      int callCount = 0;
+      final retryClient = MockClient((request) {
+        callCount++;
+        throw const SocketException('no internet');
+      });
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => retryClient);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+      fakeAsync((async) {
+        Object? caughtError;
+        client.get(Uri(path: '/test')).then((_) {}).catchError((Object e) {
+          caughtError = e;
+        });
+        async.flushTimers();
+        expect(caughtError, isA<SocketException>());
+        expect(callCount, 2);
+      });
+    });
+
     test('failed JSON parsing will throw ClientException', () async {
       final container = await makeContainer(
         overrides: {

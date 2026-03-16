@@ -149,12 +149,14 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
 /// Only one instance of this client is created and kept alive for the whole app.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
-    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // Retry once after 500ms on rate-limiting, server errors, or transient
+    // network failures (socket errors, timeouts).
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
-      when: (response) => response.statusCode == 429,
+      when: (response) => response.statusCode == 429 || response.statusCode >= 500,
+      whenError: (error, _) => error is SocketException || error is TimeoutException,
     ),
     ref,
   );

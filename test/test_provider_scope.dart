@@ -113,6 +113,14 @@ Future<Widget> makeOfflineTestProviderScope(
     httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
       return FakeHttpClientFactory(() => offlineClient);
     }),
+    // Override lichessClientProvider to bypass RetryClient, which would
+    // otherwise retry on SocketException and create pending timers in
+    // FakeAsync-based tests.
+    lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+      final client = LichessClient(offlineClient, ref);
+      ref.onDispose(() => client.close());
+      return client;
+    }),
     ...?overrides,
   },
   authUser: authUser,
