@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
-import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -146,15 +145,13 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
 
   void _onTimeChanged() {
     if (!mounted) return;
-    final warning = ref.read(clockToolPreferencesProvider).lowTimeWarning;
     final initialTime = widget.playerType == ClockSide.top
         ? widget.clockState.options.topTime
         : widget.clockState.options.bottomTime;
-    final threshold = warning.threshold(initialTime);
+    final threshold = Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
     final timeLeft = widget.clockState.getDuration(widget.playerType).value;
     final isActive = widget.clockState.isActivePlayer(widget.playerType);
-    final isEmergency =
-        threshold != null && timeLeft > Duration.zero && timeLeft <= threshold && isActive;
+    final isEmergency = timeLeft > Duration.zero && timeLeft <= threshold && isActive;
     if (isEmergency == _inEmergency) return;
     _inEmergency = isEmergency;
     if (isEmergency) {

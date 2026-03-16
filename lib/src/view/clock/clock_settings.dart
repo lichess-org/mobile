@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
-import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 
 const _iconSize = 38.0;
 const _kIconPadding = EdgeInsets.all(10.0);
@@ -106,12 +102,6 @@ class ClockSettings extends ConsumerWidget {
         Expanded(
           child: RotatedBox(
             quarterTurns: clockOrientation.quarterTurns,
-            child: _LowTimeWarningButton(iconSize: _iconSize, enabled: buttonsEnabled),
-          ),
-        ),
-        Expanded(
-          child: RotatedBox(
-            quarterTurns: clockOrientation.quarterTurns,
             child: IconButton(
               padding: _kIconPadding,
               iconSize: _iconSize,
@@ -139,127 +129,6 @@ class ClockSettings extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _LowTimeWarningButton extends ConsumerWidget {
-  const _LowTimeWarningButton({required this.iconSize, required this.enabled});
-
-  final double iconSize;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final warning = ref.watch(clockToolPreferencesProvider.select((p) => p.lowTimeWarning));
-
-    return IconButton(
-      padding: _kIconPadding,
-      iconSize: iconSize,
-      // TODO: translate
-      tooltip: 'Low time warning',
-      onPressed: enabled
-          ? () => showModalBottomSheet<void>(
-              context: context,
-              builder: (_) => const _LowTimeWarningModal(),
-            )
-          : null,
-      icon: Icon(warning == .off ? Icons.alarm_off : Icons.alarm_on),
-    );
-  }
-}
-
-class _LowTimeWarningModal extends ConsumerWidget {
-  const _LowTimeWarningModal();
-
-  static const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final current = ref.watch(clockToolPreferencesProvider.select((p) => p.lowTimeWarning));
-    final notifier = ref.read(clockToolPreferencesProvider.notifier);
-    const options = LowTimeWarning.values;
-
-    return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      children: [
-        const Padding(
-          padding: _horizontalPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // TODO: translate
-              SettingsSectionTitle('Low time warning'),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4.0),
-        Card.filled(
-          margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
-            child: Row(
-              children: [
-                for (int i = 0; i < options.length; i++) ...[
-                  Expanded(
-                    child: _LowTimeChip(
-                      label: options[i].label,
-                      selected: current == options[i],
-                      onTap: () {
-                        notifier.setLowTimeWarning(options[i]);
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                  if (i < options.length - 1) const SizedBox(width: 8),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _LowTimeChip extends StatelessWidget {
-  const _LowTimeChip({required this.label, required this.selected, required this.onTap});
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: selected ? colorScheme.secondaryContainer : colorScheme.surfaceContainerLow,
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        border: Border.fromBorderSide(
-          BorderSide(
-            color: selected ? colorScheme.secondaryContainer : Theme.of(context).dividerColor,
-          ),
-        ),
-      ),
-      child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Center(
-            child: Text(
-              label,
-              style: Styles.timeControl
-                  .merge(Styles.bold)
-                  .copyWith(
-                    color: selected ? colorScheme.onPrimaryContainer : colorScheme.onSurfaceVariant,
-                  ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
