@@ -142,6 +142,8 @@ void main() {
       expect(find.textContaining('Racing Kings'), findsOneWidget);
       expect(find.textContaining('Crazyhouse'), findsOneWidget);
 
+      await tester.ensureVisible(find.textContaining('Horde')); // scroll if needed
+      await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Horde'));
       await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
@@ -155,6 +157,8 @@ void main() {
       await tester.pumpAndSettle(); // wait for menu to open
       await tester.tap(find.text('Variant'));
       await tester.pumpAndSettle(); // wait for dialog to open
+      await tester.ensureVisible(find.textContaining('Crazyhouse')); // scroll if needed
+      await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Crazyhouse'));
       await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
