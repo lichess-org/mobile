@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -58,24 +59,48 @@ class AuthRepository {
       throw Exception('Could not open browser for authentication.');
     }
 
-    final expectedRedirectUri = Uri.parse(kOAuthRedirectUri);
+    final callbackCompleter = Completer<Uri>();
 
-    final callbackUri = await _ref
-        .read(oauthCallbackProvider)
-        .stream
-        .firstWhere((uri) {
-          final isExpectedRedirect =
-              uri.scheme == expectedRedirectUri.scheme &&
-              uri.host == expectedRedirectUri.host &&
-              uri.path == expectedRedirectUri.path;
-          return isExpectedRedirect;
-        })
-        .timeout(const Duration(minutes: 5));
+    // Listen for the redirect callback URI from the browser.
+    final callbackSub = _ref.read(oauthCallbackProvider).stream.listen(
+      (uri) {
+        if (!callbackCompleter.isCompleted &&
+            uri.scheme == kOAuthRedirectUriScheme &&
+            uri.host == kOAuthRedirectUriHost) {
+          callbackCompleter.complete(uri);
+        }
+      },
+      onError: (Object error) {
+        if (!callbackCompleter.isCompleted) {
+          callbackCompleter.completeError(error);
+        }
+      },
+    );
 
-    // Dismiss the in-app browser (SFSafariViewController on iOS).
-    // On Android, Chrome Custom Tabs close automatically when the intent is
-    // intercepted; this call is a no-op in that case.
-    await closeInAppWebView();
+    // Cancel the flow when the user dismisses the browser without completing
+    // auth. When a redirect succeeds, the callback URI arrives in Dart before
+    // (or very shortly after) the resumed lifecycle event — a short delay
+    // prevents a false cancellation in the success path.
+    final lifecycleListener = AppLifecycleListener(
+      onResume: () => Future<void>.delayed(
+        const Duration(milliseconds: 300),
+        () {
+          if (!callbackCompleter.isCompleted) {
+            callbackCompleter.completeError(Exception('Sign-in was cancelled.'));
+          }
+        },
+      ),
+    );
+
+    final Uri callbackUri;
+    try {
+      callbackUri = await callbackCompleter.future.timeout(const Duration(minutes: 5));
+    } finally {
+      // Dismiss the in-app browser in all cases (no-op if already closed).
+      unawaited(closeInAppWebView());
+      unawaited(callbackSub.cancel());
+      lifecycleListener.dispose();
+    }
 
     final returnedState = callbackUri.queryParameters['state'];
     if (returnedState != state) {
