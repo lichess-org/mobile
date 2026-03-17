@@ -64,7 +64,7 @@ class ClockToolController extends Notifier<ClockState> {
     );
   }
 
-  // Emergency threshold is set to 10% of the total time.
+  // Emergency threshold is set to 10% of the total time
   Duration _calculateEmergencyThreshold(Duration initialTime) {
     return Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
   }
