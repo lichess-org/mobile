@@ -1007,6 +1007,26 @@ void main() {
       expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
     });
 
+    testWidgets("Cannot interact with the opponent's pockets", (tester) async {
+      // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5 Nf3',
+        youAre: Side.white,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // Regression test: it used to be possible to interact with the opponent's pockets and play a DropMove for them
+      await playDropMove(tester, Side.black, Role.pawn, 'd6');
+      await tester.pumpAndSettle();
+
+      // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
+      expect(find.byKey(const ValueKey('d6-blackpawn')), findsNothing);
+    });
+
     testWidgets('correctly handles opponent drop move received from server', (tester) async {
       const gameFullId = GameFullId('qVChCOTcHSeW');
       final gameSocketUri = GameController.socketUri(gameFullId);
