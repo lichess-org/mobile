@@ -1,59 +1,89 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const redirectUri = 'org.lichess.mobile://login-callback';
 const oauthScopes = ['web:mobile'];
 
-/// A provider for [FlutterAppAuth].
-final appAuthProvider = Provider<FlutterAppAuth>((Ref ref) {
-  return const FlutterAppAuth();
-}, name: 'AppAuthProvider');
-
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
-  final appAuth = ref.read(appAuthProvider);
-  return AuthRepository(ref, appAuth);
+  return AuthRepository(ref);
 }, name: 'AuthRepositoryProvider');
 
 class AuthRepository {
-  AuthRepository(Ref ref, FlutterAppAuth appAuth) : _ref = ref, _appAuth = appAuth;
+  AuthRepository(Ref ref) : _ref = ref;
 
   final Ref _ref;
   final Logger _log = Logger('AuthRepository');
-  final FlutterAppAuth _appAuth;
+  final _random = Random.secure();
 
   LichessClient get _client => _ref.read(lichessClientProvider);
 
-  /// Sign in with Lichess.
+  /// Sign in with Lichess using OAuth 2.0 PKCE.
   ///
-  /// This method uses the [FlutterAppAuth] package to sign in with Lichess using
-  /// OAuth 2.0. It first calls [FlutterAppAuth.authorizeAndExchangeCode] to
-  /// get an access token, and then calls the Lichess API to get the user's
-  /// account information.
+  /// Opens the system default browser to the Lichess authorization page.
+  /// After the user authorizes, the browser redirects to [redirectUri] which
+  /// is caught by [app_links] and forwarded to [oauthCallbackProvider].
   Future<AuthUser> signIn() async {
-    final authResp = await _appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(
-        kLichessClientId,
-        redirectUri,
-        allowInsecureConnections: kDebugMode,
-        serviceConfiguration: AuthorizationServiceConfiguration(
-          authorizationEndpoint: lichessUri('/oauth').toString(),
-          tokenEndpoint: lichessUri('/api/token').toString(),
-        ),
-        scopes: oauthScopes,
-      ),
+    final codeVerifier = _generateCodeVerifier();
+    final codeChallenge = _generateCodeChallenge(codeVerifier);
+    final state = _generateState();
+
+    final authUrl = lichessUri('/oauth').replace(
+      queryParameters: {
+        'response_type': 'code',
+        'client_id': kLichessClientId,
+        'redirect_uri': redirectUri,
+        'scope': oauthScopes.join(' '),
+        'code_challenge': codeChallenge,
+        'code_challenge_method': 'S256',
+        'state': state,
+      },
     );
 
-    _log.fine('Got oAuth response $authResp');
+    await launchUrl(authUrl, mode: .externalApplication);
 
-    final token = authResp.accessToken;
+    final callbackUri = await _ref
+        .read(oauthCallbackProvider)
+        .stream
+        .first
+        .timeout(const Duration(minutes: 5));
 
+    final returnedState = callbackUri.queryParameters['state'];
+    if (returnedState != state) {
+      throw Exception('OAuth state mismatch.');
+    }
+
+    final code = callbackUri.queryParameters['code'];
+    if (code == null) {
+      throw Exception('Authorization code not found.');
+    }
+
+    final tokenResponse = await _client.postReadJson(
+      Uri(path: '/api/token'),
+      body: {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'code_verifier': codeVerifier,
+        'redirect_uri': redirectUri,
+        'client_id': kLichessClientId,
+      },
+      mapper: (json) => json,
+    );
+
+    _log.fine('Got OAuth token response');
+
+    final token = tokenResponse['access_token'] as String?;
     if (token == null) {
       throw Exception('Access token not found.');
     }
@@ -66,7 +96,7 @@ class AuthRepository {
     return AuthUser(token: token, user: user.lightUser);
   }
 
-  /// Sign out the current user by revoking the authUser token.
+  /// Sign out the current user by revoking the auth token.
   Future<void> signOut() async {
     await _client.deleteRead(Uri(path: '/api/token'));
   }
@@ -78,5 +108,20 @@ class AuthRepository {
         .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
         .timeout(const Duration(seconds: 5));
     return data[authUser.token] != null;
+  }
+
+  String _generateCodeVerifier() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    return List.generate(64, (_) => chars[_random.nextInt(chars.length)]).join();
+  }
+
+  String _generateCodeChallenge(String codeVerifier) {
+    final digest = sha256.convert(utf8.encode(codeVerifier));
+    return base64Url.encode(digest.bytes).replaceAll('=', '');
+  }
+
+  String _generateState() {
+    final bytes = List<int>.generate(16, (_) => _random.nextInt(256));
+    return base64Url.encode(bytes).replaceAll('=', '');
   }
 }
