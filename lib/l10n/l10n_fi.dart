@@ -284,6 +284,36 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
+  String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
+
+  @override
+  String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
+
+  @override
+  String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
+
+  @override
   String get activityActivity => 'Toiminta';
 
   @override

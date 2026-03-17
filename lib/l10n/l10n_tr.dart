@@ -284,6 +284,36 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
+  String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
+
+  @override
+  String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
+
+  @override
+  String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
+
+  @override
+  String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
+
+  @override
+  String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
+
+  @override
+  String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
+
+  @override
   String get activityActivity => 'Son Etkinlikler';
 
   @override

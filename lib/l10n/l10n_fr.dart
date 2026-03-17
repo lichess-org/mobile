@@ -284,6 +284,36 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Importer un fichier PGN';
 
   @override
+  String get variantStandardTitle => 'Règles standard des échecs (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La position de départ des pièces de la première rangée est randomisée.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Amenez votre roi au centre pour gagner la partie.';
+
+  @override
+  String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
+
+  @override
+  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagner la partie.';
+
+  @override
+  String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
+
+  @override
+  String get variantHordeTitle => 'Un camp a un grand nombre de pions, l\'autre a un nombre de pièces normales.';
+
+  @override
+  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquer pour gagner la partie.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Au lieu de bouger une pièce, vous pouvez replacer sur l\'échiquier une pièce capturée.';
+
+  @override
+  String get variantFromPositionTitle => 'Échecs standard à partir d\'une position personnalisée';
+
+  @override
   String get activityActivity => 'Activité';
 
   @override

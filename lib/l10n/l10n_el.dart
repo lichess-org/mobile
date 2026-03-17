@@ -284,6 +284,36 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
+  String get variantStandardTitle => 'Πρότυποι κανόνες του σκακιού (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Η αρχική θέση των κομματιών της πρώτης και τελευταίας γραμμής είναι τυχαία.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Φέρτε τον βασιλιά στο κέντρο της σκακιέρας για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantThreeCheckTitle => 'Κάντε σαχ 3 φορές για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantAntichessTitle => 'Η πλευρά που χάνει πρώτη όλα τα κομμάτια της ή δεν μπορεί να παίξει καμία κίνηση (πατ) κερδίζει την παρτίδα.';
+
+  @override
+  String get variantAtomicTitle => 'Ανατινάξτε τον αντίπαλο βασιλιά για να κερδίσετε.';
+
+  @override
+  String get variantHordeTitle => 'Η μία πλευρά έχει πολλά πιόνια, ενώ η άλλη έχει κανονική διάταξη σκακιού.';
+
+  @override
+  String get variantRacingKingsTitle => 'Κερδίζει ο βασιλιάς που φτάνει μέχρι την άλλη άκρη της σκακιέρας.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Τα αιχμαλωτισμένα κομμάτια μπορούν να «φυτευτούν» πάλι στη σκακιέρα.';
+
+  @override
+  String get variantFromPositionTitle => 'Κανονικό σκάκι από καθορισμένη θέση';
+
+  @override
   String get activityActivity => 'Δραστηριότητα';
 
   @override

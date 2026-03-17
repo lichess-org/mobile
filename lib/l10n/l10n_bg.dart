@@ -284,6 +284,36 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Стандартни правила на шаха (ФИДЕ)';
+
+  @override
+  String get variantChess960Title => 'Началната подредба на фигурите на последния ред е произволна.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Докарай царя си до центъра, за да спечелиш партията.';
+
+  @override
+  String get variantThreeCheckTitle => 'Дай шах на противника 3 пъти, за да спечелиш.';
+
+  @override
+  String get variantAntichessTitle => 'Спечели, като загубиш всичките си фигури или останеш в пат.';
+
+  @override
+  String get variantAtomicTitle => 'Взриви противниковия цар, за да спечелиш.';
+
+  @override
+  String get variantHordeTitle => 'Едната страна разполага с войска от пешки срещу нормална армия.';
+
+  @override
+  String get variantRacingKingsTitle => 'Стигни пръв с царя си до другия край на дъската, за да спечелиш.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Вместо ход, можеш да поставиш пленена фигура обратно на дъската.';
+
+  @override
+  String get variantFromPositionTitle => 'Стандартен шах от зададена позиция';
+
+  @override
   String get activityActivity => 'Дейност';
 
   @override

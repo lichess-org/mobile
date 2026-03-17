@@ -284,6 +284,36 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Standardregler för schack (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Pjäspositioner på bakre raden är slumpade.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Ta din kung till centrum för att vinna spelet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Schacka din motståndare 3 gånger för att vinna.';
+
+  @override
+  String get variantAntichessTitle => 'Förlora alla pjäser (eller hamna i patt) för att vinna spelet.';
+
+  @override
+  String get variantAtomicTitle => 'Spräng din motståndares kung för att vinna spelet.';
+
+  @override
+  String get variantHordeTitle => 'Ena sidan har ett stort antal bönder, den andra har normal pjäsuppställning.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din kung till andra sidan av brädet för att vinna.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Fångade pjäser kan återplaceras på brädet istället för att flytta en pjäs.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override

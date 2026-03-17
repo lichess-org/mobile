@@ -284,6 +284,36 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Az alapsori bábuk véletlenszerű mezőről indulnak.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Juttasd a királyt a centrumba, hogy megnyerd a partit.';
+
+  @override
+  String get variantThreeCheckTitle => 'Adj 3 sakkot a győzelemért.';
+
+  @override
+  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomicTitle => 'Robbantsd fel az ellenfél királyát a győzelemért.';
+
+  @override
+  String get variantHordeTitle => 'Világos nagy számú gyaloggal kezd, sötétnek minden bábuja megvan.';
+
+  @override
+  String get variantRacingKingsTitle => 'Juttasd királyod a tábla túloldalára a győzelemért.';
+
+  @override
+  String get variantCrazyhouseTitle => 'A leütött bábukat vissza lehet helyezni a táblára egy lépés helyett.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Aktivitás';
 
   @override

@@ -284,6 +284,36 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
+  String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Vị trí bắt đầu của các quân cờ hàng 1 và  8 được sắp xếp ngẫu nhiên.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Mang quân Vua của bạn vào các ô trung tâm để chiến thắng.';
+
+  @override
+  String get variantThreeCheckTitle => 'Chiếu vua đối thủ 3 lần để giành chiến thắng.';
+
+  @override
+  String get variantAntichessTitle => 'Để mất toàn bộ quân cờ của bạn (bao gồm cả vua hoặc làm bị hết nước đi) để chiến thắng.';
+
+  @override
+  String get variantAtomicTitle => 'Cho nổ vua đối phương để giành chiến thắng.';
+
+  @override
+  String get variantHordeTitle => 'Một bên có số lượng quân tốt lớn, bên kia chỉ có đội quân bình thường.';
+
+  @override
+  String get variantRacingKingsTitle => 'Đưa vua của bạn sang phía bên kia của bàn cờ để giành chiến thắng.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Các quân cờ bắt được có thể được thả lại vào bàn cờ thay vì chỉ di chuyển một quân cờ.';
+
+  @override
+  String get variantFromPositionTitle => 'Cờ tiêu chuẩn từ một thế trận tùy chỉnh';
+
+  @override
   String get activityActivity => 'Hoạt động';
 
   @override

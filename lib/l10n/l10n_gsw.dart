@@ -284,6 +284,36 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
+  String get variantStandardTitle => 'Schtandard-Schachregle (FIDE)';
+
+  @override
+  String get variantChess960Title => 'D\'Grundschtellig, vu de Figure, isch zuefällig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring din König is Zäntrum zum s\'Schpiel günne.';
+
+  @override
+  String get variantThreeCheckTitle => 'Büt dim Gägner drümal Schach, zum s\'Schpiel günne.';
+
+  @override
+  String get variantAntichessTitle => 'Verlür all Figure (oder mach es Patt) zum s\'Schpiel günne.';
+
+  @override
+  String get variantAtomicTitle => 'Schpräng de gägnerisch Köng, zum günne.';
+
+  @override
+  String get variantHordeTitle => 'En hufe Pure gäge e ganz normali Armee.';
+
+  @override
+  String get variantRacingKingsTitle => 'Bring din König, zum günne, uf die ander Site vum Brätt.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
+
+  @override
+  String get variantFromPositionTitle => 'Schtandard-Schach vunere g\'wählte Position';
+
+  @override
   String get activityActivity => 'Aktivitäte';
 
   @override
