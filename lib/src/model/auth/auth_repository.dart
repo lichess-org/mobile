@@ -74,6 +74,15 @@ class AuthRepository {
       throw Exception('OAuth state mismatch.');
     }
 
+    final error = callbackUri.queryParameters['error'];
+    if (error != null) {
+      final errorDescription = callbackUri.queryParameters['error_description'];
+      final message = errorDescription != null
+          ? 'OAuth error: $error - $errorDescription'
+          : 'OAuth error: $error';
+      throw Exception(message);
+    }
+
     final code = callbackUri.queryParameters['code'];
     if (code == null) {
       throw Exception('Authorization code not found.');
