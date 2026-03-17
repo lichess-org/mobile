@@ -13,7 +13,9 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const redirectUri = 'org.lichess.mobile://login-callback';
+const kOAuthRedirectUriScheme = 'org.lichess.mobile';
+const kOAuthRedirectUriHost = 'login-callback';
+const kOAuthRedirectUri = '$kOAuthRedirectUriScheme://$kOAuthRedirectUriHost';
 const oauthScopes = ['web:mobile'];
 
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
@@ -32,7 +34,7 @@ class AuthRepository {
   /// Sign in with Lichess using OAuth 2.0 PKCE.
   ///
   /// Opens the system default browser to the Lichess authorization page.
-  /// After the user authorizes, the browser redirects to [redirectUri] which
+  /// After the user authorizes, the browser redirects to [kOAuthRedirectUri] which
   /// is caught by [app_links] and forwarded to [oauthCallbackProvider].
   Future<AuthUser> signIn() async {
     final codeVerifier = _generateCodeVerifier();
@@ -43,7 +45,7 @@ class AuthRepository {
       queryParameters: {
         'response_type': 'code',
         'client_id': kLichessClientId,
-        'redirect_uri': redirectUri,
+        'redirect_uri': kOAuthRedirectUri,
         'scope': oauthScopes.join(' '),
         'code_challenge': codeChallenge,
         'code_challenge_method': 'S256',
@@ -51,7 +53,10 @@ class AuthRepository {
       },
     );
 
-    await launchUrl(authUrl, mode: .externalApplication);
+    final launched = await launchUrl(authUrl, mode: .externalApplication);
+    if (!launched) {
+      throw Exception('Could not open browser for authentication.');
+    }
 
     final callbackUri = await _ref
         .read(oauthCallbackProvider)
@@ -75,7 +80,7 @@ class AuthRepository {
         'grant_type': 'authorization_code',
         'code': code,
         'code_verifier': codeVerifier,
-        'redirect_uri': redirectUri,
+        'redirect_uri': kOAuthRedirectUri,
         'client_id': kLichessClientId,
       },
       mapper: (json) => json,
