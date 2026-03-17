@@ -53,7 +53,7 @@ class AuthRepository {
       },
     );
 
-    final launched = await launchUrl(authUrl, mode: .externalApplication);
+    final launched = await launchUrl(authUrl, mode: .inAppBrowserView);
     if (!launched) {
       throw Exception('Could not open browser for authentication.');
     }
@@ -63,6 +63,11 @@ class AuthRepository {
         .stream
         .first
         .timeout(const Duration(minutes: 5));
+
+    // Dismiss the in-app browser (SFSafariViewController on iOS).
+    // On Android, Chrome Custom Tabs close automatically when the intent is
+    // intercepted; this call is a no-op in that case.
+    await closeInAppWebView();
 
     final returnedState = callbackUri.queryParameters['state'];
     if (returnedState != state) {
