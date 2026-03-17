@@ -11,6 +11,7 @@ class PocketsMenu extends ConsumerWidget {
     required this.pockets,
     required this.side,
     required this.sideToMove,
+    required this.playerSide,
     required this.squareSize,
     this.isUpsideDown = false,
     this.pieceAssets,
@@ -20,8 +21,11 @@ class PocketsMenu extends ConsumerWidget {
 
   final Side side;
 
-  /// If this is equal to [side], pieces from the pockets are can be dragged onto the board to make a move.
+  /// If this is equal to [side] and matches [playerSide], pieces from the pockets are can be dragged onto the board to make a move.
   final Side? sideToMove;
+
+  /// Which side can interact with the board. If this matches [side] and [sideToMove], pieces from the pockets can be dragged onto the board to make a move.
+  final PlayerSide playerSide;
 
   /// Size of a square on the chessboard.
   ///
@@ -58,7 +62,11 @@ class PocketsMenu extends ConsumerWidget {
                   (role) => _Pocket(
                     count: pockets.of(side, role),
                     role: role,
-                    interactive: side == sideToMove,
+                    interactive:
+                        side == sideToMove &&
+                        (playerSide == PlayerSide.both ||
+                            (playerSide == PlayerSide.white && side == Side.white) ||
+                            (playerSide == PlayerSide.black && side == Side.black)),
                     side: side,
                     squareSize: squareSize,
                     pieceAssets: pieceAssets ?? boardPrefs.pieceSet.assets,
