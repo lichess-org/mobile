@@ -284,6 +284,36 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
+
+  @override
+  String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
+
+  @override
+  String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
+
+  @override
+  String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
+
+  @override
+  String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
+
+  @override
   String get activityActivity => '활동';
 
   @override
@@ -4991,6 +5021,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get clearSearch => '검색 초기화';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => '태그';

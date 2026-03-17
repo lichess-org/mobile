@@ -40,4 +40,9 @@ sealed class GameBoardParams with _$GameBoardParams {
     ReadonlyBoardParams(:final pockets) => pockets,
     InteractiveBoardParams(:final position) => position.pockets,
   };
+
+  PlayerSide get playerSide => switch (this) {
+    ReadonlyBoardParams() => PlayerSide.none,
+    InteractiveBoardParams(:final playerSide) => playerSide,
+  };
 }

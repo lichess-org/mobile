@@ -284,6 +284,36 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
+
+  @override
+  String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
+
+  @override
+  String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
+
+  @override
+  String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -5019,6 +5049,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tøm søk';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Merkelapper';

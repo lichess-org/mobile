@@ -284,6 +284,36 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get variantStandardTitle => 'Regras do xadrez estándar (FIDE)';
+
+  @override
+  String get variantChess960Title => 'A posición inicial das pezas das filas 1 e 8 é aleatoria.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Leva o teu Rei ó centro para gañar a partida.';
+
+  @override
+  String get variantThreeCheckTitle => 'Dálle xaque 3 veces ó teu rival para gañar a partida.';
+
+  @override
+  String get variantAntichessTitle => 'Perde todas as túas pezas (ou fica afogado) para gañar a partida.';
+
+  @override
+  String get variantAtomicTitle => 'Estoura o rei do rival para gañares.';
+
+  @override
+  String get variantHordeTitle => 'Un bando ten unha manchea de peóns e o outro ten un exército normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Leva o teu rei ó outro lado do taboleiro para gañar.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Ademais dos movementos convencionais, podes guindar as pezas capturadas no taboleiro.';
+
+  @override
+  String get variantFromPositionTitle => 'Xadrez estándar a partir dunha posición personalizada';
+
+  @override
   String get activityActivity => 'Actividade';
 
   @override
@@ -5019,6 +5049,11 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Borrar a procura';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Non hai resultados para \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';

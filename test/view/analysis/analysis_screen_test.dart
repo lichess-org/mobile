@@ -131,7 +131,7 @@ void main() {
       await tester.tap(find.text('Variant'));
       await tester.pumpAndSettle(); // wait for dialog to open
 
-      expect(find.textContaining('Standard'), findsOneWidget);
+      expect(find.textContaining('Standard'), findsNWidgets(2)); // title and description
       expect(find.textContaining('Chess960'), findsNothing);
       expect(find.textContaining('From Position'), findsNothing);
       expect(find.textContaining('Antichess'), findsOneWidget);
@@ -142,6 +142,8 @@ void main() {
       expect(find.textContaining('Racing Kings'), findsOneWidget);
       expect(find.textContaining('Crazyhouse'), findsOneWidget);
 
+      await tester.ensureVisible(find.textContaining('Horde')); // scroll if needed
+      await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Horde'));
       await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
@@ -155,6 +157,8 @@ void main() {
       await tester.pumpAndSettle(); // wait for menu to open
       await tester.tap(find.text('Variant'));
       await tester.pumpAndSettle(); // wait for dialog to open
+      await tester.ensureVisible(find.textContaining('Crazyhouse')); // scroll if needed
+      await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Crazyhouse'));
       await tester.pumpAndSettle(); // wait for dialog to close and new variant to be loaded
 
@@ -243,7 +247,7 @@ void main() {
       await tester.tap(find.text('Play against computer'));
       await tester.pumpAndSettle(); // wait for play menu to open
       // Variant we set previously should be preselected
-      expect(find.text('Atomic'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
     });
 
     testWidgets('Continue OTB', (tester) async {
@@ -1271,6 +1275,8 @@ void main() {
     await tester.pumpAndSettle(); // wait for menu to open
     await tester.tap(find.text('Variant'));
     await tester.pumpAndSettle(); // wait for variant selection dialog to open
+    await tester.ensureVisible(find.textContaining('Racing Kings'));
+    await tester.pumpAndSettle();
     await tester.tap(find.textContaining('Racing Kings'));
     await tester.pumpAndSettle(); // wait for variant to change
 

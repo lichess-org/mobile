@@ -165,7 +165,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Сховати дошку';
+  String get mobileSettingsPickAnImageHideBoard => 'Заховати дошку';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Показати дошку';
@@ -282,6 +282,36 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
+
+  @override
+  String get variantStandardTitle => 'Стандартні правила шахів (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Початкова позиція фігур задається випадково.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Перемістіть свого короля до центру, щоб перемогти.';
+
+  @override
+  String get variantThreeCheckTitle => 'Поставте шах супернику 3 рази, щоб перемогти.';
+
+  @override
+  String get variantAntichessTitle => 'Утратьте всі свої фігури (або хай вам поставлять пат), щоб перемогти.';
+
+  @override
+  String get variantAtomicTitle => 'Підірвіть короля суперника, щоб перемогти.';
+
+  @override
+  String get variantHordeTitle => 'Одна сторона має багато пішаків, а інша — звичайну армію.';
+
+  @override
+  String get variantRacingKingsTitle => 'Перемістіть короля на інший бік дошки, щоб перемогти.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Замість звичайного ходу можна поставити захоплену ворожу фігуру.';
+
+  @override
+  String get variantFromPositionTitle => 'Звичайні шахи із власної позиції';
 
   @override
   String get activityActivity => 'Активність';
@@ -1584,7 +1614,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleMotifs => 'Мотиви';
 
   @override
-  String get puzzleAdvanced => 'Просунутий';
+  String get puzzleAdvanced => 'Просунуті Мотиви';
 
   @override
   String get puzzleLengths => 'Довжина';
@@ -2074,7 +2104,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замість очікуваного ходу, спочатку робиться інший хід з безпосередньою атакою, на яку суперник має відповісти. Також відомий як \"Zwischenzug\" або \"In between\".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Мат: Смертельна коробка';
+  String get puzzleThemeKillBoxMate => 'Мат \"Смертельна коробка\"';
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
@@ -2086,7 +2116,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Тура ставить мат королю, поки слон закриває поля для втечі.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Мат Мерфі';
+  String get puzzleThemeMorphysMate => 'Мат Морфі';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
@@ -5075,6 +5105,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистити пошук';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Нічого не знайдено для «$param»';
+  }
 
   @override
   String get tags => 'Теги';

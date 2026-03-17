@@ -1,3 +1,4 @@
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -199,6 +200,12 @@ class AnalysisLayout extends StatelessWidget {
                 final isTablet = isTabletOrLarger(context);
                 const tabletBoardRadius = Styles.boardBorderRadius;
 
+                final playerSide = switch (sideToMove) {
+                  Side.white => PlayerSide.white,
+                  Side.black => PlayerSide.black,
+                  null => PlayerSide.none,
+                };
+
                 if (orientation == Orientation.landscape) {
                   final headerAndFooterHeight =
                       (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
@@ -287,6 +294,7 @@ class AnalysisLayout extends StatelessWidget {
                                   child: PocketsMenu(
                                     side: pov.opposite,
                                     sideToMove: sideToMove,
+                                    playerSide: playerSide,
                                     pockets: pockets!,
                                     squareSize: pocketSquareSize(
                                       boardSize: boardSize,
@@ -307,6 +315,7 @@ class AnalysisLayout extends StatelessWidget {
                                   child: PocketsMenu(
                                     side: pov,
                                     sideToMove: sideToMove,
+                                    playerSide: playerSide,
                                     pockets: pockets!,
                                     squareSize: pocketSquareSize(
                                       boardSize: boardSize,
@@ -350,6 +359,7 @@ class AnalysisLayout extends StatelessWidget {
                               PocketsMenu(
                                 side: pov.opposite,
                                 sideToMove: sideToMove,
+                                playerSide: playerSide,
                                 pockets: pockets!,
                                 squareSize: pocketSquareSize(
                                   boardSize: boardSize,
@@ -406,6 +416,7 @@ class AnalysisLayout extends StatelessWidget {
                               PocketsMenu(
                                 side: pov,
                                 sideToMove: sideToMove,
+                                playerSide: playerSide,
                                 pockets: pockets!,
                                 squareSize: pocketSquareSize(
                                   boardSize: boardSize,

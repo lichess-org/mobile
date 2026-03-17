@@ -362,7 +362,6 @@ class _ClockDisplay extends StatelessWidget {
       valueListenable: clockState.getDuration(playerType),
       builder: (context, value, _) {
         return Clock(
-          padLeft: true,
           clockStyle: clockStyle,
           timeLeft: value,
           active: clockState.isActivePlayer(playerType),

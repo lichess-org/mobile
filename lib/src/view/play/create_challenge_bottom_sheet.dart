@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
   const CreateChallengeBottomSheet(this.user, {this.positionFen});
@@ -239,7 +240,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     context,
                     choices: playSupportedVariants.toList(),
                     selectedItem: preferences.variant,
-                    labelBuilder: (Variant variant) => Text(variant.label),
+                    labelBuilder: (variant) => VariantLabel(variant),
                     onSelectedItemChanged: (Variant variant) {
                       ref.read(challengePreferencesProvider.notifier).setVariant(variant);
                     },

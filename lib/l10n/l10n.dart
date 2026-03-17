@@ -730,6 +730,66 @@ abstract class AppLocalizations {
   /// **'Or import a PGN file'**
   String get mobileOrImportPgnFile;
 
+  /// No description provided for @variantStandardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard rules of chess (FIDE)'**
+  String get variantStandardTitle;
+
+  /// No description provided for @variantChess960Title.
+  ///
+  /// In en, this message translates to:
+  /// **'The starting position of the home rank pieces is randomised.'**
+  String get variantChess960Title;
+
+  /// No description provided for @variantKingOfTheHillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your King to the center to win the game.'**
+  String get variantKingOfTheHillTitle;
+
+  /// No description provided for @variantThreeCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your opponent 3 times to win the game.'**
+  String get variantThreeCheckTitle;
+
+  /// No description provided for @variantAntichessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lose all your pieces (or get stalemated) to win the game.'**
+  String get variantAntichessTitle;
+
+  /// No description provided for @variantAtomicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nuke your opponent\'s king to win.'**
+  String get variantAtomicTitle;
+
+  /// No description provided for @variantHordeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One side has a large number of pawns, the other has a normal army.'**
+  String get variantHordeTitle;
+
+  /// No description provided for @variantRacingKingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get your king to the other side of the board to win.'**
+  String get variantRacingKingsTitle;
+
+  /// No description provided for @variantCrazyhouseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured pieces can be dropped back on the board instead of moving a piece.'**
+  String get variantCrazyhouseTitle;
+
+  /// No description provided for @variantFromPositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard chess from a custom position'**
+  String get variantFromPositionTitle;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:
@@ -9219,6 +9279,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear search'**
   String get clearSearch;
+
+  /// No description provided for @thereAreNoResultsForX.
+  ///
+  /// In en, this message translates to:
+  /// **'No results for \"{param}\"'**
+  String thereAreNoResultsForX(String param);
 
   /// No description provided for @tags.
   ///

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan;
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart' show relativeDate;
 import 'package:meta/meta.dart';
 
 /// FCM Messages
@@ -226,6 +227,8 @@ sealed class LocalNotification {
         return ChallengeAcceptedNotification.fromJson(json);
       case 'challengeCreate':
         return ChallengeCreatedNotification.fromJson(json);
+      case 'announce':
+        return AnnounceNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
@@ -515,6 +518,84 @@ class ChallengeCreatedNotification extends LocalNotification {
       autoCancel: true,
     ),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
+}
+
+/// A notification for a server-wide announcement.
+///
+/// There can only be one announce notification at a time. It is shown when the server
+/// sends an announce message through the WebSocket, and cancelled when the server
+/// clears it or the optional countdown date is reached.
+class AnnounceNotification extends LocalNotification {
+  const AnnounceNotification(this.message, {this.date});
+
+  final String message;
+
+  /// Optional date shown as a relative time in the notification body.
+  final DateTime? date;
+
+  static final int notificationId = 'announce'.hashCode;
+
+  static const _channelId = 'announce';
+
+  static const dismissActionId = 'dismiss';
+
+  static const darwinCategoryId = 'announce-notification';
+
+  factory AnnounceNotification.fromJson(Map<String, dynamic> json) {
+    final dateStr = json['date'] as String?;
+    return AnnounceNotification(
+      json['message'] as String,
+      date: dateStr != null ? DateTime.parse(dateStr) : null,
+    );
+  }
+
+  static DarwinNotificationCategory darwinCategory(AppLocalizations l10n) =>
+      DarwinNotificationCategory(
+        darwinCategoryId,
+        actions: [
+          DarwinNotificationAction.plain(dismissActionId, l10n.mobileCustomizeHomeTipDismiss),
+        ],
+      );
+
+  @override
+  int get id => notificationId;
+
+  @override
+  String get channelId => _channelId;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'message': message,
+    if (date != null) 'date': date!.toIso8601String(),
+  };
+
+  @override
+  String title(AppLocalizations _) => message;
+
+  @override
+  String? body(AppLocalizations l10n) => date != null ? relativeDate(l10n, date!) : null;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      _channelId,
+      'Lichess Announcements',
+      importance: Importance.high,
+      priority: Priority.high,
+      autoCancel: false,
+      actions: [
+        AndroidNotificationAction(
+          dismissActionId,
+          l10n.mobileCustomizeHomeTipDismiss,
+          showsUserInterface: false,
+        ),
+      ],
+    ),
+    iOS: const DarwinNotificationDetails(
+      threadIdentifier: _channelId,
+      categoryIdentifier: darwinCategoryId,
+    ),
   );
 }
 

@@ -988,12 +988,21 @@ void main() {
 
   group('Crazyhouse', () {
     testWidgets('displays pockets and handles player drop moves', (tester) async {
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
       // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn
       await createTestGame(
         tester,
         variant: Variant.crazyhouse,
         pgn: 'e4 d5 exd5 Qxd5',
         youAre: Side.white,
+        socketFactory: socketFactory,
+      );
+
+      final dropExpectation = expectLater(
+        socketFactory.outgoingMessages(testGameSocketUri),
+        emitsThrough('{"t":"drop","d":{"role":"pawn","pos":"c4","s":"0","a":1}}'),
       );
 
       expect(find.byType(Chessboard), findsOneWidget);
@@ -1005,6 +1014,28 @@ void main() {
 
       // Pawn should appear on c4 (transient move before server ack)
       expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+
+      await dropExpectation;
+    });
+
+    testWidgets("Cannot interact with the opponent's pockets", (tester) async {
+      // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5 Nf3',
+        youAre: Side.white,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // Regression test: it used to be possible to interact with the opponent's pockets and play a DropMove for them
+      await playDropMove(tester, Side.black, Role.pawn, 'd6');
+      await tester.pumpAndSettle();
+
+      // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
+      expect(find.byKey(const ValueKey('d6-blackpawn')), findsNothing);
     });
 
     testWidgets('correctly handles opponent drop move received from server', (tester) async {
@@ -1024,7 +1055,7 @@ void main() {
 
       // Server sends white's drop move P@c4 (ply 5 after the 4 pgn moves)
       sendServerSocketMessages(gameSocketUri, [
-        '{"t": "move", "v": 1, "d": {"ply": 5, "uci": "P@c4", "san": "P@c4", "clock": {"white": 176, "black": 180}}}',
+        '{"t": "drop", "v": 1, "d": {"role": "pawn", "ply": 5, "uci": "P@c4", "san": "P@c4", "clock": {"white": 176, "black": 180}}}',
       ]);
       await tester.pump();
 

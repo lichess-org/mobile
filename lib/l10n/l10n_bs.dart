@@ -284,6 +284,36 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Početna pozicija figura domaćeg reda je nasumično odabrana.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Dovedite svog kralja u centar da biste pobijedili u igri.';
+
+  @override
+  String get variantThreeCheckTitle => 'Provjerite protivnika 3 puta da biste pobijedili u igri.';
+
+  @override
+  String get variantAntichessTitle => 'Izgubite sve svoje figure (ili dospijte u pat poziciju) da biste pobijedili u igri.';
+
+  @override
+  String get variantAtomicTitle => 'Nuklearno uništite protivničkog kralja da biste pobijedili.';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana ima veliki broj pijuna, druga ima normalnu vojsku.';
+
+  @override
+  String get variantRacingKingsTitle => 'Dovedite svog kralja na drugu stranu ploče da biste pobijedili.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Osvojene figure mogu se vratiti na tablu umjesto pomjeranja figure.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override
@@ -5047,6 +5077,11 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get clearSearch => 'Obriši pretragu';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Oznake';

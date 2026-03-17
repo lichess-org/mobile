@@ -218,6 +218,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation.opposite,
                   sideToMove: sideToMove,
+                  playerSide: widget.boardParams.playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.topTableUpsideDown,
@@ -240,6 +241,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation,
                   sideToMove: sideToMove,
+                  playerSide: widget.boardParams.playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.bottomTableUpsideDown,
