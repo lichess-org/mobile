@@ -58,10 +58,22 @@ class AuthRepository {
       throw Exception('Could not open browser for authentication.');
     }
 
+    final expectedRedirectUri = Uri.parse(redirectUri);
+
     final callbackUri = await _ref
         .read(oauthCallbackProvider)
         .stream
-        .first
+        .firstWhere((uri) {
+          final isExpectedRedirect =
+              uri.scheme == expectedRedirectUri.scheme &&
+              uri.host == expectedRedirectUri.host &&
+              uri.path == expectedRedirectUri.path;
+          if (!isExpectedRedirect) {
+            return false;
+          }
+          final returnedState = uri.queryParameters['state'];
+          return returnedState == state;
+        })
         .timeout(const Duration(minutes: 5));
 
     // Dismiss the in-app browser (SFSafariViewController on iOS).
