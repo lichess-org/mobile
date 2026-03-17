@@ -58,7 +58,7 @@ class AuthRepository {
       throw Exception('Could not open browser for authentication.');
     }
 
-    final expectedRedirectUri = Uri.parse(redirectUri);
+    final expectedRedirectUri = Uri.parse(kOAuthRedirectUri);
 
     final callbackUri = await _ref
         .read(oauthCallbackProvider)
@@ -68,11 +68,7 @@ class AuthRepository {
               uri.scheme == expectedRedirectUri.scheme &&
               uri.host == expectedRedirectUri.host &&
               uri.path == expectedRedirectUri.path;
-          if (!isExpectedRedirect) {
-            return false;
-          }
-          final returnedState = uri.queryParameters['state'];
-          return returnedState == state;
+          return isExpectedRedirect;
         })
         .timeout(const Duration(minutes: 5));
 
