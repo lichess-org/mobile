@@ -183,7 +183,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
     final clockStyle = ClockStyle(
       textColor: textColor,
       activeTextColor: Colors.white,
-      emergencyTextColor: Colors.white,
+      emergencyTextColor: Colors.white70,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,
       emergencyBackgroundColor: Colors.transparent,
