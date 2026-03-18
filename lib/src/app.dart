@@ -12,6 +12,8 @@ import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -160,6 +162,10 @@ class _AppState extends ConsumerState<Application> {
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       // File links are handled by the sharing intent logic, so we can ignore them here.
       if (uri.scheme == 'file' || uri.scheme == 'content') {
+        return;
+      }
+      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
+        ref.read(oauthCallbackProvider).add(uri);
         return;
       }
       final context = _navigatorKey.currentContext;
