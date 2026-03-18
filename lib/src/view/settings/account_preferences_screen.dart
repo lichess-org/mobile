@@ -260,6 +260,27 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                           );
                         },
                 ),
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.preferencesTenthsOfSeconds),
+                  settingsValue: data.clockTenths.label(context.l10n),
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: ClockTenths.values,
+                      selectedItem: data.clockTenths,
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (ClockTenths? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setClockTenths(value ?? data.clockTenths),
+                              );
+                            },
+                    );
+                  },
+                ),
               ],
             ),
             ListSection(

@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -476,6 +477,9 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     return GamePlayer(
       game: gameState.game,
@@ -494,6 +498,7 @@ class _Player extends ConsumerWidget {
               emergencyThreshold: Duration(
                 seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
               ),
+              clockTenths: clockTenths,
             ),
     );
   }
