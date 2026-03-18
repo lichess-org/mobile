@@ -34,9 +34,10 @@ class AuthRepository {
 
   /// Sign in with Lichess using OAuth 2.0 PKCE.
   ///
-  /// Opens the system default browser to the Lichess authorization page.
+  /// Opens an in-app browser (or fallback to the system default browser) to the Lichess
+  /// authorization page.
   /// After the user authorizes, the browser redirects to [kOAuthRedirectUri] which
-  /// is caught by [app_links] and forwarded to [oauthCallbackProvider].
+  /// is caught by the app links handler and forwarded to [oauthCallbackProvider].
   Future<AuthUser> signIn() async {
     final codeVerifier = _generateCodeVerifier();
     final codeChallenge = _generateCodeChallenge(codeVerifier);
@@ -62,34 +63,36 @@ class AuthRepository {
     final callbackCompleter = Completer<Uri>();
 
     // Listen for the redirect callback URI from the browser.
-    final callbackSub = _ref.read(oauthCallbackProvider).stream.listen(
-      (uri) {
-        if (!callbackCompleter.isCompleted &&
-            uri.scheme == kOAuthRedirectUriScheme &&
-            uri.host == kOAuthRedirectUriHost) {
-          callbackCompleter.complete(uri);
-        }
-      },
-      onError: (Object error) {
-        if (!callbackCompleter.isCompleted) {
-          callbackCompleter.completeError(error);
-        }
-      },
-    );
+    // Mismatched URIs (stale callbacks, unrelated deep links) are silently ignored and the listener
+    // keeps waiting.
+    final callbackSub = _ref
+        .read(oauthCallbackProvider)
+        .stream
+        .listen(
+          (uri) {
+            if (!callbackCompleter.isCompleted &&
+                uri.scheme == kOAuthRedirectUriScheme &&
+                uri.host == kOAuthRedirectUriHost &&
+                uri.queryParameters['state'] == state) {
+              callbackCompleter.complete(uri);
+            }
+          },
+          onError: (Object error) {
+            if (!callbackCompleter.isCompleted) {
+              callbackCompleter.completeError(error);
+            }
+          },
+        );
 
-    // Cancel the flow when the user dismisses the browser without completing
-    // auth. When a redirect succeeds, the callback URI arrives in Dart before
-    // (or very shortly after) the resumed lifecycle event — a short delay
-    // prevents a false cancellation in the success path.
+    // Cancel the flow when the user dismisses the browser without completing auth. When a redirect
+    // succeeds, the callback URI arrives in Dart before (or very shortly after) the resumed
+    // lifecycle event — a short delay prevents a false cancellation in the success path.
     final lifecycleListener = AppLifecycleListener(
-      onResume: () => Future<void>.delayed(
-        const Duration(milliseconds: 300),
-        () {
-          if (!callbackCompleter.isCompleted) {
-            callbackCompleter.completeError(Exception('Sign-in was cancelled.'));
-          }
-        },
-      ),
+      onResume: () => Future<void>.delayed(const Duration(milliseconds: 300), () {
+        if (!callbackCompleter.isCompleted) {
+          callbackCompleter.completeError(Exception('Sign-in was cancelled.'));
+        }
+      }),
     );
 
     final Uri callbackUri;
@@ -100,11 +103,6 @@ class AuthRepository {
       unawaited(closeInAppWebView());
       unawaited(callbackSub.cancel());
       lifecycleListener.dispose();
-    }
-
-    final returnedState = callbackUri.queryParameters['state'];
-    if (returnedState != state) {
-      throw Exception('OAuth state mismatch.');
     }
 
     final error = callbackUri.queryParameters['error'];
