@@ -17,9 +17,10 @@ final appLogServiceProvider = Provider<AppLogService>(
   name: 'AppLogServiceProvider',
 );
 
-/// Manages log entries created via [Logger] instances
+/// Manages log entries created via [Logger] instances.
 ///
-/// Currently, simply saves the most recent log entries in memory, so they do not persists across app restarts.
+/// Log entries are stored in memory for the current session and persisted to the
+/// SQLite database so they survive app restarts.
 class AppLogService {
   AppLogService(this.ref);
 
