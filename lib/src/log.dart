@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/app_log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
@@ -66,11 +67,23 @@ class AppLogService {
       }
 
       _logs.put(record);
+
+      // Persist to database asynchronously (fire-and-forget).
+      ref
+          .read(appLogStorageProvider.future)
+          .then(
+            (storage) => storage.save(AppLogEntry.fromLogRecord(record)),
+            onError: (_) {},
+          );
     });
   }
 
   void clear() {
     _logs.clear();
+    ref.read(appLogStorageProvider.future).then(
+      (storage) => storage.deleteAll(),
+      onError: (_) {},
+    );
   }
 }
 
