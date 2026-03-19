@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -169,6 +170,12 @@ class ChallengeService {
   }
 
   Future<void> _acceptChallenge(ChallengeId id) async {
+    // Cancel any pending lobby seek before accepting, to prevent being matched into a new game
+    // while accepting a challenge.
+    try {
+      await ref.read(createGameServiceProvider).cancelSeek();
+    } catch (_) {}
+
     final fullId = await acceptChallenge(id);
 
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
