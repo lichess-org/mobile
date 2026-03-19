@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
@@ -33,6 +34,8 @@ class AppLogSettingsScreen extends ConsumerStatefulWidget {
 
 class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  String? _searchQuery;
 
   @override
   void initState() {
@@ -44,27 +47,28 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final currentState = ref.read(appLogPaginatorProvider);
+      final currentState = ref.read(appLogPaginatorProvider(_searchQuery));
       if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
-        ref.read(appLogPaginatorProvider.notifier).next();
+        ref.read(appLogPaginatorProvider(_searchQuery).notifier).next();
       }
     }
   }
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(appLogPaginatorProvider.notifier).refresh();
+    return ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     final currentLevel = ref.watch(logPreferencesProvider.select((prefs) => prefs.level));
-    final asyncState = ref.watch(appLogPaginatorProvider);
+    final asyncState = ref.watch(appLogPaginatorProvider(_searchQuery));
     final logs = asyncState.value?.logs ?? [];
 
     return Scaffold(
@@ -97,7 +101,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                   title: const Text('Delete all logs'),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
-                    ref.read(appLogPaginatorProvider.notifier).deleteAll();
+                    ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();
                   },
                 );
               },
@@ -125,6 +129,20 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                 },
               ),
             ],
+          ),
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: PlatformSearchBar(
+              controller: _searchController,
+              hintText: 'Search logs...',
+              onChanged: (value) => setState(() {
+                _searchQuery = value.isEmpty ? null : value;
+              }),
+              onClear: () => setState(() {
+                _searchQuery = null;
+                _searchController.clear();
+              }),
+            ),
           ),
           Expanded(
             child: switch (asyncState) {

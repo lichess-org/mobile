@@ -10,20 +10,33 @@ part 'app_log_paginator.freezed.dart';
 const _pageSize = 20;
 
 /// A provider for [AppLogPaginator].
-final appLogPaginatorProvider = AsyncNotifierProvider.autoDispose<AppLogPaginator, AppLogState>(
-  AppLogPaginator.new,
-  name: 'AppLogPaginatorProvider',
-);
+///
+/// The family argument is the optional search query string.
+final appLogPaginatorProvider = AsyncNotifierProvider.autoDispose
+    .family<AppLogPaginator, AppLogState, String?>(
+      AppLogPaginator.new,
+      name: 'AppLogPaginatorProvider',
+    );
 
 /// A Riverpod controller for managing paginated app log entries.
 class AppLogPaginator extends AsyncNotifier<AppLogState> {
+  AppLogPaginator(this._searchQuery);
+
+  final String? _searchQuery;
+
   @override
   Future<AppLogState> build() async {
     final storage = await ref.read(appLogStorageProvider.future);
     final minLevelValue = ref.watch(logPreferencesProvider.select((p) => p.level.value));
     return AppLogState(
       data: IList.new([
-        await AsyncValue.guard(() => storage.page(limit: _pageSize, minLevelValue: minLevelValue)),
+        await AsyncValue.guard(
+          () => storage.page(
+            limit: _pageSize,
+            minLevelValue: minLevelValue,
+            searchQuery: _searchQuery,
+          ),
+        ),
       ]),
     );
   }
@@ -38,6 +51,7 @@ class AppLogPaginator extends AsyncNotifier<AppLogState> {
           limit: _pageSize,
           cursor: state.requireValue.nextPage,
           minLevelValue: minLevelValue,
+          searchQuery: _searchQuery,
         ),
       );
       state = AsyncValue.data(
