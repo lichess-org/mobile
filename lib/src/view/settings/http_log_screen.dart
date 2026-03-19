@@ -136,6 +136,13 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
 
 final _logDateFormatter = DateFormat.yMd().add_Hms();
 
+String _formatElapsed(Duration elapsed) {
+  if (elapsed.inMilliseconds < 1000) {
+    return '${elapsed.inMilliseconds}ms';
+  }
+  return '${(elapsed.inMilliseconds / 1000).toStringAsFixed(1)}s';
+}
+
 class HttpLogTile extends StatelessWidget {
   const HttpLogTile({super.key, required this.httpLog});
 
@@ -167,7 +174,8 @@ class HttpLogTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   if (httpLog.elapsed != null)
                     Text(
-                      '${httpLog.elapsed!.inMilliseconds}ms',
+                      _formatElapsed(httpLog.elapsed!),
+                      maxLines: 1,
                       style: TextStyle(
                         color: textShade(context, 0.7),
                         fontFeatures: const [FontFeature.tabularFigures()],
