@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
@@ -111,7 +112,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         ],
       ),
       body: userScreenData.when(
-        data: (data) => _UserProfileListView(data, isLoading, setIsLoading),
+        data: (data) => _UserProfileListView(
+          data,
+          isLoading,
+          setIsLoading,
+          onRefresh: () => ref.refresh(_userScreenDataProvider(widget.user.id).future),
+        ),
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
           if (error is ClientException && error.message.contains('404')) {
@@ -133,12 +139,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 }
 
 class _UserProfileListView extends ConsumerWidget {
-  const _UserProfileListView(this.data, this.isLoading, this.setIsLoading);
+  const _UserProfileListView(this.data, this.isLoading, this.setIsLoading, {required this.onRefresh});
 
   final UserScreenData data;
   final bool isLoading;
-
   final void Function(bool value) setIsLoading;
+  final RefreshCallback onRefresh;
 
   String _scoreDisplay(double score) {
     final integerPart = score.truncate();
@@ -171,7 +177,12 @@ class _UserProfileListView extends ConsumerWidget {
       }
     }
 
-    return ListView(
+    return HapticRefreshIndicator(
+      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+          ? MediaQuery.paddingOf(context).top + kToolbarHeight
+          : 0.0,
+      onRefresh: onRefresh,
+      child: ListView(
       children: [
         UserProfileWidget(user: user),
         PerfCards(user: user, isMe: false),
@@ -285,6 +296,7 @@ class _UserProfileListView extends ConsumerWidget {
           user: user.lightUser,
         ),
       ],
+    ),
     );
   }
 }
