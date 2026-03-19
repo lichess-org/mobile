@@ -845,8 +845,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               onTap: () {
                 showChoicePicker(
                   context,
-                  choices: (widget.initialFen != null ||
-                          _selectedVariant == Variant.fromPosition)
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
                       ? SideChoice.values
                       : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
                   selectedItem: _selectedSideChoice,
@@ -932,10 +931,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
           child: FilledButton(
             onPressed: _isPlayEnabled
                 ? () {
-                    final effectiveFen = widget.initialFen ??
-                        (_selectedVariant == Variant.fromPosition
-                            ? _fromPositionFen
-                            : null);
+                    final effectiveFen =
+                        widget.initialFen ??
+                        (_selectedVariant == Variant.fromPosition ? _fromPositionFen : null);
                     final side =
                         _selectedSideChoice.toSide(fen: effectiveFen) ??
                         Side.values[Random().nextInt(2)];
