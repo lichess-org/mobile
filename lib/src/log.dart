@@ -70,9 +70,12 @@ class AppLogService {
       _logs.put(record);
 
       // Persist to database asynchronously (fire-and-forget).
-      ref
-          .read(appLogStorageProvider.future)
-          .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
+      // The try-catch guards against ref being invalid (e.g. disposed ProviderScope in tests).
+      try {
+        ref
+            .read(appLogStorageProvider.future)
+            .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
+      } catch (_) {}
     });
   }
 
