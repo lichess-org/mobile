@@ -31,7 +31,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -881,22 +880,26 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               },
             ),
             if (widget.initialFen == null)
-              ExpandedSection(
-                expand: _selectedVariant == Variant.fromPosition,
-                child: SmallBoardPreview(
-                  orientation: _selectedSideChoice.toSide(fen: _fromPositionFen) ?? Side.white,
-                  fen: _fromPositionFen ?? kEmptyFEN,
-                  description: TextField(
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      labelText: context.l10n.pasteTheFenStringHere,
-                      suffixIcon: const Icon(Icons.paste),
-                    ),
-                    controller: _fenController,
-                    readOnly: true,
-                    onTap: _getClipboardData,
-                  ),
-                ),
+              AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.fastOutSlowIn,
+                child: _selectedVariant == Variant.fromPosition
+                    ? SmallBoardPreview(
+                        orientation:
+                            _selectedSideChoice.toSide(fen: _fromPositionFen) ?? Side.white,
+                        fen: _fromPositionFen ?? kEmptyFEN,
+                        description: TextField(
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            labelText: context.l10n.pasteTheFenStringHere,
+                            suffixIcon: const Icon(Icons.paste),
+                          ),
+                          controller: _fenController,
+                          readOnly: true,
+                          onTap: _getClipboardData,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
