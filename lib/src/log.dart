@@ -81,10 +81,6 @@ class AppLogService {
 
   void clear() {
     _logs.clear();
-    ref.read(appLogStorageProvider.future).then(
-      (storage) => storage.deleteAll(),
-      onError: (_) {},
-    );
   }
 }
 
