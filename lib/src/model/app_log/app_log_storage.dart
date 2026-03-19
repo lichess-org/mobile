@@ -45,11 +45,10 @@ class AppLogStorage {
 
   /// Saves an [AppLogEntry] to the database.
   Future<void> save(AppLogEntry entry) async {
-    await _db.insert(
-      kAppLogStorageTable,
-      {...entry.toJson(), 'lastModified': DateTime.now().toIso8601String()},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await _db.insert(kAppLogStorageTable, {
+      ...entry.toJson(),
+      'lastModified': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// Deletes all app log entries from the database.

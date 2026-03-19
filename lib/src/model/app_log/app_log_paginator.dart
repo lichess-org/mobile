@@ -23,9 +23,7 @@ class AppLogPaginator extends AsyncNotifier<AppLogState> {
     final minLevelValue = ref.watch(logPreferencesProvider.select((p) => p.level.value));
     return AppLogState(
       data: IList.new([
-        await AsyncValue.guard(
-          () => storage.page(limit: _pageSize, minLevelValue: minLevelValue),
-        ),
+        await AsyncValue.guard(() => storage.page(limit: _pageSize, minLevelValue: minLevelValue)),
       ]),
     );
   }

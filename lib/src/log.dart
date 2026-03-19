@@ -72,10 +72,7 @@ class AppLogService {
       // Persist to database asynchronously (fire-and-forget).
       ref
           .read(appLogStorageProvider.future)
-          .then(
-            (storage) => storage.save(AppLogEntry.fromLogRecord(record)),
-            onError: (_) {},
-          );
+          .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
     });
   }
 
