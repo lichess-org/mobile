@@ -139,7 +139,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 }
 
 class _UserProfileListView extends ConsumerWidget {
-  const _UserProfileListView(this.data, this.isLoading, this.setIsLoading, {required this.onRefresh});
+  const _UserProfileListView(
+    this.data,
+    this.isLoading,
+    this.setIsLoading, {
+    required this.onRefresh,
+  });
 
   final UserScreenData data;
   final bool isLoading;
@@ -183,120 +188,121 @@ class _UserProfileListView extends ConsumerWidget {
           : 0.0,
       onRefresh: onRefresh,
       child: ListView(
-      children: [
-        UserProfileWidget(user: user),
-        PerfCards(user: user, isMe: false),
-        ListSection(
-          hasLeading: true,
-          children: [
-            if (authUser != null && crosstable != null && (crosstable.nbGames) > 0) ...[
-              () {
-                final crosstableData = crosstable;
-                final currentUserScore = crosstableData.users[authUser.user.id] ?? 0;
-                final otherUserScore = crosstableData.users[user.id] ?? 0;
+        children: [
+          UserProfileWidget(user: user),
+          PerfCards(user: user, isMe: false),
+          ListSection(
+            hasLeading: true,
+            children: [
+              if (authUser != null && crosstable != null && (crosstable.nbGames) > 0) ...[
+                () {
+                  final crosstableData = crosstable;
+                  final currentUserScore = crosstableData.users[authUser.user.id] ?? 0;
+                  final otherUserScore = crosstableData.users[user.id] ?? 0;
 
-                return ListTile(
-                  title: Text(
-                    context.l10n.yourScore(
-                      '${_scoreDisplay(currentUserScore)} - ${_scoreDisplay(otherUserScore)}',
-                    ),
-                  ),
-                  leading: const Icon(Icons.scoreboard_outlined),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      GameHistoryScreen.buildRoute(
-                        context,
-                        user: authUser.user,
-                        isOnline: connectivity.value?.isOnline == true,
-                        gameFilter: GameFilterState(opponent: user),
+                  return ListTile(
+                    title: Text(
+                      context.l10n.yourScore(
+                        '${_scoreDisplay(currentUserScore)} - ${_scoreDisplay(otherUserScore)}',
                       ),
-                    );
-                  },
-                );
-              }(),
-            ],
-            ListTile(
-              title: Text(context.l10n.watchGames),
-              leading: const Icon(Icons.live_tv_outlined),
-              trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
-              onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(TvScreen.buildRoute(context, user: user.lightUser));
-              },
-            ),
-            if (authUser != null) ...[
-              if (user.canChallenge == true)
-                ListTile(
-                  title: Text(context.l10n.challengeChallengeToPlay),
-                  leading: const Icon(LichessIcons.crossed_swords),
-                  onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
-                ),
-
-              if (user.blocking != true && !user.isBot && kidMode.value == false)
-                ListTile(
-                  leading: const Icon(Icons.chat_bubble_outline),
-                  title: Text(context.l10n.composeMessage),
-                  onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
-                  },
-                ),
-              if (user.followable == true && user.following != true)
-                ListTile(
-                  leading: const Icon(Icons.person_add_outlined),
-                  title: Text(context.l10n.follow),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction((client) => RelationRepository(client).follow(user.id)),
-                )
-              else if (user.following == true)
-                ListTile(
-                  leading: const Icon(Icons.person_remove_outlined),
-                  title: Text(context.l10n.unfollow),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction((client) => RelationRepository(client).unfollow(user.id)),
-                ),
-              if (user.following != true && user.blocking != true)
-                ListTile(
-                  leading: const Icon(Icons.block_outlined),
-                  title: Text(context.l10n.block),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction((client) => RelationRepository(client).block(user.id)),
-                )
-              else if (user.blocking == true)
-                ListTile(
-                  leading: const Icon(Icons.block_outlined),
-                  title: Text(context.l10n.unblock),
-                  onTap: isLoading
-                      ? null
-                      : () => userAction((client) => RelationRepository(client).unblock(user.id)),
-                ),
-              ListTile(
-                leading: const Icon(Icons.report_problem_outlined),
-                title: Text(context.l10n.reportXToModerators(user.username)),
-                onTap: () {
-                  launchUrl(
-                    lichessUri('/report', {'username': user.id, 'login': authUser.user.id}),
+                    ),
+                    leading: const Icon(Icons.scoreboard_outlined),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        GameHistoryScreen.buildRoute(
+                          context,
+                          user: authUser.user,
+                          isOnline: connectivity.value?.isOnline == true,
+                          gameFilter: GameFilterState(opponent: user),
+                        ),
+                      );
+                    },
                   );
+                }(),
+              ],
+              ListTile(
+                title: Text(context.l10n.watchGames),
+                leading: const Icon(Icons.live_tv_outlined),
+                trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(TvScreen.buildRoute(context, user: user.lightUser));
                 },
               ),
+              if (authUser != null) ...[
+                if (user.canChallenge == true)
+                  ListTile(
+                    title: Text(context.l10n.challengeChallengeToPlay),
+                    leading: const Icon(LichessIcons.crossed_swords),
+                    onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
+                  ),
+
+                if (user.blocking != true && !user.isBot && kidMode.value == false)
+                  ListTile(
+                    leading: const Icon(Icons.chat_bubble_outline),
+                    title: Text(context.l10n.composeMessage),
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
+                    },
+                  ),
+                if (user.followable == true && user.following != true)
+                  ListTile(
+                    leading: const Icon(Icons.person_add_outlined),
+                    title: Text(context.l10n.follow),
+                    onTap: isLoading
+                        ? null
+                        : () => userAction((client) => RelationRepository(client).follow(user.id)),
+                  )
+                else if (user.following == true)
+                  ListTile(
+                    leading: const Icon(Icons.person_remove_outlined),
+                    title: Text(context.l10n.unfollow),
+                    onTap: isLoading
+                        ? null
+                        : () =>
+                              userAction((client) => RelationRepository(client).unfollow(user.id)),
+                  ),
+                if (user.following != true && user.blocking != true)
+                  ListTile(
+                    leading: const Icon(Icons.block_outlined),
+                    title: Text(context.l10n.block),
+                    onTap: isLoading
+                        ? null
+                        : () => userAction((client) => RelationRepository(client).block(user.id)),
+                  )
+                else if (user.blocking == true)
+                  ListTile(
+                    leading: const Icon(Icons.block_outlined),
+                    title: Text(context.l10n.unblock),
+                    onTap: isLoading
+                        ? null
+                        : () => userAction((client) => RelationRepository(client).unblock(user.id)),
+                  ),
+                ListTile(
+                  leading: const Icon(Icons.report_problem_outlined),
+                  title: Text(context.l10n.reportXToModerators(user.username)),
+                  onTap: () {
+                    launchUrl(
+                      lichessUri('/report', {'username': user.id, 'login': authUser.user.id}),
+                    );
+                  },
+                ),
+              ],
             ],
-          ],
-        ),
-        UserActivityWidget(activity: AsyncData(activity), user: user.lightUser),
-        RecentGamesWidget(
-          recentGames: AsyncData(recentGames),
-          nbOfGames: nbOfGames,
-          user: user.lightUser,
-        ),
-      ],
-    ),
+          ),
+          UserActivityWidget(activity: AsyncData(activity), user: user.lightUser),
+          RecentGamesWidget(
+            recentGames: AsyncData(recentGames),
+            nbOfGames: nbOfGames,
+            user: user.lightUser,
+          ),
+        ],
+      ),
     );
   }
 }
