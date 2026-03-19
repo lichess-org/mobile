@@ -19,23 +19,37 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Read Flutter version
+        run: echo "FLUTTER_VERSION=$(cat flutter-version)" >> $GITHUB_ENV
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version-file: flutter-version.yaml
-      - run: flutter doctor -v
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      - name: Patch Flutter
+        run: |
+          git -C ${{ env.FLUTTER_ROOT }} apply $GITHUB_WORKSPACE/flutter.patch
+          rm ${{ env.FLUTTER_ROOT }}/bin/cache/flutter_tools.snapshot
 
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Patch dependencies
+        run: |
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/jni-*/src/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_chess-*/src/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_sf16-*/src/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_variant-*/android/CMakeLists.txt
+          sed -i '/externalNativeBuild {/,/}/d' ~/.pub-cache/hosted/pub.dev/webcrypto-*/src/CMakeLists.txt
+
       - name: Code generation
         run: dart run build_runner build
 
-      - name: Build the APK
+      - name: Build APK
         run: flutter build apk --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
 
       - name: Upload the APK
         uses: actions/upload-artifact@v6
         with:
           path: build/app/outputs/flutter-apk/app-release.apk
-
