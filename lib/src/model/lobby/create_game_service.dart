@@ -16,7 +16,11 @@ import 'package:logging/logging.dart';
 
 /// A provider for the [CreateGameService].
 final createGameServiceProvider = Provider.autoDispose<CreateGameService>((Ref ref) {
-  final service = CreateGameService(Logger('CreateGameService'), ref: ref);
+  final service = CreateGameService(
+    Logger('CreateGameService'),
+    ref: ref,
+    sri: ref.read(preloadedDataProvider).requireValue.sri,
+  );
   ref.onDispose(() {
     service.dispose();
   });
@@ -25,9 +29,10 @@ final createGameServiceProvider = Provider.autoDispose<CreateGameService>((Ref r
 
 /// A service to create a new game from the lobby or from a challenge.
 class CreateGameService {
-  CreateGameService(this._log, {required this.ref});
+  CreateGameService(this._log, {required this.ref, required this.sri});
 
   final Ref ref;
+  final String sri;
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
@@ -95,7 +100,7 @@ class CreateGameService {
     }
 
     try {
-      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: socketClient.sri);
+      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       if (!completer.isCompleted) {
@@ -110,11 +115,7 @@ class CreateGameService {
   Future<void> newCorrespondenceGame(GameSeek seek) async {
     _log.info('Creating new correspondence game');
 
-    await ref.withClient(
-      (client) => LobbyRepository(
-        client,
-      ).createSeek(seek, sri: ref.read(preloadedDataProvider).requireValue.sri),
-    );
+    await ref.withClient((client) => LobbyRepository(client).createSeek(seek, sri: sri));
   }
 
   /// Create a new real time challenge.
@@ -261,10 +262,10 @@ class CreateGameService {
     return completer.future;
   }
 
-  /// Cancel the current game creation.
+  /// Cancel the current game creation. No-op if no active lobby seek.
   Future<void> cancelSeek() async {
+    if (_lobbyConnection == null) return;
     _log.info('Cancelling game creation');
-    final sri = ref.read(preloadedDataProvider).requireValue.sri;
     try {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
       if (_lobbyConnection != null && _lobbyConnection!.$2.isCompleted == false) {
