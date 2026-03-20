@@ -212,12 +212,14 @@ struct FeedItemRow: View {
                     .fontWeight(.medium)
                     .lineLimit(item.thumbnailData != nil ? 3 : 2)
                     .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
                 if let date = item.publishedDate {
                     Text(date, style: .relative)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
