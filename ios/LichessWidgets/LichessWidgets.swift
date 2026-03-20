@@ -192,8 +192,8 @@ struct LichessWidgetsEntryView: View {
     var maxItems: Int {
         switch family {
         case .systemSmall: return 2
-        case .systemMedium: return 3
-        default: return 8
+        case .systemMedium: return 2
+        default: return 5
         }
     }
 
