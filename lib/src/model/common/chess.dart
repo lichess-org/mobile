@@ -103,13 +103,13 @@ const ISet<Variant> readSupportedVariants = ISetConst({
 const IList<Variant> playSupportedVariants = IListConst([
   Variant.standard,
   Variant.chess960,
-  Variant.antichess,
-  Variant.atomic,
   Variant.kingOfTheHill,
   Variant.threeCheck,
-  Variant.racingKings,
-  Variant.horde,
   Variant.crazyhouse,
+  Variant.antichess,
+  Variant.atomic,
+  Variant.horde,
+  Variant.racingKings,
   Variant.fromPosition,
 ]);
 
