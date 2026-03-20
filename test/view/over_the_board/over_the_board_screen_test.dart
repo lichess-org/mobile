@@ -476,19 +476,19 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Change variant to Chess960
+      // Change variant to Crazyhouse
       await tester.tap(find.textContaining('Standard'));
       await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('Atomic'));
+      await tester.tap(find.textContaining('Crazyhouse'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
       final gameState = ref.read(overTheBoardGameControllerProvider);
-      // Atomic is not standard, so the variant should be preserved as-is
-      expect(gameState.game.meta.variant, Variant.atomic);
-      expect(gameState.game.lastPosition.rule, Rule.atomic);
+      // Crazyhouse is not standard, so the variant should be preserved as-is
+      expect(gameState.game.meta.variant, Variant.crazyhouse);
+      expect(gameState.game.lastPosition.rule, Rule.crazyhouse);
       expect(gameState.game.initialFen, _customFen);
     });
 
