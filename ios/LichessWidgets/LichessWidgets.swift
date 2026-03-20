@@ -57,23 +57,45 @@ struct FeedEntry: TimelineEntry {
 
 // MARK: - Feed Fetching
 
-func fetchThumbnail(urlString: String) async -> Data? {
-    guard let url = URL(string: urlString) else { return nil }
-    return try? await URLSession.shared.data(from: url).0
+private func maxItems(for family: WidgetFamily) -> Int {
+    switch family {
+    case .systemSmall: return 2
+    case .systemMedium: return 2
+    default: return 5
+    }
 }
 
-func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: String?) {
+/// Downloads and downsamples a thumbnail to `targetSize` points at 3x scale.
+private func fetchThumbnail(urlString: String, targetSize: CGFloat) async -> Data? {
+    guard let url = URL(string: urlString),
+          let (data, _) = try? await URLSession.shared.data(from: url),
+          let source = UIImage(data: data)
+    else { return nil }
+
+    let px = targetSize * 3  // 3x for highest-density displays
+    let size = CGSize(width: px, height: px)
+    let renderer = UIGraphicsImageRenderer(size: size)
+    let downsampled = renderer.image { _ in
+        source.draw(in: CGRect(origin: .zero, size: size))
+    }
+    return downsampled.jpegData(compressionQuality: 0.8)
+}
+
+private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbnailSize: CGFloat) async -> (items: [FeedItem], error: String?) {
     do {
         let feed = try await Feed(urlString: choice.rawValue)
-        let itemCount = 10
         var items: [FeedItem] = []
         switch feed {
         case .atom(let atomFeed):
             items = await withTaskGroup(of: (Int, FeedItem).self) { group in
-                for (index, entry) in (atomFeed.entries ?? []).prefix(itemCount).enumerated() {
+                for (index, entry) in (atomFeed.entries ?? []).prefix(maxCount).enumerated() {
                     group.addTask {
-                        let thumbURL = entry.media?.thumbnails?.first?.attributes?.url
-                        let thumbData = thumbURL != nil ? await fetchThumbnail(urlString: thumbURL!) : nil
+                        let thumbData: Data?
+                        if let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
+                            thumbData = await fetchThumbnail(urlString: thumbURL, targetSize: thumbnailSize)
+                        } else {
+                            thumbData = nil
+                        }
                         return (index, FeedItem(
                             id: entry.id ?? "\(index)",
                             title: entry.title ?? "Untitled",
@@ -87,7 +109,7 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
                 return results.sorted { $0.0 < $1.0 }.map(\.1)
             }
         case .rss(let rssFeed):
-            items = (rssFeed.channel?.items ?? []).prefix(itemCount).enumerated().map { index, item in
+            items = (rssFeed.channel?.items ?? []).prefix(maxCount).enumerated().map { index, item in
                 FeedItem(
                     id: item.guid?.text ?? item.link ?? "\(index)",
                     title: item.title ?? "Untitled",
@@ -96,7 +118,7 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
                 )
             }
         case .json(let jsonFeed):
-            items = (jsonFeed.items ?? []).prefix(itemCount).enumerated().map { index, item in
+            items = (jsonFeed.items ?? []).prefix(maxCount).enumerated().map { index, item in
                 FeedItem(
                     id: item.id ?? "\(index)",
                     title: item.title ?? "Untitled",
@@ -113,6 +135,10 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
 
 // MARK: - Provider
 
+private func thumbnailSize(for family: WidgetFamily) -> CGFloat {
+    family == .systemSmall ? 44 : 52
+}
+
 struct FeedProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> FeedEntry {
         FeedEntry(
@@ -121,7 +147,6 @@ struct FeedProvider: AppIntentTimelineProvider {
             items: [
                 FeedItem(id: "1", title: "Lichess Update: New Features", publishedDate: .now, thumbnailData: nil),
                 FeedItem(id: "2", title: "Titled Arena Results", publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "3", title: "Community Spotlight", publishedDate: .now, thumbnailData: nil),
             ],
             error: nil
         )
@@ -131,12 +156,20 @@ struct FeedProvider: AppIntentTimelineProvider {
         if context.isPreview {
             return placeholder(in: context)
         }
-        let (items, error) = await fetchFeed(for: configuration.feed)
+        let (items, error) = await fetchFeed(
+            for: configuration.feed,
+            maxCount: maxItems(for: context.family),
+            thumbnailSize: thumbnailSize(for: context.family)
+        )
         return FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
     }
 
     func timeline(for configuration: FeedIntent, in context: Context) async -> Timeline<FeedEntry> {
-        let (items, error) = await fetchFeed(for: configuration.feed)
+        let (items, error) = await fetchFeed(
+            for: configuration.feed,
+            maxCount: maxItems(for: context.family),
+            thumbnailSize: thumbnailSize(for: context.family)
+        )
         let entry = FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
@@ -150,13 +183,17 @@ struct ThumbnailImage: View {
     let size: CGFloat
 
     var body: some View {
-        if let uiImage = UIImage(data: data) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size, height: size)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
+        Group {
+            if let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } else {
+                Color.secondary.opacity(0.3)
+            }
         }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
     }
 }
 
@@ -189,17 +226,7 @@ struct LichessWidgetsEntryView: View {
     var entry: FeedEntry
     @Environment(\.widgetFamily) var family
 
-    var maxItems: Int {
-        switch family {
-        case .systemSmall: return 2
-        case .systemMedium: return 2
-        default: return 5
-        }
-    }
-
-    var thumbnailSize: CGFloat {
-        family == .systemSmall ? 44 : 52
-    }
+    var thumbSize: CGFloat { thumbnailSize(for: family) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -231,10 +258,9 @@ struct LichessWidgetsEntryView: View {
                     .foregroundStyle(.secondary)
                 Spacer()
             } else {
-                let visible = Array(entry.items.prefix(maxItems))
-                ForEach(visible) { item in
-                    FeedItemRow(item: item, thumbnailSize: thumbnailSize)
-                    if item.id != visible.last?.id {
+                ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
+                    FeedItemRow(item: item, thumbnailSize: thumbSize)
+                    if index < entry.items.count - 1 {
                         Divider()
                     }
                 }
@@ -285,12 +311,6 @@ struct LichessWidgets: Widget {
                 id: "2",
                 title: "Titled Arena Results",
                 publishedDate: Calendar.current.date(byAdding: .hour, value: -2, to: .now),
-                thumbnailData: nil
-            ),
-            FeedItem(
-                id: "3",
-                title: "Community Spotlight: Great Contributions",
-                publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now),
                 thumbnailData: nil
             ),
         ],
