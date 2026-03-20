@@ -8,7 +8,7 @@ internal import XMLKit
 
 enum FeedChoice: String, AppEnum {
     case officialBlog = "https://lichess.org/@/Lichess/blog.atom"
-    case newsFeed = "https://lichess.org/feed"
+    case newsFeed = "https://lichess.org/feed.atom"
     case communityBlog = "https://lichess.org/blog/community.atom"
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation = "Feed"
