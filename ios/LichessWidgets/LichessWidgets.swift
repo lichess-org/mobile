@@ -1,6 +1,7 @@
 import AppIntents
 import FeedKit
 import SwiftUI
+import UIKit
 import WidgetKit
 internal import XMLKit
 
@@ -44,6 +45,7 @@ struct FeedItem: Identifiable {
     let id: String
     let title: String
     let publishedDate: Date?
+    let thumbnailData: Data?
 }
 
 struct FeedEntry: TimelineEntry {
@@ -55,6 +57,11 @@ struct FeedEntry: TimelineEntry {
 
 // MARK: - Feed Fetching
 
+func fetchThumbnail(urlString: String) async -> Data? {
+    guard let url = URL(string: urlString) else { return nil }
+    return try? await URLSession.shared.data(from: url).0
+}
+
 func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: String?) {
     do {
         let feed = try await Feed(urlString: choice.rawValue)
@@ -62,19 +69,30 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
         var items: [FeedItem] = []
         switch feed {
         case .atom(let atomFeed):
-            items = (atomFeed.entries ?? []).prefix(itemCount).enumerated().map { index, entry in
-                FeedItem(
-                    id: entry.id ?? "\(index)",
-                    title: entry.title ?? "Untitled",
-                    publishedDate: entry.published
-                )
+            items = await withTaskGroup(of: (Int, FeedItem).self) { group in
+                for (index, entry) in (atomFeed.entries ?? []).prefix(itemCount).enumerated() {
+                    group.addTask {
+                        let thumbURL = entry.media?.thumbnails?.first?.attributes?.url
+                        let thumbData = thumbURL != nil ? await fetchThumbnail(urlString: thumbURL!) : nil
+                        return (index, FeedItem(
+                            id: entry.id ?? "\(index)",
+                            title: entry.title ?? "Untitled",
+                            publishedDate: entry.published,
+                            thumbnailData: thumbData
+                        ))
+                    }
+                }
+                var results: [(Int, FeedItem)] = []
+                for await result in group { results.append(result) }
+                return results.sorted { $0.0 < $1.0 }.map(\.1)
             }
         case .rss(let rssFeed):
             items = (rssFeed.channel?.items ?? []).prefix(itemCount).enumerated().map { index, item in
                 FeedItem(
                     id: item.guid?.text ?? item.link ?? "\(index)",
                     title: item.title ?? "Untitled",
-                    publishedDate: item.pubDate
+                    publishedDate: item.pubDate,
+                    thumbnailData: nil
                 )
             }
         case .json(let jsonFeed):
@@ -82,7 +100,8 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
                 FeedItem(
                     id: item.id ?? "\(index)",
                     title: item.title ?? "Untitled",
-                    publishedDate: item.datePublished
+                    publishedDate: item.datePublished,
+                    thumbnailData: nil
                 )
             }
         }
@@ -98,11 +117,11 @@ struct FeedProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> FeedEntry {
         FeedEntry(
             date: .now,
-            feed: .officialBlog,
+            feed: .communityBlog,
             items: [
-                FeedItem(id: "1", title: "Lichess Update: New Features", publishedDate: .now),
-                FeedItem(id: "2", title: "Titled Arena Results", publishedDate: .now),
-                FeedItem(id: "3", title: "Community Spotlight", publishedDate: .now),
+                FeedItem(id: "1", title: "Lichess Update: New Features", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "2", title: "Titled Arena Results", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "3", title: "Community Spotlight", publishedDate: .now, thumbnailData: nil),
             ],
             error: nil
         )
@@ -126,20 +145,41 @@ struct FeedProvider: AppIntentTimelineProvider {
 
 // MARK: - Views
 
-struct FeedItemRow: View {
-    let item: FeedItem
+struct ThumbnailImage: View {
+    let data: Data
+    let size: CGFloat
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(item.title)
-                .font(.caption)
-                .fontWeight(.medium)
-                .lineLimit(2)
-                .foregroundStyle(.primary)
-            if let date = item.publishedDate {
-                Text(date, style: .relative)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+        if let uiImage = UIImage(data: data) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size, height: size)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+        }
+    }
+}
+
+struct FeedItemRow: View {
+    let item: FeedItem
+    let thumbnailSize: CGFloat
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 6) {
+            if let data = item.thumbnailData {
+                ThumbnailImage(data: data, size: thumbnailSize)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.title)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .lineLimit(item.thumbnailData != nil ? 3 : 2)
+                    .foregroundStyle(.primary)
+                if let date = item.publishedDate {
+                    Text(date, style: .relative)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -155,6 +195,10 @@ struct LichessWidgetsEntryView: View {
         case .systemMedium: return 3
         default: return 8
         }
+    }
+
+    var thumbnailSize: CGFloat {
+        family == .systemSmall ? 44 : 52
     }
 
     var body: some View {
@@ -189,7 +233,7 @@ struct LichessWidgetsEntryView: View {
             } else {
                 let visible = Array(entry.items.prefix(maxItems))
                 ForEach(visible) { item in
-                    FeedItemRow(item: item)
+                    FeedItemRow(item: item, thumbnailSize: thumbnailSize)
                     if item.id != visible.last?.id {
                         Divider()
                     }
@@ -229,22 +273,25 @@ struct LichessWidgets: Widget {
 } timeline: {
     FeedEntry(
         date: .now,
-        feed: .officialBlog,
+        feed: .communityBlog,
         items: [
             FeedItem(
                 id: "1",
-                title: "Lichess Update: New Features in 2025",
-                publishedDate: .now
+                title: "Ståhlberg's Losing Streak in Zürich 1953",
+                publishedDate: .now,
+                thumbnailData: nil
             ),
             FeedItem(
                 id: "2",
                 title: "Titled Arena Results",
-                publishedDate: Calendar.current.date(byAdding: .hour, value: -2, to: .now)
+                publishedDate: Calendar.current.date(byAdding: .hour, value: -2, to: .now),
+                thumbnailData: nil
             ),
             FeedItem(
                 id: "3",
                 title: "Community Spotlight: Great Contributions",
-                publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now)
+                publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now),
+                thumbnailData: nil
             ),
         ],
         error: nil
