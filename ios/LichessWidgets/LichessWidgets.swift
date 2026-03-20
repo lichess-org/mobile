@@ -203,10 +203,10 @@ struct LichessWidgetsEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 4) {
-                Image(systemName: "newspaper.fill")
-                    .foregroundStyle(.yellow)
-                    .font(.caption2)
+            HStack(spacing: 6) {
+                Image("LichessLogo")
+                    .resizable()
+                    .frame(width: 18, height: 18)
                 Text(entry.feed.displayName)
                     .font(.caption2)
                     .fontWeight(.bold)
