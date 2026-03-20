@@ -1,5 +1,6 @@
 import WidgetKit
 import SwiftUI
+import FeedKit
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {

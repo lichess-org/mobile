@@ -11,6 +11,8 @@
 		2F2A90DE2F6DF5F3008DA3C7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2A90DD2F6DF5F3008DA3C7 /* WidgetKit.framework */; };
 		2F2A90E02F6DF5F3008DA3C7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F2A90DF2F6DF5F3008DA3C7 /* SwiftUI.framework */; };
 		2F2A90EB2F6DF5F4008DA3C7 /* LichessWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2F2A90DC2F6DF5F3008DA3C7 /* LichessWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2F2A90F42F6DFF0F008DA3C7 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F2A90F32F6DFF0F008DA3C7 /* FeedKit */; };
+		2F2A90F62F6DFF0F008DA3C7 /* XMLKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F2A90F52F6DFF0F008DA3C7 /* XMLKit */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		4C1B4CBC5F6D1FB9AB4B2E2D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150C426DBDFD9997221AABF1 /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -98,8 +100,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F2A90F42F6DFF0F008DA3C7 /* FeedKit in Frameworks */,
 				2F2A90E02F6DF5F3008DA3C7 /* SwiftUI.framework in Frameworks */,
 				2F2A90DE2F6DF5F3008DA3C7 /* WidgetKit.framework in Frameworks */,
+				2F2A90F62F6DFF0F008DA3C7 /* XMLKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +207,8 @@
 			);
 			name = LichessWidgetsExtension;
 			packageProductDependencies = (
+				2F2A90F32F6DFF0F008DA3C7 /* FeedKit */,
+				2F2A90F52F6DFF0F008DA3C7 /* XMLKit */,
 			);
 			productName = LichessWidgetsExtension;
 			productReference = 2F2A90DC2F6DF5F3008DA3C7 /* LichessWidgetsExtension.appex */;
@@ -263,6 +269,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -887,6 +896,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit";
+			requirement = {
+				kind = exactVersion;
+				version = 10.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2F2A90F32F6DFF0F008DA3C7 /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
+		2F2A90F52F6DFF0F008DA3C7 /* XMLKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = XMLKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
