@@ -58,10 +58,11 @@ struct FeedEntry: TimelineEntry {
 func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: String?) {
     do {
         let feed = try await Feed(urlString: choice.rawValue)
+        let itemCount = 10
         var items: [FeedItem] = []
         switch feed {
         case .atom(let atomFeed):
-            items = (atomFeed.entries ?? []).prefix(5).enumerated().map { index, entry in
+            items = (atomFeed.entries ?? []).prefix(itemCount).enumerated().map { index, entry in
                 FeedItem(
                     id: entry.id ?? "\(index)",
                     title: entry.title ?? "Untitled",
@@ -69,7 +70,7 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
                 )
             }
         case .rss(let rssFeed):
-            items = (rssFeed.channel?.items ?? []).prefix(5).enumerated().map { index, item in
+            items = (rssFeed.channel?.items ?? []).prefix(itemCount).enumerated().map { index, item in
                 FeedItem(
                     id: item.guid?.text ?? item.link ?? "\(index)",
                     title: item.title ?? "Untitled",
@@ -77,7 +78,7 @@ func fetchFeed(for choice: FeedChoice) async -> (items: [FeedItem], error: Strin
                 )
             }
         case .json(let jsonFeed):
-            items = (jsonFeed.items ?? []).prefix(5).enumerated().map { index, item in
+            items = (jsonFeed.items ?? []).prefix(itemCount).enumerated().map { index, item in
                 FeedItem(
                     id: item.id ?? "\(index)",
                     title: item.title ?? "Untitled",
@@ -152,7 +153,7 @@ struct LichessWidgetsEntryView: View {
         switch family {
         case .systemSmall: return 2
         case .systemMedium: return 3
-        default: return 5
+        default: return 8
         }
     }
 
