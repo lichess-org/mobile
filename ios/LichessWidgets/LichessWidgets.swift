@@ -256,7 +256,7 @@ struct FeedWidgetHeader: View {
     }
 }
 
-struct LichessWidgetsEntryView: View {
+struct BlogFeedWidgetEntryView: View {
     var entry: FeedEntry
     @Environment(\.widgetFamily) var family
 
@@ -344,16 +344,16 @@ struct LichessWidgetsEntryView: View {
 
 // MARK: - Widget
 
-struct LichessWidgets: Widget {
-    let kind: String = "LichessWidgets"
+struct BlogFeedWidget: Widget {
+    let kind: String = "BlogFeedWidget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: FeedIntent.self, provider: FeedProvider()) { entry in
             if #available(iOS 17.0, *) {
-                LichessWidgetsEntryView(entry: entry)
+                BlogFeedWidgetEntryView(entry: entry)
                     .containerBackground(.background, for: .widget)
             } else {
-                LichessWidgetsEntryView(entry: entry)
+                BlogFeedWidgetEntryView(entry: entry)
                     .padding()
                     .background()
             }
@@ -367,7 +367,7 @@ struct LichessWidgets: Widget {
 // MARK: - Preview
 
 #Preview(as: .systemLarge) {
-    LichessWidgets()
+    BlogFeedWidget()
 } timeline: {
     FeedEntry(
         date: .now,

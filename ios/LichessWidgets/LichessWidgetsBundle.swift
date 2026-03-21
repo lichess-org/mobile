@@ -4,6 +4,6 @@ import SwiftUI
 @main
 struct LichessWidgetsBundle: WidgetBundle {
     var body: some Widget {
-        LichessWidgets()
+        BlogFeedWidget()
     }
 }
