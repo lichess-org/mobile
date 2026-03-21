@@ -21,6 +21,6 @@ These changes are local only and should not be committed.
 
 When a PR that adds a new extension is ready to merge, a Lichess org member with Apple Developer access needs to:
 
-1. Register the new App ID in the Apple Developer portal.
+1. Register the new App ID (for the extension's bundle ID) in the Apple Developer portal.
 2. Create a provisioning profile for it.
 3. Ensure any required entitlements are added to the main app profile.
