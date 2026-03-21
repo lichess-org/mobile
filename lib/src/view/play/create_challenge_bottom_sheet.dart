@@ -38,6 +38,7 @@ class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
 
 class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBottomSheet> {
   Future<ChallengeDeclineReason?>? _pendingCorrespondenceChallenge;
+  bool _isSubmittingCorrespondenceChallenge = false;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -299,6 +300,10 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
             FutureBuilder(
               future: _pendingCorrespondenceChallenge,
               builder: (context, snapshot) {
+                final isWaitingForCorrespondenceChallenge =
+                    _isSubmittingCorrespondenceChallenge ||
+                    snapshot.connectionState == ConnectionState.waiting;
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
@@ -326,10 +331,21 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                             : null,
                       ChallengeTimeControlType.correspondence ||
                       ChallengeTimeControlType.unlimited =>
-                        snapshot.connectionState != ConnectionState.waiting
+                        !isWaitingForCorrespondenceChallenge
                             ? () async {
+                                if (_isSubmittingCorrespondenceChallenge) {
+                                  return;
+                                }
+
                                 final createGameService = ref.read(createGameServiceProvider);
+                                final l10n = context.l10n;
+                                final rootContext = Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).context;
+
                                 setState(() {
+                                  _isSubmittingCorrespondenceChallenge = true;
                                   _pendingCorrespondenceChallenge = createGameService
                                       .newCorrespondenceChallenge(
                                         preferences.makeRequest(
@@ -341,8 +357,10 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                       );
                                 });
 
+                                final pendingChallenge = _pendingCorrespondenceChallenge!;
+
                                 try {
-                                  final maybeDeclined = await _pendingCorrespondenceChallenge;
+                                  final maybeDeclined = await pendingChallenge;
 
                                   if (!context.mounted) return;
 
@@ -351,17 +369,17 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   ).popUntil((route) => route is! ModalBottomSheetRoute);
 
                                   if (maybeDeclined != null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    ScaffoldMessenger.of(rootContext).showSnackBar(
                                       SnackBar(
                                         content: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Text(context.l10n.challengeChallengeDeclined),
+                                            Text(l10n.challengeChallengeDeclined),
                                             const SizedBox(height: 8.0),
                                             const Divider(height: 26.0, thickness: 0.0),
                                             Text(
-                                              maybeDeclined.label(context.l10n),
+                                              maybeDeclined.label(l10n),
                                               style: const TextStyle(fontStyle: FontStyle.italic),
                                             ),
                                             const Divider(height: 26.0, thickness: 0.0),
@@ -381,27 +399,36 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                       ),
                                     );
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
+                                    showSnackBar(
+                                      rootContext,
+                                      l10n.mobileChallengeCreated,
+                                      type: SnackBarType.success,
                                     );
                                   }
                                 } catch (e) {
                                   if (context.mounted) {
                                     showSnackBar(
                                       context,
-                                      context.l10n.mobileSomethingWentWrong,
+                                      l10n.mobileSomethingWentWrong,
                                       type: SnackBarType.error,
                                     );
                                   }
                                 } finally {
-                                  setState(() {
-                                    _pendingCorrespondenceChallenge = null;
-                                  });
+                                  if (context.mounted) {
+                                    setState(() {
+                                      _pendingCorrespondenceChallenge = null;
+                                      _isSubmittingCorrespondenceChallenge = false;
+                                    });
+                                  }
                                 }
                               }
                             : null,
                     },
-                    child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+                    child: isWaitingForCorrespondenceChallenge &&
+                            (timeControl == ChallengeTimeControlType.correspondence ||
+                                timeControl == ChallengeTimeControlType.unlimited)
+                        ? const ButtonLoadingIndicator()
+                        : Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                   ),
                 );
               },
