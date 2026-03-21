@@ -168,54 +168,38 @@ struct FeedProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> FeedEntry {
         FeedEntry(
             date: .now,
-            feed: .communityBlog,
+            feed: .officialBlog,
             username: nil,
             items: [
                 FeedItem(
                     id: "1",
-                    title: "Ståhlberg's Losing Streak in Zürich 1953",
-                    url: "https://lichess.org/@/danthedestroyer317/blog/stahlbergs-losing-streak-in-zurich-1953/Xu61o492",
-                    publishedDate: Calendar.current.date(
-                        byAdding: .hour,
-                        value: -2,
-                        to: .now
-                    ),
+                    title: "Queens' Online Chess Festival",
+                    url: "https://lichess.org/@/Lichess/blog/queens-online-chess-festival/YwpMPp8y",
+                    publishedDate: Calendar.current.date(byAdding: .day, value: -27, to: .now),
                     thumbnailData: nil,
                     thumbnailImageName: "placeholder_thumb_1"
                 ),
                 FeedItem(
                     id: "2",
-                    title: "Can my local chess club handle the big league?",
-                    url: "https://lichess.org/@/TeoKajLibroj/blog/can-my-local-chess-club-handle-the-big-league/mLBEusPC",
-                    publishedDate: Calendar.current.date(
-                        byAdding: .hour,
-                        value: -12,
-                        to: .now
-                    ),
+                    title: "ChessMood 20/20 Grand Prix 2026",
+                    url: "https://lichess.org/@/Lichess/blog/announcing-the-chessmood-2020-grand-prix-2026/Y7sU143E",
+                    publishedDate: Calendar.current.date(byAdding: .day, value: -31, to: .now),
                     thumbnailData: nil,
                     thumbnailImageName: "placeholder_thumb_2"
                 ),
                 FeedItem(
                     id: "3",
-                    title: "Aurèle Lenoir: een interview",
-                    url: "https://lichess.org/@/Roeselare/blog/aurele-lenoir-een-interview/KqNAUUvy",
-                    publishedDate: Calendar.current.date(
-                        byAdding: .day,
-                        value: -1,
-                        to: .now
-                    ),
+                    title: "Streamer Arenas Announcement",
+                    url: "https://lichess.org/@/Lichess/blog/streamer-arenas-announcement--february-to-july-2026/WbNDIbKt",
+                    publishedDate: Calendar.current.date(byAdding: .day, value: -35, to: .now),
                     thumbnailData: nil,
                     thumbnailImageName: "placeholder_thumb_3"
                 ),
                 FeedItem(
                     id: "4",
-                    title: "A team blitz tournament format for three teams",
-                    url: "https://lichess.org/@/Routalempi/blog/a-team-blitz-tournament-format-for-three-teams/IfyPLvLP",
-                    publishedDate: Calendar.current.date(
-                        byAdding: .day,
-                        value: -1,
-                        to: .now
-                    ),
+                    title: "Titled Arenas Announcement",
+                    url: "https://lichess.org/@/Lichess/blog/titled-arenas-announcement--january-to-march-2026/BOzFDHHs",
+                    publishedDate: Calendar.current.date(byAdding: .day, value: -68, to: .now),
                     thumbnailData: nil,
                     thumbnailImageName: "placeholder_thumb_4"
                 ),
@@ -444,13 +428,13 @@ struct BlogFeedWidget: Widget {
 } timeline: {
     FeedEntry(
         date: .now,
-        feed: .communityBlog,
+        feed: .officialBlog,
         username: nil,
         items: [
-            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: "https://lichess.org/@/danthedestroyer317/blog/stahlbergs-losing-streak-in-zurich-1953/Xu61o492", publishedDate: .now, thumbnailData: nil, thumbnailImageName: "placeholder_thumb_1"),
-            FeedItem(id: "2", title: "Can my local chess club handle the big league?", url: "https://lichess.org/@/TeoKajLibroj/blog/can-my-local-chess-club-handle-the-big-league/mLBEusPC", publishedDate: Calendar.current.date(byAdding: .hour, value: -12, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_2"),
-            FeedItem(id: "3", title: "Aurèle Lenoir: een interview", url: "https://lichess.org/@/Roeselare/blog/aurele-lenoir-een-interview/KqNAUUvy", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_3"),
-            FeedItem(id: "4", title: "A team blitz tournament format for three teams", url: "https://lichess.org/@/Routalempi/blog/a-team-blitz-tournament-format-for-three-teams/IfyPLvLP", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_4"),
+            FeedItem(id: "1", title: "Queens' Online Chess Festival", url: "https://lichess.org/@/Lichess/blog/queens-online-chess-festival/YwpMPp8y", publishedDate: Calendar.current.date(byAdding: .day, value: -27, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_1"),
+            FeedItem(id: "2", title: "ChessMood 20/20 Grand Prix 2026", url: "https://lichess.org/@/Lichess/blog/announcing-the-chessmood-2020-grand-prix-2026/Y7sU143E", publishedDate: Calendar.current.date(byAdding: .day, value: -31, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_2"),
+            FeedItem(id: "3", title: "Streamer Arenas Announcement", url: "https://lichess.org/@/Lichess/blog/streamer-arenas-announcement--february-to-july-2026/WbNDIbKt", publishedDate: Calendar.current.date(byAdding: .day, value: -35, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_3"),
+            FeedItem(id: "4", title: "Titled Arenas Announcement", url: "https://lichess.org/@/Lichess/blog/titled-arenas-announcement--january-to-march-2026/BOzFDHHs", publishedDate: Calendar.current.date(byAdding: .day, value: -68, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_4"),
         ],
         error: nil
     )
