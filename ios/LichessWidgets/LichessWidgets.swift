@@ -398,23 +398,3 @@ struct BlogFeedWidget: Widget {
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
-
-// MARK: - Preview
-
-#Preview(as: .systemLarge) {
-    BlogFeedWidget()
-} timeline: {
-    FeedEntry(
-        date: .now,
-        feed: .communityBlog,
-        username: nil,
-        items: [
-            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
-            FeedItem(id: "2", title: "The Immortal Game Revisited: What Anderssen Got Right", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil),
-            FeedItem(id: "3", title: "Lichess Puzzle of the Month: March 2026", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -2, to: .now), thumbnailData: nil),
-            FeedItem(id: "4", title: "Opening Traps Every Club Player Should Know", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now), thumbnailData: nil),
-            FeedItem(id: "5", title: "Fischer's 21 Brilliant Games Annotated", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -5, to: .now), thumbnailData: nil),
-        ],
-        error: nil
-    )
-}
