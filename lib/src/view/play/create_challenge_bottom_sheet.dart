@@ -424,7 +424,8 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                               }
                             : null,
                     },
-                    child: isWaitingForCorrespondenceChallenge &&
+                    child:
+                        isWaitingForCorrespondenceChallenge &&
                             (timeControl == ChallengeTimeControlType.correspondence ||
                                 timeControl == ChallengeTimeControlType.unlimited)
                         ? const ButtonLoadingIndicator()
