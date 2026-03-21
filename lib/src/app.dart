@@ -168,6 +168,10 @@ class _AppState extends ConsumerState<Application> {
         ref.read(oauthCallbackProvider).add(uri);
         return;
       }
+      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == 'open-web') {
+        handleOpenWebLink(uri);
+        return;
+      }
       final context = _navigatorKey.currentContext;
       if (context != null && context.mounted) {
         handleAppLink(context, uri);
