@@ -205,6 +205,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         };
 
         final pockets = widget.boardParams.pockets;
+        final premoveDropRole = switch (gameData?.premovable?.premove) {
+          DropMove(:final role) => role,
+          _ => null,
+        };
 
         Widget topTable({required double boardSize}) => RotatedBox(
           quarterTurns: widget.topTableUpsideDown ? 2 : 0,
@@ -222,6 +226,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.topTableUpsideDown,
+                  premoveDropRole: premoveDropRole,
                 ),
               widget.topTable,
             ],
@@ -245,6 +250,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.bottomTableUpsideDown,
+                  premoveDropRole: premoveDropRole,
                 ),
             ],
           ),
