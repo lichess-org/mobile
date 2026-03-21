@@ -111,7 +111,7 @@ private func maxItems(for family: WidgetFamily) -> Int {
     switch family {
     case .systemSmall: return 1
     case .systemMedium: return 2
-    default: return 5
+    default: return 4
     }
 }
 
@@ -292,7 +292,7 @@ struct BlogFeedWidgetEntryView: View {
 
     private var spec: ThumbnailSpec { thumbnailSpec(for: family) }
     private var showDate: Bool { family == .systemLarge }
-    private var lineLimit: Int { family == .systemLarge ? 2 : 3 }
+    private var lineLimit: Int { family == .systemSmall ? 4 : family == .systemLarge ? 2 : 3 }
 
     @ViewBuilder
     private var itemsContent: some View {
