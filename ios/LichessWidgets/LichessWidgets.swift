@@ -67,7 +67,7 @@ private struct ThumbnailSpec {
 
 private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec {
     switch family {
-    case .systemSmall: return ThumbnailSpec(width: 55, aspectRatio: 1.0)     // square
+    case .systemSmall: return ThumbnailSpec(width: 28, aspectRatio: 1.0)     // square
     case .systemMedium: return ThumbnailSpec(width: 72, aspectRatio: 0.5625) // 16:9
     default: return ThumbnailSpec(width: 72, aspectRatio: 0.75)              // 4:3
     }
@@ -75,7 +75,8 @@ private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec {
 
 private func maxItems(for family: WidgetFamily) -> Int {
     switch family {
-    case .systemSmall, .systemMedium: return 2
+    case .systemSmall: return 1
+    case .systemMedium: return 2
     default: return 5
     }
 }
@@ -232,6 +233,7 @@ private struct FeedItemRow: View {
 struct FeedWidgetHeader: View {
     let feedName: String
     let updatedAt: Date
+    var showTimestamp: Bool = true
 
     var body: some View {
         HStack(alignment: .center) {
@@ -244,10 +246,12 @@ struct FeedWidgetHeader: View {
                     .foregroundStyle(.primary)
                     .lineLimit(1)
             }
-            Spacer()
-            Text("Updated at \(updatedAt.formatted(.dateTime.hour().minute()))")
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
+            if showTimestamp {
+                Spacer()
+                Text("Updated at \(updatedAt.formatted(.dateTime.hour().minute()))")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
@@ -298,22 +302,42 @@ struct LichessWidgetsEntryView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date)
+        if family == .systemSmall {
+            // Small: single item, no overflow risk — timestamp pinned at bottom.
+            VStack(alignment: .leading, spacing: 0) {
+                FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date, showTimestamp: false)
 
-            Divider()
-                .padding(.top, 8)
+                Divider()
+                    .padding(.top, 8)
 
-            // Color.clear claims all remaining vertical space in the VStack.
-            // The overlay pins itemsContent to the top of that space and clips
-            // anything that overflows below — the header above is never affected.
-            Color.clear
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .overlay(alignment: .topLeading) {
-                    itemsContent
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .clipped()
+                itemsContent
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Spacer()
+
+                Text("Updated at \(entry.date.formatted(.dateTime.hour().minute()))")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 6)
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
+                FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date)
+
+                Divider()
+                    .padding(.top, 8)
+
+                // Color.clear claims all remaining vertical space in the VStack.
+                // The overlay pins itemsContent to the top of that space and clips
+                // anything that overflows below — the header above is never affected.
+                Color.clear
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay(alignment: .topLeading) {
+                        itemsContent
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .clipped()
+            }
         }
     }
 }
