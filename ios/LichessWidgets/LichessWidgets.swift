@@ -286,7 +286,7 @@ private struct ItemThumbnail: View {
 
 private struct FeedItemRow: View {
     let item: FeedItem
-    let spec: ThumbnailSpec
+    let spec: ThumbnailSpec?
     let lineLimit: Int
     let showDate: Bool
 
@@ -305,7 +305,9 @@ private struct FeedItemRow: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            ItemThumbnail(data: item.thumbnailData, imageName: item.thumbnailImageName, spec: spec)
+            if let spec {
+                ItemThumbnail(data: item.thumbnailData, imageName: item.thumbnailImageName, spec: spec)
+            }
         }
     }
 }
@@ -374,7 +376,7 @@ struct BlogFeedWidgetEntryView: View {
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    let row = FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
+                    let row = FeedItemRow(item: item, spec: family == .systemSmall ? nil : spec, lineLimit: lineLimit, showDate: showDate)
                         .padding(.top, 8)
                     if let dest = item.url.flatMap(openWebURL) {
                         Link(destination: dest) { row }
