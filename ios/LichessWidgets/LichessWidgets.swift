@@ -64,7 +64,7 @@ struct FeedItem: Identifiable {
     let publishedDate: Date?
     let thumbnailData: Data?
     /// Asset catalog image name, used for static placeholder items only.
-    var thumbnailImageName: String? = nil
+    let thumbnailImageName: String?
 }
 
 struct FeedEntry: TimelineEntry {
@@ -83,7 +83,7 @@ struct FeedEntry: TimelineEntry {
     }
 }
 
-// MARK: - Feed Fetching
+// MARK: - Configuration
 
 private struct ThumbnailSpec {
     let width: CGFloat
@@ -134,12 +134,12 @@ struct FeedProvider: AppIntentTimelineProvider {
             let items = await withTaskGroup(of: (Int, FeedItem).self) { group in
                 for (index, entry) in (atomFeed.entries ?? []).prefix(family.maxItems).enumerated() {
                     group.addTask {
-                        let thumbData: Data?
-                        if let thumbSpec, let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
-                            thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
-                        } else {
-                            thumbData = nil
-                        }
+                        let thumbData: Data? = if let thumbSpec,
+                                                  let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
+                        await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
+                    } else {
+                        nil
+                    }
                         let entryURL = entry.links?
                             .first(where: { $0.attributes?.rel == "alternate" })?
                             .attributes?.href
@@ -149,7 +149,8 @@ struct FeedProvider: AppIntentTimelineProvider {
                             title: entry.title ?? "Untitled",
                             url: entryURL,
                             publishedDate: entry.published,
-                            thumbnailData: thumbData
+                            thumbnailData: thumbData,
+                            thumbnailImageName: nil
                         ))
                     }
                 }
@@ -255,7 +256,7 @@ private struct FeedItemRow: View {
     }
 }
 
-struct FeedWidgetHeader: View {
+private struct FeedWidgetHeader: View {
     let feedName: String
     let updatedAt: Date
     var showTimestamp: Bool = true
@@ -279,12 +280,18 @@ struct FeedWidgetHeader: View {
     }
 }
 
-struct BlogFeedWidgetEntryView: View {
+private struct BlogFeedWidgetEntryView: View {
     var entry: FeedEntry
     @Environment(\.widgetFamily) var family
 
     private var showDate: Bool { family == .systemLarge }
-    private var lineLimit: Int { family == .systemSmall ? 4 : family == .systemLarge ? 2 : 3 }
+    private var lineLimit: Int {
+        switch family {
+        case .systemSmall: 4
+        case .systemLarge: 2
+        default: 3
+        }
+    }
 
     /// Computes a thumbnail spec that makes items fill `availableHeight` without exceeding the static size.
     /// Each item row has 8pt top padding; dividers between items add ~9pt each.
