@@ -228,7 +228,7 @@ struct FeedProvider: AppIntentTimelineProvider {
                     thumbnailData: nil,
                     thumbnailImageName: "placeholder_thumb_4"
                 ),
-            ],
+            ].prefix(maxItems(for: context.family)).map { $0 },
             error: nil
         )
     }
