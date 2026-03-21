@@ -57,6 +57,21 @@ struct FeedEntry: TimelineEntry {
 
 // MARK: - Feed Fetching
 
+private struct ThumbnailSpec {
+    let width: CGFloat
+    let aspectRatio: CGFloat // height = width * aspectRatio
+
+    var height: CGFloat { width * aspectRatio }
+}
+
+private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec {
+    switch family {
+    case .systemSmall: return ThumbnailSpec(width: 55, aspectRatio: 1.0)     // square
+    case .systemMedium: return ThumbnailSpec(width: 72, aspectRatio: 0.5625) // 16:9
+    default: return ThumbnailSpec(width: 72, aspectRatio: 0.75)              // 4:3
+    }
+}
+
 private func maxItems(for family: WidgetFamily) -> Int {
     switch family {
     case .systemSmall: return 2
@@ -65,23 +80,21 @@ private func maxItems(for family: WidgetFamily) -> Int {
     }
 }
 
-/// Downloads and downsamples a thumbnail to `targetSize` points at 3x scale.
-private func fetchThumbnail(urlString: String, targetSize: CGFloat) async -> Data? {
+private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Data? {
     guard let url = URL(string: urlString),
           let (data, _) = try? await URLSession.shared.data(from: url),
           let source = UIImage(data: data)
     else { return nil }
 
-    let px = targetSize * 3  // 3x for highest-density displays
-    let size = CGSize(width: px, height: px)
+    let size = CGSize(width: spec.width * 3, height: spec.height * 3)
     let renderer = UIGraphicsImageRenderer(size: size)
     let downsampled = renderer.image { _ in
         source.draw(in: CGRect(origin: .zero, size: size))
     }
-    return downsampled.jpegData(compressionQuality: 0.8)
+    return downsampled.jpegData(compressionQuality: 0.85)
 }
 
-private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbnailSize: CGFloat) async -> (items: [FeedItem], error: String?) {
+private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: ThumbnailSpec) async -> (items: [FeedItem], error: String?) {
     do {
         let feed = try await Feed(urlString: choice.rawValue)
         var items: [FeedItem] = []
@@ -92,7 +105,7 @@ private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbnailSize: CGF
                     group.addTask {
                         let thumbData: Data?
                         if let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
-                            thumbData = await fetchThumbnail(urlString: thumbURL, targetSize: thumbnailSize)
+                            thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
                         } else {
                             thumbData = nil
                         }
@@ -135,40 +148,37 @@ private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbnailSize: CGF
 
 // MARK: - Provider
 
-private func thumbnailSize(for family: WidgetFamily) -> CGFloat {
-    family == .systemSmall ? 44 : 52
-}
-
 struct FeedProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> FeedEntry {
         FeedEntry(
             date: .now,
             feed: .communityBlog,
             items: [
-                FeedItem(id: "1", title: "Lichess Update: New Features", publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "2", title: "Titled Arena Results", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "2", title: "The Immortal Game Revisited", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "3", title: "Lichess Puzzle of the Month", publishedDate: .now, thumbnailData: nil),
             ],
             error: nil
         )
     }
 
     func snapshot(for configuration: FeedIntent, in context: Context) async -> FeedEntry {
-        if context.isPreview {
-            return placeholder(in: context)
-        }
+        if context.isPreview { return placeholder(in: context) }
+        let spec = thumbnailSpec(for: context.family)
         let (items, error) = await fetchFeed(
             for: configuration.feed,
             maxCount: maxItems(for: context.family),
-            thumbnailSize: thumbnailSize(for: context.family)
+            thumbSpec: spec
         )
         return FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
     }
 
     func timeline(for configuration: FeedIntent, in context: Context) async -> Timeline<FeedEntry> {
+        let spec = thumbnailSpec(for: context.family)
         let (items, error) = await fetchFeed(
             for: configuration.feed,
             maxCount: maxItems(for: context.family),
-            thumbnailSize: thumbnailSize(for: context.family)
+            thumbSpec: spec
         )
         let entry = FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
@@ -178,9 +188,9 @@ struct FeedProvider: AppIntentTimelineProvider {
 
 // MARK: - Views
 
-struct ThumbnailImage: View {
+private struct ItemThumbnail: View {
     let data: Data
-    let size: CGFloat
+    let spec: ThumbnailSpec
 
     var body: some View {
         Group {
@@ -189,37 +199,61 @@ struct ThumbnailImage: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } else {
-                Color.secondary.opacity(0.3)
+                Color.secondary.opacity(0.15)
             }
         }
-        .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .frame(width: spec.width, height: spec.height)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
 
-struct FeedItemRow: View {
+private struct FeedItemRow: View {
     let item: FeedItem
-    let thumbnailSize: CGFloat
+    let spec: ThumbnailSpec
+    let lineLimit: Int
+    let showDate: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 6) {
-            if let data = item.thumbnailData {
-                ThumbnailImage(data: data, size: thumbnailSize)
-            }
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .top, spacing: 10) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(item.title)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .lineLimit(item.thumbnailData != nil ? 3 : 2)
-                    .foregroundStyle(.primary)
+                    .font(.system(size: 13, weight: .semibold))
+                    .lineLimit(lineLimit)
                     .fixedSize(horizontal: false, vertical: true)
-                if let date = item.publishedDate {
+                    .foregroundStyle(.primary)
+                if showDate, let date = item.publishedDate {
                     Text(date, style: .relative)
-                        .font(.caption2)
+                        .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            if let data = item.thumbnailData {
+                ItemThumbnail(data: data, spec: spec)
+            }
+        }
+    }
+}
+
+struct FeedWidgetHeader: View {
+    let feedName: String
+    let updatedAt: Date
+
+    var body: some View {
+        HStack(alignment: .center) {
+            HStack(spacing: 6) {
+                Image("LichessLogo")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                Text(feedName)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+            }
+            Spacer()
+            Text("Updated at \(updatedAt.formatted(.dateTime.hour().minute()))")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
         }
     }
 }
@@ -228,23 +262,14 @@ struct LichessWidgetsEntryView: View {
     var entry: FeedEntry
     @Environment(\.widgetFamily) var family
 
-    var thumbSize: CGFloat { thumbnailSize(for: family) }
+    private var spec: ThumbnailSpec { thumbnailSpec(for: family) }
+    private var showDate: Bool { family == .systemLarge }
+    private var lineLimit: Int { family == .systemLarge ? 2 : 3 }
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 6) {
-                Image("LichessLogo")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                Text(entry.feed.displayName)
-                    .font(.caption2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-            }
-
-            if let error = entry.error {
-                Spacer()
+    @ViewBuilder
+    private var itemsContent: some View {
+        if let error = entry.error {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Could not load feed")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -252,22 +277,44 @@ struct LichessWidgetsEntryView: View {
                     .font(.caption2)
                     .foregroundStyle(.red)
                     .lineLimit(2)
-                Spacer()
-            } else if entry.items.isEmpty {
-                Spacer()
-                Text("No items available")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer()
-            } else {
+            }
+            .padding(.top, 8)
+        } else if entry.items.isEmpty {
+            Text("No items available")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
+        } else {
+            VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    FeedItemRow(item: item, thumbnailSize: thumbSize)
+                    FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
+                        .padding(.top, 8)
                     if index < entry.items.count - 1 {
                         Divider()
+                            .padding(.top, 8)
                     }
                 }
-                Spacer(minLength: 0)
             }
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date)
+
+            Divider()
+                .padding(.top, 8)
+
+            // Color.clear claims all remaining vertical space in the VStack.
+            // The overlay pins itemsContent to the top of that space and clips
+            // anything that overflows below — the header above is never affected.
+            Color.clear
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay(alignment: .topLeading) {
+                    itemsContent
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .clipped()
         }
     }
 }
@@ -281,7 +328,7 @@ struct LichessWidgets: Widget {
         AppIntentConfiguration(kind: kind, intent: FeedIntent.self, provider: FeedProvider()) { entry in
             if #available(iOS 17.0, *) {
                 LichessWidgetsEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
+                    .containerBackground(.background, for: .widget)
             } else {
                 LichessWidgetsEntryView(entry: entry)
                     .padding()
@@ -296,25 +343,18 @@ struct LichessWidgets: Widget {
 
 // MARK: - Preview
 
-#Preview(as: .systemMedium) {
+#Preview(as: .systemLarge) {
     LichessWidgets()
 } timeline: {
     FeedEntry(
         date: .now,
         feed: .communityBlog,
         items: [
-            FeedItem(
-                id: "1",
-                title: "Ståhlberg's Losing Streak in Zürich 1953",
-                publishedDate: .now,
-                thumbnailData: nil
-            ),
-            FeedItem(
-                id: "2",
-                title: "Titled Arena Results",
-                publishedDate: Calendar.current.date(byAdding: .hour, value: -2, to: .now),
-                thumbnailData: nil
-            ),
+            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", publishedDate: .now, thumbnailData: nil),
+            FeedItem(id: "2", title: "The Immortal Game Revisited: What Anderssen Got Right", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil),
+            FeedItem(id: "3", title: "Lichess Puzzle of the Month: March 2026", publishedDate: Calendar.current.date(byAdding: .day, value: -2, to: .now), thumbnailData: nil),
+            FeedItem(id: "4", title: "Opening Traps Every Club Player Should Know", publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now), thumbnailData: nil),
+            FeedItem(id: "5", title: "Fischer's 21 Brilliant Games Annotated", publishedDate: Calendar.current.date(byAdding: .day, value: -5, to: .now), thumbnailData: nil),
         ],
         error: nil
     )
