@@ -44,6 +44,7 @@ struct FeedIntent: WidgetConfigurationIntent {
 struct FeedItem: Identifiable {
     let id: String
     let title: String
+    let url: String?
     let publishedDate: Date?
     let thumbnailData: Data?
 }
@@ -109,9 +110,14 @@ private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: Thumbna
                         } else {
                             thumbData = nil
                         }
+                        let entryURL = entry.links?
+                            .first(where: { $0.attributes?.rel == "alternate" })?
+                            .attributes?.href
+                            ?? entry.links?.first?.attributes?.href
                         return (index, FeedItem(
                             id: entry.id ?? "\(index)",
                             title: entry.title ?? "Untitled",
+                            url: entryURL,
                             publishedDate: entry.published,
                             thumbnailData: thumbData
                         ))
@@ -126,6 +132,7 @@ private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: Thumbna
                 FeedItem(
                     id: item.guid?.text ?? item.link ?? "\(index)",
                     title: item.title ?? "Untitled",
+                    url: item.link,
                     publishedDate: item.pubDate,
                     thumbnailData: nil
                 )
@@ -135,6 +142,7 @@ private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: Thumbna
                 FeedItem(
                     id: item.id ?? "\(index)",
                     title: item.title ?? "Untitled",
+                    url: item.url,
                     publishedDate: item.datePublished,
                     thumbnailData: nil
                 )
@@ -154,9 +162,9 @@ struct FeedProvider: AppIntentTimelineProvider {
             date: .now,
             feed: .communityBlog,
             items: [
-                FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "2", title: "The Immortal Game Revisited", publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "3", title: "Lichess Puzzle of the Month", publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "2", title: "The Immortal Game Revisited", url: nil, publishedDate: .now, thumbnailData: nil),
+                FeedItem(id: "3", title: "Lichess Puzzle of the Month", url: nil, publishedDate: .now, thumbnailData: nil),
             ],
             error: nil
         )
@@ -184,6 +192,15 @@ struct FeedProvider: AppIntentTimelineProvider {
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
+}
+
+// MARK: - Deep Link
+
+/// Encodes a feed item URL into the custom scheme the app listens for,
+/// opening it in the in-app browser (LaunchMode.inAppBrowserView).
+private func openWebURL(for urlString: String) -> URL? {
+    guard let encoded = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
+    return URL(string: "org.lichess.mobile://open-web?url=\(encoded)")
 }
 
 // MARK: - Views
@@ -287,8 +304,13 @@ struct LichessWidgetsEntryView: View {
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
+                    let row = FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
                         .padding(.top, 8)
+                    if let dest = item.url.flatMap(openWebURL) {
+                        Link(destination: dest) { row }
+                    } else {
+                        row
+                    }
                     if index < entry.items.count - 1 {
                         Divider()
                             .padding(.top, 8)
@@ -350,11 +372,11 @@ struct LichessWidgets: Widget {
         date: .now,
         feed: .communityBlog,
         items: [
-            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", publishedDate: .now, thumbnailData: nil),
-            FeedItem(id: "2", title: "The Immortal Game Revisited: What Anderssen Got Right", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil),
-            FeedItem(id: "3", title: "Lichess Puzzle of the Month: March 2026", publishedDate: Calendar.current.date(byAdding: .day, value: -2, to: .now), thumbnailData: nil),
-            FeedItem(id: "4", title: "Opening Traps Every Club Player Should Know", publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now), thumbnailData: nil),
-            FeedItem(id: "5", title: "Fischer's 21 Brilliant Games Annotated", publishedDate: Calendar.current.date(byAdding: .day, value: -5, to: .now), thumbnailData: nil),
+            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
+            FeedItem(id: "2", title: "The Immortal Game Revisited: What Anderssen Got Right", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil),
+            FeedItem(id: "3", title: "Lichess Puzzle of the Month: March 2026", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -2, to: .now), thumbnailData: nil),
+            FeedItem(id: "4", title: "Opening Traps Every Club Player Should Know", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now), thumbnailData: nil),
+            FeedItem(id: "5", title: "Fischer's 21 Brilliant Games Annotated", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -5, to: .now), thumbnailData: nil),
         ],
         error: nil
     )
