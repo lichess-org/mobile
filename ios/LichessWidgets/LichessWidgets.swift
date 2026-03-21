@@ -22,15 +22,6 @@ enum FeedChoice: String, AppEnum {
         .userBlog: "User Blog",
     ]
 
-    var displayName: String {
-        switch self {
-        case .officialBlog: return "Official Blog"
-        case .newsFeed: return "News Feed"
-        case .communityBlog: return "Community Blog"
-        case .userBlog: return "User Blog"
-        }
-    }
-
     func feedURL(username: String?) -> String? {
         switch self {
         case .officialBlog: return "https://lichess.org/@/Lichess/blog.atom"
@@ -88,7 +79,7 @@ struct FeedEntry: TimelineEntry {
         if feed == .userBlog, let username, !username.isEmpty {
             return "@\(username)"
         }
-        return feed.displayName
+        return FeedChoice.caseDisplayRepresentations[feed].map { String(localized: $0.title) } ?? feed.rawValue
     }
 }
 
@@ -101,9 +92,9 @@ private struct ThumbnailSpec {
     var height: CGFloat { width * aspectRatio }
 }
 
-private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec {
+private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec? {
     switch family {
-    case .systemSmall: return ThumbnailSpec(width: 28, aspectRatio: 1.0)     // square
+    case .systemSmall: return nil
     case .systemMedium: return ThumbnailSpec(width: 72, aspectRatio: 0.5625) // 16:9
     default: return ThumbnailSpec(width: 72, aspectRatio: 0.75)              // 4:3
     }
@@ -131,7 +122,7 @@ private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Dat
     return downsampled.jpegData(compressionQuality: 0.85)
 }
 
-private func fetchFeed(for configuration: FeedIntent, maxCount: Int, thumbSpec: ThumbnailSpec) async -> (items: [FeedItem], error: String?) {
+private func fetchFeed(for configuration: FeedIntent, maxCount: Int, thumbSpec: ThumbnailSpec?) async -> (items: [FeedItem], error: String?) {
     guard let urlString = configuration.feed.feedURL(username: configuration.username) else {
         return ([], "Enter a username in widget settings")
     }
@@ -143,7 +134,7 @@ private func fetchFeed(for configuration: FeedIntent, maxCount: Int, thumbSpec: 
             for (index, entry) in (atomFeed.entries ?? []).prefix(maxCount).enumerated() {
                 group.addTask {
                     let thumbData: Data?
-                    if let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
+                    if let thumbSpec, let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
                         thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
                     } else {
                         thumbData = nil
@@ -348,16 +339,16 @@ struct BlogFeedWidgetEntryView: View {
 
     /// Computes a thumbnail spec that makes items fill `availableHeight` without exceeding the static size.
     /// Each item row has 8pt top padding; dividers between items add ~9pt each.
-    private func spec(for availableHeight: CGFloat) -> ThumbnailSpec {
+    private func spec(for availableHeight: CGFloat) -> ThumbnailSpec? {
+        guard let staticSpec = thumbnailSpec(for: family) else { return nil }
         let count = CGFloat(max(entry.items.count, 1))
         let overhead = count * 8 + (count - 1) * 9
-        let staticSpec = thumbnailSpec(for: family)
         let thumbHeight = min(max((availableHeight - overhead) / count, 20), staticSpec.height)
         return ThumbnailSpec(width: thumbHeight / staticSpec.aspectRatio, aspectRatio: staticSpec.aspectRatio)
     }
 
     @ViewBuilder
-    private func itemsContent(spec: ThumbnailSpec) -> some View {
+    private func itemsContent(spec: ThumbnailSpec?) -> some View {
         if let error = entry.error {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Could not load feed")
@@ -377,7 +368,7 @@ struct BlogFeedWidgetEntryView: View {
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    let row = FeedItemRow(item: item, spec: family == .systemSmall ? nil : spec, lineLimit: lineLimit, showDate: showDate)
+                    let row = FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
                         .padding(.top, 8)
                     if let dest = item.url.flatMap(openWebURL) {
                         Link(destination: dest) { row }
@@ -402,7 +393,7 @@ struct BlogFeedWidgetEntryView: View {
                 Divider()
                     .padding(.top, 8)
 
-                itemsContent(spec: thumbnailSpec(for: family))
+                itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
@@ -437,14 +428,8 @@ struct BlogFeedWidget: Widget {
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: FeedIntent.self, provider: FeedProvider()) { entry in
-            if #available(iOS 17.0, *) {
-                BlogFeedWidgetEntryView(entry: entry)
-                    .containerBackground(.background, for: .widget)
-            } else {
-                BlogFeedWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
-            }
+            BlogFeedWidgetEntryView(entry: entry)
+                .containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Lichess Feed")
         .description("Shows the latest posts from a Lichess feed.")
