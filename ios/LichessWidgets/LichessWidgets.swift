@@ -346,14 +346,14 @@ struct BlogFeedWidgetEntryView: View {
     private var showDate: Bool { family == .systemLarge }
     private var lineLimit: Int { family == .systemSmall ? 4 : family == .systemLarge ? 2 : 3 }
 
-    /// Computes a thumbnail spec that makes items exactly fill `availableHeight`.
+    /// Computes a thumbnail spec that makes items fill `availableHeight` without exceeding the static size.
     /// Each item row has 8pt top padding; dividers between items add ~9pt each.
     private func spec(for availableHeight: CGFloat) -> ThumbnailSpec {
         let count = CGFloat(max(entry.items.count, 1))
         let overhead = count * 8 + (count - 1) * 9
-        let thumbHeight = max((availableHeight - overhead) / count, 20)
-        let aspectRatio = thumbnailSpec(for: family).aspectRatio
-        return ThumbnailSpec(width: thumbHeight / aspectRatio, aspectRatio: aspectRatio)
+        let staticSpec = thumbnailSpec(for: family)
+        let thumbHeight = min(max((availableHeight - overhead) / count, 20), staticSpec.height)
+        return ThumbnailSpec(width: thumbHeight / staticSpec.aspectRatio, aspectRatio: staticSpec.aspectRatio)
     }
 
     @ViewBuilder
