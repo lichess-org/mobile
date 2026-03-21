@@ -242,13 +242,13 @@ private struct FeedItemRow: View {
         HStack(alignment: .top, spacing: 10) {
             VStack(alignment: .leading, spacing: 3) {
                 Text(item.title)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .lineLimit(lineLimit)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.primary)
                 if showDate, let date = item.publishedDate {
                     Text(date, style: .relative)
-                        .font(.system(size: 11))
+                        .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                 }
             }
