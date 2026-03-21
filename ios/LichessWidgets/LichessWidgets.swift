@@ -72,6 +72,8 @@ struct FeedItem: Identifiable {
     let url: String?
     let publishedDate: Date?
     let thumbnailData: Data?
+    /// Asset catalog image name, used for static placeholder items only.
+    var thumbnailImageName: String? = nil
 }
 
 struct FeedEntry: TimelineEntry {
@@ -178,9 +180,54 @@ struct FeedProvider: AppIntentTimelineProvider {
             feed: .communityBlog,
             username: nil,
             items: [
-                FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "2", title: "The Immortal Game Revisited", url: nil, publishedDate: .now, thumbnailData: nil),
-                FeedItem(id: "3", title: "Lichess Puzzle of the Month", url: nil, publishedDate: .now, thumbnailData: nil),
+                FeedItem(
+                    id: "1",
+                    title: "Ståhlberg's Losing Streak in Zürich 1953",
+                    url: "https://lichess.org/@/danthedestroyer317/blog/stahlbergs-losing-streak-in-zurich-1953/Xu61o492",
+                    publishedDate: Calendar.current.date(
+                        byAdding: .hour,
+                        value: -2,
+                        to: .now
+                    ),
+                    thumbnailData: nil,
+                    thumbnailImageName: "placeholder_thumb_1"
+                ),
+                FeedItem(
+                    id: "2",
+                    title: "Can my local chess club handle the big league?",
+                    url: "https://lichess.org/@/TeoKajLibroj/blog/can-my-local-chess-club-handle-the-big-league/mLBEusPC",
+                    publishedDate: Calendar.current.date(
+                        byAdding: .hour,
+                        value: -12,
+                        to: .now
+                    ),
+                    thumbnailData: nil,
+                    thumbnailImageName: "placeholder_thumb_2"
+                ),
+                FeedItem(
+                    id: "3",
+                    title: "Aurèle Lenoir: een interview",
+                    url: "https://lichess.org/@/Roeselare/blog/aurele-lenoir-een-interview/KqNAUUvy",
+                    publishedDate: Calendar.current.date(
+                        byAdding: .day,
+                        value: -1,
+                        to: .now
+                    ),
+                    thumbnailData: nil,
+                    thumbnailImageName: "placeholder_thumb_3"
+                ),
+                FeedItem(
+                    id: "4",
+                    title: "A team blitz tournament format for three teams",
+                    url: "https://lichess.org/@/Routalempi/blog/a-team-blitz-tournament-format-for-three-teams/IfyPLvLP",
+                    publishedDate: Calendar.current.date(
+                        byAdding: .day,
+                        value: -1,
+                        to: .now
+                    ),
+                    thumbnailData: nil,
+                    thumbnailImageName: "placeholder_thumb_4"
+                ),
             ],
             error: nil
         )
@@ -214,13 +261,18 @@ private func openWebURL(for urlString: String) -> URL? {
 // MARK: - Views
 
 private struct ItemThumbnail: View {
-    let data: Data
+    let data: Data?
+    let imageName: String?
     let spec: ThumbnailSpec
 
     var body: some View {
         Group {
-            if let uiImage = UIImage(data: data) {
+            if let data, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } else if let imageName {
+                Image(imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } else {
@@ -253,9 +305,7 @@ private struct FeedItemRow: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            if let data = item.thumbnailData {
-                ItemThumbnail(data: data, spec: spec)
-            }
+            ItemThumbnail(data: item.thumbnailData, imageName: item.thumbnailImageName, spec: spec)
         }
     }
 }
@@ -397,4 +447,23 @@ struct BlogFeedWidget: Widget {
         .description("Shows the latest posts from a Lichess feed.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
+}
+
+// MARK: - Preview
+
+#Preview(as: .systemLarge) {
+    BlogFeedWidget()
+} timeline: {
+    FeedEntry(
+        date: .now,
+        feed: .communityBlog,
+        username: nil,
+        items: [
+            FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: "https://lichess.org/@/danthedestroyer317/blog/stahlbergs-losing-streak-in-zurich-1953/Xu61o492", publishedDate: .now, thumbnailData: nil, thumbnailImageName: "placeholder_thumb_1"),
+            FeedItem(id: "2", title: "Can my local chess club handle the big league?", url: "https://lichess.org/@/TeoKajLibroj/blog/can-my-local-chess-club-handle-the-big-league/mLBEusPC", publishedDate: Calendar.current.date(byAdding: .hour, value: -12, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_2"),
+            FeedItem(id: "3", title: "Aurèle Lenoir: een interview", url: "https://lichess.org/@/Roeselare/blog/aurele-lenoir-een-interview/KqNAUUvy", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_3"),
+            FeedItem(id: "4", title: "A team blitz tournament format for three teams", url: "https://lichess.org/@/Routalempi/blog/a-team-blitz-tournament-format-for-three-teams/IfyPLvLP", publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_4"),
+        ],
+        error: nil
+    )
 }
