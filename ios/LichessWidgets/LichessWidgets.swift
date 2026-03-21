@@ -75,8 +75,7 @@ private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec {
 
 private func maxItems(for family: WidgetFamily) -> Int {
     switch family {
-    case .systemSmall: return 2
-    case .systemMedium: return 2
+    case .systemSmall, .systemMedium: return 2
     default: return 5
     }
 }
@@ -97,56 +96,34 @@ private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Dat
 
 private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: ThumbnailSpec) async -> (items: [FeedItem], error: String?) {
     do {
-        let feed = try await Feed(urlString: choice.rawValue)
-        var items: [FeedItem] = []
-        switch feed {
-        case .atom(let atomFeed):
-            items = await withTaskGroup(of: (Int, FeedItem).self) { group in
-                for (index, entry) in (atomFeed.entries ?? []).prefix(maxCount).enumerated() {
-                    group.addTask {
-                        let thumbData: Data?
-                        if let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
-                            thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
-                        } else {
-                            thumbData = nil
-                        }
-                        let entryURL = entry.links?
-                            .first(where: { $0.attributes?.rel == "alternate" })?
-                            .attributes?.href
-                            ?? entry.links?.first?.attributes?.href
-                        return (index, FeedItem(
-                            id: entry.id ?? "\(index)",
-                            title: entry.title ?? "Untitled",
-                            url: entryURL,
-                            publishedDate: entry.published,
-                            thumbnailData: thumbData
-                        ))
+        guard case .atom(let atomFeed) = try await Feed(urlString: choice.rawValue) else {
+            return ([], "Unexpected feed format")
+        }
+        let items = await withTaskGroup(of: (Int, FeedItem).self) { group in
+            for (index, entry) in (atomFeed.entries ?? []).prefix(maxCount).enumerated() {
+                group.addTask {
+                    let thumbData: Data?
+                    if let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
+                        thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
+                    } else {
+                        thumbData = nil
                     }
+                    let entryURL = entry.links?
+                        .first(where: { $0.attributes?.rel == "alternate" })?
+                        .attributes?.href
+                        ?? entry.links?.first?.attributes?.href
+                    return (index, FeedItem(
+                        id: entry.id ?? "\(index)",
+                        title: entry.title ?? "Untitled",
+                        url: entryURL,
+                        publishedDate: entry.published,
+                        thumbnailData: thumbData
+                    ))
                 }
-                var results: [(Int, FeedItem)] = []
-                for await result in group { results.append(result) }
-                return results.sorted { $0.0 < $1.0 }.map(\.1)
             }
-        case .rss(let rssFeed):
-            items = (rssFeed.channel?.items ?? []).prefix(maxCount).enumerated().map { index, item in
-                FeedItem(
-                    id: item.guid?.text ?? item.link ?? "\(index)",
-                    title: item.title ?? "Untitled",
-                    url: item.link,
-                    publishedDate: item.pubDate,
-                    thumbnailData: nil
-                )
-            }
-        case .json(let jsonFeed):
-            items = (jsonFeed.items ?? []).prefix(maxCount).enumerated().map { index, item in
-                FeedItem(
-                    id: item.id ?? "\(index)",
-                    title: item.title ?? "Untitled",
-                    url: item.url,
-                    publishedDate: item.datePublished,
-                    thumbnailData: nil
-                )
-            }
+            var results: [(Int, FeedItem)] = []
+            for await result in group { results.append(result) }
+            return results.sorted { $0.0 < $1.0 }.map(\.1)
         }
         return (items, nil)
     } catch {
