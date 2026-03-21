@@ -290,12 +290,21 @@ struct BlogFeedWidgetEntryView: View {
     var entry: FeedEntry
     @Environment(\.widgetFamily) var family
 
-    private var spec: ThumbnailSpec { thumbnailSpec(for: family) }
     private var showDate: Bool { family == .systemLarge }
     private var lineLimit: Int { family == .systemSmall ? 4 : family == .systemLarge ? 2 : 3 }
 
+    /// Computes a thumbnail spec that makes items exactly fill `availableHeight`.
+    /// Each item row has 8pt top padding; dividers between items add ~9pt each.
+    private func spec(for availableHeight: CGFloat) -> ThumbnailSpec {
+        let count = CGFloat(max(entry.items.count, 1))
+        let overhead = count * 8 + (count - 1) * 9
+        let thumbHeight = max((availableHeight - overhead) / count, 20)
+        let aspectRatio = thumbnailSpec(for: family).aspectRatio
+        return ThumbnailSpec(width: thumbHeight / aspectRatio, aspectRatio: aspectRatio)
+    }
+
     @ViewBuilder
-    private var itemsContent: some View {
+    private func itemsContent(spec: ThumbnailSpec) -> some View {
         if let error = entry.error {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Could not load feed")
@@ -333,14 +342,14 @@ struct BlogFeedWidgetEntryView: View {
 
     var body: some View {
         if family == .systemSmall {
-            // Small: single item, no overflow risk — timestamp pinned at bottom.
+            // Small: single item — use fixed spec, timestamp pinned at bottom.
             VStack(alignment: .leading, spacing: 0) {
                 FeedWidgetHeader(feedName: entry.headerTitle, updatedAt: entry.date, showTimestamp: false)
 
                 Divider()
                     .padding(.top, 8)
 
-                itemsContent
+                itemsContent(spec: thumbnailSpec(for: family))
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
@@ -357,16 +366,12 @@ struct BlogFeedWidgetEntryView: View {
                 Divider()
                     .padding(.top, 8)
 
-                // Color.clear claims all remaining vertical space in the VStack.
-                // The overlay pins itemsContent to the top of that space and clips
-                // anything that overflows below — the header above is never affected.
-                Color.clear
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay(alignment: .topLeading) {
-                        itemsContent
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .clipped()
+                // GeometryReader fills remaining vertical space and provides its height
+                // so thumbnails can be sized to make items exactly fill the available area.
+                GeometryReader { geo in
+                    itemsContent(spec: spec(for: geo.size.height))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
         }
     }
