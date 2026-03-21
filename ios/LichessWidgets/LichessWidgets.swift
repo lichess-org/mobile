@@ -92,74 +92,82 @@ private struct ThumbnailSpec {
     var height: CGFloat { width * aspectRatio }
 }
 
-private func thumbnailSpec(for family: WidgetFamily) -> ThumbnailSpec? {
-    switch family {
-    case .systemSmall: return nil
-    case .systemMedium: return ThumbnailSpec(width: 72, aspectRatio: 0.5625) // 16:9
-    default: return ThumbnailSpec(width: 72, aspectRatio: 0.75)              // 4:3
-    }
-}
-
-private func maxItems(for family: WidgetFamily) -> Int {
-    switch family {
-    case .systemSmall: return 1
-    case .systemMedium: return 2
-    default: return 4
-    }
-}
-
-private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Data? {
-    guard let url = URL(string: urlString),
-          let (data, _) = try? await URLSession.shared.data(from: url),
-          let source = UIImage(data: data)
-    else { return nil }
-    let size = CGSize(width: spec.width * 3, height: spec.height * 3)
-    return await source.byPreparingThumbnail(ofSize: size)?.jpegData(compressionQuality: 0.85)
-}
-
-private func fetchFeed(for configuration: FeedIntent, maxCount: Int, thumbSpec: ThumbnailSpec?) async -> (items: [FeedItem], error: String?) {
-    guard let urlString = configuration.feed.feedURL(username: configuration.username) else {
-        return ([], "Enter a username in widget settings")
-    }
-    do {
-        guard case .atom(let atomFeed) = try await Feed(urlString: urlString) else {
-            return ([], "Unexpected feed format")
+private extension WidgetFamily {
+    var thumbnailSpec: ThumbnailSpec? {
+        switch self {
+        case .systemSmall: return nil
+        case .systemMedium: return ThumbnailSpec(width: 72, aspectRatio: 0.5625) // 16:9
+        default: return ThumbnailSpec(width: 72, aspectRatio: 0.75)              // 4:3
         }
-        let items = await withTaskGroup(of: (Int, FeedItem).self) { group in
-            for (index, entry) in (atomFeed.entries ?? []).prefix(maxCount).enumerated() {
-                group.addTask {
-                    let thumbData: Data?
-                    if let thumbSpec, let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
-                        thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
-                    } else {
-                        thumbData = nil
-                    }
-                    let entryURL = entry.links?
-                        .first(where: { $0.attributes?.rel == "alternate" })?
-                        .attributes?.href
-                        ?? entry.links?.first?.attributes?.href
-                    return (index, FeedItem(
-                        id: entry.id ?? "\(index)",
-                        title: entry.title ?? "Untitled",
-                        url: entryURL,
-                        publishedDate: entry.published,
-                        thumbnailData: thumbData
-                    ))
-                }
-            }
-            var results: [(Int, FeedItem)] = []
-            for await result in group { results.append(result) }
-            return results.sorted { $0.0 < $1.0 }.map(\.1)
+    }
+
+    var maxItems: Int {
+        switch self {
+        case .systemSmall: return 1
+        case .systemMedium: return 2
+        default: return 4
         }
-        return (items, nil)
-    } catch {
-        return ([], error.localizedDescription)
     }
 }
 
 // MARK: - Provider
 
 struct FeedProvider: AppIntentTimelineProvider {
+    private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Data? {
+        guard let url = URL(string: urlString),
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let source = UIImage(data: data)
+        else { return nil }
+        let size = CGSize(width: spec.width * 3, height: spec.height * 3)
+        return await source.byPreparingThumbnail(ofSize: size)?.jpegData(compressionQuality: 0.85)
+    }
+
+    private func fetchFeed(for configuration: FeedIntent, family: WidgetFamily) async -> (items: [FeedItem], error: String?) {
+        guard let urlString = configuration.feed.feedURL(username: configuration.username) else {
+            return ([], "Enter a username in widget settings")
+        }
+        do {
+            guard case .atom(let atomFeed) = try await Feed(urlString: urlString) else {
+                return ([], "Unexpected feed format")
+            }
+            let thumbSpec = family.thumbnailSpec
+            let items = await withTaskGroup(of: (Int, FeedItem).self) { group in
+                for (index, entry) in (atomFeed.entries ?? []).prefix(family.maxItems).enumerated() {
+                    group.addTask {
+                        let thumbData: Data?
+                        if let thumbSpec, let thumbURL = entry.media?.thumbnails?.first?.attributes?.url {
+                            thumbData = await fetchThumbnail(urlString: thumbURL, spec: thumbSpec)
+                        } else {
+                            thumbData = nil
+                        }
+                        let entryURL = entry.links?
+                            .first(where: { $0.attributes?.rel == "alternate" })?
+                            .attributes?.href
+                            ?? entry.links?.first?.attributes?.href
+                        return (index, FeedItem(
+                            id: entry.id ?? "\(index)",
+                            title: entry.title ?? "Untitled",
+                            url: entryURL,
+                            publishedDate: entry.published,
+                            thumbnailData: thumbData
+                        ))
+                    }
+                }
+                var results: [(Int, FeedItem)] = []
+                for await result in group { results.append(result) }
+                return results.sorted { $0.0 < $1.0 }.map(\.1)
+            }
+            return (items, nil)
+        } catch {
+            return ([], error.localizedDescription)
+        }
+    }
+
+    private func fetchEntry(for configuration: FeedIntent, family: WidgetFamily) async -> FeedEntry {
+        let (items, error) = await fetchFeed(for: configuration, family: family)
+        return FeedEntry(date: .now, feed: configuration.feed, username: configuration.username, items: items, error: error)
+    }
+
     func placeholder(in context: Context) -> FeedEntry {
         let allItems: [FeedItem] = [
             FeedItem(id: "1", title: "Queens' Online Chess Festival", url: "https://lichess.org/@/Lichess/blog/queens-online-chess-festival/YwpMPp8y", publishedDate: Calendar.current.date(byAdding: .day, value: -27, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_1"),
@@ -167,12 +175,7 @@ struct FeedProvider: AppIntentTimelineProvider {
             FeedItem(id: "3", title: "Streamer Arenas Announcement", url: "https://lichess.org/@/Lichess/blog/streamer-arenas-announcement--february-to-july-2026/WbNDIbKt", publishedDate: Calendar.current.date(byAdding: .day, value: -35, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_3"),
             FeedItem(id: "4", title: "Titled Arenas Announcement", url: "https://lichess.org/@/Lichess/blog/titled-arenas-announcement--january-to-march-2026/BOzFDHHs", publishedDate: Calendar.current.date(byAdding: .day, value: -68, to: .now), thumbnailData: nil, thumbnailImageName: "placeholder_thumb_4"),
         ]
-        return FeedEntry(date: .now, feed: .officialBlog, username: nil, items: Array(allItems.prefix(maxItems(for: context.family))), error: nil)
-    }
-
-    private func fetchEntry(for configuration: FeedIntent, family: WidgetFamily) async -> FeedEntry {
-        let (items, error) = await fetchFeed(for: configuration, maxCount: maxItems(for: family), thumbSpec: thumbnailSpec(for: family))
-        return FeedEntry(date: .now, feed: configuration.feed, username: configuration.username, items: items, error: error)
+        return FeedEntry(date: .now, feed: .officialBlog, username: nil, items: Array(allItems.prefix(context.family.maxItems)), error: nil)
     }
 
     func snapshot(for configuration: FeedIntent, in context: Context) async -> FeedEntry {
@@ -189,10 +192,12 @@ struct FeedProvider: AppIntentTimelineProvider {
 
 // MARK: - Deep Link
 
-/// Encodes a URL into the custom scheme the app listens for to open it in the in-app browser.
-private func openWebURL(for urlString: String) -> URL? {
-    guard let encoded = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
-    return URL(string: "org.lichess.mobile://open-web?url=\(encoded)")
+private extension String {
+    /// Encodes the string into the custom scheme the app listens for to open it in the in-app browser.
+    var lichessWebURL: URL? {
+        guard let encoded = addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
+        return URL(string: "org.lichess.mobile://open-web?url=\(encoded)")
+    }
 }
 
 // MARK: - Views
@@ -284,7 +289,7 @@ struct BlogFeedWidgetEntryView: View {
     /// Computes a thumbnail spec that makes items fill `availableHeight` without exceeding the static size.
     /// Each item row has 8pt top padding; dividers between items add ~9pt each.
     private func spec(for availableHeight: CGFloat) -> ThumbnailSpec? {
-        guard let staticSpec = thumbnailSpec(for: family) else { return nil }
+        guard let staticSpec = family.thumbnailSpec else { return nil }
         let count = CGFloat(max(entry.items.count, 1))
         let overhead = count * 8 + (count - 1) * 9
         let thumbHeight = min(max((availableHeight - overhead) / count, 20), staticSpec.height)
@@ -314,7 +319,7 @@ struct BlogFeedWidgetEntryView: View {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
                     let row = FeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
                         .padding(.top, 8)
-                    if let dest = item.url.flatMap(openWebURL) {
+                    if let dest = item.url?.lichessWebURL {
                         Link(destination: dest) { row }
                     } else {
                         row
