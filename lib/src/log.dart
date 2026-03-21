@@ -70,12 +70,17 @@ class AppLogService {
       _logs.put(record);
 
       // Persist to database asynchronously (fire-and-forget).
+      // Deferred via Future() to avoid re-entrant logging: ref.read() can synchronously mount
+      // providers, which triggers ProviderLogger.didAddProvider → _logger.info() → re-entrant
+      // Logger._publish while already dispatching, causing a StateError.
       // The try-catch guards against ref being invalid (e.g. disposed ProviderScope in tests).
-      try {
-        ref
-            .read(appLogStorageProvider.future)
-            .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
-      } catch (_) {}
+      Future(() {
+        try {
+          ref
+              .read(appLogStorageProvider.future)
+              .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
+        } catch (_) {}
+      });
     });
   }
 
