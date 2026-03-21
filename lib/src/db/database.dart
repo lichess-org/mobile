@@ -14,6 +14,7 @@ const corresGameTTL = Duration(days: 60);
 const gameTTL = Duration(days: 90);
 const chatReadMessagesTTL = Duration(days: 180);
 const httpLogTTL = Duration(days: 7);
+const appLogTTL = Duration(days: 7);
 
 const kStorageAnonId = '**anonymous**';
 
@@ -67,7 +68,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 4,
+      version: 5,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -79,6 +80,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _deleteOldEntries(db, 'game', gameTTL),
           _deleteOldEntries(db, 'chat_read_messages', chatReadMessagesTTL),
           _deleteOldEntries(db, 'http_log', httpLogTTL),
+          _deleteOldEntries(db, 'app_log', appLogTTL),
         ]);
       },
       onCreate: (db, version) async {
@@ -89,6 +91,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
         _createHttpLogTableV4(batch);
+        _createAppLogTableV5(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -101,6 +104,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 4) {
           _createHttpLogTableV4(batch);
+        }
+        if (oldVersion < 5) {
+          _createAppLogTableV5(batch);
         }
         await batch.commit();
       },
@@ -203,6 +209,23 @@ void _createHttpLogTableV4(Batch batch) {
     responseDateTime TEXT,
     lastModified TEXT NOT NULL,
     errorMessage TEXT
+  )
+    ''');
+}
+
+void _createAppLogTableV5(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS app_log');
+  batch.execute('''
+    CREATE TABLE app_log(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    logTime TEXT NOT NULL,
+    loggerName TEXT NOT NULL,
+    levelValue INTEGER NOT NULL,
+    levelName TEXT NOT NULL,
+    message TEXT NOT NULL,
+    error TEXT,
+    stackTrace TEXT,
+    lastModified TEXT NOT NULL
   )
     ''');
 }
