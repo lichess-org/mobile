@@ -8,9 +8,10 @@ internal import XMLKit
 // MARK: - Feed Selection
 
 enum FeedChoice: String, AppEnum {
-    case officialBlog = "https://lichess.org/@/Lichess/blog.atom"
-    case newsFeed = "https://lichess.org/feed.atom"
-    case communityBlog = "https://lichess.org/blog/community.atom"
+    case officialBlog
+    case newsFeed
+    case communityBlog
+    case userBlog
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation = "Feed"
 
@@ -18,6 +19,7 @@ enum FeedChoice: String, AppEnum {
         .officialBlog: "Official Blog",
         .newsFeed: "News Feed",
         .communityBlog: "Community Blog",
+        .userBlog: "User Blog",
     ]
 
     var displayName: String {
@@ -25,6 +27,18 @@ enum FeedChoice: String, AppEnum {
         case .officialBlog: return "Official Blog"
         case .newsFeed: return "News Feed"
         case .communityBlog: return "Community Blog"
+        case .userBlog: return "User Blog"
+        }
+    }
+
+    func feedURL(username: String?) -> String? {
+        switch self {
+        case .officialBlog: return "https://lichess.org/@/Lichess/blog.atom"
+        case .newsFeed: return "https://lichess.org/feed.atom"
+        case .communityBlog: return "https://lichess.org/blog/community.atom"
+        case .userBlog:
+            guard let username, !username.isEmpty else { return nil }
+            return "https://lichess.org/@/\(username)/blog.atom"
         }
     }
 }
@@ -37,6 +51,17 @@ struct FeedIntent: WidgetConfigurationIntent {
 
     @Parameter(title: "Feed", default: .officialBlog)
     var feed: FeedChoice
+
+    @Parameter(title: "Username")
+    var username: String?
+
+    static var parameterSummary: some ParameterSummary {
+        When(\FeedIntent.$feed, .equalTo, .userBlog) {
+            Summary("Show \(\.$feed) for \(\.$username)")
+        } otherwise: {
+            Summary("Show \(\.$feed)")
+        }
+    }
 }
 
 // MARK: - Model
@@ -52,8 +77,17 @@ struct FeedItem: Identifiable {
 struct FeedEntry: TimelineEntry {
     let date: Date
     let feed: FeedChoice
+    let username: String?
     let items: [FeedItem]
     let error: String?
+
+    /// Display name for the widget header.
+    var headerTitle: String {
+        if feed == .userBlog, let username, !username.isEmpty {
+            return "@\(username)"
+        }
+        return feed.displayName
+    }
 }
 
 // MARK: - Feed Fetching
@@ -95,9 +129,12 @@ private func fetchThumbnail(urlString: String, spec: ThumbnailSpec) async -> Dat
     return downsampled.jpegData(compressionQuality: 0.85)
 }
 
-private func fetchFeed(for choice: FeedChoice, maxCount: Int, thumbSpec: ThumbnailSpec) async -> (items: [FeedItem], error: String?) {
+private func fetchFeed(for configuration: FeedIntent, maxCount: Int, thumbSpec: ThumbnailSpec) async -> (items: [FeedItem], error: String?) {
+    guard let urlString = configuration.feed.feedURL(username: configuration.username) else {
+        return ([], "Enter a username in widget settings")
+    }
     do {
-        guard case .atom(let atomFeed) = try await Feed(urlString: choice.rawValue) else {
+        guard case .atom(let atomFeed) = try await Feed(urlString: urlString) else {
             return ([], "Unexpected feed format")
         }
         let items = await withTaskGroup(of: (Int, FeedItem).self) { group in
@@ -139,6 +176,7 @@ struct FeedProvider: AppIntentTimelineProvider {
         FeedEntry(
             date: .now,
             feed: .communityBlog,
+            username: nil,
             items: [
                 FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
                 FeedItem(id: "2", title: "The Immortal Game Revisited", url: nil, publishedDate: .now, thumbnailData: nil),
@@ -151,22 +189,14 @@ struct FeedProvider: AppIntentTimelineProvider {
     func snapshot(for configuration: FeedIntent, in context: Context) async -> FeedEntry {
         if context.isPreview { return placeholder(in: context) }
         let spec = thumbnailSpec(for: context.family)
-        let (items, error) = await fetchFeed(
-            for: configuration.feed,
-            maxCount: maxItems(for: context.family),
-            thumbSpec: spec
-        )
-        return FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
+        let (items, error) = await fetchFeed(for: configuration, maxCount: maxItems(for: context.family), thumbSpec: spec)
+        return FeedEntry(date: .now, feed: configuration.feed, username: configuration.username, items: items, error: error)
     }
 
     func timeline(for configuration: FeedIntent, in context: Context) async -> Timeline<FeedEntry> {
         let spec = thumbnailSpec(for: context.family)
-        let (items, error) = await fetchFeed(
-            for: configuration.feed,
-            maxCount: maxItems(for: context.family),
-            thumbSpec: spec
-        )
-        let entry = FeedEntry(date: .now, feed: configuration.feed, items: items, error: error)
+        let (items, error) = await fetchFeed(for: configuration, maxCount: maxItems(for: context.family), thumbSpec: spec)
+        let entry = FeedEntry(date: .now, feed: configuration.feed, username: configuration.username, items: items, error: error)
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
@@ -305,7 +335,7 @@ struct BlogFeedWidgetEntryView: View {
         if family == .systemSmall {
             // Small: single item, no overflow risk — timestamp pinned at bottom.
             VStack(alignment: .leading, spacing: 0) {
-                FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date, showTimestamp: false)
+                FeedWidgetHeader(feedName: entry.headerTitle, updatedAt: entry.date, showTimestamp: false)
 
                 Divider()
                     .padding(.top, 8)
@@ -322,7 +352,7 @@ struct BlogFeedWidgetEntryView: View {
             }
         } else {
             VStack(alignment: .leading, spacing: 0) {
-                FeedWidgetHeader(feedName: entry.feed.displayName, updatedAt: entry.date)
+                FeedWidgetHeader(feedName: entry.headerTitle, updatedAt: entry.date)
 
                 Divider()
                     .padding(.top, 8)
@@ -372,6 +402,7 @@ struct BlogFeedWidget: Widget {
     FeedEntry(
         date: .now,
         feed: .communityBlog,
+        username: nil,
         items: [
             FeedItem(id: "1", title: "Ståhlberg's Losing Streak in Zürich 1953", url: nil, publishedDate: .now, thumbnailData: nil),
             FeedItem(id: "2", title: "The Immortal Game Revisited: What Anderssen Got Right", url: nil, publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now), thumbnailData: nil),
