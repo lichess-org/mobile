@@ -292,19 +292,20 @@ private struct FeedItemRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(item.title)
                     .font(.system(size: 15, weight: .semibold))
                     .lineLimit(lineLimit)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.primary)
                 if showDate, let date = item.publishedDate {
+                    Spacer(minLength: 4)
                     Text(date, style: .relative)
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             if let spec {
                 ItemThumbnail(data: item.thumbnailData, imageName: item.thumbnailImageName, spec: spec)
             }
