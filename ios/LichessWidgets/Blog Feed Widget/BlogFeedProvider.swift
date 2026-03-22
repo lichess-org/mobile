@@ -91,7 +91,7 @@ struct BlogFeedProvider: AppIntentTimelineProvider {
                          thumbnailImageName: "PlaceholderThumbnail3"),
             BlogFeedItem(id: "4",
                          title: "Titled Arenas Announcement",
-                         url: "https://lichess.org/@/Lichess/blog/titled-arenas-announcement--january-to-march-2026/BOzFDHHs",
+                         url: nil,
                          publishedDate: Calendar.current.date(byAdding: .day, value: -14, to: .now),
                          thumbnailData: nil,
                          thumbnailImageName: "PlaceholderThumbnail4"),
