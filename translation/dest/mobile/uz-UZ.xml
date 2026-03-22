@@ -61,10 +61,10 @@
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Bosganda vibratsiya</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Yoqilgan boʻlsa, yurish qilganingizda yoki donani olganingizda qurilmangiz vibratsiya beradi.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sozlamalar</string>
-  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGNʼni ulashing</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin havolasini ulashing</string>
-  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Pozitsiyani FEN sifatida ulashing</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ushbu masalani ulashing</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGNʼni ulashish</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin havolasini ulashish</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Pozitsiyani FEN sifatida ulashish</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ushbu masalani ulashish</string>
   <string name="showComments" comment="Shown in the analysis screen.">Sharhlarni koʻrsatish</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Natijani koʻrsatish</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Variantlarni koʻrsatish</string>
