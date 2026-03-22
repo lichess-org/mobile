@@ -3767,6 +3767,15 @@ class AppLocalizationsBg extends AppLocalizations {
   String get invalidAuthenticationCode => 'Невалиден код за удостоверяване';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Изпрати ми препратка на имейла';
 
   @override

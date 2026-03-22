@@ -1919,10 +1919,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Kollineært trekk';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'To brikker truer hverandre, og én av dem flytter langs angrepslinjen uten å slå.';
 
   @override
   String get puzzleThemeCornerMate => 'Hjørnematt';
@@ -2699,22 +2699,22 @@ class AppLocalizationsNb extends AppLocalizations {
   String get multipleLines => 'Flere varianter';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Angi antall evalueringslinjer og trekkpiler på brettet';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Søketid';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Angi tid for å evaluere nye stillinger';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Tråder';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Sett denne lavere enn antall tråder på CPU-en din; merkene viser et trygt og godt valg';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Flere tråder vil bruke mer batteri for bedre analyse';
 
   @override
   String get cpus => 'Prosessorer';
@@ -2723,7 +2723,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get memory => 'Minne';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Høyere verdier kan forbedre ytelsen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -3765,6 +3765,15 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Ugyldig autentiseringskode';
+
+  @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
 
   @override
   String get emailMeALink => 'Send meg en lenke';
@@ -5052,7 +5061,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Ingen resultater for «$param»';
   }
 
   @override

@@ -3767,6 +3767,15 @@ class AppLocalizationsEo extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nevalida aŭtentigada kodo';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Retpoŝte sendu al mi ligilon';
 
   @override

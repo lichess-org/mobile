@@ -3765,6 +3765,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get invalidAuthenticationCode => 'अवैध प्रमाणीकरण कोड';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'मुझे एक लिंक ईमेल करें';
 
   @override

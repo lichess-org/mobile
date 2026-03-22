@@ -3767,6 +3767,15 @@ class AppLocalizationsSv extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ogiltig bekräftelsekod';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Skicka en länk till min e-post';
 
   @override

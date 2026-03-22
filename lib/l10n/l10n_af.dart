@@ -3767,6 +3767,15 @@ class AppLocalizationsAf extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ongeldige verifikasiekode';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'E-pos \'n skakel aan my';
 
   @override

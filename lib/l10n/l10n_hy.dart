@@ -3767,6 +3767,15 @@ class AppLocalizationsHy extends AppLocalizations {
   String get invalidAuthenticationCode => 'Վավերացման սխալ կոդը';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Էլեկտրոնային փոստով ուղարկել ինձ  հղումը';
 
   @override

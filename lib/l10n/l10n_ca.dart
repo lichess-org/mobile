@@ -3767,6 +3767,15 @@ class AppLocalizationsCa extends AppLocalizations {
   String get invalidAuthenticationCode => 'Codi d\'autenticació invàlid';
 
   @override
+  String get clearField => 'Neteja el camp';
+
+  @override
+  String get orSeparator => 'O';
+
+  @override
+  String get logInByEmail => 'Identificat amb el correu electrònic';
+
+  @override
   String get emailMeALink => 'Envieu-me un enllaç per correu electrònic';
 
   @override

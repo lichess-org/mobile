@@ -3767,6 +3767,15 @@ class AppLocalizationsEl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Μη έγκυρος κωδικός επαλήθευσης';
 
   @override
+  String get clearField => 'Καθαρισμός πεδίου';
+
+  @override
+  String get orSeparator => 'Ή';
+
+  @override
+  String get logInByEmail => 'Συνδεθείτε μέσω email';
+
+  @override
   String get emailMeALink => 'Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου';
 
   @override

@@ -3767,6 +3767,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ugyldig godkendelseskode';
 
   @override
+  String get clearField => 'Ryd felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Log ind via e-mail';
+
+  @override
   String get emailMeALink => 'E-mail mig et link';
 
   @override
