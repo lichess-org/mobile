@@ -42,8 +42,7 @@ jobs:
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_chess-*/src/CMakeLists.txt
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_sf16-*/src/CMakeLists.txt
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_variant-*/android/CMakeLists.txt
-          rm ~/.pub-cache/hosted/pub.dev/webcrypto-*/src/CMakeLists.txt
-          touch ~/.pub-cache/hosted/pub.dev/webcrypto-*/src/CMakeLists.txt
+          truncate -s 0 ~/.pub-cache/hosted/pub.dev/webcrypto-*/src/CMakeLists.txt
 
       - name: Code generation
         run: dart run build_runner build
