@@ -3767,6 +3767,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Code d\'authentification non valide';
 
   @override
+  String get clearField => 'Vider le champ';
+
+  @override
+  String get orSeparator => 'OU';
+
+  @override
+  String get logInByEmail => 'Se connecter par courriel';
+
+  @override
   String get emailMeALink => 'Envoyez-moi un lien';
 
   @override

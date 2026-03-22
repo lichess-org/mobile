@@ -3783,6 +3783,15 @@ class AppLocalizationsSr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Неважећи аутентификациони код';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Пошаљи ми имејл са линком';
 
   @override
@@ -4758,7 +4767,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get inTheFAQ => 'у често постављеним питањима (F.A.Q.)';
+  String get inTheFAQ => 'у најчешће постављеним питањима';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {

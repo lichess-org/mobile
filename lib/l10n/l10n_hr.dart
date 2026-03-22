@@ -3793,6 +3793,15 @@ class AppLocalizationsHr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nevažeći kôd autentičnosti';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošalji mi email';
 
   @override

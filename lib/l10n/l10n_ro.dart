@@ -3795,6 +3795,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get invalidAuthenticationCode => 'Cod de autentificare incorect';
 
   @override
+  String get clearField => 'Șterge câmpul';
+
+  @override
+  String get orSeparator => 'Sau';
+
+  @override
+  String get logInByEmail => 'Autentificare prin e-mail';
+
+  @override
   String get emailMeALink => 'Trimite-mi un email cu link-ul';
 
   @override

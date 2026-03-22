@@ -3767,6 +3767,15 @@ class AppLocalizationsHu extends AppLocalizations {
   String get invalidAuthenticationCode => 'Érvénytelen hitelesítő kód';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Link küldése e-mailben';
 
   @override

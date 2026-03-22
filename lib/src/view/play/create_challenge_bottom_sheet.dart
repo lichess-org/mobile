@@ -69,6 +69,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
+    final createGameService = ref.watch(createGameServiceProvider);
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
@@ -328,7 +329,6 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                       ChallengeTimeControlType.unlimited =>
                         snapshot.connectionState != ConnectionState.waiting
                             ? () async {
-                                final createGameService = ref.read(createGameServiceProvider);
                                 setState(() {
                                   _pendingCorrespondenceChallenge = createGameService
                                       .newCorrespondenceChallenge(
@@ -394,9 +394,11 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     );
                                   }
                                 } finally {
-                                  setState(() {
-                                    _pendingCorrespondenceChallenge = null;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      _pendingCorrespondenceChallenge = null;
+                                    });
+                                  }
                                 }
                               }
                             : null,
