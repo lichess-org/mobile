@@ -4,7 +4,8 @@ on:
     tags:
       - 'v*.*.*.fdroid'
 
-permissions: read-all
+permissions:
+  contents: write
 
 jobs:
   github-upload:
@@ -49,7 +50,21 @@ jobs:
       - name: Build APK
         run: flutter build apk --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
 
-      - name: Upload the APK
-        uses: actions/upload-artifact@v6
+      - name: Rename APK
+        run: |
+          VERSION_CODE=$(yq eval '.version' pubspec.yaml | cut -d '+' -f 2)
+          VERSION_CODE=$((10#$VERSION_CODE))
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/${VERSION_CODE}-fdroid.apk
+
+      - name: Determine release tag
+        run: |
+          TRIGGER_TAG=${GITHUB_REF#refs/tags/}
+          RELEASE_TAG=${TRIGGER_TAG%.fdroid}
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+
+      - name: Upload APK
+        uses: softprops/action-gh-release@v2
         with:
-          path: build/app/outputs/flutter-apk/app-release.apk
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: build/app/outputs/flutter-apk/${{ env.VERSION_CODE }}-fdroid.apk
