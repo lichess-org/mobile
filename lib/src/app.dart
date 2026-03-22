@@ -7,7 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
@@ -117,7 +117,7 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-    _initAppLinks();
+    _initAppLinks(ref);
     _initSharingIntent();
   }
 
@@ -158,8 +158,8 @@ class _AppState extends ConsumerState<Application> {
     );
   }
 
-  Future<void> _initAppLinks() async {
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+  Future<void> _initAppLinks(WidgetRef ref) async {
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
       // File links are handled by the sharing intent logic, so we can ignore them here.
       if (uri.scheme == 'file' || uri.scheme == 'content') {
         return;
@@ -170,7 +170,7 @@ class _AppState extends ConsumerState<Application> {
       }
       final context = _navigatorKey.currentContext;
       if (context != null && context.mounted) {
-        handleAppLink(context, uri);
+        await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
       }
     });
   }
