@@ -2,7 +2,7 @@
 
 ## Building extensions as a contributor
 
-Each iOS app extension (e.g. the Lichess widget) is a separate Xcode target with its own bundle ID. For the extension to be installed on a device, that bundle ID must be registered in the Lichess Apple Developer account with a matching provisioning profile.
+Each iOS app extension (e.g. the Lichess widgets) is a separate Xcode target with its own bundle ID. For the extension to be installed on a device, that bundle ID must be registered in the Lichess Apple Developer account with a matching provisioning profile.
 
 As an external contributor you won't have access to that account, so `flutter run` will silently drop the extension from the bundle — you can add the app to your home screen but the widget won't appear in the widget catalog.
 
