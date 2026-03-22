@@ -3767,6 +3767,15 @@ class AppLocalizationsMk extends AppLocalizations {
   String get invalidAuthenticationCode => 'Неважечки код за автентикација';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Прати ми линк на емаил';
 
   @override

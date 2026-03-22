@@ -1111,7 +1111,7 @@
   "puzzleDesc": "Тренер шаховских тактика",
   "important": "Важно",
   "yourQuestionMayHaveBeenAnswered": "Твоје питање можда већ има одговор {param1}",
-  "inTheFAQ": "у често постављеним питањима (F.A.Q.)",
+  "inTheFAQ": "у најчешће постављеним питањима",
   "toReportSomeoneForCheatingOrBadBehavior": "Да би пријавио/ла корисника за варање или лоше понашање, {param1}",
   "useTheReportForm": "користи образац за пријаву",
   "toRequestSupport": "Да затражиш подршку, {param1}",

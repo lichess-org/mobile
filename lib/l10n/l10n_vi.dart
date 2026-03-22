@@ -1479,7 +1479,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesYourPreferencesHaveBeenSaved => 'Tùy chọn của bạn đã được lưu';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Cuộn con chuột trên bàn cờ để xem lại nước đi';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Lăn chuột trên bàn cờ để xem lại nước đi';
 
   @override
   String get preferencesCorrespondenceEmailNotification => 'Email thông báo hàng ngày sẽ bao gồm cả các ván cờ qua thư';
@@ -3737,6 +3737,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Mã xác thực không hợp lệ';
+
+  @override
+  String get clearField => 'Dọn sạch trường';
+
+  @override
+  String get orSeparator => 'Hoặc';
+
+  @override
+  String get logInByEmail => 'Đăng nhập bằng email';
 
   @override
   String get emailMeALink => 'Gửi cho tôi một liên kết trong Email';

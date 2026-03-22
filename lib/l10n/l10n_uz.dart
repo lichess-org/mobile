@@ -198,16 +198,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsTab => 'Sozlamalar';
 
   @override
-  String get mobileShareGamePGN => 'PGNʼni ulashing';
+  String get mobileShareGamePGN => 'PGNʼni ulashish';
 
   @override
-  String get mobileShareGameURL => 'Oʻyin havolasini ulashing';
+  String get mobileShareGameURL => 'Oʻyin havolasini ulashish';
 
   @override
-  String get mobileSharePositionAsFEN => 'Pozitsiyani FEN sifatida ulashing';
+  String get mobileSharePositionAsFEN => 'Pozitsiyani FEN sifatida ulashish';
 
   @override
-  String get mobileSharePuzzle => 'Ushbu masalani ulashing';
+  String get mobileSharePuzzle => 'Ushbu masalani ulashish';
 
   @override
   String get mobileShowComments => 'Sharhlarni koʻrsatish';
@@ -587,7 +587,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String arenaShareUrl(String param) {
-    return 'Odamlar qoʻshilishi uchun ushbu havolani ulashing: $param';
+    return 'Odamlar qoʻshilishi uchun ushbu havolani ulashish: $param';
   }
 
   @override
@@ -1662,7 +1662,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleNotTheMove => 'Bu notoʻgʻri yurish!';
 
   @override
-  String get puzzleTrySomethingElse => 'Boshqa variantni sinab koʻring.';
+  String get puzzleTrySomethingElse => 'Boshqa yurishni sinab koʻring.';
 
   @override
   String puzzleRatingX(String param) {
@@ -2279,7 +2279,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeMix => 'Bir undan bir bundan';
 
   @override
-  String get puzzleThemeMixDescription => 'Har turdan bir shingil. Oldinda nima kutayotganini bilmaysiz, shuning uchun har qanday holatga tayyor turasiz. Xuddi real oʻyindagi kabi!';
+  String get puzzleThemeMixDescription => 'Har turdan bir shingil. Oldinda nima kutayotganini bilmaysiz, shuning uchun har qanday holatga tayyor turasiz! Haqiqiy oʻyindagi kabi!';
 
   @override
   String get puzzleThemePlayerGames => 'Oʻyinchilardan';
@@ -2296,7 +2296,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get searchSearch => 'Qidirish';
 
   @override
-  String get settingsSettings => 'Sozlashlar';
+  String get settingsSettings => 'Sozlamalar';
 
   @override
   String get settingsCloseAccount => 'Akkauntni yopish';
@@ -3406,7 +3406,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get more => 'Batafsil';
+  String get more => 'Koʻproq';
 
   @override
   String get memberSince => 'Roʻyxatdan oʻtgan kuni';
@@ -3767,6 +3767,15 @@ class AppLocalizationsUz extends AppLocalizations {
   String get invalidAuthenticationCode => 'Autentifikatsiya kodi notoʻgʻri';
 
   @override
+  String get clearField => 'Maydonni tozalash';
+
+  @override
+  String get orSeparator => 'Yoki';
+
+  @override
+  String get logInByEmail => 'E-pochta yordamida kirish';
+
+  @override
   String get emailMeALink => 'E‑pochtamga havola joʻnat';
 
   @override
@@ -4014,11 +4023,11 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 bu ($param2) bepul, erkin, reklamasiz, ochiq manbali shaxmat serveri.';
+    return '$param1 — bu $param2 bepul, reklamasiz, ochiq kodli shaxmat serveri.';
   }
 
   @override
-  String get really => 'haqiqatan ham';
+  String get really => 'mutlaqo';
 
   @override
   String get contribute => 'Hissa qo‘shish';
@@ -4030,7 +4039,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get titleVerification => 'Unvonni tasdiqlash';
 
   @override
-  String get sourceCode => 'Manba kodi';
+  String get sourceCode => 'Dastur kodi';
 
   @override
   String get simultaneousExhibitions => 'Biryoʻla seanslar';
@@ -4113,7 +4122,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get timeBeforeTournamentStarts => 'Turnir boshlangunicha';
 
   @override
-  String get averageCentipawnLoss => 'Oʻrtacha sentipiyoda yoʻqotilishi';
+  String get averageCentipawnLoss => 'Oʻrtacha santipiyoda yoʻqotilishi';
 
   @override
   String get accuracy => 'Aniqlik';
@@ -4277,7 +4286,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get downloadAllGames => 'Barcha oʻyinlarni yuklab olish';
 
   @override
-  String get crosstable => 'Oʻzaro natijalar';
+  String get crosstable => 'Hisob';
 
   @override
   String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'Oʻyindagi yurishlarni koʻrib chiqish uchun taxta ustida sichqonchani aylantiring.';
@@ -4298,7 +4307,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get receiveForumNotifications => 'Forumda sizni eslatib oʻtishganida bildirishnoma olish';
 
   @override
-  String get shareYourInsightsData => 'Shaxmat analitika maʼlumotlaringiz bilan ulashing';
+  String get shareYourInsightsData => 'Shaxmat analitika maʼlumotlaringiz bilan ulashish';
 
   @override
   String get withNobody => 'Hech kim bilan';
@@ -4494,7 +4503,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String bestWasX(String param) {
-    return 'Eng yaxshisi $param edi';
+    return '$param eng yaxshi yurish edi';
   }
 
   @override
@@ -4548,10 +4557,10 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get findBetterMoveForWhite => 'Oqlar uchun yaxshiroq yurishni toping';
+  String get findBetterMoveForWhite => 'Oqlar uchun yaxshi yurishni toping';
 
   @override
-  String get findBetterMoveForBlack => 'Qoralar uchun eng yaxshiroq yurishni toping';
+  String get findBetterMoveForBlack => 'Qoralar uchun eng yaxshi yurishni toping';
 
   @override
   String get resumeLearning => 'Oʻrganishni davom ettirish';
@@ -4560,10 +4569,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get youCanDoBetter => 'Bundan ham yaxshiroq yurish bor';
 
   @override
-  String get tryAnotherMoveForWhite => 'Oqlar bilan boshqa yurish qilib koʻring';
+  String get tryAnotherMoveForWhite => 'Oqlar uchun boshqa yurish toping';
 
   @override
-  String get tryAnotherMoveForBlack => 'Qoralar bilan boshqa yurish qilib koʻring';
+  String get tryAnotherMoveForBlack => 'Qoralar uchun boshqa yurish toping';
 
   @override
   String get solution => 'Yechim';

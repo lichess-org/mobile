@@ -80,7 +80,8 @@ sealed class AppLogState with _$AppLogState {
   const factory AppLogState({required IList<AsyncValue<AppLogPage>> data}) = _AppLogState;
 
   bool get initialized => data.isNotEmpty;
-  List<AppLogEntry> get logs => data.expand((e) => e.value?.items ?? <AppLogEntry>[]).toList();
+  List<AppLogEntry> get logs =>
+      data.expand<AppLogEntry>((e) => e.value?.items ?? <AppLogEntry>[]).toList();
   int? get nextPage => data.lastOrNull?.value?.next;
   bool get hasMore => initialized && nextPage != null;
   bool get isLoading => data.lastOrNull?.isLoading == true;

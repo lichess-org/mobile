@@ -3879,6 +3879,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidAuthenticationCode => 'رمز مصادقة غير صحيح';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'أرسل لي الرابط بالبريد الإلكتروني';
 
   @override

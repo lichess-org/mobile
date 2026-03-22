@@ -72,6 +72,10 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
+        if (version != null && version >= 307000) {
+          _logger.info('Enabling WAL journal mode');
+          await db.rawQuery('PRAGMA journal_mode=WAL');
+        }
       },
       onOpen: (db) async {
         await Future.wait([

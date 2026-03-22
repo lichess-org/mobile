@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io' show Platform;
 
@@ -71,11 +72,13 @@ class AppLogService {
 
       // Persist to database asynchronously (fire-and-forget).
       // The try-catch guards against ref being invalid (e.g. disposed ProviderScope in tests).
-      try {
-        ref
-            .read(appLogStorageProvider.future)
-            .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
-      } catch (_) {}
+      scheduleMicrotask(() {
+        try {
+          ref
+              .read(appLogStorageProvider.future)
+              .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
+        } catch (_) {}
+      });
     });
   }
 
