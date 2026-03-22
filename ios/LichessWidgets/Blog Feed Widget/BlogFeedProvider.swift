@@ -73,25 +73,26 @@ struct BlogFeedProvider: AppIntentTimelineProvider {
         let allItems: [BlogFeedItem] = [
             BlogFeedItem(id: "1",
                          title: "Queens' Online Chess Festival",
-                         url: "https://lichess.org/@/Lichess/blog/queens-online-chess-festival/YwpMPp8y",
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -27, to: .now),
+                         url: nil,
+                         publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now),
                          thumbnailData: nil,
                          thumbnailImageName: "placeholder_thumb_1"),
             BlogFeedItem(id: "2",
                          title: "ChessMood 20/20 Grand Prix 2026",
-                         url: "https://lichess.org/@/Lichess/blog/announcing-the-chessmood-2020-grand-prix-2026/Y7sU143E",
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -31, to: .now),
+                         url: nil,
+                         publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now),
                          thumbnailData: nil,
                          thumbnailImageName: "placeholder_thumb_2"),
             BlogFeedItem(id: "3",
                          title: "Streamer Arenas Announcement",
-                         url: "https://lichess.org/@/Lichess/blog/streamer-arenas-announcement--february-to-july-2026/WbNDIbKt",
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -35, to: .now),
-                         thumbnailData: nil, thumbnailImageName: "placeholder_thumb_3"),
+                         url: nil,
+                         publishedDate: Calendar.current.date(byAdding: .day, value: -8, to: .now),
+                         thumbnailData: nil,
+                         thumbnailImageName: "placeholder_thumb_3"),
             BlogFeedItem(id: "4",
                          title: "Titled Arenas Announcement",
                          url: "https://lichess.org/@/Lichess/blog/titled-arenas-announcement--january-to-march-2026/BOzFDHHs",
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -68, to: .now),
+                         publishedDate: Calendar.current.date(byAdding: .day, value: -14, to: .now),
                          thumbnailData: nil,
                          thumbnailImageName: "placeholder_thumb_4"),
         ]
@@ -111,6 +112,7 @@ struct BlogFeedProvider: AppIntentTimelineProvider {
     func timeline(for configuration: BlogFeedIntent,
                   in context: Context) async -> Timeline<BlogFeedEntry> {
         let entry = await fetchEntry(for: configuration, family: context.family)
+        // Request feed update in 1 hour intervals
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
