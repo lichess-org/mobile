@@ -99,19 +99,19 @@ const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.crazyhouse,
 });
 
-/// Set of supported variants for playing a game.
-const ISet<Variant> playSupportedVariants = ISetConst({
+/// List of supported variants for playing a game.
+const IList<Variant> playSupportedVariants = IListConst([
   Variant.standard,
   Variant.chess960,
-  Variant.fromPosition,
-  Variant.antichess,
-  Variant.atomic,
   Variant.kingOfTheHill,
   Variant.threeCheck,
-  Variant.racingKings,
-  Variant.horde,
   Variant.crazyhouse,
-});
+  Variant.antichess,
+  Variant.atomic,
+  Variant.horde,
+  Variant.racingKings,
+  Variant.fromPosition,
+]);
 
 enum Variant {
   standard('Standard', LichessIcons.crown),

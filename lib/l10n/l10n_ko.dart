@@ -3739,6 +3739,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get invalidAuthenticationCode => '잘못된 인증코드';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => '메일로 링크를 보내주세요';
 
   @override

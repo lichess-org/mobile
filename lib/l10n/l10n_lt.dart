@@ -3821,6 +3821,15 @@ class AppLocalizationsLt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neteisingas patvirtinimo kodas';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Atsiųsti nuorodą el. paštu';
 
   @override

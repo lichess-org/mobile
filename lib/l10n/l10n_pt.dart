@@ -3767,6 +3767,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Código de autenticação inválido';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Envie-me um link por e-mail';
 
   @override
@@ -10309,6 +10318,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get invalidAuthenticationCode => 'Código de verificação inválido';
+
+  @override
+  String get clearField => 'Limpar campo';
+
+  @override
+  String get orSeparator => 'Ou';
+
+  @override
+  String get logInByEmail => 'Faça login por email';
 
   @override
   String get emailMeALink => 'Me envie um link';

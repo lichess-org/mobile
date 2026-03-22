@@ -3795,6 +3795,15 @@ class AppLocalizationsBs extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nevažeći kod pri provjeri autentičnosti';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošaljite mi link e-mail porukom';
 
   @override

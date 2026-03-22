@@ -18,8 +18,10 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">首頁</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Lichess 實況主</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">您必須登入才能查看此頁面。</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">開始新局</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">沒有任何搜尋結果</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">您尚未追蹤任何使用者。</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">確認</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">實體對弈</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">名稱包含「%s」的玩家</string>
@@ -74,4 +76,5 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待對手加入...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">觀戰</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">歡迎使用 Lichess 應用程式！</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">查看對局</string>
 </resources>

@@ -3823,6 +3823,15 @@ class AppLocalizationsUk extends AppLocalizations {
   String get invalidAuthenticationCode => 'Недійсний код автентифікації';
 
   @override
+  String get clearField => 'Очистити поле';
+
+  @override
+  String get orSeparator => 'або';
+
+  @override
+  String get logInByEmail => 'Увійти через електронну пошту';
+
+  @override
   String get emailMeALink => 'Надішліть мені посилання';
 
   @override

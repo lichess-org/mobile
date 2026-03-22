@@ -3767,6 +3767,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invalidAuthenticationCode => 'Código de autenticación inválido';
 
   @override
+  String get clearField => 'Borrar campo';
+
+  @override
+  String get orSeparator => 'o';
+
+  @override
+  String get logInByEmail => 'Iniciar sesión con el correo electrónico';
+
+  @override
   String get emailMeALink => 'Envíame un enlace por correo electrónico';
 
   @override

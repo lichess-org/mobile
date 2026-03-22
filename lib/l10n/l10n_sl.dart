@@ -3823,6 +3823,15 @@ class AppLocalizationsSl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nepravilna avtentikacijska koda';
 
   @override
+  String get clearField => 'Počisti polje';
+
+  @override
+  String get orSeparator => 'Ali';
+
+  @override
+  String get logInByEmail => 'Prijava po e-pošti';
+
+  @override
   String get emailMeALink => 'Pošlji mi povezavo po elektronski pošti';
 
   @override

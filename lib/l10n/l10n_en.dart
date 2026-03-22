@@ -3765,6 +3765,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidAuthenticationCode => 'Invalid authentication code';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Email me a link';
 
   @override
@@ -10295,6 +10304,15 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get invalidAuthenticationCode => 'Invalid authentication code';
+
+  @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
 
   @override
   String get emailMeALink => 'Email me a link';

@@ -6940,6 +6940,24 @@ abstract class AppLocalizations {
   /// **'Invalid authentication code'**
   String get invalidAuthenticationCode;
 
+  /// No description provided for @clearField.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear field'**
+  String get clearField;
+
+  /// No description provided for @orSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **'Or'**
+  String get orSeparator;
+
+  /// No description provided for @logInByEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in by email'**
+  String get logInByEmail;
+
   /// No description provided for @emailMeALink.
   ///
   /// In en, this message translates to:

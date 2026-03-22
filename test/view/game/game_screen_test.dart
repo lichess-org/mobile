@@ -340,6 +340,51 @@ void main() {
       expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
     });
 
+    testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 d5 exd5',
+        variant: Variant.crazyhouse,
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: .always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: .no,
+        ),
+      );
+
+      await playDropMove(tester, Side.white, Role.pawn, 'a4');
+
+      // premove indicator should be visible
+      expect(find.byKey(const ValueKey('a4-premove')), findsOneWidget);
+
+      // opponent plays Qxd5
+      sendServerSocketMessages(gameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 57, "black": 52}}}',
+      ]);
+      await tester.pump();
+
+      // let the premove microtask run
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // premove should have been played
+      expect(find.byKey(const ValueKey('a4-premove')), findsNothing);
+      expect(find.byKey(const Key('a4-whitepawn')), findsOneWidget);
+    });
+
     testWidgets('takeback', (WidgetTester tester) async {
       await createTestGame(
         tester,

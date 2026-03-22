@@ -3767,6 +3767,15 @@ class AppLocalizationsGl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Código de autenticación inválido';
 
   @override
+  String get clearField => 'Limpar campo';
+
+  @override
+  String get orSeparator => 'Ou';
+
+  @override
+  String get logInByEmail => 'Iniciar sesión co correo electrónico';
+
+  @override
   String get emailMeALink => 'Mándame unha ligazón por correo';
 
   @override
