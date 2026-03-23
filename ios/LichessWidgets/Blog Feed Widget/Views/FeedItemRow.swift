@@ -5,6 +5,7 @@ struct BlogFeedItemRow: View {
     let spec: BlogThumbnailSpec?
     let lineLimit: Int
     let showDate: Bool
+    var showAuthor: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -16,9 +17,15 @@ struct BlogFeedItemRow: View {
                     .foregroundStyle(.primary)
                 if showDate, let date = item.publishedDate {
                     Spacer(minLength: 4)
-                    Text(date, style: .relative)
-                        .font(.system(size: 12))
-                        .foregroundStyle(.secondary)
+                    Group {
+                        if showAuthor, let author = item.author {
+                            Text(date, style: .relative) + Text(" · \(author)")
+                        } else {
+                            Text(date, style: .relative)
+                        }
+                    }
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

@@ -45,7 +45,12 @@ struct BlogFeedWidgetEntryView: View {
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    let row = BlogFeedItemRow(item: item, spec: spec, lineLimit: lineLimit, showDate: showDate)
+                    let showAuthor = showDate && entry.feed == .communityBlog
+                    let row = BlogFeedItemRow(item: item,
+                                              spec: spec,
+                                              lineLimit: lineLimit,
+                                              showDate: showDate,
+                                              showAuthor: showAuthor)
                         .padding(.top, 8)
                     if let dest = item.url?.lichessWebURL {
                         Link(destination: dest) { row }
