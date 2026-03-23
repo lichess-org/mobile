@@ -3823,6 +3823,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nieprawidłowy kod uwierzytelniający';
 
   @override
+  String get clearField => 'Wyczyść pole';
+
+  @override
+  String get orSeparator => 'lub';
+
+  @override
+  String get logInByEmail => 'Zaloguj się przez e-mail';
+
+  @override
   String get emailMeALink => 'Wyślij mi link';
 
   @override

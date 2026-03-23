@@ -3767,6 +3767,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get invalidAuthenticationCode => 'ইনভ্যালিড অথেন্টিকেশন কোড';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'আমাকে লিংক ইমেইল কর';
 
   @override

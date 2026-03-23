@@ -3767,6 +3767,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Geçersiz kimlik doğrulama kodu';
 
   @override
+  String get clearField => 'Alanı temizle';
+
+  @override
+  String get orSeparator => 'Veya';
+
+  @override
+  String get logInByEmail => 'E-posta ile giriş yap';
+
+  @override
   String get emailMeALink => 'E-Posta ile giriş linki yolla';
 
   @override
@@ -5755,7 +5764,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Çalışmalar $param tarafından oluşturulmuştur';
+    return '$param tarafından oluşturulan çalışmalar';
   }
 
   @override
@@ -6090,7 +6099,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyMistake => 'Hata';
 
   @override
-  String get studyBrilliantMove => 'Muhteşem hamle';
+  String get studyBrilliantMove => 'Göz alıcı hamle';
 
   @override
   String get studyBlunder => 'Vahim hata';

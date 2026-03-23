@@ -14,6 +14,7 @@ class PocketsMenu extends ConsumerWidget {
     required this.playerSide,
     required this.squareSize,
     this.isUpsideDown = false,
+    this.premoveDropRole,
     this.pieceAssets,
   });
 
@@ -37,6 +38,9 @@ class PocketsMenu extends ConsumerWidget {
   /// This is used to also flip the drag feedback widget when dragging a piece onto the board.
   final bool isUpsideDown;
 
+  /// If non-null and [side] is the opposite of [sideToMove], the pocket with this role will be highlighted.
+  final Role? premoveDropRole;
+
   /// Optionally overrides pieces assets used to render the pieces in the pockets.
   ///
   /// If null, the piece assets from the current board preferences are used.
@@ -59,18 +63,31 @@ class PocketsMenu extends ConsumerWidget {
             children: Role.values
                 .where((role) => role != Role.king)
                 .map(
-                  (role) => _Pocket(
-                    count: pockets.of(side, role),
-                    role: role,
-                    interactive:
-                        side == sideToMove &&
-                        (playerSide == PlayerSide.both ||
-                            (playerSide == PlayerSide.white && side == Side.white) ||
-                            (playerSide == PlayerSide.black && side == Side.black)),
-                    side: side,
-                    squareSize: squareSize,
-                    pieceAssets: pieceAssets ?? boardPrefs.pieceSet.assets,
-                    isUpsideDown: isUpsideDown,
+                  (role) => Container(
+                    color: side == sideToMove?.opposite && premoveDropRole == role
+                        ? ref.watch(
+                            boardPreferencesProvider.select(
+                              (prefs) => prefs.boardTheme.colors.validPremoves,
+                            ),
+                          )
+                        : null,
+                    child: _Pocket(
+                      count: pockets.of(side, role),
+                      role: role,
+                      interactive: switch (playerSide) {
+                        PlayerSide.none => false,
+                        // If these are the pockets of the user, they are always interactive to allow premoves.
+                        PlayerSide.white => side == Side.white,
+                        PlayerSide.black => side == Side.black,
+                        // In OTB games, premoves are not possible, so pockets are only interactive if it's this player's turn.
+                        PlayerSide.both => side == sideToMove,
+                      },
+
+                      side: side,
+                      squareSize: squareSize,
+                      pieceAssets: pieceAssets ?? boardPrefs.pieceSet.assets,
+                      isUpsideDown: isUpsideDown,
+                    ),
                   ),
                 )
                 .toList(growable: false),

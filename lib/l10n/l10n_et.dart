@@ -3767,6 +3767,15 @@ class AppLocalizationsEt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Väär autentimise kood';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Saada mulle link meilile';
 
   @override

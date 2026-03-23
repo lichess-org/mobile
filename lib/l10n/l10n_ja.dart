@@ -3739,6 +3739,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get invalidAuthenticationCode => '無効な認証コード';
 
   @override
+  String get clearField => '項目をクリア';
+
+  @override
+  String get orSeparator => 'または';
+
+  @override
+  String get logInByEmail => 'メールアドレスでログイン';
+
+  @override
   String get emailMeALink => 'リンクをメールで送る';
 
   @override

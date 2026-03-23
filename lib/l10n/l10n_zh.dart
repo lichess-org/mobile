@@ -3739,6 +3739,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get invalidAuthenticationCode => '无效的验证码';
 
   @override
+  String get clearField => '清除字段';
+
+  @override
+  String get orSeparator => '或';
+
+  @override
+  String get logInByEmail => '通过邮件登录';
+
+  @override
   String get emailMeALink => '将链接发送到我的邮箱';
 
   @override
@@ -6516,10 +6525,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileMustBeLoggedIn => '您必須登入才能查看此頁面。';
 
   @override
+  String get mobileNewGame => '開始新局';
+
+  @override
   String get mobileNoSearchResults => '沒有任何搜尋結果';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => '請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。';
+
+  @override
+  String get mobileNotFollowingAnyUser => '您尚未追蹤任何使用者。';
 
   @override
   String get mobileOkButton => '確認';
@@ -6686,6 +6701,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileWelcomeToLichessApp => '歡迎使用 Lichess 應用程式！';
+
+  @override
+  String get mobileViewGame => '查看對局';
+
+  @override
+  String get variantStandardTitle => '標準西洋棋規則';
 
   @override
   String get activityActivity => '活動';

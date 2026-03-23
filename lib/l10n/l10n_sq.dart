@@ -3767,6 +3767,15 @@ class AppLocalizationsSq extends AppLocalizations {
   String get invalidAuthenticationCode => 'Kod i pavlefshëm mirëfilltësimi';
 
   @override
+  String get clearField => 'Spatroje fushën';
+
+  @override
+  String get orSeparator => 'Ose';
+
+  @override
+  String get logInByEmail => 'Hyni me email';
+
+  @override
   String get emailMeALink => 'Dërgomëni lidhjen me email';
 
   @override

@@ -41,7 +41,7 @@ class BottomBar extends StatelessWidget {
             )
           : null,
       height: kBottomBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Row(
         mainAxisAlignment: mainAxisAlignment,
         children: expandChildren

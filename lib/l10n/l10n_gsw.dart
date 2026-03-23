@@ -3767,6 +3767,15 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ungültige Authentifizierigscode';
 
   @override
+  String get clearField => 'Fäld rume';
+
+  @override
+  String get orSeparator => 'Oder';
+
+  @override
+  String get logInByEmail => 'Mit E-Mail ilogge';
+
+  @override
   String get emailMeALink => 'Schick mer per E-Mail en Link';
 
   @override

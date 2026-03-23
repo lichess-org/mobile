@@ -3819,6 +3819,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get invalidAuthenticationCode => 'קוד אימות לא תקין';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'שלחו לי קישור בדוא״ל';
 
   @override

@@ -3823,6 +3823,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neplatný overovací kód';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošlite link emailom';
 
   @override
