@@ -270,14 +270,25 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: ref
-                          .read(overTheBoardGameControllerProvider.notifier)
-                          .onPromotionSelection,
+                      onPromotionSelection: (role) {
+                        ref
+                            .read(overTheBoardGameControllerProvider.notifier)
+                            .onPromotionSelection(role);
+                        if (role != null) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
+                      },
                       promotionMove: gameState.promotionMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        ref
-                            .read(overTheBoardClockProvider.notifier)
-                            .onMove(newSideToMove: gameState.turn.opposite);
+                        final isPromotion = move is NormalMove &&
+                            isPromotionPawnMove(gameState.currentPosition, move);
+                        if (!isPromotion) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                       },
                       premovable: null,
