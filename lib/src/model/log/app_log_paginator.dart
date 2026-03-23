@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/app_log/app_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 
 part 'app_log_paginator.freezed.dart';
