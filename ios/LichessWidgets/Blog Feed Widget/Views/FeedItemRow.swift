@@ -19,7 +19,7 @@ struct BlogFeedItemRow: View {
                     Spacer(minLength: 4)
                     Group {
                         if showAuthor, let author = item.author {
-                            Text(date, format: date.widgetDateFormat) + Text(" · \(author)")
+                            Text("\(date, format: date.widgetDateFormat) · \(author)")
                         } else {
                             Text(date, format: date.widgetDateFormat)
                         }
