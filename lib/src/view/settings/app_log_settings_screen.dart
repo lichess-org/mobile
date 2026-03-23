@@ -11,9 +11,8 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -71,8 +70,8 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
     final asyncState = ref.watch(appLogPaginatorProvider(_searchQuery));
     final logs = asyncState.value?.logs ?? [];
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: const Text('App Logs'),
         actions: [
           if (logs.isNotEmpty)
@@ -107,74 +106,72 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
               },
             ),
         ],
-      ),
-      body: Column(
-        children: [
-          ListSection(
-            children: [
-              SettingsListTile(
-                settingsLabel: const Text('Log Level'),
-                settingsValue: currentLevel.name,
-                onTap: () {
-                  showChoicePicker<Level>(
-                    context,
-                    choices: Level.LEVELS,
-                    selectedItem: currentLevel,
-                    labelBuilder: (Level l) => Text(l.name),
-                    onSelectedItemChanged: (Level value) {
-                      _logger.fine('Changing log level to ${value.name}');
-                      ref.read(logPreferencesProvider.notifier).setLogLevel(value);
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: PlatformSearchBar(
-              controller: _searchController,
-              hintText: 'Search logs...',
-              onChanged: (value) => setState(() {
-                _searchQuery = value.isEmpty ? null : value;
-              }),
-              onClear: () => setState(() {
-                _searchQuery = null;
-                _searchController.clear();
-              }),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(52.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: PlatformSearchBar(
+                    controller: _searchController,
+                    hintText: 'Search logs...',
+                    onChanged: (value) => setState(() {
+                      _searchQuery = value.isEmpty ? null : value;
+                    }),
+                    onClear: () => setState(() {
+                      _searchQuery = null;
+                      _searchController.clear();
+                    }),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showChoicePicker<Level>(
+                      context,
+                      choices: Level.LEVELS,
+                      selectedItem: currentLevel,
+                      labelBuilder: (Level l) => Text(l.name),
+                      onSelectedItemChanged: (Level value) {
+                        _logger.fine('Changing log level to ${value.name}');
+                        ref.read(logPreferencesProvider.notifier).setLogLevel(value);
+                      },
+                    );
+                  },
+                  child: Text(currentLevel.name),
+                ),
+              ],
             ),
           ),
-          Expanded(
-            child: switch (asyncState) {
-              AsyncData(:final value) when value.logs.isEmpty => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('No logs to show'),
-                    TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
-                  ],
-                ),
-              ),
-              AsyncData(:final value) => HapticRefreshIndicator(
-                onRefresh: _onRefresh,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  itemCount: value.logs.length,
-                  separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
-                  itemBuilder: (_, index) => _LogTile(entry: value.logs[index]),
-                ),
-              ),
-              AsyncError(:final error) => Center(
-                child: Padding(
-                  padding: Styles.bodySectionPadding,
-                  child: Text('Failed to load logs: $error'),
-                ),
-              ),
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
-          ),
-        ],
+        ),
       ),
+      body: switch (asyncState) {
+        AsyncData(:final value) when value.logs.isEmpty => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('No logs to show'),
+              TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
+            ],
+          ),
+        ),
+        AsyncData(:final value) => HapticRefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView.separated(
+            controller: _scrollController,
+            itemCount: value.logs.length,
+            separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
+            itemBuilder: (_, index) => _LogTile(entry: value.logs[index]),
+          ),
+        ),
+        AsyncError(:final error) => Center(
+          child: Padding(
+            padding: Styles.bodySectionPadding,
+            child: Text('Failed to load logs: $error'),
+          ),
+        ),
+        _ => const Center(child: CircularProgressIndicator.adaptive()),
+      },
     );
   }
 }
