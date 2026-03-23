@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FeedWidgetHeader: View {
+struct BlogFeedWidgetHeader: View {
     let feedName: String
     let updatedAt: Date
     var showTimestamp: Bool = true

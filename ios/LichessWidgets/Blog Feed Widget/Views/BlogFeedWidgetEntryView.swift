@@ -70,9 +70,9 @@ struct BlogFeedWidgetEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            FeedWidgetHeader(feedName: entry.headerTitle,
-                             updatedAt: entry.date,
-                             showTimestamp: family != .systemSmall)
+            BlogFeedWidgetHeader(feedName: entry.headerTitle,
+                                 updatedAt: entry.date,
+                                 showTimestamp: family != .systemSmall)
             Divider()
                 .padding(.top, 8)
 
