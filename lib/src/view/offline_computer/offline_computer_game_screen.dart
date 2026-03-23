@@ -394,7 +394,7 @@ class _BottomBar extends ConsumerWidget {
             ref.read(_isBoardFlippedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.finished)
+        if (gameState.game.finished || gameState.game.casual || gameState.game.practiceMode)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
