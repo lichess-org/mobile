@@ -77,7 +77,7 @@ struct BlogFeedWidgetEntryView: View {
                 itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                Text("Updated at \(entry.date.formatted(.dateTime.hour().minute()))")
+                Text("Updated at \(entry.date.shortTime)")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .padding(.top, 6)

@@ -16,7 +16,7 @@ struct FeedWidgetHeader: View {
                 .lineLimit(1)
             if showTimestamp {
                 Spacer()
-                Text("Updated at \(updatedAt.formatted(.dateTime.hour().minute()))")
+                Text("Updated at \(updatedAt.shortTime)")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
