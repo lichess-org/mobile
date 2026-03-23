@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 part 'chess.freezed.dart';
@@ -128,6 +129,31 @@ enum Variant {
 
   final String label;
   final IconData icon;
+
+  String description(AppLocalizations l10n) {
+    switch (this) {
+      case .standard:
+        return l10n.variantStandardTitle;
+      case .chess960:
+        return l10n.variantChess960Title;
+      case .fromPosition:
+        return l10n.variantFromPositionTitle;
+      case .antichess:
+        return l10n.variantAntichessTitle;
+      case .kingOfTheHill:
+        return l10n.variantKingOfTheHillTitle;
+      case .threeCheck:
+        return l10n.variantThreeCheckTitle;
+      case .atomic:
+        return l10n.variantAtomicTitle;
+      case .horde:
+        return l10n.variantHordeTitle;
+      case .racingKings:
+        return l10n.variantRacingKingsTitle;
+      case .crazyhouse:
+        return l10n.variantCrazyhouseTitle;
+    }
+  }
 
   bool sideCanCastle(Side side) {
     if (this == Variant.racingKings) return false;

@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 extension _MoveVerdictDisplay on MoveVerdict {
@@ -850,7 +851,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                   context,
                   choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
                   selectedItem: _selectedVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) {
                     setState(() {
                       _selectedVariant = variant;

@@ -368,18 +368,7 @@ class _BottomBar extends ConsumerWidget {
                       )
                       .toList(),
                   selectedItem: editorState.variant,
-                  labelBuilder: (Variant variant) => Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(variant.icon),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        const WidgetSpan(child: SizedBox(width: 8)),
-                        TextSpan(text: variant.label),
-                      ],
-                    ),
-                  ),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) {
                     if (variant != editorState.variant) {
                       ref.read(editorController.notifier).setVariant(variant);

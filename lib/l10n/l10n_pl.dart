@@ -284,6 +284,36 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
 
   @override
+  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
+
+  @override
+  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
+
+  @override
+  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
+
+  @override
+  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
+
+  @override
+  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
+
+  @override
+  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
+
+  @override
+  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
+
+  @override
   String get activityActivity => 'Aktywność';
 
   @override
@@ -5075,6 +5105,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Wyczyść wyszukiwanie';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Brak wyników dla \"$param\"';
+  }
 
   @override
   String get tags => 'Tagi';

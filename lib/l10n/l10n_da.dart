@@ -284,6 +284,36 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
+
+  @override
+  String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
+
+  @override
+  String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -5019,6 +5049,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ryd søgning';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for \"$param\"';
+  }
 
   @override
   String get tags => 'Etiketter';

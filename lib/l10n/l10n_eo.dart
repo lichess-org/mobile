@@ -284,6 +284,36 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Normal reguloj ŝakaj (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La komenca pozicio de la pecoj en la unua vico estas hazarda.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Portu vian reĝon al la centro por venki la ludon.';
+
+  @override
+  String get variantThreeCheckTitle => 'Ŝakigu vian kontraŭulon tri fojojn por venki la ludon.';
+
+  @override
+  String get variantAntichessTitle => 'Perdu ĉiujn viajn pecojn (aŭ kun via reĝo en pato) por venki la ludon.';
+
+  @override
+  String get variantAtomicTitle => 'Eksplodigu la reĝon de la kontraŭulo por venki la ludon.';
+
+  @override
+  String get variantHordeTitle => 'Unu flanko havas amason da peonoj, la alia flanko normalan pecaron.';
+
+  @override
+  String get variantRacingKingsTitle => 'Portu vian reĝon al la alia flanko de la tabulo por venki.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Kaptitaj pecoj povas esti metitaj denove en la tabulon, anstataŭ fari movon.';
+
+  @override
+  String get variantFromPositionTitle => 'Normala ŝako, komencante el specifa pozicio';
+
+  @override
   String get activityActivity => 'Aktiveco';
 
   @override
@@ -5019,6 +5049,11 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get clearSearch => 'Viŝi serĉon';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Etikedoj';

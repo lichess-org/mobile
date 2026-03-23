@@ -284,6 +284,36 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Aturan catur standar (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Posisi awal buah-buah di baris belakang diacak.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bawa raja Anda ke tengah papan untuk memenangkan permainan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Skak lawan 3 kali untuk memenangkan permainan.';
+
+  @override
+  String get variantAntichessTitle => 'Kehilangan semua buah Anda (atau mengalami langkah buntu) untuk memenangkan permainan.';
+
+  @override
+  String get variantAtomicTitle => 'Ledakkan raja lawan untuk menang.';
+
+  @override
+  String get variantHordeTitle => 'Satu sisi memiliki banyak pion, sisi lainnya memiliki pasukan normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Bawa raja Anda ke sisi seberang papan untuk menang.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Buah yang ditangkap dapat diletakkan kembali ke papan alih-alih menggerakkan buah.';
+
+  @override
+  String get variantFromPositionTitle => 'Catur standar dari posisi kustom';
+
+  @override
   String get activityActivity => 'Aktivitas';
 
   @override
@@ -4995,6 +5025,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get clearSearch => 'Bersihkan pencarian';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Label';

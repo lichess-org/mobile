@@ -477,9 +477,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // Change variant to Chess960
-      await tester.tap(find.text('Standard'));
+      await tester.tap(find.textContaining('Standard'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Atomic'));
+      await tester.tap(find.textContaining('Atomic'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Play'));

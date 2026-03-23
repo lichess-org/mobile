@@ -284,6 +284,36 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring your King to the center to win the game.';
+
+  @override
+  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Активност';
 
   @override
@@ -4724,7 +4754,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String yourQuestionMayHaveBeenAnswered(String param1) {
-    return 'Ваше питање можда већ има одговор $param1';
+    return 'Твоје питање можда већ има одговор $param1';
   }
 
   @override
@@ -4732,19 +4762,19 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
-    return 'Да бисте пријавили корисника због варања или лошег понашања, $param1';
+    return 'Да би пријавио/ла корисника за варање или лоше понашање, $param1';
   }
 
   @override
-  String get useTheReportForm => 'користите образац за пријаву';
+  String get useTheReportForm => 'користи образац за пријаву';
 
   @override
   String toRequestSupport(String param1) {
-    return 'Да бисте затражили подршку, $param1';
+    return 'Да затражиш подршку, $param1';
   }
 
   @override
-  String get tryTheContactPage => 'пробајте страницу за контакт';
+  String get tryTheContactPage => 'пробај страницу за контакт';
 
   @override
   String makeSureToRead(String param1) {
@@ -4755,11 +4785,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get theForumEtiquette => 'форумски бонтон';
 
   @override
-  String get thisTopicIsArchived => 'Ова тема је архивирана и не може се више одговорити на њу.';
+  String get thisTopicIsArchived => 'Ова тема је архивирана и не може се више одговарати на њу.';
 
   @override
   String joinTheTeamXToPost(String param1) {
-    return 'Придружите се $param1, да бисте могли писати поруке у овоме форуму';
+    return 'Придружи се $param1, да би могао/ла објављивати у овом форуму';
   }
 
   @override
@@ -4768,13 +4798,13 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'Још увек не можете писати поруке на овај форум. Играјте још коју партију!';
+  String get youCannotPostYetPlaySomeGames => 'Још не можеш објављивати у форумима. Одиграј неколико партија!';
 
   @override
   String get subscribe => 'Претплати се';
 
   @override
-  String get unsubscribe => 'Одјавите претплату';
+  String get unsubscribe => 'Откажи претплату';
 
   @override
   String mentionedYouInX(String param1) {
@@ -5035,6 +5065,11 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Tags';

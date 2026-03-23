@@ -332,6 +332,8 @@ class _RegisterCallbackClient extends BaseClient {
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
+  static const defaultRequestTimeout = Duration(seconds: 15);
+
   final Ref _ref;
   final Client _inner;
 
@@ -353,7 +355,7 @@ class LichessClient implements Client {
     _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
 
     try {
-      final response = await _inner.send(request);
+      final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
       _logIfError(response);
 

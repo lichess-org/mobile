@@ -60,6 +60,8 @@ void main() {
       await tester.pumpAndSettle(); // wait for menu to open
       await tester.tap(find.text('Variant'));
       await tester.pumpAndSettle(); // wait for variant selection dialog to open
+      await tester.ensureVisible(find.textContaining('Horde'));
+      await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Horde'));
       await tester.pumpAndSettle(); // wait for variant to change
 
@@ -470,7 +472,7 @@ void main() {
       await tester.tap(find.text('Over the board'));
       await tester.pumpAndSettle(); // wait for over the board menu to open
       // Variant we set previously should be preselected
-      expect(find.text('Atomic'), findsOneWidget);
+      expect(find.textContaining('Atomic'), findsOneWidget);
     });
   });
 }

@@ -284,6 +284,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
+  String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
+
+  @override
+  String get variantChess960Title => '底线棋子的起始位置随机生成';
+
+  @override
+  String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
+
+  @override
+  String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
+
+  @override
+  String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
+
+  @override
+  String get variantAtomicTitle => '“核爆”对手的王即可获胜';
+
+  @override
+  String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
+
+  @override
+  String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
+
+  @override
+  String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
+
+  @override
   String get activityActivity => '动态';
 
   @override
@@ -4991,6 +5021,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get clearSearch => '清除搜索';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '未找到“$param”的结果';
+  }
 
   @override
   String get tags => '标签';

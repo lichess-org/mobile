@@ -284,6 +284,36 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandardTitle => 'Стандартныя правілы шахмат (ФІДЭ)';
+
+  @override
+  String get variantChess960Title => 'Стартавая пазіцыя фігур выпадковая.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Для перамогі трэба прывесці караля ў цэнтр.';
+
+  @override
+  String get variantThreeCheckTitle => 'Для перамогі трэба даць шах тройчы.';
+
+  @override
+  String get variantAntichessTitle => 'Для перамогі трэба прайграць усе фігуры ці атрымаць пат.';
+
+  @override
+  String get variantAtomicTitle => 'Для перамогі трэба ўзарваць караля суперніка.';
+
+  @override
+  String get variantHordeTitle => 'Адзін бок мае шмат пешак, у іншага звычайны набор фігур.';
+
+  @override
+  String get variantRacingKingsTitle => 'Для перамогі трэба давесці свайго караля да канца дошкі першым';
+
+  @override
+  String get variantCrazyhouseTitle => 'Збітыя фігуры можна вярнуць на дошку замест хода.';
+
+  @override
+  String get variantFromPositionTitle => 'Звычайныя шахматы з сваёй пазіцыяй';
+
+  @override
   String get activityActivity => 'Актыўнасць';
 
   @override
@@ -5071,6 +5101,11 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ачысціць пошук';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Тэгі';
