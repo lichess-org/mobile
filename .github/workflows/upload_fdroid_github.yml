@@ -49,8 +49,8 @@ jobs:
 
       - name: Configure Keystore
         run: |
-          echo "${{ secrets.FDROID_KEYSTORE_FILE }}" | base64 --decode > app/keystore.jks
-          echo "storeFile=keystore.jks" >> key.properties
+          echo "${{ secrets.FDROID_KEYSTORE_FILE }}" | base64 --decode > app/lichess-fdroid.keystore
+          echo "storeFile=lichess-fdroid.keystore" >> key.properties
           echo "keyAlias=${{ secrets.FDROID_KEYSTORE_KEY_ALIAS }}" >> key.properties
           echo "storePassword=${{ secrets.FDROID_KEYSTORE_STORE_PASSWORD }}" >> key.properties
           echo "keyPassword=${{ secrets.FDROID_KEYSTORE_KEY_PASSWORD }}" >> key.properties
