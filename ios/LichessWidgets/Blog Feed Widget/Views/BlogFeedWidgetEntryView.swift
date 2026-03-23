@@ -20,8 +20,10 @@ struct BlogFeedWidgetEntryView: View {
         guard let staticSpec = family.thumbnailSpec else { return nil }
         let count = CGFloat(max(entry.items.count, 1))
         let overhead = count * 8 + (count - 1) * 9
-        let thumbHeight = min(max((availableHeight - overhead) / count, 20), staticSpec.height)
-        return BlogThumbnailSpec(width: thumbHeight / staticSpec.aspectRatio, aspectRatio: staticSpec.aspectRatio)
+        let thumbHeight = min(max((availableHeight - overhead) / count, 20),
+                              staticSpec.height)
+        return BlogThumbnailSpec(width: thumbHeight / staticSpec.aspectRatio,
+                                 aspectRatio: staticSpec.aspectRatio)
     }
 
     @ViewBuilder
@@ -68,8 +70,9 @@ struct BlogFeedWidgetEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            FeedWidgetHeader(feedName: entry.headerTitle, updatedAt: entry.date, showTimestamp: family != .systemSmall)
-
+            FeedWidgetHeader(feedName: entry.headerTitle,
+                             updatedAt: entry.date,
+                             showTimestamp: family != .systemSmall)
             Divider()
                 .padding(.top, 8)
 
