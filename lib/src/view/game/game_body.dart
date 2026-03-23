@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -102,6 +103,9 @@ class GameBody extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
@@ -159,6 +163,7 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.black
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),
@@ -207,6 +212,7 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.white
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),

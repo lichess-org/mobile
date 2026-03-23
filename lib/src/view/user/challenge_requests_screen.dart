@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -88,6 +89,11 @@ class _ChallengeListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> acceptChallenge() async {
+      // Cancel any pending lobby seek before accepting, to prevent being matched into a new game
+      // while accepting a challenge.
+      try {
+        await ref.read(createGameServiceProvider).cancelSeek();
+      } catch (_) {}
       final fullId = await ref.read(challengeServiceProvider).acceptChallenge(challenge.id);
       if (!context.mounted) return;
       if (fullId == null) {

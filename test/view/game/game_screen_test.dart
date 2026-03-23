@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -962,6 +963,25 @@ void main() {
         verify(
           () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
         ).called(1);
+      });
+
+      testWidgets('chat messages do not disappear when game state changes', (
+        WidgetTester tester,
+      ) async {
+        await createTestGame(tester, pgn: 'e4 e5');
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
+        ]);
+        await tester.pump();
+
+        // Play a move to update the GameController's state.
+        // There used to be a bug where this would make chat messages disappear.
+        await playMove(tester, 'g1', 'f3');
+
+        await tester.tap(find.byType(ChatBottomBarButton));
+        await tester.pumpAndSettle(); // wait for chat to open
+
+        expect(find.text('Hello!'), findsOneWidget);
       });
     });
 

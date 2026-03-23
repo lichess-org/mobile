@@ -111,14 +111,20 @@ class ChatController extends AsyncNotifier<ChatState> {
       _subscription?.cancel();
     });
 
+    // Do NOT use ref.watch() here, since we just need to get the initial messages.
+    // The game/tournament/study controllers do NOT update their `chat` fields when a new
+    // chat message is received, instead the ChatController itself listens to this socket event.
+    // This means that with ref.watch(), whenever the game/tournament/study controller updates,
+    // (e.g. when a new move has been made), the `ChatController` would rebuild and we'd lose
+    // any chat messages that have been received since the last build.
     final initialMessages = switch (options) {
-      GameChatOptions(:final id) => (await ref.watch(
+      GameChatOptions(:final id) => (await ref.read(
         gameControllerProvider(id).future,
       )).game.chat?.lines,
-      TournamentChatOptions(:final id) => (await ref.watch(
+      TournamentChatOptions(:final id) => (await ref.read(
         tournamentControllerProvider(id).future,
       )).tournament.chat?.lines,
-      StudyChatOptions(:final id) => (await ref.watch(
+      StudyChatOptions(:final id) => (await ref.read(
         studyControllerProvider(id).future,
       )).study.chat?.lines,
     };

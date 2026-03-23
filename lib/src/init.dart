@@ -81,6 +81,7 @@ Future<void> initializeLocalNotifications(Locale locale) async {
         notificationCategories: <DarwinNotificationCategory>[
           ChallengeNotification.darwinPlayableVariantCategory(l10n),
           ChallengeNotification.darwinUnplayableVariantCategory(l10n),
+          AnnounceNotification.darwinCategory(l10n),
         ],
       ),
       linux: const LinuxInitializationSettings(defaultActionName: 'Action'),

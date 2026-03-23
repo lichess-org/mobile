@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["HP5YLVDU97.org.lichess.mobileV2"],
+        "components": [
+          { "/": "/training/?????", "comment": "Puzzles" },
+          { "/": "/study/????????", "comment": "Studies" },
+          { "/": "/tournament/????????", "comment": "Tournaments" },
+          { "/": "/broadcast/*/*/????????", "comment": "Broadcast rounds" },
+          { "/": "/broadcast/*/*/????????/????????", "comment": "Broadcast games" },
+          { "/": "/????????/black", "comment": "Games (black perspective)" },
+          { "/": "/????????/white", "comment": "Games (white perspective)" }
+        ]
+      }
+    ]
+  }
+}
