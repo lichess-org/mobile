@@ -17,11 +17,13 @@ struct BlogFeedItemRow: View {
                     .foregroundStyle(.primary)
                 if showDate, let date = item.publishedDate {
                     Spacer(minLength: 4)
+                    let sameYear = Calendar.current.component(.year, from: date) == Calendar.current.component(.year, from: .now)
+                    let dateFormat: Date.FormatStyle = sameYear ? .dateTime.month(.abbreviated).day() : .dateTime.month(.abbreviated).day().year()
                     Group {
                         if showAuthor, let author = item.author {
-                            Text(date, style: .relative) + Text(" · \(author)")
+                            Text(date, format: dateFormat) + Text(" · \(author)")
                         } else {
-                            Text(date, style: .relative)
+                            Text(date, format: dateFormat)
                         }
                     }
                     .font(.system(size: 12))
