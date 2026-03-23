@@ -49,27 +49,24 @@ jobs:
 
       - name: Configure Keystore
         run: |
-          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
-          echo "storeFile=upload-keystore.jks" >> key.properties
-          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
-          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
-          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
-        env:
-          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          echo "${{ secrets.FDROID_KEYSTORE_FILE }}" | base64 --decode > app/keystore.jks
+          echo "storeFile=keystore.jks" >> key.properties
+          echo "keyAlias=${{ secrets.FDROID_KEYSTORE_KEY_ALIAS }}" >> key.properties
+          echo "storePassword=${{ secrets.FDROID_KEYSTORE_STORE_PASSWORD }}" >> key.properties
+          echo "keyPassword=${{ secrets.FDROID_KEYSTORE_KEY_PASSWORD }}" >> key.properties
         working-directory: android
 
-      - name: Build APK
-        run: flutter build apk --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
+      - name: Build APKs
+        run: flutter build apk --split-per-abi --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
 
-      - name: Rename APK
+      - name: Rename APKs
         run: |
           VERSION_CODE=$(yq eval '.version' pubspec.yaml | cut -d '+' -f 2)
-          VERSION_CODE=$((10#$VERSION_CODE))
-          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/${VERSION_CODE}-fdroid.apk
+          BASE=$((10#$VERSION_CODE * 100))
+          declare -A ARCH_MAP=(["armeabi-v7a"]=1 ["arm64-v8a"]=2 ["x86_64"]=3)
+          for ARCH in "${!ARCH_MAP[@]}"; do
+            mv build/app/outputs/flutter-apk/app-${ARCH}-release.apk build/app/outputs/flutter-apk/$((BASE + ARCH_MAP[$ARCH]))-${ARCH}-fdroid.apk
+          done
 
       - name: Determine release tag
         run: |
@@ -77,8 +74,8 @@ jobs:
           RELEASE_TAG=${TRIGGER_TAG%.fdroid}
           echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
-      - name: Upload APK
+      - name: Upload APKs
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.RELEASE_TAG }}
-          files: build/app/outputs/flutter-apk/${{ env.VERSION_CODE }}-fdroid.apk
+          files: build/app/outputs/flutter-apk/*-fdroid.apk
