@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/log.dart';
-import 'package:lichess_mobile/src/model/app_log/app_log_paginator.dart';
-import 'package:lichess_mobile/src/model/app_log/app_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/app_log_paginator.dart';
+import 'package:lichess_mobile/src/model/log/app_log_service.dart';
+import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
