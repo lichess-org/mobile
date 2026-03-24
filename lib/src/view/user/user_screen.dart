@@ -97,9 +97,15 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     );
     return Scaffold(
       appBar: PlatformAppBar(
-        title: UserFullNameWidget(
-          user: updatedLightUser ?? widget.user,
-          shouldShowOnline: updatedLightUser != null,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: UserAvatar(updatedLightUser ?? widget.user, radius: 16),
+          title: UserFullNameWidget(user: updatedLightUser ?? widget.user, showFlair: false),
+          subtitle: updatedLightUser != null
+              ? Text(
+                  updatedLightUser.isOnline == true ? context.l10n.online : context.l10n.offline,
+                )
+              : null,
         ),
         actions: [
           if (isLoading) const PlatformAppBarLoadingIndicator(),
