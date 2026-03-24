@@ -63,7 +63,7 @@ jobs:
         run: |
           VERSION_CODE=$(yq eval '.version' pubspec.yaml | cut -d '+' -f 2)
           BASE=$((10#$VERSION_CODE * 100))
-          declare -A ARCH_MAP=(["armeabi-v7a"]=1 ["arm64-v8a"]=2 ["x86_64"]=3)
+          declare -A ARCH_MAP=(["x86_64"]=1 ["armeabi-v7a"]=2 ["arm64-v8a"]=3)
           for ARCH in "${!ARCH_MAP[@]}"; do
             mv build/app/outputs/flutter-apk/app-${ARCH}-release.apk build/app/outputs/flutter-apk/$((BASE + ARCH_MAP[$ARCH]))-${ARCH}-fdroid.apk
           done
