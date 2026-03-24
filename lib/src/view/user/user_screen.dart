@@ -95,8 +95,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       data: (data) => data.user.lightUser.copyWith(isOnline: data.isOnline),
       orElse: () => null,
     );
-    return Scaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
+        titleSpacing: 0,
         title: ListTile(
           contentPadding: EdgeInsets.zero,
           leading: UserAvatar(updatedLightUser ?? widget.user, radius: 16),

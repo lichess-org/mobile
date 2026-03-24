@@ -111,6 +111,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.leading,
     this.title,
+    this.titleSpacing,
     this.actions,
     this.bottom,
     this.centerTitle,
@@ -119,6 +120,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final Widget? leading;
   final Widget? title;
+  final double? titleSpacing;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
   final bool? centerTitle;
@@ -131,6 +133,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final appBar = AppBar(
+      titleSpacing: titleSpacing,
       title: title,
       leading: leading,
       actions: actions,

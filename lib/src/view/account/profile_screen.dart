@@ -53,6 +53,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final online = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        titleSpacing: 0,
         title: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
