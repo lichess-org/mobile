@@ -105,7 +105,7 @@ android.applicationVariants.configureEach {
         val abi = output.filters.find { it.filterType == "ABI" }?.identifier
         val baseVersionCode = abiCodes[abi]
         if (baseVersionCode != null) {
-            (output as ApkVariantOutputImpl).versionCodeOverride = variant.versionCode * 100 + baseVersionCode
+            (output as ApkVariantOutputImpl).versionCodeOverride = versionCode * 100 + baseVersionCode
         }
     }
 }
