@@ -1,4 +1,4 @@
-import com.android.build.api.variant.FilterConfiguration
+import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -104,9 +104,10 @@ androidComponents{
     val release = selector().withBuildType("release")
     onVariants(release) { variant ->
         variant.outputs.forEach { output ->
-            val abiVersionCode = abiCodes[output.filters.find { it.filterType == FilterConfiguration.FilterType.ABI }?.identifier]
-            if (abiVersionCode != null) {
-                output.versionCode.set(android.defaultConfig.versionCode)
+            val name = output.filters.find { it.filterType == ABI }?.identifier
+            val baseAbiCode = abiCodes[name]
+            if (baseAbiCode != null) {
+                output.versionCode.set(output.versionCode.get() * 100 + baseAbiCode)
             }
         }
     }
