@@ -83,9 +83,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           contentPadding: EdgeInsets.zero,
           leading: UserAvatar(widget.user, radius: 16),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
-          subtitle: Text(
-            widget.user.isOnline == true ? context.l10n.online : context.l10n.offline,
-          ),
+          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () =>
               Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user)),
         ),

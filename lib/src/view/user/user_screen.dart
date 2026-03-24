@@ -102,9 +102,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           leading: UserAvatar(updatedLightUser ?? widget.user, radius: 16),
           title: UserFullNameWidget(user: updatedLightUser ?? widget.user, showFlair: false),
           subtitle: updatedLightUser != null
-              ? Text(
-                  updatedLightUser.isOnline == true ? context.l10n.online : context.l10n.offline,
-                )
+              ? Text(updatedLightUser.isOnline == true ? context.l10n.online : context.l10n.offline)
               : null,
         ),
         actions: [
