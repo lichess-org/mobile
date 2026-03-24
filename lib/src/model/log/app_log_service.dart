@@ -92,12 +92,12 @@ final class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
   void didDisposeProvider(ProviderObserverContext context) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override

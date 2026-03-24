@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -33,6 +33,8 @@ class AppLogSettingsScreen extends ConsumerStatefulWidget {
 
 class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  String? _searchQuery;
 
   @override
   void initState() {
@@ -44,31 +46,32 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final currentState = ref.read(appLogPaginatorProvider);
+      final currentState = ref.read(appLogPaginatorProvider(_searchQuery));
       if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
-        ref.read(appLogPaginatorProvider.notifier).next();
+        ref.read(appLogPaginatorProvider(_searchQuery).notifier).next();
       }
     }
   }
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(appLogPaginatorProvider.notifier).refresh();
+    return ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     final currentLevel = ref.watch(logPreferencesProvider.select((prefs) => prefs.level));
-    final asyncState = ref.watch(appLogPaginatorProvider);
+    final asyncState = ref.watch(appLogPaginatorProvider(_searchQuery));
     final logs = asyncState.value?.logs ?? [];
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: const Text('App Logs'),
         actions: [
           if (logs.isNotEmpty)
@@ -97,66 +100,78 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                   title: const Text('Delete all logs'),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
-                    ref.read(appLogPaginatorProvider.notifier).deleteAll();
+                    ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();
                   },
                 );
               },
             ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: PlatformSearchBar(
+                    controller: _searchController,
+                    hintText: 'Search logs...',
+                    onChanged: (value) => setState(() {
+                      _searchQuery = value.isEmpty ? null : value;
+                    }),
+                    onClear: () => setState(() {
+                      _searchQuery = null;
+                      _searchController.clear();
+                    }),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showChoicePicker<Level>(
+                      context,
+                      choices: Level.LEVELS,
+                      selectedItem: currentLevel,
+                      labelBuilder: (Level l) => Text(l.name),
+                      onSelectedItemChanged: (Level value) {
+                        _logger.fine('Changing log level to ${value.name}');
+                        ref.read(logPreferencesProvider.notifier).setLogLevel(value);
+                      },
+                    );
+                  },
+                  child: Text(currentLevel.name),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-      body: Column(
-        children: [
-          ListSection(
+      body: switch (asyncState) {
+        AsyncData(:final value) when value.logs.isEmpty => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SettingsListTile(
-                settingsLabel: const Text('Log Level'),
-                settingsValue: currentLevel.name,
-                onTap: () {
-                  showChoicePicker<Level>(
-                    context,
-                    choices: Level.LEVELS,
-                    selectedItem: currentLevel,
-                    labelBuilder: (Level l) => Text(l.name),
-                    onSelectedItemChanged: (Level value) {
-                      _logger.fine('Changing log level to ${value.name}');
-                      ref.read(logPreferencesProvider.notifier).setLogLevel(value);
-                    },
-                  );
-                },
-              ),
+              const Text('No logs to show'),
+              TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
             ],
           ),
-          Expanded(
-            child: switch (asyncState) {
-              AsyncData(:final value) when value.logs.isEmpty => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('No logs to show'),
-                    TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
-                  ],
-                ),
-              ),
-              AsyncData(:final value) => HapticRefreshIndicator(
-                onRefresh: _onRefresh,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  itemCount: value.logs.length,
-                  separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
-                  itemBuilder: (_, index) => _LogTile(entry: value.logs[index]),
-                ),
-              ),
-              AsyncError(:final error) => Center(
-                child: Padding(
-                  padding: Styles.bodySectionPadding,
-                  child: Text('Failed to load logs: $error'),
-                ),
-              ),
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
+        ),
+        AsyncData(:final value) => HapticRefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView.separated(
+            controller: _scrollController,
+            itemCount: value.logs.length,
+            separatorBuilder: (_, _) => const Divider(height: 1, thickness: 0),
+            itemBuilder: (_, index) => _LogTile(entry: value.logs[index]),
           ),
-        ],
-      ),
+        ),
+        AsyncError(:final error) => Center(
+          child: Padding(
+            padding: Styles.bodySectionPadding,
+            child: Text('Failed to load logs: $error'),
+          ),
+        ),
+        _ => const Center(child: CircularProgressIndicator.adaptive()),
+      },
     );
   }
 }

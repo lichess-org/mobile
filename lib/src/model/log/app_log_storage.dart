@@ -24,18 +24,37 @@ class AppLogStorage {
 
   /// Retrieves a paginated list of [AppLogEntry] entries from the database.
   ///
-  /// If [minLevelValue] is provided, only entries with a level value greater than
-  /// or equal to [minLevelValue] are returned.
-  Future<AppLogPage> page({int? cursor, int? minLevelValue, int limit = 100}) async {
-    final whereClause = [
-      if (cursor != null) 'id <= $cursor',
-      if (minLevelValue != null) 'levelValue >= $minLevelValue',
-    ];
+  /// [minLevelValue] filters entries at or above the given log level.
+  /// [searchQuery] filters entries whose message, logger name, or error contain the query string.
+  Future<AppLogPage> page({
+    int? cursor,
+    int? minLevelValue,
+    String? searchQuery,
+    int limit = 100,
+  }) async {
+    final whereParts = <String>[];
+    final args = <dynamic>[];
+
+    if (cursor != null) {
+      whereParts.add('id <= ?');
+      args.add(cursor);
+    }
+    if (minLevelValue != null) {
+      whereParts.add('levelValue >= ?');
+      args.add(minLevelValue);
+    }
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      whereParts.add('(message LIKE ? OR loggerName LIKE ? OR error LIKE ?)');
+      final pattern = '%$searchQuery%';
+      args.addAll([pattern, pattern, pattern]);
+    }
+
     final res = await _db.query(
       kAppLogStorageTable,
       limit: limit + 1,
       orderBy: 'id DESC',
-      where: whereClause.isNotEmpty ? whereClause.join(' AND ') : null,
+      where: whereParts.isNotEmpty ? whereParts.join(' AND ') : null,
+      whereArgs: args.isNotEmpty ? args : null,
     );
     return AppLogPage(
       items: res.take(limit).map(AppLogEntry.fromJson).toIList(),
