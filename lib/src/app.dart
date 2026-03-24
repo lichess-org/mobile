@@ -164,11 +164,11 @@ class _AppState extends ConsumerState<Application> {
       if (uri.scheme == 'file' || uri.scheme == 'content') {
         return;
       }
-      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
+      if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
         ref.read(oauthCallbackProvider).add(uri);
         return;
       }
-      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == 'open-web') {
+      if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
         handleOpenWebLink(uri);
         return;
       }
