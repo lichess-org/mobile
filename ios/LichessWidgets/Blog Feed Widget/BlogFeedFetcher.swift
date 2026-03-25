@@ -13,7 +13,7 @@ struct BlogFeedFetcher {
               let (data, _) = try? await URLSession.shared.data(from: url),
               let source = UIImage(data: data)
         else { return nil }
-        let scale = UIScreen.main.scale
+        let scale = UITraitCollection.current.displayScale
         let size = CGSize(width: spec.width * scale, height: spec.height * scale)
         return await source.byPreparingThumbnail(ofSize: size)?.jpegData(compressionQuality: 0.85)
     }
@@ -67,6 +67,4 @@ struct BlogFeedFetcher {
             return ([], error.localizedDescription)
         }
     }
-
-
 }
