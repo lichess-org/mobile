@@ -147,7 +147,7 @@ class ChallengeService {
     showConfirmDialog(context, challenge);
   }
 
-  Future<void> _onChallengeAccepted(GameFullId fullId) async {
+  void _onChallengeAccepted(GameFullId fullId) {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 

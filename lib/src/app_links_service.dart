@@ -42,21 +42,25 @@ class AppLinksService {
   final Ref ref;
 
   final _appLinks = AppLinks();
-  late StreamSubscription<Uri>? _linkSubscription;
+  StreamSubscription<Uri>? _linkSubscription;
 
   Future<void> start() async {
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
-      // File links are handled by the sharing intent logic, so we can ignore them here.
-      if (uri.scheme == 'file' || uri.scheme == 'content') {
-        return;
-      }
-      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
-        ref.read(oauthCallbackProvider).add(uri);
-        return;
-      }
-      final context = ref.read(currentNavigatorKeyProvider).currentContext;
-      if (context != null && context.mounted) {
-        await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+      try {
+        // File links are handled by the sharing intent logic, so we can ignore them here.
+        if (uri.scheme == 'file' || uri.scheme == 'content') {
+          return;
+        }
+        if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
+          ref.read(oauthCallbackProvider).add(uri);
+          return;
+        }
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context != null && context.mounted) {
+          await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+        }
+      } catch (e, st) {
+        _logger.severe('Error handling app link: $e\n$st');
       }
     });
   }

@@ -23,7 +23,7 @@ extension type const GameAnyId._(String value) implements StringId {
 extension type const GameId._(String value) implements StringId, GameAnyId {
   const GameId(this.value) : assert(value.length == 8);
 
-  bool get isValid => RegExp(r'''[\w-]{8}''').hasMatch(value);
+  bool get isValid => RegExp(r'''^[\w-]{8}$''').hasMatch(value);
 
   GameId.fromJson(dynamic json) : this(json as String);
 }

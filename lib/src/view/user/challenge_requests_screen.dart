@@ -32,7 +32,6 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final challengesAsync = ref.watch(challengesProvider);
-    final authUser = ref.watch(authControllerProvider);
 
     switch (challengesAsync) {
       case AsyncError():
@@ -56,11 +55,7 @@ class _Body extends ConsumerWidget {
 
             if (user == null) return null;
 
-            return _ChallengeListItem(
-              challenge: challenge,
-              challengerUser: user,
-              authUser: authUser,
-            );
+            return _ChallengeListItem(challenge: challenge, challengerUser: user);
           },
         );
       case _:
@@ -70,15 +65,10 @@ class _Body extends ConsumerWidget {
 }
 
 class _ChallengeListItem extends ConsumerWidget {
-  const _ChallengeListItem({
-    required this.challenge,
-    required this.challengerUser,
-    required this.authUser,
-  });
+  const _ChallengeListItem({required this.challenge, required this.challengerUser});
 
   final Challenge challenge;
   final LightUser challengerUser;
-  final AuthUser? authUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
