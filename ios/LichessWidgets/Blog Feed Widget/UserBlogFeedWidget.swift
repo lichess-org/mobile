@@ -8,17 +8,17 @@ struct UserBlogFeedWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind,
                                intent: UserBlogFeedIntent.self,
-                               provider: BlogFeedProvider()) { entry in
+                               provider: UserBlogFeedProvider()) { entry in
             BlogFeedWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("User Blog")
-        .description("Shows the latest posts from a Lichess user blog.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+                               .configurationDisplayName("User Blog")
+                               .description("Shows the latest posts from a Lichess user blog.")
+                               .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 
-// MARK: - Widget Intent
+// MARK: - Widget Configuration
 
 struct UserBlogFeedIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "User Blog"

@@ -1,6 +1,6 @@
 import WidgetKit
 
-struct BlogFeedProvider: AppIntentTimelineProvider {
+struct UserBlogFeedProvider: AppIntentTimelineProvider {
     private let fetcher = BlogFeedFetcher()
 
     func placeholder(in context: Context) -> BlogFeedEntry {
