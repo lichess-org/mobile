@@ -20,6 +20,6 @@ struct BlogItemThumbnail: View {
             }
         }
         .frame(width: spec.width, height: spec.height)
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .clipShape(RoundedRectangle(cornerRadius: BlogFeedWidgetLayout.thumbnailCornerRadius))
     }
 }

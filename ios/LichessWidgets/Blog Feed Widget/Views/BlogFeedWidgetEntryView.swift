@@ -15,12 +15,12 @@ struct BlogFeedWidgetEntryView: View {
     }
 
     /// Computes a thumbnail spec that makes items fill `availableHeight` without exceeding the static size.
-    /// Each item row has 8pt top padding; dividers between items add ~9pt each.
     private func spec(for availableHeight: CGFloat) -> BlogThumbnailSpec? {
         guard let staticSpec = family.thumbnailSpec else { return nil }
         let count = CGFloat(max(entry.items.count, 1))
-        let overhead = count * 8 + (count - 1) * 9
-        let thumbHeight = min(max((availableHeight - overhead) / count, 20),
+        let overhead = count * BlogFeedWidgetLayout.itemTopPadding
+                     + (count - 1) * BlogFeedWidgetLayout.dividerTotalHeight
+        let thumbHeight = min(max((availableHeight - overhead) / count, BlogFeedWidgetLayout.minThumbHeight),
                               staticSpec.height)
         return BlogThumbnailSpec(width: thumbHeight / staticSpec.aspectRatio,
                                  aspectRatio: staticSpec.aspectRatio)
@@ -38,12 +38,12 @@ struct BlogFeedWidgetEntryView: View {
                     .foregroundStyle(.red)
                     .lineLimit(2)
             }
-            .padding(.top, 8)
+            .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
         } else if entry.items.isEmpty {
             Text("No items available")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .padding(.top, 8)
+                .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
         } else {
             VStack(alignment: .leading, spacing: 0) {
                 let showAuthor = showDate && entry.feed == .communityBlog
@@ -53,7 +53,7 @@ struct BlogFeedWidgetEntryView: View {
                                               lineLimit: lineLimit,
                                               showDate: showDate,
                                               showAuthor: showAuthor)
-                        .padding(.top, 8)
+                        .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
                     if let dest = item.url?.lichessWebURL {
                         Link(destination: dest) { row }
                     } else {
@@ -61,7 +61,7 @@ struct BlogFeedWidgetEntryView: View {
                     }
                     if index < entry.items.count - 1 {
                         Divider()
-                            .padding(.top, 8)
+                            .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
                     }
                 }
             }
@@ -74,16 +74,16 @@ struct BlogFeedWidgetEntryView: View {
                                  updatedAt: entry.date,
                                  showTimestamp: family != .systemSmall)
             Divider()
-                .padding(.top, 8)
+                .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
 
             if family == .systemSmall {
                 itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 Text("Updated at \(entry.date.shortTime)")
-                    .font(.system(size: 11))
+                    .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
                     .foregroundStyle(.secondary)
-                    .padding(.top, 6)
+                    .padding(.top, BlogFeedWidgetLayout.smallFooterTopPadding)
             } else {
                 // GeometryReader measures remaining height so thumbnails fill the available area.
                 GeometryReader { geo in

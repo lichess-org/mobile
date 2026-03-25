@@ -8,15 +8,15 @@ struct BlogFeedItemRow: View {
     var showAuthor: Bool = false
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: BlogFeedWidgetLayout.itemHSpacing) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.title)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: BlogFeedWidgetLayout.titleFontSize, weight: .semibold))
                     .lineLimit(lineLimit)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.primary)
                 if showDate, let date = item.publishedDate {
-                    Spacer(minLength: 4)
+                    Spacer(minLength: BlogFeedWidgetLayout.dateSpacerMinLength)
                     Group {
                         if showAuthor, let author = item.author {
                             Text("\(date, format: date.widgetDateFormat) · \(author)")
@@ -24,7 +24,7 @@ struct BlogFeedItemRow: View {
                             Text(date, format: date.widgetDateFormat)
                         }
                     }
-                    .font(.system(size: 12))
+                    .font(.system(size: BlogFeedWidgetLayout.metaFontSize))
                     .foregroundStyle(.secondary)
                 }
             }

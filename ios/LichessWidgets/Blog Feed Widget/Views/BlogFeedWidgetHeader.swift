@@ -6,18 +6,18 @@ struct BlogFeedWidgetHeader: View {
     var showTimestamp: Bool = true
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: BlogFeedWidgetLayout.headerSpacing) {
             Image("LichessLogo")
                 .resizable()
-                .frame(width: 20, height: 20)
+                .frame(width: BlogFeedWidgetLayout.logoSize, height: BlogFeedWidgetLayout.logoSize)
             Text(feedName)
-                .font(.system(size: 15, weight: .semibold))
+                .font(.system(size: BlogFeedWidgetLayout.titleFontSize, weight: .semibold))
                 .foregroundStyle(.primary)
                 .lineLimit(1)
             if showTimestamp {
                 Spacer()
                 Text("Updated at \(updatedAt.shortTime)")
-                    .font(.system(size: 11))
+                    .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
                     .foregroundStyle(.secondary)
             }
         }
