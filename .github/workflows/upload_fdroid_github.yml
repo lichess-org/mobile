@@ -58,6 +58,7 @@ jobs:
 
       - name: Build APKs
         run: |
+          export SOURCE_DATE_EPOCH=0
           flutter build apk --split-per-abi --target-platform="android-x64" --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
           flutter build apk --split-per-abi --target-platform="android-arm" --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
           flutter build apk --split-per-abi --target-platform="android-arm64" --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
