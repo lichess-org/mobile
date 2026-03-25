@@ -3,7 +3,7 @@ import SwiftUI
 import WidgetKit
 
 struct UserBlogFeedWidget: Widget {
-    let kind: String = "UserBlogFeedWidget"
+    let kind = "UserBlogFeedWidget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind,
@@ -17,8 +17,6 @@ struct UserBlogFeedWidget: Widget {
                                .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
-
-// MARK: - Widget Configuration
 
 struct UserBlogFeedIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "User Blog"

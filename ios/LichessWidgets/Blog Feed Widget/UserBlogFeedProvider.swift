@@ -18,7 +18,7 @@ struct UserBlogFeedProvider: AppIntentTimelineProvider {
         let entry = await fetcher.fetchEntry(feed: .userBlog,
                                              username: configuration.username,
                                              family: context.family)
-        let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+        let nextUpdate = BlogFeedFetcher.nextUpdateDate
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
 }

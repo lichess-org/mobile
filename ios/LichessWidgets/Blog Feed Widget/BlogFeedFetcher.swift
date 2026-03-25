@@ -4,12 +4,17 @@ import WidgetKit
 internal import XMLKit
 
 struct BlogFeedFetcher {
+    static var nextUpdateDate: Date {
+        Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+    }
+
     private func fetchThumbnail(urlString: String, spec: BlogThumbnailSpec) async -> Data? {
         guard let url = URL(string: urlString),
               let (data, _) = try? await URLSession.shared.data(from: url),
               let source = UIImage(data: data)
         else { return nil }
-        let size = CGSize(width: spec.width * 3, height: spec.height * 3)
+        let scale = UIScreen.main.scale
+        let size = CGSize(width: spec.width * scale, height: spec.height * scale)
         return await source.byPreparingThumbnail(ofSize: size)?.jpegData(compressionQuality: 0.85)
     }
 

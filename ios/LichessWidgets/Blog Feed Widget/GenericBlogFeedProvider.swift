@@ -23,7 +23,7 @@ struct GenericBlogFeedProvider: TimelineProvider {
             let entry = await fetcher.fetchEntry(feed: feed,
                                                  username: nil,
                                                  family: context.family)
-            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+            let nextUpdate = BlogFeedFetcher.nextUpdateDate
             completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
         }
     }

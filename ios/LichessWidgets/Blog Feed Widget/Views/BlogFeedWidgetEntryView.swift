@@ -46,8 +46,8 @@ struct BlogFeedWidgetEntryView: View {
                 .padding(.top, 8)
         } else {
             VStack(alignment: .leading, spacing: 0) {
+                let showAuthor = showDate && entry.feed == .communityBlog
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    let showAuthor = showDate && entry.feed == .communityBlog
                     let row = BlogFeedItemRow(item: item,
                                               spec: spec,
                                               lineLimit: lineLimit,
