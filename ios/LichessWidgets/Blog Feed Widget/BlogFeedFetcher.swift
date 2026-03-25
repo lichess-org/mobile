@@ -63,22 +63,5 @@ struct BlogFeedFetcher {
         }
     }
 
-    func placeholder(feed: BlogFeedChoice, family: WidgetFamily) -> BlogFeedEntry {
-        let allItems: [BlogFeedItem] = [
-            BlogFeedItem(id: "1", title: "Queens' Online Chess Festival", url: nil,
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -1, to: .now),
-                         author: nil, thumbnailData: nil, thumbnailImageName: "PlaceholderThumbnail1"),
-            BlogFeedItem(id: "2", title: "ChessMood 20/20 Grand Prix 2026", url: nil,
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now),
-                         author: nil, thumbnailData: nil, thumbnailImageName: "PlaceholderThumbnail2"),
-            BlogFeedItem(id: "3", title: "Streamer Arenas Announcement", url: nil,
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -8, to: .now),
-                         author: nil, thumbnailData: nil, thumbnailImageName: "PlaceholderThumbnail3"),
-            BlogFeedItem(id: "4", title: "Titled Arenas Announcement", url: nil,
-                         publishedDate: Calendar.current.date(byAdding: .day, value: -14, to: .now),
-                         author: nil, thumbnailData: nil, thumbnailImageName: "PlaceholderThumbnail4"),
-        ]
-        return BlogFeedEntry(date: .now, feed: feed, username: nil,
-                             items: Array(allItems.prefix(family.maxItems)), error: nil)
-    }
+
 }

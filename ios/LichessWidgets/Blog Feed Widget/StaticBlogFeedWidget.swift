@@ -36,7 +36,7 @@ private struct GenericBlogFeedProvider: TimelineProvider {
     private let fetcher = BlogFeedFetcher()
 
     func placeholder(in context: Context) -> BlogFeedEntry {
-        fetcher.placeholder(feed: feed, family: context.family)
+        BlogFeedPlaceholder.entry(feed: feed, family: context.family)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (BlogFeedEntry) -> Void) {
