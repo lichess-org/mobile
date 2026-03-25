@@ -41,6 +41,7 @@ class _TestWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () async {
+        await ref.read(appLinksServiceProvider).start();
         await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
       },
       child: const Text('test link'),

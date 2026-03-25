@@ -1,15 +1,21 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
@@ -24,12 +30,40 @@ import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AppLinks');
 
-final appLinksServiceProvider = Provider<AppLinksService>((ref) => AppLinksService(ref));
+final appLinksServiceProvider = Provider<AppLinksService>((ref) {
+  final service = AppLinksService(ref);
+  ref.onDispose(() => service.dispose());
+  return service;
+});
 
 class AppLinksService {
   AppLinksService(this.ref);
 
   final Ref ref;
+
+  final _appLinks = AppLinks();
+  late StreamSubscription<Uri>? _linkSubscription;
+
+  Future<void> start() async {
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
+      // File links are handled by the sharing intent logic, so we can ignore them here.
+      if (uri.scheme == 'file' || uri.scheme == 'content') {
+        return;
+      }
+      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
+        ref.read(oauthCallbackProvider).add(uri);
+        return;
+      }
+      final context = ref.read(currentNavigatorKeyProvider).currentContext;
+      if (context != null && context.mounted) {
+        await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+      }
+    });
+  }
+
+  void dispose() {
+    _linkSubscription?.cancel();
+  }
 
   /// Resolves an app link [Uri] to one or more corresponding [Route]s.
   Future<List<Route<dynamic>>?> resolveAppLinkUri(BuildContext context, Uri appLinkUri) async {
