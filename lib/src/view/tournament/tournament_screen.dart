@@ -1492,7 +1492,7 @@ class _PairingTile extends ConsumerWidget {
               padding: EdgeInsets.only(right: 8.0),
               child: Icon(LichessIcons.body_cut, size: 20),
             ),
-          Icon(pairing.color == Side.white ? Icons.circle_outlined : Icons.circle, size: 20),
+          Icon(pairing.color == Side.white ? Icons.circle : Icons.circle_outlined, size: 20),
           SizedBox(
             width: 24,
             height: 24,
