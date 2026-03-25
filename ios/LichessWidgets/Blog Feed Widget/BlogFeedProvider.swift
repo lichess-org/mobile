@@ -4,7 +4,7 @@ struct BlogFeedProvider: AppIntentTimelineProvider {
     private let fetcher = BlogFeedFetcher()
 
     func placeholder(in context: Context) -> BlogFeedEntry {
-        BlogFeedPlaceholder.entry(feed: .userBlog, username: "Lichess", family: context.family)
+        BlogFeedPlaceholder.entry(feed: .userBlog, username: "ChessNoob2009", family: context.family)
     }
 
     func snapshot(for configuration: UserBlogFeedIntent, in context: Context) async -> BlogFeedEntry {
