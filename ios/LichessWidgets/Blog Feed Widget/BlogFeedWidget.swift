@@ -1,45 +1,33 @@
 import AppIntents
-import FeedKit
 import SwiftUI
 import WidgetKit
 
-struct BlogFeedWidget: Widget {
-    let kind: String = "BlogFeedWidget"
+struct UserBlogFeedWidget: Widget {
+    let kind: String = "UserBlogFeedWidget"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind,
-                               intent: BlogFeedIntent.self,
+                               intent: UserBlogFeedIntent.self,
                                provider: BlogFeedProvider()) { entry in
             BlogFeedWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-                               .configurationDisplayName("Blog Feed")
-                               .description("Shows the latest posts from a Lichess feed.")
-                               .supportedFamilies([
-                                .systemSmall,
-                                .systemMedium,
-                                .systemLarge
-                               ])
+        .configurationDisplayName("User Blog")
+        .description("Shows the latest posts from a Lichess user blog.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 
 // MARK: - Widget Intent
 
-struct BlogFeedIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Feed Selection"
-    static var description = IntentDescription("Choose which Lichess feed to display.")
+struct UserBlogFeedIntent: WidgetConfigurationIntent {
+    static var title: LocalizedStringResource = "User Blog"
+    static var description = IntentDescription("Choose which Lichess user blog to display.")
 
-    @Parameter(title: "Feed", default: .officialBlog)
-    var feed: BlogFeedChoice
-
-    @Parameter(title: "Username")
-    var username: String?
+    @Parameter(title: "Username", default: "Lichess")
+    var username: String
 
     static var parameterSummary: some ParameterSummary {
-        When(\BlogFeedIntent.$feed, .equalTo, .userBlog) {
-            Summary("Show \(\.$feed) for \(\.$username)")
-        } otherwise: {
-            Summary("Show \(\.$feed)")
-        }
+        Summary("Show blog for \(\.$username)")
     }
 }

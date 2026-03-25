@@ -1,18 +1,17 @@
 import Foundation
-import AppIntents
 
-enum BlogFeedChoice: String, AppEnum {
+enum BlogFeedChoice: String {
     case officialBlog
     case communityBlog
     case userBlog
 
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Feed"
-
-    static var caseDisplayRepresentations: [BlogFeedChoice: DisplayRepresentation] = [
-        .officialBlog: "Official Blog",
-        .communityBlog: "Community Blog",
-        .userBlog: "User Blog",
-    ]
+    var displayName: String {
+        switch self {
+        case .officialBlog: return "Official Blog"
+        case .communityBlog: return "Community Blog"
+        case .userBlog: return "User Blog"
+        }
+    }
 
     func feedURL(username: String?) -> String? {
         switch self {
