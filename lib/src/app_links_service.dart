@@ -101,6 +101,8 @@ class AppLinksService {
             puzzleId: PuzzleId(id),
           ),
         ];
+      // This might be a challenge or a game link. There's currently no API endpoint that resolves both games and challenges
+      // at the same time, so check if it's a game link first, and if that fails, we later check if it's a challenge link.
       case _:
         final gameRoutes = await _tryResolveGameLink(context, appLinkUri);
         if (gameRoutes != null) return gameRoutes;
