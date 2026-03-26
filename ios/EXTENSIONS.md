@@ -23,3 +23,20 @@ When a PR that adds a new extension is ready to merge, a Lichess org member with
 
 1. Register the new App ID (for the extension's bundle ID) in the Apple Developer portal.
 2. Create a provisioning profile for it.
+
+## Deploying extensions via fastlane
+
+Extensions have their own bundle ID (`org.lichess.mobileV2.<ExtensionName>`) and require a separate provisioning profile managed by `match`. The `Matchfile` and `Fastfile` list all extension bundle IDs alongside the main app.
+
+### Adding a new extension to the fastlane setup
+
+After registering the App ID in the developer portal (see above), run `match` once to create and store the provisioning profile:
+
+```sh
+cd ios
+bundle exec fastlane match appstore --app_identifier org.lichess.mobileV2.<ExtensionName>
+```
+
+This will generate the profile, push it to the certificates repo, and set the correct `PROVISIONING_PROFILE_SPECIFIER` in the Xcode project. After that, `fastlane beta` handles signing for all targets automatically — including in CI.
+
+Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfile` and the `sync_code_signing` call in `fastlane/Fastfile`.
