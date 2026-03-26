@@ -8,7 +8,7 @@ As an external contributor you won't have access to that account, so `flutter ru
 
 ### Testing locally
 
-You can still build and test extensions using your own Apple Developer account (a free account is enough for device testing):
+You can still build and test extensions using your own Apple Developer account and iOS Simulator. A free account is enough for device testing.
 
 1. Open `ios/Runner.xcworkspace` in Xcode.
 2. Select the **Runner** target → **Signing & Capabilities** → set **Team** to your account and change the bundle ID to something you own (e.g. `com.yourname.lichess`).
@@ -23,4 +23,3 @@ When a PR that adds a new extension is ready to merge, a Lichess org member with
 
 1. Register the new App ID (for the extension's bundle ID) in the Apple Developer portal.
 2. Create a provisioning profile for it.
-3. Ensure any required entitlements are added to the main app profile.
