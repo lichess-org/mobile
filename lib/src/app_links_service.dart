@@ -57,7 +57,7 @@ class AppLinksService {
         }
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context != null && context.mounted) {
-          await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+          await handleAppLink(context, uri);
         }
       } catch (e, st) {
         _logger.severe('Error handling app link: $e\n$st');
