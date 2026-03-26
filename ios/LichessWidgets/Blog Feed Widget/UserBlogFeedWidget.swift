@@ -12,9 +12,9 @@ struct UserBlogFeedWidget: Widget {
             BlogFeedWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-                               .configurationDisplayName("User Blog")
-                               .description("Shows the latest posts from a Lichess user blog.")
-                               .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .configurationDisplayName("User Blog")
+        .description("Shows the latest posts from a Lichess user blog.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 

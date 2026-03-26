@@ -5,7 +5,8 @@ struct OfficialBlogWidget: Widget {
     let kind = "OfficialBlogWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: GenericBlogFeedProvider(feed: .officialBlog)) { entry in
+        StaticConfiguration(kind: kind,
+                            provider: GenericBlogFeedProvider(feed: .officialBlog)) { entry in
             BlogFeedWidgetEntryView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
