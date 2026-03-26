@@ -28,9 +28,7 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
     final storage = await ref.read(httpLogStorageProvider.future);
     return HttpLogState(
       data: IList.new([
-        await AsyncValue.guard(
-          () => storage.page(limit: _pageSize, searchQuery: _searchQuery),
-        ),
+        await AsyncValue.guard(() => storage.page(limit: _pageSize, searchQuery: _searchQuery)),
       ]),
     );
   }
