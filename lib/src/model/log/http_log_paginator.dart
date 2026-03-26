@@ -9,34 +9,42 @@ part 'http_log_paginator.freezed.dart';
 const _pageSize = 20;
 
 /// A provider for [HttpLogPaginator].
-final httpLogPaginatorProvider = AsyncNotifierProvider.autoDispose<HttpLogPaginator, HttpLogState>(
-  HttpLogPaginator.new,
-  name: 'HttpLogPaginatorProvider',
-);
+///
+/// The family argument is the optional search query string.
+final httpLogPaginatorProvider = AsyncNotifierProvider.autoDispose
+    .family<HttpLogPaginator, HttpLogState, String?>(
+      HttpLogPaginator.new,
+      name: 'HttpLogPaginatorProvider',
+    );
 
 /// A Riverpod controller for managing HTTP logs.
-///
-/// The `HttpLogController` class is responsible for fetching and managing
-/// paginated HTTP log entries from the storage. It uses a throttler to limit
-/// the rate of fetching new pages.
 class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
+  HttpLogPaginator(this._searchQuery);
+
+  final String? _searchQuery;
+
   @override
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
     return HttpLogState(
-      data: IList.new([await AsyncValue.guard(() => storage.page(limit: _pageSize))]),
+      data: IList.new([
+        await AsyncValue.guard(
+          () => storage.page(limit: _pageSize, searchQuery: _searchQuery),
+        ),
+      ]),
     );
   }
 
   /// Fetches the next page of HTTP logs.
-  ///
-  /// This method uses a throttler to limit the rate of fetching new pages.
-  /// It updates the state with the new page of HTTP logs.
   Future<void> next() async {
     if (state.hasValue && state.requireValue.hasMore) {
       final storage = await ref.read(httpLogStorageProvider.future);
       final asyncPage = await AsyncValue.guard(
-        () => storage.page(limit: _pageSize, cursor: state.requireValue.nextPage),
+        () => storage.page(
+          limit: _pageSize,
+          cursor: state.requireValue.nextPage,
+          searchQuery: _searchQuery,
+        ),
       );
       state = AsyncValue.data(
         state.requireValue.copyWith(data: state.requireValue.data.add(asyncPage)),
@@ -45,12 +53,6 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   }
 
   /// Deletes all HTTP logs from the storage.
-  ///
-  /// This method reads the `httpLogStorageProvider` to get the storage instance
-  /// and then deletes all the logs from the storage. After deletion, it updates
-  /// the state with an empty list of HTTP logs.
-  ///
-  /// Returns a [Future] that completes when the deletion is done.
   Future<void> deleteAll() async {
     final storage = await ref.read(httpLogStorageProvider.future);
     await storage.deleteAll();
@@ -58,8 +60,6 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   }
 
   /// Refreshes the HTTP logs by fetching the first page again.
-  ///
-  /// This method updates the state with the first page of HTTP logs.
   Future<void> refresh() async {
     ref.invalidateSelf();
   }
