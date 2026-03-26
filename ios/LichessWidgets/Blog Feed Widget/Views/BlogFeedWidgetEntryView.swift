@@ -29,16 +29,16 @@ struct BlogFeedWidgetEntryView: View {
     @ViewBuilder
     private func itemsContent(spec: BlogThumbnailSpec?) -> some View {
         if let error = entry.error {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Could not load feed")
-                    .font(.caption)
+            VStack(spacing: BlogFeedWidgetLayout.errorStackSpacing) {
+                Image(systemName: "exclamationmark.circle")
+                    .font(.system(size: BlogFeedWidgetLayout.errorIconSize))
                     .foregroundStyle(.secondary)
                 Text(error)
-                    .font(.caption2)
-                    .foregroundStyle(.red)
-                    .lineLimit(2)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if entry.items.isEmpty {
             Text("No items available")
                 .font(.caption)

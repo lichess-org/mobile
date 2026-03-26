@@ -27,4 +27,8 @@ enum BlogFeedWidgetLayout {
 
     // Small widget footer
     static let smallFooterTopPadding: CGFloat = 6
+
+    // Error state
+    static let errorIconSize: CGFloat = 20
+    static let errorStackSpacing: CGFloat = 6
 }
