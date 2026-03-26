@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:logging/logging.dart';

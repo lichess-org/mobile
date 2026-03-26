@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 sealed class DisplayItem {}
@@ -76,16 +77,16 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: UserFullNameWidget(
-          user: widget.user,
-          showFlair: true,
-          showPatron: true,
-          shouldShowOnline: true,
-          onTap: () {
-            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
-          },
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        titleSpacing: 0,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: UserAvatar(widget.user, radius: 16),
+          title: UserFullNameWidget(user: widget.user, showFlair: false),
+          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
+          onTap: () =>
+              Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user)),
         ),
       ),
       body: _Body(user: widget.user),

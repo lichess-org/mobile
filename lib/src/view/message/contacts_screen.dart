@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -143,7 +144,14 @@ class ContactsListView extends ConsumerWidget {
     switch (contactsAsync) {
       case AsyncData(:final value):
         final contacts = value.contacts;
-        return ListView.builder(
+        return ListView.separated(
+          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider(
+                  height: 1,
+                  cupertinoHasLeading: true,
+                  cupertinoLeadingIndent: 56,
+                )
+              : const SizedBox.shrink(),
           itemCount: contacts.length,
           itemBuilder: (context, index) {
             final contact = contacts[index];
@@ -159,7 +167,7 @@ class ContactsListView extends ConsumerWidget {
   }
 }
 
-class ContactTile extends ConsumerWidget {
+class ContactTile extends StatelessWidget {
   const ContactTile(this.contact, this.me, {required this.openConvo, super.key});
 
   final Contact contact;
@@ -167,24 +175,42 @@ class ContactTile extends ConsumerWidget {
   final void Function(LightUser user) openConvo;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final unreadStyle = TextStyle(
       color: ColorScheme.of(context).primary,
       fontWeight: FontWeight.bold,
     );
-
     final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
+
     return ListTile(
-      leading: ConnectedIcon(isConnected: contact.user.isOnline == true),
-      title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
-      subtitle: Text(contact.lastMessage.text, style: isRead ? null : unreadStyle),
-      trailing: Text(
-        relativeDate(context.l10n, contact.lastMessage.date),
-        style: isRead ? null : unreadStyle,
+      contentPadding: Theme.of(
+        context,
+      ).listTileTheme.contentPadding?.add(const EdgeInsets.symmetric(vertical: 4.0)),
+      leading: UserAvatar(contact.user),
+      title: UserFullNameWidget(user: contact.user, showFlair: false, showPatron: true),
+      subtitle: Text(contact.lastMessage.text),
+      trailing: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            relativeDate(context.l10n, contact.lastMessage.date),
+            style: isRead ? null : unreadStyle,
+          ),
+          if (!isRead) ...[
+            const SizedBox(height: 4),
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: ColorScheme.of(context).primary,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ],
+        ],
       ),
-      onTap: () {
-        openConvo(contact.user);
-      },
+      onTap: () => openConvo(contact.user),
     );
   }
 }
@@ -198,13 +224,8 @@ class UserTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      leading: user.isOnline == true
-          ? const Icon(Icons.cloud, color: Colors.green)
-          : const Icon(Icons.cloud_off, color: Colors.grey),
       title: UserFullNameWidget(user: user, showFlair: true, showPatron: true),
-      onTap: () {
-        openConvo(user);
-      },
+      onTap: () => openConvo(user),
     );
   }
 }

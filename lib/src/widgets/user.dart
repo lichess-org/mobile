@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
@@ -215,4 +217,132 @@ class UserFullNameWidget extends ConsumerWidget {
     }
     return content;
   }
+}
+
+/// A circular avatar for a Lichess user.
+///
+/// Shows the user's flair if available, otherwise their initials with a
+/// deterministic background color derived from the first letter of their name.
+class UserAvatar extends ConsumerStatefulWidget {
+  const UserAvatar(this.user, {this.radius = 20.0, super.key});
+
+  final LightUser user;
+  final double radius;
+
+  @override
+  ConsumerState<UserAvatar> createState() => _UserAvatarState();
+}
+
+class _UserAvatarState extends ConsumerState<UserAvatar> {
+  bool _errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final client = ref.watch(defaultClientProvider);
+    final user = widget.user;
+    final initial = user.name[0].toUpperCase();
+    final showFlair = user.flair != null && !_errorLoadingFlair;
+
+    return CircleAvatar(
+      radius: widget.radius,
+      foregroundImage: showFlair ? HttpNetworkImage(lichessFlairSrc(user.flair!), client) : null,
+      onForegroundImageError: user.flair != null
+          ? (_, _) => setState(() => _errorLoadingFlair = true)
+          : null,
+      backgroundColor: showFlair
+          ? ColorScheme.of(context).surfaceContainer
+          : _colorForInitial(initial, Theme.of(context).brightness),
+      child: showFlair ? null : Text(initial, style: const TextStyle(color: Colors.white)),
+    );
+  }
+}
+
+Color _colorForInitial(String initial, Brightness brightness) {
+  // Palettes are sorted by hue (red → orange → lime → green → teal → cyan →
+  // blue → indigo → purple → pink), with neutrals (blueGrey, brown) woven in.
+  // All colors verified for WCAG AA white-text contrast (≥4.5:1).
+  // Dark mode uses lighter shades where contrast still holds.
+  //
+  // Index formula: (codeUnit * 11) % 26.
+  // 11 is coprime with 26, so it produces a permutation of 0‥25.
+  // Each consecutive letter lands ~11 steps away in the hue-sorted palette,
+  // i.e. ~152° apart on the color wheel — giving strong visual variety for
+  // alphabetically close names (A/B, H/I, etc.).
+  final colors = brightness == Brightness.dark
+      ? [
+          // ── reds / warm (~0–25°) ──────────────────────────────────────────
+          Colors.red.shade700,
+          Colors.redAccent.shade700,
+          Colors.deepOrange.shade900,
+          Colors.brown.shade600,
+          // ── yellow-greens (~65–130°) ──────────────────────────────────────
+          Colors.lime.shade900,
+          Colors.lightGreen.shade900,
+          Colors.green.shade800,
+          // ── teals / cyans (~170–200°) ─────────────────────────────────────
+          Colors.teal.shade700,
+          Colors.teal.shade900,
+          Colors.cyan.shade900,
+          Colors.lightBlue.shade900,
+          // ── blue-greys (desaturated ~200°) ────────────────────────────────
+          Colors.blueGrey.shade600,
+          Colors.blueGrey.shade800,
+          // ── blues (~215°) ─────────────────────────────────────────────────
+          Colors.blue.shade800,
+          Colors.blue.shade900,
+          // ── indigos (~230–245°) ───────────────────────────────────────────
+          Colors.indigo.shade500,
+          Colors.indigo.shade600,
+          Colors.indigo.shade800,
+          Colors.indigoAccent.shade700,
+          // ── deep purples (~265–275°) ──────────────────────────────────────
+          Colors.deepPurple.shade500,
+          Colors.deepPurple.shade700,
+          Colors.deepPurpleAccent.shade700,
+          // ── purples (~285–295°) ───────────────────────────────────────────
+          Colors.purple.shade500,
+          Colors.purple.shade800,
+          // ── pinks (~330–350°) ─────────────────────────────────────────────
+          Colors.pink.shade700,
+          Colors.pinkAccent.shade700,
+        ]
+      : [
+          // ── reds / warm (~0–25°) ──────────────────────────────────────────
+          Colors.red.shade800,
+          Colors.redAccent.shade700,
+          Colors.deepOrange.shade900,
+          Colors.brown.shade700,
+          // ── yellow-greens (~65–130°) ──────────────────────────────────────
+          Colors.lime.shade900,
+          Colors.lightGreen.shade900,
+          Colors.green.shade800,
+          // ── teals / cyans (~170–200°) ─────────────────────────────────────
+          Colors.teal.shade700,
+          Colors.teal.shade900,
+          Colors.cyan.shade900,
+          Colors.lightBlue.shade900,
+          // ── blue-greys (desaturated ~200°) ────────────────────────────────
+          Colors.blueGrey.shade700,
+          Colors.blueGrey.shade900,
+          // ── blues (~215°) ─────────────────────────────────────────────────
+          Colors.blue.shade800,
+          Colors.blue.shade900,
+          // ── indigos (~230–245°) ───────────────────────────────────────────
+          Colors.indigo.shade600,
+          Colors.indigo.shade700,
+          Colors.indigo.shade900,
+          Colors.indigoAccent.shade700,
+          // ── deep purples (~265–275°) ──────────────────────────────────────
+          Colors.deepPurple.shade700,
+          Colors.deepPurple.shade800,
+          Colors.deepPurpleAccent.shade700,
+          // ── purples (~285–295°) ───────────────────────────────────────────
+          Colors.purple.shade700,
+          Colors.purple.shade900,
+          // ── pinks (~330–350°) ─────────────────────────────────────────────
+          Colors.pink.shade800,
+          Colors.pinkAccent.shade700,
+        ];
+  // Multiply by 11 (coprime with 26) so consecutive letters jump ~152° in hue.
+  return colors[(initial.codeUnitAt(0) * 11) % colors.length];
 }

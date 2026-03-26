@@ -1018,6 +1018,13 @@ class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
 
 class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
   bool _openedSettings = false;
+  late Future<bool> _checkNNUEFilesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1035,11 +1042,14 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
       // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
       onFocusRegained: () {
         if (_openedSettings) {
-          setState(() {});
+          setState(() {
+            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
+            _openedSettings = false;
+          });
         }
       },
       child: FutureBuilder(
-        future: nnueService.hasOutdatedNNUEFiles(),
+        future: _checkNNUEFilesFuture,
         builder: (context, snapshot) {
           final hasOutdatedNNUEFiles = snapshot.data ?? false;
           if (!hasOutdatedNNUEFiles) {

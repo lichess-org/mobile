@@ -55,7 +55,6 @@ class UserListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
       title: UserFullNameWidget(
-        shouldShowOnline: true,
         user: LightUser(
           id: UserId.fromUserName(username),
           name: username,

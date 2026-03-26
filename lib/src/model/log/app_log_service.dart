@@ -5,7 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/app_log/app_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
@@ -92,12 +92,12 @@ final class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
   void didDisposeProvider(ProviderObserverContext context) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override
