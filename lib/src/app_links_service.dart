@@ -125,8 +125,8 @@ class AppLinksService {
       ref.read(challengeServiceProvider).showConfirmDialog(context, challenge);
 
       return true;
-    } catch (e) {
-      _logger.info('Not a challenge link: $e');
+    } catch (e, st) {
+      _logger.info('Not a challenge link: $e', e, st);
     }
     return false;
   }
@@ -159,8 +159,8 @@ class AppLinksService {
       if (user != null) {
         return [TvScreen.buildRoute(context, gameId: gameId, user: user, orientation: orientation)];
       }
-    } catch (e) {
-      _logger.info('Not a game link: $e');
+    } catch (e, st) {
+      _logger.info('Not a game link: $e', e, st);
     }
 
     return null;

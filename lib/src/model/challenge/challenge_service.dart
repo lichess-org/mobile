@@ -206,7 +206,7 @@ class ChallengeService {
   void showConfirmDialog(BuildContext context, Challenge challenge, {String? title}) {
     showAdaptiveActionSheet<void>(
       context: context,
-      title: challenge.variant.isPlaySupported
+      title: challenge.challenger != null && challenge.variant.isPlaySupported
           ? Text(
               title ??
                   '${challenge.challenger!.user.name} challenges you: ${challenge.description(context.l10n)}',
