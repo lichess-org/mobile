@@ -10,6 +10,8 @@ extension type const StringId(String value) {
 
 extension type const IntId(int value) {}
 
+bool _validGameOrChallengeId(String id) => RegExp(r'''^[\w-]{8}$''').hasMatch(id);
+
 extension type const GameAnyId._(String value) implements StringId {
   GameAnyId(this.value) : assert(value.length == 8 || value.length == 12);
   GameId get gameId => GameId(value.substring(0, 8));
@@ -23,7 +25,7 @@ extension type const GameAnyId._(String value) implements StringId {
 extension type const GameId._(String value) implements StringId, GameAnyId {
   const GameId(this.value) : assert(value.length == 8);
 
-  bool get isValid => RegExp(r'''^[\w-]{8}$''').hasMatch(value);
+  bool get isValid => _validGameOrChallengeId(value);
 
   GameId.fromJson(dynamic json) : this(json as String);
 }
@@ -52,7 +54,7 @@ extension type const UserId(String value) implements StringId {
 extension type const ChallengeId(String value) implements StringId {
   ChallengeId.fromJson(dynamic json) : this(json as String);
 
-  bool get isValid => RegExp(r'''[\w-]{8}''').hasMatch(value);
+  bool get isValid => _validGameOrChallengeId(value);
 }
 
 extension type const BroadcastTournamentId(String value) implements StringId {}
