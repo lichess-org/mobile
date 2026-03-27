@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
@@ -210,8 +210,9 @@ class _MessageBubble extends ConsumerWidget {
                     ).push(UserOrProfileScreen.buildRoute(context, message.user!)),
                   ),
                 Linkify(
-                  onOpen: (link) => onLinkifyOpen(context, link),
-                  linkifiers: kLichessLinkifiers,
+                  onOpen: (link) async =>
+                      await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                  linkifiers: AppLinksService.kLichessLinkifiers,
                   text: message.message,
                   style: TextStyle(color: _textColor(context, brightness)),
                   linkStyle: Styles.linkStyle,

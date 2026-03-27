@@ -3,7 +3,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
@@ -64,8 +64,9 @@ class UserProfileWidget extends ConsumerWidget {
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
               Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
-                linkifiers: kLichessLinkifiers,
+                onOpen: (link) async =>
+                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                linkifiers: AppLinksService.kLichessLinkifiers,
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
                 style: bioStyle,

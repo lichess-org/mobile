@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -44,8 +44,9 @@ class UserContextMenu extends ConsumerWidget {
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
                     Linkify(
-                      onOpen: (link) => onLinkifyOpen(context, link),
-                      linkifiers: kLichessLinkifiers,
+                      onOpen: (link) async =>
+                          await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                      linkifiers: AppLinksService.kLichessLinkifiers,
                       text: value.profile!.bio!,
                       maxLines: 20,
                       overflow: TextOverflow.ellipsis,
