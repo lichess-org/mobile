@@ -14,9 +14,9 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const kOAuthRedirectUriScheme = 'org.lichess.mobile';
+const kLichessUriScheme = 'org.lichess.mobile';
 const kOAuthRedirectUriHost = 'login-callback';
-const kOAuthRedirectUri = '$kOAuthRedirectUriScheme://$kOAuthRedirectUriHost';
+const kOAuthRedirectUri = '$kLichessUriScheme://$kOAuthRedirectUriHost';
 const oauthScopes = ['web:mobile'];
 
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
@@ -71,7 +71,7 @@ class AuthRepository {
         .listen(
           (uri) {
             if (!callbackCompleter.isCompleted &&
-                uri.scheme == kOAuthRedirectUriScheme &&
+                uri.scheme == kLichessUriScheme &&
                 uri.host == kOAuthRedirectUriHost &&
                 uri.queryParameters['state'] == state) {
               callbackCompleter.complete(uri);

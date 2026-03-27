@@ -73,6 +73,18 @@ List<Route<dynamic>>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   return null;
 }
 
+/// Handles an `org.lichess.mobile://open-web?url=...` link (e.g. from the platform widget)
+/// by opening the encoded URL in the platform in-app browser.
+void handleOpenWebLink(Uri uri) {
+  final target = uri.queryParameters['url'];
+  if (target != null) {
+    final targetUri = Uri.tryParse(target);
+    if (targetUri != null) {
+      launchUrl(targetUri, mode: LaunchMode.inAppBrowserView);
+    }
+  }
+}
+
 /// Handles an app link [Uri] by navigating to the corresponding screen(s).
 void handleAppLink(BuildContext context, Uri uri) {
   final routes = resolveAppLinkUri(context, uri);
