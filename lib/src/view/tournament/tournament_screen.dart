@@ -44,6 +44,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
@@ -1492,7 +1493,7 @@ class _PairingTile extends ConsumerWidget {
               padding: EdgeInsets.only(right: 8.0),
               child: Icon(LichessIcons.body_cut, size: 20),
             ),
-          Icon(pairing.color == Side.white ? Icons.circle_outlined : Icons.circle, size: 20),
+          SideIndicator(side: pairing.color, size: 20),
           SizedBox(
             width: 24,
             height: 24,
