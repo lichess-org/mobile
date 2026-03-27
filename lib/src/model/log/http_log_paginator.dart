@@ -18,6 +18,9 @@ final httpLogPaginatorProvider = AsyncNotifierProvider.autoDispose
     );
 
 /// A Riverpod controller for managing HTTP logs.
+/// The `HttpLogController` class is responsible for fetching and managing
+/// paginated HTTP log entries from the storage. It uses a throttler to limit
+/// the rate of fetching new pages.
 class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   HttpLogPaginator(this._searchQuery);
 
