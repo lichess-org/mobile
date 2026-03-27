@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
+import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
@@ -495,33 +496,16 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: showTCIcon ? 72 : 60,
+        width: showTCIcon ? 75 : 60,
         child: Row(
           mainAxisSize: .min,
           mainAxisAlignment: .center,
           children: [
             SizedBox(
               width: 30,
-              child: Center(
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    border:
-                        (Theme.of(context).brightness == .light && color == .white ||
-                            Theme.of(context).brightness == .dark && color == .black)
-                        ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
-                        : null,
-                    shape: .circle,
-                    color: switch (color) {
-                      .white => Colors.white.withValues(alpha: 0.9),
-                      .black => Colors.black.withValues(alpha: 0.9),
-                    },
-                  ),
-                ),
-              ),
+              child: Center(child: SideIndicator(side: color, size: 15)),
             ),
-            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 15)),
+            if (showTCIcon) Icon(fideTC.icon, size: 15),
             SizedBox(
               width: 30,
               child: Column(
