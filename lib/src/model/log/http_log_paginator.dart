@@ -34,6 +34,9 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   }
 
   /// Fetches the next page of HTTP logs.
+  ///
+  /// This method uses a throttler to limit the rate of fetching new pages.
+  /// It updates the state with the new page of HTTP logs.
   Future<void> next() async {
     if (state.hasValue && state.requireValue.hasMore) {
       final storage = await ref.read(httpLogStorageProvider.future);
@@ -51,6 +54,12 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   }
 
   /// Deletes all HTTP logs from the storage.
+  ///
+  /// This method reads the `httpLogStorageProvider` to get the storage instance
+  /// and then deletes all the logs from the storage. After deletion, it updates
+  /// the state with an empty list of HTTP logs.
+  ///
+  /// Returns a [Future] that completes when the deletion is done.
   Future<void> deleteAll() async {
     final storage = await ref.read(httpLogStorageProvider.future);
     await storage.deleteAll();
@@ -58,6 +67,8 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
   }
 
   /// Refreshes the HTTP logs by fetching the first page again.
+  ///
+  /// This method updates the state with the first page of HTTP logs.
   Future<void> refresh() async {
     ref.invalidateSelf();
   }
