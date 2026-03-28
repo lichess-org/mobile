@@ -13,21 +13,34 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-final _themesProvider =
-    FutureProvider.autoDispose<
-      (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
-    >((ref) async {
-      final connectivity = await ref.watch(connectivityChangesProvider.future);
-      final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
-      IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
+class ThemesNotifier
+    extends AsyncNotifier<(bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)> {
+  @override
+  Future<(bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)> build() async {
+    final connectivity = await ref.watch(connectivityChangesProvider.future);
+
+    final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
+
+    IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
+    if (connectivity.isOnline) {
       try {
         onlineThemes = await ref.watch(puzzleThemesProvider.future);
-      } catch (e) {
+      } catch (_) {
         onlineThemes = null;
       }
-      final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-      return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
-    });
+    }
+
+    final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
+
+    return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
+  }
+}
+
+final themesProvider = AsyncNotifierProvider.autoDispose<
+    ThemesNotifier,
+    (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)>(
+  ThemesNotifier.new,
+);
 
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
@@ -52,7 +65,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
-    final themes = ref.watch(_themesProvider);
+    final themes = ref.watch(themesProvider);
 
     return themes.when(
       data: (data) {
