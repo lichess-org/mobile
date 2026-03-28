@@ -113,7 +113,23 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     _root = _game.makeTree();
 
     if (_game.serverAnalysis == null) {
+      // Add listener before requesting analysis to avoid missing events
+      // that arrive between the request and listener registration.
+      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+
       await serverAnalysisService.requestAnalysis(options.id);
+
+      // Check if analysis already completed (e.g. was requested from the
+      // analysis screen and finished before we started listening).
+      final existingEvent = serverAnalysisService.lastAnalysisEvent.value;
+      if (existingEvent != null &&
+          existingEvent.$1 == options.id &&
+          existingEvent.$2.isAnalysisComplete) {
+        ServerAnalysisService.mergeOngoingAnalysis(_root, existingEvent.$2.tree);
+        state = AsyncData(await _computeMistakes(options.initialSide));
+        requestEval();
+        return state.requireValue;
+      }
 
       _serverAnalysisCompleter.future.timeout(
         kMaxWaitForServerAnalysis,
@@ -147,8 +163,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
       );
 
       state = AsyncValue.data(retroState);
-
-      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
       return retroState;
     }
