@@ -51,9 +51,7 @@ class ServerAnalysisService {
   Future<void> requestAnalysis(GameId id, [Side? side]) async {
     // If we are already listening for analysis updates of this exact game,
     // don't tear everything down and reconnect.
-    if (_currentAnalysis.value == id &&
-        _socketSubscription != null &&
-        _analysisCompleter != null) {
+    if (_currentAnalysis.value == id && _socketSubscription != null && _analysisCompleter != null) {
       return;
     }
 

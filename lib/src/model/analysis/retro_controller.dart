@@ -145,9 +145,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
         final progress =
             existingEvent.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
 
-        state = AsyncValue.data(
-          state.requireValue.copyWith(serverAnalysisProgress: progress),
-        );
+        state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
         if (existingEvent.$2.isAnalysisComplete) {
           if (!_serverAnalysisCompleter.isCompleted) {
