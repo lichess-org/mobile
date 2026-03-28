@@ -356,4 +356,3 @@ class _StreamerWidget extends ConsumerWidget {
     );
   }
 }
-
