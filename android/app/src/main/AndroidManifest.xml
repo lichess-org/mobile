@@ -77,6 +77,9 @@
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
+                <!-- Game or challenge -->
+                <data android:pathPattern="/........" />
+
                 <!-- Game with pov -->
                 <data android:pathPattern="/......../black" />
                 <data android:pathPattern="/......../white" />
