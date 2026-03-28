@@ -14,9 +14,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ThemesNotifier
-    extends AsyncNotifier<(bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)> {
+    extends
+        AsyncNotifier<
+          (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
+        > {
   @override
-  Future<(bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)> build() async {
+  Future<(bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)>
+  build() async {
     final connectivity = await ref.watch(connectivityChangesProvider.future);
 
     final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
@@ -36,11 +40,11 @@ class ThemesNotifier
   }
 }
 
-final themesProvider = AsyncNotifierProvider.autoDispose<
-    ThemesNotifier,
-    (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)>(
-  ThemesNotifier.new,
-);
+final themesProvider =
+    AsyncNotifierProvider.autoDispose<
+      ThemesNotifier,
+      (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
+    >(ThemesNotifier.new);
 
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
