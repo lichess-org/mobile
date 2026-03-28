@@ -160,6 +160,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
 
+        final isKidMode = ref.watch(kidModeProvider).value ?? false;
+
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
         final shouldShowWelcomeScreen =
@@ -241,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 shouldShow: status.isOnline,
                 child: FeaturedTournamentsWidget(featured: featuredTournaments),
               ),
-              if (_worker != null)
+              if (_worker != null && !isKidMode)
                 _EditableWidget(
                   widget: HomeEditableWidget.blogCarousel,
                   shouldShow: status.isOnline,
@@ -288,7 +290,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     children: [
                       const SizedBox(height: 8.0),
                       FeaturedTournamentsWidget(featured: featuredTournaments),
-                      if (_worker != null)
+                      if (_worker != null && !isKidMode)
                         _EditableWidget(
                           widget: HomeEditableWidget.blogCarousel,
                           shouldShow: status.isOnline,
@@ -344,7 +346,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: status.isOnline,
               child: FeaturedTournamentsWidget(featured: featuredTournaments),
             ),
-            if (_worker != null)
+            if (_worker != null && !isKidMode)
               _EditableWidget(
                 widget: HomeEditableWidget.blogCarousel,
                 shouldShow: status.isOnline,
