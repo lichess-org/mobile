@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart' hide Challenge;
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -192,52 +194,67 @@ void main() {
       );
     });
 
-    testWidgets('displays game link for open challenge', (WidgetTester tester) async {
-      const challengeRequest = ChallengeRequest(
-        destUser: null,
-        variant: Variant.standard,
-        timeControl: ChallengeTimeControlType.clock,
-        rated: true,
-        sideChoice: SideChoice.white,
-      );
-      final challenge = Challenge(
-        sideChoice: challengeRequest.sideChoice,
-        id: const ChallengeId('challengeId'),
-        variant: challengeRequest.variant,
-        timeControl: challengeRequest.timeControl,
-        rated: challengeRequest.rated,
-        speed: Speed.blitz,
-        status: ChallengeStatus.created,
-      );
+    for (final authUser in [
+      null,
+      AuthUser(
+        user: LightUser(id: UserId.fromUserName('John'), name: 'John'),
+        token: 'test-token',
+      ),
+    ]) {
+      testWidgets('displays game link for open challenge, logged in: ${authUser != null}', (
+        WidgetTester tester,
+      ) async {
+        const challengeRequest = ChallengeRequest(
+          destUser: null,
+          variant: Variant.standard,
+          timeControl: ChallengeTimeControlType.clock,
+          rated: true,
+          sideChoice: SideChoice.white,
+        );
+        final challenge = Challenge(
+          sideChoice: challengeRequest.sideChoice,
+          id: const ChallengeId('challengeId'),
+          variant: challengeRequest.variant,
+          timeControl: challengeRequest.timeControl,
+          rated: challengeRequest.rated,
+          speed: Speed.blitz,
+          status: ChallengeStatus.created,
+        );
 
-      final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
-      ).thenAnswer((_) async => challenge);
-      when(
-        () => createGameService.waitForChallengeResponse(challenge),
-      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+        final createGameService = MockCreateGameService();
+        when(
+          () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
+        ).thenAnswer((_) async => challenge);
+        when(
+          () => createGameService.waitForChallengeResponse(challenge),
+        ).thenAnswer((_) => Completer<ChallengeResponse>().future);
 
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const GameScreen(source: UserChallengeSource(challengeRequest)),
-        overrides: {
-          createGameServiceProvider: createGameServiceProvider.overrideWith(
-            (_) => createGameService,
-          ),
-        },
-      );
-      await tester.pumpWidget(app);
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+          authUser: authUser,
+          overrides: {
+            createGameServiceProvider: createGameServiceProvider.overrideWith(
+              (_) => createGameService,
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
-      expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
-      expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
-      expect(find.byType(QrImageView), findsOneWidget);
-      expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
-    });
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(find.byType(PieceWidget), findsNothing);
+        expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
+        expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
+        expect(find.byType(QrImageView), findsOneWidget);
+        expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
+        expect(
+          find.text('Or invite a Lichess user:'),
+          authUser == null ? findsNothing : findsOneWidget,
+        );
+      });
+    }
   });
 
   group('Plays sound for', () {

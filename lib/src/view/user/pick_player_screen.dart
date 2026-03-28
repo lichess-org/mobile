@@ -1,0 +1,153 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
+
+class PickPlayerScreen extends ConsumerWidget {
+  const PickPlayerScreen({required this.onUserTap, required this.title, super.key});
+
+  final void Function(LightUser) onUserTap;
+  final Widget title;
+
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required void Function(LightUser) onUserTap,
+    required Widget title,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: PickPlayerScreen(onUserTap: onUserTap, title: title),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: title),
+      body: _Body(onUserTap: onUserTap),
+    );
+  }
+}
+
+class _Body extends ConsumerWidget {
+  const _Body({required this.onUserTap});
+
+  final void Function(LightUser) onUserTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    switch (ref.watch(followingStatusesProvider)) {
+      case AsyncData(value: (final following, final statuses)):
+        final online = <User>[];
+        final offline = <User>[];
+        final statusMap = {for (final status in statuses) status.id: status}.lock;
+        for (final user in following) {
+          if (statusMap[user.id]?.online ?? false) {
+            online.add(user);
+          } else {
+            offline.add(user);
+          }
+        }
+        return _PlayersList(
+          onUserTap: onUserTap,
+          children: [
+            if (online.isNotEmpty)
+              ListSection(
+                header: Text(context.l10n.nbFriendsOnline(online.length)),
+                children: [
+                  for (final user in online)
+                    _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
+                ],
+              ),
+            if (offline.isNotEmpty)
+              ListSection(
+                header: Text(context.l10n.following),
+                children: [
+                  for (final user in offline)
+                    _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
+                ],
+              ),
+          ],
+        );
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint(
+          'SEVERE: [PickPlayerScreen] could not load following users; $error\n$stackTrace',
+        );
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
+      case _:
+        return _PlayersList(
+          onUserTap: onUserTap,
+          children: [
+            Shimmer(
+              child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 5)),
+            ),
+            Shimmer(
+              child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 5)),
+            ),
+          ],
+        );
+    }
+  }
+}
+
+class _PlayersList extends StatelessWidget {
+  const _PlayersList({required this.onUserTap, required this.children});
+
+  final void Function(LightUser) onUserTap;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: PlatformSearchBar(
+            hintText: context.l10n.searchSearch,
+            focusNode: _AlwaysDisabledFocusNode(),
+            onTap: () => Navigator.of(context).push(
+              SearchScreen.buildRoute(
+                context,
+                onUserTap: (user) {
+                  Navigator.of(context).pop();
+                  onUserTap(user);
+                },
+              ),
+            ),
+          ),
+        ),
+        ...children,
+      ],
+    );
+  }
+}
+
+class _AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
+
+class _FriendTile extends StatelessWidget {
+  const _FriendTile({required this.friend, required this.onUserTap});
+
+  final LightUser friend;
+  final void Function(LightUser) onUserTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: UserFullNameWidget(user: friend),
+      onTap: () => onUserTap(friend),
+    );
+  }
+}

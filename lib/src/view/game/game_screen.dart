@@ -231,8 +231,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           body: PopScope(
             canPop: false,
             child: OpenChallengeLoadingContent(
-              challenge,
-              ref.read(createGameServiceProvider).cancelChallenge,
+              id: challenge.id,
+              challengeRequest: (widget.source as UserChallengeSource).challengeRequest,
+              cancelChallenge: ref.read(createGameServiceProvider).cancelChallenge,
             ),
           ),
         );
