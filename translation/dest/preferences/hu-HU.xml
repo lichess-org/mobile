@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">Király mozog a bástyára</string>
   <string name="inputMovesWithTheKeyboard">Lépések bevitele billentyűzettel</string>
   <string name="inputMovesWithVoice">Lépés szóbeli utasítással</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">Nyilak illesztése a szabályos lépésekhez</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">Nyilak illesztése a szabályos lépésekhez</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">\"Good game, well played\" üzenet küldése döntetlen vagy vereség esetén</string>
   <string name="yourPreferencesHaveBeenSaved">Beállítások elmentve.</string>
   <string name="scrollOnTheBoardToReplayMoves">Lépések visszajátszása görgetéssel</string>
@@ -62,6 +62,7 @@
   <string name="notifyGameEvent">Levelező mérkőzés</string>
   <string name="notifyChallenge">Kihívás</string>
   <string name="notifyTournamentSoon">Hamarosan kezdődő verseny</string>
+  <string name="notifyBroadcasts">Közvetítések amikre feliratkoztál</string>
   <string name="notifyTimeAlarm">Hamarosan lejár az idő levelezős játszmában</string>
   <string name="notifyBell">Hangjelzés a Lichessen belül</string>
   <string name="notifyPush">Értesítés mobileszközön, amikor nem vagy fenn Lichessen</string>
@@ -69,4 +70,5 @@
   <string name="notifyDevice">Eszköz</string>
   <string name="bellNotificationSound">Hangjelzés</string>
   <string name="blindfold" comment="As in Blindfold chess">Vakjátszma mód</string>
+  <string name="showClockOnTheLeft" comment="IMPORTANT NOTE FOR LANGUAGES WRITTEN RIGHT-TO-LEFT (e.g. Arabic):&#10;Please translate &quot;left&quot; as &quot;right&quot;, because the layout is reversed in your language.&#10;&#10;---&#10;&#10;A user setting. When enabled, the clock will be shown on the left side of the screen. Only applies to mobile devices.&#10;&#10;&#10;Appears on https://lichess.org/account/preferences/chess-clock.">Mobil eszközökön a bal oldalon jelenjen meg</string>
 </resources>
