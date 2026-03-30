@@ -545,7 +545,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get arenaArena => 'Арена';
 
   @override
-  String get arenaArenaTournaments => 'Турнири у арени';
+  String get arenaArenaTournaments => 'Арена турнири';
 
   @override
   String get arenaIsItRated => 'Да ли је рангиран?';
@@ -621,7 +621,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get arenaMinimumGameLength => 'Минимална дужина партије';
 
   @override
-  String get arenaHistory => 'Прошле арене';
+  String get arenaHistory => 'Историја Арена';
 
   @override
   String get arenaNewTeamBattle => 'Нова Борба Тимова';
@@ -1584,13 +1584,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzlePhases => 'Фазе';
 
   @override
-  String get puzzleMotifs => 'Motifs';
+  String get puzzleMotifs => 'Мотиви';
 
   @override
-  String get puzzleAdvanced => 'Напредно';
+  String get puzzleAdvanced => 'Напредне';
 
   @override
-  String get puzzleLengths => 'Дужина';
+  String get puzzleLengths => 'Дужине';
 
   @override
   String get puzzleMates => 'Матови';
@@ -1608,10 +1608,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleSpecialMoves => 'Специјални потези';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Да ли вам се свиђа овај проблем?';
+  String get puzzleDidYouLikeThisPuzzle => 'Да ли ти се свидео овај проблем?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Оцени да учиташ следећи!';
+  String get puzzleVoteToLoadNextOne => 'Гласај да учиташ следећу!';
 
   @override
   String get puzzleUpVote => 'Up vote puzzle';
@@ -1652,7 +1652,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleBestMove => 'Најбољи потез!';
 
   @override
-  String get puzzleKeepGoing => 'Наставите…';
+  String get puzzleKeepGoing => 'Настави…';
 
   @override
   String get puzzlePuzzleSuccess => 'Успех!';
@@ -2333,16 +2333,16 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Овај налог је затворен.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Подешавања партије';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Изазови пријатеља';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Играј против рачунара';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Режим партије';
 
   @override
   String get createLobbyGame => 'Create lobby game';
@@ -3028,10 +3028,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get cancel => 'Откажи';
 
   @override
-  String get whiteTimeOut => 'Време истекло белом';
+  String get whiteTimeOut => 'Белом истекло време';
 
   @override
-  String get blackTimeOut => 'Време истекло црном';
+  String get blackTimeOut => 'Црном истекло време';
 
   @override
   String get drawOfferSent => 'Понуда за реми послата';
@@ -3169,7 +3169,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get ratingFilter => 'Rating filter';
 
   @override
-  String get thisAccountViolatedTos => 'Овај налог није поштовао Lichess услове коришћења';
+  String get thisAccountViolatedTos => 'Овај налог је прекршио Lichess Услове коришћења Услуге';
 
   @override
   String get openingExplorerAndTablebase => 'Претраживач отварања и база позиција у завршници';
@@ -5960,7 +5960,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Линк тренутног поглавља';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Ово можете налепити у форум да уградите';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Ово можеш налепити на форуму или твом Lichess блогу да уградиш';
 
   @override
   String get studyStartAtInitialPosition => 'Започни на почетној позицији';
@@ -5971,7 +5971,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Угради у свој сајт или блог';
+  String get studyEmbedInYourWebsite => 'Угради у свој вебсајт';
 
   @override
   String get studyReadMoreAboutEmbedding => 'Прочитај више о уграђивању';

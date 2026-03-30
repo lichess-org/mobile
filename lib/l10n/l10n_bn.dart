@@ -2326,7 +2326,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get playAgainstComputer => 'কম্পিউটারের বিপরীতে খেলুন';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'খেলার ধরন';
 
   @override
   String get createLobbyGame => 'Create lobby game';

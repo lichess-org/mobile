@@ -854,7 +854,7 @@
   "changePassword": "Parolni oʻzgartirish",
   "changeEmail": "E‑pochta manzilini oʻzgartirish",
   "email": "E‑pochta",
-  "passwordReset": "tiklashingiz",
+  "passwordReset": "Parolni tiklash",
   "forgotPassword": "Parolni unutdingizmi?",
   "error_weakPassword": "Ushbu parol juda oddiy va uni taxmin qilish oson.",
   "error_namePassword": "Foydalanuvchi nomini parol sifatida ishlatmang.",
