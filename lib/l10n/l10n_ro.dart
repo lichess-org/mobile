@@ -2345,7 +2345,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get gameSetup => 'Configurație joc';
+  String get gameSetup => 'Configurare joc';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -2360,7 +2360,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get createLobbyGame => 'Creează un joc nou';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Pentru a invita pe cineva să joace, folosiți acest URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Pentru a invita pe cineva să joace, oferiți acest URL';
 
   @override
   String get gameOver => 'Partidă încheiată';
@@ -2375,7 +2375,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get reusableChallengeUrl => 'URL provocare reutilizabil';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'Un link permanent pentru oricine să vă provoace cu aceste setări exacte.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Un link permanent pentru oricine să vă provoace cu exact aceste setări.';
 
   @override
   String get waiting => 'Se așteaptă';
@@ -2401,7 +2401,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get chat => 'Discuție';
 
   @override
-  String get resign => 'Renunță';
+  String get resign => 'Cedează jocul';
 
   @override
   String get checkmate => 'Șah mat';
@@ -2422,7 +2422,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get asBlack => 'cu negrele';
 
   @override
-  String get randomColor => 'Culoare aleatorie';
+  String get randomColor => 'Orice culoare';
 
   @override
   String get createAGame => 'Creează un joc';
@@ -2455,7 +2455,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get threeChecks => 'Trei șahuri';
 
   @override
-  String get raceFinished => 'Competiție terminată';
+  String get raceFinished => 'Competiția s-a terminat';
 
   @override
   String get variantEnding => 'Sfârșit prin variantă';
@@ -2518,7 +2518,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get computerAnalysisAvailable => 'Analiza calculatorului este disponibilă';
 
   @override
-  String get computerAnalysisDisabled => 'Analiză computerizată dezactivată';
+  String get computerAnalysisDisabled => 'Analiza calculatorului dezactivată';
 
   @override
   String get analysis => 'Tablă de analiză';
@@ -2571,22 +2571,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get expandVariations => 'Extinde variațiile';
 
   @override
-  String get forceVariation => 'Forțează variația';
+  String get forceVariation => 'Forțeaz-o ca variație';
 
   @override
-  String get copyVariationPgn => 'Copiază variația PGN';
+  String get copyVariationPgn => 'Copiază PGN-ul variației';
 
   @override
-  String get copyMainLinePgn => 'Copiază linia PGN principală';
+  String get copyMainLinePgn => 'Copiază PGN-ul variației principale';
 
   @override
   String get move => 'Mutare';
 
   @override
-  String get variantLoss => 'Variantă pierdere';
+  String get variantLoss => 'Victorie de variantă';
 
   @override
-  String get variantWin => 'Variantă câștig';
+  String get variantWin => 'Pierdere de variantă';
 
   @override
   String get insufficientMaterial => 'Material insuficient';
@@ -2641,10 +2641,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get noGameFound => 'Niciun joc găsit';
 
   @override
-  String get maxDepthReached => 'Adâncime maximă atinsă!';
+  String get maxDepthReached => 'S-a atins profunzimea maximă!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Poate doriți să includeți mai multe jocuri din meniul de preferințe?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Poate doriți să includeți mai multe jocuri prin meniul de preferințe?';
 
   @override
   String get openings => 'Deschideri';
@@ -2751,7 +2751,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get memory => 'Memorie';
 
   @override
-  String get memoryDescription => 'Valorile mai mari pot îmbunătăți performanța';
+  String get memoryDescription => 'Valori mai mari pot îmbunătăți performanța';
 
   @override
   String get infiniteAnalysis => 'Analiză infinită';

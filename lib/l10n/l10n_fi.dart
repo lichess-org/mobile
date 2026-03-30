@@ -3767,13 +3767,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get invalidAuthenticationCode => 'Tunnistautumiskoodi ei kelpaa';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Tyhjennä kenttä';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Tai';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Kirjaudu sisään sähköpostilla';
 
   @override
   String get emailMeALink => 'Lähetä minulle linkki';
