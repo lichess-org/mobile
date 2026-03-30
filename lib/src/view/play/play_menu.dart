@@ -28,6 +28,22 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useRootNavigator: true,
+                  builder: (context) {
+                    return const CreateChallengeBottomSheet(user: null);
+                  },
+                );
+              },
+              leading: const Icon(Icons.person),
+              title: Text(context.l10n.challengeAFriend),
+            ),
+            ListTile(
               enabled: isOnline,
               onTap: () {
                 // Pops the play bottom sheet
@@ -51,10 +67,6 @@ class PlayMenu extends ConsumerWidget {
               leading: const Icon(LichessIcons.tournament_cup),
               title: Text(context.l10n.arenaArenaTournaments),
             ),
-          ],
-        ),
-        _Section(
-          children: [
             ListTile(
               onTap: () {
                 // Pops the play bottom sheet
@@ -78,22 +90,6 @@ class PlayMenu extends ConsumerWidget {
               },
               leading: const Icon(Icons.table_restaurant_outlined),
               title: Text(context.l10n.mobileOverTheBoard),
-            ),
-            ListTile(
-              onTap: () {
-                // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  useRootNavigator: true,
-                  builder: (context) {
-                    return const CreateChallengeBottomSheet(user: null);
-                  },
-                );
-              },
-              leading: const Icon(LichessIcons.crossed_swords),
-              title: Text(context.l10n.challengeAFriend),
             ),
           ],
         ),

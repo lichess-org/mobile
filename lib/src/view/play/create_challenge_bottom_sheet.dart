@@ -405,7 +405,12 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                               }
                             : null,
                     },
-                    child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+                    child: Text(
+                      widget.user != null
+                          ? context.l10n.challengeChallengeToPlay
+                          : context.l10n.challengeAFriend,
+                      style: Styles.bold,
+                    ),
                   ),
                 );
               },
