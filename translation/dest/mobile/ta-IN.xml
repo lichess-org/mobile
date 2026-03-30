@@ -18,8 +18,10 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">வீடு</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">நேரடி ஸ்ட்ரீமர்கள்</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">இந்தப் பக்கத்தைப் பார்க்க நீங்கள் உள்நுழைந்திருக்க வேண்டும்.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">புதிய ஆட்டம்</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">முடிவுகள் இல்லை</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">பழைய செயலி அல்லது வலைத்தளத்தில் உள்ள அனைத்து அம்சங்களும் தற்போது கிடைக்கவில்லை என்பதை நினைவில் கொள்ளவும், ஆனால் நாங்கள் எப்போதும் அம்சங்களைச் சேர்த்து வருகிறோம்.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">நீங்கள் எந்தப் பயனரையும் பின்தொடரவில்லை.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">சரி</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">பலகையின் மீது</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" கொண்ட வீரர்கள்</string>
@@ -63,4 +65,8 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">கருவிகள்</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">எதிரணி சேர்வதற்காக காத்திருக்கிறது...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">பார்</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess செயலிக்கு வரவேற்கிறோம்!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">ஆட்டத்தைப் பார்</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">முற்றிற்று</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">முந்தையது</string>
 </resources>

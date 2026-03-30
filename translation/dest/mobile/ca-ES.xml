@@ -59,13 +59,13 @@
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Dibuixa formes utilitzant dos dits: Manté un dit en una casella buida i arrossega l\'altre dit per dibuixar la forma.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Mostra la vora</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Resposta tàctil</string>
-  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Quan s\'activa, el dispositiu produïra una petita vibració quan es mou o es captura una peça.</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Quan s\'activa, el dispositiu produirà una petita vibració quan es mou o es captura una peça.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Configuració</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Comparteix PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Comparteix l\'enllaç a la partida</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Comparteix la posició com a FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Comparteix aquest problema</string>
-  <string name="showComments" comment="Shown in the analysis screen.">Mostra comentaris</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Mostra els comentaris</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Mostra el resultat</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Mostra les variacions</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Alguna cosa ha anat malament.</string>
