@@ -32,7 +32,7 @@ dependencies:
   fast_immutable_collections: ^11.0.0
   file_picker: ^10.3.8
   firebase_core: ^4.0.0
-  firebase_crashlytics: ^5.0.0
+  firebase_crashlytics: ^5.1.0
   firebase_messaging: ^16.0.0
   fl_chart: ^1.0.0
   flutter:
