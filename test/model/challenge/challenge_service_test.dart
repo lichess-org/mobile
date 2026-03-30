@@ -407,7 +407,7 @@ void main() {
         expect(find.text('Cancel'), findsOneWidget);
         expect(find.text('Decline'), findsNothing);
       },
-      variant: TargetPlatformVariant({TargetPlatform.android}),
+      variant: const TargetPlatformVariant({TargetPlatform.android}),
     );
 
     testWidgets(
@@ -442,7 +442,7 @@ void main() {
         // The built-in CupertinoActionSheet cancel button is present
         expect(find.text('Cancel'), findsOneWidget);
       },
-      variant: TargetPlatformVariant({TargetPlatform.iOS}),
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
     );
   });
 
