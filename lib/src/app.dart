@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/home_widget_service.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
@@ -85,6 +86,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(accountServiceProvider).start();
     ref.read(correspondenceServiceProvider).start();
     ref.read(quickActionServiceProvider).start();
+    unawaited(ref.read(homeWidgetServiceProvider).start());
     ref.read(announceServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
@@ -166,6 +168,9 @@ class _AppState extends ConsumerState<Application> {
       }
       if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
         ref.read(oauthCallbackProvider).add(uri);
+        return;
+      }
+      if (isQuickPairingHomeWidgetUri(uri)) {
         return;
       }
       final context = _navigatorKey.currentContext;

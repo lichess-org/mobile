@@ -12,6 +12,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/home_widget_service.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -32,6 +33,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
+import 'model/home_widget/fake_home_widget_client.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -192,6 +194,9 @@ Future<Widget> makeTestProviderScope(
   // TODO consider loading true fonts as well
   FlutterError.onError = ignoreOverflowErrors;
 
+  final fakeHomeWidgetClient = FakeHomeWidgetClient();
+  addTearDown(fakeHomeWidgetClient.dispose);
+
   final Map<ProviderOrFamily, Override> overrideMap = {
     notificationDisplayProvider: notificationDisplayProvider.overrideWith((ref) {
       return FakeNotificationDisplay();
@@ -244,6 +249,7 @@ Future<Widget> makeTestProviderScope(
         appSupportDirectory: null,
       );
     }),
+    homeWidgetClientProvider: homeWidgetClientProvider.overrideWithValue(fakeHomeWidgetClient),
     ...?overrides,
   };
 
