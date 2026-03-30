@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kezdőlap</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Lichess-közvetítések</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Az oldal megtekintéséhez be kell jelentkezned.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Új játék</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nincs találat.</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Figyelem, a régi alkalmazásból vagy a weboldalról nem minden funkció érhető el jelenleg, de folyamatosan bővítjük az elérhető funkciókat.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Jelenleg nem követsz senkit.</string>
@@ -75,4 +76,17 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Várakozás az ellenfél csatlakozására...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Néznivaló</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Üdvözlünk a Lichess-alkalmazásban!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Játék megtekintése</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tipp: Hozzáadhatsz más widgetet is a főképernyőhöz, vagy eltávolíthatod azokat amikre nincs szükséged!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Bezárás</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Testreszabás</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Ne mutasd a fenyegetéseket</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Befejezve</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Ugrás az oldalamra</string>
+  <string name="displayModeCompact" comment="">Kompakt</string>
+  <string name="displayModeDetailed" comment="">Részletes</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">A megnyitás böngésző nem elérhető offline módban.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Kihívás elkészítve: Értesítünk amint elindul a játék.\nA kihívás a kezdőlapon található.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Előző</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Vagy PGN fájl importálása</string>
 </resources>
