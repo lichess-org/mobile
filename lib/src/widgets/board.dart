@@ -44,25 +44,29 @@ class BoardWidget extends StatelessWidget {
       explosionSquares: explosionSquares,
     );
 
-    if (boardOverlay != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            Positioned.fill(child: Center(child: boardOverlay)),
-          ],
-        ),
-      );
-    } else if (error != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            _ErrorWidget(errorMessage: error!, boardSize: size),
-          ],
-        ),
+    final overlay = boardOverlay ??
+        (error != null
+            ? _ErrorWidget(errorMessage: error!)
+            : null);
+
+    if (overlay != null) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          board,
+          Positioned(
+            left: 16.0,
+            right: 16.0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: OverflowBox(
+                maxHeight: double.infinity,
+                child: overlay,
+              ),
+            ),
+          ),
+        ],
       );
     }
 
@@ -71,26 +75,18 @@ class BoardWidget extends StatelessWidget {
 }
 
 class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({required this.errorMessage, required this.boardSize});
-  final double boardSize;
+  const _ErrorWidget({required this.errorMessage});
   final String errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: boardSize,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
-          ),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       ),
+      padding: const EdgeInsets.all(10.0),
+      child: Text(errorMessage),
     );
   }
 }
