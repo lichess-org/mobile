@@ -33,6 +33,23 @@ sealed class GameCreatedState with _$GameCreatedState implements GameScreenState
   const factory GameCreatedState(GameFullId createdGameId) = _GameCreatedState;
 }
 
+/// An open challenge has been created but not yet accepted.
+/// We're waiting for someone to accept it via the challenge link.
+@freezed
+sealed class OpenChallengeCreatedState with _$OpenChallengeCreatedState implements GameScreenState {
+  const OpenChallengeCreatedState._();
+
+  const factory OpenChallengeCreatedState(Challenge challenge) = _OpenChallengeCreatedState;
+}
+
+/// We challenged another user and are currently waiting for them to accept or decline.
+@freezed
+sealed class UserChallengeCreatedState with _$UserChallengeCreatedState implements GameScreenState {
+  const UserChallengeCreatedState._();
+
+  const factory UserChallengeCreatedState(Challenge challenge) = _UserChallengeCreatedState;
+}
+
 /// A real time challenge has been declined.
 @freezed
 sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements GameScreenState {
@@ -106,31 +123,40 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
   final GameScreenSource source;
 
   @override
-  Future<GameScreenState> build() {
+  Future<GameScreenState> build() async {
     final service = ref.watch(createGameServiceProvider);
 
-    return switch (source) {
-      LobbySource(:final seek) =>
-        service
+    switch (source) {
+      case LobbySource(:final seek):
+        return service
             .newLobbyGame(seek)
             .then(
               (data) => switch (data) {
                 GameSeekCreated(:final fullId) => GameCreatedState(fullId),
                 GameSeekCancelled() => const SeekCancelledState(),
               },
-            ),
-      UserChallengeSource(:final challengeRequest) =>
-        service
-            .newRealTimeChallenge(challengeRequest)
-            .then(
-              (data) => switch (data) {
-                ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
-                ChallengeResponseDeclined() => ChallengeDeclinedState(data),
-                ChallengeResponseCancelled() => const ChallengeCancelledState(),
-              },
-            ),
-      ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),
-    };
+            );
+      case UserChallengeSource(:final challengeRequest):
+        {
+          final challenge = await service.newRealTimeChallenge(challengeRequest);
+          service
+              .waitForChallengeResponse(challenge)
+              .then(
+                (data) => state = AsyncValue.data(switch (data) {
+                  ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
+                  ChallengeResponseDeclined() => ChallengeDeclinedState(data),
+                  ChallengeResponseCancelled() => const ChallengeCancelledState(),
+                }),
+              );
+          return Future.value(
+            challenge.destUser != null
+                ? UserChallengeCreatedState(challenge)
+                : OpenChallengeCreatedState(challenge),
+          );
+        }
+      case ExistingGameSource(:final id):
+        return Future.value(GameCreatedState(id));
+    }
   }
 
   /// Search for a new opponent (lobby only).

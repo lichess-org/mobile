@@ -119,11 +119,21 @@ class CreateGameService {
   }
 
   /// Create a new real time challenge.
-  ///
-  /// Will listen to the challenge socket and await the response from the destinated user.
-  Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
+  Future<Challenge> newRealTimeChallenge(ChallengeRequest challengeReq) async {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
+    if (_challengeConnection != null) {
+      throw StateError('Already creating a challenge.');
+    }
+
+    return await challengeRepository.create(challengeReq);
+  }
+
+  /// Wait for a response to a [challenge].
+  ///
+  /// Will listen to the challenge socket and await the response from the destinated user.
+  Future<ChallengeResponse> waitForChallengeResponse(Challenge challenge) {
+    assert(challenge.timeControl == ChallengeTimeControlType.clock);
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
     }
@@ -132,10 +142,6 @@ class CreateGameService {
     final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
 
     try {
-      _log.info('Creating new challenge game');
-
-      final challenge = await challengeRepository.create(challengeReq);
-
       final socketPool = ref.read(socketPoolProvider);
       final socketClient = socketPool.open(
         Uri(

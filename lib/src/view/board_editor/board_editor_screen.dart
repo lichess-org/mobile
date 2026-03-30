@@ -347,7 +347,10 @@ class _BottomBar extends ConsumerWidget {
                             isScrollControlled: true,
                             useRootNavigator: true,
                             builder: (context) {
-                              return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
+                              return CreateChallengeBottomSheet(
+                                user: user,
+                                positionFen: editorState.fen,
+                              );
                             },
                           );
                         },
