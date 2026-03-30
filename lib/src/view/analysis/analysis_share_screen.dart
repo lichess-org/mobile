@@ -162,6 +162,11 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                   builder: (context) {
                     return FilledButton(
                       onPressed: () {
+                        for (final entry in pgnHeaders.entries) {
+                          ref
+                              .read(ctrlProvider.notifier)
+                              .updatePgnHeader(entry.key, _controllers[entry.key]!.text);
+                        }
                         launchShareDialog(
                           context,
                           ShareParams(
