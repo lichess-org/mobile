@@ -203,7 +203,12 @@ class ChallengeService {
     );
   }
 
-  void showConfirmDialog(BuildContext context, Challenge challenge, {String? title}) {
+  void showConfirmDialog(
+    BuildContext context,
+    Challenge challenge, {
+    String? title,
+    bool fromLink = false,
+  }) {
     showAdaptiveActionSheet<void>(
       context: context,
       title: challenge.challenger != null && challenge.variant.isPlaySupported
@@ -220,12 +225,19 @@ class ChallengeService {
             isDefaultAction: true,
             onPressed: () async => await acceptChallenge(challenge.id),
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.decline),
-          leading: Icon(Icons.clear, color: context.lichessColors.error),
-          isDestructiveAction: true,
-          onPressed: () => showDeclineDialog(context, challenge.id),
-        ),
+        if (fromLink && Theme.of(context).platform != TargetPlatform.iOS)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancel),
+            leading: const Icon(Icons.close),
+            onPressed: () {},
+          )
+        else if (!fromLink)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.decline),
+            leading: Icon(Icons.clear, color: context.lichessColors.error),
+            isDestructiveAction: true,
+            onPressed: () => showDeclineDialog(context, challenge.id),
+          ),
       ],
     );
   }
