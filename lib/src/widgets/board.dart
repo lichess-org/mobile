@@ -44,10 +44,7 @@ class BoardWidget extends StatelessWidget {
       explosionSquares: explosionSquares,
     );
 
-    final overlay = boardOverlay ??
-        (error != null
-            ? _ErrorWidget(errorMessage: error!)
-            : null);
+    final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
 
     if (overlay != null) {
       return Stack(
@@ -60,10 +57,7 @@ class BoardWidget extends StatelessWidget {
             top: 0,
             bottom: 0,
             child: Center(
-              child: OverflowBox(
-                maxHeight: double.infinity,
-                child: overlay,
-              ),
+              child: OverflowBox(maxHeight: double.infinity, child: overlay),
             ),
           ),
         ],
