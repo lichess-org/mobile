@@ -6,9 +6,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_links.dart';
-import 'package:lichess_mobile/src/home_widget_service.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/home_widget_service.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
@@ -40,7 +39,6 @@ class AppInitializationScreen extends ConsumerWidget {
         FlutterNativeSplash.remove();
       }
     });
-
     switch (ref.watch(preloadedDataProvider)) {
       case AsyncData():
         return const Application();
@@ -153,26 +151,6 @@ class _AppState extends ConsumerState<Application> {
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver],
     );
-  }
-
-  Future<void> _initAppLinks() async {
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
-      // File links are handled by the sharing intent logic, so we can ignore them here.
-      if (uri.scheme == 'file' || uri.scheme == 'content') {
-        return;
-      }
-      if (uri.scheme == kOAuthRedirectUriScheme && uri.host == kOAuthRedirectUriHost) {
-        ref.read(oauthCallbackProvider).add(uri);
-        return;
-      }
-      if (isQuickPairingHomeWidgetUri(uri)) {
-        return;
-      }
-      final context = _navigatorKey.currentContext;
-      if (context != null && context.mounted) {
-        handleAppLink(context, uri);
-      }
-    });
   }
 
   void _initSharingIntent() {
