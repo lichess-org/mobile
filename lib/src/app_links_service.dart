@@ -138,7 +138,7 @@ class AppLinksService {
       final challenge = await ref.read(challengeRepositoryProvider).show(challengeId);
       if (!context.mounted) return false;
 
-      ref.read(challengeServiceProvider).showConfirmDialog(context, challenge);
+      ref.read(challengeServiceProvider).showConfirmDialog(context, challenge, fromLink: true);
 
       return true;
     } catch (e, st) {

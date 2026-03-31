@@ -194,7 +194,8 @@ class CreateGameWidget extends ConsumerWidget {
             ],
           ),
         ],
-        FilledButton(
+        FilledButton.icon(
+          icon: const Icon(Icons.groups),
           onPressed: isOnline
               ? () {
                   // Pops the play bottom sheet
@@ -214,7 +215,7 @@ class CreateGameWidget extends ConsumerWidget {
                   );
                 }
               : null,
-          child: Text(context.l10n.createAGame),
+          label: Text(context.l10n.createLobbyGame),
         ),
       ],
     );

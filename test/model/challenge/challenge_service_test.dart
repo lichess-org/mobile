@@ -31,14 +31,17 @@ class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsP
 class MockChallengeRepository extends Mock implements ChallengeRepository {}
 
 class _ShowConfirmDialogWidget extends ConsumerWidget {
-  const _ShowConfirmDialogWidget({required this.challenge});
+  const _ShowConfirmDialogWidget({required this.challenge, this.fromLink = false});
 
   final Challenge challenge;
+  final bool fromLink;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
-      onPressed: () => ref.read(challengeServiceProvider).showConfirmDialog(context, challenge),
+      onPressed: () => ref
+          .read(challengeServiceProvider)
+          .showConfirmDialog(context, challenge, fromLink: fromLink),
       child: const Text('Open Dialog'),
     );
   }
@@ -372,6 +375,75 @@ void main() {
       expect(find.text('Accept'), findsOneWidget);
       expect(find.text('Decline'), findsOneWidget);
     }, variant: kPlatformVariant);
+
+    testWidgets(
+      'fromLink: shows Cancel instead of Decline on Android',
+      (tester) async {
+        const challenge = Challenge(
+          id: ChallengeId('H9fIRZUk'),
+          status: ChallengeStatus.created,
+          challenger: (
+            user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
+            rating: 1500,
+            provisionalRating: null,
+            lagRating: null,
+          ),
+          variant: Variant.standard,
+          rated: true,
+          speed: Speed.rapid,
+          timeControl: ChallengeTimeControlType.clock,
+          clock: (time: Duration(seconds: 600), increment: Duration.zero),
+          sideChoice: SideChoice.random,
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
+        );
+        await tester.pumpWidget(app);
+        await tester.tap(find.text('Open Dialog'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Cancel'), findsOneWidget);
+        expect(find.text('Decline'), findsNothing);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.android}),
+    );
+
+    testWidgets(
+      'fromLink: shows no Decline or Cancel action on iOS',
+      (tester) async {
+        const challenge = Challenge(
+          id: ChallengeId('H9fIRZUk'),
+          status: ChallengeStatus.created,
+          challenger: (
+            user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
+            rating: 1500,
+            provisionalRating: null,
+            lagRating: null,
+          ),
+          variant: Variant.standard,
+          rated: true,
+          speed: Speed.rapid,
+          timeControl: ChallengeTimeControlType.clock,
+          clock: (time: Duration(seconds: 600), increment: Duration.zero),
+          sideChoice: SideChoice.random,
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
+        );
+        await tester.pumpWidget(app);
+        await tester.tap(find.text('Open Dialog'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Decline'), findsNothing);
+        // The built-in CupertinoActionSheet cancel button is present
+        expect(find.text('Cancel'), findsOneWidget);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+    );
   });
 
   group('showDeclineDialog', () {
