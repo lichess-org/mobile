@@ -41,6 +41,3 @@ doc/api/
 
 # VS Code
 .vscode/
-
-# yaml
-devtools_options.yaml
