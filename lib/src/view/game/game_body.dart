@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -523,9 +522,11 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.skip_next,
                 onTap: ongoingGames.maybeWhen(
                   data: (games) {
-                    final nextTurn = games
-                        .whereNot((g) => g.fullId == id)
-                        .firstWhereOrNull((g) => g.isMyTurn);
+                    final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
+                    if (gamesWithMyTurn.isEmpty) return null;
+                    final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
+                    final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
+                    final nextTurn = gamesWithMyTurn.isEmpty ? null : gamesWithMyTurn[nextIndex];
                     return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
                   },
                   orElse: () => null,
