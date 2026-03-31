@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/home_widget_service.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
@@ -38,7 +39,6 @@ class AppInitializationScreen extends ConsumerWidget {
         FlutterNativeSplash.remove();
       }
     });
-
     switch (ref.watch(preloadedDataProvider)) {
       case AsyncData():
         return const Application();
@@ -80,6 +80,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(accountServiceProvider).start();
     ref.read(correspondenceServiceProvider).start();
     ref.read(quickActionServiceProvider).start();
+    unawaited(ref.read(homeWidgetServiceProvider).start());
     ref.read(announceServiceProvider).start();
     ref.read(appLinksServiceProvider).start();
 

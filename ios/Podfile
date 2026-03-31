@@ -32,12 +32,25 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  target 'QuickPairingHomeWidgetExtension' do
+    use_frameworks!
+    use_modular_headers!
+    inherit! :search_paths
+
+    pod 'home_widget', :path => '.symlinks/plugins/home_widget/ios'
+  end
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      # Simulator pod frameworks don't need signing, and signing can fail if
+      # copied files carry macOS extended attributes.
+      if config.name == 'Debug'
+        config.build_settings['CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]'] = 'NO'
+      end
       if ENV['CI'] == 'true'
         config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['$(inherited)', '-enable-experimental-feature', 'AccessLevelOnImport']
       end
