@@ -3767,13 +3767,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ugyldig autentiseringskode';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Tøm felt';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Eller';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Logg inn via e-post';
 
   @override
   String get emailMeALink => 'Send meg en lenke';

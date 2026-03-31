@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 sealed class DisplayItem {}
@@ -76,16 +77,16 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: UserFullNameWidget(
-          user: widget.user,
-          showFlair: true,
-          showPatron: true,
-          shouldShowOnline: true,
-          onTap: () {
-            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
-          },
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        titleSpacing: 0,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: UserAvatar(widget.user, radius: 16),
+          title: UserFullNameWidget(user: widget.user, showFlair: false),
+          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
+          onTap: () =>
+              Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user)),
         ),
       ),
       body: _Body(user: widget.user),
@@ -289,7 +290,7 @@ class _DateBubble extends StatelessWidget {
   }
 }
 
-class _MessageBubble extends StatelessWidget {
+class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({
     required this.message,
     required this.isMe,
@@ -320,7 +321,7 @@ class _MessageBubble extends StatelessWidget {
   static const _inGroupRadius = Radius.circular(4);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final time = DateFormat.Hm().format(message.date);
 
     return ChatBubbleContextMenu(
@@ -365,8 +366,9 @@ class _MessageBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
-                linkifiers: kLichessLinkifiers,
+                onOpen: (link) async =>
+                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                linkifiers: AppLinksService.kLichessLinkifiers,
                 text: message.text,
                 style: TextStyle(color: _textColor(context)),
                 linkStyle: Styles.linkStyle,

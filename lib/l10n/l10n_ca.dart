@@ -192,7 +192,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Resposta tàctil';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produïra una petita vibració quan es mou o es captura una peça.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produirà una petita vibració quan es mou o es captura una peça.';
 
   @override
   String get mobileSettingsTab => 'Configuració';
@@ -210,7 +210,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSharePuzzle => 'Comparteix aquest problema';
 
   @override
-  String get mobileShowComments => 'Mostra comentaris';
+  String get mobileShowComments => 'Mostra els comentaris';
 
   @override
   String get mobileShowResult => 'Mostra el resultat';

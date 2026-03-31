@@ -92,7 +92,7 @@
   "variantChess960Title": "La position de départ des pièces de la première rangée est randomisée.",
   "variantKingOfTheHillTitle": "Amenez votre roi au centre pour gagner la partie.",
   "variantThreeCheckTitle": "Mettez votre adversaire en échec trois fois pour gagner la partie.",
-  "variantAntichessTitle": "Si vous perdez toutes vos pièces (ou êtes en pat), vous gagner la partie.",
+  "variantAntichessTitle": "Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.",
   "variantAtomicTitle": "Faites exploser le roi adverse pour gagner la partie.",
   "variantHordeTitle": "Un camp a un grand nombre de pions, l'autre a un nombre de pièces normales.",
   "variantRacingKingsTitle": "Amenez votre roi de l'autre côté de l'échiquer pour gagner la partie.",

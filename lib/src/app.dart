@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +8,10 @@ import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/home_widget_service.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -70,10 +68,8 @@ class Application extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
-  final _appLinks = AppLinks();
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  StreamSubscription<Uri>? _linkSubscription;
   StreamSubscription<List<SharedMediaFile>>? _intentSub;
 
   @override
@@ -88,6 +84,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(quickActionServiceProvider).start();
     unawaited(ref.read(homeWidgetServiceProvider).start());
     ref.read(announceServiceProvider).start();
+    ref.read(appLinksServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -119,13 +116,11 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-    _initAppLinks();
     _initSharingIntent();
   }
 
   @override
   void dispose() {
-    _linkSubscription?.cancel();
     _intentSub?.cancel();
     super.dispose();
   }
