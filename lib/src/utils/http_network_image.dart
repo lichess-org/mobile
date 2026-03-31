@@ -55,7 +55,7 @@ class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
       }
 
       if (response.bodyBytes.isEmpty) {
-        throw Exception('NetworkImage is an empty file: $resolved');
+        throw NetworkImageLoadException(statusCode: response.statusCode, uri: resolved);
       }
 
       return decode(await ui.ImmutableBuffer.fromUint8List(response.bodyBytes));
