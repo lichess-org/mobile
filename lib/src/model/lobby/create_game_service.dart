@@ -104,7 +104,7 @@ class CreateGameService {
 
       final finalSeek = account != null ? actualSeek.withRatingRangeOf(account) : actualSeek;
 
-      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: sri);
+      await LobbyRepository(lichessClient).createSeek(finalSeek, sri: sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       if (!completer.isCompleted) {
