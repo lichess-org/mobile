@@ -113,21 +113,6 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     _root = _game.makeTree();
 
     if (_game.serverAnalysis == null) {
-      await serverAnalysisService.requestAnalysis(options.id);
-
-      _serverAnalysisCompleter.future.timeout(
-        kMaxWaitForServerAnalysis,
-        onTimeout: () {
-          _logger.warning(
-            'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-          );
-          state = AsyncError(
-            Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-            StackTrace.current,
-          );
-        },
-      );
-
       final retroState = RetroState(
         serverAnalysisAvailable: false,
         mistakes: const IList.empty(),
@@ -148,9 +133,56 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
       state = AsyncValue.data(retroState);
 
+      // Attach listener BEFORE possibly requesting analysis,
+      // so we don't miss the first progress event.
       serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
-      return retroState;
+      // Reuse an already available event immediately if it belongs to this game.
+      final existingEvent = serverAnalysisService.lastAnalysisEvent.value;
+      if (existingEvent != null && existingEvent.$1 == options.id) {
+        ServerAnalysisService.mergeOngoingAnalysis(_root, existingEvent.$2.tree);
+
+        final progress =
+            existingEvent.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
+
+        state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
+
+        if (existingEvent.$2.isAnalysisComplete) {
+          if (!_serverAnalysisCompleter.isCompleted) {
+            _serverAnalysisCompleter.complete();
+          }
+
+          state = AsyncData(await _computeMistakes(options.initialSide));
+
+          socketClient.firstConnection.then((_) {
+            requestEval();
+          });
+
+          return state.requireValue;
+        }
+      }
+
+      // Only request analysis if this exact game is not already being analyzed.
+      if (serverAnalysisService.currentAnalysis.value != options.id) {
+        await serverAnalysisService.requestAnalysis(options.id);
+      }
+
+      unawaited(
+        _serverAnalysisCompleter.future.timeout(
+          kMaxWaitForServerAnalysis,
+          onTimeout: () {
+            _logger.warning(
+              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+            );
+            state = AsyncError(
+              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+              StackTrace.current,
+            );
+          },
+        ),
+      );
+
+      return state.requireValue;
     }
 
     state = AsyncData(await _computeMistakes(options.initialSide));

@@ -754,7 +754,10 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
-    _selectedVariant = widget.initialVariant ?? prefs.variant;
+    final preferredVariant = widget.initialVariant ?? prefs.variant;
+    _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
+        ? Variant.standard
+        : preferredVariant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     _fenController.addListener(() {
