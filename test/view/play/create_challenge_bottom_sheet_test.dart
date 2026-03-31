@@ -31,7 +31,7 @@ void main() {
       ) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const _TestBottomSheetOpener(_testDestUser),
+          home: const _TestBottomSheetOpener(user: _testDestUser),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => _makeClockMockClient()),
@@ -51,7 +51,7 @@ void main() {
         expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
         // default time control is clock, so the challenge button should be enabled
-        await tester.tap(find.text('Challenge'));
+        await tester.tap(find.text('Challenge ${_testDestUser.name}'));
         await tester.pumpAndSettle();
 
         // the bottom sheet should be gone
@@ -68,7 +68,7 @@ void main() {
         (tester) async {
           final app = await makeTestProviderScopeApp(
             tester,
-            home: const _TestBottomSheetOpener(_testDestUser),
+            home: const _TestBottomSheetOpener(user: _testDestUser),
             overrides: {
               httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
                 (ref) => FakeHttpClientFactory(() => _makeCorrespondenceMockClient()),
@@ -94,7 +94,7 @@ void main() {
           expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
           // tap challenge button
-          await tester.tap(find.text('Challenge'));
+          await tester.tap(find.text('Challenge ${_testDestUser.name}'));
           await tester.pump(); // start the async challenge creation
 
           // let the HTTP request for challenge creation complete
@@ -116,10 +116,51 @@ void main() {
         variant: kPlatformVariant,
       );
 
+      testWidgets('creating an open correspondence challenge opens the game screen', (
+        tester,
+      ) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const _TestBottomSheetOpener(user: null),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => _makeCorrespondenceMockClient()),
+            ),
+          },
+          authUser: fakeAuthUser,
+          defaultPreferences: {
+            '${PrefCategory.challenge.storageKey}.${fakeAuthUser.user.id}': jsonEncode(
+              ChallengePrefs.defaults
+                  .copyWith(timeControl: ChallengeTimeControlType.correspondence, rated: false)
+                  .toJson(),
+            ),
+          },
+        );
+
+        await tester.pumpWidget(app);
+        // let account provider load
+        await tester.pump(const Duration(milliseconds: 50));
+
+        // open the bottom sheet
+        await tester.tap(find.text('Open'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
+
+        await tester.tap(find.text('Challenge a friend'));
+        await tester.pumpAndSettle();
+
+        // the bottom sheet should be gone
+        expect(find.byType(CreateChallengeBottomSheet), findsNothing);
+
+        // GameScreen should be pushed (loading state is fine)
+        expect(find.byType(GameScreen), findsOneWidget);
+      }, variant: kPlatformVariant);
+
       testWidgets('shows decline reason when challenge is immediately declined', (tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const _TestBottomSheetOpener(_testDestUser),
+          home: const _TestBottomSheetOpener(user: _testDestUser),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => _makeCorrespondenceDeclinedMockClient()),
@@ -145,7 +186,7 @@ void main() {
         expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
         // tap challenge button
-        await tester.tap(find.text('Challenge'));
+        await tester.tap(find.text('Challenge ${_testDestUser.name}'));
         await tester.pump();
 
         // let the HTTP request for challenge creation complete
@@ -178,9 +219,9 @@ void main() {
 
 /// A simple wrapper widget that shows a button to open [CreateChallengeBottomSheet].
 class _TestBottomSheetOpener extends StatelessWidget {
-  const _TestBottomSheetOpener(this.user);
+  const _TestBottomSheetOpener({required this.user});
 
-  final LightUser user;
+  final LightUser? user;
 
   @override
   Widget build(BuildContext context) {

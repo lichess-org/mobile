@@ -212,7 +212,7 @@ void main() {
 
       final createGameService = MockCreateGameService();
       when(
-        () => createGameService.newRealTimeChallenge(challengeRequest),
+        () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
       ).thenAnswer((_) async => challenge);
       when(
         () => createGameService.waitForChallengeResponse(challenge),

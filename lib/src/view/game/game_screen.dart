@@ -280,9 +280,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
-              UserChallengeSource(:final challengeRequest) => _ChallengeGameTitle(
-                challenge: challengeRequest,
-              ),
+              UserChallengeSource(:final challengeRequest) when challengeRequest.destUser != null =>
+                _ChallengeGameTitle(challenge: challengeRequest),
               _ => const SizedBox.shrink(),
             },
           ),
