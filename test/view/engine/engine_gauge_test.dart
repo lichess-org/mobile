@@ -32,7 +32,9 @@ void main() {
     expect(find.text('0.0'), findsOneWidget);
   });
 
-  testWidgets('EngineGauge shows 0.0 (no sign) for small positive eval', (WidgetTester tester) async {
+  testWidgets('EngineGauge shows 0.0 (no sign) for small positive eval', (
+    WidgetTester tester,
+  ) async {
     final params = (
       isLocalEngineAvailable: true,
       orientation: Side.white,
