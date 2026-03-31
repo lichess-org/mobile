@@ -27,9 +27,9 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user, {this.positionFen});
+  const CreateChallengeBottomSheet({this.user, this.positionFen});
 
-  final LightUser user;
+  final LightUser? user;
   final String? positionFen;
 
   @override
@@ -315,6 +315,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     context,
                                     source: UserChallengeSource(
                                       preferences.makeRequest(
+                                        account,
                                         widget.user,
                                         preferences.variant != Variant.fromPosition
                                             ? null
@@ -333,6 +334,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   _pendingCorrespondenceChallenge = createGameService
                                       .newCorrespondenceChallenge(
                                         preferences.makeRequest(
+                                          account,
                                           widget.user,
                                           preferences.variant != Variant.fromPosition
                                               ? null
@@ -403,7 +405,12 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                               }
                             : null,
                     },
-                    child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+                    child: Text(
+                      widget.user != null
+                          ? context.l10n.challengeChallengeToPlay
+                          : context.l10n.challengeAFriend,
+                      style: Styles.bold,
+                    ),
                   ),
                 );
               },

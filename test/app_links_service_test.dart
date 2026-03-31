@@ -275,7 +275,8 @@ void main() {
 
       expect(find.text('Thibault challenges you: ♚ Black • Rated • 5+0'), findsOneWidget);
       expect(find.text('Accept'), findsOneWidget);
-      expect(find.text('Decline'), findsOneWidget);
+      // challenges from link cannot be declined
+      expect(find.text('Cancel'), findsOneWidget);
     });
   });
 }

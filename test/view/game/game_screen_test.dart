@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
@@ -8,15 +9,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart' hide Challenge;
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -30,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
 import '../../model/game/game_socket_example_data.dart';
@@ -49,6 +56,8 @@ final client = MockClient((request) {
 });
 
 class MockSoundService extends Mock implements SoundService {}
+
+class MockCreateGameService extends Mock implements CreateGameService {}
 
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
@@ -181,6 +190,53 @@ void main() {
         initialBoardPosition,
         reason: 'board position should not change',
       );
+    });
+
+    testWidgets('displays game link for open challenge', (WidgetTester tester) async {
+      const challengeRequest = ChallengeRequest(
+        destUser: null,
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: true,
+        sideChoice: SideChoice.white,
+      );
+      final challenge = Challenge(
+        sideChoice: challengeRequest.sideChoice,
+        id: const ChallengeId('challengeId'),
+        variant: challengeRequest.variant,
+        timeControl: challengeRequest.timeControl,
+        rated: challengeRequest.rated,
+        speed: Speed.blitz,
+        status: ChallengeStatus.created,
+      );
+
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newRealTimeChallenge(challengeRequest),
+      ).thenAnswer((_) async => challenge);
+      when(
+        () => createGameService.waitForChallengeResponse(challenge),
+      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNothing);
+      expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
+      expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
+      expect(find.byType(QrImageView), findsOneWidget);
+      expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
     });
   });
 
