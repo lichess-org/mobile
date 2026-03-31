@@ -63,7 +63,6 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
           if (controller != null) {
             ref.read(ctrlProvider.notifier).updatePgnHeader(entry.key, controller.text);
           }
-          //ref.read(ctrlProvider.notifier).updatePgnHeader(entry.key, _controllers[entry.key]!.text);
         }
       });
     }
