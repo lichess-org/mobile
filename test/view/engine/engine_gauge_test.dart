@@ -21,10 +21,7 @@ void main() {
     final widget = await makeTestProviderScopeApp(
       tester,
       home: Scaffold(
-        body: SizedBox(
-          height: 400,
-          child: EngineGauge(params: params),
-        ),
+        body: SizedBox(height: 400, child: EngineGauge(params: params)),
       ),
     );
 
@@ -49,10 +46,7 @@ void main() {
     final widget = await makeTestProviderScopeApp(
       tester,
       home: Scaffold(
-        body: SizedBox(
-          height: 400,
-          child: EngineGauge(params: params),
-        ),
+        body: SizedBox(height: 400, child: EngineGauge(params: params)),
       ),
     );
 
