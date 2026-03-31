@@ -384,7 +384,14 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
+                                      SnackBar(
+                                        content: Text(
+                                          context.l10n.mobileChallengeCreated.replaceAll(
+                                            '\\n',
+                                            '\n',
+                                          ),
+                                        ),
+                                      ),
                                     );
                                   }
                                 } catch (e) {
