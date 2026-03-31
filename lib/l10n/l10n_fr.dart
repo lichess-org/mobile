@@ -296,7 +296,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
 
   @override
-  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagner la partie.';
+  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
 
   @override
   String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';

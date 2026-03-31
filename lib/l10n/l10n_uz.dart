@@ -2898,7 +2898,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get email => 'E‑pochta';
 
   @override
-  String get passwordReset => 'tiklashingiz';
+  String get passwordReset => 'Parolni tiklash';
 
   @override
   String get forgotPassword => 'Parolni unutdingizmi?';

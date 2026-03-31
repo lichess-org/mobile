@@ -8055,7 +8055,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily mail notification listing your correspondence games';
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
 
   @override
   String get preferencesNotifyStreamStart => 'Streamer goes live';

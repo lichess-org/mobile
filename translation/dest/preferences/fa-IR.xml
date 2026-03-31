@@ -23,7 +23,7 @@
   <string name="exceptInGame">به غیر از داخل بازی</string>
   <string name="chessClock">ساعت شطرنج</string>
   <string name="tenthsOfSeconds">دهم ثانیه</string>
-  <string name="whenTimeRemainingLessThanTenSeconds" comment="whenTimeRemainingLessThanTenSeconds&#10;&#10;The &amp;lt; symbol is not required (you can write it as a word), just do NOT use &lt; in its place.&#10;&#10;Technical information: &lt; is a reserved character in HTML, which is why it cannot be used.">وقتی زمان باقی مانده کمتر از ده ثانیه می باشد</string>
+  <string name="whenTimeRemainingLessThanTenSeconds" comment="whenTimeRemainingLessThanTenSeconds&#10;&#10;The &amp;lt; symbol is not required (you can write it as a word), just do NOT use &lt; in its place.&#10;&#10;Technical information: &lt; is a reserved character in HTML, which is why it cannot be used.">وقتی زمان باقی &lt; 10 ثانیه می باشد</string>
   <string name="horizontalGreenProgressBars">نمودار زمان سبز رنگ افقی</string>
   <string name="soundWhenTimeGetsCritical">صدا در هنگام زمان بحرانی زده می شود</string>
   <string name="giveMoreTime">افزایش زمان حریف</string>
@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">شاه را روی رخ گذارید</string>
   <string name="inputMovesWithTheKeyboard">حرکاتِ ورودی با صفحه‌کلید</string>
   <string name="inputMovesWithVoice">حرکات را با صدای خود وارد کنید</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">چسبیدن پیکان‌ها به حرکت‌های ممکن</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">چسبیدن پیکان‌ها به حرکت‌های ممکن</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">گفتن \"بازی خوبی بود، خوب بازی کردی\" در هنگام باخت یا تساوی</string>
   <string name="yourPreferencesHaveBeenSaved">تغییرات شما ذخیره شده است</string>
   <string name="scrollOnTheBoardToReplayMoves">برای بازپخش حرکت‌ها، روی تخته بِنَوَردید</string>
@@ -62,6 +62,7 @@
   <string name="notifyGameEvent">به‌روزرسانی‌های بازی مکاتبه‌ای</string>
   <string name="notifyChallenge">پیشنهاد بازی</string>
   <string name="notifyTournamentSoon">مسابقات به‌زودی می‌آغازد</string>
+  <string name="notifyBroadcasts">پخش‌هایی که مشترک آن‌ها شده‌اید</string>
   <string name="notifyTimeAlarm">هشدار تنگی زمان</string>
   <string name="notifyBell">اعلان زنگی در Lichess</string>
   <string name="notifyPush">اعلان اَفزاره، هنگامی که در Lichess نیستید</string>
@@ -69,4 +70,5 @@
   <string name="notifyDevice">اَفزاره</string>
   <string name="bellNotificationSound">صدای اعلان زنگی</string>
   <string name="blindfold" comment="As in Blindfold chess">چشم‌بسته</string>
+  <string name="showClockOnTheLeft" comment="IMPORTANT NOTE FOR LANGUAGES WRITTEN RIGHT-TO-LEFT (e.g. Arabic):&#10;Please translate &quot;left&quot; as &quot;right&quot;, because the layout is reversed in your language.&#10;&#10;---&#10;&#10;A user setting. When enabled, the clock will be shown on the left side of the screen. Only applies to mobile devices.&#10;&#10;&#10;Appears on https://lichess.org/account/preferences/chess-clock.">در دستگاه‌های موبایل، در سمت چپ نمایش بده</string>
 </resources>

@@ -308,10 +308,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get variantRacingKingsTitle => 'Porta il tuo re dall\'altra parte della scacchiera per vincere.';
 
   @override
-  String get variantCrazyhouseTitle => 'I pezzi catturati possono essere riemssi sulla scacchiera invece di spostare un pezzo.';
+  String get variantCrazyhouseTitle => 'I pezzi catturati possono essere rimessi sulla scacchiera invece di spostare un pezzo.';
 
   @override
-  String get variantFromPositionTitle => 'Standard chess from a custom position';
+  String get variantFromPositionTitle => 'Scacchi tradizionali da una posizione personalizzata';
 
   @override
   String get activityActivity => 'Attività';
@@ -861,7 +861,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastFederation => 'Federazione';
 
   @override
-  String get broadcastAge => 'Age';
+  String get broadcastAge => 'Età';
 
   @override
   String get broadcastUnrated => 'Non classificato';
@@ -933,7 +933,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastScore => 'Punteggio';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Le classifiche sono calcolate prendendo in considerazione solo le partite messe in onda e potrebbero differire dai risultati ufficiali.';
 
   @override
   String get broadcastAllTeams => 'Tutte le squadre';
@@ -980,23 +980,23 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Punti della partita';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Punti della gara';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Partite';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Cronologia delle partite';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Risultati della squadra';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'I termini seguenti saranno tradotti automaticamente: $param.';
   }
 
   @override
@@ -1011,16 +1011,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastOpenTournament => 'Open';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Donne';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Uomini';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Ragazze';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Ragazzi';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
@@ -1029,33 +1029,33 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'Girls U$param';
+    return 'Ragazze U$param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Boys U$param';
+    return 'Ragazzi U$param';
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Quarti di finale';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Semifinali';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Finali';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Tiebreak';
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Partita $param';
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'KO';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1528,7 +1528,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Canali a cui ti sei iscritto';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
@@ -1552,7 +1552,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesBlindfold => 'Alla cieca';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Mostra sulla sinistra nei dispositivi mobili';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -1919,10 +1919,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Mossa collineare';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Due pezzi avversari si trovano uno di fronte all\'altro';
 
   @override
   String get puzzleThemeCornerMate => 'Matto nell\'angolo';
@@ -2006,10 +2006,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Matto di controspallina';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Due case di fuga utilizzabili dal re sotto scacco adiacenti sono occupate da altri pezzi ';
 
   @override
   String get puzzleThemeExposedKing => 'Re esposto';
@@ -2054,22 +2054,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Una Torre è vicina al Re nemico e supportata da una Regina che blocca i quadrati di fuga del Re. La Torre e la Regina catturano il Re nemico in una \"scatola assassina\" 3 x 3.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Matto di Pillsbury';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburysMateDescription => 'La torre dà lo scacco matto, mentre l\'alfiere aiuta a rinchiuderlo.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Matto di Morphy';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphysMateDescription => 'Usa l\'alfiere per dare scacco al re, mentre la torre aiuta a rinchiuderlo.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Matto della coda di rondine';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Uno scacco matto che assomiglia alla forma a V della coda di una rondine.';
 
   @override
   String get puzzleThemeTriangleMate => 'Matto triangolare';
@@ -2162,10 +2162,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Una tattica durante la prima fase della partita.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Matto dell\'opera';
 
   @override
-  String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
+  String get puzzleThemeOperaMateDescription => 'Dai scacco al re con la torre e usa un alfiere per difendere quella torre.';
 
   @override
   String get puzzleThemePawnEndgame => 'Finale di pedoni';
@@ -2344,10 +2344,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'O fai scansionare questo codice QR al tuo avversario';
 
   @override
-  String get reusableChallengeUrl => 'Reusable challenge URL';
+  String get reusableChallengeUrl => 'URL per sfidare riutilizzabile';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Un link permanente che ognuno può utilizzare per sfidarti con queste impostazioni';
 
   @override
   String get waiting => 'In attesa';
@@ -2684,37 +2684,37 @@ class AppLocalizationsIt extends AppLocalizations {
   String get evaluationGauge => 'Indicatore di valutazione del vantaggio';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Motivi visivi';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Pezzi indifesi';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Pezzi inchiodati';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Re che si può mettere sotto scacco';
 
   @override
   String get multipleLines => 'Varianti multiple';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Numero impostato di linee di valutazione e frecce di movimento pezzi sulla scacchiera';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Tempo di ricerca';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Tempo impostato per valutare posizioni nuove';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Discussioni';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Impostare questo sotto il numero di thread della CPU, le spunte indicano una scelta sicura';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Più thread utilizzeranno più batteria per una analisi migliore';
 
   @override
   String get cpus => 'Processori';
@@ -2723,7 +2723,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get memory => 'Memoria';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Valori maggiori possono aumentare le prestazioni';
 
   @override
   String get infiniteAnalysis => 'Analisi infinita';
@@ -2838,7 +2838,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get variants => 'Varianti';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Più modi di giocare';
 
   @override
   String get timeControl => 'Cadenza di gioco';
@@ -2883,7 +2883,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signupUsernameHint => 'Assicurati di scegliere un nome utente appropriato. Non potrai cambiarlo successivamente e gli account con nomi inappropriati saranno cancellati!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Noi ti manderemo soltanto mail relative al tuo account e non condivideremo mai il vostro indirizzo e-mail.';
 
   @override
   String get password => 'Password';
@@ -3069,7 +3069,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unlimited => 'Illimitato';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Prenditi tutto il tempo necessario';
 
   @override
   String get mode => 'Modalità';
@@ -3313,10 +3313,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameAsGIF => 'Salva la partita come GIF';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Nomi dei giocatori';
 
   @override
-  String get moveAnnotations => 'Move annotations';
+  String get moveAnnotations => 'Annotazioni delle mosse';
 
   @override
   String get pasteTheFenStringHere => 'Incolla qui la stringa FEN';
@@ -3767,13 +3767,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Codice di autenticazione non valido';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Campo libero';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'O';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Effettua il log in con l\'indirizzo e-mail';
 
   @override
   String get emailMeALink => 'Inviami il link via email';
@@ -4164,7 +4164,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get togglePositionAnnotations => 'Mostra le annotazioni della posizione';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Attiva/Disattiva annotazioni di osservazione';
 
   @override
   String get variationArrowsInfo => 'Le frecce delle varianti ti permettono di esplorare le mosse senza usare la lista.';
@@ -4428,7 +4428,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get brightness => 'Luminosità';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Contrasto';
 
   @override
   String get hue => 'Tonalità';
@@ -5061,7 +5061,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Nessun risultato per \"$param\"';
   }
 
   @override

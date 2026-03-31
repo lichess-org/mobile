@@ -414,7 +414,7 @@
   "preferencesSayGgWpAfterLosingOrDrawing": "Say \"Good game, well played\" upon defeat or draw",
   "preferencesYourPreferencesHaveBeenSaved": "Your preferences have been saved.",
   "preferencesScrollOnTheBoardToReplayMoves": "Scroll on the board to replay moves",
-  "preferencesCorrespondenceEmailNotification": "Daily mail notification listing your correspondence games",
+  "preferencesCorrespondenceEmailNotification": "Daily email listing your correspondence games",
   "preferencesNotifyStreamStart": "Streamer goes live",
   "preferencesNotifyInboxMsg": "New inbox message",
   "preferencesNotifyForumMention": "Forum comment mentions you",

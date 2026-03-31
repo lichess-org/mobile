@@ -22,12 +22,28 @@ class HttpLogStorage {
   final Database _db;
 
   /// Retrieves a paginated list of [HttpLogEntry] entries from the database.
-  Future<HttpLog> page({int? cursor, int limit = 100}) async {
+  ///
+  /// [searchQuery] filters entries whose request method, URL, or error message contain the query.
+  Future<HttpLog> page({int? cursor, String? searchQuery, int limit = 100}) async {
+    final whereParts = <String>[];
+    final args = <dynamic>[];
+
+    if (cursor != null) {
+      whereParts.add('id <= ?');
+      args.add(cursor);
+    }
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      whereParts.add('(requestMethod LIKE ? OR requestUrl LIKE ? OR errorMessage LIKE ?)');
+      final pattern = '%$searchQuery%';
+      args.addAll([pattern, pattern, pattern]);
+    }
+
     final res = await _db.query(
       kHttpLogStorageTable,
       limit: limit + 1,
       orderBy: 'id DESC',
-      where: cursor != null ? 'id <= $cursor' : null,
+      where: whereParts.isNotEmpty ? whereParts.join(' AND ') : null,
+      whereArgs: args.isNotEmpty ? args : null,
     );
     return HttpLog(
       items: res.take(limit).map(HttpLogEntry.fromJson).toIList(),

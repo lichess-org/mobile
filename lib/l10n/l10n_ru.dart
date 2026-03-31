@@ -281,7 +281,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePreviousPage => 'Предыдущие';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
@@ -3823,13 +3823,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidAuthenticationCode => 'Неверный код аутентификации';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Очистить поле';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Или';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Авторизация через электронную почту';
 
   @override
   String get emailMeALink => 'Прислать ссылку мне на почту';

@@ -3773,7 +3773,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get orSeparator => 'Or';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Komenci seancon per retpoŝto';
 
   @override
   String get emailMeALink => 'Retpoŝte sendu al mi ligilon';
@@ -4428,7 +4428,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get brightness => 'Lumeco';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Kontrasto';
 
   @override
   String get hue => 'Kolortono';
