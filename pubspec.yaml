@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.23.0+002300 # See README.md for details about versioning
+version: 0.23.1+002301 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -58,7 +58,8 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: ^4.2811.0
+  # TODO remove pin
+  material_symbols_icons: 4.2906.0
   meta: ^1.8.0
   multistockfish: ^0.5.0
   package_info_plus: ^9.0.0
