@@ -755,10 +755,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
     final preferredVariant = widget.initialVariant ?? prefs.variant;
-    _selectedVariant =
-        widget.initialFen == null && preferredVariant == Variant.fromPosition
-            ? Variant.standard
-            : preferredVariant;
+    _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
+        ? Variant.standard
+        : preferredVariant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     _fenController.addListener(() {
