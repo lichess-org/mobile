@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -37,6 +38,7 @@ class PuzzleController extends Notifier<PuzzleState> {
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
+  IList<PuzzleId>? _replayRemaining;
 
   Future<PuzzleService> get _service =>
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
@@ -53,6 +55,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     if (initialContext.userId != null) {
       _updateUserRating();
     }
+
+    _replayRemaining = initialContext.replayRemaining;
 
     return _loadNewContext(initialContext);
   }
@@ -72,6 +76,9 @@ class PuzzleController extends Notifier<PuzzleState> {
   PuzzleState _loadNewContext(PuzzleContext context) {
     final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
+
+    // update puzzles that are remaining in replay
+    _replayRemaining = context.replayRemaining;
 
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
@@ -216,8 +223,8 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   Future<PuzzleContext?> _nextReplayPuzzle() async {
-    final remaining = initialContext.replayRemaining!;
-    if (remaining.isEmpty) return null;
+    final remaining = _replayRemaining;
+    if (remaining == null || remaining.isEmpty) return null;
     try {
       final nextPuzzle = await _repository.fetch(remaining.first);
       return PuzzleContext(
