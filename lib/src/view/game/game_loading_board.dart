@@ -257,7 +257,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 12.0,
+                  spacing: 20.0,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
