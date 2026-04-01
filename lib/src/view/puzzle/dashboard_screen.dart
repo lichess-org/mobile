@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -44,7 +45,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(children: const [PuzzleDashboardWidget()]);
+    return ListView(children: const [PuzzleDashboardWidget(), _ReplayButton()]);
   }
 }
 
@@ -260,6 +261,44 @@ class PuzzleChart extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ReplayButton extends ConsumerWidget {
+  const _ReplayButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final days = ref.watch(daysProvider).days;
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider(days));
+
+    return puzzleDashboard.maybeWhen(
+      data: (dashboard) {
+        if (dashboard == null) return const SizedBox.shrink();
+        final puzzlesToReplay =
+            dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
+        if (puzzlesToReplay <= 0) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Center(
+            child: FilledButton.icon(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  PuzzleScreen.buildRoute(
+                    context,
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    replayDays: days,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.play_arrow),
+              label: Text(context.l10n.puzzleNbToReplay(puzzlesToReplay)),
+            ),
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }
