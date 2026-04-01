@@ -41,9 +41,22 @@ class PlayerScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  final _focusNode = _AlwaysDisabledFocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider);
     final onlineFriends = ref.watch(onlineFriendsProvider);
     final onlineBots = ref.watch(onlineBotsProvider);
@@ -55,7 +68,7 @@ class _Body extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: PlatformSearchBar(
             hintText: context.l10n.searchSearch,
-            focusNode: AlwaysDisabledFocusNode(),
+            focusNode: _focusNode,
             onTap: () => Navigator.of(context).push(
               SearchScreen.buildRoute(
                 context,
@@ -74,7 +87,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class AlwaysDisabledFocusNode extends FocusNode {
+class _AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
 }

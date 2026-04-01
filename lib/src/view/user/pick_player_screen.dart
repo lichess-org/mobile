@@ -100,11 +100,24 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PlayersList extends StatelessWidget {
+class _PlayersList extends StatefulWidget {
   const _PlayersList({required this.onUserTap, required this.children});
 
   final void Function(LightUser) onUserTap;
   final List<Widget> children;
+
+  @override
+  State<_PlayersList> createState() => _PlayersListState();
+}
+
+class _PlayersListState extends State<_PlayersList> {
+  final _searchFocusNode = _AlwaysDisabledFocusNode();
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,19 +127,19 @@ class _PlayersList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: PlatformSearchBar(
             hintText: context.l10n.searchSearch,
-            focusNode: _AlwaysDisabledFocusNode(),
+            focusNode: _searchFocusNode,
             onTap: () => Navigator.of(context).push(
               SearchScreen.buildRoute(
                 context,
                 onUserTap: (user) {
                   Navigator.of(context).pop();
-                  onUserTap(user);
+                  widget.onUserTap(user);
                 },
               ),
             ),
           ),
         ),
-        ...children,
+        ...widget.children,
       ],
     );
   }
