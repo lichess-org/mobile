@@ -215,6 +215,22 @@ class PuzzleController extends Notifier<PuzzleState> {
     state = _loadNewContext(nextContext);
   }
 
+  Future<PuzzleContext?> _nextReplayPuzzle() async {
+    final remaining = initialContext.replayRemaining!;
+    if (remaining.isEmpty) return null;
+    try {
+      final nextPuzzle = await _repository.fetch(remaining.first);
+      return PuzzleContext(
+        puzzle: nextPuzzle,
+        angle: initialContext.angle,
+        userId: initialContext.userId,
+        replayRemaining: remaining.removeAt(0),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
   void _goToNextNode({bool isNavigating = false}) {
     if (state.node.children.isEmpty) return;
     _setPath(state.currentPath + state.node.children.first.id, isNavigating: isNavigating);
@@ -260,23 +276,27 @@ class PuzzleController extends Notifier<PuzzleState> {
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
       final currentPuzzle = state.puzzle.puzzle;
-      final service = await _service;
-      final next =
-          currentPuzzle.id == initialContext.puzzle.puzzle.id && initialContext.casual == true
-          ? await service.nextPuzzle(userId: initialContext.userId, angle: initialContext.angle)
-          : await service.solve(
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-              puzzle: state.puzzle,
-              solution: PuzzleSolution(
-                id: state.puzzle.puzzle.id,
-                win: state.result == PuzzleResult.win,
-                rated:
-                    initialContext.userId != null &&
-                    !state.hintShown &&
-                    ref.read(puzzlePreferencesProvider).rated,
-              ),
-            );
+      final PuzzleContext? next;
+      if (initialContext.replayRemaining != null) {
+        next = await _nextReplayPuzzle();
+      } else {
+        final service = await _service;
+        next = currentPuzzle.id == initialContext.puzzle.puzzle.id && initialContext.casual == true
+            ? await service.nextPuzzle(userId: initialContext.userId, angle: initialContext.angle)
+            : await service.solve(
+                userId: initialContext.userId,
+                angle: initialContext.angle,
+                puzzle: state.puzzle,
+                solution: PuzzleSolution(
+                  id: state.puzzle.puzzle.id,
+                  win: state.result == PuzzleResult.win,
+                  rated:
+                      initialContext.userId != null &&
+                      !state.hintShown &&
+                      ref.read(puzzlePreferencesProvider).rated,
+                ),
+              );
+      }
 
       if (!ref.mounted) return;
 
