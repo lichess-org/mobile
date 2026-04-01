@@ -278,6 +278,20 @@ class PuzzleController extends Notifier<PuzzleState> {
       final currentPuzzle = state.puzzle.puzzle;
       final PuzzleContext? next;
       if (initialContext.replayRemaining != null) {
+        final service = await _service;
+        await service.solve(
+          userId: initialContext.userId,
+          angle: initialContext.angle,
+          puzzle: state.puzzle,
+          solution: PuzzleSolution(
+            id: state.puzzle.puzzle.id,
+            win: state.result == PuzzleResult.win,
+            rated:
+                initialContext.userId != null &&
+                !state.hintShown &&
+                ref.read(puzzlePreferencesProvider).rated,
+          ),
+        );
         next = await _nextReplayPuzzle();
       } else {
         final service = await _service;
