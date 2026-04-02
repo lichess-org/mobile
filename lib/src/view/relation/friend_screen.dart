@@ -30,15 +30,11 @@ final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList
     return (IList<User>(), IList<UserStatus>());
   }
 
-  final ids = following.map((user) => user.id).toIList();
-  final statuses = <UserStatus>[];
   // The /api/users/status endpoint accepts at most 100 IDs per request.
-  for (var i = 0; i < ids.length; i += 100) {
-    final chunk = ids.sublist(i, i + 100 < ids.length ? i + 100 : ids.length);
-    final result = await ref.read(userRepositoryProvider).getUsersStatuses(chunk.toISet());
-    statuses.addAll(result);
-  }
-  return (following, IList(statuses));
+  final statuses = await ref
+      .read(userRepositoryProvider)
+      .getUsersStatuses(following.take(100).map((user) => user.id).toISet());
+  return (following, statuses);
 });
 
 class FriendScreen extends ConsumerStatefulWidget {
