@@ -273,6 +273,6 @@ class _Following extends ConsumerWidget {
   }
 
   bool _isOnline(User user, IList<UserStatus> statuses) {
-    return statuses.firstWhere((status) => status.id == user.id).online ?? false;
+    return statuses.firstWhereOrNull((status) => status.id == user.id)?.online ?? false;
   }
 }
