@@ -8,7 +8,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -93,9 +92,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   @override
   OfflineComputerGameState build() {
-    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
-    _socketSubscription?.cancel();
-    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
     final evaluationService = ref.watch(evaluationServiceProvider);
     ref.onDispose(() {
       evaluationService.quit();
@@ -458,11 +454,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
 
     return completer.future;
-  }
-
-  void _handleSocketEvent(SocketEvent event) {
-    // not handling any events for now, but we keep the connection open
-    _logger.finer('Received socket event: ${event.topic}');
   }
 
   Future<CloudEval?> _getCloudEval(EvalWork work, {required int numEvalLines}) async {
