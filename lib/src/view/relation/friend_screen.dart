@@ -84,6 +84,11 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
           ),
           body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
         );
+      case AsyncError():
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
+          body: FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider)),
+        );
       case _:
         return PlatformScaffold(
           appBar: PlatformAppBar(title: Text(context.l10n.friends)),
