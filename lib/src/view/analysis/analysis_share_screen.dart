@@ -166,9 +166,13 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                     return FilledButton(
                       onPressed: () {
                         for (final entry in pgnHeaders.entries) {
+                          final controller = _controllers[entry.key];
+                          if (controller == null) {
+                            throw StateError('Controller missing for key: ${entry.key}');
+                          }
                           ref
                               .read(ctrlProvider.notifier)
-                              .updatePgnHeader(entry.key, _controllers[entry.key]!.text);
+                              .updatePgnHeader(entry.key, controller.text);
                         }
                         launchShareDialog(
                           context,
