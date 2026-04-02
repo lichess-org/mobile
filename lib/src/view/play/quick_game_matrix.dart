@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -129,7 +130,7 @@ class _SectionChoices extends ConsumerWidget {
         children: [
           ...choiceWidgets,
           if (showCustom) ...[
-            const SizedBox(width: _kMatrixSpacing),
+            if (choices.isNotEmpty) const SizedBox(width: _kMatrixSpacing),
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
@@ -203,5 +204,130 @@ class _ChoiceChip extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
+  final homePrefs = ref.read(homePreferencesProvider);
+  final disabledControls = Set<TimeIncrement>.from(homePrefs.disabledTimeControls);
+  var customEnabled = homePrefs.customButtonEnabled;
+
+  final grouped = groupBy(TimeIncrement.matrixPresets, (tc) => tc.speed);
+
+  return showAdaptiveDialog<void>(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          final enabledCount =
+              TimeIncrement.matrixPresets.length -
+              disabledControls.length +
+              (customEnabled ? 1 : 0);
+
+          return AlertDialog.adaptive(
+            title: Text(context.l10n.quickPairing),
+            contentPadding: const EdgeInsets.only(top: 12),
+            scrollable: true,
+            content: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final speed in grouped.keys) ...[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          speed.label,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
+                        ),
+                      ),
+                    ),
+                    for (final tc in grouped[speed]!)
+                      CheckboxListTile.adaptive(
+                        title: Text(tc.display),
+                        value: !disabledControls.contains(tc),
+                        onChanged: !disabledControls.contains(tc) && enabledCount <= 1
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  if (value!) {
+                                    disabledControls.remove(tc);
+                                  } else {
+                                    disabledControls.add(tc);
+                                  }
+                                });
+                              },
+                      ),
+                  ],
+                  const Divider(),
+                  CheckboxListTile.adaptive(
+                    title: Text(context.l10n.custom),
+                    value: customEnabled,
+                    onChanged: customEnabled && enabledCount <= 1
+                        ? null
+                        : (value) {
+                            setState(() {
+                              customEnabled = value!;
+                            });
+                          },
+                  ),
+                ],
+              ),
+            ),
+            actions: Theme.of(context).platform == TargetPlatform.iOS
+                ? [
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(context.l10n.cancel),
+                    ),
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () {
+                        _applyTimeControlChanges(ref, disabledControls, customEnabled);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(context.l10n.mobileOkButton),
+                    ),
+                  ]
+                : [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(context.l10n.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _applyTimeControlChanges(ref, disabledControls, customEnabled);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(context.l10n.mobileOkButton),
+                    ),
+                  ],
+          );
+        },
+      );
+    },
+  );
+}
+
+void _applyTimeControlChanges(
+  WidgetRef ref,
+  Set<TimeIncrement> disabledControls,
+  bool customEnabled,
+) {
+  final notifier = ref.read(homePreferencesProvider.notifier);
+  final currentPrefs = ref.read(homePreferencesProvider);
+
+  for (final tc in TimeIncrement.matrixPresets) {
+    final isCurrentlyDisabled = currentPrefs.disabledTimeControls.contains(tc);
+    final shouldBeDisabled = disabledControls.contains(tc);
+    if (isCurrentlyDisabled != shouldBeDisabled) {
+      notifier.toggleTimeControl(tc);
+    }
+  }
+
+  if (currentPrefs.customButtonEnabled != customEnabled) {
+    notifier.toggleCustomButton();
   }
 }
