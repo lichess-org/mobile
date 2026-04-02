@@ -275,7 +275,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Irekieren esploratzaila ezin da konexio gabe erabili.';
 
   @override
-  String get mobileChallengeCreated => 'Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\\nHasiera fitxatik sar zaitezke.';
+  String get mobileChallengeCreated => 'Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\nHasiera fitxatik sar zaitezke.';
 
   @override
   String get mobilePreviousPage => 'Aurrekoa';

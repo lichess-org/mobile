@@ -275,7 +275,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'O Explorador de Aperturas non está dispoñible sen conexión.';
 
   @override
-  String get mobileChallengeCreated => 'Desafío creado: serás notificado cando comece a partida.\\nPodes acceder ó reto dende a pantalla de Inicio.';
+  String get mobileChallengeCreated => 'Desafío creado: serás notificado cando comece a partida.\nPodes acceder ó reto dende a pantalla de Inicio.';
 
   @override
   String get mobilePreviousPage => 'Anterior';

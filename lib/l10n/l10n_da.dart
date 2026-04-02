@@ -275,7 +275,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åbningsudforsker er ikke tilgængelig offline.';
 
   @override
-  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\\nDu kan få adgang til det fra hjemfanen.';
+  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';

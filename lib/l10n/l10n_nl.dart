@@ -275,7 +275,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
   String get mobilePreviousPage => 'Vorige';

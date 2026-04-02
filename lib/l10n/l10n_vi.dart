@@ -275,7 +275,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
 
   @override
-  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\\nBạn có thể truy cập trận đấu từ trang chủ.';
+  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\nBạn có thể truy cập trận đấu từ trang chủ.';
 
   @override
   String get mobilePreviousPage => 'Trang trước';

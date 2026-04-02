@@ -275,7 +275,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\\nNäet sen etusivulla.';
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
   String get mobilePreviousPage => 'Edellinen';

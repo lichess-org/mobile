@@ -275,7 +275,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
 
   @override
-  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\\nホームタブからアクセスできます。';
+  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
 
   @override
   String get mobilePreviousPage => '前';

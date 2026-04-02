@@ -275,7 +275,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Довідник дебютів недоступний в режимі офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\\nВи можете перейти до неї з головної сторінки.';
+  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.';
 
   @override
   String get mobilePreviousPage => 'Попередня';

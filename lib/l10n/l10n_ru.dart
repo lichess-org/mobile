@@ -275,7 +275,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Книга дебютов недоступна офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\\nВы можете получить доступ к нему с главной вкладки.';
+  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\nВы можете получить доступ к нему с главной вкладки.';
 
   @override
   String get mobilePreviousPage => 'Предыдущие';

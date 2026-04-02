@@ -275,7 +275,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Hapja e Explorer-it s’bëhet dot jashtë linje.';
 
   @override
-  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\\nMund ta përdorni që nga skeda shtëpi.';
+  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.';
 
   @override
   String get mobilePreviousPage => 'E mëparshmja';

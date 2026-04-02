@@ -275,7 +275,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Oflayn rejimda debyutlar bazasi ishlamaydi.';
 
   @override
-  String get mobileChallengeCreated => 'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\\nUnga asosiy ekrandan kirishingiz mumkin.';
+  String get mobileChallengeCreated => 'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.';
 
   @override
   String get mobilePreviousPage => 'Oldingi';

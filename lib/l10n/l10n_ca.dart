@@ -275,7 +275,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorador d\'obertures no està disponible sense connexió.';
 
   @override
-  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\\nPodeu accedir-hi des de la pantalla d\'inici.';
+  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\nPodeu accedir-hi des de la pantalla d\'inici.';
 
   @override
   String get mobilePreviousPage => 'Anterior';

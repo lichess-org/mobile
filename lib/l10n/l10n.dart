@@ -715,7 +715,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileChallengeCreated.
   ///
   /// In en, this message translates to:
-  /// **'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.'**
+  /// **'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.'**
   String get mobileChallengeCreated;
 
   /// No description provided for @mobilePreviousPage.

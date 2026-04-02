@@ -275,7 +275,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.';
 
   @override
-  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
+  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
 
   @override
   String get mobilePreviousPage => 'پیشین';

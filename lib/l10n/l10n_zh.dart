@@ -275,7 +275,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
 
   @override
-  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\\n您可以在首页选项卡中访问它。';
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
   String get mobilePreviousPage => '上一页';

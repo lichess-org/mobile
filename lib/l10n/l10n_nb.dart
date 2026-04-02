@@ -275,7 +275,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åpningsutforskeren krever nett.';
 
   @override
-  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\\nDu kan åpne det fra Hjem-fanen.';
+  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\nDu kan åpne det fra Hjem-fanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';

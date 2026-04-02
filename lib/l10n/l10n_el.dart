@@ -275,7 +275,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.';
 
   @override
-  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
+  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
 
   @override
   String get mobilePreviousPage => 'Προηγούμενη';

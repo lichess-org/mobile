@@ -275,7 +275,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Exploratorul nu se poate deschide deconectat.';
 
   @override
-  String get mobileChallengeCreated => 'Provocare creată: Vei fi notificat când începe jocul.\\nO poți accesa din pagina principală.';
+  String get mobileChallengeCreated => 'Provocare creată: Vei fi notificat când începe jocul.\nO poți accesa din pagina principală.';
 
   @override
   String get mobilePreviousPage => 'Înapoi';

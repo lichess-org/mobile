@@ -275,7 +275,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
@@ -6828,7 +6828,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
 
   @override
-  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\\nVocê pode acessá-lo pela aba de início.';
+  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.';
 
   @override
   String get mobilePreviousPage => 'Anterior';

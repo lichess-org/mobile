@@ -275,7 +275,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
 
   @override
-  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\\nMożesz zobaczyć je w głównej zakładce.';
+  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.';
 
   @override
   String get mobilePreviousPage => 'Wróć';

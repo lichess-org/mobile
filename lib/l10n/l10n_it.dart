@@ -275,7 +275,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'Esploratore di apertura non è disponibile offline.';
 
   @override
-  String get mobileChallengeCreated => 'Sfida creata: Sarai avvisato quando inizierà la partita.\\nPotrai accedervi dalla scheda Home.';
+  String get mobileChallengeCreated => 'Sfida creata: Sarai avvisato quando inizierà la partita.\nPotrai accedervi dalla scheda Home.';
 
   @override
   String get mobilePreviousPage => 'Precedente';

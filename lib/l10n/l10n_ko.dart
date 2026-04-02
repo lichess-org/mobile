@@ -275,7 +275,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
 
   @override
-  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\\n홈 탭에서 들어갈 수 있습니다.';
+  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
 
   @override
   String get mobilePreviousPage => '이전';

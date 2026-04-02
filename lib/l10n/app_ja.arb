@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "コンパクト",
   "mobileDisplayModeDetailed": "詳細",
   "mobileOpeningExplorerNotAvailableOffline": "エクスプローラーはオフラインでは利用できません。",
-  "mobileChallengeCreated": "チャレンジを作成しました：ゲームが始まると通知されます。\\nホームタブからアクセスできます。",
+  "mobileChallengeCreated": "チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。",
   "mobilePreviousPage": "前",
   "mobileOrImportPgnFile": "または PGN ファイルをインポート",
   "variantStandardTitle": "チェスの標準ルール (FIDE)",

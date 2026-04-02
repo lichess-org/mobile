@@ -275,7 +275,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Açılış Kaşifi çevrimdışı kullanılamaz.';
 
   @override
-  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\\nOyuna ana sekmeden erişebilirsiniz.';
+  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
 
   @override
   String get mobilePreviousPage => 'Önceki';

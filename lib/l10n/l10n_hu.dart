@@ -275,7 +275,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'A megnyitás böngésző nem elérhető offline módban.';
 
   @override
-  String get mobileChallengeCreated => 'Kihívás elkészítve: Értesítünk amint elindul a játék.\\nA kihívás a kezdőlapon található.';
+  String get mobileChallengeCreated => 'Kihívás elkészítve: Értesítünk amint elindul a játék.\nA kihívás a kezdőlapon található.';
 
   @override
   String get mobilePreviousPage => 'Előző';
