@@ -463,12 +463,7 @@ class LichessClient implements Client {
       }
     }
 
-    final streamedResponse = await send(request);
-    // send() already has a timeout for the initial response headers, but
-    // Response.fromStream (which reads the full body) has none. On a stalled
-    // connection this can hang indefinitely, especially for large NDJSON
-    // responses streamed over slow mobile networks.
-    return Response.fromStream(streamedResponse).timeout(defaultRequestTimeout);
+    return Response.fromStream(await send(request));
   }
 }
 
