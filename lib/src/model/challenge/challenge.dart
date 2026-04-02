@@ -103,6 +103,8 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 
     return '$sidePiece$side • $mode • $time$variantStr';
   }
+
+  bool get isOpenOrRealTime => timeControl == ChallengeTimeControlType.clock || destUser == null;
 }
 
 /// A challenge request to play a game with another user.
@@ -141,6 +143,8 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
       if (sideChoice != SideChoice.random) 'color': sideChoice.name,
     };
   }
+
+  bool get isOpenOrRealTime => timeControl == ChallengeTimeControlType.clock || destUser == null;
 }
 
 /// The user response of a challenge request.

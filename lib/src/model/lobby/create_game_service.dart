@@ -118,9 +118,9 @@ class CreateGameService {
     await ref.withClient((client) => LobbyRepository(client).createSeek(seek, sri: sri));
   }
 
-  /// Create a new real time challenge.
-  Future<Challenge> newRealTimeChallenge(ChallengeRequest challengeReq) async {
-    assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
+  /// Create a new challenge that is either open or a directed real-time challenge.
+  Future<Challenge> newOpenOrRealTimeChallenge(ChallengeRequest challengeReq) async {
+    assert(challengeReq.isOpenOrRealTime);
 
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
@@ -133,7 +133,7 @@ class CreateGameService {
   ///
   /// Will listen to the challenge socket and await the response from the destinated user.
   Future<ChallengeResponse> waitForChallengeResponse(Challenge challenge) {
-    assert(challenge.timeControl == ChallengeTimeControlType.clock);
+    assert(challenge.isOpenOrRealTime);
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
     }

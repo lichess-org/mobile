@@ -138,16 +138,15 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
             );
       case UserChallengeSource(:final challengeRequest):
         {
-          final challenge = await service.newRealTimeChallenge(challengeRequest);
-          service
-              .waitForChallengeResponse(challenge)
-              .then(
-                (data) => state = AsyncValue.data(switch (data) {
-                  ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
-                  ChallengeResponseDeclined() => ChallengeDeclinedState(data),
-                  ChallengeResponseCancelled() => const ChallengeCancelledState(),
-                }),
-              );
+          final challenge = await service.newOpenOrRealTimeChallenge(challengeRequest);
+          service.waitForChallengeResponse(challenge).then((data) {
+            if (!ref.mounted) return;
+            state = AsyncValue.data(switch (data) {
+              ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
+              ChallengeResponseDeclined() => ChallengeDeclinedState(data),
+              ChallengeResponseCancelled() => const ChallengeCancelledState(),
+            });
+          });
           return Future.value(
             challenge.destUser != null
                 ? UserChallengeCreatedState(challenge)

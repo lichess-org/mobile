@@ -66,6 +66,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         _term = term;
       });
       saveHistoryDebouncer.call(() {
+        if (!mounted) return;
         ref.read(searchHistoryProvider.notifier).saveTerm(term);
       });
     } else {

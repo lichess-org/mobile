@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
@@ -15,6 +18,9 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
@@ -211,9 +217,14 @@ class _UserChallengeLoadingContentState extends State<UserChallengeLoadingConten
 }
 
 class OpenChallengeLoadingContent extends ConsumerStatefulWidget {
-  const OpenChallengeLoadingContent(this.challenge, this.cancelChallenge);
+  const OpenChallengeLoadingContent({
+    required this.id,
+    required this.challengeRequest,
+    required this.cancelChallenge,
+  });
 
-  final Challenge challenge;
+  final ChallengeId id;
+  final ChallengeRequest challengeRequest;
   final Future<void> Function() cancelChallenge;
 
   @override
@@ -225,7 +236,8 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
 
   @override
   Widget build(BuildContext context) {
-    final challengeLink = 'https://$kLichessHost/${widget.challenge.id}';
+    final challengeLink = 'https://$kLichessHost/${widget.id}';
+    final authUser = ref.watch(authControllerProvider);
 
     final qrColor = ref.watch(currentBrightnessProvider) == Brightness.dark
         ? Colors.white
@@ -245,20 +257,20 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 12.0,
+                  spacing: 20.0,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          widget.challenge.perf.icon,
+                          widget.challengeRequest.perf.icon,
                           color: DefaultTextStyle.of(context).style.color,
                         ),
                         const SizedBox(width: 8.0),
                         Text(
-                          widget.challenge.timeIncrement?.display ??
-                              '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
+                          widget.challengeRequest.timeIncrement?.display ??
+                              '${context.l10n.daysPerTurn}: ${widget.challengeRequest.days}',
                           style: TextTheme.of(context).titleLarge,
                         ),
                       ],
@@ -294,6 +306,55 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                     ),
 
                     Text(context.l10n.theFirstPersonToComeOnThisUrlWillPlayWithYou),
+
+                    if (authUser != null)
+                      FilledButton.tonalIcon(
+                        onPressed: () => Navigator.of(context).push(
+                          PickPlayerScreen.buildRoute(
+                            context,
+                            title: Text(context.l10n.challengeAFriend),
+                            onUserTap: (user) async {
+                              try {
+                                await widget.cancelChallenge();
+                              } catch (e) {
+                                debugPrint('Error cancelling open challenge: $e');
+                              }
+
+                              final directedChallengeReq = widget.challengeRequest.copyWith(
+                                destUser: user,
+                              );
+                              if (!context.mounted) return;
+
+                              if (widget.challengeRequest.timeControl ==
+                                  ChallengeTimeControlType.clock) {
+                                Navigator.of(context).pop();
+                                Navigator.of(context, rootNavigator: true).pushReplacement(
+                                  GameScreen.buildRoute(
+                                    context,
+                                    source: UserChallengeSource(directedChallengeReq),
+                                  ),
+                                );
+                              } else {
+                                await ref
+                                    .read(challengeRepositoryProvider)
+                                    .create(directedChallengeReq);
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      context.l10n.mobileChallengeCreated.replaceAll('\\n', '\n'),
+                                    ),
+                                  ),
+                                );
+                                // Back to home screen
+                                Navigator.of(context).popUntil((route) => route.isFirst);
+                              }
+                            },
+                          ),
+                        ),
+                        label: Text(context.l10n.challengeInviteLichessUser),
+                        icon: const Icon(Icons.person_search),
+                      ),
 
                     Container(
                       padding: const EdgeInsets.all(4.0),
