@@ -209,10 +209,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
-    } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
-    } else if (state.currentPosition.isInsufficientMaterial) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     } else if (state.currentPosition.isVariantEnd) {
       state = state.copyWith(
         game: state.game.copyWith(
@@ -220,6 +216,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           winner: state.currentPosition.variantOutcome?.winner,
         ),
       );
+    } else if (state.currentPosition.isStalemate) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.isInsufficientMaterial) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
     _moveFeedback(sanMove);
