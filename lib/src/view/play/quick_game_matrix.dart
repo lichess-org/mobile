@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -32,6 +33,20 @@ class QuickGameMatrix extends ConsumerWidget {
       return PlaybanMessage(playban: playban);
     }
 
+    final homePrefs = ref.watch(homePreferencesProvider);
+    final enabledControls = TimeIncrement.matrixPresets
+        .where((tc) => !homePrefs.disabledTimeControls.contains(tc))
+        .toList();
+    final showCustom = homePrefs.customButtonEnabled;
+
+    final rows = <List<TimeIncrement>>[];
+    for (var i = 0; i < enabledControls.length; i += 3) {
+      rows.add(enabledControls.sublist(i, (i + 3).clamp(0, enabledControls.length)));
+    }
+    if (rows.isEmpty && showCustom) {
+      rows.add([]);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,21 +62,19 @@ class QuickGameMatrix extends ConsumerWidget {
                   ),
                 )
               : null,
-          child: const Column(
+          child: Column(
             children: [
-              _SectionChoices(
-                choices: [TimeIncrement(60, 0), TimeIncrement(120, 1), TimeIncrement(180, 0)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(
-                choices: [TimeIncrement(180, 2), TimeIncrement(300, 0), TimeIncrement(300, 3)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(
-                choices: [TimeIncrement(600, 0), TimeIncrement(600, 5), TimeIncrement(900, 10)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(choices: [TimeIncrement(1800, 0), TimeIncrement(1800, 20)]),
+              for (final (index, row) in rows.indexed) ...[
+                if (index > 0) const SizedBox(height: _kMatrixSpacing),
+                _SectionChoices(
+                  choices: row,
+                  showCustom: showCustom && index == rows.length - 1 && row.length < 3,
+                ),
+              ],
+              if (showCustom && rows.every((r) => r.length >= 3)) ...[
+                const SizedBox(height: _kMatrixSpacing),
+                const _SectionChoices(choices: [], showCustom: true),
+              ],
             ],
           ),
         ),
@@ -71,9 +84,10 @@ class QuickGameMatrix extends ConsumerWidget {
 }
 
 class _SectionChoices extends ConsumerWidget {
-  const _SectionChoices({required this.choices});
+  const _SectionChoices({required this.choices, this.showCustom = false});
 
   final List<TimeIncrement> choices;
+  final bool showCustom;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,7 +128,7 @@ class _SectionChoices extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ...choiceWidgets,
-          if (choices.length < 3) ...[
+          if (showCustom) ...[
             const SizedBox(width: _kMatrixSpacing),
             Expanded(
               child: _ChoiceChip(

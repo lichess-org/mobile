@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -41,11 +42,41 @@ class HomePreferences extends Notifier<HomePrefs> with SessionPreferencesStorage
     );
     return save(newState);
   }
+
+  Future<void> toggleTimeControl(TimeIncrement tc) {
+    final isDisabled = state.disabledTimeControls.contains(tc);
+    if (!isDisabled) {
+      final enabledCount =
+          TimeIncrement.matrixPresets.length -
+          state.disabledTimeControls.length +
+          (state.customButtonEnabled ? 1 : 0);
+      if (enabledCount <= 1) return Future.value();
+    }
+    final newState = state.copyWith(
+      disabledTimeControls: isDisabled
+          ? state.disabledTimeControls.remove(tc)
+          : state.disabledTimeControls.add(tc),
+    );
+    return save(newState);
+  }
+
+  Future<void> toggleCustomButton() {
+    if (state.customButtonEnabled) {
+      final enabledCount =
+          TimeIncrement.matrixPresets.length - state.disabledTimeControls.length + 1;
+      if (enabledCount <= 1) return Future.value();
+    }
+    return save(state.copyWith(customButtonEnabled: !state.customButtonEnabled));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class HomePrefs with _$HomePrefs implements Serializable {
-  const factory HomePrefs({required IList<HomeEditableWidget> disabledWidgets}) = _HomePrefs;
+  const factory HomePrefs({
+    required IList<HomeEditableWidget> disabledWidgets,
+    @Default(IListConst<TimeIncrement>([])) IList<TimeIncrement> disabledTimeControls,
+    @Default(true) bool customButtonEnabled,
+  }) = _HomePrefs;
 
   static const defaults = HomePrefs(disabledWidgets: _defaultList);
 
