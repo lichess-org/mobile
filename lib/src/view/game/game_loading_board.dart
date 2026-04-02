@@ -352,7 +352,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                             },
                           ),
                         ),
-                        label: Text(context.l10n.challengeInviteLichessUser),
+                        label: Text(context.l10n.challengeInviteLichessUser.replaceAll(':', '')),
                         icon: const Icon(Icons.person_search),
                       ),
 
