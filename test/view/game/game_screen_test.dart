@@ -250,7 +250,7 @@ void main() {
         expect(find.byType(QrImageView), findsOneWidget);
         expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
         expect(
-          find.text('Or invite a Lichess user:'),
+          find.text('Or invite a Lichess user'),
           authUser == null ? findsNothing : findsOneWidget,
         );
       });
