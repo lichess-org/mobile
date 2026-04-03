@@ -74,7 +74,9 @@ class HomePreferences extends Notifier<HomePrefs> with SessionPreferencesStorage
 sealed class HomePrefs with _$HomePrefs implements Serializable {
   const factory HomePrefs({
     required IList<HomeEditableWidget> disabledWidgets,
-    @Default(IListConst<TimeIncrement>([])) IList<TimeIncrement> disabledTimeControls,
+    @Default(IListConst<TimeIncrement>([]))
+    @_TimeIncrementIListConverter()
+    IList<TimeIncrement> disabledTimeControls,
     @Default(true) bool customButtonEnabled,
   }) = _HomePrefs;
 
@@ -90,3 +92,17 @@ sealed class HomePrefs with _$HomePrefs implements Serializable {
 }
 
 const _defaultList = IListConst<HomeEditableWidget>([HomeEditableWidget.quickPairing]);
+
+class _TimeIncrementIListConverter implements JsonConverter<IList<TimeIncrement>, List<dynamic>> {
+  const _TimeIncrementIListConverter();
+
+  @override
+  IList<TimeIncrement> fromJson(List<dynamic> json) {
+    return IList(json.map((e) => TimeIncrement.fromJson(e as Map<String, dynamic>)));
+  }
+
+  @override
+  List<dynamic> toJson(IList<TimeIncrement> object) {
+    return object.map((e) => e.toJson()).toList();
+  }
+}
