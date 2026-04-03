@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -104,6 +105,47 @@ void main() {
       final result = await repo.puzzleDashboard(30);
 
       expect(result, isA<PuzzleDashboard>());
+    });
+
+    test('puzzle replay', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/replay/30/mix') {
+          return mockResponse(
+            '{"replay":{"days":30,"theme":"mix","nb":3,"remaining":["EUX2q","B2dps","3ck12"]},"angle":{"key":"mix","name":"Puzzle Themes","desc":"A mix of everything."}}',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = PuzzleRepository(client);
+
+      final remaining = await repo.puzzleReplay(30, 'mix');
+
+      expect(remaining.length, 3);
+      expect(remaining.first, const PuzzleId('EUX2q'));
+    });
+
+    test('puzzle replay empty', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/replay/30/mix') {
+          return mockResponse(
+            '{"replay":{"days":30,"theme":"mix","nb":0,"remaining":[]},"angle":{"key":"mix","name":"Puzzle Themes","desc":"A mix of everything."}}',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = PuzzleRepository(client);
+
+      final remaining = await repo.puzzleReplay(30, 'mix');
+
+      expect(remaining, isEmpty);
     });
 
     test('puzzle activity', () async {
