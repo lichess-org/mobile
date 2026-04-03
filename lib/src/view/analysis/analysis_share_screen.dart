@@ -59,7 +59,10 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
       _focusNodes[entry.key] = FocusNode();
       _focusNodes[entry.key]!.addListener(() {
         if (!_focusNodes[entry.key]!.hasFocus) {
-          ref.read(ctrlProvider.notifier).updatePgnHeader(entry.key, _controllers[entry.key]!.text);
+          final controller = _controllers[entry.key];
+          if (controller != null) {
+            ref.read(ctrlProvider.notifier).updatePgnHeader(entry.key, controller.text);
+          }
         }
       });
     }
@@ -162,6 +165,15 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                   builder: (context) {
                     return FilledButton(
                       onPressed: () {
+                        for (final entry in pgnHeaders.entries) {
+                          final controller = _controllers[entry.key];
+                          if (controller == null) {
+                            throw StateError('Controller missing for key: ${entry.key}');
+                          }
+                          ref
+                              .read(ctrlProvider.notifier)
+                              .updatePgnHeader(entry.key, controller.text);
+                        }
                         launchShareDialog(
                           context,
                           ShareParams(
