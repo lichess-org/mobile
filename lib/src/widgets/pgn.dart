@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const innacuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
@@ -1456,11 +1458,42 @@ class _MoveContextMenu extends ConsumerWidget {
   }
 }
 
-List<TextSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) => comments
-    .map(
-      (comment) => TextSpan(
-        text: comment,
-        style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2.0),
-      ),
-    )
-    .toList(growable: false);
+List<TextSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) {
+  final urlRegex = RegExp(r'(https?:\/\/[^\s]+)');
+
+  return comments
+      .expand((comment) {
+        final spans = <TextSpan>[];
+
+        final parts = comment.split(urlRegex);
+        final matches = urlRegex.allMatches(comment).toList();
+
+        for (int i = 0; i < parts.length; i++) {
+          spans.add(
+            TextSpan(
+              text: parts[i],
+              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+            ),
+          );
+
+          if (i < matches.length) {
+            final url = matches[i].group(0)!;
+
+            spans.add(
+              TextSpan(
+                text: url,
+                style: textStyle.copyWith(
+                  fontSize: textStyle.fontSize! - 2,
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(url)),
+              ),
+            );
+          }
+        }
+
+        return spans;
+      })
+      .toList(growable: false);
+}
