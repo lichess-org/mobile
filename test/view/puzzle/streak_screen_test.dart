@@ -5,6 +5,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -117,6 +118,69 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+    });
+
+    testWidgets('hasSkipped is persisted when exiting after skip', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solve first puzzle to get index that is bigger than 0 (so back button shows dialog)
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+
+      // verify skip button is enabled on second puzzle
+      final skipButtonFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Skip this move',
+      );
+      expect(skipButtonFinder, findsOneWidget);
+      expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNotNull);
+
+      await tester.tap(find.byTooltip('Skip this move'));
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // verify skip button is now disabled
+      expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNull);
+
+      // exit screen
+      await tester.pageBack();
+      await tester.pump();
+      await tester.tap(find.text('Yes'));
+      await tester.pumpAndSettle();
+
+      // re-enter streak screen
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // verify skip button is still disabled after resume
+      expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNull);
     });
 
     testWidgets('failing first puzzle allows restart correctly', (tester) async {
