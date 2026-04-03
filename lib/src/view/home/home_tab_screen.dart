@@ -561,6 +561,11 @@ class _EditableWidget extends ConsumerWidget {
               Expanded(
                 child: IgnorePointer(ignoring: isEditing, child: child),
               ),
+              if (widget == HomeEditableWidget.quickPairing)
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => showTimeControlPicker(context, ref),
+                ),
             ],
           )
         : widget.alwaysEnabled || isEnabled
