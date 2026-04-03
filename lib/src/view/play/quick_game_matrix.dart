@@ -286,10 +286,12 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                     CupertinoDialogAction(
                       isDefaultAction: true,
                       onPressed: () {
-                        ref.read(homePreferencesProvider.notifier).setTimeControlConfig(
-                          disabledTimeControls: IList(disabledControls),
-                          customButtonEnabled: customEnabled,
-                        );
+                        ref
+                            .read(homePreferencesProvider.notifier)
+                            .setTimeControlConfig(
+                              disabledTimeControls: IList(disabledControls),
+                              customButtonEnabled: customEnabled,
+                            );
                         Navigator.of(context).pop();
                       },
                       child: Text(context.l10n.mobileOkButton),
@@ -302,10 +304,12 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                     ),
                     TextButton(
                       onPressed: () {
-                        ref.read(homePreferencesProvider.notifier).setTimeControlConfig(
-                          disabledTimeControls: IList(disabledControls),
-                          customButtonEnabled: customEnabled,
-                        );
+                        ref
+                            .read(homePreferencesProvider.notifier)
+                            .setTimeControlConfig(
+                              disabledTimeControls: IList(disabledControls),
+                              customButtonEnabled: customEnabled,
+                            );
                         Navigator.of(context).pop();
                       },
                       child: Text(context.l10n.mobileOkButton),
