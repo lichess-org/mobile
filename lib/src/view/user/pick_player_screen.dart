@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -46,18 +45,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(followingStatusesProvider)) {
-      case AsyncData(value: (final following, final statuses)):
-        final online = <User>[];
-        final offline = <User>[];
-        final statusMap = {for (final status in statuses) status.id: status}.lock;
-        for (final user in following) {
-          if (statusMap[user.id]?.online ?? false) {
-            online.add(user);
-          } else {
-            offline.add(user);
-          }
-        }
+    switch (ref.watch(onlineAndFollowingProvider)) {
+      case AsyncData(value: (final online, final following)):
         return _PlayersList(
           onUserTap: onUserTap,
           children: [
@@ -65,15 +54,15 @@ class _Body extends ConsumerWidget {
               ListSection(
                 header: Text(context.l10n.nbFriendsOnline(online.length)),
                 children: [
-                  for (final user in online)
-                    _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
+                  for (final friend in online)
+                    _FriendTile(friend: friend.user, onUserTap: onUserTap),
                 ],
               ),
-            if (offline.isNotEmpty)
+            if (following.isNotEmpty)
               ListSection(
                 header: Text(context.l10n.following),
                 children: [
-                  for (final user in offline)
+                  for (final user in following)
                     _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
                 ],
               ),
@@ -83,7 +72,7 @@ class _Body extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PickPlayerScreen] could not load following users; $error\n$stackTrace',
         );
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(onlineAndFollowingProvider));
       case _:
         return _PlayersList(
           onUserTap: onUserTap,

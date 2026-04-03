@@ -6,7 +6,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,19 +20,19 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
-  ref,
-) async {
-  final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
-  if (following.isEmpty) {
-    return (IList<User>(), IList<UserStatus>());
-  }
-
-  final statuses = await ref
-      .read(userRepositoryProvider)
-      .getUsersStatuses(following.map((user) => user.id).toISet());
-  return (following, statuses);
+final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
+  return ref.withClient((client) => RelationRepository(client).getFollowing());
 });
+
+final onlineAndFollowingProvider =
+    FutureProvider.autoDispose<(IList<OnlineFriend> onlineFriends, IList<User> following)>((
+      ref,
+    ) async {
+      final onlineFriends = await ref.watch(onlineFriendsProvider.future);
+      final following = await ref.watch(followingProvider.future);
+
+      return (onlineFriends, following);
+    });
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
@@ -63,9 +62,9 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final followingAndOnlines = ref.watch(followingStatusesProvider);
+    final onlineAndFollowing = ref.watch(onlineAndFollowingProvider);
 
-    switch (followingAndOnlines) {
+    switch (onlineAndFollowing) {
       case AsyncData(:final value):
         return PlatformScaffold(
           appBar: PlatformAppBar(
@@ -73,16 +72,17 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
             bottom: TabBar(
               controller: _tabController,
               tabs: <Widget>[
-                Tab(
-                  text: context.l10n.nbFriendsOnline(
-                    value.$2.where((status) => status.online ?? false).length,
-                  ),
-                ),
-                Tab(text: context.l10n.nbFollowing(value.$1.length)),
+                Tab(text: context.l10n.nbFriendsOnline(value.$1.length)),
+                Tab(text: context.l10n.nbFollowing(value.$2.length)),
               ],
             ),
           ),
           body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
+        );
+      case AsyncError():
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
+          body: FullScreenRetryRequest(onRetry: () => ref.invalidate(onlineAndFollowingProvider)),
         );
       case _:
         return PlatformScaffold(
@@ -199,11 +199,11 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(followingStatusesProvider);
+    final following = ref.watch(followingProvider);
 
-    switch (followingAndOnlines) {
+    switch (following) {
       case AsyncData(:final value):
-        IList<User> following = value.$1;
+        IList<User> following = value;
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
@@ -247,7 +247,6 @@ class _Following extends ConsumerWidget {
                   ),
                   child: UserListTile.fromUser(
                     user,
-                    _isOnline(user, value.$2),
                     onTap: () => {
                       Navigator.of(
                         context,
@@ -261,13 +260,9 @@ class _Following extends ConsumerWidget {
         );
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
       case _:
         return const CenterLoadingIndicator();
     }
-  }
-
-  bool _isOnline(User user, IList<UserStatus> statuses) {
-    return statuses.firstWhere((status) => status.id == user.id).online ?? false;
   }
 }
