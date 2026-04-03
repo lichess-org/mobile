@@ -43,30 +43,21 @@ class HomePreferences extends Notifier<HomePrefs> with SessionPreferencesStorage
     return save(newState);
   }
 
-  Future<void> toggleTimeControl(TimeIncrement tc) {
-    final isDisabled = state.disabledTimeControls.contains(tc);
-    if (!isDisabled) {
-      final enabledCount =
-          TimeIncrement.matrixPresets.length -
-          state.disabledTimeControls.length +
-          (state.customButtonEnabled ? 1 : 0);
-      if (enabledCount <= 1) return Future.value();
-    }
-    final newState = state.copyWith(
-      disabledTimeControls: isDisabled
-          ? state.disabledTimeControls.remove(tc)
-          : state.disabledTimeControls.add(tc),
+  Future<void> setTimeControlConfig({
+    required IList<TimeIncrement> disabledTimeControls,
+    required bool customButtonEnabled,
+  }) {
+    final enabledCount =
+        TimeIncrement.matrixPresets.length -
+        disabledTimeControls.length +
+        (customButtonEnabled ? 1 : 0);
+    if (enabledCount < 1) return Future.value();
+    return save(
+      state.copyWith(
+        disabledTimeControls: disabledTimeControls,
+        customButtonEnabled: customButtonEnabled,
+      ),
     );
-    return save(newState);
-  }
-
-  Future<void> toggleCustomButton() {
-    if (state.customButtonEnabled) {
-      final enabledCount =
-          TimeIncrement.matrixPresets.length - state.disabledTimeControls.length + 1;
-      if (enabledCount <= 1) return Future.value();
-    }
-    return save(state.copyWith(customButtonEnabled: !state.customButtonEnabled));
   }
 }
 

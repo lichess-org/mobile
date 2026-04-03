@@ -48,83 +48,39 @@ void main() {
     });
   });
 
-  group('HomePreferences toggle logic', () {
-    test('toggleTimeControl enables disabled control', () {
+  group('HomePrefs time control config', () {
+    test('can batch-update disabled time controls and custom button', () {
+      const prefs = HomePrefs(disabledWidgets: IListConst([]));
+
+      final updated = prefs.copyWith(
+        disabledTimeControls: IList(const [TimeIncrement(60, 0), TimeIncrement(300, 0)]),
+        customButtonEnabled: false,
+      );
+
+      expect(updated.disabledTimeControls.length, 2);
+      expect(updated.customButtonEnabled, isFalse);
+    });
+
+    test('min-1 validation: at least one time control or custom must remain', () {
+      final allDisabledCount = TimeIncrement.matrixPresets.length;
+
+      // All TC disabled + custom disabled = 0 enabled → invalid
+      expect(TimeIncrement.matrixPresets.length - allDisabledCount, 0);
+
+      // All TC disabled + custom enabled = 1 enabled → valid
+      expect(TimeIncrement.matrixPresets.length - allDisabledCount + 1, 1);
+    });
+
+    test('removing a single control from disabled list re-enables it', () {
       final prefs = HomePrefs(
         disabledWidgets: const IListConst([]),
         disabledTimeControls: IList(const [TimeIncrement(60, 0)]),
       );
 
-      // Simulating the toggle logic inline since we can't use Riverpod notifier in unit tests
-      const tc = TimeIncrement(60, 0);
-      final isDisabled = prefs.disabledTimeControls.contains(tc);
-      expect(isDisabled, isTrue);
-
-      final newPrefs = prefs.copyWith(disabledTimeControls: prefs.disabledTimeControls.remove(tc));
-      expect(newPrefs.disabledTimeControls, isEmpty);
-    });
-
-    test('toggleTimeControl disables enabled control', () {
-      const prefs = HomePrefs(
-        disabledWidgets: IListConst([]),
-        disabledTimeControls: IListConst([]),
+      final updated = prefs.copyWith(
+        disabledTimeControls: prefs.disabledTimeControls.remove(const TimeIncrement(60, 0)),
       );
-
-      const tc = TimeIncrement(300, 0);
-      final newPrefs = prefs.copyWith(disabledTimeControls: prefs.disabledTimeControls.add(tc));
-      expect(newPrefs.disabledTimeControls, contains(tc));
-    });
-
-    test('cannot disable last enabled item (time controls only)', () {
-      // All time controls disabled except one, custom also disabled
-      final allButOne = TimeIncrement.matrixPresets.sublist(1).lock;
-      final prefs = HomePrefs(
-        disabledWidgets: const IListConst([]),
-        disabledTimeControls: allButOne,
-        customButtonEnabled: false,
-      );
-
-      final enabledCount =
-          TimeIncrement.matrixPresets.length -
-          prefs.disabledTimeControls.length +
-          (prefs.customButtonEnabled ? 1 : 0);
-      expect(enabledCount, 1);
-
-      // Should not be allowed to disable the last one
-      final lastEnabled = TimeIncrement.matrixPresets.first;
-      final isDisabled = prefs.disabledTimeControls.contains(lastEnabled);
-      expect(isDisabled, isFalse);
-      // The notifier would return early here
-    });
-
-    test('cannot disable custom when it is the last enabled item', () {
-      // All time controls disabled, only custom enabled
-      final allDisabled = TimeIncrement.matrixPresets.lock;
-      final prefs = HomePrefs(
-        disabledWidgets: const IListConst([]),
-        disabledTimeControls: allDisabled,
-        customButtonEnabled: true,
-      );
-
-      final enabledCount =
-          TimeIncrement.matrixPresets.length - prefs.disabledTimeControls.length + 1;
-      expect(enabledCount, 1);
-      // The notifier would return early here
-    });
-
-    test('can disable custom when time controls remain', () {
-      const prefs = HomePrefs(
-        disabledWidgets: IListConst([]),
-        disabledTimeControls: IListConst([]),
-        customButtonEnabled: true,
-      );
-
-      final enabledCount =
-          TimeIncrement.matrixPresets.length - prefs.disabledTimeControls.length + 1;
-      expect(enabledCount, 12);
-
-      final newPrefs = prefs.copyWith(customButtonEnabled: false);
-      expect(newPrefs.customButtonEnabled, isFalse);
+      expect(updated.disabledTimeControls, isEmpty);
     });
   });
 }

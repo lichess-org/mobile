@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -285,7 +286,10 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                     CupertinoDialogAction(
                       isDefaultAction: true,
                       onPressed: () {
-                        _applyTimeControlChanges(ref, disabledControls, customEnabled);
+                        ref.read(homePreferencesProvider.notifier).setTimeControlConfig(
+                          disabledTimeControls: IList(disabledControls),
+                          customButtonEnabled: customEnabled,
+                        );
                         Navigator.of(context).pop();
                       },
                       child: Text(context.l10n.mobileOkButton),
@@ -298,7 +302,10 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                     ),
                     TextButton(
                       onPressed: () {
-                        _applyTimeControlChanges(ref, disabledControls, customEnabled);
+                        ref.read(homePreferencesProvider.notifier).setTimeControlConfig(
+                          disabledTimeControls: IList(disabledControls),
+                          customButtonEnabled: customEnabled,
+                        );
                         Navigator.of(context).pop();
                       },
                       child: Text(context.l10n.mobileOkButton),
@@ -309,25 +316,4 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
       );
     },
   );
-}
-
-void _applyTimeControlChanges(
-  WidgetRef ref,
-  Set<TimeIncrement> disabledControls,
-  bool customEnabled,
-) {
-  final notifier = ref.read(homePreferencesProvider.notifier);
-  final currentPrefs = ref.read(homePreferencesProvider);
-
-  for (final tc in TimeIncrement.matrixPresets) {
-    final isCurrentlyDisabled = currentPrefs.disabledTimeControls.contains(tc);
-    final shouldBeDisabled = disabledControls.contains(tc);
-    if (isCurrentlyDisabled != shouldBeDisabled) {
-      notifier.toggleTimeControl(tc);
-    }
-  }
-
-  if (currentPrefs.customButtonEnabled != customEnabled) {
-    notifier.toggleCustomButton();
-  }
 }
