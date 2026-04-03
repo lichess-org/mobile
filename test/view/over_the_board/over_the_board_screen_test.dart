@@ -29,6 +29,11 @@ import '../../test_provider_scope.dart';
 // A position after 1.e4 e5 — white to move
 const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
+// Antichess position one move before stalemate:
+// White pawn on a5, black pawn on a7. White to move plays a6, blocking black's pawn.
+// Black has no legal moves = stalemate = black wins in antichess.
+const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
+
 class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
 
 void main() {
@@ -542,6 +547,52 @@ void main() {
       expect(gameState.game.initialFen, isNull);
       expect(gameState.game.steps.length, 1);
       expect(gameState.game.steps.first.position, Chess.initial);
+    });
+
+    testWidgets('Antichess stalemate is a win, not a draw', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(
+        () => gameStorage.save(
+          any(),
+          timeIncrement: any(named: 'timeIncrement'),
+          whiteTimeLeft: any(named: 'whiteTimeLeft'),
+          blackTimeLeft: any(named: 'blackTimeLeft'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(
+          initialVariant: Variant.antichess,
+          initialFen: _antichessStalemateFen,
+        ),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // White plays a5-a6, blocking black's pawn. Black has no legal moves = stalemate.
+      // In antichess, the stalemated player (black) wins.
+      await playMove(tester, 'a5', 'a6');
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+
+      // Verify it's a win for black (0-1), not a draw (½-½)
+      expect(find.text('0-1'), findsOneWidget);
+      expect(find.textContaining('Black is victorious'), findsOneWidget);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final gameState = container.read(overTheBoardGameControllerProvider);
+      expect(gameState.game.status, GameStatus.variantEnd);
+      expect(gameState.game.winner, Side.black);
     });
 
     testWidgets('Rematch from custom position and variant restarts from same FEN and variant', (
