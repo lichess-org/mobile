@@ -5,7 +5,10 @@ import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:linkify/linkify.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -524,8 +527,15 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
               vertical: kCommentVerticalPadding,
               horizontal: kViewHorizontalPadding,
             ),
-            child: Text.rich(
-              TextSpan(children: _comments(rootComments, textStyle: _baseTextStyle)),
+            child: Consumer(
+              builder: (context, ref, _) => Linkify(
+                onOpen: (link) async =>
+                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                linkifiers: AppLinksService.kLichessLinkifiers,
+                text: rootComments.join(' '),
+                style: _baseTextStyle.copyWith(fontSize: _baseTextStyle.fontSize! - 2),
+                linkStyle: Styles.linkStyle,
+              ),
             ),
           ),
         ...subtrees
@@ -833,8 +843,13 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
         if (params.shouldShowComments && lastBranch?.hasTextComment == true)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: kViewHorizontalPadding),
-            child: Text.rich(
-              TextSpan(children: _comments(lastBranch!.textComments, textStyle: textStyle)),
+            child: Linkify(
+              onOpen: (link) async =>
+                  await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+              linkifiers: AppLinksService.kLichessLinkifiers,
+              text: lastBranch!.textComments.join(' '),
+              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+              linkStyle: Styles.linkStyle,
             ),
           ),
       ],
@@ -1458,42 +1473,23 @@ class _MoveContextMenu extends ConsumerWidget {
   }
 }
 
-List<TextSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) {
-  final urlRegex = RegExp(r'(https?:\/\/[^\s]+)');
-
+List<InlineSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) {
   return comments
       .expand((comment) {
-        final spans = <TextSpan>[];
-
-        final parts = comment.split(urlRegex);
-        final matches = urlRegex.allMatches(comment).toList();
-
-        for (int i = 0; i < parts.length; i++) {
-          spans.add(
-            TextSpan(
-              text: parts[i],
-              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
-            ),
-          );
-
-          if (i < matches.length) {
-            final url = matches[i].group(0)!;
-
-            spans.add(
-              TextSpan(
-                text: url,
-                style: textStyle.copyWith(
-                  fontSize: textStyle.fontSize! - 2,
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
-                ),
-                recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(url)),
-              ),
+        final elements = linkify(comment, options: const LinkifyOptions(humanize: false));
+        return elements.map((element) {
+          if (element is LinkableElement) {
+            return TextSpan(
+              text: element.text,
+              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2).merge(Styles.linkStyle),
+              recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(element.url)),
             );
           }
-        }
-
-        return spans;
+          return TextSpan(
+            text: element.text,
+            style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+          );
+        });
       })
       .toList(growable: false);
 }
