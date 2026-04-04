@@ -306,22 +306,28 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     onPressed: timeControl == ChallengeTimeControlType.clock || widget.user == null
                         ? isValidTimeControl && isValidPosition
                               ? () {
+                                  final source = UserChallengeSource(
+                                    preferences.makeRequest(
+                                      account,
+                                      widget.user,
+                                      preferences.variant != Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+                                  // Invalidate any stale provider state from a previous game
+                                  // with the same source (same opponent + settings), so the
+                                  // new GameScreen always runs build() and creates a fresh
+                                  // challenge instead of showing the old GameCreatedState.
+                                  ref.invalidate(gameScreenLoaderProvider(source));
                                   Navigator.of(
                                     context,
                                   ).popUntil((route) => route is! ModalBottomSheetRoute);
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    GameScreen.buildRoute(
-                                      context,
-                                      source: UserChallengeSource(
-                                        preferences.makeRequest(
-                                          account,
-                                          widget.user,
-                                          preferences.variant != Variant.fromPosition
-                                              ? null
-                                              : fromPositionFenInput,
-                                        ),
-                                      ),
-                                    ),
+                                  // Use pushAndRemoveUntil to clear any old GameScreen with
+                                  // the same source from the navigation stack.
+                                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                    GameScreen.buildRoute(context, source: source),
+                                    (route) => route.isFirst,
                                   );
                                 }
                               : null
