@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -99,6 +100,52 @@ void main() {
       expect(
         tester.widget(find.byType(TournamentScreen)),
         isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
+      );
+    });
+
+    testWidgets('resolves /broadcast/.../{roundId}#players to players tab', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/broadcast/grenke-chess-festival-2026--freestyle-open-a/round-3/ioIYmuar#players',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(BroadcastRoundScreenLoading)),
+        isA<BroadcastRoundScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
+      );
+    });
+
+    testWidgets('resolves /broadcast/.../{roundId}#players/{fideId} to player results screen', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/broadcast/grenke-chess-festival-2026--freestyle-open-a/round-3/ioIYmuar#players/250511',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      // Top of stack: player results screen
+      expect(
+        tester.widget(find.byType(BroadcastPlayerResultsScreenLoading)),
+        isA<BroadcastPlayerResultsScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.playerId, 'id', '250511'),
+      );
+
+      // Back navigates to the round screen on the players tab
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(BroadcastRoundScreenLoading)),
+        isA<BroadcastRoundScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
       );
     });
 
