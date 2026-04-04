@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -26,11 +27,16 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
+import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -43,17 +49,12 @@ class StreakScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Streak')),
-        body: const _Load(),
-      ),
-    );
+    return const _StreakLoader();
   }
 }
 
-class _Load extends ConsumerWidget {
-  const _Load();
+class _StreakLoader extends ConsumerWidget {
+  const _StreakLoader();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,20 +64,55 @@ class _Load extends ConsumerWidget {
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+        return _StreakScaffold(
+          initialPuzzleContext: null,
+          body: PuzzleErrorBoardWidget(errorMessage: error.toString()),
+        );
       case AsyncValue(:final value?):
-        return _Body(
-          initialPuzzleContext: PuzzleContext(
-            puzzle: value.puzzle,
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            userId: authUser?.user.id,
-            isPuzzleStreak: true,
-          ),
-          streak: value.streak,
+        final initialPuzzleContext = PuzzleContext(
+          puzzle: value.puzzle,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          userId: authUser?.user.id,
+          isPuzzleStreak: true,
+        );
+        return _StreakScaffold(
+          initialPuzzleContext: initialPuzzleContext,
+          body: _Body(initialPuzzleContext: initialPuzzleContext, streak: value.streak),
         );
       case _:
-        return const Center(child: CircularProgressIndicator.adaptive());
+        return const _StreakScaffold(
+          initialPuzzleContext: null,
+          body: Center(child: CircularProgressIndicator.adaptive()),
+        );
     }
+  }
+}
+
+class _StreakScaffold extends StatelessWidget {
+  const _StreakScaffold({required this.initialPuzzleContext, required this.body});
+
+  final PuzzleContext? initialPuzzleContext;
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context) {
+    return WakelockWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          actions: [
+            const ToggleSoundButton(),
+            if (initialPuzzleContext != null) _StreakSettingsButton(initialPuzzleContext!),
+          ],
+          title: const Text('Puzzle Streak'),
+        ),
+        body: body,
+      ),
+    );
   }
 }
 
@@ -125,7 +161,10 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
-        ref.read(puzzleStreakControllerProvider.notifier).next();
+        final autoNext = ref.read(puzzlePreferencesProvider).autoNext;
+        if (autoNext) {
+          ref.read(puzzleStreakControllerProvider.notifier).next();
+        }
       }
     });
 
@@ -461,17 +500,21 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+
+    final bool isInReviewMode =
+        streak.finished || (!autoNext && puzzleState.result == PuzzleResult.win);
 
     return BottomBar(
       children: [
-        if (!streak.finished)
+        if (!isInReviewMode)
           BottomBarButton(
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Streak'),
             showLabel: true,
             onTap: () => _streakInfoDialogBuilder(context),
           ),
-        if (!streak.finished)
+        if (!isInReviewMode)
           BottomBarButton(
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
@@ -483,7 +526,7 @@ class _BottomBar extends ConsumerWidget {
                     ref.read(puzzleStreakControllerProvider.notifier).skipMove();
                   },
           ),
-        if (streak.finished)
+        if (isInReviewMode)
           BottomBarButton(
             onTap: () {
               launchShareDialog(
@@ -496,7 +539,7 @@ class _BottomBar extends ConsumerWidget {
             label: 'Share this puzzle',
             icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
-        if (streak.finished)
+        if (isInReviewMode)
           BottomBarButton(
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
@@ -516,7 +559,7 @@ class _BottomBar extends ConsumerWidget {
             label: context.l10n.analysis,
             icon: Icons.biotech,
           ),
-        if (streak.finished)
+        if (isInReviewMode)
           BottomBarButton(
             onTap: puzzleState.canGoBack
                 ? () => ref.read(ctrlProvider.notifier).userPrevious()
@@ -524,19 +567,27 @@ class _BottomBar extends ConsumerWidget {
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
           ),
-        if (streak.finished)
+        if (isInReviewMode)
           BottomBarButton(
             onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
             label: context.l10n.next,
             icon: CupertinoIcons.chevron_forward,
           ),
-        if (streak.finished)
+        if (isInReviewMode)
           BottomBarButton(
             onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
-                ? () => ref.invalidate(puzzleStreakControllerProvider)
+                ? () {
+                    if (streak.finished) {
+                      ref.invalidate(puzzleStreakControllerProvider);
+                    } else {
+                      ref.read(puzzleStreakControllerProvider.notifier).next();
+                    }
+                  }
                 : null,
             highlighted: true,
-            label: context.l10n.puzzleNewStreak,
+            label: streak.finished
+                ? context.l10n.puzzleNewStreak
+                : context.l10n.puzzleContinueTraining,
             icon: CupertinoIcons.play_arrow_solid,
           ),
       ],
@@ -556,6 +607,74 @@ class _BottomBar extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _StreakSettingsButton extends StatelessWidget {
+  const _StreakSettingsButton(this.initialPuzzleContext);
+
+  final PuzzleContext initialPuzzleContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return SemanticIconButton(
+      onPressed: () => showModalBottomSheet<void>(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        builder: (_) => _StreakSettingsBottomSheet(initialPuzzleContext),
+      ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
+  }
+}
+
+class _StreakSettingsBottomSheet extends ConsumerWidget {
+  const _StreakSettingsBottomSheet(this.initialPuzzleContext);
+
+  final PuzzleContext initialPuzzleContext;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.only(bottom: 16),
+      children: [
+        ListSection(
+          header: Text(context.l10n.settingsSettings),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
+              value: autoNext,
+              onChanged: (value) {
+                ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+
+                // Smart auto-advance: if enabling autoNext while puzzle is already won
+                if (value &&
+                    ref.read(puzzleControllerProvider(initialPuzzleContext)).result ==
+                        PuzzleResult.win) {
+                  ref.read(puzzleStreakControllerProvider.notifier).next();
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+            ListTile(
+              title: Text(context.l10n.mobileBoardSettings),
+              trailing: const CupertinoListTileChevron(),
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
