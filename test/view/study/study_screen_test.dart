@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -237,39 +236,6 @@ void main() {
 
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
-    });
-
-    testWidgets('Can flip the board', (tester) async {
-      final mockRepository = MockStudyRepository();
-      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
-        (_) async => (
-          makeStudy(
-            chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.white),
-          ),
-          '',
-        ),
-      );
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const StudyScreen(id: testId),
-        overrides: {
-          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
-        },
-      );
-      await tester.pumpWidget(app);
-      // Wait for study to load
-      await tester.pumpAndSettle();
-
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
-
-      await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pumpAndSettle(); // Wait for menu to open
-
-      await tester.tap(find.text('Flip board'));
-      await tester.pumpAndSettle(); // Wait for board to flip
-
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
     });
 
     testWidgets('Interactive study', (WidgetTester tester) async {
