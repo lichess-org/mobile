@@ -87,7 +87,7 @@
   <string name="timePlaying">奕棋時間</string>
   <string name="variantXOverLastY">%1$s 超過了最近的 %2$s</string>
   <string name="winrate">勝率</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">概覽</string>
   <string name="news">最新消息</string>
   <string name="classNews">課程消息</string>
@@ -112,7 +112,7 @@
   <string name="xisNowAStudentOfTheClass">%s 現在是班級的學生</string>
   <string name="anInvitationHasBeenSentToX">邀請已發送到 %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s 已經有待處理的邀請</string>
-  <string name="xIsAKidAccountWarning">%1$s 是未成年帳戶，無法接收您的消息。您必須手動給他發送邀請鏈接： %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s 是未成年帳戶，無法接收您的消息。您必須手動給他發送邀請鏈接： %2$s</string>
   <string name="moveToClass">移動到 %s</string>
   <string name="moveToAnotherClass">移動到另一個課程</string>
   <string name="allowMessagingBetweenStudents">允許學生之間的消息</string>

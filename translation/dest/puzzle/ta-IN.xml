@@ -13,9 +13,9 @@
   <string name="specialMoves">சிறப்பு நகர்வுகள்</string>
   <string name="didYouLikeThisPuzzle">இந்தப் புதிர் நீங்கள் விரும்புகிறீர்களா?</string>
   <string name="voteToLoadNextOne">அடுத்ததை ஏற்றுவதற்கு வாக்களியுங்கள்!</string>
-  <string name="upVote">மேல் வாக்குப் புதிர்</string>
-  <string name="downVote">கீழ் வாக்குப் புதிர்</string>
-  <string name="yourPuzzleRatingWillNotChange">உங்கள் புதிர் மதிப்பீடு மாறாது. புதிர்கள் போட்டிகள் அல்ல என்பதை நினைவிற் கொள்க. உங்களின் மதிப்பீடு உங்களிற்கு உகந்த புதிரைத் தேர்ந்தெடுக்க உதவுகின்றது.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">மேல் வாக்குப் புதிர்</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">கீழ் வாக்குப் புதிர்</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">உங்கள் புதிர் மதிப்பீடு மாறாது. புதிர்கள் போட்டிகள் அல்ல என்பதை நினைவிற் கொள்க. உங்களின் மதிப்பீடு உங்களிற்கு உகந்த புதிரைத் தேர்ந்தெடுக்க உதவுகின்றது.</string>
   <string name="findTheBestMoveForWhite">வெள்ளைக்கு சிறந்த நகர்த்தலை கண்டறியுங்கள்.</string>
   <string name="findTheBestMoveForBlack">கருப்புக்குச் சிறந்த நகர்த்தலைக் கண்டறியுங்கள்.</string>
   <string name="toGetPersonalizedPuzzles">உங்களின் விருப்பத்திற்குரிய புதிர்களைப் பெற:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">எனது விளையாட்டுக்களிலிருந்து</string>
   <string name="lookupOfPlayer">வீரர்களின் விளையாட்டுகளிலிருந்து புதிர்களைத் தேடுங்கள்</string>
   <string name="searchPuzzles">புதிர்களைத் தேட</string>
-  <string name="fromMyGamesNone">தரவுத்தளத்தில் உங்களுக்குரிய புதிர்கள் ஏதுமில்லை, ஆனாலும் Lichess உங்களை மிகவும் விரும்புகின்றது!
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">தரவுத்தளத்தில் உங்களுக்குரிய புதிர்கள் ஏதுமில்லை, ஆனாலும் Lichess உங்களை மிகவும் விரும்புகின்றது!
 
 உங்கள் புதிர் சேர்க்கப்படுவதற்கான வாய்ப்புகளை அதிகரிக்க துரிதம் மற்றும் செவ்வியல் ஆட்டங்களை விளையாடுங்கள்!</string>
   <plurals name="puzzlesFoundInUserGames">
@@ -93,6 +93,6 @@
   </plurals>
   <string name="percentSolved">%s தீர்க்கப்பட்டது</string>
   <string name="noPuzzlesToShow">காட்சிப்படுத்துவதற்கு எதுவுமில்லை. முதலில் சில புதிர்களைத் தீர்க்கவும்!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">உங்கள் முன்னேற்றத்தை உகப்பாக்க இவற்றைப் பயிலவும்!</string>
+  <string name="improvementAreasDescription">உங்கள் முன்னேற்றத்தை உகப்பாக்க இவற்றைப் பயிலவும்!</string>
   <string name="strengthDescription">இந்தக் கருப்பொருளில் நீங்கள் சிறப்பாக விளையாடினீர்கள்</string>
 </resources>

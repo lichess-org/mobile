@@ -21,10 +21,10 @@
   <string name="ongoing">Devam eden turnuvalar</string>
   <string name="upcoming">Yaklaşan turnuvalar</string>
   <string name="roundName">Tur ismi</string>
-  <string name="tournamentName">Turnuva ismi</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnuva ismi</string>
   <string name="tournamentDescription">Turnuvanın kısa tanımı</string>
-  <string name="fullDescription">Etkinliğin detaylıca açıklaması</string>
-  <string name="fullDescriptionHelp">Etkinliğin isteğe bağlı detaylı açıklaması. %1$s seçeneği mevcuttur. Metnin uzunluğu azami %2$s karakter olmalıdır.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Etkinliğin detaylıca açıklaması</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Etkinliğin isteğe bağlı detaylı açıklaması. %1$s seçeneği mevcuttur. Metnin uzunluğu azami %2$s karakter olmalıdır.</string>
   <string name="sourceSingleUrl">PGN Kaynak URL\'si</string>
   <string name="sourceUrlHelp">Lichess, sağladığınız URL yardımıyla PGN\'yi güncelleyecektir. İnternet üzerinden herkese açık bir URL yazmalısınız.</string>
   <string name="sourceGameIds">Boşluklarla ayrılmış 64 adede kadar Lichess oyun ID\'si.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">Yayın henüz başlamadı.</string>
   <string name="officialWebsite">Resmî site</string>
   <string name="officialStandings">Resmi Sıralamalar</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">%snda daha fazla seçenek</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">%snda daha fazla seçenek</string>
   <string name="webmastersPage">ağ yöneticileri sayfası</string>
   <string name="embedThisBroadcast">İnternet sitenizde bu yayını gömülü paylaşın</string>
   <string name="ratingDiff">Puan farkı</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Puan durumu, yayınlanan maçlar esas alınarak hesaplanır ve resmi sonuçlardan farklılık gösterebilir.</string>
   <string name="allTeams">Tüm takımlar</string>
   <string name="tournamentFormat">Turnuva biçimi</string>
-  <string name="tournamentLocation">Turnuva Konumu</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turnuva Konumu</string>
   <string name="topPlayers">En iyi oyuncular</string>
   <string name="timezone">Zaman dilimi</string>
   <string name="fideRatingCategory">FIDE derecelendirme kategorisi</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Yarı final</string>
   <string name="finals">Final</string>
   <string name="tiebreaks">Beraberlik bozma</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Oyun %s</string>
+  <string name="gameX">Oyun %s</string>
   <string name="knockouts">Eleme</string>
 </resources>

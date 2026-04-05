@@ -91,7 +91,7 @@
   <string name="timePlaying">Време играјући</string>
   <string name="variantXOverLastY">%1$s током претходних %2$s</string>
   <string name="winrate">Проценат победа</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Недоступно</string>
+  <string name="na">Недоступно</string>
   <string name="overview">Преглед</string>
   <string name="news">Вести</string>
   <string name="classNews">Новости са часа</string>
@@ -116,5 +116,5 @@
   <string name="xisNowAStudentOfTheClass">%s је сада ученик у разреду</string>
   <string name="anInvitationHasBeenSentToX">Позивница је послата %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s већ има активну позивницу</string>
-  <string name="xIsAKidAccountWarning">%1$s је дечји налог и не може да прима поруке. Морате им ручно послати линк: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s је дечји налог и не може да прима поруке. Морате им ручно послати линк: %2$s</string>
 </resources>

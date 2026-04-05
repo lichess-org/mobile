@@ -65,7 +65,7 @@
   <string name="fromMyGames">Oyunlarımdan</string>
   <string name="lookupOfPlayer">Bir oyunçunun oyunlarından tapmacalar</string>
   <string name="searchPuzzles">Tapmaca axtar</string>
-  <string name="fromMyGamesNone">Verilənlər bazasında heç bir tapmaca yoxdur, amma Lichess hələ də səni çox sevir.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Verilənlər bazasında heç bir tapmaca yoxdur, amma Lichess hələ də səni çox sevir.
 Bir tapmaca əlavə etmək şansınızı artırmaq üçün sürətli və klassik oyunlar oynayın!</string>
   <string name="puzzleDashboardDescription">Təlim edin, təhlil edin, təkmilləşdirmə edin</string>
   <string name="percentSolved">%s həll edildi</string>

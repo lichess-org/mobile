@@ -87,7 +87,7 @@
   <string name="timePlaying">プレイ時間</string>
   <string name="variantXOverLastY">%1$s（過去 %2$s 間）</string>
   <string name="winrate">勝率</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">(無関係)</string>
+  <string name="na">(無関係)</string>
   <string name="overview">概要</string>
   <string name="news">ニュース</string>
   <string name="classNews">教室ニュース</string>
@@ -111,14 +111,14 @@
   <string name="xisNowAStudentOfTheClass">%s は現在この教室の生徒です</string>
   <string name="anInvitationHasBeenSentToX">%s に招待が送信されました</string>
   <string name="xAlreadyHasAPendingInvitation">%s はすでに招待ずみです</string>
-  <string name="xIsAKidAccountWarning">%1$s は子供のアカウントで、あなたのメッセージを受信できません。招待 URL を手動で伝えてください： %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s は子供のアカウントで、あなたのメッセージを受信できません。招待 URL を手動で伝えてください： %2$s</string>
   <string name="moveToClass">%s へ移動</string>
   <string name="moveToAnotherClass">別のクラスに移動</string>
   <string name="allowMessagingBetweenStudents">生徒どうしのメッセージを許可</string>
   <string name="allowMessagingBetweenStudentsDesc">これはあなたが生徒のために作成したアカウントにのみ適用されます。</string>
   <string name="quickLoginCode">クイックログインコード</string>
   <string name="quickLoginCodes">クイックログインコード</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">%s でこのコードを使うと生徒たちを Lichess にログインさせることができます。</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">%s でこのコードを使うと生徒たちを Lichess にログインさせることができます。</string>
   <string name="quickLoginCodesDesc2">コードが期限切れになると、生徒は手動でログアウトするまでログイン状態のままです。</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">使用期限：%s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">使用期限：%s</string>
 </resources>

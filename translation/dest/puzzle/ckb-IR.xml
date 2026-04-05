@@ -13,9 +13,9 @@
   <string name="specialMoves">جووڵە تایبەتەکان</string>
   <string name="didYouLikeThisPuzzle">ئەم مەتەڵەت بەدڵبوو؟</string>
   <string name="voteToLoadNextOne">دەنگ بدە بۆ بارکردنی دانەی داھاتوو!</string>
-  <string name="upVote">مەتەڵەکەم بەدڵە</string>
-  <string name="downVote">مەتەڵەکەم بەدڵ نییە</string>
-  <string name="yourPuzzleRatingWillNotChange">ڕیزبەندیەکەت گۆڕانکاری بەسەردا نایەت، ئەوەک تێبینییەک، مەتڵەکان پێشبرکێی تێدانییە، ئەو ڕیزبەندییەی کە هەیە تەنها هاوکاری دیاریکردنی باشترین مەتەڵ دەکا کە لەگەڵ ئاستی تۆ گونجاوبێت.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">مەتەڵەکەم بەدڵە</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">مەتەڵەکەم بەدڵ نییە</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">ڕیزبەندیەکەت گۆڕانکاری بەسەردا نایەت، ئەوەک تێبینییەک، مەتڵەکان پێشبرکێی تێدانییە، ئەو ڕیزبەندییەی کە هەیە تەنها هاوکاری دیاریکردنی باشترین مەتەڵ دەکا کە لەگەڵ ئاستی تۆ گونجاوبێت.</string>
   <string name="findTheBestMoveForWhite">دۆزینەوەی باشترین جوڵە بۆ سپی.</string>
   <string name="findTheBestMoveForBlack">دۆزینەوەی باشترین جوڵە بۆ ڕەش.</string>
   <string name="toGetPersonalizedPuzzles">بۆ بەدەستهێنانی مەتەڵی تایبەتی:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">لە یاریەکانمەوە</string>
   <string name="lookupOfPlayer">گەڕان بۆ مەتەڵ لە یاری یاریزانانی ترەوە</string>
   <string name="searchPuzzles">گەڕان بۆ مەتەڵ</string>
-  <string name="fromMyGamesNone">هیچ مەتەڵێکت نییە لە داتابەیس، بەڵام لیچێس هێشتا خۆشەویستی زۆری بۆت هەیە.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">هیچ مەتەڵێکت نییە لە داتابەیس، بەڵام لیچێس هێشتا خۆشەویستی زۆری بۆت هەیە.
 یاری ڕاپید یان کلاسیک بکە بۆ بەرزکردنەوەی چانسی دەستکەوتنی مەتەڵی یاریەکانی خۆت!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">مەتەڵێک لە یارییەکانی %2$sدا دۆزرایەوە</item>
@@ -92,6 +92,6 @@
   </plurals>
   <string name="percentSolved">%s شیکارکراو</string>
   <string name="noPuzzlesToShow">هیچشتێک نییە بۆ نیشاندان، سەرەتا هەندێک مەتەڵ شیکاربکە!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ڕاهێنانی ئەمانە بکە بۆ باشتر بەرەوپێشچوونت!</string>
+  <string name="improvementAreasDescription">ڕاهێنانی ئەمانە بکە بۆ باشتر بەرەوپێشچوونت!</string>
   <string name="strengthDescription">تۆ باشترینت ئەنجامدا لەم بابەتەدا</string>
 </resources>

@@ -90,7 +90,7 @@ Här är länken för att komma till klassen.</string>
   <string name="timePlaying">Speltid</string>
   <string name="variantXOverLastY">%1$s under de senaste %2$s</string>
   <string name="winrate">Segerfrekvens</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Ej tillämpbar</string>
+  <string name="na">Ej tillämpbar</string>
   <string name="overview">Översikt</string>
   <string name="news">Nyheter</string>
   <string name="classNews">Nyheter för klassen</string>
@@ -114,7 +114,7 @@ Här är länken för att komma till klassen.</string>
   <string name="xisNowAStudentOfTheClass">%s är nu student i klassen</string>
   <string name="anInvitationHasBeenSentToX">En inbjudan har skickats till %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s har redan en väntande inbjudan</string>
-  <string name="xIsAKidAccountWarning">%1$s är ett barnkonto och kan inte ta emot ditt meddelande. Du måste ge dem en inbjudningslänk manuellt: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s är ett barnkonto och kan inte ta emot ditt meddelande. Du måste ge dem en inbjudningslänk manuellt: %2$s</string>
   <string name="moveToClass">Flytta till %s</string>
   <string name="moveToAnotherClass">Flytta till en annan klass</string>
 </resources>

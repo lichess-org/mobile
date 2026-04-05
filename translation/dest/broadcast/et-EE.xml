@@ -7,10 +7,10 @@
   <string name="ongoing">Käimas</string>
   <string name="upcoming">Tulemas</string>
   <string name="roundName">Vooru nimi</string>
-  <string name="tournamentName">Turniiri nimi</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turniiri nimi</string>
   <string name="tournamentDescription">Lühike turniiri kirjeldus</string>
-  <string name="fullDescription">Sündmuse täielik kirjeldus</string>
-  <string name="fullDescriptionHelp">Valikuline otseülekande kirjeldus. %1$s on saadaval. Pikkus peab olema maksimaalselt %2$s tähemärki.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Sündmuse täielik kirjeldus</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Valikuline otseülekande kirjeldus. %1$s on saadaval. Pikkus peab olema maksimaalselt %2$s tähemärki.</string>
   <string name="sourceUrlHelp">URL, kust Lichess saab PGN-i värskenduse. See peab olema Internetist kättesaadav.</string>
   <string name="startDateHelp">Valikuline, kui tead millal sündmus algab</string>
   <string name="currentGameUrl">Praeguse mängu URL</string>

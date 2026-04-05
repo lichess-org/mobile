@@ -122,5 +122,5 @@ Beidh líne chothrománach le feiceáil.</string>
   <string name="xisNowAStudentOfTheClass">Is mac léinn den rang é %s anois</string>
   <string name="anInvitationHasBeenSentToX">Tá cuireadh seolta chuig %s</string>
   <string name="xAlreadyHasAPendingInvitation">Tá cuireadh ar feitheamh ag %s cheana féin</string>
-  <string name="xIsAKidAccountWarning">Is cuntas páiste é %1$s agus ní féidir leis do theachtaireacht a fháil. Caithfidh tú an cuiridh URL a thabhairt dóibh de lámh: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">Is cuntas páiste é %1$s agus ní féidir leis do theachtaireacht a fháil. Caithfidh tú an cuiridh URL a thabhairt dóibh de lámh: %2$s</string>
 </resources>

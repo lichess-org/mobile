@@ -14,9 +14,9 @@
   <string name="specialMoves">Speciální tahy</string>
   <string name="didYouLikeThisPuzzle">Líbila se vám tato úloha?</string>
   <string name="voteToLoadNextOne">Hlasujte pro načtení další úlohy!</string>
-  <string name="upVote">Dobrá úloha</string>
-  <string name="downVote">Špatná úloha</string>
-  <string name="yourPuzzleRatingWillNotChange">Vaše hodnocení hádanky se nezmění. Hádanky nejsou soutěží. Hodnocení pomáhá vybírat nejlepší hádanky pro vaši aktuální dovednost.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Dobrá úloha</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Špatná úloha</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Vaše hodnocení hádanky se nezmění. Hádanky nejsou soutěží. Hodnocení pomáhá vybírat nejlepší hádanky pro vaši aktuální dovednost.</string>
   <string name="findTheBestMoveForWhite">Najděte nejlepší tah za bílého.</string>
   <string name="findTheBestMoveForBlack">Najděte nejlepší tah za černého.</string>
   <string name="toGetPersonalizedPuzzles">Personalizované úlohy:</string>
@@ -82,7 +82,7 @@
   <string name="fromMyGames">Z mých partií</string>
   <string name="lookupOfPlayer">Vyhledat úlohy z her hráče</string>
   <string name="searchPuzzles">Hledat hádanky</string>
-  <string name="fromMyGamesNone">V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.
 Hrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!</string>
   <string name="puzzleDashboardDescription">Trénujte, analyzujte, zlepšujte</string>
   <plurals name="nbPlayed">
@@ -99,6 +99,6 @@ Hrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!
   </plurals>
   <string name="percentSolved">%s vyřešeno</string>
   <string name="noPuzzlesToShow">Nic k zobrazení, jděte nejdříve zkusit nějaké úlohy!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Tyto procvičujte pro zlepšení!</string>
+  <string name="improvementAreasDescription">Tyto procvičujte pro zlepšení!</string>
   <string name="strengthDescription">V těchto tématech se vám daří nejvíc</string>
 </resources>

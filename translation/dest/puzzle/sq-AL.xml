@@ -14,9 +14,9 @@
   <string name="specialMoves">Lëvizje speciale</string>
   <string name="didYouLikeThisPuzzle">Ju pëlqeu ky ushtrim?</string>
   <string name="voteToLoadNextOne">Votojeni, që të ngarkohet pasuesi!</string>
-  <string name="upVote">Jepini një votë ushtrimit</string>
-  <string name="downVote">Hiqini një votë ushtrimit</string>
-  <string name="yourPuzzleRatingWillNotChange">Vlerësimi juaj për ushtrimet nuk do të ndryshojë. Kini parasysh se ushtrimet nuk janë garë. Vlerësimi juaj ndihmon në përzgjedhjen e ushtrimeve më të mira për aftësitë tuaja të tanishme.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Jepini një votë ushtrimit</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Hiqini një votë ushtrimit</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Vlerësimi juaj për ushtrimet nuk do të ndryshojë. Kini parasysh se ushtrimet nuk janë garë. Vlerësimi juaj ndihmon në përzgjedhjen e ushtrimeve më të mira për aftësitë tuaja të tanishme.</string>
   <string name="findTheBestMoveForWhite">Gjej lëvizjen më të mirë për të bardhin.</string>
   <string name="findTheBestMoveForBlack">Gjej lëvizjen më të mirë për të ziun.</string>
   <string name="toGetPersonalizedPuzzles">Për të marrë ushtrime të personalizuara:</string>
@@ -74,7 +74,7 @@
   <string name="fromMyGames">Nga lojërat e mia</string>
   <string name="lookupOfPlayer">Kërkoni te ushtrime prej lojërave të një lojtari</string>
   <string name="searchPuzzles">Kërkoni në ushtrime</string>
-  <string name="fromMyGamesNone">S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.
 
 Luani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pasur një ushtrim nga tuajt të shtuar atje!</string>
   <plurals name="puzzlesFoundInUserGames">
@@ -92,6 +92,6 @@ Luani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pas
   </plurals>
   <string name="percentSolved">%s të zgjidhur</string>
   <string name="noPuzzlesToShow">S’ka gjë për shfaqje, shkoni e luani ca ushtrime, së pari!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Stërvituni me këto, që të optimizoni përparimin tuaj!</string>
+  <string name="improvementAreasDescription">Stërvituni me këto, që të optimizoni përparimin tuaj!</string>
   <string name="strengthDescription">Dilni më mirë në këto tema</string>
 </resources>

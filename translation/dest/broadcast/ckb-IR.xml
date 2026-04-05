@@ -16,10 +16,10 @@
   <string name="ongoing">بەردەوامە</string>
   <string name="upcoming">لە داھاتوو دا</string>
   <string name="roundName">ناوی خولەکە</string>
-  <string name="tournamentName">ناوی پاڵەوانێتیەکە</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">ناوی پاڵەوانێتیەکە</string>
   <string name="tournamentDescription">باسی پاڵەوانێتیەکە بکە</string>
-  <string name="fullDescription">بە گشتی باسی پالەوانێتیەکە بکە</string>
-  <string name="fullDescriptionHelp">وەسفێکی درێژی ھەڵبژاردنی پاڵەوانێتییەکە. %1$s بەردەستە. درێژی دەبێت کەمتر بێت لە کاراکتەرەکانی %2$s.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">بە گشتی باسی پالەوانێتیەکە بکە</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">وەسفێکی درێژی ھەڵبژاردنی پاڵەوانێتییەکە. %1$s بەردەستە. درێژی دەبێت کەمتر بێت لە کاراکتەرەکانی %2$s.</string>
   <string name="sourceSingleUrl">بەستەری سەرچاوەی PGN</string>
   <string name="sourceUrlHelp">URL مافی لی چێسە بۆ بەردەست خستنی تازەکردنەوە PGN پێویستە بۆ ھەموان بەردەست بێت لەسەر ئەنتەرنێت</string>
   <string name="startDateHelp">بە ھەلبژاردنی خۆتە چ کاتێک دەس پێ بکات</string>
@@ -54,7 +54,7 @@
   <string name="startVerySoon">پەخشەکە بەمزووانە دەستێدەکات.</string>
   <string name="notYetStarted">پەخشەکە دەستی پێ نەکردووە.</string>
   <string name="officialWebsite">وێبگەی فەرمی</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">ھەڵبژاردەی زیاتر لە %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">ھەڵبژاردەی زیاتر لە %s</string>
   <string name="ratingDiff">جیاوازیی ھەڵسەنگاندن</string>
   <string name="gamesThisTournament">یارییەکانی ئەم پاڵەوانێتییە</string>
   <string name="score">نمرە</string>

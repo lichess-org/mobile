@@ -21,10 +21,10 @@
   <string name="ongoing">Lopend</string>
   <string name="upcoming">Aankomend</string>
   <string name="roundName">Naam ronde</string>
-  <string name="tournamentName">Naam toernooi</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Naam toernooi</string>
   <string name="tournamentDescription">Korte toernooibeschrijving</string>
-  <string name="fullDescription">Volledige beschrijving evenement</string>
-  <string name="fullDescriptionHelp">Optionele lange beschrijving van de uitzending. %1$s is beschikbaar. Totale lengte moet minder zijn dan %2$s tekens.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Volledige beschrijving evenement</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Optionele lange beschrijving van de uitzending. %1$s is beschikbaar. Totale lengte moet minder zijn dan %2$s tekens.</string>
   <string name="sourceSingleUrl">URL van PGN-bron</string>
   <string name="sourceUrlHelp">Link die Lichess gebruikt om PGN updates te krijgen. Deze moet openbaar toegankelijk zijn via internet.</string>
   <string name="sourceGameIds">Tot 64 Lichess partij-ID\'\'s, gescheiden door spaties.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">De uitzending is nog niet begonnen.</string>
   <string name="officialWebsite">Officiële website</string>
   <string name="officialStandings">Officiële standen</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Meer opties voor de %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Meer opties voor de %s</string>
   <string name="webmastersPage">pagina van de webmaster</string>
   <string name="embedThisBroadcast">Deze uitzending insluiten in je website</string>
   <string name="ratingDiff">Ratingverschil</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Standen worden berekend aan de hand van uitgezonden partijen en kunnen verschillen van de officiële resultaten.</string>
   <string name="allTeams">Alle teams</string>
   <string name="tournamentFormat">Toernooivorm</string>
-  <string name="tournamentLocation">Toernooilocatie</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Toernooilocatie</string>
   <string name="topPlayers">Topspelers</string>
   <string name="timezone">Tijdzone</string>
   <string name="fideRatingCategory">FIDE-rating categorie</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Halve finales</string>
   <string name="finals">Finale</string>
   <string name="tiebreaks">Tiebreaks</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Partij %s</string>
+  <string name="gameX">Partij %s</string>
   <string name="knockouts">Afvalrondes</string>
 </resources>

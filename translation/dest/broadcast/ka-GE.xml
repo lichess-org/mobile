@@ -7,9 +7,9 @@
   <string name="ongoing">მიმდინარე</string>
   <string name="upcoming">მოახლოებული</string>
   <string name="roundName">ტურის ნომერი</string>
-  <string name="tournamentName">შეჯიბრის სახელი</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">შეჯიბრის სახელი</string>
   <string name="tournamentDescription">ტურნირი მცირე აღწერა</string>
-  <string name="fullDescription">ტურნირის სრული აღწერა</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">ტურნირის სრული აღწერა</string>
   <string name="currentGameUrl">მიმდინარე პარტიის URL</string>
   <string name="downloadAllRounds">ჩამოტვირთე ყველა ტური</string>
   <string name="resetRound">გადატვირთე ეს ტური</string>

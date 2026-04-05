@@ -12,10 +12,10 @@
   <string name="ongoing">Deurlopend</string>
   <string name="upcoming">Opkomend</string>
   <string name="roundName">Ronde se naam</string>
-  <string name="tournamentName">Toernooi se naam</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Toernooi se naam</string>
   <string name="tournamentDescription">Kort beskrywing van die toernooi</string>
-  <string name="fullDescription">Volle geleentheid beskrywing</string>
-  <string name="fullDescriptionHelp">Opsionele lang beskrywing van die uitsending. %1$s is beskikbaar. Lengte moet minder as %2$s karakters.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Volle geleentheid beskrywing</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Opsionele lang beskrywing van die uitsending. %1$s is beskikbaar. Lengte moet minder as %2$s karakters.</string>
   <string name="sourceSingleUrl">PGN-Bronskakel</string>
   <string name="sourceUrlHelp">URL wat Lichess sal nagaan vir PGN opdaterings. Dit moet openbaar beskikbaar wees vanaf die Internet.</string>
   <string name="startDateHelp">Optioneel, indien jy weet wanner die geleentheid begin</string>

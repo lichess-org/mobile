@@ -21,10 +21,10 @@
   <string name="ongoing">En curso</string>
   <string name="upcoming">Próximamente</string>
   <string name="roundName">Nombre de la ronda</string>
-  <string name="tournamentName">Nombre del torneo</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nombre del torneo</string>
   <string name="tournamentDescription">Breve descripción del torneo</string>
-  <string name="fullDescription">Descripción completa del evento</string>
-  <string name="fullDescriptionHelp">Descripción larga opcional de la emisión. %1$s está disponible. La longitud debe ser inferior a %2$s caracteres.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Descripción completa del evento</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Descripción larga opcional de la emisión. %1$s está disponible. La longitud debe ser inferior a %2$s caracteres.</string>
   <string name="sourceSingleUrl">Enlace de origen del archivo PGN</string>
   <string name="sourceUrlHelp">URL que Lichess comprobará para obtener actualizaciones PGN. Debe ser públicamente accesible desde Internet.</string>
   <string name="sourceGameIds">Hasta 64 identificadores de partidas de Lichess, separados por espacios.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">La transmisión aún no ha comenzado.</string>
   <string name="officialWebsite">Sitio oficial</string>
   <string name="officialStandings">Clasificación oficial</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Más opciones en %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Más opciones en %s</string>
   <string name="webmastersPage">la página del webmaster</string>
   <string name="embedThisBroadcast">Inserta esta transmisión en tu sitio web</string>
   <string name="ratingDiff">Diferencia de puntuación</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Las clasificaciones se calculan con partidas retransmitidas y pueden ser distintas a las oficiales.</string>
   <string name="allTeams">Todos los equipos</string>
   <string name="tournamentFormat">Formato del torneo</string>
-  <string name="tournamentLocation">Ubicación del torneo</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Ubicación del torneo</string>
   <string name="topPlayers">Mejores jugadores</string>
   <string name="timezone">Zona horaria</string>
   <string name="fideRatingCategory">Categoría de calificación de FIDE</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Semifinales</string>
   <string name="finals">Finales</string>
   <string name="tiebreaks">Desempates</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Partida %s</string>
+  <string name="gameX">Partida %s</string>
   <string name="knockouts">Eliminatorias</string>
 </resources>

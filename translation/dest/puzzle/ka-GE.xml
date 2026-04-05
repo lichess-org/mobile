@@ -14,9 +14,9 @@
   <string name="specialMoves">განსაკუთრებული სვლა</string>
   <string name="didYouLikeThisPuzzle">მოგეწონა ეს ამოცანა?</string>
   <string name="voteToLoadNextOne">აირჩიე და ჩატვირთე შემდეგი!</string>
-  <string name="upVote">აირჩიე სავარჯიშო</string>
-  <string name="downVote">არ აირჩიო ამოცანა</string>
-  <string name="yourPuzzleRatingWillNotChange">თქვენი ამოცანების რეიტინგი არ შეიცვალა.. ამოცანების ამოხსნა არ გახლავთ შეჯიბრი. თქვენი რეიტინგი გვეხმარება თქვენი ამჟამინდელი დონისთვის შეგირჩიოთ საუკეთესო სავარჯიშო.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">აირჩიე სავარჯიშო</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">არ აირჩიო ამოცანა</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">თქვენი ამოცანების რეიტინგი არ შეიცვალა.. ამოცანების ამოხსნა არ გახლავთ შეჯიბრი. თქვენი რეიტინგი გვეხმარება თქვენი ამჟამინდელი დონისთვის შეგირჩიოთ საუკეთესო სავარჯიშო.</string>
   <string name="findTheBestMoveForWhite">იპოვნე თეთრების საუკეთესო სვლა.</string>
   <string name="findTheBestMoveForBlack">იპოვნე შავების საუკეთესო სვლა.</string>
   <string name="toGetPersonalizedPuzzles">მიიღე ინდივიდუალური ამოცანები:</string>
@@ -68,7 +68,7 @@
   <string name="fromMyGames">ჩემი პარტიებიდან</string>
   <string name="lookupOfPlayer">დაათვალიერე ამოცანები მოთამაშეთა პარტიებიდან</string>
   <string name="searchPuzzles">მოძებნე ამოცანები</string>
-  <string name="fromMyGamesNone">თქვენ არ გაქვთ ამოცანები თქვენს ბაზაში , მაგრამ ლიჩეესს ჯერ კიდევ ძალიან უყვარხარ.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">თქვენ არ გაქვთ ამოცანები თქვენს ბაზაში , მაგრამ ლიჩეესს ჯერ კიდევ ძალიან უყვარხარ.
 ითამაშე სწრაფი და კლასიკური პარტიები და გაზარდე შანსი გქონდეს საკუთრივ დამატებული ამოცანები.</string>
   <string name="puzzleDashboardDescription">ვარჯიში, ანალიზი, გაუმჯობესება</string>
   <string name="percentSolved">%s ამოხსნილია</string>

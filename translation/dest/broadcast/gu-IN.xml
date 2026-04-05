@@ -21,10 +21,10 @@
   <string name="ongoing">ચાલુ છે</string>
   <string name="upcoming">આગામી</string>
   <string name="roundName">રાઉન્ડનું નામ</string>
-  <string name="tournamentName">ટુર્નામેન્ટનું નામ</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">ટુર્નામેન્ટનું નામ</string>
   <string name="tournamentDescription">ટુર્નામેન્ટનું ટૂંકું વર્ણન</string>
-  <string name="fullDescription">સંપૂર્ણ ટુર્નામેન્ટ વર્ણન</string>
-  <string name="fullDescriptionHelp">ટુર્નામેન્ટનું વૈકલ્પિક લાંબુ વર્ણન. %1$s ઉપલબ્ધ છે. લંબાઈ %2$s અક્ષરો કરતા ઓછી હોવી જોઈએ.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">સંપૂર્ણ ટુર્નામેન્ટ વર્ણન</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">ટુર્નામેન્ટનું વૈકલ્પિક લાંબુ વર્ણન. %1$s ઉપલબ્ધ છે. લંબાઈ %2$s અક્ષરો કરતા ઓછી હોવી જોઈએ.</string>
   <string name="sourceSingleUrl">PGN સોર્સ URL</string>
   <string name="sourceUrlHelp">PGN અપડેટ્સ મેળવવા માટે Lichess જે URL તપાસશે. તે ઇન્ટરનેટ પરથી સાર્વજનિક રીતે સુલભ હોવું જોઈએ.</string>
   <string name="sourceGameIds">સ્પેસ દ્વારા અલગ કરાયેલા 64 Lichess ગેમ ID સુધી.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">પ્રસારણ હજુ શરૂ થયું નથી.</string>
   <string name="officialWebsite">સત્તાવાર વેબસાઇટ</string>
   <string name="officialStandings">સત્તાવાર સ્ટેન્ડિંગ</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">%s પર વધુ વિકલ્પો</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">%s પર વધુ વિકલ્પો</string>
   <string name="webmastersPage">વેબમાસ્ટર્સ પેજ</string>
   <string name="embedThisBroadcast">આ પ્રસારણને તમારી વેબસાઇટમાં એમ્બેડ કરો</string>
   <string name="ratingDiff">રેટિંગ તફાવત</string>
@@ -71,7 +71,7 @@
   <string name="score">સ્કોર</string>
   <string name="allTeams">બધી ટીમો</string>
   <string name="tournamentFormat">ટુર્નામેન્ટ ફોર્મેટ</string>
-  <string name="tournamentLocation">ટુર્નામેન્ટ સ્થાન</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">ટુર્નામેન્ટ સ્થાન</string>
   <string name="topPlayers">ટોચના ખેલાડીઓ</string>
   <string name="timezone">સમય ઝોન</string>
   <string name="fideRatingCategory">FIDE રેટિંગ શ્રેણી</string>

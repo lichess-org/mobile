@@ -64,7 +64,7 @@
   <string name="fromMyGames">Dari permainan saya</string>
   <string name="lookupOfPlayer">Cari teka-teki dari sebuah permainan pemain</string>
   <string name="searchPuzzles">Cari teka-teki</string>
-  <string name="fromMyGamesNone">Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.
 Mainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!</string>
   <string name="puzzleDashboardDescription">Latih, analisis, meningkat</string>
   <plurals name="nbPlayed">
@@ -75,6 +75,6 @@ Mainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebua
   </plurals>
   <string name="percentSolved">%s selesai</string>
   <string name="noPuzzlesToShow">Tidak ada apa apa, silahkan mainkan taktik terlebih dahulu!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Latih ini untuk mengoptimisasi kemajuan anda!</string>
+  <string name="improvementAreasDescription">Latih ini untuk mengoptimisasi kemajuan anda!</string>
   <string name="strengthDescription">Performa anda baik di tema-tema ini</string>
 </resources>

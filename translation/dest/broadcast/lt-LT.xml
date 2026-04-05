@@ -25,10 +25,10 @@
   <string name="ongoing">Vykstančios</string>
   <string name="upcoming">Artėjančios</string>
   <string name="roundName">Raundo pavadinimas</string>
-  <string name="tournamentName">Turnyro pavadinimas</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnyro pavadinimas</string>
   <string name="tournamentDescription">Trumpas turnyro aprašymas</string>
-  <string name="fullDescription">Pilnas renginio aprašymas</string>
-  <string name="fullDescriptionHelp">Neprivalomas pilnas transliacijos aprašymas. Galima naudoti %1$s. Ilgis negali viršyti %2$s simbolių.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Pilnas renginio aprašymas</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Neprivalomas pilnas transliacijos aprašymas. Galima naudoti %1$s. Ilgis negali viršyti %2$s simbolių.</string>
   <string name="sourceSingleUrl">PGN šaltinio URL</string>
   <string name="sourceUrlHelp">URL, į kurį „Lichess“ kreipsis gauti PGN atnaujinimus. Privalo būti viešai pasiekiamas internete.</string>
   <string name="sourceGameIds">Iki 64 Lichess žaidimo ID, atskirtų tarpais.</string>
@@ -66,7 +66,7 @@
   <string name="notYetStarted">Transliacija dar neprasidėjo.</string>
   <string name="officialWebsite">Oficialus tinklapis</string>
   <string name="officialStandings">Oficialūs rezultatai</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Daugiau parinkčių %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Daugiau parinkčių %s</string>
   <string name="webmastersPage">žiniatinklio valdytojų puslapis</string>
   <string name="embedThisBroadcast">Įterpkite šią transliaciją į savo svetainę</string>
   <string name="ratingDiff">Reitingo skirtumas</string>
@@ -74,7 +74,7 @@
   <string name="score">Taškų skaičius</string>
   <string name="allTeams">Visos komandos</string>
   <string name="tournamentFormat">Turnyro formatas</string>
-  <string name="tournamentLocation">Turnyro vieta</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turnyro vieta</string>
   <string name="topPlayers">Geriausi žaidėjai</string>
   <string name="timezone">Laiko juosta</string>
   <string name="fideRatingCategory">FIDE reitingo kategorija</string>
