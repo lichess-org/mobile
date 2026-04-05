@@ -120,7 +120,7 @@ void main() {
       );
     });
 
-    testWidgets('resolves /broadcast/.../{roundId}#players/{fideId} to player results screen', (
+    testWidgets('resolves /broadcast/.../{roundId}#players/{playerId} to player results screen', (
       WidgetTester tester,
     ) async {
       final uri = Uri.parse(
@@ -148,6 +148,35 @@ void main() {
             .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
       );
     });
+
+    testWidgets(
+      'resolves /broadcast/.../{roundId}#players/{playerId} with percent-encoded non-FIDE playerId',
+      (WidgetTester tester) async {
+        // Players without a FIDE ID use their name as playerId in the URL fragment
+        final uri = Uri.parse(
+          'https://lichess.org/broadcast/tcec-s29-leagues--superfinal/match/RSIGxDYD#players/Stockfish%20dev-20260318-d173a065',
+        );
+        await triggerAppLink(tester, uri);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.widget(find.byType(BroadcastPlayerResultsScreenLoading)),
+          isA<BroadcastPlayerResultsScreenLoading>()
+              .having((s) => s.roundId, 'id', 'RSIGxDYD')
+              .having((s) => s.playerId, 'id', 'Stockfish dev-20260318-d173a065'),
+        );
+
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.widget(find.byType(BroadcastRoundScreenLoading)),
+          isA<BroadcastRoundScreenLoading>()
+              .having((s) => s.roundId, 'id', 'RSIGxDYD')
+              .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
+        );
+      },
+    );
 
     testWidgets('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', (
       WidgetTester tester,
