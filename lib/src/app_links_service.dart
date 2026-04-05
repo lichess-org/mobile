@@ -98,7 +98,7 @@ class AppLinksService {
           final fragment = appLinkUri.fragment;
           final tab = BroadcastRoundTab.tabOrNullFromString(fragment.split('/').first);
           if (tab == BroadcastRoundTab.players && fragment.length > 'players/'.length) {
-            final playerId = fragment.substring('players/'.length);
+            final playerId = Uri.decodeComponent(fragment.substring('players/'.length));
             return [
               BroadcastRoundScreenLoading.buildRoute(
                 context,
