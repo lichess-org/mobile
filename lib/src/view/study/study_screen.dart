@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -389,6 +390,13 @@ class _StudyMenu extends ConsumerWidget {
             },
             icon: Icons.chat_bubble_outline,
           ),
+        ContextMenuAction(
+          icon: CupertinoIcons.arrow_2_squarepath,
+          label: context.l10n.flipBoard,
+          onPressed: () {
+            ref.read(studyControllerProvider(id).notifier).toggleBoard();
+          },
+        ),
       ],
     );
   }
