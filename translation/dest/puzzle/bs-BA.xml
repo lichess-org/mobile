@@ -14,9 +14,9 @@
   <string name="specialMoves">Specijalni potezi</string>
   <string name="didYouLikeThisPuzzle">Je li Vam se svidio ovaj problem?</string>
   <string name="voteToLoadNextOne">Glasajte da učitate sljedeći!</string>
-  <string name="upVote">Pozitivno ocijenite problem</string>
-  <string name="downVote">Negativno ocijenite problem</string>
-  <string name="yourPuzzleRatingWillNotChange">Vaša ocjena slagalice se neće promijeniti. Imajte na umu da zagonetke nisu takmičenje. Vaša ocjena pomaže u odabiru najboljih zagonetki za vašu trenutnu vještinu.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Pozitivno ocijenite problem</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Negativno ocijenite problem</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Vaša ocjena slagalice se neće promijeniti. Imajte na umu da zagonetke nisu takmičenje. Vaša ocjena pomaže u odabiru najboljih zagonetki za vašu trenutnu vještinu.</string>
   <string name="findTheBestMoveForWhite">Nađite najbolji potez za bijelog.</string>
   <string name="findTheBestMoveForBlack">Nađite najbolji potez za crnog.</string>
   <string name="toGetPersonalizedPuzzles">Kako biste dobili personalizirane probleme:</string>
@@ -79,7 +79,7 @@
   <string name="fromMyGames">Iz mojih partija</string>
   <string name="lookupOfPlayer">Potražite probleme u igračevim partijama</string>
   <string name="searchPuzzles">Pretražite probleme</string>
-  <string name="fromMyGamesNone">Nemate probleme u bazi podataka, ali Vas Lichess i dalje mnogo voli.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Nemate probleme u bazi podataka, ali Vas Lichess i dalje mnogo voli.
 Igrajte ubrzani i klasični šah kako biste povećali šanse da bude dodan Vaš problem!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Jedna zagonetka pronađena u igrama od strane korisnika %2$s</item>

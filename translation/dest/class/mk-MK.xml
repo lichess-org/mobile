@@ -113,5 +113,5 @@
   <string name="xisNowAStudentOfTheClass">%s сега е студент во класот</string>
   <string name="anInvitationHasBeenSentToX">Покана беше испратена до %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s веќе има неприфатена покана</string>
-  <string name="xIsAKidAccountWarning">%1$s е детска сметка и не може да ја прими Вашата порака. Мора да им пратите покана мануелно преку УРЛ линк: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s е детска сметка и не може да ја прими Вашата порака. Мора да им пратите покана мануелно преку УРЛ линк: %2$s</string>
 </resources>

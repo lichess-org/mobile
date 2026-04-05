@@ -59,7 +59,7 @@
   <string name="intermezzoDescription">بدلاً من لعب النقلة المتوقعة، يتم أولاً القيام بنقلة أخرى تشكل تهديدًا فوريًا مباشرًا يجب على الخصم الرد عليه. يُعرف أيضًا باسم \"زفيشنزوك\" أو \"أنترميزو \".</string>
   <string name="killBoxMate">كش مات المِصّيدة</string>
   <string name="killBoxMateDescription">يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.</string>
-  <string name="vukovicMate">كش مات فوكوفيتش</string>
+  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">كش مات فوكوفيتش</string>
   <string name="vukovicMateDescription">يتعاون الرخ والحصان لإماتة الملك. يقوم الرخ بتنفيذ الإماتة مدعومًا بقطعة ثالثة، بينما يُستخدم الحصان لإغلاق خانات هروب الملك.</string>
   <string name="knightEndgame">نهاية المباراة تتضمن حصان</string>
   <string name="knightEndgameDescription">نهاية مباراة تتضمن أحصنة و بيادق فقط.</string>

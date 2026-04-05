@@ -90,7 +90,7 @@ Jen la ligo por aliri la klason.</string>
   <string name="timePlaying">Tempo pasita ludante</string>
   <string name="variantXOverLastY">%1$s sur la lastaj %2$s</string>
   <string name="winrate">Venka procento</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Ne havebla</string>
+  <string name="na">Ne havebla</string>
   <string name="overview">Superrigardo</string>
   <string name="news">Novaĵoj</string>
   <string name="classNews">Novaĵoj de la lecionoj</string>
@@ -115,9 +115,9 @@ Jen la ligo por aliri la klason.</string>
   <string name="xisNowAStudentOfTheClass">%s nun apartenas al la klaso</string>
   <string name="anInvitationHasBeenSentToX">Invito sendis al %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s jam havas pritraktota invito</string>
-  <string name="xIsAKidAccountWarning">%1$s estas infana kono kaj ne povas ricevi vian mesaĝo. Vi devas aldoni al ili la invita URL permane: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s estas infana kono kaj ne povas ricevi vian mesaĝo. Vi devas aldoni al ili la invita URL permane: %2$s</string>
   <string name="moveToClass">Movi al %s</string>
   <string name="moveToAnotherClass">Movi al alia klaso</string>
   <string name="allowMessagingBetweenStudents">Permesi mesaĝojn inter studentoj</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Senvalidiĝo: %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">Senvalidiĝo: %s</string>
 </resources>

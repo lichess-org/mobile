@@ -12,9 +12,9 @@
   <string name="specialMoves">විශේෂ ඇදීම්</string>
   <string name="didYouLikeThisPuzzle">ඔබ මෙම ප්‍රහේලිකාවට කැමතිද?</string>
   <string name="voteToLoadNextOne">ඊළඟ එක පූරණය කිරීමට ඡන්දය දෙන්න!</string>
-  <string name="upVote">ප්‍රහේලිකාව​ උසස් කරන්න</string>
-  <string name="downVote">ප්‍රහේලිකාව පහත් කරන්න</string>
-  <string name="yourPuzzleRatingWillNotChange">ඔබේ ප්‍රහේලිකා ශ්‍රේණිගත කිරීම වෙනස් නොවනු ඇත. ප්‍රහේලිකා තරඟයක් නොවන බව සලකන්න. ඔබගේ ශ්‍රේණිගත කිරීම ඔබගේ වර්තමාන කුසලතාව සඳහා හොඳම ප්‍රහේලිකා තෝරාගැනීමට උපකාරී වේ.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ප්‍රහේලිකාව​ උසස් කරන්න</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ප්‍රහේලිකාව පහත් කරන්න</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">ඔබේ ප්‍රහේලිකා ශ්‍රේණිගත කිරීම වෙනස් නොවනු ඇත. ප්‍රහේලිකා තරඟයක් නොවන බව සලකන්න. ඔබගේ ශ්‍රේණිගත කිරීම ඔබගේ වර්තමාන කුසලතාව සඳහා හොඳම ප්‍රහේලිකා තෝරාගැනීමට උපකාරී වේ.</string>
   <string name="findTheBestMoveForWhite">සුදුට ඇති හොඳම ඇදීම සොයන්න.</string>
   <string name="findTheBestMoveForBlack">කළුට ඇති හොඳම ඇදීම සොයන්න.</string>
   <string name="toGetPersonalizedPuzzles">පෞද්ගලීකරණය කළ ප්‍රහේලිකා ලබා ගැනීමට:</string>
@@ -73,7 +73,7 @@
   <string name="fromMyGames">මගේ ක්‍රීඩා වලින්</string>
   <string name="lookupOfPlayer">ක්‍රීඩකයෙකුගේ ක්‍රීඩා වලින් ප්‍රහේලිකා සොයන්න</string>
   <string name="searchPuzzles">ප්‍රහේලිකා සොයන්න​</string>
-  <string name="fromMyGamesNone">ඔබට දත්ත ගබඩාවේ ප්‍රහේලිකා නොමැත, නමුත් Lichess තවමත් ඔබට බෙහෙවින් ආදරය කරයි.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">ඔබට දත්ත ගබඩාවේ ප්‍රහේලිකා නොමැත, නමුත් Lichess තවමත් ඔබට බෙහෙවින් ආදරය කරයි.
 
 ඔබේ ප්‍රහේලිකාව එකතු කර ගැනීමේ අවස්ථාව වැඩි කිරීමට Rapid සහ Classical ක්‍රීඩා කරන්න!</string>
   <string name="puzzleDashboardDescription">පුහුණුවෙන්න, විශ්ලේෂණය කරන්න, වැඩි දියුණු වෙන්න</string>
@@ -87,6 +87,6 @@
   </plurals>
   <string name="percentSolved">%s ක් සාදා ඇත​</string>
   <string name="noPuzzlesToShow">පෙන්වීමට කිසිවක් නැත, පළමුව ප්‍රහේලිකා කිහිපයක් සෙල්ලම් කරන්න!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ඔබේ ප්‍රගතිය ප්‍රශස්ත කිරීමට මේවා පුහුණු කරන්න!</string>
+  <string name="improvementAreasDescription">ඔබේ ප්‍රගතිය ප්‍රශස්ත කිරීමට මේවා පුහුණු කරන්න!</string>
   <string name="strengthDescription">ඔබ මෙම තේමාවන්හි හොඳටම ක්‍රීඩා කරයි</string>
 </resources>

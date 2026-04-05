@@ -16,7 +16,7 @@
   <string name="zenMode" comment="zenMode&#10;&#10;This is not the religious meaning. Turning this option on takes away make elements of the user interface.&#10;&#10;Can also translate as 'Focus mode' as one example.">Режим Дзен</string>
   <string name="showPlayerRatings">Показывать рейтинг игрока</string>
   <string name="showFlairs">Показывать эмодзи игроков</string>
-  <string name="explainShowPlayerRatings">Позволяет скрыть все рейтинги на сайте, чтобы помочь сосредоточиться на игре. Сами партии останутся рейтинговыми, просто вы не будете это видеть.</string>
+  <string name="explainShowPlayerRatings" comment="A site-wide setting: https://lichess.org/account/preferences/display&#10;&#10;This string used to say &quot;[...] hides all ratings from the website&quot;, but because people can access Lichess in other ways, it has been updated to say &quot;Hide all ratings from Lichess&quot;. Please update translations as needed.">Позволяет скрыть все рейтинги на сайте, чтобы помочь сосредоточиться на игре. Сами партии останутся рейтинговыми, просто вы не будете это видеть.</string>
   <string name="displayBoardResizeHandle">Показывать ручку изменения размера доски</string>
   <string name="onlyOnInitialPosition">Только в начальном положении</string>
   <string name="inGameOnly">Только в игре</string>
@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">Переместить короля на ладью</string>
   <string name="inputMovesWithTheKeyboard">Вводить ходы с помощью клавиатуры</string>
   <string name="inputMovesWithVoice">Вводить ходы голосом</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">Показывать стрелками только допустимые ходы</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">Показывать стрелками только допустимые ходы</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">Писать в чат “Good game, well played” после поражения или ничьей</string>
   <string name="yourPreferencesHaveBeenSaved">Ваши настройки сохранены.</string>
   <string name="scrollOnTheBoardToReplayMoves">Прокручивайте колесо мыши над доской, чтобы смотреть ходы</string>
@@ -64,11 +64,11 @@
   <string name="notifyTournamentSoon">Турнир скоро начнётся</string>
   <string name="notifyBroadcasts">Трансляции, на которые вы подписаны</string>
   <string name="notifyTimeAlarm">В игре по переписке скоро упадёт флажок</string>
-  <string name="notifyBell">Звуковое оповещение на Личесс</string>
+  <string name="notifyBell" comment="A notification setting - toggles a bell sound being played when a notification appears.&#10;&#10;This text used to say &quot;Bell notification within Lichess&quot;. The word &quot;bell&quot; can be removed, as it is obvious from the context.">Звуковое оповещение на Личесс</string>
   <string name="notifyPush">Оповещение на устройстве, когда вы не находитесь на сайте Lichess</string>
   <string name="notifyWeb">Браузер</string>
   <string name="notifyDevice">Устройство</string>
   <string name="bellNotificationSound">Звук колокольчика уведомлений</string>
   <string name="blindfold" comment="As in Blindfold chess">Игра вслепую</string>
-  <string name="showClockOnTheLeft" comment="IMPORTANT NOTE FOR LANGUAGES WRITTEN RIGHT-TO-LEFT (e.g. Arabic):&#10;Please translate &quot;left&quot; as &quot;right&quot;, because the layout is reversed in your language.&#10;&#10;---&#10;&#10;A user setting. When enabled, the clock will be shown on the left side of the screen. Only applies to mobile devices.&#10;&#10;&#10;Appears on https://lichess.org/account/preferences/chess-clock.">Показывать слева на мобильных устройствах</string>
+  <string name="showClockOnTheLeft" comment="During the game on a mobile device, show the clock on the left side of the screen. Only applies to mobile devices.">Показывать слева на мобильных устройствах</string>
 </resources>

@@ -115,5 +115,5 @@ Lūk saite, lai piekļūtu kasei.</string>
   <string name="xisNowAStudentOfTheClass">%s tagad ir šīs klases skolēns</string>
   <string name="anInvitationHasBeenSentToX">Ielūgums nosūtīts skolēnam %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s jau ir ielūgts</string>
-  <string name="xIsAKidAccountWarning">%1$s ir bērna konts, kuram nevar nosūtīt jūsu ziņu. Jums jānodod ielūguma URL citā veidā: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ir bērna konts, kuram nevar nosūtīt jūsu ziņu. Jums jānodod ielūguma URL citā veidā: %2$s</string>
 </resources>

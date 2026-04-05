@@ -26,8 +26,8 @@
   <string name="castlingDescription">将王转移到安全位置，并出动车参与进攻。</string>
   <string name="capturingDefender">消除保护</string>
   <string name="capturingDefenderDescription">消除保护另一个棋子的防御子，使得接下来可以吃掉那个失去保护的棋子。</string>
-  <string name="collinearMove" comment="Description for this theme (translateable separately):&#10;Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.&#10;&#10;Collinear is a term that comes from the field of geometry: https://en.wiktionary.org/wiki/collinear">共线移动</string>
-  <string name="collinearMoveDescription" comment="Description for the puzzle theme 'Collinear move' (translateable separately).">两枚对立的棋子彼此面对，其中一枚棋子沿攻击线移动但不吃子。</string>
+  <string name="collinearMove">共线移动</string>
+  <string name="collinearMoveDescription">两枚对立的棋子彼此面对，其中一枚棋子沿攻击线移动但不吃子。</string>
   <string name="cornerMate">角落将杀</string>
   <string name="cornerMateDescription">用车或后与马配合，将对方的王困在角落并将其将杀。</string>
   <string name="crushing">压倒性优势</string>
@@ -79,7 +79,7 @@
   <string name="swallowstailMateDescription">一种呈 V 字形、视觉上形似燕尾的将杀模式。</string>
   <string name="triangleMate">三角将杀</string>
   <string name="triangleMateDescription">后和车距离对方王一格，且位于同一横线或直线，中间相隔一格，形成一个三角形。</string>
-  <string name="vukovicMate">瓦科维奇将杀</string>
+  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">瓦科维奇将杀</string>
   <string name="vukovicMateDescription">车和马配合将杀对方的王。车在第三个棋子的支持下执行将杀，而马则用于封锁对方王的逃逸格。</string>
   <string name="knightEndgame">马残局</string>
   <string name="knightEndgameDescription">只有马和兵的残局。</string>

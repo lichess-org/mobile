@@ -96,7 +96,7 @@ Tukaj je povezava za dostop do razreda.</string>
   <string name="timePlaying">Čas igranja</string>
   <string name="variantXOverLastY">%1$s v zadnjih %2$s</string>
   <string name="winrate">Delež zmag</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Ni na voljo</string>
+  <string name="na">Ni na voljo</string>
   <string name="overview">Pregled</string>
   <string name="news">Obvestila</string>
   <string name="classNews">Novice razreda</string>
@@ -121,14 +121,14 @@ Prikazal bo horizontalno črto.</string>
   <string name="xisNowAStudentOfTheClass">%s je zdaj učenec razreda</string>
   <string name="anInvitationHasBeenSentToX">Povabilo je bilo poslano na %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s že ima čakajoče povabilo</string>
-  <string name="xIsAKidAccountWarning">%1$s je otroški račun in ne more prejeti vašega sporočila. Ročno jim morate dati URL povabila: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s je otroški račun in ne more prejeti vašega sporočila. Ročno jim morate dati URL povabila: %2$s</string>
   <string name="moveToClass">Premakni v %s</string>
   <string name="moveToAnotherClass">Premakni se v drug razred</string>
   <string name="allowMessagingBetweenStudents">Dovoli sporočila med študenti</string>
   <string name="allowMessagingBetweenStudentsDesc">To velja samo za račune, ki ste jih ustvarili za svoje učence.</string>
   <string name="quickLoginCode">Koda za hitro prijavo</string>
   <string name="quickLoginCodes">Kode za hitro prijavo</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">Uporabite te kode na %s za prijavo svojih učencev v Lichess.</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">Uporabite te kode na %s za prijavo svojih učencev v Lichess.</string>
   <string name="quickLoginCodesDesc2">Ko kode potečejo, bodo vaši učenci ostali prijavljeni, dokler se ročno ne odjavijo.</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Potek: %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">Potek: %s</string>
 </resources>

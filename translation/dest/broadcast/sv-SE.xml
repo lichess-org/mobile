@@ -21,10 +21,10 @@
   <string name="ongoing">Pågående</string>
   <string name="upcoming">Kommande</string>
   <string name="roundName">Omgångens namn</string>
-  <string name="tournamentName">Turneringens namn</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turneringens namn</string>
   <string name="tournamentDescription">Kort beskrivning av turneringen</string>
-  <string name="fullDescription">Fullständig beskrivning</string>
-  <string name="fullDescriptionHelp">Valfri längre beskrivning av sändningen. %1$s är tillgänglig. Längden måste vara mindre än %2$s tecken.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Fullständig beskrivning</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Valfri längre beskrivning av sändningen. %1$s är tillgänglig. Längden måste vara mindre än %2$s tecken.</string>
   <string name="sourceSingleUrl">PNG-källans URL</string>
   <string name="sourceUrlHelp">URL som Lichess kan använda för att få PGN-uppdateringar. Den måste vara publikt tillgänglig från Internet.</string>
   <string name="sourceGameIds">Upp till 64 Lichess-partiers ID, separerade med mellanslag.</string>
@@ -62,7 +62,7 @@
   <string name="notYetStarted">Sändningen har ännu inte startat.</string>
   <string name="officialWebsite">Officiell webbplats</string>
   <string name="officialStandings">Officiella ställningar</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Fler alternativ på %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Fler alternativ på %s</string>
   <string name="webmastersPage">webbmasterns sida</string>
   <string name="embedThisBroadcast">Infoga denna sändning på din webbplats</string>
   <string name="ratingDiff">Rating diff</string>
@@ -70,7 +70,7 @@
   <string name="score">Poäng</string>
   <string name="allTeams">Alla lag</string>
   <string name="tournamentFormat">Turneringens format</string>
-  <string name="tournamentLocation">Turneringens plats</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turneringens plats</string>
   <string name="topPlayers">Toppspelare</string>
   <string name="timezone">Tidszon</string>
   <string name="fideRatingCategory">Kategori för FIDE-rating</string>

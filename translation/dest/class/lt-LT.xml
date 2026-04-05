@@ -96,7 +96,7 @@ Slaptažodis: %3$s</string>
   <string name="timePlaying">Žaista laiko</string>
   <string name="variantXOverLastY">%1$s per paskutines %2$s</string>
   <string name="winrate">Laimėjimo dažnumas</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Neprieinama</string>
+  <string name="na">Neprieinama</string>
   <string name="overview">Apžvalga</string>
   <string name="news">Naujienos</string>
   <string name="classNews">Klasės naujienos</string>
@@ -121,7 +121,7 @@ Taip bus parodyta horizontali linija.</string>
   <string name="xisNowAStudentOfTheClass">%s yra klasės mokinys</string>
   <string name="anInvitationHasBeenSentToX">Pakvietimas buvo išsiųstas %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s jau turi laukiantį pakvietimą</string>
-  <string name="xIsAKidAccountWarning">%1$s yra vaiko paskyra ir negali priimti jūsų žinutės. Turite jiems duoti pakvietimo adresą kitu būdu: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s yra vaiko paskyra ir negali priimti jūsų žinutės. Turite jiems duoti pakvietimo adresą kitu būdu: %2$s</string>
   <string name="moveToClass">Perkelti į %s</string>
   <string name="moveToAnotherClass">Perkelti į kitą klasę</string>
 </resources>

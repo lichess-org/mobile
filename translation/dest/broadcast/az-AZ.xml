@@ -7,10 +7,10 @@
   <string name="ongoing">Davam edən</string>
   <string name="upcoming">Yaxınlaşan</string>
   <string name="roundName">Tur adı</string>
-  <string name="tournamentName">Turnir adı</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnir adı</string>
   <string name="tournamentDescription">Qısa turnir açıqlaması</string>
-  <string name="fullDescription">Tədbirin tam açıqlaması</string>
-  <string name="fullDescriptionHelp">Tədbirin istəyə bağlı təfsilatlı açıqlaması. %1$s seçimi mövcuddur. Mətnin uzunluğu %2$s simvoldan az olmalıdır.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Tədbirin tam açıqlaması</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Tədbirin istəyə bağlı təfsilatlı açıqlaması. %1$s seçimi mövcuddur. Mətnin uzunluğu %2$s simvoldan az olmalıdır.</string>
   <string name="sourceUrlHelp">Lichess, verdiyiniz URL ilə PGN-i yeniləyəcək. Bu internetdə hamı tərəfindən əldə edilə bilən olmalıdır.</string>
   <string name="startDateHelp">İstəyə bağlı, tədbirin başlama vaxtını bilirsinizsə</string>
   <string name="currentGameUrl">Hazırkı oyun URL-i</string>

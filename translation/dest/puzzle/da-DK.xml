@@ -14,9 +14,9 @@
   <string name="specialMoves">Særlige træk</string>
   <string name="didYouLikeThisPuzzle">Kunne du lide denne opgave?</string>
   <string name="voteToLoadNextOne">Stem for at indlæse den næste!</string>
-  <string name="upVote">Stem opgave op</string>
-  <string name="downVote">Stem opgave ned</string>
-  <string name="yourPuzzleRatingWillNotChange">Din opgave-rating vil ikke ændre sig. Bemærk at opgaver ikke er en konkurrence. Rating hjælper med at vælge de bedste opgaver i forhold til dine nuværende færdigheder.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Stem opgave op</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Stem opgave ned</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Din opgave-rating vil ikke ændre sig. Bemærk at opgaver ikke er en konkurrence. Rating hjælper med at vælge de bedste opgaver i forhold til dine nuværende færdigheder.</string>
   <string name="findTheBestMoveForWhite">Find det bedste træk for hvid.</string>
   <string name="findTheBestMoveForBlack">Find det bedste træk for sort.</string>
   <string name="toGetPersonalizedPuzzles">For at få personlige taktikopgaver:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Fra mine partier</string>
   <string name="lookupOfPlayer">Søg taktikopgaver fra en spillers partier</string>
   <string name="searchPuzzles">Søg taktikopgaver</string>
-  <string name="fromMyGamesNone">Du har ingen taktikopgaver i databasen, men Lichess elsker dig alligevel.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Du har ingen taktikopgaver i databasen, men Lichess elsker dig alligevel.
 Spil hurtige (rapid) og klassiske (classical) partier for at forøge chancerne for at en af dine taktikopgave tilføjes!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">En opgave fundet i parti af %2$s</item>
@@ -93,6 +93,6 @@ Spil hurtige (rapid) og klassiske (classical) partier for at forøge chancerne f
   </plurals>
   <string name="percentSolved">%s løst</string>
   <string name="noPuzzlesToShow">Intet at vise, løs først nogle opgaver!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Træn disse for at optimere dine fremskridt!</string>
+  <string name="improvementAreasDescription">Træn disse for at optimere dine fremskridt!</string>
   <string name="strengthDescription">Du klarer dig bedst i disse temaer</string>
 </resources>

@@ -21,10 +21,10 @@
   <string name="ongoing">ادامه‌دار</string>
   <string name="upcoming">آینده</string>
   <string name="roundName">نام دور</string>
-  <string name="tournamentName">نام مسابقات</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">نام مسابقات</string>
   <string name="tournamentDescription">توضیحات کوتاه مسابقات</string>
-  <string name="fullDescription">توضیحات کامل مسابقات</string>
-  <string name="fullDescriptionHelp">توضیحات بلند و اختیاری پخش همگانی. %1$s قابل‌استفاده است. طول متن باید کمتر از %2$s نویسه باشد.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">توضیحات کامل مسابقات</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">توضیحات بلند و اختیاری پخش همگانی. %1$s قابل‌استفاده است. طول متن باید کمتر از %2$s نویسه باشد.</string>
   <string name="sourceSingleUrl">وب‌نشانیِ PGN</string>
   <string name="sourceUrlHelp">وب‌نشانی‌ای که Lichess برای دریافت به‌روزرسانی‌های PGN می‌بررسد. آن باید از راه اینترنت در دسترس همگان باشد.</string>
   <string name="sourceGameIds">تا ۶۴ شناسهٔ بازی Lichess، جداشده با فاصله.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">پخش زنده هنوز نیاغازیده است.</string>
   <string name="officialWebsite">وبگاه رسمی</string>
   <string name="officialStandings">رده‌بندی رسمی</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">گزینه‌های بیشتر در %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">گزینه‌های بیشتر در %s</string>
   <string name="webmastersPage">صفحهٔ وبداران</string>
   <string name="embedThisBroadcast">جاسازی این پخش زنده در وبگاه‌تان</string>
   <string name="ratingDiff">اختلاف درجه‌بندی</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Persian</string>
   <string name="allTeams">همهٔ یَران‌ها</string>
   <string name="tournamentFormat">ساختار مسابقات</string>
-  <string name="tournamentLocation">مکان مسابقات</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">مکان مسابقات</string>
   <string name="topPlayers">بازیکنان برتر</string>
   <string name="timezone">زمان-یانه</string>
   <string name="fideRatingCategory">رسته‌بندی درجه‌بندی فیده</string>
@@ -105,6 +105,6 @@
   <string name="semifinals">نیمه نهایی</string>
   <string name="finals">نهایی</string>
   <string name="tiebreaks">پوئن شکنی‌ها</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">بازی %s</string>
+  <string name="gameX">بازی %s</string>
   <string name="knockouts">ناک اوت</string>
 </resources>

@@ -90,7 +90,7 @@
   <string name="timePlaying">Χρόνος που διατέθηκε παίζοντας</string>
   <string name="variantXOverLastY">%1$s για τις τελευταίες %2$s</string>
   <string name="winrate">Ποσοστό νικών</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Μη διαθέσιμο</string>
+  <string name="na">Μη διαθέσιμο</string>
   <string name="overview">Επισκόπηση</string>
   <string name="news">Νέα</string>
   <string name="classNews">Τα νέα της τάξης</string>
@@ -115,14 +115,14 @@
   <string name="xisNowAStudentOfTheClass">Ο %s είναι πλέον μαθητής αυτής της τάξης</string>
   <string name="anInvitationHasBeenSentToX">Μια πρόσκληση στάλθηκε στον χρήστη %s</string>
   <string name="xAlreadyHasAPendingInvitation">Έχει ήδη σταλεί πρόσκληση στον χρήστη %s</string>
-  <string name="xIsAKidAccountWarning">Ο χρήστης %1$s είναι λογαριασμός παιδιού και δεν μπορεί να λάβει το μήνυμά σας. Πρέπει να του δώσετε με κάποιον άλλο τρόπο τη διεύθυνση URL της πρόσκλησης: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">Ο χρήστης %1$s είναι λογαριασμός παιδιού και δεν μπορεί να λάβει το μήνυμά σας. Πρέπει να του δώσετε με κάποιον άλλο τρόπο τη διεύθυνση URL της πρόσκλησης: %2$s</string>
   <string name="moveToClass">Μετακίνηση στην τάξη %s</string>
   <string name="moveToAnotherClass">Μετακίνηση σε άλλη τάξη</string>
   <string name="allowMessagingBetweenStudents">Να επιτρέπεται η αποστολή μηνυμάτων μεταξύ των μαθητών</string>
   <string name="allowMessagingBetweenStudentsDesc">Η ρύθμιση αυτή ισχύει μόνο για τους λογαριασμούς που έχετε δημιουργήσει εσείς για τους μαθητές σας.</string>
   <string name="quickLoginCode">Γρήγορος κωδικός σύνδεσης</string>
   <string name="quickLoginCodes">Γρήγοροι κωδικοί σύνδεσης</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">Χρησιμοποιήστε αυτούς τους κωδικούς στη διεύθυνση %s για να πραγματοποιήσετε την είσοδο των μαθητών σας στο Lichess.</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">Χρησιμοποιήστε αυτούς τους κωδικούς στη διεύθυνση %s για να πραγματοποιήσετε την είσοδο των μαθητών σας στο Lichess.</string>
   <string name="quickLoginCodesDesc2">Αφού οι κωδικοί λήξουν, οι μαθητές σας θα παραμείνουν συνδεδεμένοι έως ότου επιλέξουν να αποσυνδεθούν.</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Λήγει %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">Λήγει %s</string>
 </resources>
