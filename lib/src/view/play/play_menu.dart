@@ -28,6 +28,7 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
+              enabled: isOnline,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
