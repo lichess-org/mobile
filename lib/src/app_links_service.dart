@@ -80,7 +80,13 @@ class AppLinksService {
     switch (appLinkUri.pathSegments[0]) {
       case 'study':
         final id = appLinkUri.pathSegments[1];
-        return [StudyScreen.buildRoute(context, StudyId(id))];
+        final chapter = appLinkUri.pathSegments.getOrNull(2);
+        return [
+          StudyScreen.buildRoute(context, (
+            id: StudyId(id),
+            initialChapter: chapter != null ? StudyChapterId(chapter) : null,
+          )),
+        ];
       case 'broadcast':
         final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
         if (appLinkUri.pathSegments.length > 4) {

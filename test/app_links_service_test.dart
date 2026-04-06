@@ -78,7 +78,23 @@ void main() {
       await tester.pumpAndSettle(); // Wait study screen to load
       expect(
         tester.widget(find.byType(StudyScreen)),
-        isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
+        isA<StudyScreen>()
+            .having((s) => s.options.id, 'id', 'p9uY0321')
+            .having((s) => s.options.initialChapter, 'initialChapter', isNull),
+      );
+    });
+
+    testWidgets('resolves /study/{id}/{chapter} to StudyScreen route with initial chapter', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/study/p9uY0321/abcd1234');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait study screen to load
+      expect(
+        tester.widget(find.byType(StudyScreen)),
+        isA<StudyScreen>()
+            .having((s) => s.options.id, 'id', 'p9uY0321')
+            .having((s) => s.options.initialChapter, 'initialChapter', 'abcd1234'),
       );
     });
 
