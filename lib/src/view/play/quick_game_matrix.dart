@@ -1,7 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -32,6 +35,20 @@ class QuickGameMatrix extends ConsumerWidget {
       return PlaybanMessage(playban: playban);
     }
 
+    final homePrefs = ref.watch(homePreferencesProvider);
+    final enabledControls = TimeIncrement.matrixPresets
+        .where((tc) => !homePrefs.disabledTimeControls.contains(tc))
+        .toList();
+    final showCustom = homePrefs.customButtonEnabled;
+
+    final rows = <List<TimeIncrement>>[];
+    for (var i = 0; i < enabledControls.length; i += 3) {
+      rows.add(enabledControls.sublist(i, (i + 3).clamp(0, enabledControls.length)));
+    }
+    if (rows.isEmpty && showCustom) {
+      rows.add([]);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,21 +64,19 @@ class QuickGameMatrix extends ConsumerWidget {
                   ),
                 )
               : null,
-          child: const Column(
+          child: Column(
             children: [
-              _SectionChoices(
-                choices: [TimeIncrement(60, 0), TimeIncrement(120, 1), TimeIncrement(180, 0)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(
-                choices: [TimeIncrement(180, 2), TimeIncrement(300, 0), TimeIncrement(300, 3)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(
-                choices: [TimeIncrement(600, 0), TimeIncrement(600, 5), TimeIncrement(900, 10)],
-              ),
-              SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(choices: [TimeIncrement(1800, 0), TimeIncrement(1800, 20)]),
+              for (final (index, row) in rows.indexed) ...[
+                if (index > 0) const SizedBox(height: _kMatrixSpacing),
+                _SectionChoices(
+                  choices: row,
+                  showCustom: showCustom && index == rows.length - 1 && row.length < 3,
+                ),
+              ],
+              if (showCustom && rows.every((r) => r.length >= 3)) ...[
+                const SizedBox(height: _kMatrixSpacing),
+                const _SectionChoices(choices: [], showCustom: true),
+              ],
             ],
           ),
         ),
@@ -71,9 +86,10 @@ class QuickGameMatrix extends ConsumerWidget {
 }
 
 class _SectionChoices extends ConsumerWidget {
-  const _SectionChoices({required this.choices});
+  const _SectionChoices({required this.choices, this.showCustom = false});
 
   final List<TimeIncrement> choices;
+  final bool showCustom;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,8 +130,8 @@ class _SectionChoices extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ...choiceWidgets,
-          if (choices.length < 3) ...[
-            const SizedBox(width: _kMatrixSpacing),
+          if (showCustom) ...[
+            if (choices.isNotEmpty) const SizedBox(width: _kMatrixSpacing),
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
@@ -190,4 +206,118 @@ class _ChoiceChip extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
+  final homePrefs = ref.read(homePreferencesProvider);
+  final disabledControls = Set<TimeIncrement>.from(homePrefs.disabledTimeControls);
+  var customEnabled = homePrefs.customButtonEnabled;
+
+  final grouped = groupBy(TimeIncrement.matrixPresets, (tc) => tc.speed);
+
+  return showAdaptiveDialog<void>(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          final enabledCount =
+              TimeIncrement.matrixPresets.length -
+              disabledControls.length +
+              (customEnabled ? 1 : 0);
+
+          return AlertDialog.adaptive(
+            title: Text(context.l10n.quickPairing),
+            contentPadding: const EdgeInsets.only(top: 12),
+            scrollable: true,
+            content: Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final speed in grouped.keys) ...[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          speed.label,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
+                        ),
+                      ),
+                    ),
+                    for (final tc in grouped[speed]!)
+                      CheckboxListTile.adaptive(
+                        title: Text(tc.display),
+                        value: !disabledControls.contains(tc),
+                        onChanged: !disabledControls.contains(tc) && enabledCount <= 1
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  if (value!) {
+                                    disabledControls.remove(tc);
+                                  } else {
+                                    disabledControls.add(tc);
+                                  }
+                                });
+                              },
+                      ),
+                  ],
+                  const Divider(),
+                  CheckboxListTile.adaptive(
+                    title: Text(context.l10n.custom),
+                    value: customEnabled,
+                    onChanged: customEnabled && enabledCount <= 1
+                        ? null
+                        : (value) {
+                            setState(() {
+                              customEnabled = value!;
+                            });
+                          },
+                  ),
+                ],
+              ),
+            ),
+            actions: Theme.of(context).platform == TargetPlatform.iOS
+                ? [
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(context.l10n.cancel),
+                    ),
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () {
+                        ref
+                            .read(homePreferencesProvider.notifier)
+                            .setTimeControlConfig(
+                              disabledTimeControls: IList(disabledControls),
+                              customButtonEnabled: customEnabled,
+                            );
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(context.l10n.mobileOkButton),
+                    ),
+                  ]
+                : [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(context.l10n.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref
+                            .read(homePreferencesProvider.notifier)
+                            .setTimeControlConfig(
+                              disabledTimeControls: IList(disabledControls),
+                              customButtonEnabled: customEnabled,
+                            );
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(context.l10n.mobileOkButton),
+                    ),
+                  ],
+          );
+        },
+      );
+    },
+  );
 }
