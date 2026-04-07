@@ -7,9 +7,11 @@ import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({required this.id});
@@ -313,6 +315,8 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       }
     });
 
+    final canEdit = state.canIContribute;
+
     return BottomSheetScrollableContainer(
       scrollController: widget.scrollController,
       children: [
@@ -339,6 +343,29 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               ),
               maxLines: 2,
             ),
+            trailing: canEdit
+                ? IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () {
+                      showConfirmDialog<void>(
+                        context,
+                        title: Text(context.l10n.studyDeleteThisChapter),
+                        isDestructiveAction: true,
+                        onConfirm: () {
+                          Navigator.of(context).pop();
+                          ref
+                              .read(studyControllerProvider(widget.id).notifier)
+                              .deleteChapter(chapter.id)
+                              .catchError((Object e) {
+                                if (context.mounted) {
+                                  showSnackBar(context, e.toString(), type: SnackBarType.error);
+                                }
+                              });
+                        },
+                      );
+                    },
+                  )
+                : null,
             onTap: () {
               ref.read(studyControllerProvider(widget.id).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();
