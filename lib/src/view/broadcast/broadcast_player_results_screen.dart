@@ -105,8 +105,8 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final displayPlayer =
         player ??
-        switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
-          AsyncData(value: final data) => data.$1.playerWithOverallResult.player,
+        switch (ref.watch(broadcastPlayerProvider((tournamentId, playerId)))) {
+          AsyncData(value: final data) => data.playerWithOverallResult.player,
           _ => null,
         };
 
