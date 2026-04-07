@@ -231,6 +231,48 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
+  /// Edit a chapter's metadata (name, orientation).
+  ///
+  /// Sends the full chapter edit data to the server via socket.
+  Future<void> editChapter(StudyChapterId chapterId, {String? name, Side? orientation}) async {
+    if (!state.hasValue || !state.requireValue.canIContribute) return;
+
+    final study = state.requireValue.study;
+    final chapter = study.chapter;
+    final chapterMeta = study.chapters.firstWhere((c) => c.id == chapterId);
+
+    final currentName = chapterMeta.name;
+    final currentOrientation = chapter.id == chapterId ? chapter.setup.orientation : Side.white;
+    final currentMode = chapter.id == chapterId
+        ? (chapter.gamebook
+              ? 'gamebook'
+              : chapter.practise
+              ? 'practice'
+              : 'normal')
+        : 'normal';
+
+    _socketClient.send('editChapter', {
+      'id': chapterId.value,
+      'name': name ?? currentName,
+      'orientation': (orientation ?? currentOrientation).name,
+      'mode': currentMode,
+      'description': '',
+    });
+
+    // Update local state
+    if (name != null) {
+      final updatedChapters = study.chapters
+          .map((c) => c.id == chapterId ? c.copyWith(name: name.trim()) : c)
+          .toIList();
+      state = AsyncData(
+        state.requireValue.copyWith(study: study.copyWith(chapters: updatedChapters)),
+      );
+    }
+    if (orientation != null && chapterId == chapter.id) {
+      state = AsyncData(state.requireValue.copyWith(pov: orientation));
+    }
+  }
+
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) {
       assert(false, 'received a game SocketEvent while StudyState is null');
