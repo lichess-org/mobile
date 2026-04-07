@@ -271,7 +271,7 @@ void main() {
 
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
     });
-    
+
     testWidgets('Interactive study', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
       when(() => mockRepository.getStudy(id: testId)).thenAnswer(
