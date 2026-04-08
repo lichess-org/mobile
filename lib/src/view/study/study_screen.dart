@@ -396,7 +396,7 @@ class _StudyMenu extends ConsumerWidget {
           icon: CupertinoIcons.arrow_2_squarepath,
           label: context.l10n.flipBoard,
           onPressed: () {
-            ref.read(studyControllerProvider(id).notifier).toggleBoard();
+            ref.read(studyControllerProvider(options).notifier).toggleBoard();
           },
         ),
       ],

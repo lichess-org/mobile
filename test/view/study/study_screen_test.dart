@@ -289,7 +289,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
