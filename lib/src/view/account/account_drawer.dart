@@ -91,8 +91,29 @@ class AccountDrawer extends ConsumerStatefulWidget {
   ConsumerState<AccountDrawer> createState() => _AccountDrawerState();
 }
 
-class _AccountDrawerState extends ConsumerState<AccountDrawer> {
+class _AccountDrawerState extends ConsumerState<AccountDrawer> with WidgetsBindingObserver {
   bool errorLoadingFlair = false;
+  bool _pendingKidModeRefresh = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _pendingKidModeRefresh) {
+      _pendingKidModeRefresh = false;
+      ref.invalidate(accountProvider);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +184,8 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
                 title: Text(context.l10n.kidModeIsEnabled),
                 onTap: () {
-                  launchUrl(lichessUri('/account/kid')).then((_) {
-                    ref.invalidate(accountProvider);
-                  });
+                  _pendingKidModeRefresh = true;
+                  launchUrl(lichessUri('/account/kid'));
                 },
               ),
             const PlatformDivider(indent: 0),
