@@ -14,9 +14,9 @@
   <string name="specialMoves">Jugades especials</string>
   <string name="didYouLikeThisPuzzle">T\'ha agradat aquest problema?</string>
   <string name="voteToLoadNextOne">Vota per passar al següent!</string>
-  <string name="upVote">Vota positivament el problema</string>
-  <string name="downVote">Vota negativament el problema</string>
-  <string name="yourPuzzleRatingWillNotChange">La teva puntuació de problemes no canviarà. Tingues en compte que els problemes no són una competició. La puntuació indica els problemes que més s\'assimilen a les teves habilitats.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vota positivament el problema</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vota negativament el problema</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">La teva puntuació de problemes no canviarà. Tingues en compte que els problemes no són una competició. La puntuació indica els problemes que més s\'assimilen a les teves habilitats.</string>
   <string name="findTheBestMoveForWhite">Troba la millor jugada de les blanques.</string>
   <string name="findTheBestMoveForBlack">Troba la millor jugada de les negres.</string>
   <string name="toGetPersonalizedPuzzles">Per obtenir problemes personalitzats:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">De les meves partides</string>
   <string name="lookupOfPlayer">Cercar problemes de les partides d\'un jugador</string>
   <string name="searchPuzzles">Cercar problemes</string>
-  <string name="fromMyGamesNone">No hi ha problemes teus a la base de dates, però Lichess t\'estima molt igualment.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">No hi ha problemes teus a la base de dates, però Lichess t\'estima molt igualment.
 Juga partides ràpides i clàssiques per augmentar les possibilitats que se n\'hi afegeixi algun!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Un problema trobat en partides de %2$s</item>
@@ -93,6 +93,6 @@ Juga partides ràpides i clàssiques per augmentar les possibilitats que se n\'h
   </plurals>
   <string name="percentSolved">%s resolts</string>
   <string name="noPuzzlesToShow">Encara no hi ha res per mostrar aquí. Resol alguns problemes primer!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Entreneu aquestes temàtiques per a progressar!</string>
+  <string name="improvementAreasDescription">Entreneu aquestes temàtiques per a progressar!</string>
   <string name="strengthDescription">Aquestes són les temàtiques en que ets millor</string>
 </resources>

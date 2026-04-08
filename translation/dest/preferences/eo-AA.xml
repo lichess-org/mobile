@@ -16,7 +16,7 @@
   <string name="zenMode" comment="zenMode&#10;&#10;This is not the religious meaning. Turning this option on takes away make elements of the user interface.&#10;&#10;Can also translate as 'Focus mode' as one example.">Zena modo</string>
   <string name="showPlayerRatings">Montri rangojn de ludanto</string>
   <string name="showFlairs">Montri ludantajn emoĝiojn</string>
-  <string name="explainShowPlayerRatings">Ĉi tio permesas kaŝi ĉiujn rangojn el la retejo, por helpi koncentriĝas pri la ŝako. Ludoj povas daŭre esti range, ĉi tiu temas nur pri tio, kion vi vidas.</string>
+  <string name="explainShowPlayerRatings" comment="A site-wide setting: https://lichess.org/account/preferences/display&#10;&#10;This string used to say &quot;[...] hides all ratings from the website&quot;, but because people can access Lichess in other ways, it has been updated to say &quot;Hide all ratings from Lichess&quot;. Please update translations as needed.">Ĉi tio permesas kaŝi ĉiujn rangojn el la retejo, por helpi koncentriĝas pri la ŝako. Ludoj povas daŭre esti range, ĉi tiu temas nur pri tio, kion vi vidas.</string>
   <string name="displayBoardResizeHandle">Montri la grandecregilon de la ŝaktabulo</string>
   <string name="onlyOnInitialPosition">Nur sur komenca pozicio</string>
   <string name="inGameOnly">Nur en ludo</string>
@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">Movi reĝon al la turo</string>
   <string name="inputMovesWithTheKeyboard">Enigi movojn per klavaro</string>
   <string name="inputMovesWithVoice">Enigi movojn per via voĉo</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">Montri per sagoj nur validajn movojn</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">Montri per sagoj nur validajn movojn</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">Skribi \"Good game, well played\" post malvenko aŭ egalvenko</string>
   <string name="yourPreferencesHaveBeenSaved">Viaj preferoj estis konservitaj.</string>
   <string name="scrollOnTheBoardToReplayMoves">Uzi rulumilon sur la tabelo por ripeti movojn</string>
@@ -63,7 +63,7 @@
   <string name="notifyChallenge">Defioj</string>
   <string name="notifyTournamentSoon">Turniro baldaŭ komencos</string>
   <string name="notifyTimeAlarm">Koresponda horloĝo baldaŭ finiĝas</string>
-  <string name="notifyBell">Sonorilaj sciigoj en Lichess mem</string>
+  <string name="notifyBell" comment="A notification setting - toggles a bell sound being played when a notification appears.&#10;&#10;This text used to say &quot;Bell notification within Lichess&quot;. The word &quot;bell&quot; can be removed, as it is obvious from the context.">Sonorilaj sciigoj en Lichess mem</string>
   <string name="notifyPush">Aparta sciigo kiam vi ne ĉe Licess</string>
   <string name="notifyWeb">Retumilo</string>
   <string name="notifyDevice">Aparato</string>

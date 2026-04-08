@@ -21,10 +21,10 @@
   <string name="ongoing">Pågåande</string>
   <string name="upcoming">Kommande</string>
   <string name="roundName">Rundenamn</string>
-  <string name="tournamentName">Turneringsnamn</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turneringsnamn</string>
   <string name="tournamentDescription">Kortfatta skildring av turneringa</string>
-  <string name="fullDescription">Full omtale av arrangementet</string>
-  <string name="fullDescriptionHelp">Valfri lang omtale av turneringa. %1$s er tilgjengeleg. Omtalen må vera kortare enn %2$s teikn.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Full omtale av arrangementet</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Valfri lang omtale av turneringa. %1$s er tilgjengeleg. Omtalen må vera kortare enn %2$s teikn.</string>
   <string name="sourceSingleUrl">PGN kjelde-URL</string>
   <string name="sourceUrlHelp">Lenke som Lichess vil hente PGN-oppdateringar frå. Den må vera offentleg tilgjengeleg på internett.</string>
   <string name="sourceGameIds">Opp til 64 Lichess spel-ID\'ar, skilde med mellomrom.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">Sendinga har førebels ikkje starta.</string>
   <string name="officialWebsite">Offisiell nettside</string>
   <string name="officialStandings">Offisiell tabell</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Fleire alternativ på %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Fleire alternativ på %s</string>
   <string name="webmastersPage">administratoren si side</string>
   <string name="embedThisBroadcast">Bygg inn denne sendinga på nettstaden din</string>
   <string name="ratingDiff">Rangeringsdiff</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Plasseringar vert berekna på grunnlag av kringkasta parti og kan avvike frå offisielle resultat.</string>
   <string name="allTeams">Alle lag</string>
   <string name="tournamentFormat">Turneringsformat</string>
-  <string name="tournamentLocation">Turneringsstad</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turneringsstad</string>
   <string name="topPlayers">Toppspelarar</string>
   <string name="timezone">Tidssone</string>
   <string name="fideRatingCategory">FIDE-ratingkategori</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Semifinalar</string>
   <string name="finals">Finalar</string>
   <string name="tiebreaks">Tiebreak</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Parti %s</string>
+  <string name="gameX">Parti %s</string>
   <string name="knockouts">Utslagsrundar</string>
 </resources>

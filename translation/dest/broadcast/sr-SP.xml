@@ -6,8 +6,8 @@
   <string name="newBroadcast">Нови пренос уживо</string>
   <string name="ongoing">У току</string>
   <string name="upcoming">Предстојећи</string>
-  <string name="fullDescription">Потпуни опис турнира</string>
-  <string name="fullDescriptionHelp">Опциони дуги опис турнира. %1$s је доступан. Дужина мора бити мања од %2$s знакова.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Потпуни опис турнира</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Опциони дуги опис турнира. %1$s је доступан. Дужина мора бити мања од %2$s знакова.</string>
   <string name="sourceUrlHelp">Линк који ће Lichess проверити да добије ажурирања PGN-а. Мора бити јавно доступан са интернета.</string>
   <string name="startDateHelp">Опционо, ако знаш када почиње догађај</string>
 </resources>

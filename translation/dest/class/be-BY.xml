@@ -94,7 +94,7 @@
   <string name="timePlaying">Час за гульнёй</string>
   <string name="variantXOverLastY">%1$s на працягу апошніх %2$s</string>
   <string name="winrate">Адсотак перамог</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Не дастасоўваецца</string>
+  <string name="na">Не дастасоўваецца</string>
   <string name="overview">Агляд</string>
   <string name="news">Навіны</string>
   <string name="classNews">Навіны занятку</string>
@@ -119,5 +119,5 @@
   <string name="xisNowAStudentOfTheClass">%s зараз на занятку</string>
   <string name="anInvitationHasBeenSentToX">Запрашэнне адпраўлена да %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s ужо мае запрашэнне</string>
-  <string name="xIsAKidAccountWarning">Уліковы запіс %1$s - дзіцячы, таму не можа атрымліваць паведамленні. Вам трэба перадаць запрашальную спасылку ўласнаручна: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">Уліковы запіс %1$s - дзіцячы, таму не можа атрымліваць паведамленні. Вам трэба перадаць запрашальную спасылку ўласнаручна: %2$s</string>
 </resources>

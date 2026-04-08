@@ -117,6 +117,6 @@ To će prikazati horizontalnu liniju.</string>
   <string name="xisNowAStudentOfTheClass">%s je sada student u razredu</string>
   <string name="anInvitationHasBeenSentToX">Pozivnica je poslana %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s već ima aktivnu pozivnicu</string>
-  <string name="xIsAKidAccountWarning">%1$s je dječji račun i ne može primati vaše poruke. Morate mu ručno poslati link: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s je dječji račun i ne može primati vaše poruke. Morate mu ručno poslati link: %2$s</string>
   <string name="moveToClass">Premjestite se u %s</string>
 </resources>

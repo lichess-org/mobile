@@ -29,10 +29,10 @@
   <string name="ongoing">المستمرة</string>
   <string name="upcoming">القادمة</string>
   <string name="roundName">اسم الجولة</string>
-  <string name="tournamentName">اسم البطولة</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">اسم البطولة</string>
   <string name="tournamentDescription">الوصف الموجز</string>
-  <string name="fullDescription">الوصف الكامل</string>
-  <string name="fullDescriptionHelp">الوصف الاختياري الطويل للبث. %1$s متاح. يجب أن لا يتجاوز طول النص %2$s حرفاً.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">الوصف الكامل</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">الوصف الاختياري الطويل للبث. %1$s متاح. يجب أن لا يتجاوز طول النص %2$s حرفاً.</string>
   <string name="sourceSingleUrl">رابط مصدر PGN</string>
   <string name="sourceUrlHelp">عنوان URL الذي سيتحقق منه ليتشيس للحصول على تحديثات PGN. يجب أن يكون متاحا للجميع من الإنترنت.</string>
   <string name="sourceGameIds">حتى 64 معرف لُعْبَة ليتشيس، مفصولة بمسافات.</string>
@@ -70,7 +70,7 @@
   <string name="notYetStarted">البث لم يبدأ بعد.</string>
   <string name="officialWebsite">الموقع الرسمي</string>
   <string name="officialStandings">الترتيب الرسمي</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">المزيد من الخيارات على %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">المزيد من الخيارات على %s</string>
   <string name="webmastersPage">صفحة مدير المواقع</string>
   <string name="embedThisBroadcast">ادمج هذا البث في موقع الويب الخاص بك</string>
   <string name="ratingDiff">فرق التقييم</string>
@@ -78,7 +78,7 @@
   <string name="score">النتيجة</string>
   <string name="allTeams">كل الفرق</string>
   <string name="tournamentFormat">نظام البطولة</string>
-  <string name="tournamentLocation">موقع البطولة</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">موقع البطولة</string>
   <string name="topPlayers">أفضل اللاعبين</string>
   <string name="timezone">المنطقة الزمنية</string>
   <string name="fideRatingCategory">فئة تقيم FIDE</string>

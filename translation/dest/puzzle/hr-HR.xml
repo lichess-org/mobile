@@ -13,9 +13,9 @@
   <string name="specialMoves">Specifični potezi</string>
   <string name="didYouLikeThisPuzzle">Sviđa li ti se ovaj zadatak?</string>
   <string name="voteToLoadNextOne">Ocijeni i prijeđi na sljedeći zadatak!</string>
-  <string name="upVote">Glasaj za zagonetku</string>
-  <string name="downVote">Glasaj protiv zagonetke</string>
-  <string name="yourPuzzleRatingWillNotChange">Tvoj rejting zadataka se neće promjeniti. Imaj na umu da rješavanje zadaka nije natjecanje. Rejting prvenstveno pomaže u odabiru najboljih zadataka za tvoj trenutni nivo vještine.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Glasaj za zagonetku</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Glasaj protiv zagonetke</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Tvoj rejting zadataka se neće promjeniti. Imaj na umu da rješavanje zadaka nije natjecanje. Rejting prvenstveno pomaže u odabiru najboljih zadataka za tvoj trenutni nivo vještine.</string>
   <string name="findTheBestMoveForWhite">Pronađi najbolji potez za bijelog.</string>
   <string name="findTheBestMoveForBlack">Pronađi najbolji potez za crnog.</string>
   <string name="toGetPersonalizedPuzzles">Za personalizirane zadatke:</string>
@@ -78,7 +78,7 @@
   <string name="fromMyGames">Iz mojih partija</string>
   <string name="lookupOfPlayer">Pronađi zadatke iz igračevih partija</string>
   <string name="searchPuzzles">Pretraži zadatke</string>
-  <string name="fromMyGamesNone">Nema tvojih zadataka u bazi, ali Lichess te i dalje puno voli.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Nema tvojih zadataka u bazi, ali Lichess te i dalje puno voli.
 
 Igraj rapid i classic partije da povećaš vjerojatnost da zadatak iz tvoje partije bude dodan!</string>
   <string name="puzzleDashboardDescription">Vježbaj, analiziraj, unaprijedi</string>

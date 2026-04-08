@@ -17,10 +17,10 @@
   <string name="ongoing">En curso</string>
   <string name="upcoming">Proximament</string>
   <string name="roundName">Nombre d\'a ronda</string>
-  <string name="tournamentName">Nombre d\'o torneyo</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nombre d\'o torneyo</string>
   <string name="tournamentDescription">Descripción curta d\'o torneyo</string>
-  <string name="fullDescription">Descripción completa de l\'evento</string>
-  <string name="fullDescriptionHelp">Descripción larga opcional d\'a emisión. %1$s ye disponible. La largaria ha d\'estar inferior a %2$s caracters.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Descripción completa de l\'evento</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Descripción larga opcional d\'a emisión. %1$s ye disponible. La largaria ha d\'estar inferior a %2$s caracters.</string>
   <string name="sourceSingleUrl">URL d\'orichen d\'o PGN</string>
   <string name="sourceUrlHelp">URL que Lichess comprebará pa obtener actualizacions PGN. Ha d\'estar publicament accesible dende Internet.</string>
   <string name="sourceGameIds">Dica 64 IDs de chuego de Liches, separaus per espacios.</string>
@@ -45,7 +45,7 @@
   <string name="score">Puntuación</string>
   <string name="allTeams">Toz los equipos</string>
   <string name="tournamentFormat">Formato de torneyo</string>
-  <string name="tournamentLocation">Puesto d\'o torneyo</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Puesto d\'o torneyo</string>
   <string name="topPlayers">Millors chugadors</string>
   <string name="timezone">Zona horaria</string>
   <string name="fideRatingCategory">Categoría de fading FIDE</string>

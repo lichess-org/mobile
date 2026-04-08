@@ -21,10 +21,10 @@
   <string name="ongoing">Болып жатқан</string>
   <string name="upcoming">Келе жатқан</string>
   <string name="roundName">Айналым атауы</string>
-  <string name="tournamentName">Жарыс атауы</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Жарыс атауы</string>
   <string name="tournamentDescription">Жарыстың қысқа сипаттамасы</string>
-  <string name="fullDescription">Оқиғаның толық сипаттамасы</string>
-  <string name="fullDescriptionHelp">Көрсетілімнің қосымша үлкен сипаттамасы. %1$s қолданысқа ашық. Ұзындығы %2$s таңбадан кем болуы керек.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Оқиғаның толық сипаттамасы</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Көрсетілімнің қосымша үлкен сипаттамасы. %1$s қолданысқа ашық. Ұзындығы %2$s таңбадан кем болуы керек.</string>
   <string name="sourceSingleUrl">PGN мекенжайы</string>
   <string name="sourceUrlHelp">PGN жаңартуларын алу үшін Личес тексеретін сілтеме. Ол интернетте баршалыққа ашық болуы керек.</string>
   <string name="startDateHelp">Міндетті емес, егер күнін біліп тұрсаңыз</string>

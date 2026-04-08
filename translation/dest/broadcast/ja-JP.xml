@@ -19,10 +19,10 @@
   <string name="ongoing">配信中</string>
   <string name="upcoming">予定</string>
   <string name="roundName">ラウンド名</string>
-  <string name="tournamentName">大会名</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">大会名</string>
   <string name="tournamentDescription">大会の短い説明</string>
-  <string name="fullDescription">長い説明</string>
-  <string name="fullDescriptionHelp">内容の詳しい説明（オプション）。%1$s が利用できます。長さは [欧文換算で] %2$s 字まで。</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">長い説明</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">内容の詳しい説明（オプション）。%1$s が利用できます。長さは [欧文換算で] %2$s 字まで。</string>
   <string name="sourceSingleUrl">PGN のソース URL</string>
   <string name="sourceUrlHelp">Lichess が PGN を取得するための URL。インターネット上に公表されているもののみ。</string>
   <string name="sourceGameIds">Lichess ゲーム ID、半角スペースで区切って最大 64 個まで。</string>
@@ -61,7 +61,7 @@
   <string name="notYetStarted">中継はまだ始まっていません。</string>
   <string name="officialWebsite">公式サイト</string>
   <string name="officialStandings">公式順位</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">他のオプションは %s にあります</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">他のオプションは %s にあります</string>
   <string name="webmastersPage">ウェブ管理者のページ</string>
   <string name="embedThisBroadcast">この中継をウェブサイトに埋め込む</string>
   <string name="ratingDiff">レーティングの差</string>
@@ -70,7 +70,7 @@
   <string name="standingsDisclaimer">順位は中継対象のゲームに基づいて計算されるため、公式の結果とは異なる場合があります。</string>
   <string name="allTeams">すべてのチーム</string>
   <string name="tournamentFormat">トーナメント形式</string>
-  <string name="tournamentLocation">開催地</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">開催地</string>
   <string name="topPlayers">トッププレイヤー</string>
   <string name="timezone">タイムゾーン</string>
   <string name="fideRatingCategory">FIDE レーティング カテゴリー</string>
@@ -102,6 +102,6 @@
   <string name="semifinals">準決勝</string>
   <string name="finals">決勝</string>
   <string name="tiebreaks">タイブレーク</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">局数 %s</string>
+  <string name="gameX">局数 %s</string>
   <string name="knockouts">ノックアウト</string>
 </resources>

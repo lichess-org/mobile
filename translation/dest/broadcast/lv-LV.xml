@@ -7,10 +7,10 @@
   <string name="ongoing">Notiekošie</string>
   <string name="upcoming">Gaidāmie</string>
   <string name="roundName">Raunda nosaukums</string>
-  <string name="tournamentName">Turnīra nosaukums</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnīra nosaukums</string>
   <string name="tournamentDescription">Īss turnīra apraksts</string>
-  <string name="fullDescription">Pilns pasākuma apraksts</string>
-  <string name="fullDescriptionHelp">Neobligāts garš raidījuma apraksts. Pieejams %1$s. Garumam jābūt mazāk kā %2$s rakstzīmēm.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Pilns pasākuma apraksts</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Neobligāts garš raidījuma apraksts. Pieejams %1$s. Garumam jābūt mazāk kā %2$s rakstzīmēm.</string>
   <string name="sourceUrlHelp">URL, ko Lichess aptaujās, lai iegūtu PGN atjauninājumus. Tam jābūt publiski piekļūstamam no interneta.</string>
   <string name="startDateHelp">Neobligāts, ja zināt, kad pasākums sākas</string>
   <string name="currentGameUrl">Pašreizējās spēles URL</string>

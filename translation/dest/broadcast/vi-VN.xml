@@ -19,10 +19,10 @@
   <string name="ongoing">Đang diễn ra</string>
   <string name="upcoming">Sắp diễn ra</string>
   <string name="roundName">Tên vòng</string>
-  <string name="tournamentName">Tên giải đấu</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Tên giải đấu</string>
   <string name="tournamentDescription">Mô tả ngắn giải đấu</string>
-  <string name="fullDescription">Mô tả đầy đủ giải đấu</string>
-  <string name="fullDescriptionHelp">Tùy chọn mô tả dài về giải đấu. Có thể sử dụng %1$s. Độ dài phải nhỏ hơn %2$s ký tự.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Mô tả đầy đủ giải đấu</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Tùy chọn mô tả dài về giải đấu. Có thể sử dụng %1$s. Độ dài phải nhỏ hơn %2$s ký tự.</string>
   <string name="sourceSingleUrl">URL Nguồn PGN</string>
   <string name="sourceUrlHelp">URL mà Lichess sẽ khảo sát để nhận cập nhật PGN. Nó phải được truy cập công khai từ Internet.</string>
   <string name="sourceGameIds">Tối đa 64 ID ván cờ trên Lichess, phân tách bằng dấu cách.</string>
@@ -61,7 +61,7 @@
   <string name="notYetStarted">Chương trình phát sóng vẫn chưa bắt đầu.</string>
   <string name="officialWebsite">Website chính thức</string>
   <string name="officialStandings">Bảng xếp hạng Chính thức</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Thêm tùy chọn trên %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Thêm tùy chọn trên %s</string>
   <string name="webmastersPage">trang nhà phát triển web</string>
   <string name="embedThisBroadcast">Nhúng chương trình phát sóng này vào trang web của bạn</string>
   <string name="ratingDiff">Độ thay đổi hệ số</string>
@@ -70,7 +70,7 @@
   <string name="standingsDisclaimer">Bảng xếp hạng được tính toán dựa trên các trận đấu được phát sóng và có thể khác với kết quả chính thức.</string>
   <string name="allTeams">Tất cả đội</string>
   <string name="tournamentFormat">Điều lệ giải đấu</string>
-  <string name="tournamentLocation">Địa điểm tổ chức giải đấu</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Địa điểm tổ chức giải đấu</string>
   <string name="topPlayers">Những kỳ thủ hàng đầu</string>
   <string name="timezone">Múi giờ</string>
   <string name="fideRatingCategory">Thể loại xếp hạng FIDE</string>
@@ -102,6 +102,6 @@
   <string name="semifinals">Bán kết</string>
   <string name="finals">Chung kết</string>
   <string name="tiebreaks">Tiebreak</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Trận thứ %s</string>
+  <string name="gameX">Trận thứ %s</string>
   <string name="knockouts">Loại trực tiếp</string>
 </resources>

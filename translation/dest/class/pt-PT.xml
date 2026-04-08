@@ -90,7 +90,7 @@ Aqui está o link para acederes à aula.</string>
   <string name="timePlaying">Tempo jogado</string>
   <string name="variantXOverLastY">%1$s sobre os últimos %2$s</string>
   <string name="winrate">Taxa de vitórias</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">Visão geral</string>
   <string name="news">Notícias</string>
   <string name="classNews">Novidades sobre a aula</string>
@@ -114,7 +114,7 @@ Aqui está o link para acederes à aula.</string>
   <string name="xisNowAStudentOfTheClass">%s é agora aluno da presente turma</string>
   <string name="anInvitationHasBeenSentToX">Foi enviado um convite para %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s já tem um convite pendente</string>
-  <string name="xIsAKidAccountWarning">%1$s é uma conta de criança e não pode receber a sua mensagem. Deve dar-lhe o URL de convite manualmente: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s é uma conta de criança e não pode receber a sua mensagem. Deve dar-lhe o URL de convite manualmente: %2$s</string>
   <string name="moveToClass">Mover para %s</string>
   <string name="moveToAnotherClass">Mover para outra aula</string>
   <string name="allowMessagingBetweenStudents">Permitir mensagens entre alunos</string>

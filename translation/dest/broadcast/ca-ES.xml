@@ -21,10 +21,10 @@
   <string name="ongoing">En curs</string>
   <string name="upcoming">Properes</string>
   <string name="roundName">Nom de ronda</string>
-  <string name="tournamentName">Nom del torneig</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nom del torneig</string>
   <string name="tournamentDescription">Breu descripció del torneig</string>
-  <string name="fullDescription">Descripció total de l\'esdeveniment</string>
-  <string name="fullDescriptionHelp">Opció de llarga descripció de l\'esdeveniment. %1$s és disponible. Ha de tenir menys de %2$s lletres.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Descripció total de l\'esdeveniment</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Opció de llarga descripció de l\'esdeveniment. %1$s és disponible. Ha de tenir menys de %2$s lletres.</string>
   <string name="sourceSingleUrl">URL origen del PGN</string>
   <string name="sourceUrlHelp">URL que Lichess comprovarà per a obtenir actualitzacions PGN. Ha de ser públicament accessible des d\'Internet.</string>
   <string name="sourceGameIds">Fins a 64 identificadors de partides de Lichess, separades per espais.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">La retransmissió encara no ha començat.</string>
   <string name="officialWebsite">Lloc web oficial</string>
   <string name="officialStandings">Classificació oficial</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Més opcions a la %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Més opcions a la %s</string>
   <string name="webmastersPage">pàgina d\'administració</string>
   <string name="embedThisBroadcast">Incrusta aquesta retransmissió al vostre lloc web</string>
   <string name="ratingDiff">Diferència puntuació</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">La classificació es calcula utilitzant les partides de la retransmissió i pot variar dels resultats oficials.</string>
   <string name="allTeams">Tots els equips</string>
   <string name="tournamentFormat">Format del torneig</string>
-  <string name="tournamentLocation">Ubicació del torneig</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Ubicació del torneig</string>
   <string name="topPlayers">Millors jugadors</string>
   <string name="timezone">Zona horària</string>
   <string name="fideRatingCategory">Categoria puntuació FIDE</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Semifinals</string>
   <string name="finals">Finals</string>
   <string name="tiebreaks">Desempats</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Partida %s</string>
+  <string name="gameX">Partida %s</string>
   <string name="knockouts">Eliminatòria</string>
 </resources>

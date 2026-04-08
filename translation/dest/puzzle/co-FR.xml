@@ -13,9 +13,9 @@
   <string name="specialMoves">Colpu speciale</string>
   <string name="didYouLikeThisPuzzle">Vi hà piaciutu stu ?</string>
   <string name="voteToLoadNextOne">Vutate pà carigà u prossimu!</string>
-  <string name="upVote">Vutà pà stu prublema</string>
-  <string name="downVote">Vutà contru à issu prublema</string>
-  <string name="yourPuzzleRatingWillNotChange">A vostra classifica di  ùn hà da cambià. Issi prublemi ùn sò una cumpetizione. A vostra classifica ci permette di prupone vi prublemi addattati à u vostru livellu attuale.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vutà pà stu prublema</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vutà contru à issu prublema</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">A vostra classifica di  ùn hà da cambià. Issi prublemi ùn sò una cumpetizione. A vostra classifica ci permette di prupone vi prublemi addattati à u vostru livellu attuale.</string>
   <string name="findTheBestMoveForWhite">Truvate u colpu u più forte pè i bianchi.</string>
   <string name="findTheBestMoveForBlack">Truvate u colpu u più forte pè i neri.</string>
   <string name="toGetPersonalizedPuzzles">Per uttene prubemi persunalizati:</string>
@@ -69,7 +69,7 @@
   <string name="fromMyGames">Strattu di e mo partite</string>
   <string name="lookupOfPlayer">Cercà i prublemi in e partite di l\' altri ghjucadori</string>
   <string name="searchPuzzles">Cercà i prublemi</string>
-  <string name="fromMyGamesNone">Ùn avete prublemi in a databasa, ma li piaceria à Lichess d\' avè ne.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Ùn avete prublemi in a databasa, ma li piaceria à Lichess d\' avè ne.
 
 Ghjucate e partite rapide è e partite classiche per aumintà a prubabilità d\' avè un  strattu di e vostre partite!</string>
   <string name="puzzleDashboardDescription">Addestrà, analisà, migliurà</string>

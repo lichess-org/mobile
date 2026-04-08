@@ -13,10 +13,10 @@
   <string name="ongoing">Бягучыя</string>
   <string name="upcoming">Надыходзячыя</string>
   <string name="roundName">Назва туру</string>
-  <string name="tournamentName">Назва турніру</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Назва турніру</string>
   <string name="tournamentDescription">Сціслае апісанне турніру</string>
-  <string name="fullDescription">Поўнае апісанне турніру</string>
-  <string name="fullDescriptionHelp">Неабавязковая дасканалае апісанне турніру. Даступны %1$s. Даўжыня павінна быць менш за %2$s сімвалаў.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Поўнае апісанне турніру</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Неабавязковая дасканалае апісанне турніру. Даступны %1$s. Даўжыня павінна быць менш за %2$s сімвалаў.</string>
   <string name="sourceSingleUrl">Спасылка ў фармаце PGN</string>
   <string name="sourceUrlHelp">Спасылка, з якой Lichess паспрабуе атрымоўваць абнаўленні PGN. Яны павінна быць даступнай для кожнай ва Інтэрнэце.</string>
   <string name="sourceGameIds">Да 64 ігравых ID Lichess, раздзеленых прабеламі.</string>
@@ -55,7 +55,7 @@
   <string name="notYetStarted">Трансляцыя яшчэ не пачалася.</string>
   <string name="officialWebsite">Афіцыйны сайт</string>
   <string name="officialStandings">Афіцыяльная турнірная табліца</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Больш опцый на %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Больш опцый на %s</string>
   <string name="webmastersPage">старонцы вэб-майстра</string>
   <string name="embedThisBroadcast">Убудуйце гэтую трансляцыю на сваім сайце</string>
   <string name="ratingDiff">Розніца ў рэйтынгу</string>

@@ -19,10 +19,10 @@
   <string name="ongoing">进行中</string>
   <string name="upcoming">即将开始</string>
   <string name="roundName">轮次名称</string>
-  <string name="tournamentName">锦标赛名称</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">锦标赛名称</string>
   <string name="tournamentDescription">锦标赛简短描述</string>
-  <string name="fullDescription">锦标赛完整描述</string>
-  <string name="fullDescriptionHelp">锦标赛的详细描述（可选）。可使用 %1$s 格式。长度必须少于 %2$s 个字符。</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">锦标赛完整描述</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">锦标赛的详细描述（可选）。可使用 %1$s 格式。长度必须少于 %2$s 个字符。</string>
   <string name="sourceSingleUrl">PGN 源文件链接</string>
   <string name="sourceUrlHelp">Lichess 将检查此链接以获取 PGN 更新。它必须能在互联网上公开访问。</string>
   <string name="sourceGameIds">最多 64 个 Lichess 对局 ID，以空格分隔。</string>
@@ -61,7 +61,7 @@
   <string name="notYetStarted">转播尚未开始。</string>
   <string name="officialWebsite">官方网站</string>
   <string name="officialStandings">官方排名</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">更多选项位于 %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">更多选项位于 %s</string>
   <string name="webmastersPage">站长页面</string>
   <string name="embedThisBroadcast">将此转播嵌入您的网站</string>
   <string name="ratingDiff">等级分差</string>
@@ -70,7 +70,7 @@
   <string name="standingsDisclaimer">数据统计基于赛事转播画面计算，可能与官方结果存在出入</string>
   <string name="allTeams">所有团队</string>
   <string name="tournamentFormat">锦标赛赛制</string>
-  <string name="tournamentLocation">锦标赛地点</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">锦标赛地点</string>
   <string name="topPlayers">顶尖棋手</string>
   <string name="timezone">时区</string>
   <string name="fideRatingCategory">FIDE 等级分类别</string>
@@ -102,6 +102,6 @@
   <string name="semifinals">半决赛</string>
   <string name="finals">决赛</string>
   <string name="tiebreaks">加赛</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">第 %s 局</string>
+  <string name="gameX">第 %s 局</string>
   <string name="knockouts">淘汰赛</string>
 </resources>

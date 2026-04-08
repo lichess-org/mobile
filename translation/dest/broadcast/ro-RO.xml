@@ -23,10 +23,10 @@
   <string name="ongoing">În desfășurare</string>
   <string name="upcoming">Următoare</string>
   <string name="roundName">Numele rundei</string>
-  <string name="tournamentName">Numele turneului</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Numele evenimentului</string>
   <string name="tournamentDescription">O descriere scurtă a turneului</string>
-  <string name="fullDescription">Întreaga descriere a evenimentului</string>
-  <string name="fullDescriptionHelp">Descriere lungă, opțională, a difuzării. %1$s este disponibil. Lungimea trebuie să fie mai mică decât %2$s caractere.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Întreaga descriere a evenimentului</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Descriere lungă, opțională, a difuzării. %1$s este disponibil. Lungimea trebuie să fie mai mică decât %2$s caractere.</string>
   <string name="sourceSingleUrl">URL sursă PGN</string>
   <string name="sourceUrlHelp">URL-ul pe care Lichess îl va verifica pentru a obține actualizări al PGN-ului. Trebuie să fie public accesibil pe Internet.</string>
   <string name="sourceGameIds">Până la 64 de ID-uri de joc Lichess, separate prin spații.</string>
@@ -65,7 +65,7 @@
   <string name="notYetStarted">Transmisiunea nu a început încă.</string>
   <string name="officialWebsite">Website-ul oficial</string>
   <string name="officialStandings">Clasament oficial</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Mai multe opțiuni pe %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Mai multe opțiuni pe %s</string>
   <string name="webmastersPage">pagina administratorilor de site</string>
   <string name="embedThisBroadcast">Încorporează această transmisiune în site-ul tău</string>
   <string name="ratingDiff">Diferență rating</string>
@@ -74,7 +74,7 @@
   <string name="standingsDisclaimer">Clasamentele sunt calculate folosind jocuri difuzate şi pot fi diferite de rezultatele oficiale.</string>
   <string name="allTeams">Toate echipele</string>
   <string name="tournamentFormat">Format turneu</string>
-  <string name="tournamentLocation">Locație turneu</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Locație turneu</string>
   <string name="topPlayers">Jucători de top</string>
   <string name="timezone">Fus orar</string>
   <string name="fideRatingCategory">Categoria de rating FIDE</string>
@@ -106,6 +106,6 @@
   <string name="semifinals">Semifinale</string>
   <string name="finals">Finale</string>
   <string name="tiebreaks">Departajări</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Joc %s</string>
+  <string name="gameX">Joc %s</string>
   <string name="knockouts">Eliminatorii</string>
 </resources>

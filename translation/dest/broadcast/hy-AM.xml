@@ -9,9 +9,9 @@
   <string name="ongoing">Ընթացիկ</string>
   <string name="upcoming">Առաջիկայում սպասվող</string>
   <string name="roundName">Խաղափուլի անվանում</string>
-  <string name="tournamentName">Մրցաշարի անվանում</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Մրցաշարի անվանում</string>
   <string name="tournamentDescription">Իրադարձության համառոտ նկարագրություն</string>
-  <string name="fullDescription">Իրադարձության ամբողջական նկարագրություն</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Իրադարձության ամբողջական նկարագրություն</string>
   <string name="startDateHelp">Լրացուցիչ, եթե գիտեք, թե երբ է սկսվելու իրադարձությունը</string>
   <string name="currentGameUrl">Ընթացիկ պարտիայի URL-հասցեն</string>
   <string name="downloadAllRounds">Բեռնել բոլոր խաղափուլերը</string>

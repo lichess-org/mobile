@@ -21,10 +21,10 @@
   <string name="ongoing">In corso</string>
   <string name="upcoming">Prossimamente</string>
   <string name="roundName">Nome turno</string>
-  <string name="tournamentName">Nome del torneo</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nome del torneo</string>
   <string name="tournamentDescription">Breve descrizione dell\'evento</string>
-  <string name="fullDescription">Descrizione completa dell\'evento</string>
-  <string name="fullDescriptionHelp">(Facoltativo) Descrizione completa dell\'evento. %1$s è disponibile. La lunghezza deve essere inferiore a %2$s caratteri.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Descrizione completa dell\'evento</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">(Facoltativo) Descrizione completa dell\'evento. %1$s è disponibile. La lunghezza deve essere inferiore a %2$s caratteri.</string>
   <string name="sourceSingleUrl">Sorgente URL PGN</string>
   <string name="sourceUrlHelp">L\'URL che Lichess utilizzerà per ottenere gli aggiornamenti dei PGN. Deve essere accessibile pubblicamente su Internet.</string>
   <string name="sourceGameIds">Fino a 64 ID di partite Lichess, separati da spazi.</string>
@@ -63,7 +63,7 @@
   <string name="notYetStarted">Questa trasmissione non è ancora cominciata.</string>
   <string name="officialWebsite">Sito web ufficiale</string>
   <string name="officialStandings">Classifica Ufficiale</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Altre opzioni si trovano nella %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Altre opzioni si trovano nella %s</string>
   <string name="webmastersPage">pagina dei gestori web</string>
   <string name="embedThisBroadcast">Incorpora questa trasmissione nel tuo sito web</string>
   <string name="ratingDiff">Differenza di punteggio</string>
@@ -72,7 +72,7 @@
   <string name="standingsDisclaimer">Le classifiche sono calcolate prendendo in considerazione solo le partite messe in onda e potrebbero differire dai risultati ufficiali.</string>
   <string name="allTeams">Tutte le squadre</string>
   <string name="tournamentFormat">Formato del torneo</string>
-  <string name="tournamentLocation">Luogo del Torneo</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Luogo del Torneo</string>
   <string name="topPlayers">Giocatori migliori</string>
   <string name="timezone">Fuso orario</string>
   <string name="fideRatingCategory">Categoria di punteggio FIDE</string>
@@ -104,6 +104,6 @@
   <string name="semifinals">Semifinali</string>
   <string name="finals">Finali</string>
   <string name="tiebreaks">Tiebreak</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Partita %s</string>
+  <string name="gameX">Partita %s</string>
   <string name="knockouts">KO</string>
 </resources>

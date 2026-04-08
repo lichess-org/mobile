@@ -13,9 +13,9 @@
   <string name="specialMoves">বিশেশ চাল</string>
   <string name="didYouLikeThisPuzzle">আপনি এই ধাঁধা তি কি পছন্দ করেছেন?</string>
   <string name="voteToLoadNextOne">পরের ধাঁধা তি তে জেতে ভতে দিন!</string>
-  <string name="upVote">ধাঁধা কে আপ-ভোট করুন</string>
-  <string name="downVote">ধাঁধা কে ডাউন-ভোট করুন</string>
-  <string name="yourPuzzleRatingWillNotChange">আপনার ধাঁধার রেটিং পরিবর্তীত হবে না। উল্লেখ্য, ধাঁধা প্রতিযোগীতামূলক নয়। আপনার রেটিং আপনার দক্ষতা অনুযায়ী ধাঁধা বাছাই করতে সাহায্য করে।</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ধাঁধা কে আপ-ভোট করুন</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ধাঁধা কে ডাউন-ভোট করুন</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">আপনার ধাঁধার রেটিং পরিবর্তীত হবে না। উল্লেখ্য, ধাঁধা প্রতিযোগীতামূলক নয়। আপনার রেটিং আপনার দক্ষতা অনুযায়ী ধাঁধা বাছাই করতে সাহায্য করে।</string>
   <string name="findTheBestMoveForWhite">সাদার জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.</string>
   <string name="findTheBestMoveForBlack">কালোর জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.</string>
   <string name="toGetPersonalizedPuzzles">আপনার ব্যাক্তিগত পাজল পেতে:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">আমার খেলা গুলো থেকে</string>
   <string name="lookupOfPlayer">একজন খেলোয়াড়ের খেলা থেকে ধাঁধা দেখুন</string>
   <string name="searchPuzzles">ধাঁধা খুজুন</string>
-  <string name="fromMyGamesNone">ডাটাবেজে আপনার কোনো ধাঁধা নেই।
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">ডাটাবেজে আপনার কোনো ধাঁধা নেই।
 আপনার খেলা থেকে ধাঁধা নেয়ার সম্ভাবনা বাড়াতে র‍্যাপিড এবং ক্লাসিক খেলুন।</string>
   <string name="puzzleDashboardDescription">প্রশিক্ষণ, বিশ্লেষণ, উন্নতি</string>
   <plurals name="nbPlayed">
@@ -88,6 +88,6 @@
   </plurals>
   <string name="percentSolved">%s সমাধান করেছেন।</string>
   <string name="noPuzzlesToShow">প্রদর্শনের কিছু নেই। প্রথমে কিছু ধাঁধা খেলুন।</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">আপনার প্রগতির জন্য এইগুলোতে প্রশিক্ষণ করুন!</string>
+  <string name="improvementAreasDescription">আপনার প্রগতির জন্য এইগুলোতে প্রশিক্ষণ করুন!</string>
   <string name="strengthDescription">আপনি এই ধাঁচের গুলোয় ভালো খেলেন।</string>
 </resources>

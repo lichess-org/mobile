@@ -13,9 +13,9 @@
   <string name="specialMoves">ವಿಶೇಷ ನಡೆಗಳು</string>
   <string name="didYouLikeThisPuzzle">ನಿಮಗೆ ಈ ಒಗಟು ಇಷ್ಟವಾಯಿತೇ?</string>
   <string name="voteToLoadNextOne">ಮುಂದಿನದ್ದಕ್ಕೆ ಆಯ್ಕೆ ಮಾಡಿ!</string>
-  <string name="upVote">ಒಗಟು ಅಪ್ ವೋಟ್ ಮಾಡಿ</string>
-  <string name="downVote">ಒಗಟು ಡೌನ್ ವೋಟ್ ಮಾಡಿ</string>
-  <string name="yourPuzzleRatingWillNotChange">ನಿಮ್ಮ ಒಗಟು ವಿಭಾಗದ ಧಾರಣೆ ಬದಲಾಗುವುದಿಲ್ಲ. ಒಗಟು ಅಂದರೆ ಸ್ಪರ್ಧೆ ಅಲ್ಲ ಅನ್ನುವುದನ್ನು ಗಮನಿಸಿ. ಒಗಟು ವಿಭಾಗದ ಧಾರಣೆಯು ನಿಮ್ಮ ನೈಪುಣ್ಯತೆಗೆ ಅನುಗುಣವಾಗಿರುವ ಅತ್ಯುತ್ತಮ ಒಗಟನ್ನು ಆಯ್ಕೆ ಮಾಡಲಷ್ಟೇ ಸಹಾಯಿಸುತ್ತದೆ.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ಒಗಟು ಅಪ್ ವೋಟ್ ಮಾಡಿ</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">ಒಗಟು ಡೌನ್ ವೋಟ್ ಮಾಡಿ</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">ನಿಮ್ಮ ಒಗಟು ವಿಭಾಗದ ಧಾರಣೆ ಬದಲಾಗುವುದಿಲ್ಲ. ಒಗಟು ಅಂದರೆ ಸ್ಪರ್ಧೆ ಅಲ್ಲ ಅನ್ನುವುದನ್ನು ಗಮನಿಸಿ. ಒಗಟು ವಿಭಾಗದ ಧಾರಣೆಯು ನಿಮ್ಮ ನೈಪುಣ್ಯತೆಗೆ ಅನುಗುಣವಾಗಿರುವ ಅತ್ಯುತ್ತಮ ಒಗಟನ್ನು ಆಯ್ಕೆ ಮಾಡಲಷ್ಟೇ ಸಹಾಯಿಸುತ್ತದೆ.</string>
   <string name="findTheBestMoveForWhite">ಬಿಳಿಗೆ ಉತ್ತಮ ನಡೆ ಹುಡುಕಿ.</string>
   <string name="findTheBestMoveForBlack">ಕಪ್ಪಿಗೆ ಉತ್ತಮ ನಡೆ ಹುಡುಕಿ.</string>
   <string name="toGetPersonalizedPuzzles">ನಿಮಗೆ ಅನುಗುಣವಾದ ಒಗಟುಗಳಿಗೆ:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">ನನ್ನದೇ ಆಟಗಳಿಂದ</string>
   <string name="lookupOfPlayer">ಒಬ್ಬರು ಆಟಗಾರರ ಆಟಗಳಿಂದ ಒಗಟು ಹುಡುಕಿ ತೆಗೆಯಿರಿ</string>
   <string name="searchPuzzles">ಒಗಟುಗಳನ್ನು ಹುಡುಕಿ</string>
-  <string name="fromMyGamesNone">ನಮ್ಮ ಡೇಟಾಬೇಸ್ ನಲ್ಲಿ ನಿಮ್ಮ ಯಾವುದೇ ಒಗಟುಗಳಿಲ್ಲ, ಆದರೆ ಲೀಚೆಸ್ ನಿಮ್ಮನ್ನು ಎಂದಿನಂತೆಯೇ ತುಂಬಾ ಇಷ್ಟ ಪಡುತ್ತಿದೆ.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">ನಮ್ಮ ಡೇಟಾಬೇಸ್ ನಲ್ಲಿ ನಿಮ್ಮ ಯಾವುದೇ ಒಗಟುಗಳಿಲ್ಲ, ಆದರೆ ಲೀಚೆಸ್ ನಿಮ್ಮನ್ನು ಎಂದಿನಂತೆಯೇ ತುಂಬಾ ಇಷ್ಟ ಪಡುತ್ತಿದೆ.
 ತ್ವರಿತ (Rapid) ಮತ್ತು ಶಾಸ್ತ್ರೀಯ ಶೈಲಿಯ ಆಟಗಳನ್ನು ಇನ್ನಷ್ಟು ಹೆಚ್ಚು ಆಡಿ, ಒಗಟುಗಳ ಗುಚ್ಛದಲ್ಲಿ ನಿಮ್ಮ ಆಟಗಳನ್ನು ಕಾಣುವ ಅವಕಾಶವನ್ನು ಹೆಚ್ಚಿಸಿಕೊಳ್ಳಿ!</string>
   <string name="puzzleDashboardDescription">ಕಲಿಯಿರಿ, ವಿಶ್ಲೇಷಿಸಿ, ಸುಧಾರಿಸಿ</string>
   <plurals name="nbPlayed">
@@ -88,6 +88,6 @@
   </plurals>
   <string name="percentSolved">%s ಉತ್ತರಿಸಿದ್ದೀರಿ</string>
   <string name="noPuzzlesToShow">ತೋರಿಸಲು ಯಾವುದೇ ವಿವರಗಳಿಲ್ಲ, ಮೊದಲು ಸ್ವಲ್ಪ ಒಗಟುಗಳನ್ನು ಆಡಿ!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ನಿಮ್ಮ ಚೆಸ್ ಪ್ರಗತಿಯನ್ನು ಉತ್ತಮಗೊಳಿಸಲು ಇವನ್ನು ಅಭ್ಯಾಸ ಮಾಡಿ!</string>
+  <string name="improvementAreasDescription">ನಿಮ್ಮ ಚೆಸ್ ಪ್ರಗತಿಯನ್ನು ಉತ್ತಮಗೊಳಿಸಲು ಇವನ್ನು ಅಭ್ಯಾಸ ಮಾಡಿ!</string>
   <string name="strengthDescription">ನೀವು ಈ ವಿಷಯಗಳಲ್ಲಿ ಚೆನ್ನಾಗಿ ಆಡುತ್ತೀರಿ</string>
 </resources>

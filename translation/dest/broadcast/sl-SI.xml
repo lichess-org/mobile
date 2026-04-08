@@ -25,10 +25,10 @@
   <string name="ongoing">V teku</string>
   <string name="upcoming">Prihajajoči</string>
   <string name="roundName">Ime kroga</string>
-  <string name="tournamentName">Turnirsko ime</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnirsko ime</string>
   <string name="tournamentDescription">Kratek opis turnirja</string>
-  <string name="fullDescription">Polni opis dogodka</string>
-  <string name="fullDescriptionHelp">Neobvezen dolg opis prenosa. %1$s je na voljo. Dolžina mora biti manjša od %2$s znakov.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Polni opis dogodka</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Neobvezen dolg opis prenosa. %1$s je na voljo. Dolžina mora biti manjša od %2$s znakov.</string>
   <string name="sourceSingleUrl">Vir partije v PGN formatu</string>
   <string name="sourceUrlHelp">URL, ki ga bo Lichess preveril, da bo prejel PGN posodobitve. Javno mora biti dostopen preko interneta.</string>
   <string name="sourceGameIds">Do 64 Lichess ID-jev iger, deljenih s presledkom.</string>
@@ -67,7 +67,7 @@
   <string name="notYetStarted">Prenos v živo se še ni začel.</string>
   <string name="officialWebsite">Uradna spletna stran</string>
   <string name="officialStandings">Uradna lestvica</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Več nastavitev s %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Več nastavitev s %s</string>
   <string name="webmastersPage">Stran administratorja turnirja</string>
   <string name="embedThisBroadcast">Vgradite prenos v živo v svojo spletno stran.</string>
   <string name="ratingDiff">Razlika v ratingu</string>
@@ -76,7 +76,7 @@
   <string name="standingsDisclaimer">Lestvice se izračunajo na podlagi predvajanih tekem in se lahko razlikujejo od uradnih rezultatov.</string>
   <string name="allTeams">Vse ekipe</string>
   <string name="tournamentFormat">Oblika turnirja</string>
-  <string name="tournamentLocation">Lokacija turnirja</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Lokacija turnirja</string>
   <string name="topPlayers">Najboljši igralci</string>
   <string name="timezone">Časovni pas</string>
   <string name="fideRatingCategory">FIDE rating kategorija</string>
@@ -108,6 +108,6 @@
   <string name="semifinals">Polfinali</string>
   <string name="finals">Finala</string>
   <string name="tiebreaks">Tiebreaki</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Igra %s</string>
+  <string name="gameX">Igra %s</string>
   <string name="knockouts">Nokauti</string>
 </resources>
