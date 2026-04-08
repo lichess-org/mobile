@@ -208,7 +208,7 @@ class AppLinksService {
 
     if (routes != null) {
       for (final route in routes) {
-        Navigator.of(context).push(route);
+        Navigator.of(context, rootNavigator: true).push(route);
       }
     } else {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
