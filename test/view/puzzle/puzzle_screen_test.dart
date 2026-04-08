@@ -816,7 +816,7 @@ void main() {
         tester,
         home: const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix), replayDays: 30),
         overrides: {
-          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) async {
+          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) {
             return replayContext;
           }),
           puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
@@ -843,7 +843,7 @@ void main() {
         tester,
         home: const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix), replayDays: 30),
         overrides: {
-          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) async {
+          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) {
             return null;
           }),
           puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
@@ -886,7 +886,7 @@ void main() {
         tester,
         home: const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix), replayDays: 30),
         overrides: {
-          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) async {
+          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) {
             return replayContext;
           }),
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
@@ -975,7 +975,7 @@ void main() {
         tester,
         home: const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix), replayDays: 30),
         overrides: {
-          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) async {
+          puzzleReplayProvider: puzzleReplayProvider.overrideWith((ref, params) {
             return replayContext;
           }),
           puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
