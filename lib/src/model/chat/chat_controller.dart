@@ -66,7 +66,7 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
 @freezed
 abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
   const StudyChatOptions._();
-  const factory StudyChatOptions({required StudyId id, required bool writeable}) =
+  const factory StudyChatOptions({required StudyOptions options, required bool writeable}) =
       _StudyChatOptions;
 
   @override
@@ -74,6 +74,9 @@ abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
 
   @override
   bool get isPublic => true;
+
+  @override
+  StringId get id => options.id;
 }
 
 /// A provider that gets the chat unread messages
@@ -124,8 +127,8 @@ class ChatController extends AsyncNotifier<ChatState> {
       TournamentChatOptions(:final id) => (await ref.read(
         tournamentControllerProvider(id).future,
       )).tournament.chat?.lines,
-      StudyChatOptions(:final id) => (await ref.read(
-        studyControllerProvider(id).future,
+      StudyChatOptions(:final options) => (await ref.read(
+        studyControllerProvider(options).future,
       )).study.chat?.lines,
     };
 
