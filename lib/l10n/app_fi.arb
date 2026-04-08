@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Vakuutan etten ota vastaan ulkopuolista apua pelieni aikana (shakkitietokoneilta, kirjoilta, tietokannoilta enkä muilta ihmisiltä).",
   "agreementNice": "Vakuutan että käyttäydyn aina muita pelaajia kunnioittaen.",
   "agreementMultipleAccounts": "Hyväksyn, että en luo useampaa kuin yhtä käyttäjätunnusta (paitsi kohdassa {param} mainituista syistä).",
-  "agreementPolicy": "Vakuutan että noudatan Lichessin sääntöjä.",
   "searchOrStartNewDiscussion": "Hae tai aloita uusi keskustelu",
   "edit": "Muokkaa",
   "ultraBullet": "UltraBullet",

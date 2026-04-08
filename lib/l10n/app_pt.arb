@@ -1362,7 +1362,6 @@
   "agreementAssistance": "Concordo que nunca recorrerei a assistência durante as minhas partidas (de um computador de xadrez, livro, base de dados ou outra pessoa).",
   "agreementNice": "Concordo que serei sempre repeitoso para os outros jogadores.",
   "agreementMultipleAccounts": "Concordo que não criarei várias contas (exceto pelas razões indicadas em {param}).",
-  "agreementPolicy": "Concordo que seguirei todas as políticas do Lichess.",
   "searchOrStartNewDiscussion": "Pesquisa ou começa uma nova conversa",
   "edit": "Editar",
   "ultraBullet": "Ultra-Bala",

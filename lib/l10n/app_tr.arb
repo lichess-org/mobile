@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Maçlar esnasında hiçbir zaman dışarıdan yardım almayacağım (bilgisayardan, kitaptan, veri tabanından veya başka bir insandan).",
   "agreementNice": "Diğer oyunculara karşı her zaman iyi bir tutum içinde olacağım.",
   "agreementMultipleAccounts": "Birden fazla hesap oluşturmayacağımı onaylıyorum ({param}'da sıralanmış durumlar hariç).",
-  "agreementPolicy": "Lichess kurallarını takip edeceğim.",
   "searchOrStartNewDiscussion": "Tartışma ara veya yenisini başlat",
   "edit": "Düzenle",
   "ultraBullet": "UltraBullet",

@@ -4754,9 +4754,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Zgadzam się przestrzegać wszystkich zasad Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Szukaj lub rozpocznij nową rozmowę';
 
   @override

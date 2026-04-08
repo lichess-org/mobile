@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Eu concordo que em momento algum receberei assistência durante os meus jogos (seja de um computador, livro, banco de dados ou outra pessoa).",
   "agreementNice": "Eu concordo que serei sempre cortês com outros jogadores.",
   "agreementMultipleAccounts": "Eu concordo que não criarei múltiplas contas (exceto pelas razões indicadas em {param}).",
-  "agreementPolicy": "Eu concordo que seguirei todas as normas do Lichess.",
   "searchOrStartNewDiscussion": "Procurar ou iniciar nova conversa",
   "edit": "Editar",
   "ultraBullet": "UltraBullet",

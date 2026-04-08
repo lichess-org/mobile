@@ -1407,7 +1407,6 @@
   "agreementAssistance": "私はいかなる場合も対局中に外部の力を借りないことに同意します（コンピュータ、書籍、データベース、別の人物）。",
   "agreementNice": "私は常に他のプレイヤーへの礼儀を守ることに同意します。",
   "agreementMultipleAccounts": "私は複数のアカウントを作成しないことに同意します（{param} に記載の理由による場合を除く）。",
-  "agreementPolicy": "私は Lichess のすべてのポリシーに従うことに同意します。",
   "searchOrStartNewDiscussion": "検索または新しいトピックを始める",
   "edit": "編集",
   "ultraBullet": "ウルトラブレット",

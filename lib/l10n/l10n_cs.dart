@@ -4752,9 +4752,6 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Souhlasím, že se budu řídit všemi pravidly Lichessu.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Začněte nebo vyhledejte konverzaci';
 
   @override

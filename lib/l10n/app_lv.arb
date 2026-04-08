@@ -1125,7 +1125,6 @@
   "agreementAssistance": "Piekrītu spēlējot nevienā brīdī nesaņemt palīdzību (no šaha programmas, grāmatas, datubāzes vai cita cilvēka).",
   "agreementNice": "Piekrītu vienmēr izturēties pieklājīgi pret citiem spēlētājiem.",
   "agreementMultipleAccounts": "Piekrītu neizveidot vairākus kontus (izņemot gadījumos, kad to attaisno {param}).",
-  "agreementPolicy": "Piekrītu ievērot visus Lichess noteikumus.",
   "searchOrStartNewDiscussion": "Meklēt vai uzsākt sarunu",
   "edit": "Rediģēt",
   "bullet": "Bullet",

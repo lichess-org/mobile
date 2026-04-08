@@ -4670,9 +4670,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Tôi đồng ý rằng, tôi sẽ luôn tuân thủ các chính sách của Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Tìm hoặc bắt đầu một cuộc trò chuyện';
 
   @override

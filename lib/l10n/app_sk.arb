@@ -1345,7 +1345,6 @@
   "agreementAssistance": "Súhlasím, že v žiadnom prípade nebudem používať asistenciu (počítača, šachovej knihy, databázy alebo inej osoby).",
   "agreementNice": "Súhlasím, že budem vždy rešpektovať ostatných hráčov.",
   "agreementMultipleAccounts": "Súhlasím, že nebudem vytvárať ďalšie účty (s výnimkou dôvodov uvedených v {param}).",
-  "agreementPolicy": "Súhlasím, že budem dodržiavať všetky pravidlá Lichessu.",
   "searchOrStartNewDiscussion": "Prehľadávať alebo začať novú konverzáciu",
   "edit": "Upraviť",
   "ultraBullet": "UltraBullet",

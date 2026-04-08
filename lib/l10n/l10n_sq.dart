@@ -290,7 +290,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the center to win the game.';
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
@@ -910,7 +910,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Sajti zyrtar';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Official standings';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1531,7 +1531,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyBroadcasts => 'Transmetime te të cilat jeni pajtuar';
 
   @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+  String get preferencesNotifyTimeAlarm => 'Correspondence time running out';
 
   @override
   String get preferencesNotifyBell => 'Njoftim zileje brenda Lichess-it';
@@ -2285,7 +2285,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemePlayerGames => 'Lojëra të lojëtarit';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+  String get puzzleThemePlayerGamesDescription => 'View puzzles generated from your games, or from another player\'s games';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -4696,9 +4696,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Pranoj se nuk do të krijoj disa llogari (hiq për arsyet e deklaruara te $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Jam dakord se do të ndjek krejt rregullat e Lichess-it.';
 
   @override
   String get searchOrStartNewDiscussion => 'Kërkoni ose filloni bisedë të re';

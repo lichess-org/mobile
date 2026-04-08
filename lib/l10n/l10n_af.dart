@@ -290,7 +290,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the center to win the game.';
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
@@ -668,7 +668,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaCreated => 'Created';
 
   @override
-  String get arenaRecentlyPlayed => 'Recently played';
+  String get arenaRecentlyPlayed => 'Last played';
 
   @override
   String get arenaBestResults => 'Best results';
@@ -837,7 +837,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Vee beslis die hele toernooi uit, met al sy rondtes en spelle.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Show player scores based on game results';
 
   @override
   String get broadcastReplacePlayerTags => 'Opsioneel: vervang spelername, graderings en titels';
@@ -910,15 +910,15 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Amptelike webtuiste';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Official standings';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Find more options on the $param.';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'Webmasters page';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
@@ -942,7 +942,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastTournamentFormat => 'Tournament format';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Event location';
 
   @override
   String get broadcastTopPlayers => 'Top players';
@@ -2549,7 +2549,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get copyVariationPgn => 'Kopieer variasie-PGN';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Copy main line PGN';
 
   @override
   String get move => 'Skuif';
@@ -3721,7 +3721,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get reportCheatBoostHelp => 'Kopieer die skakel na die relevante spel(le) en verduidelik wat fout is met die speler se gedrag. Moenie net sê \"hulle kroek\" nie, verduidelik hoe jy die gevolgtrekking gekom bereik het. Jou antwoord sal vinniger geantwoord word as dit in Engels geskryf is.';
 
   @override
-  String get reportUsernameHelp => 'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+  String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
 
   @override
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
@@ -4062,7 +4062,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get hostANewSimul => 'Bied \'n nuwe simul aan';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul => 'Register to join or host a simul';
 
   @override
   String get noSimulFound => 'Simul nie gevind nie';
@@ -4696,9 +4696,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Ek verklaar dat ek nie meer as een rekening sal skep nie (met die uitsondering van redes genoem in die $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Ek stem in om al Lichess se beleide na te volg.';
 
   @override
   String get searchOrStartNewDiscussion => 'Soek of begin \'n nuwe gesprek';
@@ -6254,7 +6251,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyConclusionTitle => 'Dankie vir jou tyd';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Kom ons skep \'n studiehoofstuk';
@@ -6290,7 +6287,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyFromPgnGameTitle => 'Vanaf \'n PGN-spel';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';

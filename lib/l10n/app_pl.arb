@@ -1405,7 +1405,6 @@
   "agreementAssistance": "Zgadzam się nie korzystać z pomocy podczas gry (programów szachowych, książek, baz danych, czy innych osób).",
   "agreementNice": "Zgadzam się odnosić zawsze z szacunkiem do innych graczy.",
   "agreementMultipleAccounts": "Zgadzam się, że nie będę tworzyć wielu kont (z wyjątkiem powodów podanych w {param}).",
-  "agreementPolicy": "Zgadzam się przestrzegać wszystkich zasad Lichess.",
   "searchOrStartNewDiscussion": "Szukaj lub rozpocznij nową rozmowę",
   "edit": "Edytuj",
   "ultraBullet": "UltraBullet",

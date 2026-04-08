@@ -67,7 +67,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Vi devas esti ensalutata por spekti ĉi tiun paĝon.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Nova ludo';
 
   @override
   String get mobileNoSearchResults => 'Neniu rezultoj';
@@ -749,7 +749,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Nuntempaj turniraj elsendoj';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Kalendaro de elsendoj';
 
   @override
   String get broadcastNewBroadcast => 'Nova viva elsendo';
@@ -837,7 +837,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Sendube forigi la tuta turniro, kaj ĝiajn raŭndojn kaj ĉiujn ĝiajn ludojn.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Show player scores based on game results';
 
   @override
   String get broadcastReplacePlayerTags => 'Nedeviga: anstataŭigi nomojn de ludantoj, rangojn kaj titolojn';
@@ -885,7 +885,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Alŝuti bildon por la turniro';
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
@@ -910,15 +910,15 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Oficiala retejo';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Official standings';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Find more options on the $param.';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'Webmasters page';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
@@ -927,10 +927,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastRatingDiff => 'Ranga malsamo';
 
   @override
-  String get broadcastGamesThisTournament => 'Ludoj en ĉi tiun turniron';
+  String get broadcastGamesThisTournament => 'Ludoj en tiu ĉi turniro';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Rezulto';
 
   @override
   String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
@@ -939,13 +939,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastAllTeams => 'Ĉiuj teamoj';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Formo de turniro';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Loko de turniro';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Plej bonaj ludantoj';
 
   @override
   String get broadcastTimezone => 'Horzono';
@@ -957,10 +957,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Antaŭaj elsendoj';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Montri ĉiujn elsendoj laŭ monato';
 
   @override
   String get broadcastBackToLiveMove => 'Back to live move';
@@ -992,7 +992,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastMatchHistory => 'Match History';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Rezultoj de teamo';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
@@ -1001,57 +1001,57 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Rondo $param';
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
+  String get broadcastDefaultRoundNameHelp => 'Se vi gardas la norman nomon, ĝi estos aŭtomate tradukita al ĉiuj aliaj lingvoj.';
 
   @override
-  String get broadcastOpenTournament => 'Open';
+  String get broadcastOpenTournament => 'Malfermita';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Virina';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Vira';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Knabina';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Knaba';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
-    return 'Open U$param';
+    return 'Malfermita - aĝlimo $param';
   }
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'Girls U$param';
+    return 'Knabina - aĝlimo $param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Boys U$param';
+    return 'Knaba - aĝlimo $param';
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Kvaronfinaloj';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Duonfinaloj';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Finaloj';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Egalrompoj';
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Ludo $param';
   }
 
   @override
@@ -2078,7 +2078,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'Vuković mate';
 
   @override
   String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
@@ -2708,10 +2708,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get searchTimeDescription => 'Set time to evaluate fresh positions';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Fadenoj';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Elektu malsupre la nombron de fadenoj de via procesoro. La markoj indikas sekurajn elektojn';
 
   @override
   String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
@@ -2785,7 +2785,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get signIn => 'Ensaluti';
 
   @override
-  String get rememberMe => 'Memoru mian ensaluton';
+  String get rememberMe => 'Memori mian ensaluton';
 
   @override
   String get youNeedAnAccountToDoThat => 'Vi bezonas konton por fari tion';
@@ -3313,10 +3313,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get gameAsGIF => 'Ludo kiel GIF';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Nomoj de ludantoj';
 
   @override
-  String get moveAnnotations => 'Move annotations';
+  String get moveAnnotations => 'Notoj pri movoj';
 
   @override
   String get pasteTheFenStringHere => 'Glui la FEN-ĉenon ĉi tie';
@@ -3767,10 +3767,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nevalida aŭtentigada kodo';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Viŝi kampon';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'aŭ';
 
   @override
   String get logInByEmail => 'Komenci seancon per retpoŝto';
@@ -4696,9 +4696,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Mi konsentas ke mi ne faros plurajn kontojn (escepte pro la deklaritaj kialoj en la $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Mi konsentas sekvi ĉiujn politikojn de Lichess.';
 
   @override
   String get searchOrStartNewDiscussion => 'Serĉi aŭ komenci novan konversacion';
@@ -6209,7 +6206,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Bonvenu al Lichess Studo!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Dividita kaj konservita';
@@ -6227,7 +6224,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Select $param.<br>Then decide who will be allowed to contribute.';
   }
 
   @override
@@ -6241,38 +6238,38 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Click the $param button, or right-click on the move list.<br>Comments are shared and saved.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Click the !? button, or right-click on the move list.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Dankon pro via tempo';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'Ekde komenca pozicio';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'A board set up for a new game.<br>Useful for exploring openings.';
 
   @override
   String get studyCustomPositionTitle => 'Personecigita pozicio';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
@@ -6290,7 +6287,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyFromPgnGameTitle => 'El ludo en PNG';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';

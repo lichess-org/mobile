@@ -290,7 +290,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the center to win the game.';
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
@@ -4808,9 +4808,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'أوافق على أني لن أدخل بحسابات متعددة (إلا للأسباب المذكورة في $param).';
   }
-
-  @override
-  String get agreementPolicy => 'أوافق على أني سأتبع سياسات الموقع.';
 
   @override
   String get searchOrStartNewDiscussion => 'البحث أو بدء محادثة جديدة';

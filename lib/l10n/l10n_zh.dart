@@ -4670,9 +4670,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '我同意我将遵守所有 Lichess 规范。';
-
-  @override
   String get searchOrStartNewDiscussion => '搜索或开始新对话';
 
   @override
@@ -10772,9 +10769,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String agreementMultipleAccounts(String param) {
     return '我同意我不會開設多個帳號(除了於$param列明的原因以外)';
   }
-
-  @override
-  String get agreementPolicy => '我同意我將會遵守Lichess的規則';
 
   @override
   String get searchOrStartNewDiscussion => '尋找或開始聊天';

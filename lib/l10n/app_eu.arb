@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Nire partidetan ez dut inoiz laguntzarik jasoko (ordenagailuak, liburua, datu-base bat edo beste pertsona bat).",
   "agreementNice": "Atsegina izango naiz beste jokalariekin.",
   "agreementMultipleAccounts": "Hitz ematen dut ez dudala kontu bat baino gehiago irekiko ({param} adierazitako kasuetan izan ezik).",
-  "agreementPolicy": "Lichessek ezarritako politikak beteko ditut.",
   "searchOrStartNewDiscussion": "Hizketaldia bilatu edo berria hasi",
   "edit": "Aldatu",
   "ultraBullet": "UltraBullet",

@@ -4698,9 +4698,6 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Съгласявам се, че ше спазвам всички правила на Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Търси или започни нов разговор';
 
   @override

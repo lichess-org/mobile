@@ -4698,9 +4698,6 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichessek ezarritako politikak beteko ditut.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hizketaldia bilatu edo berria hasi';
 
   @override

@@ -4698,9 +4698,6 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover, at jeg vil overholde alle Lichess-politikker.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søg eller start ny diskussion';
 
   @override

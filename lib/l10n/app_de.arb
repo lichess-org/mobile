@@ -1407,7 +1407,6 @@
   "agreementAssistance": "Ich stimme zu, dass ich zu keiner Zeit während meiner Partien Hilfe in Anspruch nehmen werde (durch einen Schachcomputer, Buch, Datenbank oder eine andere Person).",
   "agreementNice": "Ich stimme zu, dass ich anderen Spielern immer respektvoll gegenübertreten werde.",
   "agreementMultipleAccounts": "Ich stimme zu, dass ich nicht mehrere Konten erstellen werde (außer aus den in den {param} angegebenen Gründen).",
-  "agreementPolicy": "Ich stimme zu, dass ich allen Lichess-Richtlinien folgen werde.",
   "searchOrStartNewDiscussion": "Suche oder beginne eine neue Konversation",
   "edit": "Bearbeiten",
   "ultraBullet": "UltraBullet",

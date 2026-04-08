@@ -686,7 +686,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaCreated => 'Creat';
 
   @override
-  String get arenaRecentlyPlayed => 'Jucate recent';
+  String get arenaRecentlyPlayed => 'Ultimele jucate';
 
   @override
   String get arenaBestResults => 'Cele mai bune rezultate';
@@ -799,7 +799,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastRoundName => 'Numele rundei';
 
   @override
-  String get broadcastTournamentName => 'Numele turneului';
+  String get broadcastTournamentName => 'Numele evenimentului';
 
   @override
   String get broadcastTournamentDescription => 'O descriere scurtă a turneului';
@@ -1412,7 +1412,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesShowFlairs => 'Arată pictograma personalizată a jucătorului';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'Acest lucru permite ascunderea tuturor ratingurilor de pe site, pentru a ajuta la concentrarea pe jocul de șah. Jocurile pot fi evaluate, această setare este doar despre ce se poate vedea.';
+  String get preferencesExplainShowPlayerRatings => 'Ascunde toate ratingurile de pe Lichess, pentru a te ajuta la concentrarea pe jocul de șah.\nJocurile vor fi evaluate în continuare, această setare afectează doar ce e vizibil.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Arată indicatorul de redimensionare a tablei';
@@ -1619,7 +1619,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
 
   @override
-  String get puzzleUpVote => 'Îmi place';
+  String get puzzleUpVote => 'Vot pozitiv';
 
   @override
   String get puzzleDownVote => 'Vot negativ';
@@ -2106,7 +2106,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeTriangleMateDescription => 'Regina și tura, la un pătrat de regele inamic, sunt pe același linie sau coloană, separate de un singur pătrat, formând un triunghi.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Mat Vukovic';
+  String get puzzleThemeVukovicMate => 'Mat Vuković';
 
   @override
   String get puzzleThemeVukovicMateDescription => 'O tură și un cal fac echipă pentru a da șah mat regelui. Tura dă mat fiind apărată de o a treia piesă iar calul blochează toate căile de scăpare ale regelui.';
@@ -2235,7 +2235,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeQuietMove => 'Mutare silențioasă';
 
   @override
-  String get puzzleThemeQuietMoveDescription => 'O mutare care nu capturează sau dă șah, dar care pregătește o amenințare inevitabilă pentru o mutare ulterioară.';
+  String get puzzleThemeQuietMoveDescription => 'O mutare care nu dă șah, capturează sau crează o amenințare imediată, dar care pregătește o amenințare ascunsă și inevitabilă pentru o mutare ulterioară.';
 
   @override
   String get puzzleThemeRookEndgame => 'Final cu turnuri';
@@ -3749,7 +3749,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get reportCheatBoostHelp => 'Adaugă link-ul de la joc(uri) și arată ce este greșit cu privire la comportamentul acestui utilizator. Nu preciza doar \"trișează\", ci spune-ne cum ai ajuns la această concluzie.';
 
   @override
-  String get reportUsernameHelp => 'Explică de ce acest nume de utilizator este jignitor. Nu spune doar \"e ofensator/inadecvat\", ci spune-ne cum ai ajuns la această concluzie, mai ales în cazul în care insulta este obscură, nu este în engleză, este jargon sau este o referință istorică/culturală.';
+  String get reportUsernameHelp => 'Explică de ce acest nume de utilizator este jignitor. Nu spune doar \"jignește/e inadecvat\", ci spune-ne cum ai ajuns la această concluzie, mai ales în cazul în care insulta este obscură, nu este în engleză, este jargon sau este o referință istorică/culturală.';
 
   @override
   String get reportProcessedFasterInEnglish => 'Raportul tău va fi procesat mai rapid dacă este scris în engleză.';
@@ -4126,7 +4126,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get simulVariantsHint => 'Dacă alegi mai multe variante, fiecare jucător va avea de ales ce variantă va juca.';
 
   @override
-  String get simulClockHint => 'Configurare de ceas Fischer. Cu cât joci împotriva mai multor jucători, cu atât vei avea nevoie de mai mult timp.';
+  String get simulClockHint => 'Cu cât joci împotriva mai multor jucători, cu atât mai mult vei avea nevoie de timp.';
 
   @override
   String get simulAddExtraTime => 'Poți adăuga timp în plus pe ceasul tău pentru a te ajuta să faci față simultanului.';
@@ -4724,9 +4724,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Sunt de acord să nu creez conturi multiple (cu excepția motivelor declarate în $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Sunt de acord cu respectarea tuturor politicilor Lichess.';
 
   @override
   String get searchOrStartNewDiscussion => 'Caută sau începe o nouă conversație';
@@ -5441,7 +5438,7 @@ class AppLocalizationsRo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count de partide oficiale $param2 jucate',
       few: '≥ $count partide oficiale $param2 jucate',
-      one: '≥ o partidă $param2 jucată',
+      one: '≥ o partidă $param2 oficială jucată',
     );
     return '$_temp0';
   }
@@ -6301,7 +6298,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click pe butonul $param.<br>Apoi decide cine poate contribui sau nu.';
+    return 'Selectează $param.<br>Apoi decide cine poate contribui sau nu.';
   }
 
   @override
@@ -6315,7 +6312,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Clic pe butonul $param, sau clic dreapta pe lista de mutări din dreapta.<br>Comentariile sunt comune şi salvate.';
+    return 'Clic pe butonul $param, sau clic dreapta pe lista de mutări.<br>Comentariile sunt comune şi salvate.';
   }
 
   @override
