@@ -152,6 +152,12 @@ class _Body extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: _Title(state: state),
           actions: [
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: 'Share tournament',
+              onPressed: () =>
+                  launchShareDialog(context, ShareParams(uri: lichessUri('/tournament/$id'))),
+            ),
             if (state.tournament.isFinished != true)
               SocketPingRatingIcon(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
