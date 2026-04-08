@@ -27,21 +27,21 @@ final broadcastTournamentIdProvider = FutureProvider.autoDispose
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreenLoading({
     required this.roundId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
-    BroadcastPlayer player,
-    String playerId,
-  ) {
+    String playerId, {
+    BroadcastPlayer? player,
+  }) {
     return buildScreenRoute(
       context,
       screen: BroadcastPlayerResultsScreenLoading(
@@ -74,14 +74,14 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastPlayerResultsScreen extends StatelessWidget {
+class BroadcastPlayerResultsScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreen({
     required this.tournamentId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
@@ -102,10 +102,19 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final displayPlayer =
+        player ??
+        switch (ref.watch(broadcastPlayerProvider((tournamentId, playerId)))) {
+          AsyncData(value: final data) => data.playerWithOverallResult.player,
+          _ => null,
+        };
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+        title: displayPlayer != null
+            ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
+            : const SizedBox.shrink(),
       ),
       body: _Body(tournamentId, playerId),
     );

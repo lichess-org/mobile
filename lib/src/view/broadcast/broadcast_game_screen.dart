@@ -496,8 +496,8 @@ class _PlayerWidget extends ConsumerWidget {
                     : BroadcastPlayerResultsScreenLoading.buildRoute(
                         context,
                         roundId,
-                        player,
                         player.id!,
+                        player: player,
                       ),
               );
             }
