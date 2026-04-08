@@ -45,7 +45,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(children: const [PuzzleDashboardWidget(), _ReplayButton()]);
+    return ListView(children: const [PuzzleDashboardWidget()]);
   }
 }
 
@@ -57,13 +57,15 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
+    final days = ref.watch(daysProvider).days;
+
     return puzzleDashboard.when(
       data: (dashboard) {
         if (dashboard == null) return const SizedBox.shrink();
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector),
+            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector, days: days),
             _PerformanceSection(dashboard: dashboard, metric: Metric.improvementArea),
             _PerformanceSection(dashboard: dashboard, metric: Metric.strength),
           ],
@@ -129,14 +131,21 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 }
 
 class _ChartSection extends StatelessWidget {
-  const _ChartSection({required this.dashboard, required this.showDaysSelector});
+  const _ChartSection({
+    required this.dashboard,
+    required this.showDaysSelector,
+    required this.days,
+  });
 
   final PuzzleDashboard dashboard;
   final bool showDaysSelector;
+  final int days;
 
   @override
   Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+    final puzzlesToReplay =
+        dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +189,22 @@ class _ChartSection extends StatelessWidget {
           ),
         ]),
         if (chartData.length >= 3) PuzzleChart(chartData),
+        if (puzzlesToReplay > 0)
+          Center(
+            child: TextButton.icon(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  PuzzleScreen.buildRoute(
+                    context,
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    replayDays: days,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.play_arrow),
+              label: Text(context.l10n.puzzleNbToReplay(puzzlesToReplay)),
+            ),
+          ),
       ],
     );
   }
@@ -261,44 +286,6 @@ class PuzzleChart extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ReplayButton extends ConsumerWidget {
-  const _ReplayButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final days = ref.watch(daysProvider).days;
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider(days));
-
-    return puzzleDashboard.maybeWhen(
-      data: (dashboard) {
-        if (dashboard == null) return const SizedBox.shrink();
-        final puzzlesToReplay =
-            dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
-        if (puzzlesToReplay <= 0) return const SizedBox.shrink();
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Center(
-            child: FilledButton.icon(
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  PuzzleScreen.buildRoute(
-                    context,
-                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    replayDays: days,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.play_arrow),
-              label: Text(context.l10n.puzzleNbToReplay(puzzlesToReplay)),
-            ),
-          ),
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
     );
   }
 }
