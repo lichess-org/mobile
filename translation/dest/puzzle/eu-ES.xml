@@ -14,9 +14,9 @@
   <string name="specialMoves">Jokaldi bereziak</string>
   <string name="didYouLikeThisPuzzle">Ariketa gustukoa izan da?</string>
   <string name="voteToLoadNextOne">Eman bozka hurrengoa kargatzeko!</string>
-  <string name="upVote">Ariketari +1 botoa</string>
-  <string name="downVote">Ariketari -1 botoa</string>
-  <string name="yourPuzzleRatingWillNotChange">Ariketen zure puntuazioa ez da aldatuko. Kontuan izan ariketak ez direla txapelketa bat. Puntuaziok zure gaitasunen araberako ariketak aukeratzen laguntzen du.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Ariketari +1 botoa</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Ariketari -1 botoa</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Ariketen zure puntuazioa ez da aldatuko. Kontuan izan ariketak ez direla txapelketa bat. Puntuaziok zure gaitasunen araberako ariketak aukeratzen laguntzen du.</string>
   <string name="findTheBestMoveForWhite">Zurien jokaldi onena bilatu.</string>
   <string name="findTheBestMoveForBlack">Beltzen jokaldi onena bilatu.</string>
   <string name="toGetPersonalizedPuzzles">Ariketa pertsonalizatuak lortzeko:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Nire partidetatik</string>
   <string name="lookupOfPlayer">Bilatu jokalari baten partidetatik ateratako ariketak</string>
   <string name="searchPuzzles">Ariketak bilatu</string>
-  <string name="fromMyGamesNone">Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.
 Jokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izateko!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Ariketa bat aurkitu da %2$s erabiltzailearen partidetan</item>
@@ -93,6 +93,6 @@ Jokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izatek
   </plurals>
   <string name="percentSolved">%s ebatzita</string>
   <string name="noPuzzlesToShow">Ez dago ezer erakusteko, ebatzi ariketa batzuk!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Entrenatu zure eboluzioa hobetzeko!</string>
+  <string name="improvementAreasDescription">Entrenatu zure eboluzioa hobetzeko!</string>
   <string name="strengthDescription">Gai hauetan zabiltza ondoen</string>
 </resources>

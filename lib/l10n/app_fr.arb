@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Je m'engage à ne jamais recevoir d'aide pendant mes parties (ni d'un programme d'échecs, ni d'un livre, ni d'une base de données, ni d'autrui).",
   "agreementNice": "Je m'engage à toujours être agréable envers les autres.",
   "agreementMultipleAccounts": "J'accepte de ne pas créer de comptes multiples (sauf pour les raisons indiquées dans les {param}).",
-  "agreementPolicy": "Je m'engage à respecter toutes les règles de Lichess.",
   "searchOrStartNewDiscussion": "Rechercher ou démarrer une nouvelle conversation",
   "edit": "Éditer",
   "ultraBullet": "Ultrabullet",

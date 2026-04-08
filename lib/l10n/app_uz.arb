@@ -1,5 +1,5 @@
 {
-  "mobileAccountPreferences": "Akkaunt sozlamalari",
+  "mobileAccountPreferences": "Hisob sozlamalari",
   "mobileAccountPreferencesHelp": "Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.",
   "mobileAllGames": "Barcha oʻyinlar",
   "mobileAreYouSure": "Ishonchingiz komilmi?",
@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Oʻyinlarim davomida hech qachon (shaxmat kompyuteri, kitob, maʼlumotlar bazasi yoki boshqa shaxsdan) yordam olmaslikka vaʼda beraman.",
   "agreementNice": "Boshqa oʻyinchilarga nisbatan har doim hurmatli munosabatda boʻlishga vaʼda beraman.",
   "agreementMultipleAccounts": "Men bir nechta akkaunt yaratmaslikka vaʼda beraman (bundan {param}dagi holatlar mustasno).",
-  "agreementPolicy": "Lichessʼning barcha qoidalariga amal qilishga vaʼda beraman.",
   "searchOrStartNewDiscussion": "Qidirish yoki yangi suhbat boshlash",
   "edit": "Tahrirlash",
   "ultraBullet": "UltraBullet",

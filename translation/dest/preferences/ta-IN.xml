@@ -16,7 +16,7 @@
   <string name="zenMode" comment="zenMode&#10;&#10;This is not the religious meaning. Turning this option on takes away make elements of the user interface.&#10;&#10;Can also translate as 'Focus mode' as one example.">தியான நிலை</string>
   <string name="showPlayerRatings">ஆட்டக்காரரின் மதிப்பீட்டைக் காட்டு</string>
   <string name="showFlairs">வீரர்களின் திறமைகளைக் காட்டு</string>
-  <string name="explainShowPlayerRatings">இது சதுரங்கத்தில் கவனம் செலுத்த உதவும் அனைத்து மதிப்பீடுகளையும் Lichess இலிருந்து மறைக்கிறது. மதிப்பிடப்பட்ட கேம்கள் இன்னும் உங்கள் மதிப்பீட்டைப் பாதிக்கின்றன, இது நீங்கள் பார்ப்பதைப் பற்றியது மட்டுமே.</string>
+  <string name="explainShowPlayerRatings" comment="A site-wide setting: https://lichess.org/account/preferences/display&#10;&#10;This string used to say &quot;[...] hides all ratings from the website&quot;, but because people can access Lichess in other ways, it has been updated to say &quot;Hide all ratings from Lichess&quot;. Please update translations as needed.">இது சதுரங்கத்தில் கவனம் செலுத்த உதவும் அனைத்து மதிப்பீடுகளையும் Lichess இலிருந்து மறைக்கிறது. மதிப்பிடப்பட்ட கேம்கள் இன்னும் உங்கள் மதிப்பீட்டைப் பாதிக்கின்றன, இது நீங்கள் பார்ப்பதைப் பற்றியது மட்டுமே.</string>
   <string name="displayBoardResizeHandle">பலகையின் அளவை மாற்றும் கைப்பிடியைக் காட்டு</string>
   <string name="onlyOnInitialPosition">ஆரம்ப நிலையில் மட்டுமே</string>
   <string name="inGameOnly">விளையாட்டில் மட்டும்</string>
@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">அரசரை யானையின்மீது நகர்த்தவும்</string>
   <string name="inputMovesWithTheKeyboard">விசைப்பலகைமூலம் நகர்வு உள்ளிடுதல்</string>
   <string name="inputMovesWithVoice">உங்கள் குரல்மூலம் நகர்களை உள்ளிடுதல்</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">சரியான நகர்வுகளுக்கு அம்புகளை எடுக்கவும்</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">சரியான நகர்வுகளுக்கு அம்புகளை எடுக்கவும்</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">தோல்வி அல்லது இழுபறியில் \"Good game, well played\" என்று சொல்லுங்கள்</string>
   <string name="yourPreferencesHaveBeenSaved">உங்கள் விருப்பத்தேர்வுகள் சேமிக்கப்பட்டுள்ளது.</string>
   <string name="scrollOnTheBoardToReplayMoves">நகர்வுகளை மீண்டும் இயக்க, பலகையில் உருட்டவும்</string>
@@ -63,7 +63,7 @@
   <string name="notifyChallenge">சவால்கள்</string>
   <string name="notifyTournamentSoon">பந்தயம் விரைவில் துவங்குகிறது</string>
   <string name="notifyTimeAlarm">இசைவு விளையாட்டு கடிகாரம் முடிகிறது</string>
-  <string name="notifyBell">Lichess இல் மணி அறிவிப்பு</string>
+  <string name="notifyBell" comment="A notification setting - toggles a bell sound being played when a notification appears.&#10;&#10;This text used to say &quot;Bell notification within Lichess&quot;. The word &quot;bell&quot; can be removed, as it is obvious from the context.">Lichess இல் மணி அறிவிப்பு</string>
   <string name="notifyPush">நீங்கள் Lichess இல் இல்லாதபோது சாதன அறிவிப்பு</string>
   <string name="notifyWeb">உலாவி</string>
   <string name="notifyDevice">சாதனம்</string>

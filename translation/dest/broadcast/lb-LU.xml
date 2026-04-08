@@ -20,10 +20,10 @@
   <string name="ongoing">Am Gaang</string>
   <string name="upcoming">Demnächst</string>
   <string name="roundName">Ronnennumm</string>
-  <string name="tournamentName">Turnéiernumm</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnéiernumm</string>
   <string name="tournamentDescription">Kuerz Turnéierbeschreiwung</string>
-  <string name="fullDescription">Komplett Turnéierbeschreiwung</string>
-  <string name="fullDescriptionHelp">Optional laang Beschreiwung vum Turnéier. %1$s ass disponibel. Längt muss manner wéi %2$s Buschtawen sinn.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Komplett Turnéierbeschreiwung</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Optional laang Beschreiwung vum Turnéier. %1$s ass disponibel. Längt muss manner wéi %2$s Buschtawen sinn.</string>
   <string name="sourceUrlHelp">URL déi Lichess checkt fir PGN à jour ze halen. Muss ëffentlech iwwer Internet zougänglech sinn.</string>
   <string name="sourceGameIds">Bis zu 64 Lichess-Partie-IDen, duerch Espacë getrennt.</string>
   <string name="startDateTimeZone">Startdatum vum Turnéier an der lokaler Zäitzon: %s</string>
@@ -59,7 +59,7 @@
   <string name="notYetStarted">D\'Iwwerdroung huet nach net ugefaangen.</string>
   <string name="officialWebsite">Offiziell Websäit</string>
   <string name="officialStandings">Offizielle Stand</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Méi Optiounen op der %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Méi Optiounen op der %s</string>
   <string name="webmastersPage">Webmaster-Säit</string>
   <string name="embedThisBroadcast">Bann dës Iwwerdroung an deng Websäit an</string>
   <string name="ratingDiff">Wäertungsdifferenz</string>
@@ -67,7 +67,7 @@
   <string name="score">Punktestand</string>
   <string name="allTeams">All Ekippen</string>
   <string name="tournamentFormat">Turnéierformat</string>
-  <string name="tournamentLocation">Turnéierplaz</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turnéierplaz</string>
   <string name="topPlayers">Topspiller</string>
   <string name="timezone">Zäitzon</string>
   <string name="fideRatingCategory">FIDE-Wäertungskategorie</string>

@@ -13,9 +13,9 @@
   <string name="specialMoves">Di-pangkaraniwan na tira</string>
   <string name="didYouLikeThisPuzzle">Nagustuhan mo ba ang palaisipang ito?</string>
   <string name="voteToLoadNextOne">Bumoto ka upang mapunta ka sa susunod na palaisipan!</string>
-  <string name="upVote">I-up vote ang palaisipan</string>
-  <string name="downVote">I-down vote ang palaisipan</string>
-  <string name="yourPuzzleRatingWillNotChange">Ang iyong palaisipang marka ay hindi magbabago. Tandaan na ang mga palaisipan ay hindi isang kompetisyon. Ang iyong marka ay tumutulong sa pagpili ng pinakamahusay na mga palaisipan para sa iyong antas na kasanayan.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">I-up vote ang palaisipan</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">I-down vote ang palaisipan</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Ang iyong palaisipang marka ay hindi magbabago. Tandaan na ang mga palaisipan ay hindi isang kompetisyon. Ang iyong marka ay tumutulong sa pagpili ng pinakamahusay na mga palaisipan para sa iyong antas na kasanayan.</string>
   <string name="findTheBestMoveForWhite">Hanapin ang pinakamahusay na galaw para sa puti.</string>
   <string name="findTheBestMoveForBlack">Hanapin ang pinakamahusay na galaw para sa itim.</string>
   <string name="toGetPersonalizedPuzzles">Para makakuha ng mga personalized na palaisipan:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">Mula sa aking mga laro</string>
   <string name="lookupOfPlayer">Maghanap ng mga palaisipan mula sa mga laro ng manlalaro</string>
   <string name="searchPuzzles">Maghanap ng mga palaisipan</string>
-  <string name="fromMyGamesNone">Wala kang mga palaisipan sa database, pero mahal na mahal ka parin ng Lichess.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Wala kang mga palaisipan sa database, pero mahal na mahal ka parin ng Lichess.
 
 Maglaro ng mabilisan at mga klasikong laro para tumaas ang iyong mga tsansa na madagdag ang iyong mga palaisipan!</string>
   <plurals name="puzzlesFoundInUserGames">

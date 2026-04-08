@@ -7,10 +7,10 @@
   <string name="ongoing">Leanúnach</string>
   <string name="upcoming">Le teacht</string>
   <string name="roundName">Ainm babhta</string>
-  <string name="tournamentName">Ainm comórtas</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Ainm comórtas</string>
   <string name="tournamentDescription">Cur síos gairid ar an gcomórtas</string>
-  <string name="fullDescription">Cur síos iomlán ar an ócáid</string>
-  <string name="fullDescriptionHelp">Cur síos fada roghnach ar an craoladh. Tá %1$s ar fáil. Caithfidh an fad a bheith níos lú ná %2$s carachtar.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Cur síos iomlán ar an ócáid</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Cur síos fada roghnach ar an craoladh. Tá %1$s ar fáil. Caithfidh an fad a bheith níos lú ná %2$s carachtar.</string>
   <string name="sourceUrlHelp">URL a seiceálfaidh Lichess chun PGN nuashonruithe a fháil. Caithfidh sé a bheith le féiceáil go poiblí ón Idirlíon.</string>
   <string name="startDateHelp">Roghnach, má tá a fhios agat cathain a thosóidh an ócáid</string>
   <string name="currentGameUrl">URL cluiche reatha</string>

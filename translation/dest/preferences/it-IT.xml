@@ -16,7 +16,7 @@
   <string name="zenMode" comment="zenMode&#10;&#10;This is not the religious meaning. Turning this option on takes away make elements of the user interface.&#10;&#10;Can also translate as 'Focus mode' as one example.">Modalità Zen</string>
   <string name="showPlayerRatings">Mostra punteggi giocatori</string>
   <string name="showFlairs">Mostra le icone del giocatore</string>
-  <string name="explainShowPlayerRatings">Questa funzionalità permette di nascondere i punteggi dei giocatori per aiutare a concentrarti sulla partita. Le partite possono comunque essere classificate, questa impostazione riguarda solo ciò che vedi.</string>
+  <string name="explainShowPlayerRatings" comment="A site-wide setting: https://lichess.org/account/preferences/display&#10;&#10;This string used to say &quot;[...] hides all ratings from the website&quot;, but because people can access Lichess in other ways, it has been updated to say &quot;Hide all ratings from Lichess&quot;. Please update translations as needed.">Questa funzionalità permette di nascondere i punteggi dei giocatori per aiutare a concentrarti sulla partita. Le partite possono comunque essere classificate, questa impostazione riguarda solo ciò che vedi.</string>
   <string name="displayBoardResizeHandle">Mostra l\'icona di ridimensionamento della scacchiera</string>
   <string name="onlyOnInitialPosition">Solo sulla posizione iniziale</string>
   <string name="inGameOnly">Solamente durante la partita</string>
@@ -50,7 +50,7 @@
   <string name="castleByMovingOntoTheRook">Muovi il re sopra la Torre</string>
   <string name="inputMovesWithTheKeyboard">Muovi utilizzando la tastiera</string>
   <string name="inputMovesWithVoice">Muovi con la tua voce</string>
-  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The arrows are for quick annotations you can do on the board, drawn by holding the right mouse button.&#10;&#10;With this setting enabled, it means the arrows will align themselves to places where pieces can move.&#10;&#10;It doesn't take into account actual move legality given the position, but it means that you can only draw an arrow between two squares if that move trajectory is theoretically possible by any piece.&#10;For example, if this was enabled and you tried drawing a line between c3 and f4: you wouldn't be able to, because no piece could ever move like that. But you can draw an arrow from c3 to f5 (bishop/queen), or c3 to e4 (knight), for example.&#10;&#10;">Collega le frecce a mosse valide</string>
+  <string name="snapArrowsToValidMoves" comment="snapArrowsToValidMoves&#10;&#10;The 'arrows' are for quick annotations you can do on the board, by holding right mouse button. With this setting enabled, it means the arrows will align themselves to places were pieces can move.">Collega le frecce a mosse valide</string>
   <string name="sayGgWpAfterLosingOrDrawing" comment="sayGgWpAfterLosingOrDrawing&#10;&#10;When enabled, this setting will automatically send 'Good game, well played' to your opponent if you are lose or draw the game. It's meant as a courtesy message.&#10;&#10;The message will be sent in ENGLISH.&#10;&#10;It is up to you how to deal with this. For example, you may want to put '(message will be sent in English)' in your translated text as one example. Or you can leave the actual English text and put a brief translation in your own language.">Di\' \"Good game, well played\" alla sconfitta o al pareggio</string>
   <string name="yourPreferencesHaveBeenSaved">Le tue preferenze sono state salvate.</string>
   <string name="scrollOnTheBoardToReplayMoves">Scorri sulla scacchiera per riprodurre le mosse</string>
@@ -64,11 +64,11 @@
   <string name="notifyTournamentSoon">Il torneo sta per iniziare</string>
   <string name="notifyBroadcasts">Canali a cui ti sei iscritto</string>
   <string name="notifyTimeAlarm">Il tempo sta per scadere in una partita per corrispondenza</string>
-  <string name="notifyBell">Notifica sonora in Lichess</string>
+  <string name="notifyBell" comment="A notification setting - toggles a bell sound being played when a notification appears.&#10;&#10;This text used to say &quot;Bell notification within Lichess&quot;. The word &quot;bell&quot; can be removed, as it is obvious from the context.">Notifica sonora in Lichess</string>
   <string name="notifyPush">Notifiche dispositivo (push) quando non sei collegato a Lichess</string>
   <string name="notifyWeb">Browser</string>
   <string name="notifyDevice">Dispositivo</string>
   <string name="bellNotificationSound">Tono notifica</string>
   <string name="blindfold" comment="As in Blindfold chess">Alla cieca</string>
-  <string name="showClockOnTheLeft" comment="IMPORTANT NOTE FOR LANGUAGES WRITTEN RIGHT-TO-LEFT (e.g. Arabic):&#10;Please translate &quot;left&quot; as &quot;right&quot;, because the layout is reversed in your language.&#10;&#10;---&#10;&#10;A user setting. When enabled, the clock will be shown on the left side of the screen. Only applies to mobile devices.&#10;&#10;&#10;Appears on https://lichess.org/account/preferences/chess-clock.">Mostra sulla sinistra nei dispositivi mobili</string>
+  <string name="showClockOnTheLeft" comment="During the game on a mobile device, show the clock on the left side of the screen. Only applies to mobile devices.">Mostra sulla sinistra nei dispositivi mobili</string>
 </resources>

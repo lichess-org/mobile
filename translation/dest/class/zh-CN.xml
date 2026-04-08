@@ -87,7 +87,7 @@
   <string name="timePlaying">对局时长</string>
   <string name="variantXOverLastY">最近 %2$s 天内总计 %1$s</string>
   <string name="winrate">胜率</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">概览</string>
   <string name="news">公告</string>
   <string name="classNews">班级公告</string>
@@ -112,14 +112,14 @@
   <string name="xisNowAStudentOfTheClass">%s 现已成为班级的学生</string>
   <string name="anInvitationHasBeenSentToX">已向 %s 发送邀请</string>
   <string name="xAlreadyHasAPendingInvitation">%s 已有待处理的邀请</string>
-  <string name="xIsAKidAccountWarning">%1$s 是儿童账户，无法接收您的消息。您必须手动向其提供邀请链接：%2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s 是儿童账户，无法接收您的消息。您必须手动向其提供邀请链接：%2$s</string>
   <string name="moveToClass">移至 %s</string>
   <string name="moveToAnotherClass">移至另一个班级</string>
   <string name="allowMessagingBetweenStudents">允许学生之间互发消息</string>
   <string name="allowMessagingBetweenStudentsDesc">此设置仅适用于您为学生创建的账户。</string>
   <string name="quickLoginCode">快速登录代码</string>
   <string name="quickLoginCodes">快速登录代码</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">在 %s 上使用这些代码，以便您的学生登录 Lichess。</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">在 %s 上使用这些代码，以便您的学生登录 Lichess。</string>
   <string name="quickLoginCodesDesc2">即使这些代码过期后，您的学生仍将保持登录状态，直至他们手动登出。</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">过期时间：%s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">过期时间：%s</string>
 </resources>

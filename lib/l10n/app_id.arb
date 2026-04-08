@@ -1231,7 +1231,6 @@
   "agreementAssistance": "Saya menyetujui bahwa saya tidak akan pernah menerima bantuan selama pertandingan (dari komputer catur, buku, database ataupun orang lain).",
   "agreementNice": "Saya menyetujui bahwa saya akan selalu bersikap baik kepada pemain lain.",
   "agreementMultipleAccounts": "Saya setuju untuk tidak membuat banyak akun (kecuali untuk alasan yang tertera di {param}).",
-  "agreementPolicy": "Saya menyetujui bahwa saya akan mengikuti semua kebijakan yang ada di Lichess.",
   "searchOrStartNewDiscussion": "Cari atau mulai diskusi baru",
   "edit": "Ubah",
   "bullet": "Peluru",

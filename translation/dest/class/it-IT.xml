@@ -90,7 +90,7 @@ Questo è il link per accedere alla lezione.</string>
   <string name="timePlaying">Tempo giocato</string>
   <string name="variantXOverLastY">%1$s sopra gli ultimi %2$s</string>
   <string name="winrate">Percentuale di vittorie</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">Panoramica</string>
   <string name="news">Notizie</string>
   <string name="classNews">News della classe</string>
@@ -114,14 +114,14 @@ Questo è il link per accedere alla lezione.</string>
   <string name="xisNowAStudentOfTheClass">%s è ora uno studente della classe</string>
   <string name="anInvitationHasBeenSentToX">Un invito è stato inviato a %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s ha già un invito in sospeso</string>
-  <string name="xIsAKidAccountWarning">%1$s è un profilo per bambini e non può ricevere il tuo messaggio. Devi dare loro l\'URL d\'invito manualmente: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s è un profilo per bambini e non può ricevere il tuo messaggio. Devi dare loro l\'URL d\'invito manualmente: %2$s</string>
   <string name="moveToClass">Vai a %s</string>
   <string name="moveToAnotherClass">Vai a un\'altra lezione</string>
   <string name="allowMessagingBetweenStudents">Consenti messaggi tra studenti</string>
   <string name="allowMessagingBetweenStudentsDesc">Questo vale solo per gli account che hai creato per i tuoi studenti.</string>
   <string name="quickLoginCode">Codice di log in rapido</string>
   <string name="quickLoginCodes">Codici di log in rapido</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">Usa questi codici su %s per inserire i tuoi studenti su Lichess.</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">Usa questi codici su %s per inserire i tuoi studenti su Lichess.</string>
   <string name="quickLoginCodesDesc2">Quando i codici scadranno, i tuoi studenti rimarranno inseriti, finché loro non usciranno manualmente.</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Scadenza %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">Scadenza %s</string>
 </resources>

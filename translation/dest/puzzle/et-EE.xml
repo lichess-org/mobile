@@ -13,9 +13,9 @@
   <string name="specialMoves">Erilised käigud</string>
   <string name="didYouLikeThisPuzzle">Kas sulle meeldis see pusle?</string>
   <string name="voteToLoadNextOne">Hääleta, nii saad edasi!</string>
-  <string name="upVote">Hääleta poolt</string>
-  <string name="downVote">Hääleta vastu</string>
-  <string name="yourPuzzleRatingWillNotChange">Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Hääleta poolt</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Hääleta vastu</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.</string>
   <string name="findTheBestMoveForWhite">Leia parim käik valgele.</string>
   <string name="findTheBestMoveForBlack">Leia parim käik mustale.</string>
   <string name="toGetPersonalizedPuzzles">Saa personaalseid puslesid:</string>
@@ -62,7 +62,7 @@
   <string name="fromMyGames">Minu mängudest</string>
   <string name="lookupOfPlayer">Otsi puslesid mängija partiidest</string>
   <string name="searchPuzzles">Otsi puslesid</string>
-  <string name="fromMyGamesNone">Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.
 
 Mängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusle sinu mängust!</string>
   <string name="puzzleDashboardDescription">Treeni, analüüsi, täiusta</string>
@@ -76,6 +76,6 @@ Mängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusl
   </plurals>
   <string name="percentSolved">%s lahendatud</string>
   <string name="noPuzzlesToShow">Midagi pole näidata, lahenda ennem mõned pusled!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Harjuta neid, et optimeerida oma edusamme!</string>
+  <string name="improvementAreasDescription">Harjuta neid, et optimeerida oma edusamme!</string>
   <string name="strengthDescription">Sa lahendad kõige paremini neid teemasid</string>
 </resources>

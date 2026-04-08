@@ -1402,7 +1402,6 @@
   "agreementAssistance": "Strinjam se, da ne bom nikoli uporabljal pomoči med partijo (od računalnika, knjige, podatkovne baze ali od druge osebe).",
   "agreementNice": "Strinjam se, da bom do drugih vedno prijazen.",
   "agreementMultipleAccounts": "Strinjam se, da ne bom ustvaril več računov (razen iz razlogov, navedenih v {param}).",
-  "agreementPolicy": "Strinjam se, da bom spoštoval vsa pravila Lichess strani.",
   "searchOrStartNewDiscussion": "Poišči ali prični nov pogovor",
   "edit": "Uredi",
   "ultraBullet": "UltraBullet",

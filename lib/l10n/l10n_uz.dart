@@ -9,7 +9,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Akkaunt sozlamalari';
+  String get mobileAccountPreferences => 'Hisob sozlamalari';
 
   @override
   String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
@@ -4696,9 +4696,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Men bir nechta akkaunt yaratmaslikka vaʼda beraman (bundan ${param}dagi holatlar mustasno).';
   }
-
-  @override
-  String get agreementPolicy => 'Lichessʼning barcha qoidalariga amal qilishga vaʼda beraman.';
 
   @override
   String get searchOrStartNewDiscussion => 'Qidirish yoki yangi suhbat boshlash';

@@ -933,7 +933,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastScore => 'Poengsum';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Stillingen beregnes basert på overførte partier og kan avvike fra de offisielle resultatene.';
 
   @override
   String get broadcastAllTeams => 'Alle lag';
@@ -980,23 +980,23 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Kamppoeng';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Partipoeng';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Kamper';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Kamphistorikk';
 
   @override
   String get broadcastTeamResults => 'Lagresultater';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'Følgende begrep(er) vil bli oversatt automatisk: $param.';
   }
 
   @override
@@ -4164,7 +4164,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get togglePositionAnnotations => 'Skru kommentarer for stillinger av eller på';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Skru kommentarer for observasjoner av eller på';
 
   @override
   String get variationArrowsInfo => 'Variantpiler lar deg navigere uten å bruke notasjonslisten.';
@@ -4696,9 +4696,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Jeg godtar å ikke opprette flere kontoer (med unntak for grunnene nevnt i våre $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Jeg lover å respektere alle Lichess\' retningslinjer.';
 
   @override
   String get searchOrStartNewDiscussion => 'Søk eller start en ny diskusjon';

@@ -90,7 +90,7 @@
   <string name="timePlaying">زمان بازی کردن</string>
   <string name="variantXOverLastY">%1$s در %2$s روز اخیر</string>
   <string name="winrate">نرخِ برد</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">در دسترس نیست</string>
+  <string name="na">در دسترس نیست</string>
   <string name="overview">نمای کلی</string>
   <string name="news">اخبار</string>
   <string name="classNews">اخبار کلاس</string>
@@ -115,14 +115,14 @@
   <string name="xisNowAStudentOfTheClass">%s الان دانش آموز کلاس است</string>
   <string name="anInvitationHasBeenSentToX">یک دعوتنامه به %s فرستاده شد</string>
   <string name="xAlreadyHasAPendingInvitation">%s از قبل یک دعوتنامه در حال انتظار دارد</string>
-  <string name="xIsAKidAccountWarning">%1$s حساب کودک است و نمی‌تواند پیام‌تان را دریافت کند. شما باید وب‌نشانی دعوت را، دستی به آن‌ها دهید: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s حساب کودک است و نمی‌تواند پیام‌تان را دریافت کند. شما باید وب‌نشانی دعوت را، دستی به آن‌ها دهید: %2$s</string>
   <string name="moveToClass">حرکت به %s</string>
   <string name="moveToAnotherClass">حرکت به کلاس دیگر</string>
   <string name="allowMessagingBetweenStudents">اِجازهٔ پیامیدنِ میانِ شطرنج‌آموزان</string>
   <string name="allowMessagingBetweenStudentsDesc">این فقط مربوط به حساب‌هایی‌ست که برای شطرنج‌آموزان‌تان ایجاد کرده‌اید.</string>
   <string name="quickLoginCode">کدِ ورودِ فوری</string>
   <string name="quickLoginCodes">کدهای ورودِ فوری</string>
-  <string name="quickLoginCodesDesc1" comment="%s is a link to https://lichess.org/class">از این کدها در %s برای ورود شطرنج‌آموزان‌تان به Lichess ببَهرید.</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">از این کدها در %s برای ورود شطرنج‌آموزان‌تان به Lichess ببَهرید.</string>
   <string name="quickLoginCodesDesc2">زمانی که کدها انقضا شوند، شطرنج‌آموزان‌تان در حالت ورود باقی خواهند ماند تا وقتی که دستی خارج شوند.</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">انقضا %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">انقضا %s</string>
 </resources>

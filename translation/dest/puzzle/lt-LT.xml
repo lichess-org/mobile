@@ -13,9 +13,9 @@
   <string name="specialMoves">Ypatingi ėjimai</string>
   <string name="didYouLikeThisPuzzle">Ar jums patiko ši užduotis?</string>
   <string name="voteToLoadNextOne">Nubalsuokite norėdami pakrauti kitą!</string>
-  <string name="upVote">Prabalsuoti už</string>
-  <string name="downVote">Prabalsuoti prieš</string>
-  <string name="yourPuzzleRatingWillNotChange">Jūsų galvosūkių reitingas nesikeis. Pažymėtina, kad galvosūkiai nėra rungtynės. Reitingas padeda išrinkti tinkamiausius galvosūkius pagal jūsų gebėjimus.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Prabalsuoti už</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Prabalsuoti prieš</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Jūsų galvosūkių reitingas nesikeis. Pažymėtina, kad galvosūkiai nėra rungtynės. Reitingas padeda išrinkti tinkamiausius galvosūkius pagal jūsų gebėjimus.</string>
   <string name="findTheBestMoveForWhite">Raskite geriausią ėjimą baltiems.</string>
   <string name="findTheBestMoveForBlack">Raskite geriausią ėjimą juodiems.</string>
   <string name="toGetPersonalizedPuzzles">Norėdami gauti suasmenintas užduotis:</string>
@@ -81,7 +81,7 @@
   <string name="fromMyGames">Iš mano partijų</string>
   <string name="lookupOfPlayer">Peržiūrėti galvosūkius iš žaidėjo partijų</string>
   <string name="searchPuzzles">Ieškoti galvosūkių</string>
-  <string name="fromMyGamesNone">Jūs galvosūkių duomenų bazėje neturite, bet Lichess vis tiek jus labai myli.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Jūs galvosūkių duomenų bazėje neturite, bet Lichess vis tiek jus labai myli.
 Žaiskite greituosius ir klasikinius žaidimus ir taip padidinkite šansus, kad bus pridėtas galvosūkis iš jūsų partijos!</string>
   <string name="puzzleDashboardDescription">Treniruokitės, analizuokite, tobulinkitės</string>
   <plurals name="nbPlayed">
@@ -98,6 +98,6 @@
   </plurals>
   <string name="percentSolved">%s išspręsta</string>
   <string name="noPuzzlesToShow">Nėra ką rodyti, pirma išspręskite galvosūkių!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Treniruokitės su šiomis norėdami pagerinti savo progresą!</string>
+  <string name="improvementAreasDescription">Treniruokitės su šiomis norėdami pagerinti savo progresą!</string>
   <string name="strengthDescription">Jums geriausiai sekasi šiose temose</string>
 </resources>

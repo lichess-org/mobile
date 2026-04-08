@@ -4698,9 +4698,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Δηλώνω ότι θα συμμορφωθώ με όλες τις πολιτικές του Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Αναζήτηση ή έναρξη νέας συνομιλίας';
 
   @override
@@ -5061,7 +5058,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'Δε βρέθηκαν αποτελέσματα για το \"$param\"';
+    return 'Δε βρέθηκαν αποτελέσματα για το «$param»';
   }
 
   @override

@@ -88,7 +88,7 @@
   <string name="timePlaying">ಆಡುವ ಸಮಯ</string>
   <string name="variantXOverLastY">ಕಳೆದ %2$s ಗಿಂತ %1$s</string>
   <string name="winrate">ಗೆಲುವಿನ ದರ</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">ಅವಲೋಕನ</string>
   <string name="news">ಸುದ್ದಿ</string>
   <string name="classNews">ವರ್ಗ ಸುದ್ದಿ</string>
@@ -113,5 +113,5 @@
   <string name="xisNowAStudentOfTheClass">%s ಅವರು ಈಗ ತರಗತಿಯ ವಿದ್ಯಾರ್ಥಿಯಾಗಿದ್ದಾರೆ</string>
   <string name="anInvitationHasBeenSentToX">%s ಗೆ ಆಹ್ವಾನವನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
   <string name="xAlreadyHasAPendingInvitation">%s ಈಗಾಗಲೇ ಬಾಕಿ ಉಳಿದಿರುವ ಆಹ್ವಾನವನ್ನು ಹೊಂದಿದ್ದಾರೆ</string>
-  <string name="xIsAKidAccountWarning">%1$s ಮಗುವಿನ ಖಾತೆಯಾಗಿದೆ ಮತ್ತು ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಸ್ವೀಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ನೀವು ಅವರಿಗೆ ಆಹ್ವಾನ URL ಅನ್ನು ಹಸ್ತಚಾಲಿತವಾಗಿ ನೀಡಬೇಕು: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ಮಗುವಿನ ಖಾತೆಯಾಗಿದೆ ಮತ್ತು ನಿಮ್ಮ ಸಂದೇಶವನ್ನು ಸ್ವೀಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ನೀವು ಅವರಿಗೆ ಆಹ್ವಾನ URL ಅನ್ನು ಹಸ್ತಚಾಲಿತವಾಗಿ ನೀಡಬೇಕು: %2$s</string>
 </resources>

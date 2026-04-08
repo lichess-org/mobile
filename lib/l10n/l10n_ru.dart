@@ -4754,9 +4754,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Подтверждаю, что я буду следовать всем правилам Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Найти обсуждение или начать новое';
 
   @override

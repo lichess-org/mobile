@@ -4698,9 +4698,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichess kurallarını takip edeceğim.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Tartışma ara veya yenisini başlat';
 
   @override

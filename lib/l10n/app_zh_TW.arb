@@ -1299,7 +1299,6 @@
   "agreementAssistance": "我同意我不會在比賽期間使用支援(從書籍、電腦運算、資料庫等等)",
   "agreementNice": "我會一直尊重其他的玩家",
   "agreementMultipleAccounts": "我同意我不會開設多個帳號(除了於{param}列明的原因以外)",
-  "agreementPolicy": "我同意我將會遵守Lichess的規則",
   "searchOrStartNewDiscussion": "尋找或開始聊天",
   "edit": "編輯",
   "bullet": "Bullet",

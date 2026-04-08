@@ -4670,9 +4670,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '私は Lichess のすべてのポリシーに従うことに同意します。';
-
-  @override
   String get searchOrStartNewDiscussion => '検索または新しいトピックを始める';
 
   @override

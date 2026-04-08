@@ -4698,9 +4698,6 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Elfogadom, hogy követni fogom a Lichess szabályait.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Keresés, vagy új beszélgetés indítása';
 
   @override

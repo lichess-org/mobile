@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Tôi đồng ý rằng, tôi sẽ không nhận sự trợ giúp trong lúc chơi (từ máy tính, sách, các cơ sở dữ liệu hoặc từ người khác).",
   "agreementNice": "Tôi đồng ý rằng, tôi sẽ luôn luôn tôn trọng người chơi khác.",
   "agreementMultipleAccounts": "Tôi đồng ý rằng, tôi sẽ không tạo nhiều tài khoản (trừ các lý do nêu trong {param}).",
-  "agreementPolicy": "Tôi đồng ý rằng, tôi sẽ luôn tuân thủ các chính sách của Lichess.",
   "searchOrStartNewDiscussion": "Tìm hoặc bắt đầu một cuộc trò chuyện",
   "edit": "Chỉnh sửa",
   "ultraBullet": "Cờ siêu đạn",

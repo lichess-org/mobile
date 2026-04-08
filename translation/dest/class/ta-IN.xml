@@ -90,7 +90,7 @@
   <string name="timePlaying">விளையாடும் நேரம்</string>
   <string name="variantXOverLastY">கடந்த %2$s இல் %1$s</string>
   <string name="winrate">வெற்றி விகிதம்</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">பொருந்தாது</string>
+  <string name="na">பொருந்தாது</string>
   <string name="overview">மேலோட்டம்</string>
   <string name="news">செய்தி</string>
   <string name="classNews">வகுப்புச் செய்திகள்</string>
@@ -115,7 +115,7 @@
   <string name="xisNowAStudentOfTheClass">%s இப்போது வகுப்பின் மாணவர்</string>
   <string name="anInvitationHasBeenSentToX">%sக்கு அழைப்பு அனுப்பப்பட்டது</string>
   <string name="xAlreadyHasAPendingInvitation">%s க்கு ஏற்கனவே அழைப்பு நிலுவையில் உள்ளது</string>
-  <string name="xIsAKidAccountWarning">%1$s ஒரு குழந்தை கணக்கு மற்றும் உங்கள் செய்தியைப் பெற முடியாது. நீங்கள் அவர்களுக்கு அழைப்பிதழ் URL ஐ கைமுறையாக வழங்க வேண்டும்: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ஒரு குழந்தை கணக்கு மற்றும் உங்கள் செய்தியைப் பெற முடியாது. நீங்கள் அவர்களுக்கு அழைப்பிதழ் URL ஐ கைமுறையாக வழங்க வேண்டும்: %2$s</string>
   <string name="moveToClass">%s க்கு நகர்த்து</string>
   <string name="moveToAnotherClass">மற்றொரு வகுப்பிற்க்கு நகர்த்து</string>
 </resources>

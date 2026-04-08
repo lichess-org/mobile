@@ -1283,7 +1283,6 @@
   "agreementAssistance": "Jag lovar att jag inte kommer att få hjälp under mina partier (från en schackdator, bok, databas eller annan person).",
   "agreementNice": "Jag lovar att jag alltid kommer att vara respektfull mot andra spelare.",
   "agreementMultipleAccounts": "Jag godkänner att jag inte kommer att skapa flera konton (förutom av de skäl som anges i {param}).",
-  "agreementPolicy": "Jag instämmer med att jag kommer att följa alla Lichess-regler.",
   "searchOrStartNewDiscussion": "Sök eller starta ny konversation",
   "edit": "Redigera",
   "bullet": "Bullet",

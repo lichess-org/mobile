@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -78,7 +79,23 @@ void main() {
       await tester.pumpAndSettle(); // Wait study screen to load
       expect(
         tester.widget(find.byType(StudyScreen)),
-        isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
+        isA<StudyScreen>()
+            .having((s) => s.options.id, 'id', 'p9uY0321')
+            .having((s) => s.options.initialChapter, 'initialChapter', isNull),
+      );
+    });
+
+    testWidgets('resolves /study/{id}/{chapter} to StudyScreen route with initial chapter', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/study/p9uY0321/abcd1234');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait study screen to load
+      expect(
+        tester.widget(find.byType(StudyScreen)),
+        isA<StudyScreen>()
+            .having((s) => s.options.id, 'id', 'p9uY0321')
+            .having((s) => s.options.initialChapter, 'initialChapter', 'abcd1234'),
       );
     });
 
@@ -101,6 +118,81 @@ void main() {
         isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
       );
     });
+
+    testWidgets('resolves /broadcast/.../{roundId}#players to players tab', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/broadcast/grenke-chess-festival-2026--freestyle-open-a/round-3/ioIYmuar#players',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(BroadcastRoundScreenLoading)),
+        isA<BroadcastRoundScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
+      );
+    });
+
+    testWidgets('resolves /broadcast/.../{roundId}#players/{playerId} to player results screen', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/broadcast/grenke-chess-festival-2026--freestyle-open-a/round-3/ioIYmuar#players/250511',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      // Top of stack: player results screen
+      expect(
+        tester.widget(find.byType(BroadcastPlayerResultsScreenLoading)),
+        isA<BroadcastPlayerResultsScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.playerId, 'id', '250511'),
+      );
+
+      // Back navigates to the round screen on the players tab
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(BroadcastRoundScreenLoading)),
+        isA<BroadcastRoundScreenLoading>()
+            .having((s) => s.roundId, 'id', 'ioIYmuar')
+            .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
+      );
+    });
+
+    testWidgets(
+      'resolves /broadcast/.../{roundId}#players/{playerId} with percent-encoded non-FIDE playerId',
+      (WidgetTester tester) async {
+        // Players without a FIDE ID use their name as playerId in the URL fragment
+        final uri = Uri.parse(
+          'https://lichess.org/broadcast/tcec-s29-leagues--superfinal/match/RSIGxDYD#players/Stockfish%20dev-20260318-d173a065',
+        );
+        await triggerAppLink(tester, uri);
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.widget(find.byType(BroadcastPlayerResultsScreenLoading)),
+          isA<BroadcastPlayerResultsScreenLoading>()
+              .having((s) => s.roundId, 'id', 'RSIGxDYD')
+              .having((s) => s.playerId, 'id', 'Stockfish dev-20260318-d173a065'),
+        );
+
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.widget(find.byType(BroadcastRoundScreenLoading)),
+          isA<BroadcastRoundScreenLoading>()
+              .having((s) => s.roundId, 'id', 'RSIGxDYD')
+              .having((s) => s.initialTab, 'initialTab', BroadcastRoundTab.players),
+        );
+      },
+    );
 
     testWidgets('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', (
       WidgetTester tester,

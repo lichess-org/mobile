@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta página.';
 
   @override
-  String get mobileNewGame => 'Partida nueva';
+  String get mobileNewGame => 'Nueva Partida';
 
   @override
   String get mobileNoSearchResults => 'Sin resultados';
@@ -4696,9 +4696,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Me comprometo a no crear varias cuentas (excepto por las razones indicadas en las $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Me comprometo a seguir las normas de Lichess.';
 
   @override
   String get searchOrStartNewDiscussion => 'Buscar o empezar una nueva conversación';

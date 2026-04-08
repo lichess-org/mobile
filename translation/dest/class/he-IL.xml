@@ -96,7 +96,7 @@
   <string name="timePlaying">זמן ששיחק/ה</string>
   <string name="variantXOverLastY">%1$s לאורך %2$s הימים האחרונים</string>
   <string name="winrate">שיעור ניצחונות</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">מבט על</string>
   <string name="news">חדשות</string>
   <string name="classNews">חדשות הכיתה</string>
@@ -121,7 +121,7 @@
   <string name="xisNowAStudentOfTheClass">%s הוא עכשיו תלמיד בכיתה</string>
   <string name="anInvitationHasBeenSentToX">נשלחה הזמנה ל־%s</string>
   <string name="xAlreadyHasAPendingInvitation">ל־%s כבר יש הזמנה בהמתנה לתשובה</string>
-  <string name="xIsAKidAccountWarning">%1$s הוא חשבון של ילד/ה ולא יכול לקבל את ההודעה שלך. עליך לתת להם את קישור ההזמנה באופן ידני: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s הוא חשבון של ילד/ה ולא יכול לקבל את ההודעה שלך. עליך לתת להם את קישור ההזמנה באופן ידני: %2$s</string>
   <string name="moveToClass">עבור ל-%s</string>
   <string name="moveToAnotherClass">עבור לכיתה אחרת</string>
 </resources>

@@ -1390,7 +1390,6 @@
   "agreementAssistance": "Elfogadom, hogy játék közben soha semmilyen segítséget (sakkprogram, könyv, adatbázis vagy másik személy) nem használok fel.",
   "agreementNice": "Elfogadom, hogy tisztelettudó leszek a többi játékossal szemben.",
   "agreementMultipleAccounts": "Beleegyezem, hogy nem fogok egynél több felhasználói fiókot létrehozni (kivéve a {param} között ismertetett okok miatt).",
-  "agreementPolicy": "Elfogadom, hogy követni fogom a Lichess szabályait.",
   "searchOrStartNewDiscussion": "Keresés, vagy új beszélgetés indítása",
   "edit": "Szerkeszt",
   "ultraBullet": "UltraBullet",

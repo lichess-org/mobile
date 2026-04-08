@@ -1404,7 +1404,6 @@
   "agreementAssistance": "Jeg lover, at jeg på intet tidspunkt i løbet af mine partier vil modtage assistance (fra en skakcomputer, bog, database eller anden person).",
   "agreementNice": "Jeg lover, at jeg altid vil være respektfuld mod andre spillere.",
   "agreementMultipleAccounts": "Jeg er indforstået med, at jeg ikke opretter flere konti (undtagen af de grunde, der er angivet i {param}).",
-  "agreementPolicy": "Jeg lover, at jeg vil overholde alle Lichess-politikker.",
   "searchOrStartNewDiscussion": "Søg eller start ny diskussion",
   "edit": "Rediger",
   "ultraBullet": "UltraBullet",

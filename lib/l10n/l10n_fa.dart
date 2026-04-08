@@ -4698,9 +4698,6 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'با پیروی از همهٔ خط‌مشی‌های لیچس، موافقم.';
-
-  @override
   String get searchOrStartNewDiscussion => 'جستجو یا شروع کردن مکالمه جدید';
 
   @override

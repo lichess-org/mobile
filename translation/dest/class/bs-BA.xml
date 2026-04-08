@@ -117,7 +117,7 @@ Evo linka za pristup času.</string>
   <string name="xisNowAStudentOfTheClass">%s je sad student u razredu</string>
   <string name="anInvitationHasBeenSentToX">Pozivnica je poslana %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s već ima pozivnicu na čekanju</string>
-  <string name="xIsAKidAccountWarning">%1$s je dječiji račun i ne može primati vaše poruke. Morate im ručno poslati vezu: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s je dječiji račun i ne može primati vaše poruke. Morate im ručno poslati vezu: %2$s</string>
   <string name="moveToClass">Premjesti u %s</string>
   <string name="moveToAnotherClass">Premjesti se u drugi razred</string>
   <string name="allowMessagingBetweenStudents">Dozvoli poruke između učenika</string>

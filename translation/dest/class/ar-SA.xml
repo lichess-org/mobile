@@ -102,7 +102,7 @@
   <string name="timePlaying">وقت اللعب</string>
   <string name="variantXOverLastY">%1$s خلال آخر %2$s</string>
   <string name="winrate">نسبة الفوز</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">غير متوفر</string>
+  <string name="na">غير متوفر</string>
   <string name="overview">نظرة عامة</string>
   <string name="news">الأخبار</string>
   <string name="classNews">أخبار الفصل</string>
@@ -127,7 +127,7 @@
   <string name="xisNowAStudentOfTheClass">%s هو طالب في الصف الدراسي</string>
   <string name="anInvitationHasBeenSentToX">تم إرسال الدعوة الى %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s لديه دعوة معلقة بالفعل</string>
-  <string name="xIsAKidAccountWarning">%1$s حساب طفل ولا يمكنه استلام رسالتك. يجب أن تعطيهم عنوان URL للدعوة يدوياً: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s حساب طفل ولا يمكنه استلام رسالتك. يجب أن تعطيهم عنوان URL للدعوة يدوياً: %2$s</string>
   <string name="moveToClass">نقل إلى %s</string>
   <string name="moveToAnotherClass">نقل إلى صف آخر</string>
   <string name="allowMessagingBetweenStudents">السماح بالرسائل بين التلاميذ</string>

@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -80,7 +81,13 @@ class AppLinksService {
     switch (appLinkUri.pathSegments[0]) {
       case 'study':
         final id = appLinkUri.pathSegments[1];
-        return [StudyScreen.buildRoute(context, StudyId(id))];
+        final chapter = appLinkUri.pathSegments.getOrNull(2);
+        return [
+          StudyScreen.buildRoute(context, (
+            id: StudyId(id),
+            initialChapter: chapter != null ? StudyChapterId(chapter) : null,
+          )),
+        ];
       case 'broadcast':
         final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
         if (appLinkUri.pathSegments.length > 4) {
@@ -94,7 +101,19 @@ class AppLinksService {
             BroadcastGameScreen.buildRoute(context, roundId: roundId, gameId: gameId),
           ];
         } else {
-          final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
+          final fragment = appLinkUri.fragment;
+          final tab = BroadcastRoundTab.tabOrNullFromString(fragment.split('/').first);
+          if (tab == BroadcastRoundTab.players && fragment.length > 'players/'.length) {
+            final playerId = Uri.decodeComponent(fragment.substring('players/'.length));
+            return [
+              BroadcastRoundScreenLoading.buildRoute(
+                context,
+                roundId,
+                initialTab: BroadcastRoundTab.players,
+              ),
+              BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, playerId),
+            ];
+          }
           return [BroadcastRoundScreenLoading.buildRoute(context, roundId, initialTab: tab)];
         }
       case 'tournament':

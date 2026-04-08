@@ -4698,9 +4698,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Concordo que seguirei todas as políticas do Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Pesquisa ou começa uma nova conversa';
 
   @override
@@ -11249,9 +11246,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String agreementMultipleAccounts(String param) {
     return 'Eu concordo que não criarei múltiplas contas (exceto pelas razões indicadas em $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Eu concordo que seguirei todas as normas do Lichess.';
 
   @override
   String get searchOrStartNewDiscussion => 'Procurar ou iniciar nova conversa';

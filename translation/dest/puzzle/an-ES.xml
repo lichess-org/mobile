@@ -13,9 +13,9 @@
   <string name="specialMoves">Movimientos especials</string>
   <string name="didYouLikeThisPuzzle">Te fa goyo este problema?</string>
   <string name="voteToLoadNextOne">Vota pa cargar lo siguient!</string>
-  <string name="upVote">Vota positivament lo problema</string>
-  <string name="downVote">Vota negativament lo problema</string>
-  <string name="yourPuzzleRatingWillNotChange">La tuya puntuación de problemas no cambiará. Tiene en cuenta que los problemas no son pas una competición. La puntuación nomás indica los problemas que mas s\'asimilan a las tuyas habilidaz.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vota positivament lo problema</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vota negativament lo problema</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">La tuya puntuación de problemas no cambiará. Tiene en cuenta que los problemas no son pas una competición. La puntuación nomás indica los problemas que mas s\'asimilan a las tuyas habilidaz.</string>
   <string name="findTheBestMoveForWhite">Troba lo millor movimiento pa las blancas.</string>
   <string name="findTheBestMoveForBlack">Troba lo millor movimiento pa las negras.</string>
   <string name="toGetPersonalizedPuzzles">Pa aconseguir problemas personalizaus:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">Quitaus d\'as mías partidas</string>
   <string name="lookupOfPlayer">Mira los problemas quitaus d\'as partidas d\'un chugador</string>
   <string name="searchPuzzles">Mirar problemas</string>
-  <string name="fromMyGamesNone">No i hai problemas de las tuyas partidas en a base de datos, pero Lichess te quiere muito igual.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">No i hai problemas de las tuyas partidas en a base de datos, pero Lichess te quiere muito igual.
 Chuga partidas rapidas y clasica pa tener mas opcions de que anyadamos un problemas tuyo.</string>
   <string name="puzzleDashboardDescription">Entrena, analisa, millora</string>
   <plurals name="nbPlayed">

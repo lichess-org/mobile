@@ -4698,9 +4698,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Vakuutan että noudatan Lichessin sääntöjä.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hae tai aloita uusi keskustelu';
 
   @override

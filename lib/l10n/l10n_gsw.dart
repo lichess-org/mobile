@@ -4698,9 +4698,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ich schtimme zue, dass ich alli Lichess-Richtlinie befolge.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Suech e Underhaltig oder fang e Neui a';
 
   @override

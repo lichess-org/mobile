@@ -13,9 +13,9 @@
   <string name="specialMoves">Հատուկ քայլեր</string>
   <string name="didYouLikeThisPuzzle">Հավանեցի՞ք խնդիրը։</string>
   <string name="voteToLoadNextOne">Քվեարկե՛ք և անցե՛ք հաջորդին։</string>
-  <string name="upVote">Խնդիրը հավանեցի</string>
-  <string name="downVote">Խնդիրը չհավանեցի</string>
-  <string name="yourPuzzleRatingWillNotChange">Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Խնդիրը հավանեցի</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Խնդիրը չհավանեցի</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։</string>
   <string name="findTheBestMoveForWhite">Գտե՛ք սպիտակների լավագույն քայլը։</string>
   <string name="findTheBestMoveForBlack">Գտե՛ք սևերի լավագույն քայլը։</string>
   <string name="toGetPersonalizedPuzzles">Անհատական խնդիրներ ստանալու համար.</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">Իմ պարտիաներից</string>
   <string name="lookupOfPlayer">Փնտրել խնդիրներ խաղացողի պարտիաներից</string>
   <string name="searchPuzzles">Փնտրել խնդիրներ</string>
-  <string name="fromMyGamesNone">Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։</string>
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։</string>
   <string name="puzzleDashboardDescription">Մարզվե՛ք, վերլուծե՛ք, բարելավե՛ք</string>
   <plurals name="nbPlayed">
     <item quantity="one">%s լուծված Է</item>

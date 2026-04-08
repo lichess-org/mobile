@@ -1408,7 +1408,6 @@
   "agreementAssistance": "我同意在对局中任何时刻都不会接受帮助（来自电脑引擎、书籍、数据库或其他人）。",
   "agreementNice": "我同意我将始终尊重其他棋手。",
   "agreementMultipleAccounts": "我同意我不会创建多个账户（除非出于 {param} 中所述的原因）。",
-  "agreementPolicy": "我同意我将遵守所有 Lichess 规范。",
   "searchOrStartNewDiscussion": "搜索或开始新对话",
   "edit": "编辑",
   "ultraBullet": "超子弹棋",

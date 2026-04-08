@@ -90,7 +90,7 @@
   <string name="timePlaying">کاتی یاری</string>
   <string name="variantXOverLastY">%1$s لە ماوەی کۆتا %2$s</string>
   <string name="winrate">ڕێژەی براوە</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">بەردەست نییە</string>
+  <string name="na">بەردەست نییە</string>
   <string name="overview">تێڕوانینێکی گشتی</string>
   <string name="news">هەواڵ</string>
   <string name="classNews">هەواڵی پۆل</string>
@@ -115,7 +115,7 @@
   <string name="xisNowAStudentOfTheClass">%s ئێستا خوێندکاری پۆلەکەیە</string>
   <string name="anInvitationHasBeenSentToX">بانگهێشتنامەکە نێردا بۆ %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s بانگهێشتنامەی بۆکراوە</string>
-  <string name="xIsAKidAccountWarning">%1$s ئەکاونتێکی منداڵانە و ناتوانێت نامەکەت وەربگرێت. پێویستە بە دەستی بەستەری بانگهێشتکردنیان پێ بدەیت: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ئەکاونتێکی منداڵانە و ناتوانێت نامەکەت وەربگرێت. پێویستە بە دەستی بەستەری بانگهێشتکردنیان پێ بدەیت: %2$s</string>
   <string name="moveToClass">دەتەوێت بگوازرێتەوە بۆ %s</string>
   <string name="moveToAnotherClass">چوون بۆ پۆلێکی تر</string>
 </resources>

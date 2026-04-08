@@ -21,10 +21,10 @@
   <string name="ongoing">Në zhvillim</string>
   <string name="upcoming">I ardhshëm</string>
   <string name="roundName">Emër raundi</string>
-  <string name="tournamentName">Emër turneu</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Emër turneu</string>
   <string name="tournamentDescription">Përshkrim i shkurtër i turneut</string>
-  <string name="fullDescription">Përshkrim i plotë i turneut</string>
-  <string name="fullDescriptionHelp">Përshkrim i gjatë opsional i turneut. %1$s është e disponueshme. Gjatësia duhet të jetë më pak se %2$s shenja.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Përshkrim i plotë i turneut</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Përshkrim i gjatë opsional i turneut. %1$s është e disponueshme. Gjatësia duhet të jetë më pak se %2$s shenja.</string>
   <string name="sourceSingleUrl">URL Burimi PGN-je</string>
   <string name="sourceUrlHelp">URL-ja që do të kontrollojë Lichess-i për të marrë përditësime PGN-sh. Duhet të jetë e përdorshme publikisht që nga Interneti.</string>
   <string name="sourceGameIds">Deri në 64 ID lojërash Lichess, ndarë me hapësira.</string>
@@ -61,14 +61,14 @@
   <string name="startVerySoon">Transmetimi do të fillojë shumë shpejt.</string>
   <string name="notYetStarted">Transmetimi s’ka filluar ende.</string>
   <string name="officialWebsite">Sajti zyrtar</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Më tepër mundësi te %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Më tepër mundësi te %s</string>
   <string name="webmastersPage">faqe webmaster-ësh</string>
   <string name="embedThisBroadcast">Trupëzojeni këtë transmetim në sajtin tuaj</string>
   <string name="gamesThisTournament">Lojëra në këtë turne</string>
   <string name="score">Përfundim</string>
   <string name="allTeams">Krejt ekipet</string>
   <string name="tournamentFormat">Format turneu</string>
-  <string name="tournamentLocation">Vendndodhje Turney</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Vendndodhje Turney</string>
   <string name="topPlayers">Lojtarët kryesues</string>
   <string name="timezone">Zonë kohore</string>
   <string name="fideRatingCategory">Kategori vlerësimi FIDE</string>
@@ -98,5 +98,5 @@
   <string name="quarterfinals">Çerekfinale</string>
   <string name="semifinals">Gjysmëfinale</string>
   <string name="finals">Fiale</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">Loja %s</string>
+  <string name="gameX">Loja %s</string>
 </resources>
