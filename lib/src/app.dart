@@ -94,12 +94,12 @@ class _AppState extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
-      ref.listenManual(kidModeProvider, (_, state) {
-        if (state.hasValue) {
+      ref.listenManual(kidModeProvider, (prev, state) {
+        if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
-            for (final kind in _kIosBlogWidgetKinds) {
-              HomeWidget.updateWidget(iOSName: kind);
-            }
+            Future.wait([
+              for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
+            ]);
           });
         }
       }, fireImmediately: true);
