@@ -10,7 +10,7 @@ struct UserBlogFeedProvider: AppIntentTimelineProvider {
     func snapshot(for configuration: UserBlogFeedIntent, in context: Context) async -> BlogFeedEntry {
         if context.isPreview { return placeholder(in: context) }
         if LichessAppGroup.isKidModeActive {
-            return kidModeEntry(username: configuration.username)
+            return .kidMode(feed: .userBlog, username: configuration.username)
         }
         return await fetcher.fetchEntry(feed: .userBlog,
                                         username: configuration.username,
@@ -19,7 +19,7 @@ struct UserBlogFeedProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: UserBlogFeedIntent, in context: Context) async -> Timeline<BlogFeedEntry> {
         if LichessAppGroup.isKidModeActive {
-            return Timeline(entries: [kidModeEntry(username: configuration.username)], policy: .never)
+            return Timeline(entries: [.kidMode(feed: .userBlog, username: configuration.username)], policy: .never)
         }
         let entry = await fetcher.fetchEntry(feed: .userBlog,
                                              username: configuration.username,
@@ -28,7 +28,4 @@ struct UserBlogFeedProvider: AppIntentTimelineProvider {
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
 
-    private func kidModeEntry(username: String?) -> BlogFeedEntry {
-        BlogFeedEntry(date: .now, feed: .userBlog, username: username, items: [], error: nil, isKidMode: true)
-    }
 }
