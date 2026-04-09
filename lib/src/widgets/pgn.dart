@@ -3,7 +3,6 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,8 +17,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:linkify/linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const innacuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
@@ -1474,22 +1471,21 @@ class _MoveContextMenu extends ConsumerWidget {
 }
 
 List<InlineSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) {
-  return comments
-      .expand((comment) {
-        final elements = linkify(comment, options: const LinkifyOptions(humanize: false));
-        return elements.map((element) {
-          if (element is LinkableElement) {
-            return TextSpan(
-              text: element.text,
-              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2).merge(Styles.linkStyle),
-              recognizer: TapGestureRecognizer()..onTap = () => launchUrl(Uri.parse(element.url)),
-            );
-          }
-          return TextSpan(
-            text: element.text,
-            style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
-          );
-        });
-      })
-      .toList(growable: false);
+  return [
+    WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Consumer(
+        builder: (context, ref, _) => Linkify(
+          onOpen: (link) async =>
+              await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          text: comments.join(' '),
+          options: const LinkifyOptions(humanize: false),
+          style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+          linkStyle: Styles.linkStyle,
+        ),
+      ),
+    ),
+  ];
 }

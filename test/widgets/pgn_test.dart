@@ -14,14 +14,14 @@ import '../test_provider_scope.dart';
 // true for any mainline node whose first child has a text comment. This causes
 // the mainline to be split into a new _TwoColumnMainlinePart after every
 // commented move. Each part then renders its last branch's comment as a
-// standalone Linkify widget (line 843 of pgn.dart).
+// standalone Linkify widget (_TwoColumnMainlinePart comment rendering).
 //
 // This means ALL three changed locations end up producing a Linkify widget:
 //
-//  { Root comment }   → Consumer+Linkify before the first move   (line 524)
-//  1. e4 { ... }      → end-of-mainline Linkify for part 1       (line 843)
-//  e5  { ... }        → end-of-mainline Linkify for part 2       (line 843)
-//  2. Nf3 { ... }     → end-of-mainline Linkify for part 3       (line 843)
+//  { Root comment }   → Consumer+Linkify before the first move   (_PgnTreeView root comment rendering)
+//  1. e4 { ... }      → end-of-mainline Linkify for part 1       (_TwoColumnMainlinePart comment rendering)
+//  e5  { ... }        → end-of-mainline Linkify for part 2       (_TwoColumnMainlinePart comment rendering)
+//  2. Nf3 { ... }     → end-of-mainline Linkify for part 3       (_TwoColumnMainlinePart comment rendering)
 //
 // We include one comment with a URL and one without for each location, to
 // verify both plain text and linkified URL rendering.
@@ -73,7 +73,7 @@ void main() {
     // --- Location 1: root comment ---
     //
     // The root comment sits before the first move. It is rendered by a
-    // Consumer+Linkify widget (the change at line 524 of pgn.dart).
+    // Consumer+Linkify widget in _PgnTreeView's root comment rendering.
 
     testWidgets('root comment text is visible', (tester) async {
       await _pumpPgnScreen(tester);
@@ -94,7 +94,7 @@ void main() {
     // In two-column mode, a commented move causes _hasNonInlineSideLine() to
     // return true, which ends the current mainline part. The comment is then
     // rendered as a standalone Linkify widget at the bottom of that part
-    // (line 843 of pgn.dart), not inline with the move notation.
+    // (_TwoColumnMainlinePart comment rendering), not inline with the move notation.
 
     testWidgets('plain move comment text is visible', (tester) async {
       await _pumpPgnScreen(tester);
@@ -111,7 +111,7 @@ void main() {
     // --- Location 3: end-of-mainline comment ---
     //
     // Same mechanism as Location 2 — the Nf3 comment ends up as a standalone
-    // Linkify widget at the bottom of its mainline part (line 843 of pgn.dart).
+    // Linkify widget at the bottom of its mainline part (_TwoColumnMainlinePart comment rendering).
 
     testWidgets('end-of-mainline comment text is visible', (tester) async {
       await _pumpPgnScreen(tester);
@@ -128,10 +128,10 @@ void main() {
     // --- Linkify widget count ---
     //
     // Our PGN produces 4 Linkify widgets:
-    //   1. root comment (line 524)
-    //   2. e4 comment — end-of-part 1 (line 843)
-    //   3. e5 comment — end-of-part 2 (line 843)
-    //   4. Nf3 comment — end-of-part 3 (line 843)
+    //   1. root comment (_PgnTreeView root comment rendering)
+    //   2. e4 comment — end-of-part 1 (_TwoColumnMainlinePart comment rendering)
+    //   3. e5 comment — end-of-part 2 (_TwoColumnMainlinePart comment rendering)
+    //   4. Nf3 comment — end-of-part 3 (_TwoColumnMainlinePart comment rendering)
 
     testWidgets('all four comments are rendered as Linkify widgets', (tester) async {
       await _pumpPgnScreen(tester);
