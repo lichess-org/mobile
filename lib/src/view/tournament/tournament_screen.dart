@@ -603,9 +603,11 @@ class _StandingPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentId = state.id;
+    final isMe = ref.watch(authControllerProvider)?.user.id == player.user.id;
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
+      selected: isMe,
       tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
       leading: player.withdraw
           ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
