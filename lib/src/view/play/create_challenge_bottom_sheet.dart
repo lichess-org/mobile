@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -323,11 +324,11 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   Navigator.of(
                                     context,
                                   ).popUntil((route) => route is! ModalBottomSheetRoute);
-                                  // Use pushAndRemoveUntil to clear any old GameScreen with
-                                  // the same source from the navigation stack.
+                                  // Use pushAndRemoveUntil to clear any old GameScreen from
+                                  // the navigation stack without removing unrelated routes.
                                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                                     GameScreen.buildRoute(context, source: source),
-                                    (route) => route.isFirst,
+                                    (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                   );
                                 }
                               : null

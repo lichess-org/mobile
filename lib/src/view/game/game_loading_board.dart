@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -314,10 +315,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                             context,
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
-                              // Capture everything that needs BuildContext before the async
-                              // gap: after cancelChallenge() completes, the GameScreen
-                              // rebuilds to ChallengeCancelledState, which removes this
-                              // widget from the tree and makes context.mounted false.
+                              // Capture everything that needs BuildContext before the async gap.
                               final rootNav = Navigator.of(context, rootNavigator: true);
                               final directedChallengeReq = widget.challengeRequest.copyWith(
                                 destUser: user,
@@ -337,6 +335,8 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                                 debugPrint('Error cancelling open challenge: $e');
                               }
 
+                              if (!context.mounted) return;
+
                               if (directedChallengeRoute != null) {
                                 // Invalidate the provider so the new GameScreen creates a
                                 // fresh challenge even if the same UserChallengeSource was
@@ -346,12 +346,11 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                                     UserChallengeSource(directedChallengeReq),
                                   ),
                                 );
-                                // Use pushAndRemoveUntil to clear any old GameScreen with
-                                // the same source from the stack so they don't share the
-                                // provider and interfere with the new challenge.
+                                // Use pushAndRemoveUntil to clear any old GameScreen from
+                                // the stack without removing unrelated routes.
                                 rootNav.pushAndRemoveUntil(
                                   directedChallengeRoute,
-                                  (route) => route.isFirst,
+                                  (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                 );
                               } else {
                                 await ref
