@@ -20,7 +20,7 @@ struct BlogFeedFetcher {
 
     func fetchEntry(feed: BlogFeedChoice, username: String?, family: WidgetFamily) async -> BlogFeedEntry {
         let (items, error) = await fetchFeed(feed: feed, username: username, family: family)
-        return BlogFeedEntry(date: .now, feed: feed, username: username, items: items, error: error)
+        return BlogFeedEntry(date: .now, feed: feed, username: username, items: items, error: error, isKidMode: false)
     }
 
     private func fetchFeed(feed: BlogFeedChoice,
