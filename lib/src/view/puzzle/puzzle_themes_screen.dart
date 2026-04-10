@@ -82,6 +82,10 @@ class _BodyState extends ConsumerState<_Body> {
             controller: _searchController,
             hintText: context.l10n.search,
             onChanged: (String query) => setState(() => _searchQuery = query),
+            onClear: () => setState(() {
+              _searchController.clear();
+              _searchQuery = '';
+            }),
           ),
         );
 
