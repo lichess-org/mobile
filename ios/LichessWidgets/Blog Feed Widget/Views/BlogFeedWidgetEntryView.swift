@@ -8,9 +8,8 @@ struct BlogFeedWidgetEntryView: View {
     private var showDate: Bool { family == .systemLarge }
     private var lineLimit: Int {
         switch family {
-        case .systemSmall: 4
-        case .systemLarge: 2
-        default: 3
+        case .systemSmall: 3
+        default: 2
         }
     }
 

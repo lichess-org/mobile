@@ -10,15 +10,17 @@ struct BlogFeedWidgetHeader: View {
             Image("LichessLogo")
                 .resizable()
                 .frame(width: BlogFeedWidgetLayout.logoSize, height: BlogFeedWidgetLayout.logoSize)
-            Text(feedName)
-                .font(.system(size: BlogFeedWidgetLayout.titleFontSize, weight: .semibold))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-            if showTimestamp {
-                Spacer()
-                Text("Updated at \(updatedAt.shortTime)")
-                    .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
-                    .foregroundStyle(.secondary)
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                Text(feedName)
+                    .font(.system(size: BlogFeedWidgetLayout.titleFontSize, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                if showTimestamp {
+                    Spacer()
+                    Text("Updated at \(updatedAt.shortTime)")
+                        .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
