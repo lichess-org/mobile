@@ -13,7 +13,8 @@ You can still build and test extensions using your own Apple Developer account a
 1. Open `ios/Runner.xcworkspace` in Xcode.
 2. Select the **Runner** target → **Signing & Capabilities** → set **Team** to your account and change the bundle ID to something you own (e.g. `com.yourname.lichess`).
 3. Do the same for the extension target (e.g. **LichessWidgetsExtension**), using a matching sub-ID (e.g. `com.yourname.lichess.widget`).
-4. Build and run from Xcode — the extension will be signed with your profile and work on your device.
+4. For both targets, go to **Signing & Capabilities** → **+ Capability** → **App Groups**, and add an app group matching your bundle ID (e.g. `group.com.yourname.lichess`). The group ID must match across both targets and must also match what the Flutter app passes to `HomeWidget.setAppGroupId(...)` in `lib/src/app.dart`.
+5. Build and run from Xcode — the extension will be signed with your profile and work on your device.
 
 These changes are local only and should not be committed.
 
@@ -23,6 +24,15 @@ When a PR that adds a new extension is ready to merge, a Lichess org member with
 
 1. Register the new App ID (for the extension's bundle ID) in the Apple Developer portal.
 2. Create a provisioning profile for it.
+
+### Registering a new App Group
+
+When a PR introduces a new App Group (shared `UserDefaults` between the main app and an extension), a Lichess org member needs to do this once:
+
+1. In the [Apple Developer portal](https://developer.apple.com/account/resources/identifiers/list/applicationGroup), go to **Identifiers** → **App Groups** → **+** and register the new group ID (e.g. `group.org.lichess.mobileV2`).
+2. Edit the **main app** identifier (`org.lichess.mobileV2`) → **App Groups** → enable the new group.
+3. Edit the **extension** identifier (e.g. `org.lichess.mobileV2.LichessWidgets`) → **App Groups** → enable the same group.
+4. Regenerate and re-download any affected provisioning profiles, or let `match` handle it (see below).
 
 ## Deploying extensions via fastlane
 

@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
@@ -26,6 +28,13 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+const String _kIosAppGroupId = 'group.org.lichess.mobileV2';
+const List<String> _kIosBlogWidgetKinds = [
+  'OfficialBlogWidget',
+  'CommunityBlogWidget',
+  'UserBlogFeedWidget',
+];
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -82,6 +91,19 @@ class _AppState extends ConsumerState<Application> {
     ref.read(quickActionServiceProvider).start();
     ref.read(announceServiceProvider).start();
     ref.read(appLinksServiceProvider).start();
+
+    if (Platform.isIOS) {
+      HomeWidget.setAppGroupId(_kIosAppGroupId);
+      ref.listenManual(kidModeProvider, (prev, state) {
+        if (state.hasValue && prev?.value != state.value) {
+          HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
+            Future.wait([
+              for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
+            ]);
+          });
+        }
+      }, fireImmediately: true);
+    }
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {

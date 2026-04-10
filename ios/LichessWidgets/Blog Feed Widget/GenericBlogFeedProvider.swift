@@ -11,6 +11,10 @@ struct GenericBlogFeedProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (BlogFeedEntry) -> Void) {
         if context.isPreview { completion(placeholder(in: context)); return }
+        if LichessAppGroup.isKidModeActive {
+            completion(.kidMode(feed: feed))
+            return
+        }
         Task {
             completion(await fetcher.fetchEntry(feed: feed,
                                                 username: nil,
@@ -19,6 +23,10 @@ struct GenericBlogFeedProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<BlogFeedEntry>) -> Void) {
+        if LichessAppGroup.isKidModeActive {
+            completion(Timeline(entries: [.kidMode(feed: feed)], policy: .never))
+            return
+        }
         Task {
             let entry = await fetcher.fetchEntry(feed: feed,
                                                  username: nil,
@@ -27,4 +35,5 @@ struct GenericBlogFeedProvider: TimelineProvider {
             completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
         }
     }
+
 }
