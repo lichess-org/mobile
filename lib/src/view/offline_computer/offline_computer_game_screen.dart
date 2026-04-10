@@ -360,16 +360,16 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.menu,
         ),
         BottomBarButton(
+          label: context.l10n.resign,
+          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
+          icon: CupertinoIcons.flag,
+        ),
+        BottomBarButton(
           label: context.l10n.takeback,
           onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
-        ),
-        BottomBarButton(
-          label: context.l10n.resign,
-          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
-          icon: CupertinoIcons.flag,
         ),
         BottomBarButton(
           label: context.l10n.getAHint,
