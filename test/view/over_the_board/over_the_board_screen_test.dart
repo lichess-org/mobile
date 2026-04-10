@@ -460,6 +460,8 @@ void main() {
     );
 
     testWidgets('Game preserves non-standard variant when initialFen is provided', (tester) async {
+      // When the board editor sends a non-standard variant + custom FEN (e.g. Crazyhouse), the
+      // configure sheet must keep that variant and not auto-switch to fromPosition.
       final gameStorage = MockOverTheBoardGameStorage();
       when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
 
@@ -469,7 +471,10 @@ void main() {
         home: Consumer(
           builder: (context, r, _) {
             ref = r;
-            return const OverTheBoardScreen(initialFen: _customFen);
+            return const OverTheBoardScreen(
+              initialVariant: Variant.crazyhouse,
+              initialFen: _customFen,
+            );
           },
         ),
         overrides: {
@@ -479,12 +484,6 @@ void main() {
         },
       );
       await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-
-      // Change variant to Crazyhouse
-      await tester.tap(find.textContaining('Standard'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('Crazyhouse'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Play'));
