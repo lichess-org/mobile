@@ -94,7 +94,9 @@ class _BodyState extends ConsumerState<_Body> {
           final matched = [
             for (final (_, categoryThemes) in list)
               for (final theme in categoryThemes)
-                if (theme.l10n(context.l10n).name.toLowerCase().contains(query)) theme,
+                if (theme.l10n(context.l10n).name.toLowerCase().contains(query) ||
+                    theme.l10n(context.l10n).description.toLowerCase().contains(query))
+                  theme,
           ];
 
           return ListView(
