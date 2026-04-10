@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -31,7 +30,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
@@ -898,7 +896,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                           ),
                           controller: _fenController,
                           readOnly: true,
-                          onTap: _getClipboardData,
+                          onTap: () => pasteFenFromClipboard(context, _fenController),
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -964,20 +962,6 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
       _selectedVariant != Variant.fromPosition ||
       widget.initialFen != null ||
       (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
-
-  Future<void> _getClipboardData() async {
-    final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data != null) {
-      try {
-        Chess.fromSetup(Setup.parseFen(data.text!.trim()));
-        _fenController.text = data.text!.trim();
-      } catch (_) {
-        if (mounted) {
-          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-        }
-      }
-    }
-  }
 }
 
 class _PracticeSettingsSheet extends ConsumerWidget {

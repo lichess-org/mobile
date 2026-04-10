@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -263,7 +262,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                   ),
                   controller: _controller,
                   readOnly: true,
-                  onTap: _getClipboardData,
+                  onTap: () => pasteFenFromClipboard(context, _controller),
                 ),
               ),
             ),
@@ -415,20 +414,6 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
         );
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
-    }
-  }
-
-  Future<void> _getClipboardData() async {
-    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data != null) {
-      try {
-        Chess.fromSetup(Setup.parseFen(data.text!.trim()));
-        _controller.text = data.text!;
-      } catch (_) {
-        if (mounted) {
-          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-        }
-      }
     }
   }
 }
