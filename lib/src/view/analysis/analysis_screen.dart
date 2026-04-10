@@ -122,15 +122,23 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return WakelockWidget(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              centerTitle: false,
-              title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
-              actions: appBarActions,
+        return PopScope(
+          // Disable the iOS swipe-back gesture to prevent it from conflicting
+          // with piece drag gestures on the board near the left edge.
+          canPop: Theme.of(context).platform != TargetPlatform.iOS,
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop && context.mounted) Navigator.pop(context);
+          },
+          child: WakelockWidget(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: AppBar(
+                centerTitle: false,
+                title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
+                actions: appBarActions,
+              ),
+              body: _Body(options: widget.options, controller: _tabController),
             ),
-            body: _Body(options: widget.options, controller: _tabController),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
