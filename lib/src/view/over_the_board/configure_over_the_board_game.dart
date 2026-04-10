@@ -61,7 +61,17 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 
   @override
   void initState() {
-    chosenVariant = widget.initialVariant;
+    // Auto-switch variant to fromPosition when an initialFen is given for a
+    // standard game (mirrors the controller's fromVariant logic), and fall back
+    // to standard when fromPosition arrives without a FEN (e.g. "New game"
+    // after a fromPosition game).
+    if (widget.initialFen != null && widget.initialVariant == Variant.standard) {
+      chosenVariant = Variant.fromPosition;
+    } else if (widget.initialFen == null && widget.initialVariant == Variant.fromPosition) {
+      chosenVariant = Variant.standard;
+    } else {
+      chosenVariant = widget.initialVariant;
+    }
     _fromPositionFen = widget.initialFen;
     if (widget.initialFen != null) {
       _fenController.text = widget.initialFen!;
@@ -224,13 +234,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                     ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
                     ref
                         .read(overTheBoardGameControllerProvider.notifier)
-                        .startNewGame(
-                          chosenVariant,
-                          timeIncrement,
-                          initialFen: chosenVariant == Variant.fromPosition
-                              ? _fromPositionFen
-                              : null,
-                        );
+                        .startNewGame(chosenVariant, timeIncrement, initialFen: _fromPositionFen);
                     Navigator.pop(context);
                   }
                 : null,
