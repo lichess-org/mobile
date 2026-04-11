@@ -50,3 +50,22 @@ bundle exec fastlane match appstore --app_identifier org.lichess.mobileV2.<Exten
 This will generate the profile, push it to the certificates repo, and set the correct `PROVISIONING_PROFILE_SPECIFIER` in the Xcode project. After that, `fastlane beta` handles signing for all targets automatically — including in CI.
 
 Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfile` and the `sync_code_signing` call in `fastlane/Fastfile`.
+
+## Chessboard assets
+
+Board textures and piece images used by the widgets are sourced from the
+[flutter-chessground](https://github.com/lichess-org/flutter-chessground) package
+and stored in the widget extension's asset catalog under the `Chessboard` group.
+
+### Keeping assets in sync
+
+After bumping the `chessground` version in `pubspec.yaml` and running
+`flutter pub get`, regenerate the asset catalog group by running:
+
+```sh
+./scripts/sync-chessground-assets.sh
+```
+
+The script reads the locked version from `pubspec.lock`, finds the package in
+the local pub cache, and replaces all `board_*` and `piece_*` imagesets in the
+`Chessboard` group. No arguments are needed.
