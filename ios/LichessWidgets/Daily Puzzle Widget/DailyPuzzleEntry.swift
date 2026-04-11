@@ -7,6 +7,7 @@ struct DailyPuzzleEntry: TimelineEntry {
     let lastMove: String?
     let rating: Int?
     let showRating: Bool
+    let boardStyle: BoardStyle
     let error: String?
 
     var isWhiteToMove: Bool {
@@ -34,6 +35,7 @@ struct DailyPuzzleEntry: TimelineEntry {
             lastMove: "f1c4",
             rating: 1500,
             showRating: true,
+            boardStyle: BoardStyle.fromAppGroup(),
             error: nil
         )
     }

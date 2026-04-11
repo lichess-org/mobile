@@ -14,16 +14,17 @@ struct DailyPuzzleFetcher {
     }
 
     func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
+        let boardStyle = BoardStyle.fromAppGroup()
         guard let url = URL(string: "https://lichess.org/api/puzzle/daily") else {
-            return errorEntry(showRating: showRating)
+            return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-            return try parse(data, showRating: showRating)
+            return try parse(data, showRating: showRating, boardStyle: boardStyle)
         } catch {
-            return errorEntry(showRating: showRating)
+            return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
     }
 
@@ -39,7 +40,9 @@ struct DailyPuzzleFetcher {
         let puzzle: Puzzle
     }
 
-    private func parse(_ data: Data, showRating: Bool) throws -> DailyPuzzleEntry {
+    private func parse(_ data: Data, showRating: Bool, boardStyle: BoardStyle) throws
+        -> DailyPuzzleEntry
+    {
         let response = try JSONDecoder().decode(APIResponse.self, from: data)
         return DailyPuzzleEntry(
             date: .now,
@@ -48,11 +51,12 @@ struct DailyPuzzleFetcher {
             lastMove: response.puzzle.lastMove,
             rating: response.puzzle.rating,
             showRating: showRating,
+            boardStyle: boardStyle,
             error: nil
         )
     }
 
-    private func errorEntry(showRating: Bool) -> DailyPuzzleEntry {
+    private func errorEntry(showRating: Bool, boardStyle: BoardStyle) -> DailyPuzzleEntry {
         DailyPuzzleEntry(
             date: .now,
             puzzleId: nil,
@@ -60,6 +64,7 @@ struct DailyPuzzleFetcher {
             lastMove: nil,
             rating: nil,
             showRating: showRating,
+            boardStyle: boardStyle,
             error: "Could not load puzzle"
         )
     }

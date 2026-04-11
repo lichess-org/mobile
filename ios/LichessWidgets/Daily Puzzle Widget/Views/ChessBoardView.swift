@@ -2,9 +2,9 @@ import SwiftUI
 
 /// Renders a chess position from a FEN string as an 8×8 grid.
 ///
-/// Pieces are drawn using Unicode chess symbols, coloured and shadowed so they
-/// remain legible on both light and dark squares.  The last-move squares are
-/// highlighted in yellow, matching the lichess default theme.
+/// Square colours come from a ``BoardStyle`` that mirrors the board theme the
+/// user has selected in the main Lichess app.  Piece images are the staunty
+/// PNG set (the app default), bundled directly in the widget extension.
 struct ChessBoardView: View {
     /// The FEN string for the position to display.
     let fen: String
@@ -12,11 +12,8 @@ struct ChessBoardView: View {
     let lastMove: String?
     /// When `true` the board is shown from Black's perspective (Black at the bottom).
     let flipped: Bool
-
-    // MARK: - Board colours (lichess "brown" theme)
-    private let lightSquare = Color(red: 0.941, green: 0.851, blue: 0.710)  // #F0D9B5
-    private let darkSquare  = Color(red: 0.710, green: 0.533, blue: 0.388)  // #B58863
-    private let highlight   = Color(red: 0.961, green: 0.957, blue: 0.286).opacity(0.6)  // #F5F449
+    /// Board colours matching the main app's current theme.
+    let boardStyle: BoardStyle
 
     // MARK: - FEN parsing
 
@@ -74,13 +71,15 @@ struct ChessBoardView: View {
                             let fi = flipped ? 7 - col : col
                             let isLight = (ri + fi) % 2 != 0
                             let name = squareName(rankIndex: ri, fileIndex: fi)
-                            let piece: Character? = ri < boardData.count && fi < boardData[ri].count
+                            let piece: Character? =
+                                ri < boardData.count && fi < boardData[ri].count
                                 ? boardData[ri][fi] : nil
 
                             ZStack {
-                                Rectangle().fill(isLight ? lightSquare : darkSquare)
+                                Rectangle()
+                                    .fill(isLight ? boardStyle.lightSquare : boardStyle.darkSquare)
                                 if highlighted.contains(name) {
-                                    Rectangle().fill(highlight)
+                                    Rectangle().fill(boardStyle.lastMoveHighlight)
                                 }
                                 if let piece {
                                     ChessPieceView(piece: piece, squareSize: sq)
@@ -99,43 +98,22 @@ struct ChessBoardView: View {
 
 // MARK: - Piece view
 
-/// Draws a single chess piece using a Unicode chess symbol.
-///
-/// All pieces use the "filled" (Black) Unicode variant so that colouring via
-/// `.foregroundStyle` produces consistent results.  White pieces are drawn in
-/// white with a dark shadow for contrast on light squares; Black pieces are
-/// drawn in a near-black colour with a faint white shadow.
+/// Draws a single chess piece using the bundled staunty PNG asset set.
 private struct ChessPieceView: View {
     let piece: Character
     let squareSize: CGFloat
 
-    private var isWhite: Bool { piece.isUppercase }
-
-    private var symbol: String {
-        switch piece.lowercased().first {
-        case "k": "♚"
-        case "q": "♛"
-        case "r": "♜"
-        case "b": "♝"
-        case "n": "♞"
-        case "p": "♟"
-        default: ""
-        }
+    /// Returns the xcassets name for this piece, e.g. `"piece_staunty_wK"`.
+    private var assetName: String {
+        let color = piece.isUppercase ? "w" : "b"
+        let kind = piece.uppercased()
+        return "piece_staunty_\(color)\(kind)"
     }
 
     var body: some View {
-        Text(symbol)
-            .font(.system(size: squareSize * 0.82))
-            .foregroundStyle(
-                isWhite
-                    ? Color.white
-                    : Color(red: 0.10, green: 0.10, blue: 0.10)
-            )
-            .shadow(
-                color: isWhite ? .black.opacity(0.75) : .white.opacity(0.55),
-                radius: 0.6,
-                x: 0.4,
-                y: 0.4
-            )
+        Image(assetName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: squareSize * 0.9, height: squareSize * 0.9)
     }
 }

@@ -123,7 +123,12 @@ struct DailyPuzzleWidgetView: View {
     @ViewBuilder
     private var boardView: some View {
         if let fen = entry.fen {
-            ChessBoardView(fen: fen, lastMove: entry.lastMove, flipped: !entry.isWhiteToMove)
+            ChessBoardView(
+                fen: fen,
+                lastMove: entry.lastMove,
+                flipped: !entry.isWhiteToMove,
+                boardStyle: entry.boardStyle
+            )
         } else {
             Color.secondary.opacity(0.2)
         }

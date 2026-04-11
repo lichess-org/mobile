@@ -103,6 +103,13 @@ class _AppState extends ConsumerState<Application> {
           });
         }
       }, fireImmediately: true);
+      ref.listenManual(boardPreferencesProvider, (prev, state) {
+        if (prev?.boardTheme != state.boardTheme || prev?.pieceSet != state.pieceSet) {
+          HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name);
+          HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name);
+          HomeWidget.updateWidget(iOSName: 'DailyPuzzleWidget');
+        }
+      }, fireImmediately: true);
     }
 
     // Listen for connectivity changes and perform actions accordingly.
