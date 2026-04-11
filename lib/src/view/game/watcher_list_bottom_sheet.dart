@@ -2,11 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 
 class WatcherListBottomSheet extends StatelessWidget {
-  const WatcherListBottomSheet({
-    required this.nbWatchers,
-    required this.watcherNames,
-    super.key,
-  });
+  const WatcherListBottomSheet({required this.nbWatchers, required this.watcherNames, super.key});
 
   final int nbWatchers;
   final IList<String> watcherNames;
@@ -41,10 +37,7 @@ class WatcherListBottomSheet extends StatelessWidget {
             // Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Spectators ($nbWatchers)',
-                style: theme.textTheme.titleMedium,
-              ),
+              child: Text('Spectators ($nbWatchers)', style: theme.textTheme.titleMedium),
             ),
             const SizedBox(height: 8),
             const Divider(height: 1),
