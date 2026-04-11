@@ -21,8 +21,10 @@ struct DailyPuzzleProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: DailyPuzzleIntent, in context: Context) async -> DailyPuzzleEntry {
-        if context.isPreview { return .placeholder }
-        return await fetcher.fetchEntry(showRating: configuration.showRating)
+        // Always return the placeholder — snapshot is called for the widget gallery
+        // and edit sheet, where a fast static preview is more appropriate than a
+        // live network fetch.
+        .placeholder
     }
 
     func timeline(for configuration: DailyPuzzleIntent, in context: Context) async -> Timeline<DailyPuzzleEntry> {

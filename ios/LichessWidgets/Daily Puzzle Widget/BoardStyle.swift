@@ -24,8 +24,12 @@ struct BoardStyle {
 
     // swiftlint:disable:next function_body_length
     static func from(themeName: String, pieceSet: String = "staunty") -> BoardStyle {
-        let teal = Color(red: 0, green: 155 / 255, blue: 199 / 255).opacity(0.41)
         switch themeName {
+        case "system":
+            // The "system" theme uses Android's Material You dynamic colours via
+            // CorePalette — a feature that returns nil on iOS, causing the app to
+            // fall back to the brown scheme.  We replicate that fallback here.
+            return .init(light: 0xF0D9B6, dark: 0xB58863, pieceSet: pieceSet)
         case "blue":
             return .init(light: 0xDEE3E6, dark: 0x8CA2AD, pieceSet: pieceSet)
         case "blue2":
@@ -37,9 +41,9 @@ struct BoardStyle {
         case "canvas":
             return .init(light: 0xD7DAEB, dark: 0x547388, pieceSet: pieceSet)
         case "green":
-            return .init(light: 0xFFFFDD, dark: 0x86A666, lastMove: teal, pieceSet: pieceSet)
+            return .init(light: 0xFFFFDD, dark: 0x86A666, lastMove: tealLastMove, pieceSet: pieceSet)
         case "greenPlastic":
-            return .init(light: 0xF2F9BB, dark: 0x59935D, lastMove: teal, pieceSet: pieceSet)
+            return .init(light: 0xF2F9BB, dark: 0x59935D, lastMove: tealLastMove, pieceSet: pieceSet)
         case "grey":
             return .init(light: 0xB8B8B8, dark: 0x7D7D7D, pieceSet: pieceSet)
         case "horsey":
@@ -53,7 +57,7 @@ struct BoardStyle {
         case "maple2":
             return .init(light: 0xE2C89F, dark: 0x996633, pieceSet: pieceSet)
         case "marble":
-            return .init(light: 0x93AB91, dark: 0x4F644E, lastMove: teal, pieceSet: pieceSet)
+            return .init(light: 0x93AB91, dark: 0x4F644E, lastMove: tealLastMove, pieceSet: pieceSet)
         case "metal":
             return .init(light: 0xC9C9C9, dark: 0x727272, pieceSet: pieceSet)
         case "newspaper":
@@ -74,12 +78,17 @@ struct BoardStyle {
             return .init(light: 0xD0CECA, dark: 0x755839, pieceSet: pieceSet)
         case "wood4":
             return .init(light: 0xCAAF7D, dark: 0x7B5330, pieceSet: pieceSet)
-        default:  // "brown", "system", and any unknown value
+        default:  // "brown" and any unknown value
             return .init(light: 0xF0D9B6, dark: 0xB58863, pieceSet: pieceSet)
         }
     }
 
-    // MARK: - Private init
+    // MARK: - Private
+
+    /// Teal last-move highlight used by the green, greenPlastic, and marble themes.
+    /// Declared as a static constant so it is only ever constructed once.
+    private static let tealLastMove =
+        Color(red: 0, green: 155 / 255, blue: 199 / 255).opacity(0.41)
 
     private static let defaultLastMove =
         Color(red: 156 / 255, green: 199 / 255, blue: 0).opacity(0.502)

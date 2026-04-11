@@ -185,7 +185,7 @@ struct DailyPuzzleWidgetView: View {
             Image(systemName: "exclamationmark.circle")
                 .font(.system(size: 20))
                 .foregroundStyle(.secondary)
-            Text("Could not load puzzle")
+            Text(message)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

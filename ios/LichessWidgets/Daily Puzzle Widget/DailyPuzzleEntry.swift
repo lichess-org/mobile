@@ -25,14 +25,17 @@ struct DailyPuzzleEntry: TimelineEntry {
         }
     }
 
-    /// A recognisable starting position (Italian game after 1.e4 e5 2.Nf3 Nc6 3.Bc4)
+    /// A recognisable position (Italian game after 1.e4 e5 2.Nf3 Nc6, white to play Bc4)
     /// used as placeholder while the real puzzle loads.
+    ///
+    /// White is to move, so `isWhiteToMove == true` and the board renders from
+    /// white's perspective (`flipped == false`).
     static var placeholder: DailyPuzzleEntry {
         DailyPuzzleEntry(
             date: .now,
             puzzleId: nil,
-            fen: "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
-            lastMove: "f1c4",
+            fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+            lastMove: "b8c6",
             rating: 1500,
             showRating: true,
             boardStyle: BoardStyle.fromAppGroup(),

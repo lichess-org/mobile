@@ -1,15 +1,20 @@
 import Foundation
 
 struct DailyPuzzleFetcher {
-    /// The next update is scheduled for 00:05 the following day, giving the server
-    /// a few minutes to publish the new puzzle after midnight.
+    /// The next update is scheduled for 00:05 UTC the following day.
+    ///
+    /// The daily puzzle is published at midnight UTC, so we use a UTC calendar to
+    /// compute the next trigger time rather than the device's local calendar — a
+    /// device in UTC+12 would otherwise schedule the reload 12 hours too late.
     static var nextUpdateDate: Date {
-        var components = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+        var utc = Calendar(identifier: .gregorian)
+        utc.timeZone = TimeZone(identifier: "UTC")!
+        var components = utc.dateComponents([.year, .month, .day], from: .now)
         components.day = (components.day ?? 0) + 1
         components.hour = 0
         components.minute = 5
         components.second = 0
-        return Calendar.current.date(from: components)
+        return utc.date(from: components)
             ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
     }
 
