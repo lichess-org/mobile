@@ -40,7 +40,7 @@ struct DailyPuzzleWidgetView: View {
     private var wideView: some View {
         HStack(spacing: 0) {
             boardView
-                .padding(8)
+                .padding(.trailing, 8)
 
             VStack(alignment: .leading, spacing: 0) {
                 header
