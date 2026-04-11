@@ -2,9 +2,10 @@ import SwiftUI
 
 /// Renders a chess position from a FEN string as an 8×8 grid.
 ///
-/// Square colours come from a ``BoardStyle`` that mirrors the board theme the
-/// user has selected in the main Lichess app.  Piece images are the staunty
-/// PNG set (the app default), bundled directly in the widget extension.
+/// Square colours and piece images are driven by a ``BoardStyle`` that mirrors
+/// the board theme and piece set the user has selected in the main Lichess app.
+/// All piece sets supported by the app are bundled in the widget extension and
+/// selected at render time from the piece-set name stored in the App Group.
 struct ChessBoardView: View {
     /// The FEN string for the position to display.
     let fen: String
@@ -12,7 +13,7 @@ struct ChessBoardView: View {
     let lastMove: String?
     /// When `true` the board is shown from Black's perspective (Black at the bottom).
     let flipped: Bool
-    /// Board colours matching the main app's current theme.
+    /// Board colours and piece-set name matching the main app's current settings.
     let boardStyle: BoardStyle
 
     // MARK: - FEN parsing
@@ -82,7 +83,11 @@ struct ChessBoardView: View {
                                     Rectangle().fill(boardStyle.lastMoveHighlight)
                                 }
                                 if let piece {
-                                    ChessPieceView(piece: piece, squareSize: sq)
+                                    ChessPieceView(
+                                        piece: piece,
+                                        squareSize: sq,
+                                        pieceSet: boardStyle.pieceSet
+                                    )
                                 }
                             }
                             .frame(width: sq, height: sq)
@@ -98,16 +103,22 @@ struct ChessBoardView: View {
 
 // MARK: - Piece view
 
-/// Draws a single chess piece using the bundled staunty PNG asset set.
+/// Draws a single chess piece using the PNG asset bundled for the given piece set.
+///
+/// Asset names follow the pattern `piece_{pieceSet}_{color}{kind}`, e.g.
+/// `piece_cburnett_wK`.  Every piece set supported by the Lichess app is
+/// bundled in the widget extension's `Assets.xcassets`, so the lookup always
+/// succeeds for a valid piece-set name.
 private struct ChessPieceView: View {
     let piece: Character
     let squareSize: CGFloat
+    /// The Dart `PieceSet` enum `.name` value (e.g. `"staunty"`, `"kiwenSuwi"`).
+    let pieceSet: String
 
-    /// Returns the xcassets name for this piece, e.g. `"piece_staunty_wK"`.
     private var assetName: String {
         let color = piece.isUppercase ? "w" : "b"
         let kind = piece.uppercased()
-        return "piece_staunty_\(color)\(kind)"
+        return "piece_\(pieceSet)_\(color)\(kind)"
     }
 
     var body: some View {
