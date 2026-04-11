@@ -2,26 +2,21 @@ import SwiftUI
 
 /// Renders a chess position from a FEN string as an 8×8 grid.
 ///
-/// Square colours and piece images are driven by a ``BoardStyle`` that mirrors
-/// the board theme and piece set the user has selected in the main Lichess app.
-/// All piece sets supported by the app are bundled in the widget extension and
-/// selected at render time from the piece-set name stored in the App Group.
+/// The board background exactly matches the main Lichess app:
+/// - Image-backed themes (wood, marble, …) draw the full board texture image and
+///   lay highlights and pieces on top.
+/// - Solid-colour themes (brown, blue, green, ic) draw individual light/dark squares.
+///
+/// Piece images are driven by `boardStyle.pieceSet`; all piece sets supported by
+/// the app are bundled in the widget extension's `Assets.xcassets`.
 struct ChessBoardView: View {
-    /// The FEN string for the position to display.
     let fen: String
-    /// The last move in UCI notation (e.g. `"a4c5"`), used to highlight squares.
     let lastMove: String?
-    /// When `true` the board is shown from Black's perspective (Black at the bottom).
     let flipped: Bool
-    /// Board colours and piece-set name matching the main app's current settings.
     let boardStyle: BoardStyle
 
     // MARK: - FEN parsing
 
-    /// Returns an 8×8 grid where `board[rankIndex][fileIndex]`:
-    ///  - `rankIndex 0` = rank 8 (Black's back rank)
-    ///  - `fileIndex 0` = file a
-    ///  - `nil` = empty square
     private var board: [[Character?]] {
         let position = fen.split(separator: " ").first.map(String.init) ?? fen
         let ranks = position.split(separator: "/", omittingEmptySubsequences: false)
@@ -39,15 +34,11 @@ struct ChessBoardView: View {
         }
     }
 
-    /// The set of algebraic square names covered by `lastMove` (e.g. `{"a4","c5"}`).
     private var highlightedSquares: Set<String> {
         guard let lm = lastMove, lm.count >= 4 else { return [] }
         return [String(lm.prefix(2)), String(lm.dropFirst(2).prefix(2))]
     }
 
-    // MARK: - Coordinate helpers
-
-    /// Converts a board-array coordinate to algebraic notation ("a8", "h1", …).
     private func squareName(rankIndex: Int, fileIndex: Int) -> String {
         let files = "abcdefgh"
         let fileChar = files[files.index(files.startIndex, offsetBy: fileIndex)]
@@ -64,36 +55,56 @@ struct ChessBoardView: View {
             let side = min(geo.size.width, geo.size.height)
             let sq = side / 8
 
-            VStack(spacing: 0) {
-                ForEach(0 ..< 8, id: \.self) { row in
-                    HStack(spacing: 0) {
-                        ForEach(0 ..< 8, id: \.self) { col in
-                            let ri = flipped ? 7 - row : row
-                            let fi = flipped ? 7 - col : col
-                            let isLight = (ri + fi) % 2 != 0
-                            let name = squareName(rankIndex: ri, fileIndex: fi)
-                            let piece: Character? =
-                                ri < boardData.count && fi < boardData[ri].count
-                                ? boardData[ri][fi] : nil
+            ZStack {
+                // ── Board background ──────────────────────────────────────────
+                // Image-backed themes: one full-board texture scaled to fill.
+                // Solid-colour themes: drawn square-by-square in the grid below.
+                if let imageName = boardStyle.boardImageName {
+                    Image(imageName)
+                        .resizable()
+                        .frame(width: side, height: side)
+                }
 
-                            ZStack {
-                                Rectangle()
-                                    .fill(isLight ? boardStyle.lightSquare : boardStyle.darkSquare)
-                                if highlighted.contains(name) {
-                                    Rectangle().fill(boardStyle.lastMoveHighlight)
+                // ── Square grid: solid fill · highlights · pieces ─────────────
+                VStack(spacing: 0) {
+                    ForEach(0 ..< 8, id: \.self) { row in
+                        HStack(spacing: 0) {
+                            ForEach(0 ..< 8, id: \.self) { col in
+                                let ri = flipped ? 7 - row : row
+                                let fi = flipped ? 7 - col : col
+                                let isLight = (ri + fi) % 2 != 0
+                                let name = squareName(rankIndex: ri, fileIndex: fi)
+                                let piece: Character? =
+                                    ri < boardData.count && fi < boardData[ri].count
+                                    ? boardData[ri][fi] : nil
+
+                                ZStack {
+                                    // Solid fill only for non-image themes
+                                    if boardStyle.boardImageName == nil {
+                                        Rectangle()
+                                            .fill(
+                                                isLight
+                                                    ? boardStyle.lightSquare
+                                                    : boardStyle.darkSquare
+                                            )
+                                    }
+                                    if highlighted.contains(name) {
+                                        Rectangle().fill(boardStyle.lastMoveHighlight)
+                                    }
+                                    if let piece {
+                                        ChessPieceView(
+                                            piece: piece,
+                                            squareSize: sq,
+                                            pieceSet: boardStyle.pieceSet
+                                        )
+                                    }
                                 }
-                                if let piece {
-                                    ChessPieceView(
-                                        piece: piece,
-                                        squareSize: sq,
-                                        pieceSet: boardStyle.pieceSet
-                                    )
-                                }
+                                .frame(width: sq, height: sq)
                             }
-                            .frame(width: sq, height: sq)
                         }
                     }
                 }
+                .frame(width: side, height: side)
             }
             .frame(width: side, height: side)
         }
@@ -103,12 +114,6 @@ struct ChessBoardView: View {
 
 // MARK: - Piece view
 
-/// Draws a single chess piece using the PNG asset bundled for the given piece set.
-///
-/// Asset names follow the pattern `piece_{pieceSet}_{color}{kind}`, e.g.
-/// `piece_cburnett_wK`.  Every piece set supported by the Lichess app is
-/// bundled in the widget extension's `Assets.xcassets`, so the lookup always
-/// succeeds for a valid piece-set name.
 private struct ChessPieceView: View {
     let piece: Character
     let squareSize: CGFloat
