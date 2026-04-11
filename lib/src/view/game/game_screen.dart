@@ -504,13 +504,7 @@ class _WatcherButton extends ConsumerWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            const Icon(Icons.visibility_outlined, size: 16),
-            const SizedBox(width: 4),
-            Text('$nb'),
-          ],
-        ),
+        child: Badge(label: Text('$nb'), child: const Icon(Icons.visibility_outlined)),
       ),
     );
   }
