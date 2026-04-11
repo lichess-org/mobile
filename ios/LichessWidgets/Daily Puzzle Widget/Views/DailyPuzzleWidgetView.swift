@@ -33,7 +33,7 @@ struct DailyPuzzleWidgetView: View {
         }
     }
 
-    // MARK: - Wide (.systemMedium / .systemLarge)
+    // MARK: - Medium (.systemMedium)
 
     /// Board on the left, puzzle metadata on the right.
     @ViewBuilder
@@ -49,7 +49,7 @@ struct DailyPuzzleWidgetView: View {
 
                 VStack(alignment: .leading, spacing: 10) {
                     sideToMoveRow
-                    if let rating = entry.rating {
+                    if entry.showRating, let rating = entry.rating {
                         ratingRow(rating)
                     }
                 }
@@ -94,8 +94,9 @@ struct DailyPuzzleWidgetView: View {
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
 
-                if let rating = entry.rating {
+                if entry.showRating, let rating = entry.rating {
                     Text("·")
+                        .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.system(size: 10))
@@ -106,6 +107,7 @@ struct DailyPuzzleWidgetView: View {
                 }
 
                 Text("·")
+                    .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                 Text(entry.date.shortTime)
                     .font(.system(size: 11))

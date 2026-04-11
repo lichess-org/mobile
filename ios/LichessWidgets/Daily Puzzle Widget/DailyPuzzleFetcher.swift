@@ -13,17 +13,17 @@ struct DailyPuzzleFetcher {
             ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
     }
 
-    func fetchEntry() async -> DailyPuzzleEntry {
+    func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
         guard let url = URL(string: "https://lichess.org/api/puzzle/daily") else {
-            return errorEntry("Invalid URL")
+            return errorEntry(showRating: showRating)
         }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
-            return try parse(data)
+            return try parse(data, showRating: showRating)
         } catch {
-            return errorEntry(error.localizedDescription)
+            return errorEntry(showRating: showRating)
         }
     }
 
@@ -39,7 +39,7 @@ struct DailyPuzzleFetcher {
         let puzzle: Puzzle
     }
 
-    private func parse(_ data: Data) throws -> DailyPuzzleEntry {
+    private func parse(_ data: Data, showRating: Bool) throws -> DailyPuzzleEntry {
         let response = try JSONDecoder().decode(APIResponse.self, from: data)
         return DailyPuzzleEntry(
             date: .now,
@@ -47,11 +47,20 @@ struct DailyPuzzleFetcher {
             fen: response.puzzle.fen,
             lastMove: response.puzzle.lastMove,
             rating: response.puzzle.rating,
+            showRating: showRating,
             error: nil
         )
     }
 
-    private func errorEntry(_ message: String) -> DailyPuzzleEntry {
-        DailyPuzzleEntry(date: .now, puzzleId: nil, fen: nil, lastMove: nil, rating: nil, error: message)
+    private func errorEntry(showRating: Bool) -> DailyPuzzleEntry {
+        DailyPuzzleEntry(
+            date: .now,
+            puzzleId: nil,
+            fen: nil,
+            lastMove: nil,
+            rating: nil,
+            showRating: showRating,
+            error: "Could not load puzzle"
+        )
     }
 }
