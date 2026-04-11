@@ -2,7 +2,7 @@
 # sync-chessground-assets.sh
 #
 # Syncs board textures and piece images from the flutter-chessground pub package
-# into the iOS widget's asset catalog (DailyPuzzle group).
+# into the iOS widget's asset catalog (Chessboard group).
 #
 # Run from the repo root after upgrading the chessground dependency:
 #   ./scripts/sync-chessground-assets.sh
@@ -103,7 +103,7 @@ for entry in "${BOARD_ENTRIES[@]}"; do
   "info" : { "author" : "xcode", "version" : 1 }
 }
 EOF
-    (( board_count++ ))
+    board_count=$((board_count + 1))
 done
 
 echo "  boards: $board_count imagesets written"
@@ -146,7 +146,7 @@ for set_dir in "$PIECES_SRC"/*/; do
 }
 EOF
     done
-    (( set_count++ ))
+    set_count=$((set_count + 1))
 done
 
 echo "  pieces: $set_count sets × ${#PIECES[@]} pieces = $(( set_count * ${#PIECES[@]} )) imagesets written"
