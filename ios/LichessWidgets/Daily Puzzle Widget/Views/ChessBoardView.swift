@@ -50,6 +50,7 @@ struct ChessBoardView: View {
     var body: some View {
         let boardData = board
         let highlighted = highlightedSquares
+        let isSolidTheme = boardStyle.boardImageName == nil
 
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
@@ -72,15 +73,16 @@ struct ChessBoardView: View {
                             ForEach(0 ..< 8, id: \.self) { col in
                                 let ri = flipped ? 7 - row : row
                                 let fi = flipped ? 7 - col : col
-                                let isLight = (ri + fi) % 2 != 0
+                                // Light squares are where (rankIndex + fileIndex) is even:
+                                // a8=(0,0) is light, b8=(0,1) is dark, a7=(1,0) is dark, etc.
+                                let isLight = (ri + fi) % 2 == 0
                                 let name = squareName(rankIndex: ri, fileIndex: fi)
                                 let piece: Character? =
                                     ri < boardData.count && fi < boardData[ri].count
                                     ? boardData[ri][fi] : nil
 
                                 ZStack {
-                                    // Solid fill only for non-image themes
-                                    if boardStyle.boardImageName == nil {
+                                    if isSolidTheme {
                                         Rectangle()
                                             .fill(
                                                 isLight
