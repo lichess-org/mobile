@@ -851,7 +851,6 @@ class GameController extends AsyncNotifier<GameState> {
             newState = newState.copyWith(opponentLeftCountdown: null);
           }
         }
-        //
         final watcherData = data['watchers'];
         if (watcherData != null && watcherData is Map<String, dynamic>) {
           final nb = watcherData['nb'] as int? ?? 0;
