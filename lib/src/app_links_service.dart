@@ -7,12 +7,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -20,6 +23,8 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -62,6 +67,10 @@ class AppLinksService {
         }
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context != null && context.mounted) {
+          if (_isQuickPairingLink(uri)) {
+            _handleQuickPairingLink(context, uri);
+            return;
+          }
           await handleAppLink(context, uri);
         }
       } catch (e, st) {
@@ -150,6 +159,50 @@ class AppLinksService {
     }
   }
 
+  bool _isQuickPairingLink(Uri uri) {
+    return uri.scheme == kLichessUriScheme && uri.host == 'quick-pair';
+  }
+
+  void _handleQuickPairingLink(BuildContext context, Uri uri) {
+    final seek = _quickPairingSeekFromUri(uri);
+    if (seek == null) {
+      _logger.warning('Ignored invalid quick pair link: $uri');
+      return;
+    }
+
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(GameScreen.buildRoute(context, source: LobbySource(seek)));
+  }
+
+  GameSeek? _quickPairingSeekFromUri(Uri uri) {
+    final timeSeconds = int.tryParse(uri.queryParameters['time'] ?? '');
+    final incrementSeconds = int.tryParse(uri.queryParameters['increment'] ?? '');
+    if (timeSeconds == null || incrementSeconds == null) {
+      return null;
+    }
+    if (timeSeconds < 0 || incrementSeconds < 0) {
+      return null;
+    }
+
+    final ratedParam = uri.queryParameters['rated']?.toLowerCase();
+    final requestedRated = ratedParam == 'true' || ratedParam == '1';
+    final isAuthenticated = ref.read(authControllerProvider) != null;
+    final rated = requestedRated && isAuthenticated;
+
+    final variantName = uri.queryParameters['variant'];
+    final variant = variantName != null
+        ? (Variant.nameMap[variantName] ?? Variant.standard)
+        : Variant.standard;
+
+    return GameSeek(
+      clock: (Duration(seconds: timeSeconds), Duration(seconds: incrementSeconds)),
+      rated: rated,
+      variant: variant == Variant.standard ? null : variant,
+    );
+  }
+
   Future<bool> _tryResolveChallengeLink(BuildContext context, Uri appLinkUri) async {
     try {
       final challengeId = ChallengeId(appLinkUri.pathSegments[0]);
@@ -203,6 +256,11 @@ class AppLinksService {
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
   Future<void> handleAppLink(BuildContext context, Uri uri) async {
+    if (_isQuickPairingLink(uri)) {
+      _handleQuickPairingLink(context, uri);
+      return;
+    }
+
     final routes = await resolveAppLinkUri(context, uri);
     if (!context.mounted) return;
 

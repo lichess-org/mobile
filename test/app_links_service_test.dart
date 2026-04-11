@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -117,6 +118,18 @@ void main() {
         tester.widget(find.byType(TournamentScreen)),
         isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
       );
+    });
+
+    testWidgets('handles custom quick-pair links', (WidgetTester tester) async {
+      final uri = Uri.parse(
+        'org.lichess.mobile://quick-pair?time=300&increment=3&rated=true&variant=standard',
+      );
+
+      await triggerAppLink(tester, uri);
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(GameScreen), findsOneWidget);
     });
 
     testWidgets('resolves /broadcast/.../{roundId}#players to players tab', (

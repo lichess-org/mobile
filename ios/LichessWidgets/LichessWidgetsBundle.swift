@@ -7,5 +7,6 @@ struct LichessWidgetsBundle: WidgetBundle {
         CommunityBlogWidget()
         UserBlogFeedWidget()
         OfficialBlogWidget()
+        QuickPairingWidget()
     }
 }
