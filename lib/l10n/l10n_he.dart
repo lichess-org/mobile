@@ -141,7 +141,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsDraggedTargetCircle => 'Circle';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'רבוע';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -254,7 +254,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'התאימו אישית';
 
   @override
   String get mobileStopShowingThreat => 'Stop showing threat';
@@ -275,10 +275,43 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'לבוא את המלך שלך למרכז כדי לנצח.';
+
+  @override
+  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'פעילות';
@@ -1588,7 +1621,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleMates => 'מט';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'מוטיבים של מט';
 
   @override
   String get puzzleGoals => 'יעדים';
@@ -1938,6 +1971,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'הסרת כלי קריטי להגנה על כלי אחר, המאפשרת להכות את הכלי החשוף כעת במסע הבא.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2091,7 +2130,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeTriangleMateDescription => 'The queen and rook, one square away from the enemy king, are on the same rank or file, separated by one square, forming a triangle.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'Vuković mate';
 
   @override
   String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
@@ -2562,7 +2601,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get copyVariationPgn => 'העתקת ה־PGN של נגזרת השחמט';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Copy main line PGN';
 
   @override
   String get move => 'מסע';
@@ -2712,10 +2751,31 @@ class AppLocalizationsHe extends AppLocalizations {
   String get multipleLines => 'המשכים מקבילים';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'מעבדים';
 
   @override
   String get memory => 'זיכרון';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'ניתוח אינסופי';
@@ -2875,7 +2935,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get signupUsernameHint => 'ודאו ששם המשתמש שלכם מתאים גם לילדים. לא תוכלו לשנות אותו מאוחר יותר וחשבונות עם שמות משתמש לא הולמים יסגרו!';
 
   @override
-  String get signupEmailHint => 'רק לצורך איפוס הסיסמה.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'סיסמה';
@@ -3759,6 +3819,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get invalidAuthenticationCode => 'קוד אימות לא תקין';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'או';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'שלחו לי קישור בדוא״ל';
 
   @override
@@ -4127,18 +4196,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'כנס לגרסה או צא ממנה';
-
-  @override
-  String get keyRequestComputerAnalysis => 'בקשו ניתוח ממוחשב, למדו מטעויותיכם';
-
-  @override
-  String get keyNextBlunder => 'הטעות הגסה הבאה';
-
-  @override
-  String get keyNextMistake => 'הטעות הבאה';
-
-  @override
-  String get keyNextInaccuracy => 'אי־הדיוק הבא';
 
   @override
   String get keyPreviousBranch => 'הענף הקודם';
@@ -4693,9 +4750,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'אני מסכימ/ה לציית לכל מדיניות של Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'חפשו את התחילו שיחה חדשה';
 
   @override
@@ -5053,6 +5107,11 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get clearSearch => 'ניקוי החיפוש';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'תגיות';
@@ -6291,7 +6350,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'ברוכים הבאים ללוחות הלמידה של Lichess!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
@@ -6309,7 +6368,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Select $param.<br>Then decide who will be allowed to contribute.';
   }
 
   @override
@@ -6323,38 +6382,38 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Click the $param button, or right-click on the move list.<br>Comments are shared and saved.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Click the !? button, or right-click on the move list.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'A board set up for a new game.<br>Useful for exploring openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
@@ -6372,7 +6431,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';

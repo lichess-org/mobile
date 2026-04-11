@@ -96,7 +96,7 @@ Zde je odkaz pro přístup ke třídě.</string>
   <string name="timePlaying">Čas hraní</string>
   <string name="variantXOverLastY">%1$s za posledních %2$s</string>
   <string name="winrate">Podíl výher</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">N/A</string>
+  <string name="na">N/A</string>
   <string name="overview">Shrnutí</string>
   <string name="news">Novinky</string>
   <string name="classNews">Novinky třídy</string>
@@ -121,12 +121,12 @@ Zobrazí se vodorovná čára.</string>
   <string name="xisNowAStudentOfTheClass">%s je nyní student třídy</string>
   <string name="anInvitationHasBeenSentToX">Pozvánka byla odeslána uživateli %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s již má pozvánku</string>
-  <string name="xIsAKidAccountWarning">%1$s je dětský účet a nemůže přijmout tvojí zprávu. Musíš mu dát URL adresu pozvánky sám:%2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s je dětský účet a nemůže přijmout tvojí zprávu. Musíš mu dát URL adresu pozvánky sám:%2$s</string>
   <string name="moveToClass">Přesunout do %s</string>
   <string name="moveToAnotherClass">Přesunout do jiné třídy</string>
   <string name="allowMessagingBetweenStudents">Povolit zprávy mezi studenty</string>
   <string name="allowMessagingBetweenStudentsDesc">Tohle platí pouze pro účty, které jste vytvořil pro studenty.</string>
   <string name="quickLoginCode">Kód pro rychlé přihlášení</string>
   <string name="quickLoginCodes">Kód pro rychlé přihlášení</string>
-  <string name="expirationInMomentFromNow" comment="%s is relative time in the future. For example, 'in 2 hours'&#10;&#10;If it works better for your language, you can use punctuation e.g. &quot;Expiration: %s&quot;">Vyprší za %s</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">Vyprší za %s</string>
 </resources>

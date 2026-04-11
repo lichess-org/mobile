@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   const CorrespondenceChallengesScreen({super.key});
@@ -80,26 +81,26 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
         return const Scaffold(body: Center(child: Text('Could not load correspondence seeks')));
       case AsyncData(value: final seeks):
         final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.correspondence),
-            actions: [
-              if (authUser != null)
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outlined),
-                  onPressed: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return const CreateCorrespondenceGameBottomSheet();
-                      },
-                    ).then((_) {
-                      ref.invalidate(correspondenceSeeksProvider);
-                    });
-                  },
-                ),
-            ],
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              if (authUser == null) {
+                showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                return;
+              }
+              showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) {
+                  return const CreateCorrespondenceGameBottomSheet();
+                },
+              ).then((_) {
+                ref.invalidate(correspondenceSeeksProvider);
+              });
+            },
+            label: Text(context.l10n.createAGame),
+            icon: const Icon(Icons.add_circle_outline),
           ),
           body: HapticRefreshIndicator(
             key: _refreshKey,

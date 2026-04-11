@@ -1,21 +1,23 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -100,6 +102,9 @@ class GameBody extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
@@ -158,6 +163,7 @@ class GameBody extends ConsumerWidget {
                             ? gameState.game.meta.clock?.emergency
                             : null,
                         side: Side.black,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),
@@ -207,6 +213,7 @@ class GameBody extends ConsumerWidget {
                             ? gameState.game.meta.clock?.emergency
                             : null,
                         side: Side.white,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),
@@ -260,7 +267,13 @@ class GameBody extends ConsumerWidget {
                 isBoardTurned: isBoardTurned,
               ),
               lastMove: gameState.game.moveAt(gameState.stepCursor),
-              interactiveBoardParams: (
+              explosionSquares: gameState.stepCursor > 0
+                  ? atomicExplosionSquares(
+                      gameState.game.positionAt(gameState.stepCursor - 1),
+                      gameState.game.moveAt(gameState.stepCursor),
+                    )
+                  : null,
+              boardParams: GameBoardParams.interactive(
                 variant: gameState.game.meta.variant,
                 position: gameState.currentPosition,
                 playerSide: gameState.game.playable && !gameState.isReplaying
@@ -511,9 +524,11 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.skip_next,
                 onTap: ongoingGames.maybeWhen(
                   data: (games) {
-                    final nextTurn = games
-                        .whereNot((g) => g.fullId == id)
-                        .firstWhereOrNull((g) => g.isMyTurn);
+                    final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
+                    if (gamesWithMyTurn.isEmpty) return null;
+                    final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
+                    final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
+                    final nextTurn = gamesWithMyTurn.isEmpty ? null : gamesWithMyTurn[nextIndex];
                     return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
                   },
                   orElse: () => null,

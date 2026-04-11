@@ -115,7 +115,7 @@ Dit sal \'n horisontale lyn vertoon.</string>
   <string name="xisNowAStudentOfTheClass">%s is nou \'n student van die klas</string>
   <string name="anInvitationHasBeenSentToX">\'n Uitnodiging is gestuur na %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s is reeds genooi</string>
-  <string name="xIsAKidAccountWarning">%1$s is \'n kind en kan nie jou boodskap ontvang nie. Gee die uitnodiging met die hand: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s is \'n kind en kan nie jou boodskap ontvang nie. Gee die uitnodiging met die hand: %2$s</string>
   <string name="moveToClass">Skuif na %s</string>
   <string name="moveToAnotherClass">Skuif na \'n ander klas</string>
 </resources>

@@ -136,8 +136,15 @@
   <string name="pinnedPieces">Зв\'язані фігури</string>
   <string name="checkableKing">Король, якому можна поставити шах</string>
   <string name="multipleLines">Кількість стрілок</string>
+  <string name="multipleLinesDescription">Укажіть кількість стрілок аналізу на дошці</string>
+  <string name="searchTime">Час пошуку</string>
+  <string name="searchTimeDescription">Установити час для оцінки нових позицій</string>
+  <string name="threads">Потоки</string>
+  <string name="threadsDescription">Установіть значення нижче за вашу кількість потоків процесора. Галочки позначають безпечний вибір</string>
+  <string name="threadsDescriptionMobile">Більше потоків буде споживати більше заряду акумулятора, але надаватиме кращий аналіз</string>
   <string name="cpus">Потоки</string>
   <string name="memory">Пам\'ять</string>
+  <string name="memoryDescription">Вищі значення можуть підвищити продуктивність</string>
   <string name="infiniteAnalysis">Нескінченний аналіз</string>
   <string name="removesTheDepthLimit">Знімає обмеження на глибину аналізу - ваш комп’ютер стане теплішим</string>
   <string name="blunder">Груба помилка</string>
@@ -267,7 +274,7 @@
   <string name="changeUsernameNotSame">Можна змінити лише регістр літер. Наприклад, \"johndoe\" до \"JohnDoe\".</string>
   <string name="changeUsernameDescription">Змініть своє ім\'я користувача. Це може бути зроблено лише один раз і вам дозволено лише змінити регістр літер вашого імені користувача.</string>
   <string name="signupUsernameHint">Переконайтесь, що ви вибрали хороше ім\'я. Ви не можете змінити його потім, а профілі з непристойними іменами будуть заблоковані!</string>
-  <string name="signupEmailHint">Ми використаємо її лише для скидання пароля.</string>
+  <string name="signupEmailPromise">Ми надсилатимемо вам листи лише щодо вашого облікового запису та ніколи не будемо ділитися вашою електронною поштою.</string>
   <string name="password">Пароль</string>
   <string name="changePassword">Змінити пароль</string>
   <string name="changeEmail">Змінити адресу електронної пошти</string>
@@ -667,6 +674,9 @@
   <string name="invalidUsernameOrPassword">Недійсне ім\'я користувача або пароль</string>
   <string name="incorrectPassword">Невірний пароль</string>
   <string name="invalidAuthenticationCode">Недійсний код автентифікації</string>
+  <string name="clearField">Очистити поле</string>
+  <string name="orSeparator">або</string>
+  <string name="logInByEmail">Увійти через електронну пошту</string>
   <string name="emailMeALink">Надішліть мені посилання</string>
   <string name="currentPassword">Поточний пароль</string>
   <string name="newPassword">Новий пароль</string>
@@ -799,10 +809,6 @@
   <string name="keyCycleSelectedVariation">Прокрутити вибраний варіант</string>
   <string name="keyShowOrHideComments">показати/приховати коментарі</string>
   <string name="keyEnterOrExitVariation">зайти/вийти з варіанту</string>
-  <string name="keyRequestComputerAnalysis">Зробити запит на комп\'ютерний аналіз, Учіться на своїх помилках</string>
-  <string name="keyNextBlunder">Наступна груба помилка</string>
-  <string name="keyNextMistake">Наступна помилка</string>
-  <string name="keyNextInaccuracy">Наступна неточність</string>
   <string name="keyPreviousBranch">Попередній варіант</string>
   <string name="keyNextBranch">Наступний варіант</string>
   <string name="toggleVariationArrows">Показати стрілки варіантів</string>
@@ -1001,7 +1007,6 @@
   <string name="agreementAssistance">Я погоджуюся, що не буду отримувати допомогу під час моїх ігор (від шахового комп\'ютера, книги, бази даних або іншої особи).</string>
   <string name="agreementNice">Я погоджуюся, що я завжди буду ставитись чемно до інших гравців.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Я погоджуюсь с тим, що не буду створювати декілька облікових записів (крім причин, описаних у %s).</string>
-  <string name="agreementPolicy">Я погоджуюся, що я буду слідувати усім правилам Lichess.</string>
   <string name="searchOrStartNewDiscussion">Шукати або розпочати бесіду</string>
   <string name="edit">Змінити</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ультракуля</string>
@@ -1113,6 +1118,7 @@
   <string name="offline" comment="status of a user">не в мережі</string>
   <string name="search">Пошук</string>
   <string name="clearSearch">Очистити пошук</string>
+  <string name="thereAreNoResultsForX">Нічого не знайдено для «%s»</string>
   <string name="tags">Теги</string>
   <string name="enPassant">Взяття на проході</string>
 </resources>

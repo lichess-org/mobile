@@ -388,7 +388,9 @@ class _Body extends ConsumerWidget {
                       StatCardRow([
                         StatCard(
                           context.l10n.averageOpponent,
-                          value: data.avgOpponent == null ? '?' : data.avgOpponent.toString(),
+                          value: data.avgOpponent == null
+                              ? '?'
+                              : data.avgOpponent!.round().toString(),
                         ),
                         StatCard(
                           context.l10n.perfStatTimeSpentPlaying,

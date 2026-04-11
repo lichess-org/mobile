@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
@@ -16,9 +18,10 @@ final appLogServiceProvider = Provider<AppLogService>(
   name: 'AppLogServiceProvider',
 );
 
-/// Manages log entries created via [Logger] instances
+/// Manages log entries created via [Logger] instances.
 ///
-/// Currently, simply saves the most recent log entries in memory, so they do not persists across app restarts.
+/// Log entries are stored in memory for the current session and persisted to the
+/// SQLite database so they survive app restarts.
 class AppLogService {
   AppLogService(this.ref);
 
@@ -66,6 +69,16 @@ class AppLogService {
       }
 
       _logs.put(record);
+
+      // Persist to database asynchronously (fire-and-forget).
+      // The try-catch guards against ref being invalid (e.g. disposed ProviderScope in tests).
+      scheduleMicrotask(() {
+        try {
+          ref
+              .read(appLogStorageProvider.future)
+              .then((storage) => storage.save(AppLogEntry.fromLogRecord(record)), onError: (_) {});
+        } catch (_) {}
+      });
     });
   }
 
@@ -79,12 +92,12 @@ final class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} initialized', value);
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
   @override
   void didDisposeProvider(ProviderObserverContext context) {
-    _logger.info('${context.provider.name ?? context.provider.runtimeType} disposed');
+    _logger.fine('${context.provider.name ?? context.provider.runtimeType} disposed');
   }
 
   @override

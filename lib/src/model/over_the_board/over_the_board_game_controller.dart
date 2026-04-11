@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -14,6 +17,8 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
+
+final _random = Random();
 
 final overTheBoardGameControllerProvider =
     NotifierProvider.autoDispose<OverTheBoardGameController, OverTheBoardGameState>(
@@ -28,8 +33,12 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
     Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
   );
 
-  void startNewGame(Variant variant, TimeIncrement timeIncrement) {
-    state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
+  void startNewGame(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
+    state = OverTheBoardGameState.fromVariant(
+      variant,
+      Speed.fromTimeIncrement(timeIncrement),
+      initialFen: initialFen,
+    );
   }
 
   void loadOngoingGame(OverTheBoardGame game) {
@@ -37,7 +46,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   }
 
   void rematch() {
-    state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
+    state = OverTheBoardGameState.fromVariant(
+      state.game.meta.variant,
+      state.game.meta.speed,
+      initialFen: state.game.initialFen,
+    );
   }
 
   void resign() {
@@ -87,8 +100,6 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
-    } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     } else if (state.currentPosition.variantOutcome != null) {
       switch (state.currentPosition.variantOutcome!.winner) {
         case Side.white:
@@ -102,6 +113,8 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
         case null:
           state = state.copyWith(game: state.game.copyWith(status: GameStatus.variantEnd));
       }
+    } else if (state.currentPosition.isStalemate) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     }
 
     _moveFeedback(sanMove);
@@ -160,21 +173,32 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     @Default(null) NormalMove? promotionMove,
   }) = _OverTheBoardGameState;
 
-  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed) {
-    final position = variant == Variant.chess960
-        ? randomChess960Position()
-        : variant.initialPosition;
+  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed, {String? initialFen}) {
+    final Position position;
+    final Variant effectiveVariant;
+    if (initialFen != null) {
+      effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+      position = Position.setupPosition(effectiveVariant.rule, Setup.parseFen(initialFen));
+    } else if (variant == Variant.chess960) {
+      position = randomChess960Position();
+      effectiveVariant = variant;
+    } else {
+      position = variant.initialPosition;
+      effectiveVariant = variant;
+    }
+    final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     return OverTheBoardGameState(
       game: OverTheBoardGame(
+        id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: position.fen,
+        initialFen: initialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,
-          variant: variant,
+          variant: effectiveVariant,
           speed: speed,
-          perf: Perf.fromVariantAndSpeed(variant, speed),
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
         ),
       ),
     );

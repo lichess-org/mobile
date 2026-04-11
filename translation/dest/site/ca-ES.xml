@@ -132,8 +132,15 @@
   <string name="pinnedPieces">Peces clavades</string>
   <string name="checkableKing">Rei exposat a escac</string>
   <string name="multipleLines">Múltiples línies</string>
+  <string name="multipleLinesDescription">Estableix el nombre de línies i moviments avaluar al tauler</string>
+  <string name="searchTime">Temps de cerca</string>
+  <string name="searchTimeDescription">Estableix un temps per avaluar les posicions fresques</string>
+  <string name="threads">Fils</string>
+  <string name="threadsDescription">Establiu el valor per sota del vostre nombre de fils del CPUs. La marca és un bon valor segur</string>
+  <string name="threadsDescriptionMobile">Més fils utilitzarà més bateria per millors anàlisis</string>
   <string name="cpus">CPUs</string>
   <string name="memory">Memòria</string>
+  <string name="memoryDescription">Valors més alts pot millorar el rendiment</string>
   <string name="infiniteAnalysis">Anàlisi il·limitada</string>
   <string name="removesTheDepthLimit">Treu el límit de profunditat i escalfa el teu ordinador</string>
   <string name="blunder">Errada greu</string>
@@ -237,7 +244,7 @@
   <string name="changeUsernameNotSame">Només es pot canviar entre majúscules i minúscules. Per exemple, de \"perecullera\" a \"PereCullera\".</string>
   <string name="changeUsernameDescription">Canvia el teu nom d\'usuari. Això es pot fer una única vegada i només només se\'t permet canviar lletres entre majúscules i minúscules.</string>
   <string name="signupUsernameHint">Assegureu-vos d\'escollir un nom d\'usuari amigable. No el podreu canviar més tard i qualsevol compte amb nom d\'usuaris inapropiats es tancarà!</string>
-  <string name="signupEmailHint">Només s\'utilitzarà per restablir la contrasenya.</string>
+  <string name="signupEmailPromise">Només t\'enviarem correus sobre el teu compte i mai compartirem el teu correu electrònic.</string>
   <string name="password">Contrasenya</string>
   <string name="changePassword">Canvia la contrasenya</string>
   <string name="changeEmail">Canvia el correu electrònic</string>
@@ -595,6 +602,9 @@
   <string name="invalidUsernameOrPassword">Nom d\'usuari o contrasenya incorrectes</string>
   <string name="incorrectPassword">Contrasenya incorrecta</string>
   <string name="invalidAuthenticationCode">Codi d\'autenticació invàlid</string>
+  <string name="clearField">Neteja el camp</string>
+  <string name="orSeparator">O</string>
+  <string name="logInByEmail">Identificat amb el correu electrònic</string>
   <string name="emailMeALink">Envieu-me un enllaç per correu electrònic</string>
   <string name="currentPassword">Contrasenya actual</string>
   <string name="newPassword">Nova contrasenya</string>
@@ -721,10 +731,6 @@
   <string name="keyCycleSelectedVariation">Canvia la variació seleccionada</string>
   <string name="keyShowOrHideComments">mostrar/ocultar comentaris</string>
   <string name="keyEnterOrExitVariation">entrar/sortir variació</string>
-  <string name="keyRequestComputerAnalysis">Demana una anàlisi computeritzada, aprèn dels teus errors</string>
-  <string name="keyNextBlunder">Següent errada</string>
-  <string name="keyNextMistake">Següent errada greu</string>
-  <string name="keyNextInaccuracy">Següent imprecisió</string>
   <string name="keyPreviousBranch">Branca anterior</string>
   <string name="keyNextBranch">Branca següent</string>
   <string name="toggleVariationArrows">Mostra/amaga les fletxes de les variants</string>
@@ -773,6 +779,7 @@
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">També pots desplaçar-te sobre el tauler per moure en el joc.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Mantingueu el ratolí sobre les variants d\'anàlisi per a previsualitzar-les.</string>
   <string name="analysisShapesHowTo">Pitja la tecla Shift + clic o feu clic dret per dibuixar cercles i fletxes al tauler.</string>
+  <string name="primaryColorArrowsHowTo">Ctrl o majúscules = vermell; comandament, alt o meta = blau; una tecla de cada = groc.</string>
   <string name="letOtherPlayersMessageYou">Deixa que altres jugadors t\'envïin missatges</string>
   <string name="receiveForumNotifications">Rebre notificacions quan et mencionin al fòrum</string>
   <string name="shareYourInsightsData">Comparteix les teves dades d\'estadístiques</string>
@@ -912,7 +919,6 @@
   <string name="agreementAssistance">Estic d’acord que mai rebré assistència durant les meves partides (ni d’ordinadors, llibres, base de dades o d’una altra persona).</string>
   <string name="agreementNice">Estic d’acord que sempre seré respectuós amb els altres jugadors.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Estic d\'acord en no crear múltiples comptes (excepte per les raons detallades als %s).</string>
-  <string name="agreementPolicy">Estic d’acord que seguiré totes les polítiques de Lichess.</string>
   <string name="searchOrStartNewDiscussion">Cerca o inicia una nova discusió</string>
   <string name="edit">Edita</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ultra-Bala</string>
@@ -1025,6 +1031,7 @@ Les despeses de funcionament, desenvolupament i continguts es financen exclusiva
   <string name="offline" comment="status of a user">fora de línia</string>
   <string name="search">Cerca</string>
   <string name="clearSearch">Neteja la cerca</string>
+  <string name="thereAreNoResultsForX">No hi ha resultats per \"%s\"</string>
   <string name="tags">Etiquetes</string>
   <string name="enPassant">Captura al pas</string>
 </resources>

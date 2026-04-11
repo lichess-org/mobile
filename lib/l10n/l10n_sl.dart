@@ -281,6 +281,39 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobilePreviousPage => 'Prejšnji';
 
   @override
+  String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
+
+  @override
+  String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Začetni položaj figur v prvi vrstici je naključen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pripelji svojega kralja v sredino, da zmagaš v igri.';
+
+  @override
+  String get variantThreeCheckTitle => 'Za zmago v igri trikrat napadite nasprotnikovega kralja.';
+
+  @override
+  String get variantAntichessTitle => 'Izgubite vse svoje figure (ali se znajdete v pat poziciji), da zmagate v igri.';
+
+  @override
+  String get variantAtomicTitle => 'Za zmago uniči nasprotnikovega kralja.';
+
+  @override
+  String get variantHordeTitle => 'Ena stran ima veliko število kmetov, druga pa normalno vojsko.';
+
+  @override
+  String get variantRacingKingsTitle => 'Premakni svojega kralja na drugo stran plošče, da zmagaš.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zajete figure lahko namesto premikanja figure spustite nazaj na šahovnico.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override
@@ -1942,6 +1975,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstranitev figure, ki je ključna za obrambo druge figure, kar omogoča, da se nezaščitena figura zajame z naslednjo potezo.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kolinearna poteza';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Dve nasprotni figuri se soočita druga z drugo, ena pa drsi vzdolž napadalne linije, ne da bi zajela sovražnikovo figuro.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat v kotu';
 
   @override
@@ -2716,10 +2755,31 @@ class AppLocalizationsSl extends AppLocalizations {
   String get multipleLines => 'Več variant';
 
   @override
+  String get multipleLinesDescription => 'Nastavite število vrstic za ocenjevanje in premaknite puščice na tabli';
+
+  @override
+  String get searchTime => 'Čas iskanja';
+
+  @override
+  String get searchTimeDescription => 'Določite čas za oceno novih pozicij';
+
+  @override
+  String get threads => 'Teme';
+
+  @override
+  String get threadsDescription => 'Nastavite to pod število niti vašega procesorja, kljukice označujejo dobro in varno izbiro';
+
+  @override
+  String get threadsDescriptionMobile => 'Več niti bo porabilo več baterije za boljšo analizo';
+
+  @override
   String get cpus => 'CPU-ji';
 
   @override
   String get memory => 'Spomin';
+
+  @override
+  String get memoryDescription => 'Višje vrednosti lahko izboljšajo delovanje';
 
   @override
   String get infiniteAnalysis => 'Neskončna analiza';
@@ -2879,7 +2939,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get signupUsernameHint => 'Ne pozabite izbrati družini prijaznega uporabniškega imena. Pozneje ga ne morete spremeniti in vsa neprimerna uporabniška imena bodo zaprta!';
 
   @override
-  String get signupEmailHint => 'Uporabljali ga bomo samo za ponastavitev gesla.';
+  String get signupEmailPromise => 'Poslali vam bomo le e-poštna sporočila o vašem računu in nikoli ne bomo delili vašega e-poštnega naslova.';
 
   @override
   String get password => 'Geslo';
@@ -3763,6 +3823,15 @@ class AppLocalizationsSl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nepravilna avtentikacijska koda';
 
   @override
+  String get clearField => 'Počisti polje';
+
+  @override
+  String get orSeparator => 'Ali';
+
+  @override
+  String get logInByEmail => 'Prijava po e-pošti';
+
+  @override
   String get emailMeALink => 'Pošlji mi povezavo po elektronski pošti';
 
   @override
@@ -4131,18 +4200,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vstopi/izstopi v varianto';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Zahtevajte računalniško analizo, učite se iz svojih napak';
-
-  @override
-  String get keyNextBlunder => 'Naslednji spodrsljaj';
-
-  @override
-  String get keyNextMistake => 'Naslednja napaka';
-
-  @override
-  String get keyNextInaccuracy => 'Naslednja nepravilnost';
 
   @override
   String get keyPreviousBranch => 'Prejšnja veja';
@@ -4697,9 +4754,6 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Strinjam se, da bom spoštoval vsa pravila Lichess strani.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Poišči ali prični nov pogovor';
 
   @override
@@ -5057,6 +5111,11 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Počisti iskanje';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Oznake';

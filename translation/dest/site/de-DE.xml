@@ -132,8 +132,15 @@
   <string name="pinnedPieces">Gefesselte Figuren</string>
   <string name="checkableKing">König, dem Schach geboten werden kann</string>
   <string name="multipleLines">Mehrere Varianten</string>
+  <string name="multipleLinesDescription">Anzahl der besten Züge und Zug-Pfeile auf dem Brett festlegen</string>
+  <string name="searchTime">Suchzeit</string>
+  <string name="searchTimeDescription">Zeit für die Bewertung neuer Positionen</string>
+  <string name="threads">Threads</string>
+  <string name="threadsDescription">Setze sie unterhalb deiner CPU-Kernanzahl fest, die Ticks markieren eine gute und sichere Wahl</string>
+  <string name="threadsDescriptionMobile">Mehr Threads verbrauchen mehr Akku für eine bessere Analyse</string>
   <string name="cpus">CPUs</string>
   <string name="memory">Arbeitsspeicher</string>
+  <string name="memoryDescription">Höhere Werte können die Leistung verbessern</string>
   <string name="infiniteAnalysis">Endlose Analyse</string>
   <string name="removesTheDepthLimit">Entfernt die Tiefenbegrenzung und hält deinen Computer warm</string>
   <string name="blunder">Grober Patzer</string>
@@ -237,7 +244,7 @@
   <string name="changeUsernameNotSame">Nur die Groß-/Kleinschreibung kann geändert werden, z.B. \"jondoe\" zu \"JonDoe\".</string>
   <string name="changeUsernameDescription">Ändere deinen Benutzernamen. Dies ist nur einmalig möglich und bezieht sich lediglich auf Anpassungen der Groß- und Kleinschreibung deines Benutzernamens.</string>
   <string name="signupUsernameHint">Bitte wähle einen familienfreundlichen Benutzernamen. Du kannst ihn später nicht mehr ändern und Konten mit unpassenden Benutzernamen werden geschlossen!</string>
-  <string name="signupEmailHint">Wir werden sie nur zum Zurücksetzen deines Passworts verwenden.</string>
+  <string name="signupEmailPromise">Wir werden dir nur E-Mails bezüglich deines Kontos senden und niemals deine E-Mail-Adresse weitergeben.</string>
   <string name="password">Passwort</string>
   <string name="changePassword">Passwort ändern</string>
   <string name="changeEmail">E-Mail-Adresse ändern</string>
@@ -595,6 +602,9 @@
   <string name="invalidUsernameOrPassword">Ungültiger Benutzername oder Passwort</string>
   <string name="incorrectPassword">Falsches Passwort</string>
   <string name="invalidAuthenticationCode">Ungültiger Authentifizierungscode</string>
+  <string name="clearField">Feld leeren</string>
+  <string name="orSeparator">Oder</string>
+  <string name="logInByEmail">Per E-Mail anmelden</string>
   <string name="emailMeALink">Schicke mir einen Link per E-Mail</string>
   <string name="currentPassword">Derzeitiges Passwort</string>
   <string name="newPassword">Neues Passwort</string>
@@ -721,10 +731,6 @@
   <string name="keyCycleSelectedVariation">Durch die ausgewählte Variante schalten</string>
   <string name="keyShowOrHideComments">zeige/verberge Kommentare</string>
   <string name="keyEnterOrExitVariation">Variante wählen/verlassen</string>
-  <string name="keyRequestComputerAnalysis">Hole dir eine Computer-Analyse, lerne aus deinen Fehlern</string>
-  <string name="keyNextBlunder">Der nächste grobe Patzer</string>
-  <string name="keyNextMistake">Der nächste Fehler</string>
-  <string name="keyNextInaccuracy">Die nächste Ungenauigkeit</string>
   <string name="keyPreviousBranch">Vorherige Verzweigung</string>
   <string name="keyNextBranch">Nächste Verzweigung</string>
   <string name="toggleVariationArrows">Varianten-Pfeile ein-/auschalten</string>
@@ -913,7 +919,6 @@
   <string name="agreementAssistance">Ich stimme zu, dass ich zu keiner Zeit während meiner Partien Hilfe in Anspruch nehmen werde (durch einen Schachcomputer, Buch, Datenbank oder eine andere Person).</string>
   <string name="agreementNice">Ich stimme zu, dass ich anderen Spielern immer respektvoll gegenübertreten werde.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Ich stimme zu, dass ich nicht mehrere Konten erstellen werde (außer aus den in den %s angegebenen Gründen).</string>
-  <string name="agreementPolicy">Ich stimme zu, dass ich allen Lichess-Richtlinien folgen werde.</string>
   <string name="searchOrStartNewDiscussion">Suche oder beginne eine neue Konversation</string>
   <string name="edit">Bearbeiten</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>
@@ -1026,6 +1031,7 @@ Alle Betriebskosten, Entwicklung und Inhalte werden ausschließlich durch Benutz
   <string name="offline" comment="status of a user">offline</string>
   <string name="search">Suchen</string>
   <string name="clearSearch">Neue Suche</string>
+  <string name="thereAreNoResultsForX">Keine Ergebnisse für \"%s\"</string>
   <string name="tags">Schlagwörter</string>
   <string name="enPassant">En passant</string>
 </resources>

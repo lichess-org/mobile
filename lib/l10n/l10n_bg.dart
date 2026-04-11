@@ -275,10 +275,43 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Стандартни правила на шаха (ФИДЕ)';
+
+  @override
+  String get variantChess960Title => 'Началната подредба на фигурите на последния ред е произволна.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Докарай царя си до центъра, за да спечелиш партията.';
+
+  @override
+  String get variantThreeCheckTitle => 'Дай шах на противника 3 пъти, за да спечелиш.';
+
+  @override
+  String get variantAntichessTitle => 'Спечели, като загубиш всичките си фигури или останеш в пат.';
+
+  @override
+  String get variantAtomicTitle => 'Взриви противниковия цар, за да спечелиш.';
+
+  @override
+  String get variantHordeTitle => 'Едната страна разполага с войска от пешки срещу нормална армия.';
+
+  @override
+  String get variantRacingKingsTitle => 'Стигни пръв с царя си до другия край на дъската, за да спечелиш.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Вместо ход, можеш да поставиш пленена фигура обратно на дъската.';
+
+  @override
+  String get variantFromPositionTitle => 'Стандартен шах от зададена позиция';
 
   @override
   String get activityActivity => 'Дейност';
@@ -1886,6 +1919,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Премахване на главната защита на фигура, което позволява на вече незащитената фигура да бъде взета на следващия ход.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Мат в ъгъла';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsBg extends AppLocalizations {
   String get multipleLines => 'Множество ходове';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Процесори';
 
   @override
   String get memory => 'Памет';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Неограничен анализ';
@@ -2823,7 +2883,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get signupUsernameHint => 'Изберете прилично потребителско име. Няма да можете да го смените по-късно и всички регистрации с нецензурни имена биват затворени!';
 
   @override
-  String get signupEmailHint => 'Ще го използваме само за възстановяване на паролата.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Парола';
@@ -3707,6 +3767,15 @@ class AppLocalizationsBg extends AppLocalizations {
   String get invalidAuthenticationCode => 'Невалиден код за удостоверяване';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Изпрати ми препратка на имейла';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'влез/излез от вариацията';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Поискайте компютърен анализ, Учете се от грешките си';
-
-  @override
-  String get keyNextBlunder => 'Следваща груба грешка';
-
-  @override
-  String get keyNextMistake => 'Следваща грешка';
-
-  @override
-  String get keyNextInaccuracy => 'Следваща неточност';
 
   @override
   String get keyPreviousBranch => 'Предишно разклонение';
@@ -4641,9 +4698,6 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Съгласявам се, че ше спазвам всички правила на Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Търси или започни нов разговор';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get clearSearch => 'Изчистване на търсенето';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Етикети';

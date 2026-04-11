@@ -14,9 +14,9 @@
   <string name="specialMoves">Spesialtrekk</string>
   <string name="didYouLikeThisPuzzle">Likte du denne sjakknøtten?</string>
   <string name="voteToLoadNextOne">Stem for å laste den neste!</string>
-  <string name="upVote">Bra sjakknøtt</string>
-  <string name="downVote">Mindre bra sjakknøtt</string>
-  <string name="yourPuzzleRatingWillNotChange">Ratingen din for sjakknøtter vil ikke endre seg. Husk at sjakknøtter ikke er en konkurranse. Ratingen din hjelper til med å finne de sjakknøttene som passer ferdighetene dine.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Bra sjakknøtt</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Mindre bra sjakknøtt</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Ratingen din for sjakknøtter vil ikke endre seg. Husk at sjakknøtter ikke er en konkurranse. Ratingen din hjelper til med å finne de sjakknøttene som passer ferdighetene dine.</string>
   <string name="findTheBestMoveForWhite">Finn det beste trekket for hvit.</string>
   <string name="findTheBestMoveForBlack">Finn det beste trekket for svart.</string>
   <string name="toGetPersonalizedPuzzles">For tilpassede sjakknøtter:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Fra mine partier</string>
   <string name="lookupOfPlayer">Søk etter sjakknøtter fra en spillers partier</string>
   <string name="searchPuzzles">Søk etter sjakknøtter</string>
-  <string name="fromMyGamesNone">Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.
 Spill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Én nøtt funnet i partier med %2$s</item>
@@ -93,6 +93,6 @@ Spill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med
   </plurals>
   <string name="percentSolved">%s løst</string>
   <string name="noPuzzlesToShow">Ingenting å vise, løs noen sjakknøtter først!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Øv på disse for å optimalisere framgangen din!</string>
+  <string name="improvementAreasDescription">Øv på disse for å optimalisere framgangen din!</string>
   <string name="strengthDescription">Du gjør det best i disse temaene</string>
 </resources>

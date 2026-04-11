@@ -19,10 +19,10 @@
   <string name="ongoing">כרגע</string>
   <string name="upcoming">בקרוב</string>
   <string name="roundName">שם סבב</string>
-  <string name="tournamentName">שם הטורניר</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">שם הטורניר</string>
   <string name="tournamentDescription">תיאור הטורניר בקצרה</string>
-  <string name="fullDescription">תיאור מלא של הטורניר</string>
-  <string name="fullDescriptionHelp">תיאור מפורט של הטורניר (אופציונאלי). %1$s זמין. אורך התיאור לא יעלה על %2$s תווים.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">תיאור מלא של הטורניר</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">תיאור מפורט של הטורניר (אופציונאלי). %1$s זמין. אורך התיאור לא יעלה על %2$s תווים.</string>
   <string name="sourceSingleUrl">קישור המקור של ה־PGN</string>
   <string name="sourceUrlHelp">הקישור ש־Lichess יבדוק כדי לקלוט עדכונים ב־PGN. הוא חייב להיות פומבי ונגיש דרך האינטרנט.</string>
   <string name="sourceGameIds">עד 64 מזהי משחק של Lichess, מופרדים ברווחים.</string>
@@ -61,7 +61,7 @@
   <string name="notYetStarted">ההקרנה טרם החלה.</string>
   <string name="officialWebsite">האתר הרשמי</string>
   <string name="officialStandings">טבלת מובילים רשמית</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">ישנן אפשרויות נוספות ב%s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">ישנן אפשרויות נוספות ב%s</string>
   <string name="webmastersPage">עמוד המתכנתים</string>
   <string name="embedThisBroadcast">הטמעת ההקרנה באתר האינטרנט שלך</string>
   <string name="ratingDiff">הפרש הדירוג</string>
@@ -69,7 +69,7 @@
   <string name="score">ניקוד</string>
   <string name="allTeams">כל הקבוצות</string>
   <string name="tournamentFormat">שיטת הטורניר</string>
-  <string name="tournamentLocation">מיקום הטורניר</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">מיקום הטורניר</string>
   <string name="topPlayers">שחקני צמרת</string>
   <string name="timezone">אזור זמן</string>
   <string name="fideRatingCategory">קטגוריית דירוג FIDE</string>

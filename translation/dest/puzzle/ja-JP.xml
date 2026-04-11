@@ -14,9 +14,9 @@
   <string name="specialMoves">特殊な手</string>
   <string name="didYouLikeThisPuzzle">この問題は気に入りましたか？</string>
   <string name="voteToLoadNextOne">投票すると次を読み込みます！</string>
-  <string name="upVote">上げ投票</string>
-  <string name="downVote">下げ投票</string>
-  <string name="yourPuzzleRatingWillNotChange">あなたのレーティングは動きません。タクティクス問題は競技ではありません。レーティングは今のあなたのスキルに見合った問題を選ぶのに役立ちます。</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">上げ投票</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">下げ投票</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">あなたのレーティングは動きません。タクティクス問題は競技ではありません。レーティングは今のあなたのスキルに見合った問題を選ぶのに役立ちます。</string>
   <string name="findTheBestMoveForWhite">白の最善手を見つけてください。</string>
   <string name="findTheBestMoveForBlack">黒の最善手を見つけてください。</string>
   <string name="toGetPersonalizedPuzzles">あなたに合わせた問題を解くには:</string>
@@ -73,7 +73,7 @@
   <string name="fromMyGames">自分のゲームから</string>
   <string name="lookupOfPlayer">ある人の対局から取った問題を検索</string>
   <string name="searchPuzzles">問題を検索</string>
-  <string name="fromMyGamesNone">あなたの対局からの問題はまだありませんが、Lichess はあなたの参加を歓迎します。自分の対局が使われる可能性を増やすには、ラピッドかクラシカルでプレイしてください！</string>
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">あなたの対局からの問題はまだありませんが、Lichess はあなたの参加を歓迎します。自分の対局が使われる可能性を増やすには、ラピッドかクラシカルでプレイしてください！</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="other">%1$s 問（%2$s の対局から）が見つかりました</item>
   </plurals>
@@ -86,6 +86,6 @@
   </plurals>
   <string name="percentSolved">%s に正解</string>
   <string name="noPuzzlesToShow">データがありません、まず問題をプレイしてから！</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">ここのテーマを練習して前進！</string>
+  <string name="improvementAreasDescription">ここのテーマを練習して前進！</string>
   <string name="strengthDescription">これらのテーマで好成績でした</string>
 </resources>

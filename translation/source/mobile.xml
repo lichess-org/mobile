@@ -88,4 +88,5 @@
   <string name="openingExplorerNotAvailableOffline" comment="">Opening Explorer is not available offline.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Previous</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Or import a PGN file</string>
 </resources>

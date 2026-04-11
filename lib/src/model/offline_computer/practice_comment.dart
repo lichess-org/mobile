@@ -1,19 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'practice_comment.freezed.dart';
 part 'practice_comment.g.dart';
 
 /// Maximum winning chances shift for a move to be considered good.
-const kGoodMoveThreshold = 0.04;
+const kGoodMoveThreshold = 0.05;
 
 /// Maximum winning chances shift for a move to be considered an inaccuracy.
-const kInaccuracyThreshold = 0.08;
+const kInaccuracyThreshold = 0.11;
 
 /// Maximum winning chances shift for a move to be considered a mistake.
-const kMistakeThreshold = 0.18;
+const kMistakeThreshold = 0.24;
 
 /// Winning chances threshold above which a position is considered winning.
 ///
@@ -64,24 +62,6 @@ enum MoveVerdict {
     return .blunder;
   }
 
-  /// The icon for this verdict.
-  IconData get icon => switch (this) {
-    .goodMove => Icons.check_circle,
-    .notBest => Icons.info,
-    .inaccuracy => Icons.help,
-    .mistake => Icons.error,
-    .blunder => Icons.cancel,
-  };
-
-  /// The color for this verdict.
-  Color get color => switch (this) {
-    .goodMove => Colors.lightGreen,
-    .notBest => Colors.lightGreen,
-    .inaccuracy => innacuracyColor,
-    .mistake => mistakeColor,
-    .blunder => blunderColor,
-  };
-
   /// The symbol for this verdict.
   String get symbol => switch (this) {
     .goodMove => '!',
@@ -103,17 +83,8 @@ sealed class PracticeComment with _$PracticeComment {
     /// The verdict for the move.
     required MoveVerdict verdict,
 
-    /// The best move that was available in SAN format (shown if verdict is not goodMove).
-    SanMove? bestMove,
-
-    /// An alternative good move in SAN format (shown if verdict is goodMove and there was another good option).
-    SanMove? alternativeGoodMove,
-
-    /// The winning chances before the move was made.
-    required double winningChancesBefore,
-
-    /// The winning chances after the move was made.
-    required double winningChancesAfter,
+    /// The move suggestion to display as an alternative to the move played.
+    SanMove? moveSuggestion,
 
     /// The evaluation string after the move (e.g., "+0.5", "-1.2", "#3").
     String? evalAfter,
@@ -121,29 +92,4 @@ sealed class PracticeComment with _$PracticeComment {
     /// Whether the move is a book move (found in the master database).
     @Default(false) bool isBookMove,
   }) = _PracticeComment;
-
-  /// The shift in winning chances (how much the position deteriorated).
-  double get shift => winningChancesBefore - winningChancesAfter;
-
-  /// Whether to show a suggested move.
-  bool get hasSuggestedMove => bestMove != null || alternativeGoodMove != null;
-
-  /// The move to show as suggestion.
-  ///
-  /// For good moves, prefer showing an alternative good move if available,
-  /// otherwise fall back to the best move.
-  SanMove? get suggestedMove => verdict == .goodMove ? (alternativeGoodMove ?? bestMove) : bestMove;
-
-  /// Whether the suggested move is an alternative (vs the best move).
-  ///
-  /// Used to determine which label to show ("Another was" vs "Best was").
-  bool get isShowingAlternative => verdict == .goodMove && alternativeGoodMove != null;
-
-  /// The icon to display for this comment.
-  ///
-  /// Shows a book icon for book moves, otherwise the verdict icon.
-  IconData get icon => isBookMove ? Icons.menu_book : verdict.icon;
-
-  /// The color to display for this comment.
-  Color get color => verdict.color;
 }

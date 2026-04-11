@@ -16,33 +16,16 @@ part 'offline_computer_game.g.dart';
 
 /// An offline game played against the local Stockfish engine.
 @Freezed(fromJson: true, toJson: true)
-abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, IndexableSteps {
+abstract class OfflineComputerGame with BaseGame, _$OfflineComputerGame, LocalGame, IndexableSteps {
   const OfflineComputerGame._();
-
-  factory OfflineComputerGame.fromJson(Map<String, dynamic> json) =>
-      _$OfflineComputerGameFromJson(json);
-
-  @override
-  Side? get youAre => playerSide;
-
-  @override
-  IList<ExternalEval>? get evals => null;
-  @override
-  IList<Duration>? get clocks => null;
-
-  @override
-  GameId get id => const GameId('--------');
-
-  bool get abortable => playable && lastPosition.fullmoves <= 1;
-
-  bool get resignable => playable && !abortable;
 
   @Assert('steps.isNotEmpty')
   factory OfflineComputerGame({
-    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
+    required StringId id,
     required GameMeta meta,
     required String? initialFen,
     required GameStatus status,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
 
     /// The side the human player is playing as.
     required Side playerSide,
@@ -69,6 +52,21 @@ abstract class OfflineComputerGame with _$OfflineComputerGame, BaseGame, Indexab
     Side? winner,
     bool? isThreefoldRepetition,
   }) = _OfflineComputerGame;
+
+  factory OfflineComputerGame.fromJson(Map<String, dynamic> json) =>
+      _$OfflineComputerGameFromJson(json);
+
+  @override
+  Side? get youAre => playerSide;
+
+  @override
+  IList<ExternalEval>? get evals => null;
+  @override
+  IList<Duration>? get clocks => null;
+
+  bool get abortable => playable && lastPosition.fullmoves <= 1;
+
+  bool get resignable => playable && !abortable;
 
   @override
   Player get white => playerSide == Side.white ? humanPlayer : enginePlayer;

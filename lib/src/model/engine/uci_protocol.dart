@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -149,16 +148,17 @@ class UCIProtocol {
     for (int i = 1; i < parts.length; i++) {
       switch (parts[i]) {
         case 'depth':
-          depth = int.parse(parts[++i]);
+          depth = int.tryParse(parts[++i]) ?? depth;
         case 'nodes':
-          nodes = int.parse(parts[++i]);
+          nodes = int.tryParse(parts[++i]) ?? nodes;
         case 'multipv':
-          multiPv = int.parse(parts[++i]);
+          multiPv = int.tryParse(parts[++i]) ?? multiPv;
         case 'time':
-          elapsedMs = int.parse(parts[++i]);
+          elapsedMs = int.tryParse(parts[++i]) ?? elapsedMs;
         case 'score':
           isMate = parts[++i] == 'mate';
-          povEv = int.parse(parts[++i]);
+          povEv = int.tryParse(parts[++i]);
+          if (povEv == null) return;
           if (i + 1 < parts.length &&
               (parts[i + 1] == 'lowerbound' || parts[i + 1] == 'upperbound')) {
             evalType = parts[++i];
@@ -185,7 +185,7 @@ class UCIProtocol {
 
     if (multiPv == 1) {
       _currentEval = LocalEval(
-        position: work.threatMode ? work.threatModePosition : work.position,
+        position: work.threatMode ? threatModePosition(work.position) : work.position,
         searchTime: Duration(milliseconds: elapsedMs),
         depth: depth,
         nodes: nodes,
@@ -241,16 +241,14 @@ class UCIProtocol {
           setOption('Skill Level', '20');
       }
 
-      final positionCommand = switch (_work) {
+      final positionCommand = switch (_work!) {
         final EvalWork evalWork when evalWork.threatMode =>
-          'position fen ${evalWork.threatModePosition.fen}',
+          'position fen ${threatModePosition(evalWork.position).fen}',
         _ => [
           'position fen',
           _work!.initialPosition.fen,
           'moves',
-          ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-          ),
+          ..._work!.steps.map((s) => s.sanMove.normalizeUci(_work!.variant)),
         ].join(' '),
       };
 

@@ -275,10 +275,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
   String get mobilePreviousPage => 'Vorige';
+
+  @override
+  String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
+
+  @override
+  String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
+
+  @override
+  String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
+
+  @override
+  String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
+
+  @override
+  String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
+
+  @override
+  String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
+
+  @override
+  String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
+
+  @override
+  String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
+
+  @override
+  String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -1886,6 +1919,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collineaire zet';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Twee vijandige stukken staan tegenover elkaar, en één glipt langs de lijn van aanval zonder het stuk van de vijand te slaan.';
+
+  @override
   String get puzzleThemeCornerMate => 'Mat in een hoek';
 
   @override
@@ -2290,7 +2329,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameMode => 'Spelmodus';
 
   @override
-  String get createLobbyGame => 'Maak een lobby spel aan';
+  String get createLobbyGame => 'Maak een lobbypartij aan';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Deel deze link als u iemand wil uitnodigen om met u te spelen';
@@ -2660,10 +2699,31 @@ class AppLocalizationsNl extends AppLocalizations {
   String get multipleLines => 'Meerdere varianten';
 
   @override
+  String get multipleLinesDescription => 'Stel het aantal evaluatievariaties en zetpijlen in op het bord';
+
+  @override
+  String get searchTime => 'Zoektijd';
+
+  @override
+  String get searchTimeDescription => 'Stel tijd in om nieuwe stellingen te evalueren';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Stel dit in onder het aantal threads van uw CVE, de pijltjes markeren een goede veilige keuze';
+
+  @override
+  String get threadsDescriptionMobile => 'Meer threads zullen meer accu gebruiken voor een betere analyse';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Geheugen';
+
+  @override
+  String get memoryDescription => 'Hogere waarden kunnen de prestaties verbeteren';
 
   @override
   String get infiniteAnalysis => 'Oneindige analyse';
@@ -2823,7 +2883,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get signupUsernameHint => 'Zorg ervoor dat u een gezinsvriendelijke gebruikersnaam kiest. U kunt het later niet meer wijzigen en alle accounts met ongepaste gebruikersnamen zullen gesloten worden!';
 
   @override
-  String get signupEmailHint => 'We zullen het alleen gebruiken om het wachtwoord opnieuw in te stellen.';
+  String get signupEmailPromise => 'We sturen alleen e-mails over uw account en delen uw e-mail nooit.';
 
   @override
   String get password => 'Wachtwoord';
@@ -3707,6 +3767,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ongeldige authenticatiecode';
 
   @override
+  String get clearField => 'Veld leegmaken';
+
+  @override
+  String get orSeparator => 'of';
+
+  @override
+  String get logInByEmail => 'Log in via e-mail';
+
+  @override
   String get emailMeALink => 'Email me een link';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'vermeld/stop variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
-
-  @override
-  String get keyNextBlunder => 'Volgende blunder';
-
-  @override
-  String get keyNextMistake => 'Volgende fout';
-
-  @override
-  String get keyNextInaccuracy => 'Volgende onnauwkeurigheid';
 
   @override
   String get keyPreviousBranch => 'Vorige vertakking';
@@ -4641,9 +4698,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ik ga ermee akkoord dat ik de Lichess-regels zal volgen.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Zoek of start een nieuwe discussie';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Zoekopdracht wissen';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Geen resultaten voor \"$param\"';
+  }
 
   @override
   String get tags => 'Labels';

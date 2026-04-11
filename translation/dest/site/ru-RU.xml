@@ -9,7 +9,7 @@
   <string name="gameOver">Партия окончена</string>
   <string name="waitingForOpponent">Ожидание соперника</string>
   <string name="orLetYourOpponentScanQrCode">Или позвольте вашему сопернику отсканировать этот QR-код</string>
-  <string name="reusableChallengeUrl">Постоянная ссылка на вызов на игру</string>
+  <string name="reusableChallengeUrl">Многоразовая ссылка на вызов на игру</string>
   <string name="permanentLinkForAnyoneToChallengeYou">Постоянная ссылка на игру с заданными настройками.</string>
   <string name="waiting">Ожидание</string>
   <string name="yourTurn">Ваш ход</string>
@@ -112,9 +112,9 @@
   <string name="maybeIncludeMoreGamesFromThePreferencesMenu">Возможно, стоит включить больше игр в настройках?</string>
   <string name="openings">Дебюты</string>
   <string name="openingExplorer">База дебютов</string>
-  <string name="openingEndgameExplorer">База дебютов/окончаний</string>
+  <string name="openingEndgameExplorer">База дебютов/эндшпилей</string>
   <string name="xOpeningExplorer">База дебютов для %s</string>
-  <string name="playFirstOpeningEndgameExplorerMove">Играть первый ход изучения дебютов/эндшпилей</string>
+  <string name="playFirstOpeningEndgameExplorerMove">Играть первый ход дебюта/эндшпиля</string>
   <string name="winPreventedBy50MoveRule">Не удаётся победить из-за правила 50 ходов</string>
   <string name="lossSavedBy50MoveRule">Удаётся избежать поражения из-за правила 50 ходов</string>
   <string name="winOr50MovesByPriorMistake">Победа или правило 50 ходов</string>
@@ -136,8 +136,15 @@
   <string name="pinnedPieces">Связанные фигуры</string>
   <string name="checkableKing">Возможность дать шах королю</string>
   <string name="multipleLines">Множество вариантов</string>
+  <string name="multipleLinesDescription">Задаёт число строк вариантов и стрелок ходов на доске</string>
+  <string name="searchTime">Время поиска</string>
+  <string name="searchTimeDescription">Задаёт время для оценки новой позиции</string>
+  <string name="threads">Потоки</string>
+  <string name="threadsDescription">Установите количество не больше числа потоков процессора, лучше на предлагаемой отметке</string>
+  <string name="threadsDescriptionMobile">Больше потоков быстрее расходует заряд батареи, но лучше для анализа</string>
   <string name="cpus">Потоки</string>
   <string name="memory">Память</string>
+  <string name="memoryDescription">Более высокие значения могут повысить производительность</string>
   <string name="infiniteAnalysis">Бесконечный анализ</string>
   <string name="removesTheDepthLimit">Снимает ограничение на глубину анализа, но заставляет поработать ваш компьютер</string>
   <string name="blunder">Зевок</string>
@@ -267,7 +274,7 @@
   <string name="changeUsernameNotSame">Можно изменить только регистр символов. Например, поменять «Johndoe» на «JohnDoe».</string>
   <string name="changeUsernameDescription">Изменить имя пользователя. Это можно сделать только один раз, при этом можно изменить только регистр символов.</string>
   <string name="signupUsernameHint">Убедитесь, что вы выбрали благопристойное имя пользователя. Вы не сможете изменить его позже, при этом все учётные записи с неприличными именами будут закрыты!</string>
-  <string name="signupEmailHint">Мы будем использовать его только для сброса пароля.</string>
+  <string name="signupEmailPromise">Мы будем только отправлять вам письма, касающиеся вашей учётной записи, и никогда не передадим ваш адрес кому-либо.</string>
   <string name="password">Пароль</string>
   <string name="changePassword">Сменить пароль</string>
   <string name="changeEmail">Сменить адрес электронной почты</string>
@@ -415,9 +422,9 @@
   <string name="whiteDeclinesTakeback">Белые отказались вернуть ход</string>
   <string name="blackDeclinesTakeback">Чёрные отказались вернуть ход</string>
   <string name="whiteAcceptsTakeback">Белые принимают возврат хода</string>
-  <string name="blackAcceptsTakeback">Чёрные принимают возврат хода</string>
-  <string name="whiteCancelsTakeback">Белые отменили просьбу вернуть ход</string>
-  <string name="blackCancelsTakeback">Чёрные отменили просьбу вернуть ход</string>
+  <string name="blackAcceptsTakeback">Чёрные согласны вернуть ход</string>
+  <string name="whiteCancelsTakeback">Белые отказались вернуть ход</string>
+  <string name="blackCancelsTakeback">Чёрные отказались вернуть ход</string>
   <string name="yourOpponentProposesATakeback">Ваш соперник просит вас вернуть ход</string>
   <string name="bookmarkThisGame">Отметить эту игру</string>
   <string name="tournament">Турнир</string>
@@ -470,7 +477,7 @@
     <item quantity="other">Вы должны сыграть ещё %s рейтинговых игр</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Ваш рейтинг в %s ещё недостоверный</string>
-  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Игра на рейтинг повысит стабильность.</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Играя в рейтинговые игры, вы повысите стабильность вашего рейтинга.</string>
   <string name="yourPerfRatingIsTooHigh">Ваш рейтинг в %1$s (%2$s) слишком высок для участия</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Ваш еженедельный рейтинг в %1$s (%2$s) слишком высок</string>
   <string name="yourPerfRatingIsTooLow">Ваш рейтинг в %1$s (%2$s) недостаточен для участия</string>
@@ -482,7 +489,7 @@
   <string name="siteDescription">Бесплатный шахматный сервер. Сыграйте в шахматы прямо сейчас в простом интерфейсе без рекламы. Не требует регистрации и скачивания программы. Играйте в шахматы с компьютером, друзьями или случайными соперниками.</string>
   <string name="xJoinedTeamY">%1$s вступил в клуб %2$s</string>
   <string name="xCreatedTeamY">%1$s организовал клуб %2$s</string>
-  <string name="startedStreaming">начал(-а) стрим</string>
+  <string name="startedStreaming">начал трансляцию</string>
   <string name="xStartedStreaming">%s запустил стрим</string>
   <string name="averageElo">Средний рейтинг участников</string>
   <string name="location">Местоположение</string>
@@ -667,6 +674,9 @@
   <string name="invalidUsernameOrPassword">Неверное имя пользователя или пароль</string>
   <string name="incorrectPassword">Неверный пароль</string>
   <string name="invalidAuthenticationCode">Неверный код аутентификации</string>
+  <string name="clearField">Очистить поле</string>
+  <string name="orSeparator">Или</string>
+  <string name="logInByEmail">Авторизация через электронную почту</string>
   <string name="emailMeALink">Прислать ссылку мне на почту</string>
   <string name="currentPassword">Текущий пароль</string>
   <string name="newPassword">Новый пароль</string>
@@ -799,10 +809,6 @@
   <string name="keyCycleSelectedVariation">Прокручивать выбранный вариант</string>
   <string name="keyShowOrHideComments">показать/скрыть комментарии</string>
   <string name="keyEnterOrExitVariation">ввести/закрыть вариант</string>
-  <string name="keyRequestComputerAnalysis">Запросите компьютерный анализ, Учитесь над своими ошибками</string>
-  <string name="keyNextBlunder">Следующий зевок</string>
-  <string name="keyNextMistake">Следующая ошибка</string>
-  <string name="keyNextInaccuracy">Следующая неточность</string>
   <string name="keyPreviousBranch">Предыдущая ветка</string>
   <string name="keyNextBranch">Следующая ветка</string>
   <string name="toggleVariationArrows">Переключить стрелки вариантов</string>
@@ -1001,7 +1007,6 @@
   <string name="agreementAssistance">Подтверждаю, что я никогда не воспользуюсь посторонней помощью в своих играх (из шахматных программ, книг, баз данных и от других игроков).</string>
   <string name="agreementNice">Подтверждаю, что я буду с уважением относиться к другим игрокам.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Я согласен с тем, что не должен создавать множество учётных записей (за исключением причин, указанных в %s).</string>
-  <string name="agreementPolicy">Подтверждаю, что я буду следовать всем правилам Lichess.</string>
   <string name="searchOrStartNewDiscussion">Найти обсуждение или начать новое</string>
   <string name="edit">Изменить</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ультра-пуля</string>
@@ -1114,6 +1119,7 @@
   <string name="offline" comment="status of a user">офлайн</string>
   <string name="search">Поиск</string>
   <string name="clearSearch">Очистить поиск</string>
+  <string name="thereAreNoResultsForX">Нет результатов для «%s»</string>
   <string name="tags">Теги</string>
   <string name="enPassant">Взятие на проходе</string>
 </resources>

@@ -14,9 +14,9 @@
   <string name="specialMoves">Erityissiirrot</string>
   <string name="didYouLikeThisPuzzle">Piditkö tästä tehtävästä?</string>
   <string name="voteToLoadNextOne">Anna arviosi, niin seuraava latautuu!</string>
-  <string name="upVote">Arvioi tehtävä hyväksi</string>
-  <string name="downVote">Arvioi tehtävä huonoksi</string>
-  <string name="yourPuzzleRatingWillNotChange">Tehtävävahvuuslukusi ei muutu. Huomaa, että tehtävien ratkaisu ei ole kilpailu. Vahvuusluvun perusteella saat ratkaistavaksesi tämänhetkistä taitotasoasi parhaiten vastaavia tehtäviä.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Arvioi tehtävä hyväksi</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Arvioi tehtävä huonoksi</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Tehtävävahvuuslukusi ei muutu. Huomaa, että tehtävien ratkaisu ei ole kilpailu. Vahvuusluvun perusteella saat ratkaistavaksesi tämänhetkistä taitotasoasi parhaiten vastaavia tehtäviä.</string>
   <string name="findTheBestMoveForWhite">Löydä valkean paras siirto.</string>
   <string name="findTheBestMoveForBlack">Löydä mustan paras siirto.</string>
   <string name="toGetPersonalizedPuzzles">Halutessasi henkilökohtaisia tehtäviä:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Omista peleistäni</string>
   <string name="lookupOfPlayer">Hae tehtäviä tietyn pelaajan peleistä</string>
   <string name="searchPuzzles">Hae tehtäviä</string>
-  <string name="fromMyGamesNone">Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.
 Kun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Käyttäjän %2$s peleistä löytyi yksi tehtävä</item>
@@ -93,6 +93,6 @@ Kun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että
   </plurals>
   <string name="percentSolved">%s ratkaistu</string>
   <string name="noPuzzlesToShow">Täällä ei ole vielä mitään nähtävää – tee ensin joitakin tehtäviä!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Harjoittele näitä tehostaaksesi edistymistäsi!</string>
+  <string name="improvementAreasDescription">Harjoittele näitä tehostaaksesi edistymistäsi!</string>
   <string name="strengthDescription">Suoriudut parhaiten näissä aiheissa</string>
 </resources>

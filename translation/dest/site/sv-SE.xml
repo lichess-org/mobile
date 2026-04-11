@@ -225,7 +225,6 @@
   <string name="changeUsernameNotSame">Bara storleken på bokstäver kan ändras. Till exempel \"anderssvensson\" till \"AndersSvenson\".</string>
   <string name="changeUsernameDescription">Ändra ditt användarnamn. Detta kan bara göras en gång och det är endast tillåtet att ändra skiftläget för bokstäverna i ditt användarnamn.</string>
   <string name="signupUsernameHint">Se till att välja ett familjevänligt användarnamn. Du kan inte ändra det senare och alla konton med olämpliga användarnamn kommer att stängas!</string>
-  <string name="signupEmailHint">Vi kommer endast att använda den för att återställa lösenordet.</string>
   <string name="password">Lösenord</string>
   <string name="changePassword">Byt lösenord</string>
   <string name="changeEmail">Ändra e-postadress</string>
@@ -704,10 +703,6 @@
   <string name="keyCycleSelectedVariation">Cykla vald variant</string>
   <string name="keyShowOrHideComments">visa/göm kommentarer</string>
   <string name="keyEnterOrExitVariation">påbörja/avsluta variant</string>
-  <string name="keyRequestComputerAnalysis">Begär datoranalys, lär av dina misstag</string>
-  <string name="keyNextBlunder">Nästa blunder</string>
-  <string name="keyNextMistake">Nästa misstag</string>
-  <string name="keyNextInaccuracy">Nästa felaktighet</string>
   <string name="keyPreviousBranch">Föregående gren</string>
   <string name="keyNextBranch">Nästa gren</string>
   <string name="toggleVariationArrows">Växla variationspilar</string>
@@ -892,7 +887,6 @@
   <string name="agreementAssistance">Jag lovar att jag inte kommer att få hjälp under mina partier (från en schackdator, bok, databas eller annan person).</string>
   <string name="agreementNice">Jag lovar att jag alltid kommer att vara respektfull mot andra spelare.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Jag godkänner att jag inte kommer att skapa flera konton (förutom av de skäl som anges i %s).</string>
-  <string name="agreementPolicy">Jag instämmer med att jag kommer att följa alla Lichess-regler.</string>
   <string name="searchOrStartNewDiscussion">Sök eller starta ny konversation</string>
   <string name="edit">Redigera</string>
   <string name="bullet" comment="Probably best left untranslated. Leave it as 'Bullet' unless your language has a better word for it.">Bullet</string>

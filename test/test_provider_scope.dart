@@ -146,6 +146,12 @@ Future<Widget> makeTestProviderScope(
     tester.binding.setSurfaceSize(null);
   });
 
+  // Also set the view's physical size so that MediaQueryData.fromView() returns
+  // a consistent size for code that reads from View.of(context) directly
+  // (e.g., isShortVerticalScreen uses View.of(context) to bypass local MediaQuery overrides).
+  tester.view.physicalSize = surfaceSize * tester.view.devicePixelRatio;
+  addTearDown(tester.view.resetPhysicalSize);
+
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
   final defaultTestPrefs = {

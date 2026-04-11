@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -25,11 +26,20 @@ import 'package:mocktail/mocktail.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+// A position after 1.e4 e5 — white to move
+const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+// Antichess position one move before stalemate:
+// White pawn on a5, black pawn on a7. White to move plays a6, blocking black's pawn.
+// Black has no legal moves = stalemate = black wins in antichess.
+const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
+
 class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
 
 void main() {
   registerFallbackValue(
     OverTheBoardGame(
+      id: const StringId('otb_test00'),
       steps: [const GameStep(position: Chess.initial)].lock,
       meta: GameMeta(
         createdAt: DateTime.now(),
@@ -209,6 +219,7 @@ void main() {
       when(() => gameStorage.fetchOngoingGame()).thenAnswer(
         (_) async => SavedOtbGame(
           game: OverTheBoardGame(
+            id: const StringId('otb_test01'),
             steps: [
               const GameStep(position: Chess.initial),
               GameStep(
@@ -310,6 +321,331 @@ void main() {
           blackTimeLeft: const Duration(minutes: 1),
         ),
       ).called(1);
+    });
+  });
+
+  group('Custom starting position (initialFen)', () {
+    testWidgets('Configure sheet shows mini board preview when initialFen is provided', (
+      tester,
+    ) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(initialFen: _customFen),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StaticChessboard), findsOneWidget);
+    });
+
+    testWidgets('Configure sheet does not show mini board without initialFen', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StaticChessboard), findsNothing);
+    });
+
+    testWidgets('initialFen bypasses saved game and shows configure sheet immediately', (
+      tester,
+    ) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      // A saved game exists, but it should be ignored when initialFen is provided
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+        (_) async => SavedOtbGame(
+          game: OverTheBoardGame(
+            id: const StringId('otb_saved'),
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.rapid,
+              perf: Perf.rapid,
+            ),
+            initialFen: null,
+            status: GameStatus.started,
+          ),
+          whiteTimeLeft: const Duration(minutes: 5),
+          blackTimeLeft: const Duration(minutes: 5),
+          timeIncrement: const TimeIncrement(5, 0),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(initialFen: _customFen),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Configure sheet must be shown (not the saved game)
+      expect(find.text('Play'), findsOneWidget);
+      // Mini board preview must be visible
+      expect(find.byType(StaticChessboard), findsOneWidget);
+      // fetchOngoingGame must NOT have been called
+      verifyNever(() => gameStorage.fetchOngoingGame());
+    });
+
+    testWidgets(
+      'Game uses Variant.fromPosition and custom initial position when variant is standard',
+      (tester) async {
+        final gameStorage = MockOverTheBoardGameStorage();
+        when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+        late WidgetRef ref;
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Consumer(
+            builder: (context, r, _) {
+              ref = r;
+              return const OverTheBoardScreen(initialFen: _customFen);
+            },
+          ),
+          overrides: {
+            overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+              (_) => gameStorage,
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        // Variant defaults to Standard, tap Play
+        await tester.tap(find.text('Play'));
+        await tester.pumpAndSettle();
+
+        final gameState = ref.read(overTheBoardGameControllerProvider);
+        expect(gameState.game.meta.variant, Variant.fromPosition);
+        expect(gameState.game.initialFen, _customFen);
+        // Board should show the custom position (e4 pawn on e4, black pawn on e5)
+        expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
+        expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+        expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+        expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      },
+    );
+
+    testWidgets('Game preserves non-standard variant when initialFen is provided', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OverTheBoardScreen(initialFen: _customFen);
+          },
+        ),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Change variant to Crazyhouse
+      await tester.tap(find.textContaining('Standard'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.textContaining('Crazyhouse'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(overTheBoardGameControllerProvider);
+      // Crazyhouse is not standard, so the variant should be preserved as-is
+      expect(gameState.game.meta.variant, Variant.crazyhouse);
+      expect(gameState.game.lastPosition.rule, Rule.crazyhouse);
+      expect(gameState.game.initialFen, _customFen);
+    });
+
+    testWidgets('Starting a new standard game after a fromPosition game does not crash', (
+      tester,
+    ) async {
+      // Regression test: after playing a game from a custom FEN (which stores
+      // Variant.fromPosition in the game metadata), opening the configure sheet
+      // for a normal new game and pressing Play used to throw:
+      // "Invalid argument(s): This variant has no defined initial position!"
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OverTheBoardScreen(initialFen: _customFen);
+          },
+        ),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Start a game from the custom FEN — variant is stored as Variant.fromPosition
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      expect(ref.read(overTheBoardGameControllerProvider).game.meta.variant, Variant.fromPosition);
+
+      // Now open the configure sheet again without an initialFen (normal new game).
+      // The sheet must not crash and must default to Variant.standard.
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+
+      // Pressing Play must not throw even though the previous game used Variant.fromPosition
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(overTheBoardGameControllerProvider);
+      expect(gameState.game.meta.variant, Variant.standard);
+      expect(gameState.game.initialFen, isNull);
+      expect(gameState.game.steps.length, 1);
+      expect(gameState.game.steps.first.position, Chess.initial);
+    });
+
+    testWidgets('Antichess stalemate is a win, not a draw', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(
+        () => gameStorage.save(
+          any(),
+          timeIncrement: any(named: 'timeIncrement'),
+          whiteTimeLeft: any(named: 'whiteTimeLeft'),
+          blackTimeLeft: any(named: 'blackTimeLeft'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(
+          initialVariant: Variant.antichess,
+          initialFen: _antichessStalemateFen,
+        ),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // White plays a5-a6, blocking black's pawn. Black has no legal moves = stalemate.
+      // In antichess, the stalemated player (black) wins.
+      await playMove(tester, 'a5', 'a6');
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+
+      // Verify it's a win for black (0-1), not a draw (½-½)
+      expect(find.text('0-1'), findsOneWidget);
+      expect(find.textContaining('Black is victorious'), findsOneWidget);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final gameState = container.read(overTheBoardGameControllerProvider);
+      expect(gameState.game.status, GameStatus.variantEnd);
+      expect(gameState.game.winner, Side.black);
+    });
+
+    testWidgets('Rematch from custom position and variant restarts from same FEN and variant', (
+      tester,
+    ) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+      when(
+        () => gameStorage.save(
+          any(),
+          timeIncrement: any(named: 'timeIncrement'),
+          whiteTimeLeft: any(named: 'whiteTimeLeft'),
+          blackTimeLeft: any(named: 'blackTimeLeft'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(initialVariant: Variant.atomic, initialFen: _customFen),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      // Play a quick fool's mate from the custom position (white to move after 1.e4 e5)
+      await playMove(tester, 'd1', 'h5'); // Qh5
+      await playMove(tester, 'b8', 'c6'); // Nc6
+      await playMove(tester, 'f1', 'c4'); // Bc4
+      await playMove(tester, 'g8', 'f6'); // Nf6 (blunder)
+      await playMove(tester, 'h5', 'f7'); // Qxf7#
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+      expect(find.textContaining('White is victorious'), findsOneWidget);
+
+      await tester.tap(find.text('Rematch'));
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final gameState = container.read(overTheBoardGameControllerProvider);
+
+      // Rematch should restart from the same custom FEN
+      expect(gameState.game.initialFen, _customFen);
+      expect(gameState.game.meta.variant, Variant.atomic);
+      expect(gameState.game.steps.length, 1);
+      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
     });
   });
 }

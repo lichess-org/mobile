@@ -14,9 +14,9 @@
   <string name="specialMoves">Ειδικές κινήσεις</string>
   <string name="didYouLikeThisPuzzle">Σας άρεσε αυτό το τακτικό;</string>
   <string name="voteToLoadNextOne">Ψηφίστε για να προχωρήσετε στο επόμενο!</string>
-  <string name="upVote">Μου άρεσε το τακτικό</string>
-  <string name="downVote">Δε μου άρεσε το τακτικό</string>
-  <string name="yourPuzzleRatingWillNotChange">Η βαθμολογία τακτικών σας δε θα αλλάξει. Σημειώνουμε πως η επίλυση τακτικών δεν είναι διαγωνιστική διαδικασία — η βαθμολογία σας, άλλωστε, χρησιμοποιείται ως μέτρο για την επιλογή τακτικών δυσκολίας αντίστοιχης με το επίπεδο στο οποίο βρίσκεστε.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Μου άρεσε το τακτικό</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Δε μου άρεσε το τακτικό</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Η βαθμολογία τακτικών σας δε θα αλλάξει. Σημειώνουμε πως η επίλυση τακτικών δεν είναι διαγωνιστική διαδικασία — η βαθμολογία σας, άλλωστε, χρησιμοποιείται ως μέτρο για την επιλογή τακτικών δυσκολίας αντίστοιχης με το επίπεδο στο οποίο βρίσκεστε.</string>
   <string name="findTheBestMoveForWhite">Βρείτε την καλύτερη κίνηση για τα λευκά.</string>
   <string name="findTheBestMoveForBlack">Βρείτε την καλύτερη κίνηση για τα μαύρα.</string>
   <string name="toGetPersonalizedPuzzles">Για να λύνετε εξατομικευμένα τακτικά, κάντε:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Από τις παρτίδες μου</string>
   <string name="lookupOfPlayer">Αναζητήστε τακτικά από τις παρτίδες ενός παίκτη</string>
   <string name="searchPuzzles">Αναζήτηση τακτικών</string>
-  <string name="fromMyGamesNone">Δεν υπάρχουν τακτικά από τις παρτίδες σας στη βάση δεδομένων.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Δεν υπάρχουν τακτικά από τις παρτίδες σας στη βάση δεδομένων.
 Παίξτε κλασικές ή rapid παρτίδες για να αυξηθούν οι πιθανότητες προσθήκης τακτικών από τις παρτίδες σας στη βάση δεδομένων!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Ένα τακτικό βρέθηκε στις παρτίδες του χρήστη %2$s</item>
@@ -93,6 +93,6 @@
   </plurals>
   <string name="percentSolved">%s λυμένα</string>
   <string name="noPuzzlesToShow">Δεν υπάρχουν δεδομένα για εμφάνιση — δοκιμάστε να λύσετε μερικά τακτικά πρώτα!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Εξασκηθείτε στους ακόλουθους τομείς για να βελτιώσετε την απόδοσή σας!</string>
+  <string name="improvementAreasDescription">Εξασκηθείτε στους ακόλουθους τομείς για να βελτιώσετε την απόδοσή σας!</string>
   <string name="strengthDescription">Τα πάτε καλύτερα στις εξής κατηγορίες</string>
 </resources>

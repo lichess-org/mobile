@@ -275,10 +275,43 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+
+  @override
+  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -1912,6 +1945,12 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Eliminacijom figure koja brani ili je neizravno uključena u obranu druge figure omogućujete uzimanje figure koja ostaje bez obrane.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2536,7 +2575,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get copyVariationPgn => 'Kopiraj varijaciju PGN-a';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Copy main line PGN';
 
   @override
   String get move => 'Potez';
@@ -2686,10 +2725,31 @@ class AppLocalizationsHr extends AppLocalizations {
   String get multipleLines => 'Višestrukih varijanti';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Procesora';
 
   @override
   String get memory => 'Memorija';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Neprekidna analiza';
@@ -2849,7 +2909,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get signupUsernameHint => 'Obavezno odaberi obiteljsko korisničko ime. Ne možeš ga kasnije promijeniti i svi računi s neprikladnim korisničkim imenima bit će zatvoreni!';
 
   @override
-  String get signupEmailHint => 'Koristiti ćemo ga samo za ponovno postavljanje lozinke.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Lozinka';
@@ -3733,6 +3793,15 @@ class AppLocalizationsHr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Nevažeći kôd autentičnosti';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošalji mi email';
 
   @override
@@ -4101,18 +4170,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'otvori/zatvori varijantu';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Zatraži računalnu analizu, Uči na svojim greškama';
-
-  @override
-  String get keyNextBlunder => 'Sljedeća velika pogreška';
-
-  @override
-  String get keyNextMistake => 'Sljedeća pogreška';
-
-  @override
-  String get keyNextInaccuracy => 'Sljedeća sitna pogreška';
 
   @override
   String get keyPreviousBranch => 'Prethodna grana';
@@ -4667,9 +4724,6 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Slažem se da ću slijediti sve politike Lichessa.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Traži ili započni novi razgovor';
 
   @override
@@ -5027,6 +5081,11 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Tags';
@@ -6219,7 +6278,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
@@ -6237,7 +6296,7 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Select $param.<br>Then decide who will be allowed to contribute.';
   }
 
   @override
@@ -6251,38 +6310,38 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Click the $param button, or right-click on the move list.<br>Comments are shared and saved.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Click the !? button, or right-click on the move list.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'A board set up for a new game.<br>Useful for exploring openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
@@ -6300,7 +6359,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';

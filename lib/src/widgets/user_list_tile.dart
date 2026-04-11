@@ -10,18 +10,16 @@ class UserListTile extends StatelessWidget {
   const UserListTile._(
     this.username,
     this.title,
-    this.isOnline,
     this.patronColor,
     this.flair,
     this.onTap,
     this.userPerfs,
   );
 
-  factory UserListTile.fromUser(User user, bool isOnline, {VoidCallback? onTap}) {
+  factory UserListTile.fromUser(User user, {VoidCallback? onTap}) {
     return UserListTile._(
       user.username,
       user.title,
-      isOnline,
       user.patronColor,
       user.flair,
       onTap,
@@ -30,21 +28,12 @@ class UserListTile extends StatelessWidget {
   }
 
   factory UserListTile.fromLightUser(LightUser user, {VoidCallback? onTap}) {
-    return UserListTile._(
-      user.name,
-      user.title,
-      user.isOnline,
-      user.patronColor,
-      user.flair,
-      onTap,
-      null,
-    );
+    return UserListTile._(user.name, user.title, user.patronColor, user.flair, onTap, null);
   }
 
   final String? title;
   final String username;
   final String? flair;
-  final bool? isOnline;
   final int? patronColor;
   final VoidCallback? onTap;
 
@@ -55,14 +44,12 @@ class UserListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
       title: UserFullNameWidget(
-        shouldShowOnline: true,
         user: LightUser(
           id: UserId.fromUserName(username),
           name: username,
           title: title,
           flair: flair,
           patronColor: patronColor,
-          isOnline: isOnline,
         ),
       ),
       trailing: userPerfs != null ? _UserRating(perfs: userPerfs!) : null,

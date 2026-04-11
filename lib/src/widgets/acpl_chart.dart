@@ -64,7 +64,8 @@ class AcplChart extends StatelessWidget {
           child: LineChart(
             LineChartData(
               lineTouchData: LineTouchData(
-                enabled: false,
+                enabled: true,
+                handleBuiltInTouches: false,
                 touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
                   if (event is FlTapUpEvent ||
                       event is FlPanUpdateEvent ||

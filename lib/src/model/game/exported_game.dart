@@ -30,7 +30,9 @@ typedef ClockData = ({Duration initial, Duration increment});
 ///
 /// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements BaseGame {
+sealed class ExportedGame
+    with BaseGame, _$ExportedGame, ServerGame, IndexableSteps
+    implements ServerGame {
   const ExportedGame._();
 
   @Assert('steps.isNotEmpty')

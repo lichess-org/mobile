@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateGameWidget extends ConsumerWidget {
   const CreateGameWidget();
@@ -93,9 +94,11 @@ class CreateGameWidget extends ConsumerWidget {
                       showChoicePicker(
                         context,
                         title: Text(context.l10n.variant),
-                        choices: [Variant.standard, Variant.chess960],
+                        choices: playSupportedVariants
+                            .where((v) => v != Variant.fromPosition)
+                            .toList(),
                         selectedItem: playPrefs.customVariant,
-                        labelBuilder: (Variant variant) => Text(variant.label),
+                        labelBuilder: (variant) => VariantLabel(variant),
                         onSelectedItemChanged: (Variant variant) {
                           ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                         },
@@ -191,7 +194,8 @@ class CreateGameWidget extends ConsumerWidget {
             ],
           ),
         ],
-        FilledButton(
+        FilledButton.icon(
+          icon: const Icon(Icons.groups),
           onPressed: isOnline
               ? () {
                   // Pops the play bottom sheet
@@ -211,7 +215,7 @@ class CreateGameWidget extends ConsumerWidget {
                   );
                 }
               : null,
-          child: Text(context.l10n.createAGame),
+          label: Text(context.l10n.createLobbyGame),
         ),
       ],
     );

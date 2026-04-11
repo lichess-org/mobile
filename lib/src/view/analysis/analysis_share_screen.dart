@@ -162,6 +162,18 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                   builder: (context) {
                     return FilledButton(
                       onPressed: () {
+                        // Flush all text field values into state before
+                        // generating the PGN. We can't rely on unfocus
+                        // alone because the focus listener may not fire
+                        // synchronously or may not fire at all if focus
+                        // was already lost.
+                        final notifier = ref.read(
+                          analysisControllerProvider(widget.options).notifier,
+                        );
+                        for (final entry in _controllers.entries) {
+                          notifier.updatePgnHeader(entry.key, entry.value.text);
+                        }
+                        FocusScope.of(context).unfocus();
                         launchShareDialog(
                           context,
                           ShareParams(

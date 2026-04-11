@@ -88,7 +88,7 @@ Siin on link klassi sisenemiseks.</string>
   <string name="timePlaying">Mängitud aeg</string>
   <string name="variantXOverLastY">%1$s viimase %2$s jooksul</string>
   <string name="winrate">Võiduprotsent</string>
-  <string name="na" comment="Appears as part of the 'Progress' column on Lichess classes, where a teacher is looking at their list of students under specific rating or variant categories.">Puudub</string>
+  <string name="na">Puudub</string>
   <string name="overview">Ülevaade</string>
   <string name="news">Uudised</string>
   <string name="classNews">Klassi uudised</string>
@@ -113,5 +113,5 @@ Neid näidatakse horisontaalselt.</string>
   <string name="xisNowAStudentOfTheClass">%s on nüüd klassi õpilane</string>
   <string name="anInvitationHasBeenSentToX">Kutse on saadetud kasutajale %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s on juba saanud kutse, mis ootab vastust</string>
-  <string name="xIsAKidAccountWarning">%1$s on lastekonto ega saa võtta vastu su sõnumit. Sa pead andma õpilasele kutse manuaalselt läbi URLi: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s on lastekonto ega saa võtta vastu su sõnumit. Sa pead andma õpilasele kutse manuaalselt läbi URLi: %2$s</string>
 </resources>

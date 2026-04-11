@@ -13,8 +13,8 @@
   <string name="specialMoves">Шпеціалні ходы</string>
   <string name="didYouLikeThisPuzzle">Полюбила ся вам ся завданка?</string>
   <string name="voteToLoadNextOne">Проголосуйте і ідіт дале!</string>
-  <string name="upVote">Облюбовати завданку</string>
-  <string name="downVote">Не полюбила ся завданка</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Облюбовати завданку</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Не полюбила ся завданка</string>
   <string name="findTheBestMoveForWhite">Найдіт лїпшый ход для білых.</string>
   <string name="findTheBestMoveForBlack">Найдіт лїпшый ход для чорных.</string>
   <string name="toGetPersonalizedPuzzles">Обы достати персоналізовані задачі:</string>

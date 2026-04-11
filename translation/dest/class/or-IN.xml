@@ -49,5 +49,5 @@
   <string name="xisNowAStudentOfTheClass">ଏବେ %s ଶ୍ରେଣୀର ଜଣେ ଛାତ୍ର ଅଟନ୍ତି</string>
   <string name="anInvitationHasBeenSentToX">%sଙ୍କୁ ଏକ ନିମନ୍ତ୍ରଣ ପଠାଯାଇଛି</string>
   <string name="xAlreadyHasAPendingInvitation">%sଙ୍କ ପାଖରେ ଆଗରୁ ଏକ ବିଚାରାଧୀନ ନିମନ୍ତ୍ରଣ ଅଛି</string>
-  <string name="xIsAKidAccountWarning">%1$s ଏକ ଶିଶୁ ଆକାଉଣ୍ଟ୍ ଅଟେ ଏବଂ ଆପଣଙ୍କ ବାର୍ତ୍ତା ପ୍ରାପ୍ତ କରିପାରିବ ନାହିଁ। ଆପଣଙ୍କୁ ସେମାନଙ୍କୁ ହସ୍ତକୃତ ଭାବରେ ନିମନ୍ତ୍ରଣ URL ପଠାଇବାକୁ ପଡ଼ିବ: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ଏକ ଶିଶୁ ଆକାଉଣ୍ଟ୍ ଅଟେ ଏବଂ ଆପଣଙ୍କ ବାର୍ତ୍ତା ପ୍ରାପ୍ତ କରିପାରିବ ନାହିଁ। ଆପଣଙ୍କୁ ସେମାନଙ୍କୁ ହସ୍ତକୃତ ଭାବରେ ନିମନ୍ତ୍ରଣ URL ପଠାଇବାକୁ ପଡ଼ିବ: %2$s</string>
 </resources>

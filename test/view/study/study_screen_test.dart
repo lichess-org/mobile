@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -82,7 +83,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -134,7 +135,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -194,6 +195,43 @@ void main() {
       expect(find.text('pgn 2'), findsNothing);
     });
 
+    testWidgets('Loads initial chapter if given', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+
+      final studyChapter1 = makeStudy(
+        chapter: makeChapter(id: const StudyChapterId('1')),
+        chapters: IList(const [
+          StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
+          StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
+        ]),
+      );
+
+      final studyChapter2 = studyChapter1.copyWith(
+        chapter: makeChapter(id: const StudyChapterId('2')),
+      );
+
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
+      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: StudyChapterId('2'))),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      expect(find.text('1. Chapter 1'), findsNothing);
+      expect(find.text('2. Chapter 2'), findsOneWidget);
+
+      expect(find.text('pgn 1'), findsNothing);
+      expect(find.text('pgn 2'), findsOneWidget);
+    });
+
     testWidgets('Can play moves for both sides', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();
       when(() => mockRepository.getStudy(id: testId)).thenAnswer(
@@ -207,7 +245,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -236,6 +274,39 @@ void main() {
 
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
+    });
+
+    testWidgets('Can flip the board', (tester) async {
+      final mockRepository = MockStudyRepository();
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.white),
+          ),
+          '',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.pumpAndSettle(); // Wait for menu to open
+
+      await tester.tap(find.text('Flip board'));
+      await tester.pumpAndSettle(); // Wait for board to flip
+
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
     });
 
     testWidgets('Interactive study', (WidgetTester tester) async {
@@ -271,7 +342,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -404,7 +475,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -515,7 +586,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const StudyScreen(id: testId),
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
         overrides: {
           studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
         },
@@ -587,7 +658,7 @@ void main() {
 
     final app = await makeTestProviderScopeApp(
       tester,
-      home: const StudyScreen(id: testId),
+      home: const StudyScreen(options: (id: testId, initialChapter: null)),
       overrides: {
         studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
       },
@@ -675,7 +746,7 @@ void main() {
 
     final app = await makeTestProviderScopeApp(
       tester,
-      home: const StudyScreen(id: testId),
+      home: const StudyScreen(options: (id: testId, initialChapter: null)),
       overrides: {
         studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
       },

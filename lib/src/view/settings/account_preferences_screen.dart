@@ -24,8 +24,30 @@ class AccountPreferencesScreen extends ConsumerStatefulWidget {
   ConsumerState<AccountPreferencesScreen> createState() => _AccountPreferencesScreenState();
 }
 
-class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScreen> {
+class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScreen>
+    with WidgetsBindingObserver {
   bool isLoading = false;
+  bool _pendingKidModeRefresh = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _pendingKidModeRefresh) {
+      _pendingKidModeRefresh = false;
+      ref.invalidate(accountProvider);
+    }
+  }
 
   Future<void> _setPref(Future<void> Function() f) async {
     setState(() {
@@ -260,6 +282,27 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                           );
                         },
                 ),
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.preferencesTenthsOfSeconds),
+                  settingsValue: data.clockTenths.label(context.l10n),
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: ClockTenths.values,
+                      selectedItem: data.clockTenths,
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (ClockTenths? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setClockTenths(value ?? data.clockTenths),
+                              );
+                            },
+                    );
+                  },
+                ),
               ],
             ),
             ListSection(
@@ -343,9 +386,8 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   title: Text(kidMode ? context.l10n.disableKidMode : context.l10n.enableKidMode),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
-                    launchUrl(lichessUri('/account/kid')).then((_) {
-                      ref.invalidate(kidModeProvider);
-                    });
+                    _pendingKidModeRefresh = true;
+                    launchUrl(lichessUri('/account/kid'));
                   },
                 ),
               ],

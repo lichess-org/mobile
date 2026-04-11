@@ -14,9 +14,9 @@
   <string name="specialMoves">特殊着法</string>
   <string name="didYouLikeThisPuzzle">您喜欢这道谜题吗？</string>
   <string name="voteToLoadNextOne">投票以加载下一题</string>
-  <string name="upVote">赞</string>
-  <string name="downVote">踩</string>
-  <string name="yourPuzzleRatingWillNotChange">您的谜题等级分不会改变。请注意，谜题并非竞赛。您的等级分有助于根据您当前水平筛选最佳题目。</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">赞</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">踩</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">您的谜题等级分不会改变。请注意，谜题并非竞赛。您的等级分有助于根据您当前水平筛选最佳题目。</string>
   <string name="findTheBestMoveForWhite">找出白方的最佳着法</string>
   <string name="findTheBestMoveForBlack">找出黑方的最佳着法</string>
   <string name="toGetPersonalizedPuzzles">获取个性化谜题</string>
@@ -73,7 +73,7 @@
   <string name="fromMyGames">来自我的对局</string>
   <string name="lookupOfPlayer">查找特定棋手对局中的谜题</string>
   <string name="searchPuzzles">搜索谜题</string>
-  <string name="fromMyGamesNone">您的对局数据库中暂无谜题，但 Lichess 依然记得您走过的每一着。
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">您的对局数据库中暂无谜题，但 Lichess 依然记得您走过的每一着。
 
 多进行快棋和慢棋对局，会增加您的对局被收录为谜题的机会！</string>
   <plurals name="puzzlesFoundInUserGames">
@@ -88,6 +88,6 @@
   </plurals>
   <string name="percentSolved">%s 已解决</string>
   <string name="noPuzzlesToShow">暂无数据显示，请先去解决一些谜题吧！</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">训练这些主题以提升您的棋艺！</string>
+  <string name="improvementAreasDescription">训练这些主题以提升您的棋艺！</string>
   <string name="strengthDescription">您在这些主题中表现最佳</string>
 </resources>

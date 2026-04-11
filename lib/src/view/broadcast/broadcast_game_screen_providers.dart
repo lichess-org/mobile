@@ -48,3 +48,9 @@ final broadcastGameScreenTitleProvider = FutureProvider.autoDispose
       final round = await ref.watch(broadcastRoundControllerProvider(roundId).future);
       return round.round.name;
     }, name: 'BroadcastGameScreenTitleProvider');
+
+final broadcastRoundCustomScoringProvider = FutureProvider.autoDispose
+    .family<BroadcastCustomScoring?, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
+      final round = await ref.watch(broadcastRoundControllerProvider(roundId).future);
+      return round.round.customScoring;
+    }, name: 'BroadcastRoundCustomScoringProvider');

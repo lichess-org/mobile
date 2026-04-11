@@ -275,10 +275,43 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.';
 
   @override
-  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
+  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
 
   @override
   String get mobilePreviousPage => 'Προηγούμενη';
+
+  @override
+  String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
+
+  @override
+  String get variantStandardTitle => 'Πρότυποι κανόνες του σκακιού (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Η αρχική θέση των κομματιών της πρώτης και τελευταίας γραμμής είναι τυχαία.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Φέρτε τον βασιλιά στο κέντρο της σκακιέρας για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantThreeCheckTitle => 'Κάντε σαχ 3 φορές για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantAntichessTitle => 'Η πλευρά που χάνει πρώτη όλα τα κομμάτια της ή δεν μπορεί να παίξει καμία κίνηση (πατ) κερδίζει την παρτίδα.';
+
+  @override
+  String get variantAtomicTitle => 'Ανατινάξτε τον αντίπαλο βασιλιά για να κερδίσετε.';
+
+  @override
+  String get variantHordeTitle => 'Η μία πλευρά έχει πολλά πιόνια, ενώ η άλλη έχει κανονική διάταξη σκακιού.';
+
+  @override
+  String get variantRacingKingsTitle => 'Κερδίζει ο βασιλιάς που φτάνει μέχρι την άλλη άκρη της σκακιέρας.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Τα αιχμαλωτισμένα κομμάτια μπορούν να «φυτευτούν» πάλι στη σκακιέρα.';
+
+  @override
+  String get variantFromPositionTitle => 'Κανονικό σκάκι από καθορισμένη θέση';
 
   @override
   String get activityActivity => 'Δραστηριότητα';
@@ -1886,6 +1919,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Συγγραμμική κίνηση';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Ματ στη γωνία';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsEl extends AppLocalizations {
   String get multipleLines => 'Πολλαπλές γραμμές';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'CPUs';
 
   @override
   String get memory => 'Μνήμη';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Άπειρη ανάλυση';
@@ -2823,7 +2883,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get signupUsernameHint => 'Eπιλέξτε ένα φιλικό προς την οικογένεια όνομα χρήστη, καθώς δε θα έχετε τη δυνατότητα να το αλλάξετε αργότερα. Τονίζουμε πως λογαριασμοί με ακατάλληλα ονόματα χρήστη θα απενεργοποιούνται!';
 
   @override
-  String get signupEmailHint => 'Θα τη χρησιμοποιήσουμε μόνο για την επαναφορά του κωδικού πρόσβασης.';
+  String get signupEmailPromise => 'Το email σας θα χρησιμοποιηθεί αποκλειστικά για ενημερώσεις σχετικά με τον λογαριασμό σας και ποτέ δεν θα κοινοποιηθεί σε τρίτους.';
 
   @override
   String get password => 'Κωδικός';
@@ -3707,6 +3767,15 @@ class AppLocalizationsEl extends AppLocalizations {
   String get invalidAuthenticationCode => 'Μη έγκυρος κωδικός επαλήθευσης';
 
   @override
+  String get clearField => 'Καθαρισμός πεδίου';
+
+  @override
+  String get orSeparator => 'Ή';
+
+  @override
+  String get logInByEmail => 'Συνδεθείτε μέσω email';
+
+  @override
   String get emailMeALink => 'Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'είσοδος / έξοδος εκδοχής';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Ζητήστε ανάλυση της παρτίδας από υπολογιστή (Μάθετε από τα λάθη σας)';
-
-  @override
-  String get keyNextBlunder => 'Επόμενο σοβαρό σφάλμα';
-
-  @override
-  String get keyNextMistake => 'Επόμενο λάθος';
-
-  @override
-  String get keyNextInaccuracy => 'Επόμενη ανακρίβεια';
 
   @override
   String get keyPreviousBranch => 'Προηγούμενος κλάδος';
@@ -4641,9 +4698,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Δηλώνω ότι θα συμμορφωθώ με όλες τις πολιτικές του Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Αναζήτηση ή έναρξη νέας συνομιλίας';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Εκκαθάριση πεδίου αναζήτησης';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Δε βρέθηκαν αποτελέσματα για το «$param»';
+  }
 
   @override
   String get tags => 'Ετικέτες';

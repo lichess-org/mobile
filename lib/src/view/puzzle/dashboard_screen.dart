@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -56,13 +57,15 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
+    final days = ref.watch(daysProvider).days;
+
     return puzzleDashboard.when(
       data: (dashboard) {
         if (dashboard == null) return const SizedBox.shrink();
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector),
+            _ChartSection(dashboard: dashboard, showDaysSelector: showDaysSelector, days: days),
             _PerformanceSection(dashboard: dashboard, metric: Metric.improvementArea),
             _PerformanceSection(dashboard: dashboard, metric: Metric.strength),
           ],
@@ -128,14 +131,21 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 }
 
 class _ChartSection extends StatelessWidget {
-  const _ChartSection({required this.dashboard, required this.showDaysSelector});
+  const _ChartSection({
+    required this.dashboard,
+    required this.showDaysSelector,
+    required this.days,
+  });
 
   final PuzzleDashboard dashboard;
   final bool showDaysSelector;
+  final int days;
 
   @override
   Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+    final puzzlesToReplay =
+        dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,6 +189,22 @@ class _ChartSection extends StatelessWidget {
           ),
         ]),
         if (chartData.length >= 3) PuzzleChart(chartData),
+        if (puzzlesToReplay > 0)
+          Center(
+            child: TextButton.icon(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).push(
+                  PuzzleScreen.buildRoute(
+                    context,
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    replayDays: days,
+                  ),
+                );
+              },
+              icon: const Icon(Icons.play_arrow),
+              label: Text(context.l10n.puzzleNbToReplay(puzzlesToReplay)),
+            ),
+          ),
       ],
     );
   }
@@ -192,7 +218,8 @@ class _PerformanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themes = metric.sort(dashboard.themes);
+    final themes = metric.sort(dashboard.themes, dashboard);
+    if (themes.isEmpty) return const SizedBox.shrink();
     return ListSection(
       header: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,9 +231,9 @@ class _PerformanceSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(metric.title(context.l10n)), // #4: logic on enum
+                    Text(metric.title(context.l10n)),
                     Text(
-                      metric.subtitle(context.l10n), // #4: logic on enum
+                      metric.subtitle(context.l10n),
                       style: Styles.subtitle.copyWith(
                         color: textShade(context, Styles.subtitleOpacity),
                       ),
@@ -293,14 +320,35 @@ enum Metric {
 
   static const _itemsToShow = 3;
 
-  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes) => switch (this) {
-    strength =>
-      themes
-          .sortedByCompare((e) => e.performance, (a, b) => b.compareTo(a))
-          .take(_itemsToShow)
-          .toList(),
-    improvementArea => themes.sortedBy((e) => e.performance).take(_itemsToShow).toList(),
-  };
+  List<PuzzleDashboardData> sort(IList<PuzzleDashboardData> themes, PuzzleDashboard dashboard) {
+    // Themes are filtered to those with enough plays (nb > global.nb / 40),
+    // then sorted ascending by performance. Improvement areas are taken from
+    // the bottom (lowest performance), strengths from the top (highest performance).
+    final minNb = dashboard.global.nb / 40;
+
+    final all = themes.where((e) => e.nb > minNb).sortedByCompare((e) => e.performance, (a, b) {
+      final perfCmp = a.compareTo(b);
+      return perfCmp;
+    }).toList();
+
+    return switch (this) {
+      strength =>
+        all
+            .where((e) => e.firstWins >= 3 && e.performance > dashboard.global.performance)
+            .toList()
+            .reversed
+            .take(_itemsToShow)
+            .toList(),
+      improvementArea =>
+        all
+            .where((e) {
+              final failed = e.nb - e.firstWins; // fixed + unfixed = nb - firstWins
+              return failed >= 3 && e.performance < dashboard.global.performance;
+            })
+            .take(_itemsToShow)
+            .toList(),
+    };
+  }
 
   String title(AppLocalizations l10n) => switch (this) {
     strength => l10n.puzzleStrengths,
@@ -377,7 +425,6 @@ class PuzzleThemeRow extends ConsumerWidget {
             ),
             StatCardRow([
               StatCard(context.l10n.performance, value: data.performance.toString()),
-              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
               StatCard(
                 context.l10n
                     .puzzleNbPlayed(data.nb)
@@ -386,6 +433,7 @@ class PuzzleThemeRow extends ConsumerWidget {
                     .capitalize(),
                 value: data.nb.toString().localizeNumbers(),
               ),
+              StatCard(context.l10n.puzzleSolved.capitalize(), value: '$solvePercentage%'),
             ]),
           ],
         ),

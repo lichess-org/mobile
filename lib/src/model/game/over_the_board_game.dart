@@ -16,7 +16,7 @@ part 'over_the_board_game.g.dart';
 ///
 /// See [PlayableGame] for a game that is played online.
 @Freezed(fromJson: true, toJson: true)
-abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableSteps {
+abstract class OverTheBoardGame with BaseGame, _$OverTheBoardGame, LocalGame, IndexableSteps {
   const OverTheBoardGame._();
 
   factory OverTheBoardGame.fromJson(Map<String, dynamic> json) => _$OverTheBoardGameFromJson(json);
@@ -41,9 +41,6 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   @override
   IList<Duration>? get clocks => null;
 
-  @override
-  GameId get id => const GameId('--------');
-
   bool get abortable => playable && lastPosition.fullmoves <= 1;
 
   bool get resignable => playable && !abortable;
@@ -51,6 +48,7 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
 
   @Assert('steps.isNotEmpty')
   factory OverTheBoardGame({
+    required StringId id,
     @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     required GameMeta meta,
     required String? initialFen,

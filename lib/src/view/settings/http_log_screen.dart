@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_paginator.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/http_log_paginator.dart';
+import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
@@ -23,6 +24,8 @@ class HttpLogScreen extends ConsumerStatefulWidget {
 class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final TextEditingController _searchController = TextEditingController();
+  String? _searchQuery;
 
   @override
   void initState() {
@@ -34,26 +37,27 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final currentState = ref.read(httpLogPaginatorProvider);
+      final currentState = ref.read(httpLogPaginatorProvider(_searchQuery));
       if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
-        ref.read(httpLogPaginatorProvider.notifier).next();
+        ref.read(httpLogPaginatorProvider(_searchQuery).notifier).next();
       }
     }
   }
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(httpLogPaginatorProvider.notifier).refresh();
+    return ref.read(httpLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    final asyncState = ref.watch(httpLogPaginatorProvider);
+    final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
     return Scaffold(
       appBar: AppBar(
         title: const Text('HTTP logs'),
@@ -68,11 +72,29 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
                   context,
                   // TODO localize
                   title: const Text('Delete all logs'),
-                  onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
+                  onConfirm: () =>
+                      ref.read(httpLogPaginatorProvider(_searchQuery).notifier).deleteAll(),
                 );
               },
             ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: PlatformSearchBar(
+              controller: _searchController,
+              hintText: 'Search logs...',
+              onChanged: (value) => setState(() {
+                _searchQuery = value.isEmpty ? null : value;
+              }),
+              onClear: () => setState(() {
+                _searchQuery = null;
+                _searchController.clear();
+              }),
+            ),
+          ),
+        ),
       ),
       body: _HttpLogList(
         scrollController: _scrollController,
@@ -136,6 +158,13 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
 
 final _logDateFormatter = DateFormat.yMd().add_Hms();
 
+String _formatElapsed(Duration elapsed) {
+  if (elapsed.inMilliseconds < 1000) {
+    return '${elapsed.inMilliseconds}ms';
+  }
+  return '${(elapsed.inMilliseconds / 1000).toStringAsFixed(1)}s';
+}
+
 class HttpLogTile extends StatelessWidget {
   const HttpLogTile({super.key, required this.httpLog});
 
@@ -167,7 +196,8 @@ class HttpLogTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   if (httpLog.elapsed != null)
                     Text(
-                      '${httpLog.elapsed!.inMilliseconds}ms',
+                      _formatElapsed(httpLog.elapsed!),
+                      maxLines: 1,
                       style: TextStyle(
                         color: textShade(context, 0.7),
                         fontFeatures: const [FontFeature.tabularFigures()],

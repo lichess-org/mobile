@@ -19,10 +19,10 @@
   <string name="ongoing">進行中</string>
   <string name="upcoming">即將舉行</string>
   <string name="roundName">回合名稱</string>
-  <string name="tournamentName">錦標賽名稱</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">錦標賽名稱</string>
   <string name="tournamentDescription">簡短比賽說明</string>
-  <string name="fullDescription">完整比賽說明</string>
-  <string name="fullDescriptionHelp">直播內容的詳細描述 。可以利用 %1$s。字數限於%2$s個字。</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">完整比賽說明</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">直播內容的詳細描述 。可以利用 %1$s。字數限於%2$s個字。</string>
   <string name="sourceSingleUrl">PGN 來源網址</string>
   <string name="sourceUrlHelp">Lichess 將以該網址更新PGN數據，網址必須公開</string>
   <string name="sourceGameIds">最多 64 個以空格分開的 Lichess 棋局序號。</string>
@@ -60,7 +60,7 @@
   <string name="notYetStarted">直播尚未開始。</string>
   <string name="officialWebsite">官網</string>
   <string name="officialStandings">官方排名</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">更多選項在%s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">更多選項在%s</string>
   <string name="webmastersPage">網頁管理員頁面</string>
   <string name="embedThisBroadcast">將此直播嵌入您的網站</string>
   <string name="ratingDiff">評級差異</string>
@@ -68,7 +68,7 @@
   <string name="score">分數</string>
   <string name="allTeams">所有團隊</string>
   <string name="tournamentFormat">錦標賽格式</string>
-  <string name="tournamentLocation">錦標賽地點</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">錦標賽地點</string>
   <string name="topPlayers">頂尖玩家</string>
   <string name="timezone">時區</string>
   <string name="fideRatingCategory">FIDE 評級類別</string>

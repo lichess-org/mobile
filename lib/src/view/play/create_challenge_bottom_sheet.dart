@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
@@ -25,11 +24,12 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user, {this.positionFen});
+  const CreateChallengeBottomSheet({this.user, this.positionFen});
 
-  final LightUser user;
+  final LightUser? user;
   final String? positionFen;
 
   @override
@@ -69,6 +69,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
+    final createGameService = ref.watch(createGameServiceProvider);
 
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
@@ -238,9 +239,9 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 onPressed: () {
                   showChoicePicker(
                     context,
-                    choices: [Variant.standard, Variant.chess960, Variant.fromPosition],
+                    choices: playSupportedVariants.toList(),
                     selectedItem: preferences.variant,
-                    labelBuilder: (Variant variant) => Text(variant.label),
+                    labelBuilder: (variant) => VariantLabel(variant),
                     onSelectedItemChanged: (Variant variant) {
                       ref.read(challengePreferencesProvider.notifier).setVariant(variant);
                     },
@@ -253,7 +254,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
               expand: preferences.variant == Variant.fromPosition,
               child: SmallBoardPreview(
                 orientation: preferences.sideChoice == SideChoice.black ? Side.black : Side.white,
-                fen: fromPositionFenInput ?? kEmptyFen,
+                fen: fromPositionFenInput ?? kEmptyFEN,
                 description: TextField(
                   maxLines: 5,
                   decoration: InputDecoration(
@@ -302,106 +303,110 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed: switch (timeControl) {
-                      ChallengeTimeControlType.clock =>
-                        isValidTimeControl && isValidPosition
-                            ? () {
-                                Navigator.of(
-                                  context,
-                                ).popUntil((route) => route is! ModalBottomSheetRoute);
-                                Navigator.of(context, rootNavigator: true).push(
-                                  GameScreen.buildRoute(
+                    onPressed: timeControl == ChallengeTimeControlType.clock || widget.user == null
+                        ? isValidTimeControl && isValidPosition
+                              ? () {
+                                  Navigator.of(
                                     context,
-                                    source: UserChallengeSource(
-                                      preferences.makeRequest(
-                                        widget.user,
-                                        preferences.variant != Variant.fromPosition
-                                            ? null
-                                            : fromPositionFenInput,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            : null,
-                      ChallengeTimeControlType.correspondence ||
-                      ChallengeTimeControlType.unlimited =>
-                        snapshot.connectionState != ConnectionState.waiting
-                            ? () async {
-                                final createGameService = ref.read(createGameServiceProvider);
-                                setState(() {
-                                  _pendingCorrespondenceChallenge = createGameService
-                                      .newCorrespondenceChallenge(
+                                  ).popUntil((route) => route is! ModalBottomSheetRoute);
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    GameScreen.buildRoute(
+                                      context,
+                                      source: UserChallengeSource(
                                         preferences.makeRequest(
+                                          account,
                                           widget.user,
                                           preferences.variant != Variant.fromPosition
                                               ? null
                                               : fromPositionFenInput,
                                         ),
-                                      );
-                                });
-
-                                try {
-                                  final maybeDeclined = await _pendingCorrespondenceChallenge;
-
-                                  if (!context.mounted) return;
-
-                                  Navigator.of(
-                                    context,
-                                  ).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                                  if (maybeDeclined != null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text(context.l10n.challengeChallengeDeclined),
-                                            const SizedBox(height: 8.0),
-                                            const Divider(height: 26.0, thickness: 0.0),
-                                            Text(
-                                              maybeDeclined.label(context.l10n),
-                                              style: const TextStyle(fontStyle: FontStyle.italic),
-                                            ),
-                                            const Divider(height: 26.0, thickness: 0.0),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Text(' — '),
-                                                  UserFullNameWidget(user: widget.user),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        duration: const Duration(seconds: 5),
                                       ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
-                                    );
-                                  }
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    showSnackBar(
-                                      context,
-                                      context.l10n.mobileSomethingWentWrong,
-                                      type: SnackBarType.error,
-                                    );
-                                  }
-                                } finally {
-                                  setState(() {
-                                    _pendingCorrespondenceChallenge = null;
-                                  });
+                                    ),
+                                  );
                                 }
+                              : null
+                        : snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            setState(() {
+                              _pendingCorrespondenceChallenge = createGameService
+                                  .newCorrespondenceChallenge(
+                                    preferences.makeRequest(
+                                      account,
+                                      widget.user,
+                                      preferences.variant != Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+                            });
+
+                            try {
+                              final maybeDeclined = await _pendingCorrespondenceChallenge;
+
+                              if (!context.mounted) return;
+
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                              if (maybeDeclined != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(context.l10n.challengeChallengeDeclined),
+                                        const SizedBox(height: 8.0),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Text(
+                                          maybeDeclined.label(context.l10n),
+                                          style: const TextStyle(fontStyle: FontStyle.italic),
+                                        ),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text(' — '),
+                                              UserFullNameWidget(user: widget.user),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    duration: const Duration(seconds: 5),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
+                                );
                               }
-                            : null,
-                    },
-                    child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+                            } catch (e) {
+                              if (context.mounted) {
+                                showSnackBar(
+                                  context,
+                                  context.l10n.mobileSomethingWentWrong,
+                                  type: SnackBarType.error,
+                                );
+                              }
+                            } finally {
+                              if (mounted) {
+                                setState(() {
+                                  _pendingCorrespondenceChallenge = null;
+                                });
+                              }
+                            }
+                          }
+                        : null,
+                    child: Text(
+                      widget.user != null
+                          ? context.l10n.challengeX(widget.user!.name)
+                          : context.l10n.challengeAFriend,
+                      style: Styles.bold,
+                    ),
                   ),
                 );
               },

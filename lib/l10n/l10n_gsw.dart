@@ -281,6 +281,39 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePreviousPage => 'Vorher';
 
   @override
+  String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
+
+  @override
+  String get variantStandardTitle => 'Schtandard-Schachregle (FIDE)';
+
+  @override
+  String get variantChess960Title => 'D\'Grundschtellig, vu de Figure, isch zuefällig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring din König is Zäntrum zum s\'Schpiel günne.';
+
+  @override
+  String get variantThreeCheckTitle => 'Büt dim Gägner drümal Schach, zum s\'Schpiel günne.';
+
+  @override
+  String get variantAntichessTitle => 'Verlür all Figure (oder mach es Patt) zum s\'Schpiel günne.';
+
+  @override
+  String get variantAtomicTitle => 'Schpräng de gägnerisch Köng, zum günne.';
+
+  @override
+  String get variantHordeTitle => 'En hufe Pure gäge e ganz normali Armee.';
+
+  @override
+  String get variantRacingKingsTitle => 'Bring din König, zum günne, uf die ander Site vum Brätt.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
+
+  @override
+  String get variantFromPositionTitle => 'Schtandard-Schach vunere g\'wählte Position';
+
+  @override
   String get activityActivity => 'Aktivitäte';
 
   @override
@@ -1886,6 +1919,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kollineare Zug';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Zwei gägnerischi Figure stöhnd sich gägenüber, und eini gaht entlang vu de Agriffslinie, ohni die Ander z\'schlah.';
+
+  @override
   String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get multipleLines => 'Mehreri Variantä';
 
   @override
+  String get multipleLinesDescription => 'Beschtimm d\'Anzahl Bewertigslinie und verschieb d\'Pfil uf em Brätt';
+
+  @override
+  String get searchTime => 'Suech Zit';
+
+  @override
+  String get searchTimeDescription => 'De Zitpunkt für d\'Bewertig vu neue Positione bestimme';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'De Wert underhalb vu de Thread-Azahl i de CPU ischtelle; die Fette sind e gueti und sicheri Wahl';
+
+  @override
+  String get threadsDescriptionMobile => 'Meh Threads verbruched meh Akku für e besseri Analyse';
+
+  @override
   String get cpus => 'Prozässore';
 
   @override
   String get memory => 'Arbetsschpeicher';
+
+  @override
+  String get memoryDescription => 'Höcheri Wert chönd d\'Leischtig verbessere';
 
   @override
   String get infiniteAnalysis => 'Unändlichi Analyse';
@@ -2823,7 +2883,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get signupUsernameHint => 'Wähl bitte en aschtändige Benutzername. Du chasch en nachträglich nöd ändere und jedes Konto mit untolerierbarem Name wird gschlosse!';
 
   @override
-  String get signupEmailHint => 'Mir benutzed sie nur zum s\'Passwort zruggsetze.';
+  String get signupEmailPromise => 'Mir schicked dir nur E-Mail, wo dis Konto beträffed und gänd dini E-Mail-Adrässe niemals und niemerem witer.';
 
   @override
   String get password => 'Passwort';
@@ -3707,6 +3767,15 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ungültige Authentifizierigscode';
 
   @override
+  String get clearField => 'Fäld rume';
+
+  @override
+  String get orSeparator => 'Oder';
+
+  @override
+  String get logInByEmail => 'Mit E-Mail ilogge';
+
+  @override
   String get emailMeALink => 'Schick mer per E-Mail en Link';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Variante ischtige/verlah';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Computeranalyse afordere, Lern us dine Fähler';
-
-  @override
-  String get keyNextBlunder => 'Nächschte Patzer';
-
-  @override
-  String get keyNextMistake => 'Nächschte Fähler';
-
-  @override
-  String get keyNextInaccuracy => 'Nächschti Ungnauigkeit';
 
   @override
   String get keyPreviousBranch => 'Vorherige Variante';
@@ -4641,9 +4698,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ich schtimme zue, dass ich alli Lichess-Richtlinie befolge.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Suech e Underhaltig oder fang e Neui a';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get clearSearch => 'Suechi lösche';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Kei Resultat für \"$param\"';
+  }
 
   @override
   String get tags => 'Tags';

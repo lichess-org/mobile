@@ -67,15 +67,6 @@ sealed class EvalWork extends Work with _$EvalWork {
   @override
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The (fake) position to use in threat mode searches.
-  Position get threatModePosition {
-    return position.copyWith(
-      turn: position.turn.opposite,
-      halfmoves: position.halfmoves + 1,
-      fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
-    );
-  }
-
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
 }
@@ -129,20 +120,4 @@ sealed class Step with _$Step {
   factory Step.fromNode(Branch node) {
     return Step(position: node.position, sanMove: node.sanMove, eval: node.eval);
   }
-
-  /// Stockfish in chess960 mode always needs a "king takes rook" UCI notation.
-  ///
-  /// Cannot be used in chess960 variant where this notation is already forced and
-  /// where it would conflict with the actual move.
-  UCIMove get castleSafeUCI {
-    if (sanMove.isCastles) {
-      return _castleMoves.containsKey(sanMove.move.uci)
-          ? _castleMoves[sanMove.move.uci]!
-          : sanMove.move.uci;
-    } else {
-      return sanMove.move.uci;
-    }
-  }
 }
-
-const _castleMoves = {'e1c1': 'e1a1', 'e1g1': 'e1h1', 'e8c8': 'e8a8', 'e8g8': 'e8h8'};

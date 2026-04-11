@@ -262,7 +262,6 @@
   <string name="changeUsernameNotSame">Je možné zmeniť iba veľké a malé písmená. Napríklad \"miskomrkvicka\" na MiskoMrkvicka\".</string>
   <string name="changeUsernameDescription">Zmena užívateľského mena. Tento úkon je možné vykonať len raz a je povolené zmeniť iba veľké a malé písmená.</string>
   <string name="signupUsernameHint">Uistite sa, že si vyberáte rodinne prijateľné používateľské meno! Neskôr ho už nemôžete zmeniť a akýkoľvek účet s nevhodným užívateľským menom bude uzavretý.</string>
-  <string name="signupEmailHint">Použijeme ho iba pri znovunastavení hesla.</string>
   <string name="password">Heslo</string>
   <string name="changePassword">Zmeniť heslo</string>
   <string name="changeEmail">Zmeniť email</string>
@@ -792,10 +791,6 @@
   <string name="keyCycleSelectedVariation">Vybrať variant</string>
   <string name="keyShowOrHideComments">zobraziť/skryť komentáre</string>
   <string name="keyEnterOrExitVariation">zvoliť/opustiť variant</string>
-  <string name="keyRequestComputerAnalysis">Požadujte analýzu počítačom, Poučte sa zo svojich chýb</string>
-  <string name="keyNextBlunder">Ďalšia hrubá chyba</string>
-  <string name="keyNextMistake">Ďalšia chyba</string>
-  <string name="keyNextInaccuracy">Ďalšia nepresnosť</string>
   <string name="keyPreviousBranch">Predchádzajúca vetva</string>
   <string name="keyNextBranch">Nasledujúca vetva</string>
   <string name="toggleVariationArrows">Prepnúť šípky variantov</string>
@@ -992,7 +987,6 @@
   <string name="agreementAssistance">Súhlasím, že v žiadnom prípade nebudem používať asistenciu (počítača, šachovej knihy, databázy alebo inej osoby).</string>
   <string name="agreementNice">Súhlasím, že budem vždy rešpektovať ostatných hráčov.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Súhlasím, že nebudem vytvárať ďalšie účty (s výnimkou dôvodov uvedených v %s).</string>
-  <string name="agreementPolicy">Súhlasím, že budem dodržiavať všetky pravidlá Lichessu.</string>
   <string name="searchOrStartNewDiscussion">Prehľadávať alebo začať novú konverzáciu</string>
   <string name="edit">Upraviť</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>

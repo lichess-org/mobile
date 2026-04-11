@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
@@ -39,6 +40,10 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
     return save(state.copyWith(sideChoice: sideChoice));
   }
 
+  Future<void> setVariant(Variant variant) {
+    return save(state.copyWith(variant: variant));
+  }
+
   Future<void> setCasual(bool casual) {
     return save(state.copyWith(casual: casual));
   }
@@ -60,12 +65,18 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
 enum SideChoice {
   white,
   random,
-  black;
+  black,
+  nextToPlay;
 
-  Side? toSide() => switch (this) {
+  /// Resolves the side choice to a [Side].
+  ///
+  /// When [fen] is provided and this is [nextToPlay], returns the side to move
+  /// from the FEN. Returns `null` for [random] (caller should pick randomly).
+  Side? toSide({String? fen}) => switch (this) {
     SideChoice.white => Side.white,
     SideChoice.random => null,
     SideChoice.black => Side.black,
+    SideChoice.nextToPlay => fen != null ? Setup.parseFen(fen).turn : null,
   };
 
   static SideChoice fromSide(Side? side) => switch (side) {
@@ -82,6 +93,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   const factory OfflineComputerGamePrefs({
     required StockfishLevel stockfishLevel,
     required SideChoice sideChoice,
+    @Default(Variant.standard) Variant variant,
     @Default(true) bool casual,
     @Default(false) bool practiceMode,
     @Default(false) bool hideBestMove,
@@ -91,6 +103,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   static const defaults = OfflineComputerGamePrefs(
     stockfishLevel: StockfishLevel.defaultLevel,
     sideChoice: SideChoice.random,
+    variant: Variant.standard,
     casual: true,
     practiceMode: false,
     hideBestMove: false,

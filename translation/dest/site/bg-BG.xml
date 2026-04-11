@@ -237,7 +237,6 @@
   <string name="changeUsernameNotSame">Единствено могат да се заменят малки с главни букви. Например, \"johndoe\" с \"JohnDoe\".</string>
   <string name="changeUsernameDescription">Промяна на потребителско име. Може да се извърши само веднъж и можете да сменяте единствено малки и главни букви.</string>
   <string name="signupUsernameHint">Изберете прилично потребителско име. Няма да можете да го смените по-късно и всички регистрации с нецензурни имена биват затворени!</string>
-  <string name="signupEmailHint">Ще го използваме само за възстановяване на паролата.</string>
   <string name="password">Парола</string>
   <string name="changePassword">Промяна на паролата</string>
   <string name="changeEmail">Промяна на имейла</string>
@@ -722,10 +721,6 @@
   <string name="keyCycleSelectedVariation">Превключи избрания вариант</string>
   <string name="keyShowOrHideComments">покажи/скрий коментарите</string>
   <string name="keyEnterOrExitVariation">влез/излез от вариацията</string>
-  <string name="keyRequestComputerAnalysis">Поискайте компютърен анализ, Учете се от грешките си</string>
-  <string name="keyNextBlunder">Следваща груба грешка</string>
-  <string name="keyNextMistake">Следваща грешка</string>
-  <string name="keyNextInaccuracy">Следваща неточност</string>
   <string name="keyPreviousBranch">Предишно разклонение</string>
   <string name="keyNextBranch">Следващо разклонение</string>
   <string name="toggleVariationArrows">Превключване на стрелките за варианти</string>
@@ -914,7 +909,6 @@
   <string name="agreementAssistance">Съгласявам се, че никога няма да получавам помощ по време на игра (от компютър, книга, база данни или друг човек).</string>
   <string name="agreementNice">Съгласявам се, че винаги ще уважавам другите играчи.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Съгласявам се, че няма да се регистрирам няколко пъти (с изключение на причините изброени в %s).</string>
-  <string name="agreementPolicy">Съгласявам се, че ше спазвам всички правила на Lichess.</string>
   <string name="searchOrStartNewDiscussion">Търси или започни нов разговор</string>
   <string name="edit">Редактиране</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>

@@ -259,7 +259,6 @@
   <string name="changeUsernameNotSame">Můžete změnit pouze velikost písmen. Např. z \"petrnovak\" na \"PetrNovak\".</string>
   <string name="changeUsernameDescription">Změňte své uživatelské jméno. To lze provést pouze jednou, a můžete změnit pouze velikost písmen.</string>
   <string name="signupUsernameHint">Zvolte si vhodné a nezávadné uživatelské jméno. Později ho nelze změnit a účty s nevhodnými uživatelskými jmény budou uzavřeny!</string>
-  <string name="signupEmailHint">Bude použit pouze pro obnovení hesla.</string>
   <string name="password">Heslo</string>
   <string name="changePassword">Změnit heslo</string>
   <string name="changeEmail">Změnit email</string>
@@ -788,10 +787,6 @@
   <string name="keyCycleSelectedVariation">Projdi zkrze vybranou variaci</string>
   <string name="keyShowOrHideComments">zobrazte/skryjte komentáře</string>
   <string name="keyEnterOrExitVariation">Zobraz variantu</string>
-  <string name="keyRequestComputerAnalysis">Vyžádejte si počítačovou analýzu, poučte se ze svých chyb</string>
-  <string name="keyNextBlunder">Další hrubá chyba</string>
-  <string name="keyNextMistake">Další chyba</string>
-  <string name="keyNextInaccuracy">Další nepřesnost</string>
   <string name="keyPreviousBranch">Předchozí větev</string>
   <string name="keyNextBranch">Další větev</string>
   <string name="toggleVariationArrows">Přepnout šipky variant</string>
@@ -988,7 +983,6 @@
   <string name="agreementAssistance">Přísahám, že nikdy nevyužiji jiné pomoci při mých hrách (počítače, knihy, databáze nebo jiné osoby).</string>
   <string name="agreementNice">Přísahám, že budu vždy respektovat ostatní hráče.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Souhlasím s tím, že nebudu vytvářet více účtů (s výjimkou důvodů uvedených v %s).</string>
-  <string name="agreementPolicy">Souhlasím, že se budu řídit všemi pravidly Lichessu.</string>
   <string name="searchOrStartNewDiscussion">Začněte nebo vyhledejte konverzaci</string>
   <string name="edit">Upravit</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>

@@ -109,7 +109,7 @@ sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implemen
     isEnabled: true,
     numEvalLines: 2,
     numEngineCores: 1,
-    engineSearchTime: Duration(seconds: 6),
+    engineSearchTime: Duration(seconds: 4),
     enginePref: ChessEnginePref.sf16,
   );
 
@@ -131,6 +131,7 @@ int _searchTimeToJson(Duration duration) {
 }
 
 const kAvailableEngineSearchTimes = [
+  Duration(seconds: 2),
   Duration(seconds: 4),
   Duration(seconds: 6),
   Duration(seconds: 8),

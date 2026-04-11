@@ -5,7 +5,7 @@
   <string name="recommended">Рекомендовані</string>
   <string name="phases">Стадії</string>
   <string name="motifs">Мотиви</string>
-  <string name="advanced">Просунутий</string>
+  <string name="advanced">Просунуті Мотиви</string>
   <string name="lengths">Довжина</string>
   <string name="mates">Мати</string>
   <string name="mateThemes">Теми матів</string>
@@ -14,9 +14,9 @@
   <string name="specialMoves">Спеціальні ходи</string>
   <string name="didYouLikeThisPuzzle">Вам сподобалась ця задача?</string>
   <string name="voteToLoadNextOne">Голосуйте, щоб перейти далі!</string>
-  <string name="upVote">Вподобати задачу</string>
-  <string name="downVote">Не вподобати задачу</string>
-  <string name="yourPuzzleRatingWillNotChange">Ваш рейтинг у задачах не зміниться. Зверніть увагу, що задачі - це не змагання. Ваш рейтинг допомагає підбирати задачі за вашими вміннями.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Вподобати задачу</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Не вподобати задачу</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Ваш рейтинг у задачах не зміниться. Зверніть увагу, що задачі - це не змагання. Ваш рейтинг допомагає підбирати задачі за вашими вміннями.</string>
   <string name="findTheBestMoveForWhite">Знайдіть найкращий хід за білих.</string>
   <string name="findTheBestMoveForBlack">Знайдіть найкращий хід за чорних.</string>
   <string name="toGetPersonalizedPuzzles">Для отримання персоналізованих задач:</string>
@@ -82,7 +82,7 @@
   <string name="fromMyGames">З моїх ігор</string>
   <string name="lookupOfPlayer">Знайти задачі з ігр користувача</string>
   <string name="searchPuzzles">Шукати задачі</string>
-  <string name="fromMyGamesNone">Ваших задач немає в базі даних, проте Lichess все одно дуже сильно вас любить.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Ваших задач немає в базі даних, проте Lichess все одно дуже сильно вас любить.
 Грайте ігри в рапід або з класичною системою контролю часу, для того щоб збільшити можливість додання вашої задачі!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Одну задачу знайдено в іграх від %2$s</item>
@@ -105,6 +105,6 @@
   </plurals>
   <string name="percentSolved">%s вирішено</string>
   <string name="noPuzzlesToShow">Немає що показати, спочатку вирішіть кілька задач!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Тренуйтеся, щоб покращити ваш прогрес!</string>
+  <string name="improvementAreasDescription">Тренуйтеся, щоб покращити ваш прогрес!</string>
   <string name="strengthDescription">Ви показуєте найкращий результат в наступних темах</string>
 </resources>

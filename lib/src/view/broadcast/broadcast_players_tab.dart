@@ -366,7 +366,8 @@ class BroadcastPlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final BroadcastPlayerWithOverallResult(
       :player,
-      :ratingDiff,
+      :ratingDiffs,
+      :ratingsMap,
       :score,
       :played,
       :rank,
@@ -417,25 +418,39 @@ class BroadcastPlayerRow extends StatelessWidget {
           ),
         ],
       ),
-      subtitle: federation != null
-          ? Row(
-              mainAxisSize: .min,
-              children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
-                const SizedBox(width: 5),
-                if (rating != null)
-                  Text(
-                    rating.toString(),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontFeatures: [FontFeature.tabularFigures()],
+      subtitle: Row(
+        mainAxisSize: .min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (federation != null) Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+          if (ratingsMap != null)
+            Column(
+              mainAxisAlignment: .start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: ratingsMap
+                  .mapTo(
+                    (tc, rating) => Row(
+                      mainAxisAlignment: .start,
+                      spacing: 4.0,
+                      children: [
+                        const SizedBox(width: 4),
+                        if (ratingsMap.length > 1) Icon(tc.icon, size: 14),
+                        Text(
+                          rating.toString(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
+                        ),
+                        if (ratingDiffs != null && ratingDiffs.get(tc) != null)
+                          ProgressionWidget(ratingDiffs.get(tc)!, fontSize: 13),
+                      ],
                     ),
-                  ),
-                const SizedBox(width: 4),
-                if (ratingDiff != null) ProgressionWidget(ratingDiff, fontSize: 13),
-              ],
-            )
-          : null,
+                  )
+                  .toList(),
+            ),
+        ],
+      ),
       trailing: rating != null || score != null
           ? SizedBox(
               width: 35,

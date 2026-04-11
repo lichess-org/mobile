@@ -109,7 +109,7 @@ Doduerch gëtt eng hotizontal Linn ugewisen.</string>
   <string name="studentsRealNamesOnePerLine">Richtegen Numm vun de Schüler, ee pro Zeil</string>
   <string name="xisNowAStudentOfTheClass">De Benotzer %s ass lo ee Schüler vum Cours</string>
   <string name="anInvitationHasBeenSentToX">Et gouf eng Invitatioun geschéckt un de Benotzer %s</string>
-  <string name="xIsAKidAccountWarning">%1$s ass ee Kannerkont a kann däi Message net empfänken. Du muss him d\'Invitatiouns-URL manuell ginn: %2$s</string>
+  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s ass ee Kannerkont a kann däi Message net empfänken. Du muss him d\'Invitatiouns-URL manuell ginn: %2$s</string>
   <string name="allowMessagingBetweenStudents">Messagen tëscht Schüler erlaben</string>
   <string name="allowMessagingBetweenStudentsDesc">Dat gëllt nëmme fir Konten, déi s du fir deng Schüler ugeluecht hues.</string>
 </resources>

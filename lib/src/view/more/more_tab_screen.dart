@@ -84,13 +84,7 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
-                      id: StringId('standalone'),
-                      orientation: Side.white,
-                      pgn: '',
-                      isComputerAnalysisAllowed: true,
-                      variant: Variant.standard,
-                    ),
+                    const AnalysisOptions.standalone(variant: Variant.standard),
                   ),
                 ),
               ),
@@ -104,8 +98,8 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   OpeningExplorerScreen.buildRoute(
                     context,
-                    const AnalysisOptions.standalone(
-                      id: StringId('standalone'),
+                    const AnalysisOptions.pgn(
+                      id: StringId('standalone_opening_explorer'),
                       orientation: Side.white,
                       pgn: '',
                       isComputerAnalysisAllowed: false,
@@ -120,10 +114,12 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.boardEditor),
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(BoardEditorScreen.buildRoute(context)),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  BoardEditorScreen.buildRoute(context, (
+                    initialVariant: Variant.standard,
+                    initialFen: null,
+                  )),
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.alarm_outlined),

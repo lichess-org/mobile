@@ -4,13 +4,19 @@ import 'package:dartchess/dartchess.dart';
 
 final _random = Random.secure();
 
-Position randomChess960Position() {
-  final rank8 = _positions[_random.nextInt(_positions.length)];
+Position chess960Position(int index) {
+  if (index < 0 || index >= _positions.length) {
+    throw ArgumentError('Index must be between 0 and ${_positions.length - 1}');
+  }
+
+  final rank8 = _positions[index];
 
   return Chess.fromSetup(
     Setup.parseFen('$rank8/pppppppp/8/8/8/8/PPPPPPPP/${rank8.toUpperCase()} w KQkq - 0 1'),
   );
 }
+
+Position randomChess960Position() => chess960Position(_random.nextInt(_positions.length));
 
 // https://github.com/lichess-org/scalachess/blob/bd139c6dc1acdc8fff08c46e412f784d49a16578/core/src/main/scala/variant/Chess960.scala#L49
 final _positions = [

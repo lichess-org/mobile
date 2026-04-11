@@ -10,79 +10,10 @@ import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 import '../../network/fake_http_client_factory.dart';
-import '../../test_container.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
-  group('followingStatusesProvider', () {
-    test('returns empty lists when following is empty', () async {
-      bool getUsersStatusesCalled = false;
-
-      final mockClient = MockClient((request) {
-        if (request.url.path == '/api/rel/following') {
-          return mockResponse('', 200);
-        }
-        if (request.url.path == '/api/users/status') {
-          getUsersStatusesCalled = true;
-          return mockResponse('[]', 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final container = await lichessClientContainer(mockClient);
-
-      final result = await container.read(followingStatusesProvider.future);
-
-      expect(result.$1, isA<IList<User>>());
-      expect(result.$1.isEmpty, true);
-      expect(result.$2, isA<IList<UserStatus>>());
-      expect(result.$2.isEmpty, true);
-
-      expect(getUsersStatusesCalled, false);
-    });
-
-    test('calls getUsersStatuses when following is not empty', () async {
-      bool getUsersStatusesCalled = false;
-
-      const String expectedId = 'testuser';
-      const bool expectedOnlineStatus = true;
-
-      final mockClient = MockClient((request) {
-        if (request.url.path == '/api/rel/following') {
-          return mockResponse(
-            '{"id":"testuser","username":"TestUser","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}',
-            200,
-          );
-        }
-        if (request.url.path == '/api/users/status' && request.url.query.contains('ids=testuser')) {
-          getUsersStatusesCalled = true;
-          return mockResponse('''
-[
-  {
-    "id": "$expectedId",
-    "name": "TestUser",
-    "online": $expectedOnlineStatus
-  }
-]
-''', 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final container = await lichessClientContainer(mockClient);
-
-      final result = await container.read(followingStatusesProvider.future);
-
-      expect(result.$1.length, 1);
-      expect(result.$1.first.id.value, expectedId);
-      expect(result.$2.length, 1);
-      expect(result.$2.first.online, expectedOnlineStatus);
-
-      expect(getUsersStatusesCalled, true);
-    });
-  });
-
   group('widget tests', () {
     testWidgets('shows CenterLoadingIndicator before request completes', (
       WidgetTester tester,

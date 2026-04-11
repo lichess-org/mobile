@@ -178,6 +178,13 @@ class PuzzleRepository {
     );
   }
 
+  Future<IList<PuzzleId>> puzzleReplay(int days, String theme) {
+    return client.readJson(
+      Uri(path: '/api/puzzle/replay/$days/$theme'),
+      mapper: _puzzleReplayFromJson,
+    );
+  }
+
   PuzzleBatchResponse _decodeBatchResponse(Map<String, dynamic> json) {
     final puzzles = json['puzzles'];
     if (puzzles is! List<dynamic>) {
@@ -241,6 +248,14 @@ sealed class PuzzleStormResponse with _$PuzzleStormResponse {
 }
 
 // --
+
+IList<PuzzleId> _puzzleReplayFromJson(Map<String, dynamic> json) {
+  return pick(
+    json,
+    'replay',
+    'remaining',
+  ).asListOrThrow((p) => PuzzleId(p.asStringOrThrow())).toIList();
+}
 
 PuzzleHistoryEntry _puzzleActivityFromJson(Map<String, dynamic> json) =>
     _historyPuzzleFromPick(pick(json).required());

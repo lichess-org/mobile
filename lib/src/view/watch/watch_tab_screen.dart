@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
@@ -73,7 +74,9 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
         ref.invalidate(broadcastsPaginatorProvider);
         ref.invalidate(featuredChannelsProvider);
-        ref.invalidate(liveStreamersProvider);
+        if (!(ref.read(kidModeProvider).value ?? false)) {
+          ref.invalidate(liveStreamersProvider);
+        }
       }
     });
 
@@ -153,7 +156,10 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
     final featuredChannels = ref.watch(featuredChannelsProvider);
-    final streamers = ref.watch(liveStreamersProvider);
+    final isKidMode = ref.watch(kidModeProvider).value ?? false;
+    final streamers = isKidMode
+        ? const AsyncValue.data(IListConst<Streamer>([]))
+        : ref.watch(liveStreamersProvider);
     final isTablet = isTabletOrLarger(context);
 
     final content = [
@@ -163,12 +169,12 @@ class _BodyState extends ConsumerState<_Body> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(child: _WatchTvWidget(featuredChannels)),
-            Expanded(child: _StreamerWidget(streamers)),
+            if (!isKidMode) Expanded(child: _StreamerWidget(streamers)),
           ],
         )
       else ...[
         _WatchTvWidget(featuredChannels),
-        _StreamerWidget(streamers),
+        if (!isKidMode) _StreamerWidget(streamers),
       ],
     ];
 
@@ -180,7 +186,7 @@ Future<void> _doRefreshDataForRef(WidgetRef ref) {
   return Future.wait([
     ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
-    ref.refresh(liveStreamersProvider.future),
+    if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
   ]);
 }
 

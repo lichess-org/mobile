@@ -103,6 +103,8 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 
     return '$sidePiece$side • $mode • $time$variantStr';
   }
+
+  bool get isOpenOrRealTime => timeControl == ChallengeTimeControlType.clock || destUser == null;
 }
 
 /// A challenge request to play a game with another user.
@@ -111,7 +113,8 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
   const ChallengeRequest._();
 
   const factory ChallengeRequest({
-    required LightUser destUser,
+    // If null, it's an open challenge that anyone (even anonymous users) can accept.
+    LightUser? destUser,
     required Variant variant,
     required ChallengeTimeControlType timeControl,
     ({Duration time, Duration increment})? clock,
@@ -140,6 +143,8 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
       if (sideChoice != SideChoice.random) 'color': sideChoice.name,
     };
   }
+
+  bool get isOpenOrRealTime => timeControl == ChallengeTimeControlType.clock || destUser == null;
 }
 
 /// The user response of a challenge request.

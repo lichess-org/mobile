@@ -8,14 +8,15 @@
   <string name="advanced">מתקדם</string>
   <string name="lengths">אורך</string>
   <string name="mates">מט</string>
+  <string name="mateThemes">מוטיבים של מט</string>
   <string name="goals">יעדים</string>
   <string name="origin">מקור</string>
   <string name="specialMoves">צעדים מיוחדים</string>
   <string name="didYouLikeThisPuzzle">אהבת את החידה?</string>
   <string name="voteToLoadNextOne">יש לדרג לקבלת החידה הבאה!</string>
-  <string name="upVote">הצבעה בעד החידה</string>
-  <string name="downVote">הצבעה נגד החידה</string>
-  <string name="yourPuzzleRatingWillNotChange">דירוג החידות שלך לא ישתנה. שימו לב כי פתירת חידות אינה תחרות. הדירוג נועד לאפשר בחירה של חידות המתאימות לרמה הנוכחית שלך.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">הצבעה בעד החידה</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">הצבעה נגד החידה</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">דירוג החידות שלך לא ישתנה. שימו לב כי פתירת חידות אינה תחרות. הדירוג נועד לאפשר בחירה של חידות המתאימות לרמה הנוכחית שלך.</string>
   <string name="findTheBestMoveForWhite">מצא/י את המהלך הטוב ביותר ללבן.</string>
   <string name="findTheBestMoveForBlack">מצא/י את המהלך הטוב ביותר לשחור.</string>
   <string name="toGetPersonalizedPuzzles">לקבלת חידות מותאמות אישית:</string>
@@ -81,7 +82,7 @@
   <string name="fromMyGames">מהמשחקים שלי</string>
   <string name="lookupOfPlayer">חפש פאזלים ממשחקים של אחד השחקנים</string>
   <string name="searchPuzzles">חיפוש פאזלים</string>
-  <string name="fromMyGamesNone">אין פאזלים מהמשחקים שלך במאגר, אך אנחנו עדיין אוהבים אותך!
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">אין פאזלים מהמשחקים שלך במאגר, אך אנחנו עדיין אוהבים אותך!
 שחק/י משחקי Rapid ו־Classical כדי להגדיל את הסבירות שיתווסף פאזל משלך!</string>
   <string name="puzzleDashboardDescription">אימון וניתוח יובילו לשיפור</string>
   <plurals name="nbPlayed">
@@ -98,6 +99,6 @@
   </plurals>
   <string name="percentSolved">%s נפתרו</string>
   <string name="noPuzzlesToShow">אין מה להראות, לכו לפתור כמה חידות קודם!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">התאמנו על אלה כדי לשפר את ההתקדמות שלכם!</string>
+  <string name="improvementAreasDescription">התאמנו על אלה כדי לשפר את ההתקדמות שלכם!</string>
   <string name="strengthDescription">את/ה מתפקד/ת הכי טוב בנושאים הבאים</string>
 </resources>

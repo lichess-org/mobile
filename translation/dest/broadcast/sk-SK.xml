@@ -25,10 +25,10 @@
   <string name="ongoing">Prebiehajúci</string>
   <string name="upcoming">Blížiace sa</string>
   <string name="roundName">Názov kola</string>
-  <string name="tournamentName">Názov turnaja</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Názov turnaja</string>
   <string name="tournamentDescription">Krátky popis turnaja</string>
-  <string name="fullDescription">Úplný popis turnaja</string>
-  <string name="fullDescriptionHelp">Voliteľný dlhý popis vysielania. %1$s je dostupný. Dĺžka musí byť menej ako %2$s znakov.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Úplný popis turnaja</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Voliteľný dlhý popis vysielania. %1$s je dostupný. Dĺžka musí byť menej ako %2$s znakov.</string>
   <string name="sourceSingleUrl">Zdrojová URL pre PGN súbor</string>
   <string name="sourceUrlHelp">URL, ktorú bude Lichess kontrolovať, aby získal aktualizácie PGN. Musí byť verejne prístupná z internetu.</string>
   <string name="sourceGameIds">Až do 64 identifikátorov Lichess partií oddelených medzerami.</string>
@@ -67,7 +67,7 @@
   <string name="notYetStarted">Vysielanie sa ešte nezačalo.</string>
   <string name="officialWebsite">Oficiálna webstránka</string>
   <string name="officialStandings">Oficiálne poradie</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Viac možností nájdete na %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Viac možností nájdete na %s</string>
   <string name="webmastersPage">stránke tvorcu</string>
   <string name="embedThisBroadcast">Vložiť toto vysielanie na webovú stránku</string>
   <string name="ratingDiff">Ratingový rozdiel</string>
@@ -75,7 +75,7 @@
   <string name="score">Skóre</string>
   <string name="allTeams">Všetky tímy</string>
   <string name="tournamentFormat">Formát turnaja</string>
-  <string name="tournamentLocation">Miesto konania turnaja</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Miesto konania turnaja</string>
   <string name="topPlayers">Najlepší hráči</string>
   <string name="timezone">Časové pásmo</string>
   <string name="fideRatingCategory">Kategória FIDE ratingu</string>

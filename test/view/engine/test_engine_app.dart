@@ -28,6 +28,7 @@ import '../../test_provider_scope.dart';
 Future<void> makeEngineTestApp(
   WidgetTester tester, {
   GameId? gameId,
+  String? pgn,
   (BroadcastTournamentId, BroadcastRoundId, BroadcastGameId)? broadcastGame,
   int numEvalLines = 1,
 
@@ -151,10 +152,10 @@ Future<void> makeEngineTestApp(
         : AnalysisScreen(
             options: gameId != null
                 ? AnalysisOptions.archivedGame(orientation: Side.white, gameId: gameId)
-                : AnalysisOptions.standalone(
+                : AnalysisOptions.pgn(
                     id: const StringId('standalone'),
                     orientation: Side.white,
-                    pgn: '',
+                    pgn: pgn ?? '',
                     isComputerAnalysisAllowed: isComputerAnalysisAllowed,
                     variant: Variant.standard,
                   ),

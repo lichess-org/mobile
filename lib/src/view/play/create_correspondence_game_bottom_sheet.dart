@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
   const CreateCorrespondenceGameBottomSheet({super.key});
@@ -86,9 +87,9 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                 onPressed: () {
                   showChoicePicker(
                     context,
-                    choices: [Variant.standard, Variant.chess960],
+                    choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
                     selectedItem: preferences.customVariant,
-                    labelBuilder: (Variant variant) => Text(variant.label),
+                    labelBuilder: (variant) => VariantLabel(variant),
                     onSelectedItemChanged: (Variant variant) {
                       ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
                     },

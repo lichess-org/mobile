@@ -18,7 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Domov</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Prenašalci v živo</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Prijavite se za ogled te strani.</string>
-  <string name="newGame" comment="New game button for the features to play over the board &amp; against offline computer">Nova igra</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Nova igra</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ni rezultatov</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Upoštevajte, da trenutno niso na voljo vse funkcije iz stare aplikacije ali spletnega mesta, vendar jih ves čas dodajamo.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ne sledite nobenemu uporabniku.</string>
@@ -88,4 +88,5 @@
   <string name="openingExplorerNotAvailableOffline" comment="">Odpiranje Raziskovalca ni na voljo brez povezave.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Izziv ustvarjen: Obveščeni boste, ko se igra začne. Do njega lahko dostopate na zavihku Domov.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Prejšnji</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ali uvozite datoteko PGN</string>
 </resources>

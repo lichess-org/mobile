@@ -25,10 +25,10 @@
   <string name="ongoing">Текущие</string>
   <string name="upcoming">Предстоящие</string>
   <string name="roundName">Название тура</string>
-  <string name="tournamentName">Название турнира</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Название турнира</string>
   <string name="tournamentDescription">Краткое описание турнира</string>
-  <string name="fullDescription">Полное описание события</string>
-  <string name="fullDescriptionHelp">Необязательное полное описание трансляции. Доступна разметка %1$s. Длина должна быть меньше %2$s символов.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Полное описание события</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Необязательное полное описание трансляции. Доступна разметка %1$s. Длина должна быть меньше %2$s символов.</string>
   <string name="sourceSingleUrl">Исходный URL PGN</string>
   <string name="sourceUrlHelp">URL-адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.</string>
   <string name="sourceGameIds">До 64 идентификаторов (ID) игр Lichess, разделённых пробелами.</string>
@@ -67,7 +67,7 @@
   <string name="notYetStarted">Трансляция ещё не началась.</string>
   <string name="officialWebsite">Официальный веб-сайт</string>
   <string name="officialStandings">Официальная турнирная таблица</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">Больше опций на %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Больше опций на %s</string>
   <string name="webmastersPage">странице веб-мастера</string>
   <string name="embedThisBroadcast">Встройте эту трансляцию на ваш сайт</string>
   <string name="ratingDiff">Разница в рейтингах</string>
@@ -76,7 +76,7 @@
   <string name="standingsDisclaimer">Турнирная таблица рассчитывается по транслируемым партиям и может отличаться от официальных результатов.</string>
   <string name="allTeams">Все клубы</string>
   <string name="tournamentFormat">Формат турнира</string>
-  <string name="tournamentLocation">Местоположение турнира</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Местоположение турнира</string>
   <string name="topPlayers">Лучшие игроки</string>
   <string name="timezone">Часовой пояс</string>
   <string name="fideRatingCategory">Категория рейтинга FIDE</string>
@@ -108,6 +108,6 @@
   <string name="semifinals">Полуфиналы</string>
   <string name="finals">Финалы</string>
   <string name="tiebreaks">Тай-брейки</string>
-  <string name="gameX" comment="%s is the number of the game in a tournament format.&#10;&#10;Examples:&#10;&quot;Game 1&quot;&#10;&quot;Game 3&quot;">%s партий</string>
+  <string name="gameX">%s партий</string>
   <string name="knockouts">Нокауты</string>
 </resources>

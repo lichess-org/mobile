@@ -8,13 +8,16 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -34,10 +37,6 @@ class OpeningExplorerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
-    final boardState = switch (ref.watch(ctrlProvider)) {
-      AsyncData(value: final state) => state.currentPosition,
-      _ => null,
-    };
 
     final body = switch (ref.watch(ctrlProvider)) {
       AsyncData(value: final state) => _Body(options: options, state: state),
@@ -46,20 +45,42 @@ class OpeningExplorerScreen extends ConsumerWidget {
       ),
       _ => const CenterLoadingIndicator(),
     };
-    return Scaffold(
-      body: body,
-      appBar: AppBar(
-        title: Text(context.l10n.openingExplorer),
-        actions: [
-          if (boardState != null)
+    return WakelockWidget(
+      child: Scaffold(
+        body: body,
+        appBar: AppBar(
+          title: Text(context.l10n.openingExplorer),
+          actions: [
             SemanticIconButton(
-              semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-              onPressed: () => launchShareDialog(context, ShareParams(text: boardState.fen)),
+              semanticsLabel: context.l10n.studyShareAndExport,
+              onPressed: () => _showShareMenu(context, ref),
               icon: const PlatformShareIcon(),
             ),
-        ],
-        bottom: _MoveList(options: options),
+          ],
+          bottom: _MoveList(options: options),
+        ),
       ),
+    );
+  }
+
+  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
+          onPressed: () {
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
+          onPressed: () {
+            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+            launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
+          },
+        ),
+      ],
     );
   }
 }
@@ -162,16 +183,19 @@ class _Body extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      OpeningExplorerView(
-                        pov: options.orientation,
-                        position: state.currentPosition,
-                        opening: state.currentNode.isRoot
-                            ? LightOpening(eco: '', name: context.l10n.startPosition)
-                            : state.currentNode.opening ?? state.currentBranchOpening,
-                        onMoveSelected: (move) {
-                          ref.read(analysisControllerProvider(options).notifier).onUserMove(move);
-                        },
-                        scrollable: false,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: remainingHeight),
+                        child: OpeningExplorerView(
+                          pov: options.orientation,
+                          position: state.currentPosition,
+                          opening: state.currentNode.isRoot
+                              ? LightOpening(eco: '', name: context.l10n.startPosition)
+                              : state.currentNode.opening ?? state.currentBranchOpening,
+                          onMoveSelected: (move) {
+                            ref.read(analysisControllerProvider(options).notifier).onUserMove(move);
+                          },
+                          scrollable: false,
+                        ),
                       ),
                     ],
                   );

@@ -275,10 +275,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+
+  @override
+  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'الأنشطة';
@@ -1998,6 +2031,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'إزالة قطعة ذات أهمية حاسمة للدفاع عن قطعة أخرى، مما يسمح للقطعة التي لا يمكن الدفاع عنها الآن أن يتم الاستيلاء عليها في الحركة التالية.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
@@ -2772,10 +2811,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get multipleLines => 'عدد الخطوط';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'المعالجات';
 
   @override
   String get memory => 'الذاكرة';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'تحليل لانهائي';
@@ -2935,7 +2995,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signupUsernameHint => 'تأكد من اختيار اسم مستخدم صديق للعائلة. لا يمكنك تغييره لاحقًا وأي حسابات تحتوي على أسماء مستخدمين غير ملائمة سيتم إغلاقها!';
 
   @override
-  String get signupEmailHint => 'سوف نستخدمه فقط لإعادة تعيين كلمة المرور.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'كلمة السر';
@@ -3819,6 +3879,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidAuthenticationCode => 'رمز مصادقة غير صحيح';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'أرسل لي الرابط بالبريد الإلكتروني';
 
   @override
@@ -4187,18 +4256,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'متغير دخول/خروج';
-
-  @override
-  String get keyRequestComputerAnalysis => 'اطلب تحليل الحاسوب وتعلم من أخطائك';
-
-  @override
-  String get keyNextBlunder => 'الخطأ الفادح التالي';
-
-  @override
-  String get keyNextMistake => 'الخطأ التالي';
-
-  @override
-  String get keyNextInaccuracy => 'النقلة غير الدقيقة التالية';
 
   @override
   String get keyPreviousBranch => 'التفريع السابق';
@@ -4753,9 +4810,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'أوافق على أني سأتبع سياسات الموقع.';
-
-  @override
   String get searchOrStartNewDiscussion => 'البحث أو بدء محادثة جديدة';
 
   @override
@@ -5113,6 +5167,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clearSearch => 'مسح البحث';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'تصنيفات';

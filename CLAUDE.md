@@ -79,6 +79,21 @@ dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not 
 dart format lib/src test
 ```
 
+### Formatting Rules (CRITICAL)
+
+**Always run `dart format` on every file you edit before finishing.** CI will fail if formatting is wrong.
+
+```bash
+dart format path/to/file.dart
+```
+
+The formatter is configured via `analysis_options.yaml` (`formatter: page_width: 100`) and `dart format` picks this up automatically. Key rules enforced by the formatter:
+
+- **Page width: 100 characters** — lines exceeding 100 chars will be reflowed
+- **Trailing commas drive formatting**: a trailing comma after the last argument/parameter forces the formatter to expand the list to one-item-per-line; omitting it allows the formatter to keep items on one line if they fit within 100 chars
+- **Do not manually wrap lines** — let the formatter decide based on trailing commas and line length; hand-wrapping without trailing commas will be reformatted by the tool
+- The formatter may reformat code you didn't touch in the same expression if you change surrounding structure
+
 ## Translations (i18n)
 
 **CRITICAL**: Never manually edit `lib/l10n/app_*.arb` files - they are generated.

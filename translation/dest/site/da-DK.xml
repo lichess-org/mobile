@@ -132,8 +132,15 @@
   <string name="pinnedPieces">Bundne brikker</string>
   <string name="checkableKing">Konge der kan sættes i skak</string>
   <string name="multipleLines">Flere linjer</string>
+  <string name="multipleLinesDescription">Angiv antal evalueringslinjer og trækpile på brættet</string>
+  <string name="searchTime">Søgetid</string>
+  <string name="searchTimeDescription">Indstil tid til evaluering af friske positioner</string>
+  <string name="threads">Tråde</string>
+  <string name="threadsDescription">Indstil dette til under din CPU\'s trådantal, afkrydsningerne markerer er et godt og sikkert valg</string>
+  <string name="threadsDescriptionMobile">Flere tråde vil bruge mere batteri til bedre analyse</string>
   <string name="cpus">CPU\'er</string>
   <string name="memory">Hukommelse</string>
+  <string name="memoryDescription">Højere værdier kan forbedre ydeevnen</string>
   <string name="infiniteAnalysis">Uendelig analyse</string>
   <string name="removesTheDepthLimit">Fjerner dybdegrænsen, og holder din computer varm</string>
   <string name="blunder">Brøler</string>
@@ -237,7 +244,7 @@
   <string name="changeUsernameNotSame">Kun størrelsen af bogstaverne kan ændres. For eksempel \"bentlarsen\" til \"BentLarsen\".</string>
   <string name="changeUsernameDescription">Ændr dit brugernavn. Dette kan kun gøres én gang, og du kan kun ændre størrelsen på bogstaverne i dit brugernavn.</string>
   <string name="signupUsernameHint">Sørg for at vælge et familievenligt brugernavn. Du kan ikke ændre det senere, og alle konti med upassende brugernavne vil blive lukket!</string>
-  <string name="signupEmailHint">Vi vil kun bruge den til nulstilling af adgangskode.</string>
+  <string name="signupEmailPromise">Vi vil kun sende dig e-mails angående din konto og vil aldrig dele din e-mail.</string>
   <string name="password">Adgangskode</string>
   <string name="changePassword">Skift adgangskode</string>
   <string name="changeEmail">Skift e-mail</string>
@@ -595,6 +602,9 @@
   <string name="invalidUsernameOrPassword">Ugyldigt brugernavn eller adgangskode</string>
   <string name="incorrectPassword">Forkert adgangskode</string>
   <string name="invalidAuthenticationCode">Ugyldig godkendelseskode</string>
+  <string name="clearField">Ryd felt</string>
+  <string name="orSeparator">Eller</string>
+  <string name="logInByEmail">Log ind via e-mail</string>
   <string name="emailMeALink">E-mail mig et link</string>
   <string name="currentPassword">Nuværende adgangskode</string>
   <string name="newPassword">Ny adgangskode</string>
@@ -721,10 +731,6 @@
   <string name="keyCycleSelectedVariation">Gennemgå den valgte variant</string>
   <string name="keyShowOrHideComments">vis/skjul kommentar</string>
   <string name="keyEnterOrExitVariation">Start/slut variant</string>
-  <string name="keyRequestComputerAnalysis">Anmod om computeranalyse, Lær af dine fejl</string>
-  <string name="keyNextBlunder">Næste brøler</string>
-  <string name="keyNextMistake">Næste fejl</string>
-  <string name="keyNextInaccuracy">Næste unøjagtighed</string>
   <string name="keyPreviousBranch">Forrige gren</string>
   <string name="keyNextBranch">Næste gren</string>
   <string name="toggleVariationArrows">Slå variantpile til/fra</string>
@@ -913,7 +919,6 @@
   <string name="agreementAssistance">Jeg lover, at jeg på intet tidspunkt i løbet af mine partier vil modtage assistance (fra en skakcomputer, bog, database eller anden person).</string>
   <string name="agreementNice">Jeg lover, at jeg altid vil være respektfuld mod andre spillere.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Jeg er indforstået med, at jeg ikke opretter flere konti (undtagen af de grunde, der er angivet i %s).</string>
-  <string name="agreementPolicy">Jeg lover, at jeg vil overholde alle Lichess-politikker.</string>
   <string name="searchOrStartNewDiscussion">Søg eller start ny diskussion</string>
   <string name="edit">Rediger</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>
@@ -1026,6 +1031,7 @@ Alle driftsomkostninger, udvikling og indhold finansieres udelukkende af brugerd
   <string name="offline" comment="status of a user">offline</string>
   <string name="search">Søg</string>
   <string name="clearSearch">Ryd søgning</string>
+  <string name="thereAreNoResultsForX">Ingen resultater for \"%s\"</string>
   <string name="tags">Etiketter</string>
   <string name="enPassant">En passant</string>
 </resources>

@@ -237,7 +237,7 @@
   <string name="changeUsernameNotSame">Μόνο η αλλαγή γραμμάτων από μικρά σε κεφαλαία ή το αντίστροφο επιτρέπεται. Για παράδειγμα, το όνομα χρήστη \"johndoe\" μπορεί να τροποποιηθεί σε \"JohnDoe\".</string>
   <string name="changeUsernameDescription">Αλλάξτε το όνομα χρήστη σας. Η ενέργεια αυτή μπορεί να γίνει μόνο μία φορά, ενώ επιτρέπεται μόνο η αλλαγή των γραμμάτων από μικρά σε κεφαλαία ή το αντίστροφο.</string>
   <string name="signupUsernameHint">Eπιλέξτε ένα φιλικό προς την οικογένεια όνομα χρήστη, καθώς δε θα έχετε τη δυνατότητα να το αλλάξετε αργότερα. Τονίζουμε πως λογαριασμοί με ακατάλληλα ονόματα χρήστη θα απενεργοποιούνται!</string>
-  <string name="signupEmailHint">Θα τη χρησιμοποιήσουμε μόνο για την επαναφορά του κωδικού πρόσβασης.</string>
+  <string name="signupEmailPromise">Το email σας θα χρησιμοποιηθεί αποκλειστικά για ενημερώσεις σχετικά με τον λογαριασμό σας και ποτέ δεν θα κοινοποιηθεί σε τρίτους.</string>
   <string name="password">Κωδικός</string>
   <string name="changePassword">Αλλαγή κωδικού</string>
   <string name="changeEmail">Αλλαγή διεύθυνσης email</string>
@@ -595,6 +595,9 @@
   <string name="invalidUsernameOrPassword">Άκυρο όνομα χρήστη ή κωδικός</string>
   <string name="incorrectPassword">Εσφαλμένος κωδικός πρόσβασης</string>
   <string name="invalidAuthenticationCode">Μη έγκυρος κωδικός επαλήθευσης</string>
+  <string name="clearField">Καθαρισμός πεδίου</string>
+  <string name="orSeparator">Ή</string>
+  <string name="logInByEmail">Συνδεθείτε μέσω email</string>
   <string name="emailMeALink">Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου</string>
   <string name="currentPassword">Τρέχων κωδικός πρόσβασης</string>
   <string name="newPassword">Νέος κωδικός πρόσβασης</string>
@@ -721,10 +724,6 @@
   <string name="keyCycleSelectedVariation">Επιλογή επόμενης βαριάντας</string>
   <string name="keyShowOrHideComments">εμφάνιση / απόκρυψη σχολίων</string>
   <string name="keyEnterOrExitVariation">είσοδος / έξοδος εκδοχής</string>
-  <string name="keyRequestComputerAnalysis">Ζητήστε ανάλυση της παρτίδας από υπολογιστή (Μάθετε από τα λάθη σας)</string>
-  <string name="keyNextBlunder">Επόμενο σοβαρό σφάλμα</string>
-  <string name="keyNextMistake">Επόμενο λάθος</string>
-  <string name="keyNextInaccuracy">Επόμενη ανακρίβεια</string>
   <string name="keyPreviousBranch">Προηγούμενος κλάδος</string>
   <string name="keyNextBranch">Επόμενος κλάδος</string>
   <string name="toggleVariationArrows">Εμφάνιση/απόκρυψη βελών για βαριάντες</string>
@@ -913,7 +912,6 @@
   <string name="agreementAssistance">Δηλώνω ότι ουδέποτε θα λάβω βοήθεια κατά τη διάρκεια των παρτίδων μου (από υπολογιστή, βιβλίο, βάση δεδομένων ή άλλο πρόσωπο).</string>
   <string name="agreementNice">Δηλώνω ότι πάντα θα επιδεικνύω σεβασμό προς όλους του παίκτες.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Δηλώνω ότι δε θα δημιουργήσω πολλούς λογαριασμούς (εκτός από τους λόγους προβλέπονται από τους %s).</string>
-  <string name="agreementPolicy">Δηλώνω ότι θα συμμορφωθώ με όλες τις πολιτικές του Lichess.</string>
   <string name="searchOrStartNewDiscussion">Αναζήτηση ή έναρξη νέας συνομιλίας</string>
   <string name="edit">Επεξεργασία</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">UltraBullet</string>
@@ -1025,6 +1023,7 @@
   <string name="offline" comment="status of a user">εκτός σύνδεσης</string>
   <string name="search">Αναζήτηση</string>
   <string name="clearSearch">Εκκαθάριση πεδίου αναζήτησης</string>
+  <string name="thereAreNoResultsForX">Δε βρέθηκαν αποτελέσματα για το «%s»</string>
   <string name="tags">Ετικέτες</string>
   <string name="enPassant">En passant</string>
 </resources>

@@ -275,10 +275,43 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åpningsutforskeren krever nett.';
 
   @override
-  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\\nDu kan åpne det fra Hjem-fanen.';
+  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\nDu kan åpne det fra Hjem-fanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';
+
+  @override
+  String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
+
+  @override
+  String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
+
+  @override
+  String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
+
+  @override
+  String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
+
+  @override
+  String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -900,7 +933,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastScore => 'Poengsum';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Stillingen beregnes basert på overførte partier og kan avvike fra de offisielle resultatene.';
 
   @override
   String get broadcastAllTeams => 'Alle lag';
@@ -947,23 +980,23 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Kamppoeng';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Partipoeng';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Kamper';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Kamphistorikk';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Lagresultater';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'Følgende begrep(er) vil bli oversatt automatisk: $param.';
   }
 
   @override
@@ -1014,7 +1047,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastFinals => 'Finaler';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Kvalitet';
 
   @override
   String broadcastGameX(String param) {
@@ -1886,6 +1919,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kollineært trekk';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'To brikker truer hverandre, og én av dem flytter langs angrepslinjen uten å slå.';
+
+  @override
   String get puzzleThemeCornerMate => 'Hjørnematt';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsNb extends AppLocalizations {
   String get multipleLines => 'Flere varianter';
 
   @override
+  String get multipleLinesDescription => 'Angi antall evalueringslinjer og trekkpiler på brettet';
+
+  @override
+  String get searchTime => 'Søketid';
+
+  @override
+  String get searchTimeDescription => 'Angi tid for å evaluere nye stillinger';
+
+  @override
+  String get threads => 'Tråder';
+
+  @override
+  String get threadsDescription => 'Sett denne lavere enn antall tråder på CPU-en din; merkene viser et trygt og godt valg';
+
+  @override
+  String get threadsDescriptionMobile => 'Flere tråder vil bruke mer batteri for bedre analyse';
+
+  @override
   String get cpus => 'Prosessorer';
 
   @override
   String get memory => 'Minne';
+
+  @override
+  String get memoryDescription => 'Høyere verdier kan forbedre ytelsen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -2823,7 +2883,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get signupUsernameHint => 'Velg et sømmelig brukernavn. Det kan ikke endres, og alle kontoer med usømmelige brukernavn vil bli avsluttet.';
 
   @override
-  String get signupEmailHint => 'Vi bruker den bare når du tilbakestiller passordet ditt.';
+  String get signupEmailPromise => 'Vi sender deg bare e-poster om kontoen din og vil aldri dele e-postadressen din.';
 
   @override
   String get password => 'Passord';
@@ -3707,6 +3767,15 @@ class AppLocalizationsNb extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ugyldig autentiseringskode';
 
   @override
+  String get clearField => 'Tøm felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Logg inn via e-post';
+
+  @override
   String get emailMeALink => 'Send meg en lenke';
 
   @override
@@ -4077,18 +4146,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get keyEnterOrExitVariation => 'Gå inn i/ut av variant';
 
   @override
-  String get keyRequestComputerAnalysis => 'Be om maskinanalyse, lær av feilene dine';
-
-  @override
-  String get keyNextBlunder => 'Neste bukk';
-
-  @override
-  String get keyNextMistake => 'Neste feil';
-
-  @override
-  String get keyNextInaccuracy => 'Neste unøyaktighet';
-
-  @override
   String get keyPreviousBranch => 'Forrige gren';
 
   @override
@@ -4107,7 +4164,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get togglePositionAnnotations => 'Skru kommentarer for stillinger av eller på';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Skru kommentarer for observasjoner av eller på';
 
   @override
   String get variationArrowsInfo => 'Variantpiler lar deg navigere uten å bruke notasjonslisten.';
@@ -4641,9 +4698,6 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover å respektere alle Lichess\' retningslinjer.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søk eller start en ny diskusjon';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tøm søk';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for «$param»';
+  }
 
   @override
   String get tags => 'Merkelapper';

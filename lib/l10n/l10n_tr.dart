@@ -275,10 +275,43 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Açılış Kaşifi çevrimdışı kullanılamaz.';
 
   @override
-  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\\nOyuna ana sekmeden erişebilirsiniz.';
+  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
 
   @override
   String get mobilePreviousPage => 'Önceki';
+
+  @override
+  String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
+
+  @override
+  String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
+
+  @override
+  String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
+
+  @override
+  String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
+
+  @override
+  String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
+
+  @override
+  String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
+
+  @override
+  String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -1641,7 +1674,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'Maçın linki: $param';
+    return '$param oyunundan';
   }
 
   @override
@@ -1856,7 +1889,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeBalestraMateDescription => 'Fil matı gerçekleştirirken, vezir kalan kareleri kontrol eder.';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine matı';
+  String get puzzleThemeBlindSwineMate => 'Kör Dana matı';
 
   @override
   String get puzzleThemeBlindSwineMateDescription => 'İki kale, şahı mat etmek için 2x2 bir alanda işbirliği yapıyorlar.';
@@ -1884,6 +1917,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Bir taşı savunan diğer bir taşı ortadan kaldırarak savunmasız kalan taşı sonraki hamlede ele geçir.';
+
+  @override
+  String get puzzleThemeCollinearMove => 'Doğrusal hamle';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Karşılıklı duran iki taştan biri, düşman taşını ele geçirmeden saldırı hattı boyunca kayar.';
 
   @override
   String get puzzleThemeCornerMate => 'Köşe matı';
@@ -1967,10 +2006,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Başlangıçta iki kare ileri giden kurnaz piyonun, rakip piyon ile yan yana geldikten sonra geçerken alma kuralı sebebiyle helvasının yendiği taktikler.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Apolet matı';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Şahın kaçabileceği iki bitişik kare, diğer taşlar tarafından kullanılmaktadır.';
 
   @override
   String get puzzleThemeExposedKing => 'Savunmasız şah';
@@ -2027,7 +2066,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Kale şahı sınırlarken, fil matı gerçekleştirir.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Kırlangıç kuyruğu matı';
 
   @override
   String get puzzleThemeSwallowstailMateDescription => 'Görsel olarak V şekline benzer bir kırlangıç kuyruğu görünümünü andıran bir şah mat deseni.';
@@ -2660,10 +2699,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get multipleLines => 'Çoklu varyantlar';
 
   @override
+  String get multipleLinesDescription => 'Değerlendirme satırlarının sayısını belirleyin ve tahtadaki okları hareket ettirin';
+
+  @override
+  String get searchTime => 'Arama süresi';
+
+  @override
+  String get searchTimeDescription => 'Yeni pozisyonları değerlendirmek için zamanı ayarlayın';
+
+  @override
+  String get threads => 'Çekirdek';
+
+  @override
+  String get threadsDescription => 'Bunu işlemcinizin çekirdek sayısının altına ayarlayın, işaretler iyi ve güvenli bir seçimi gösterir';
+
+  @override
+  String get threadsDescriptionMobile => 'Daha fazla çekirdek, daha iyi analiz için daha fazla pil tüketecektir';
+
+  @override
   String get cpus => 'İşlemci';
 
   @override
   String get memory => 'Hafıza';
+
+  @override
+  String get memoryDescription => 'Daha yüksek değerler performansı artırabilir';
 
   @override
   String get infiniteAnalysis => 'Sonsuz analiz';
@@ -2823,7 +2883,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get signupUsernameHint => 'Aile dostu bir kullanıcı adı seçtiğinizden emin olun. Kullanıcı adı daha sonra değiştirilemez ve uygunsuz kullanıcı adına sahip hesaplar kapatılır!';
 
   @override
-  String get signupEmailHint => 'Bunu yalnızca şifre sıfırlaması için kullanacağız.';
+  String get signupEmailPromise => 'Size yalnızca hesabınızla ilgili e-postalar göndereceğiz ve e-posta adresinizi asla paylaşmayacağız.';
 
   @override
   String get password => 'Şifre';
@@ -3707,6 +3767,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get invalidAuthenticationCode => 'Geçersiz kimlik doğrulama kodu';
 
   @override
+  String get clearField => 'Alanı temizle';
+
+  @override
+  String get orSeparator => 'Veya';
+
+  @override
+  String get logInByEmail => 'E-posta ile giriş yap';
+
+  @override
   String get emailMeALink => 'E-Posta ile giriş linki yolla';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'varyasyona gir/çık';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
-
-  @override
-  String get keyNextBlunder => 'Sonraki vahim hata';
-
-  @override
-  String get keyNextMistake => 'Sonraki hata';
-
-  @override
-  String get keyNextInaccuracy => 'Sonraki kusurlu hamle';
 
   @override
   String get keyPreviousBranch => 'Önceki dal';
@@ -4641,9 +4698,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichess kurallarını takip edeceğim.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Tartışma ara veya yenisini başlat';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Aramayı temizle';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '\"$param\" için sonuç bulunamadı';
+  }
 
   @override
   String get tags => 'Etiketler';
@@ -5702,7 +5761,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Çalışmalar $param tarafından oluşturulmuştur';
+    return '$param tarafından oluşturulan çalışmalar';
   }
 
   @override
@@ -6037,7 +6096,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyMistake => 'Hata';
 
   @override
-  String get studyBrilliantMove => 'Muhteşem hamle';
+  String get studyBrilliantMove => 'Göz alıcı hamle';
 
   @override
   String get studyBlunder => 'Vahim hata';

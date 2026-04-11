@@ -129,6 +129,8 @@
   <string name="pinnedPieces">Fiksitaj pecoj</string>
   <string name="checkableKing">Ŝakigebla reĝo</string>
   <string name="multipleLines">Pluraj linioj</string>
+  <string name="threads">Fadenoj</string>
+  <string name="threadsDescription">Elektu malsupre la nombron de fadenoj de via procesoro. La markoj indikas sekurajn elektojn</string>
   <string name="cpus">Ĉefprocesoroj</string>
   <string name="memory">Memoro</string>
   <string name="infiniteAnalysis">Senfina analizo</string>
@@ -190,7 +192,7 @@
   <string name="viewInFullSize">Vidi plengrande</string>
   <string name="logOut">Elsaluti</string>
   <string name="signIn">Ensaluti</string>
-  <string name="rememberMe">Memoru mian ensaluton</string>
+  <string name="rememberMe">Memori mian ensaluton</string>
   <string name="youNeedAnAccountToDoThat">Vi bezonas konton por fari tion</string>
   <string name="signUp">Registriĝi</string>
   <string name="computersAreNotAllowedToPlay">Estas nepermesate ludi per komputiloj aŭ komputilasisto. Bonvolu ne akiri asiston de iu ŝakaŭtomato, datumbazo aŭ aliaj ludantoj dum ludado. Krome, notu ke la kreado de multaj kontoj estas forte malrekomendata, kaj troa uzo de multaj kontoj rezultigos vian forbaron.</string>
@@ -234,7 +236,6 @@
   <string name="changeUsernameNotSame">Nur la uskleco de la literoj povas ŝanĝiĝi. Ekzemple de \"johndoe\" al \"JohnDoe\".</string>
   <string name="changeUsernameDescription">Ŝanĝu ĉiam uzantnomon. Vi rajtas fari tion nur unufoje kaj vi rajtas ŝanĝi nur la usklecon de la literoj en via nomo.</string>
   <string name="signupUsernameHint">Certigi, ke vi elektas uzantnomon, ke estas adekvata por ĉiu-aĝaj spektantoj. Vi ne povas ŝanĝi ĝin poste, kaj la administrantoj fermas ĉiujn ajn kontojn, kiuj havas malbonimpresajn uzantnomojn!</string>
-  <string name="signupEmailHint">Ni nur uzos ĝin por pasvorta restarigo.</string>
   <string name="password">Pasvorto</string>
   <string name="changePassword">Ŝanĝi pasvorton</string>
   <string name="changeEmail">Ŝanĝi retadreson</string>
@@ -428,6 +429,8 @@
   <string name="leaderboard">Sukcesotabulo</string>
   <string name="screenshotCurrentPosition">Ekrankopii nunan pozicion</string>
   <string name="gameAsGIF">Ludo kiel GIF</string>
+  <string name="playerNames">Nomoj de ludantoj</string>
+  <string name="moveAnnotations">Notoj pri movoj</string>
   <string name="pasteTheFenStringHere">Glui la FEN-ĉenon ĉi tie</string>
   <string name="pasteThePgnStringHere">Glui la PGN-ĉenon ĉi tie</string>
   <string name="orUploadPgnFile">Aŭ alŝuti PGN-dosieron</string>
@@ -590,6 +593,9 @@
   <string name="invalidUsernameOrPassword">Malĝusta uzantnomo aŭ pasvorto</string>
   <string name="incorrectPassword">Malkorekta pasvorto</string>
   <string name="invalidAuthenticationCode">Nevalida aŭtentigada kodo</string>
+  <string name="clearField">Viŝi kampon</string>
+  <string name="orSeparator">aŭ</string>
+  <string name="logInByEmail">Komenci seancon per retpoŝto</string>
   <string name="emailMeALink">Retpoŝte sendu al mi ligilon</string>
   <string name="currentPassword">Nuna pasvorto</string>
   <string name="newPassword">Nova pasvorto</string>
@@ -716,10 +722,6 @@
   <string name="keyCycleSelectedVariation">Cikligi elektan variaĵon</string>
   <string name="keyShowOrHideComments">(mal)montri komentojn</string>
   <string name="keyEnterOrExitVariation">eniru/forlasu variaĵon</string>
-  <string name="keyRequestComputerAnalysis">Peti komputilan analizon, Lerni de viaj eraroj</string>
-  <string name="keyNextBlunder">Sekva erarego</string>
-  <string name="keyNextMistake">Sekva eraro</string>
-  <string name="keyNextInaccuracy">Sekva erareto</string>
   <string name="keyPreviousBranch">Antaŭa branĉo</string>
   <string name="keyNextBranch">Sekva branĉo</string>
   <string name="toggleVariationArrows">Baskuligi variaĵojn sagojn</string>
@@ -812,6 +814,7 @@
   <string name="size">Amplekso</string>
   <string name="opacity">Opakeco</string>
   <string name="brightness">Lumeco</string>
+  <string name="contrast">Kontrasto</string>
   <string name="hue">Kolortono</string>
   <string name="boardReset">Restarigi kolorojn al la defaŭlta</string>
   <string name="pieceSet">Ŝakpecaro</string>
@@ -907,7 +910,6 @@
   <string name="agreementAssistance">Mi konsentas, ke mi neniam ricevos helpon dum miaj ludoj (de komputila programo, libro, datumbazo aŭ alia persono).</string>
   <string name="agreementNice">Mi konsentas, ke mi ĉiam estos respektema al aliaj ludantoj.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Mi konsentas ke mi ne faros plurajn kontojn (escepte pro la deklaritaj kialoj en la %s).</string>
-  <string name="agreementPolicy">Mi konsentas sekvi ĉiujn politikojn de Lichess.</string>
   <string name="searchOrStartNewDiscussion">Serĉi aŭ komenci novan konversacion</string>
   <string name="edit">Redakti</string>
   <string name="bullet" comment="Probably best left untranslated. Leave it as 'Bullet' unless your language has a better word for it.">Bullet</string>

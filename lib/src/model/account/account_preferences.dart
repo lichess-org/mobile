@@ -19,6 +19,7 @@ typedef AccountPrefState = ({
   SubmitMove submitMove,
   // clock
   Moretime moretime,
+  ClockTenths clockTenths,
   BooleanPref clockSound,
   // privacy
   BooleanPref follow,
@@ -53,6 +54,7 @@ final defaultAccountPreferences = (
   autoThreefold: AutoThreefold.always,
   takeback: Takeback.always,
   moretime: Moretime.always,
+  clockTenths: ClockTenths.lessThan10s,
   clockSound: const BooleanPref(true),
   confirmResign: const BooleanPref(true),
   submitMove: SubmitMove({SubmitMoveChoice.correspondence}),
@@ -97,6 +99,7 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
   Future<void> setAutoQueen(AutoQueen value) => _setPref('autoQueen', value);
   Future<void> setAutoThreefold(AutoThreefold value) => _setPref('autoThreefold', value);
   Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
+  Future<void> setClockTenths(ClockTenths value) => _setPref('clockTenths', value);
   Future<void> setClockSound(BooleanPref value) => _setPref('clockSound', value);
   Future<void> setConfirmResign(BooleanPref value) => _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
@@ -394,6 +397,44 @@ enum Moretime implements AccountPref<int> {
         return Moretime.always;
       default:
         throw Exception('Invalid value for Moretime');
+    }
+  }
+}
+
+enum ClockTenths implements AccountPref<int> {
+  never(0),
+  lessThan10s(1),
+  always(2);
+
+  const ClockTenths(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case ClockTenths.never:
+        return l10n.never;
+      case ClockTenths.lessThan10s:
+        return l10n.preferencesWhenTimeRemainingLessThanTenSeconds;
+      case ClockTenths.always:
+        return l10n.always;
+    }
+  }
+
+  static ClockTenths fromInt(int value) {
+    switch (value) {
+      case 0:
+        return ClockTenths.never;
+      case 1:
+        return ClockTenths.lessThan10s;
+      case 2:
+        return ClockTenths.always;
+      default:
+        throw Exception('Invalid value for ClockTenths: $value');
     }
   }
 }

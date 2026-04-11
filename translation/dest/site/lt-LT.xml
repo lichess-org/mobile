@@ -267,7 +267,6 @@
   <string name="changeUsernameNotSame">Galima keisti tik raidžių dydį. Pvz., „vardaspav“ į „VardasPav“.</string>
   <string name="changeUsernameDescription">Pasikeiskite naudotojo vardą. Tai gali būti atlikta tik kartą, ir keisti galite tik raidžių dydį.</string>
   <string name="signupUsernameHint">Įsitikinkite, kad jūsų vartotojo vardas yra tinkamas visų amžių auditorijai. Jo vėliau pasikeisti negalėsite. Bet kokie netinkami vartotojų vardai bus uždaryti!</string>
-  <string name="signupEmailHint">Jį naudosime tik atkurti slaptažodžiui.</string>
   <string name="password">Slaptažodis</string>
   <string name="changePassword">Keisti slaptažodį</string>
   <string name="changeEmail">Keisti el. pašto adresą</string>
@@ -800,10 +799,6 @@ kompiuterinę analizę, partijos pokalbį bei URL dalinimuisi.</string>
   <string name="keyCycleSelectedVariation">Praeiti pasirinktą variantą</string>
   <string name="keyShowOrHideComments">rodyti/slėpti komentarus</string>
   <string name="keyEnterOrExitVariation">įeiti/išeiti iš variacijos</string>
-  <string name="keyRequestComputerAnalysis">Paprašyti kompiuterio analizės, pasimokykite iš savo klaidų</string>
-  <string name="keyNextBlunder">Kita šiurkšti klaida</string>
-  <string name="keyNextMistake">Kita klaida</string>
-  <string name="keyNextInaccuracy">Kitas netiklsumas</string>
   <string name="keyPreviousBranch">Praeita atšaka</string>
   <string name="keyNextBranch">Sekanti atšaka</string>
   <string name="toggleVariationArrows">Rodyti variacijų rodykles</string>
@@ -1002,7 +997,6 @@ kompiuterinę analizę, partijos pokalbį bei URL dalinimuisi.</string>
   <string name="agreementAssistance">Pasižadu niekada savo partijų metu nesinaudoti kompiuterio, knygos, duomenų bazės ar kito žmogaus pagalba.</string>
   <string name="agreementNice">Pasižadu visada būti pagarbus kitiems žaidėjams.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Aš sutinku, kad nekursiu daugiau nei vienos paskyros (išskyrus priežastis nurodytas %s).</string>
-  <string name="agreementPolicy">Pasižadu laikytis visų „Lichess“ nuostatų.</string>
   <string name="searchOrStartNewDiscussion">Ieškokite, arba pradėkite naują diskusiją</string>
   <string name="edit">Keisti</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ultra-kulka</string>

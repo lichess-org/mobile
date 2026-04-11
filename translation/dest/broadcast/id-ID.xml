@@ -7,10 +7,10 @@
   <string name="ongoing">Sedang berlangsung</string>
   <string name="upcoming">Akan datang</string>
   <string name="roundName">Nama ronde</string>
-  <string name="tournamentName">Nama turnamen</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nama turnamen</string>
   <string name="tournamentDescription">Deskripsi singkat turnamen</string>
-  <string name="fullDescription">Keterangan acara secara penuh</string>
-  <string name="fullDescriptionHelp">Deskripsi panjang opsional dari siaran. %1$s tersedia. Panjangnya harus kurang dari %2$s karakter.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Keterangan acara secara penuh</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Deskripsi panjang opsional dari siaran. %1$s tersedia. Panjangnya harus kurang dari %2$s karakter.</string>
   <string name="sourceUrlHelp">URL yang akan di-polling oleh Lichess untuk mendapatkan pembaruan PGN. Itu harus dapat diakses publik dari Internet.</string>
   <string name="startDateHelp">Opsional, jika Anda tahu kapan acara dimulai</string>
   <string name="currentGameUrl">Tautan permainan ini</string>

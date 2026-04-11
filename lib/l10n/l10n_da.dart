@@ -275,10 +275,43 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åbningsudforsker er ikke tilgængelig offline.';
 
   @override
-  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\\nDu kan få adgang til det fra hjemfanen.';
+  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';
+
+  @override
+  String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
+
+  @override
+  String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
+
+  @override
+  String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
+
+  @override
+  String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1886,6 +1919,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Tag en brik som er kritisk i forsvaret af en anden brik, så det er muligt at tage den uforsvarede brik på et efterfølgende træk.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kollineært træk';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'To modspillende brikker står over for hinanden, og den ene glider langs angrebslinjen uden at slå den fjendtlige brik.';
+
+  @override
   String get puzzleThemeCornerMate => 'Hjørnemat';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsDa extends AppLocalizations {
   String get multipleLines => 'Flere linjer';
 
   @override
+  String get multipleLinesDescription => 'Angiv antal evalueringslinjer og trækpile på brættet';
+
+  @override
+  String get searchTime => 'Søgetid';
+
+  @override
+  String get searchTimeDescription => 'Indstil tid til evaluering af friske positioner';
+
+  @override
+  String get threads => 'Tråde';
+
+  @override
+  String get threadsDescription => 'Indstil dette til under din CPU\'s trådantal, afkrydsningerne markerer er et godt og sikkert valg';
+
+  @override
+  String get threadsDescriptionMobile => 'Flere tråde vil bruge mere batteri til bedre analyse';
+
+  @override
   String get cpus => 'CPU\'er';
 
   @override
   String get memory => 'Hukommelse';
+
+  @override
+  String get memoryDescription => 'Højere værdier kan forbedre ydeevnen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -2823,7 +2883,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get signupUsernameHint => 'Sørg for at vælge et familievenligt brugernavn. Du kan ikke ændre det senere, og alle konti med upassende brugernavne vil blive lukket!';
 
   @override
-  String get signupEmailHint => 'Vi vil kun bruge den til nulstilling af adgangskode.';
+  String get signupEmailPromise => 'Vi vil kun sende dig e-mails angående din konto og vil aldrig dele din e-mail.';
 
   @override
   String get password => 'Adgangskode';
@@ -3707,6 +3767,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get invalidAuthenticationCode => 'Ugyldig godkendelseskode';
 
   @override
+  String get clearField => 'Ryd felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Log ind via e-mail';
+
+  @override
   String get emailMeALink => 'E-mail mig et link';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'Start/slut variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Anmod om computeranalyse, Lær af dine fejl';
-
-  @override
-  String get keyNextBlunder => 'Næste brøler';
-
-  @override
-  String get keyNextMistake => 'Næste fejl';
-
-  @override
-  String get keyNextInaccuracy => 'Næste unøjagtighed';
 
   @override
   String get keyPreviousBranch => 'Forrige gren';
@@ -4641,9 +4698,6 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover, at jeg vil overholde alle Lichess-politikker.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søg eller start ny diskussion';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ryd søgning';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for \"$param\"';
+  }
 
   @override
   String get tags => 'Etiketter';

@@ -21,10 +21,10 @@
   <string name="ongoing">தொடரும்</string>
   <string name="upcoming">எதிர்வரும்</string>
   <string name="roundName">சுற்றுப் பெயர்</string>
-  <string name="tournamentName">பந்தயப் பெயர்</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">பந்தயப் பெயர்</string>
   <string name="tournamentDescription">பந்தயத்தின் குறுகிய விளக்கம்</string>
-  <string name="fullDescription">பந்தயத்தின் முழு விளக்கம்</string>
-  <string name="fullDescriptionHelp">பந்தயத்தின் நீண்ட விளக்கம் கட்டாயமற்றது. %1$s கிடைக்கிறது. நீளம் %2$s எழுத்துகளுக்குக் குறைவாக இருக்க வேண்டும்.</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">பந்தயத்தின் முழு விளக்கம்</string>
+  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">பந்தயத்தின் நீண்ட விளக்கம் கட்டாயமற்றது. %1$s கிடைக்கிறது. நீளம் %2$s எழுத்துகளுக்குக் குறைவாக இருக்க வேண்டும்.</string>
   <string name="sourceSingleUrl">PGN ஆதார URL</string>
   <string name="sourceUrlHelp">PGN புதுப்பிப்புகளைப் பெற லிசெஸ் சரிபார்க்கும் URL. இது இணையத்திலிருந்து பொதுவில் அணுகக்கூடியதாக இருக்க வேண்டும்.</string>
   <string name="sourceGameIds">64 லிசெஸ் ஆட்ட அடையாளங்கள் முடிய, இடைவெளிகளால் பிரிக்கப்பட்டது.</string>
@@ -62,7 +62,7 @@
   <string name="notYetStarted">ஒளிபரப்பு இன்னும் துவங்கவில்லை.</string>
   <string name="officialWebsite">அதிகாரப்பூர்வ இணையதளம்</string>
   <string name="officialStandings">அதிகாரப்பூர்வ நிலைகள்</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page'">%s இல் கூடுதல் தேர்வுரிமை</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">%s இல் கூடுதல் தேர்வுரிமை</string>
   <string name="webmastersPage">இணையவல்லுநர் பக்கம்</string>
   <string name="embedThisBroadcast">இந்த ஒளிபரப்பை உங்கள் இணையதளத்தில் உட்பொதிக்கவும்</string>
   <string name="ratingDiff">மதிப்பீடு வேறுபாடு</string>
@@ -70,7 +70,7 @@
   <string name="score">மதிப்பெண்</string>
   <string name="allTeams">அனைத்து கூட்டணிகள்</string>
   <string name="tournamentFormat">பந்தய வடிவம்</string>
-  <string name="tournamentLocation">பந்தய இடம்</string>
+  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">பந்தய இடம்</string>
   <string name="topPlayers">சிறந்த வீரர்கள்</string>
   <string name="timezone">நேர மண்டலம்</string>
   <string name="fideRatingCategory">FIDE மதிப்பீடு வகை</string>

@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -28,8 +27,10 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'study_controller.freezed.dart';
 
+typedef StudyOptions = ({StudyId id, StudyChapterId? initialChapter});
+
 final studyControllerProvider = AsyncNotifierProvider.autoDispose
-    .family<StudyController, StudyState, StudyId>(
+    .family<StudyController, StudyState, StudyOptions>(
       StudyController.new,
       name: 'StudyControllerProvider',
     );
@@ -37,9 +38,9 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 class StudyController extends AsyncNotifier<StudyState>
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
-  StudyController(this.id);
+  StudyController(this.options);
 
-  final StudyId id;
+  final StudyOptions options;
 
   late Root _root;
 
@@ -66,9 +67,9 @@ class StudyController extends AsyncNotifier<StudyState>
     });
 
     final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
+    _socketClient = socketPool.open(Uri(path: '/study/${options.id}/socket/v6'));
 
-    final chapter = await _fetchChapter(id);
+    final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
@@ -387,15 +388,6 @@ class StudyController extends AsyncNotifier<StudyState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  Future<void> toggleEngineThreatMode() async {
-    if (state.hasValue) {
-      state = AsyncData(
-        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
-      );
-      requestEval();
-    }
-  }
-
   void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 
@@ -506,8 +498,17 @@ class StudyController extends AsyncNotifier<StudyState>
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState with _$StudyState implements EvaluationMixinState, CommonAnalysisState {
+sealed class StudyState
+    with _$StudyState, AnalysisExplosionMixin, EvaluationMixinState<StudyState>
+    implements CommonAnalysisState {
   const StudyState._();
+
+  @override
+  ViewRoot? get analysisRoot => root;
+
+  @override
+  StudyState withThreatMode(bool engineInThreatMode) =>
+      copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory StudyState({
     UserId? myId,
@@ -648,9 +649,6 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
 
   PlayerSide get playerSide =>
       gamebookActive ? (pov == Side.white ? PlayerSide.white : PlayerSide.black) : PlayerSide.both;
-
-  ChatOptions? get chatOptions =>
-      study.chat != null ? StudyChatOptions(id: study.id, writeable: study.chat!.writeable) : null;
 }
 
 @freezed

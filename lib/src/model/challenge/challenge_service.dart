@@ -6,9 +6,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -69,13 +71,6 @@ class ChallengeService {
     });
   }
 
-  /// Accept a challenge and return the created game's full ID.
-  Future<GameFullId?> acceptChallenge(ChallengeId id) async {
-    final challengeRepo = ref.read(challengeRepositoryProvider);
-    await challengeRepo.accept(id);
-    return await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
-  }
-
   void _onSocketEvent(ChallengesList current) {
     _previous = _current;
     _current = current;
@@ -124,12 +119,12 @@ class ChallengeService {
 
     switch (actionid) {
       case 'accept':
-        await _acceptChallenge(challengeId);
+        await acceptChallenge(challengeId);
 
       case 'decline':
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context == null || !context.mounted) break;
-        _showDeclineDialog(context, challengeId);
+        showDeclineDialog(context, challengeId);
 
       case null:
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -138,7 +133,7 @@ class ChallengeService {
           (challenge) => challenge.id == challengeId,
         );
         if (challenge != null) {
-          _showConfirmDialog(context, challenge);
+          showConfirmDialog(context, challenge);
         } else {
           Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
         }
@@ -150,10 +145,10 @@ class ChallengeService {
     final challenge = await ref.read(challengeRepositoryProvider).show(id);
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
-    _showConfirmDialog(context, challenge);
+    showConfirmDialog(context, challenge);
   }
 
-  Future<void> _onChallengeAccepted(GameFullId fullId) async {
+  void _onChallengeAccepted(GameFullId fullId) {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
@@ -168,8 +163,17 @@ class ChallengeService {
     ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
   }
 
-  Future<void> _acceptChallenge(ChallengeId id) async {
-    final fullId = await acceptChallenge(id);
+  /// Accept a challenge and open the GameScreen for the created game.
+  Future<void> acceptChallenge(ChallengeId id) async {
+    // Cancel any pending lobby seek before accepting, to prevent being matched into a new game
+    // while accepting a challenge.
+    try {
+      await ref.read(createGameServiceProvider).cancelSeek();
+    } catch (_) {}
+
+    final challengeRepo = ref.read(challengeRepositoryProvider);
+    await challengeRepo.accept(id);
+    final fullId = await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
 
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
@@ -178,10 +182,12 @@ class ChallengeService {
       return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
     }
 
+    ref.invalidate(ongoingGamesProvider);
+
     _onChallengeAccepted(fullId);
   }
 
-  void _showDeclineDialog(BuildContext context, ChallengeId id) {
+  void showDeclineDialog(BuildContext context, ChallengeId id) {
     showAdaptiveActionSheet<ChallengeDeclineReason>(
       context: context,
       title: Text(context.l10n.decline),
@@ -200,12 +206,18 @@ class ChallengeService {
     );
   }
 
-  void _showConfirmDialog(BuildContext context, Challenge challenge) {
+  void showConfirmDialog(
+    BuildContext context,
+    Challenge challenge, {
+    String? title,
+    bool fromLink = false,
+  }) {
     showAdaptiveActionSheet<void>(
       context: context,
-      title: challenge.variant.isPlaySupported
+      title: challenge.challenger != null && challenge.variant.isPlaySupported
           ? Text(
-              '${challenge.challenger!.user.name} challenges you: ${challenge.description(context.l10n)}',
+              title ??
+                  '${challenge.challenger!.user.name} challenges you: ${challenge.description(context.l10n)}',
             )
           : null,
       actions: [
@@ -214,14 +226,21 @@ class ChallengeService {
             makeLabel: (context) => Text(context.l10n.accept),
             leading: Icon(Icons.check, color: context.lichessColors.good),
             isDefaultAction: true,
-            onPressed: () async => await _acceptChallenge(challenge.id),
+            onPressed: () async => await acceptChallenge(challenge.id),
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.decline),
-          leading: Icon(Icons.clear, color: context.lichessColors.error),
-          isDestructiveAction: true,
-          onPressed: () => _showDeclineDialog(context, challenge.id),
-        ),
+        if (fromLink && Theme.of(context).platform != TargetPlatform.iOS)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancel),
+            leading: const Icon(Icons.close),
+            onPressed: () {},
+          )
+        else if (!fromLink)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.decline),
+            leading: Icon(Icons.clear, color: context.lichessColors.error),
+            isDestructiveAction: true,
+            onPressed: () => showDeclineDialog(context, challenge.id),
+          ),
       ],
     );
   }

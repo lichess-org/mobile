@@ -7,9 +7,9 @@
   <string name="ongoing">Házirgi</string>
   <string name="upcoming">Kelesi</string>
   <string name="roundName">Tur ataması</string>
-  <string name="tournamentName">Turnir ataması</string>
+  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Turnir ataması</string>
   <string name="tournamentDescription">Turnirdiń qısqasha táriypi</string>
-  <string name="fullDescription">Turnirdiń tolıq táriypi</string>
+  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Turnirdiń tolıq táriypi</string>
   <string name="currentGameUrl">Házirgi oyın URL mánzili</string>
   <string name="downloadAllRounds">Barlıq turlardı júklep alıw</string>
   <string name="resetRound">Bul turdı qayta ornatıw</string>

@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -49,11 +50,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final online = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        titleSpacing: 0,
         title: account.when(
-          data: (user) =>
-              user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+          data: (user) => user == null
+              ? const SizedBox.shrink()
+              : ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: UserAvatar(user.lightUser, radius: 16),
+                  title: UserFullNameWidget(user: user.lightUser, showFlair: false),
+                  subtitle: Text(online == true ? context.l10n.online : context.l10n.offline),
+                ),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),

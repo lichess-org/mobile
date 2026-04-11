@@ -275,10 +275,43 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
 
   @override
-  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\\nホームタブからアクセスできます。';
+  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
 
   @override
   String get mobilePreviousPage => '前';
+
+  @override
+  String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
+
+  @override
+  String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
+
+  @override
+  String get variantChess960Title => '1 段目の駒の配置がランダムになります。';
+
+  @override
+  String get variantKingOfTheHillTitle => 'キングを中央のマスに進めると勝ち。';
+
+  @override
+  String get variantThreeCheckTitle => '先に 3 回チェックした方が勝ち。';
+
+  @override
+  String get variantAntichessTitle => 'すべての駒を取られる（またはステイルメイトされる）と勝ち。';
+
+  @override
+  String get variantAtomicTitle => '相手のキングを「吹き飛ばす」と勝ち。';
+
+  @override
+  String get variantHordeTitle => '一方はポーンだけ、他方はふつうの駒で戦う。';
+
+  @override
+  String get variantRacingKingsTitle => 'キングをボードの向こうの端まで進めると勝ち。';
+
+  @override
+  String get variantCrazyhouseTitle => '取った駒を自分の手番に盤上に打つことができる。';
+
+  @override
+  String get variantFromPositionTitle => '指定した局面からのふつうのチェス';
 
   @override
   String get activityActivity => '活動';
@@ -1858,6 +1891,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
 
   @override
+  String get puzzleThemeCollinearMove => 'コリニア（共線）ムーブ';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => '同種の駒が向き合っている時に、一方が両者を結ぶ線上を動く手。';
+
+  @override
   String get puzzleThemeCornerMate => 'コーナー・メイト';
 
   @override
@@ -1939,10 +1978,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => '肩章（エポレット）のメイト';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'チェックされたキングの両脇のマスが味方の駒でふさがっている形。';
 
   @override
   String get puzzleThemeExposedKing => '危険なキング';
@@ -1999,10 +2038,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'ビショップがチェックをかけ、ルークがキングの逃げ道を抑えているメイト。';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => '燕尾のメイト';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => '駒がツバメの尾に似た V 字型を作るメイト。';
 
   @override
   String get puzzleThemeTriangleMate => '三角のメイト';
@@ -2632,10 +2671,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get multipleLines => '解析ライン数';
 
   @override
+  String get multipleLinesDescription => '評価手順とボード上に表示される矢印の数を設定';
+
+  @override
+  String get searchTime => '検索時間';
+
+  @override
+  String get searchTimeDescription => '新しい局面を評価するための時間を設定';
+
+  @override
+  String get threads => 'スレッド数';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'スレッド数が多いと解析精度が上がりますがバッテリー消費も増えます';
+
+  @override
   String get cpus => 'スレッド数';
 
   @override
   String get memory => 'メモリ';
+
+  @override
+  String get memoryDescription => '値が大きいほどパフォーマンスが高くなりやすい';
 
   @override
   String get infiniteAnalysis => '無限解析';
@@ -2795,7 +2855,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get signupUsernameHint => 'ユーザー名は無難なものにしてください。後で変えることはできないし、ユーザー名が不適切だとアカウントが閉鎖されます！';
 
   @override
-  String get signupEmailHint => 'この情報はパスワードのリセットにのみ使用します。';
+  String get signupEmailPromise => '送信されるのはあなたのアカウントについてのメールだけで、メールアドレスを他と共有することはありません。';
 
   @override
   String get password => 'パスワード';
@@ -3679,6 +3739,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get invalidAuthenticationCode => '無効な認証コード';
 
   @override
+  String get clearField => '項目をクリア';
+
+  @override
+  String get orSeparator => 'または';
+
+  @override
+  String get logInByEmail => 'メールアドレスでログイン';
+
+  @override
   String get emailMeALink => 'リンクをメールで送る';
 
   @override
@@ -4047,18 +4116,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => '変化に入る/出る';
-
-  @override
-  String get keyRequestComputerAnalysis => 'コンピュータ解析の要請、自分の悪手に学ぶ';
-
-  @override
-  String get keyNextBlunder => '次の大悪手';
-
-  @override
-  String get keyNextMistake => '次の悪手';
-
-  @override
-  String get keyNextInaccuracy => '次のやや悪手';
 
   @override
   String get keyPreviousBranch => '前の変化手順';
@@ -4613,9 +4670,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '私は Lichess のすべてのポリシーに従うことに同意します。';
-
-  @override
   String get searchOrStartNewDiscussion => '検索または新しいトピックを始める';
 
   @override
@@ -4973,6 +5027,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get clearSearch => '検索をクリア';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'タグ';

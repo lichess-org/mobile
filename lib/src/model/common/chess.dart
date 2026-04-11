@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 part 'chess.freezed.dart';
@@ -26,6 +27,21 @@ sealed class SanMove with _$SanMove {
   // It's sufficient to check for O-O here, because that of course also covers O-O-O.
   bool get isCastles => san.startsWith('O-O');
 
+  /// Normalize UCI to a "king takes rook" UCI notation.
+  ///
+  /// Returns the original notation in chess960 variant where this notation is already forced and
+  /// where the normalized notation could conflict with the actual move.
+  UCIMove normalizeUci(Variant variant) {
+    if (variant == Variant.chess960) {
+      return move.uci;
+    }
+    if (isCastles) {
+      return kingTakesRookCastles[move.uci] ?? move.uci;
+    } else {
+      return move.uci;
+    }
+  }
+
   bool isIrreversible(Variant variant) {
     if (isCheck) return true;
     if (variant == Variant.crazyhouse) return false;
@@ -46,8 +62,15 @@ class MoveConverter implements JsonConverter<Move, String> {
   String toJson(Move object) => object.uci;
 }
 
-/// Alternative castling uci notations.
+/// Get alternate castling notations from king takes rook notation, e.g. e1c1 for O-O-O and e1g1 for O-O.
 const altCastles = {'e1a1': 'e1c1', 'e1h1': 'e1g1', 'e8a8': 'e8c8', 'e8h8': 'e8g8'};
+
+/// Get king takes rook castling notations from alternate notation, e.g. e1a1 for O-O-O and e1h1 for O-O.
+const kingTakesRookCastles = {'e1c1': 'e1a1', 'e1g1': 'e1h1', 'e8c8': 'e8a8', 'e8g8': 'e8h8'};
+
+/// Normalizes a UCI move string for comparison by converting alternate castling notations to
+/// "king takes rook" notation (e.g. e1c1 → e1a1).
+String normalizeUci(String uci) => kingTakesRookCastles[uci] ?? uci;
 
 /// Returns `true` if the move is a pawn promotion move that is not yet promoted.
 bool isPromotionPawnMove(Position position, NormalMove move) {
@@ -68,18 +91,27 @@ const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.chess960,
   Variant.fromPosition,
   Variant.antichess,
+  Variant.atomic,
   Variant.kingOfTheHill,
   Variant.threeCheck,
   Variant.racingKings,
   Variant.horde,
+  Variant.crazyhouse,
 });
 
-/// Set of supported variants for playing a game.
-const ISet<Variant> playSupportedVariants = ISetConst({
+/// List of supported variants for playing a game.
+const IList<Variant> playSupportedVariants = IListConst([
   Variant.standard,
   Variant.chess960,
+  Variant.kingOfTheHill,
+  Variant.threeCheck,
+  Variant.crazyhouse,
+  Variant.antichess,
+  Variant.atomic,
+  Variant.horde,
+  Variant.racingKings,
   Variant.fromPosition,
-});
+]);
 
 enum Variant {
   standard('Standard', LichessIcons.crown),
@@ -98,9 +130,45 @@ enum Variant {
   final String label;
   final IconData icon;
 
+  String description(AppLocalizations l10n) {
+    switch (this) {
+      case .standard:
+        return l10n.variantStandardTitle;
+      case .chess960:
+        return l10n.variantChess960Title;
+      case .fromPosition:
+        return l10n.variantFromPositionTitle;
+      case .antichess:
+        return l10n.variantAntichessTitle;
+      case .kingOfTheHill:
+        return l10n.variantKingOfTheHillTitle;
+      case .threeCheck:
+        return l10n.variantThreeCheckTitle;
+      case .atomic:
+        return l10n.variantAtomicTitle;
+      case .horde:
+        return l10n.variantHordeTitle;
+      case .racingKings:
+        return l10n.variantRacingKingsTitle;
+      case .crazyhouse:
+        return l10n.variantCrazyhouseTitle;
+    }
+  }
+
+  bool sideCanCastle(Side side) {
+    if (this == Variant.racingKings) return false;
+    if (this == Variant.antichess) return false;
+    if (side == Side.white && this == Variant.horde) return false;
+    return true;
+  }
+
+  bool get hasEnPassant => this != Variant.racingKings;
+
   bool get isReadSupported => readSupportedVariants.contains(this);
 
   bool get isPlaySupported => playSupportedVariants.contains(this);
+
+  bool get hasDropMoves => this == Variant.crazyhouse;
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 

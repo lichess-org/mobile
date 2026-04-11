@@ -9,8 +9,11 @@
         android:fullBackupContent="@xml/backup_rules">
 
         <meta-data
-          android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@drawable/ic_stat_lichess_notification" />
+          android:name="io.flutter.embedding.android.EnableImpeller"
+          android:value="false" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_lichess_notification" />
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
@@ -21,7 +24,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/SplashTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -37,17 +40,55 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/x-chess-pgn" />
+                <data android:mimeType="application/vnd.chess-pgn" />
+                <data android:mimeType="text/x-chess-pgn" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="content" />
+
+                <data android:pathSuffix=".pgn" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="org.lichess.mobile" android:host="login-callback" />
+            </intent-filter>
+
+            <!-- App Links verified against https://lichess.org/.well-known/assetlinks.json -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" android:host="lichess.org" />
 
                 <data android:pathPattern="/training/....." />
                 <data android:pathPattern="/study/........" />
+                <data android:pathPattern="/study/......../........" />
                 <data android:pathPattern="/tournament/........" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
-                <!-- Game with pov -->
+                <!--
+                  Game or challenge link: any 8-char path (e.g. /abcd1234).
+                  pathPattern cannot exclude known static 8-char routes (e.g. /analysis,
+                  /settings); the app resolver handles false positives by falling back to
+                  launchUrl. On Android 15+, exclusions are enforced server-side via
+                  dynamic_app_link_components in assetlinks.json.
+                -->
+                <data android:pathPattern="/........" />
+
+                <!-- Game with color POV -->
                 <data android:pathPattern="/......../black" />
                 <data android:pathPattern="/......../white" />
             </intent-filter>

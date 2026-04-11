@@ -171,6 +171,8 @@ sealed class PvData with _$PvData {
 
   String get evalString => _evalString(cp, mate);
 
+  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+
   Side? get winningSide {
     if (mate != null) {
       return mate! > 0 ? Side.white : Side.black;
@@ -189,7 +191,7 @@ sealed class PvData with _$PvData {
       final movesString = moves.join(' ');
       if (move == null) {
         LichessBinding.instance.firebaseCrashlytics.recordError(
-          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen}',
+          'Invalid UCI move: "$uciMove" in PV: $movesString for position: ${pos.fen} rule: ${pos.rule}',
           null,
           reason: 'Failed to parse UCI move from PV',
         );
@@ -199,11 +201,9 @@ sealed class PvData with _$PvData {
         break;
       }
       if (!pos.isLegal(move)) {
-        LichessBinding.instance.firebaseCrashlytics.recordError(
-          'Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}',
-          null,
-          reason: 'Move from PV is not legal in the given position',
-        );
+        // Stockfish can occasionally emit PV moves that become illegal in the resulting position
+        // due to transposition table hash collisions. This is expected engine behavior; just
+        // truncate the PV here.
         _logger.warning('Illegal move: $uciMove in PV: $movesString for position: ${pos.fen}');
         break;
       }

@@ -60,6 +60,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     this.puzzle,
     this.puzzleId,
     this.openCasual = false,
+    this.replayDays,
     super.key,
   });
 
@@ -70,12 +71,16 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   /// If true, the result won't be recorded on the server for the provider [puzzleId].
   final bool openCasual;
 
+  /// If set, load puzzles to replay from the given number of days.
+  final int? replayDays;
+
   static Route<dynamic> buildRoute(
     BuildContext context, {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
     Puzzle? puzzle,
     bool openCasual = false,
+    int? replayDays,
   }) {
     return buildScreenRoute(
       context,
@@ -84,6 +89,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
         puzzleId: puzzleId,
         puzzle: puzzle,
         openCasual: openCasual,
+        replayDays: replayDays,
       ),
     );
   }
@@ -120,6 +126,9 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.replayDays != null) {
+      return _LoadReplayPuzzle(boardKey: _boardKey, days: widget.replayDays!);
+    }
     return widget.puzzle != null
         ? _LoadPuzzleFromPuzzle(boardKey: _boardKey, angle: widget.angle, puzzle: widget.puzzle!)
         : widget.puzzleId != null
@@ -207,6 +216,53 @@ class _LoadNextPuzzle extends ConsumerWidget {
           angle: angle,
           initialPuzzleContext: null,
           body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
+    }
+  }
+}
+
+class _LoadReplayPuzzle extends ConsumerWidget {
+  const _LoadReplayPuzzle({required this.boardKey, required this.days});
+
+  final GlobalKey boardKey;
+  final int days;
+
+  static const _angle = PuzzleTheme(PuzzleThemeKey.mix);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final replayPuzzle = ref.watch(puzzleReplayProvider((days: days, theme: _angle.key)));
+
+    switch (replayPuzzle) {
+      case AsyncData(:final value):
+        if (value == null) {
+          return const _PuzzleScaffold(
+            angle: _angle,
+            initialPuzzleContext: null,
+            body: PuzzleErrorBoardWidget(errorMessage: 'No more puzzles to replay.'),
+          );
+        } else {
+          return _PuzzleScaffold(
+            angle: _angle,
+            initialPuzzleContext: value,
+            body: _Body(boardKey: boardKey, initialPuzzleContext: value),
+          );
+        }
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleScreen] could not load replay puzzles; $error\n$stackTrace');
+        final errorMsg = error.toString().contains('404')
+            ? 'No puzzles to replay.'
+            : error.toString();
+        return _PuzzleScaffold(
+          angle: _angle,
+          initialPuzzleContext: null,
+          body: PuzzleErrorBoardWidget(errorMessage: errorMsg),
+        );
+      case _:
+        return const _PuzzleScaffold(
+          angle: _angle,
+          initialPuzzleContext: null,
+          body: Center(child: CircularProgressIndicator.adaptive()),
         );
     }
   }
@@ -859,6 +915,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
           materialFilledCard: true,
           children: [
             if (initialPuzzleContext.userId != null &&
+                initialPuzzleContext.replayRemaining == null &&
                 puzzleState.mode != PuzzleMode.view &&
                 isOnline)
               StatefulBuilder(
@@ -904,7 +961,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
-            if (authUser != null)
+            if (authUser != null && initialPuzzleContext.replayRemaining == null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),
                 // ignore: avoid_bool_literals_in_conditional_expressions

@@ -275,10 +275,43 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
+
+  @override
+  String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
+
+  @override
+  String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
+
+  @override
+  String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
+
+  @override
+  String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
+
+  @override
+  String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -1942,6 +1975,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Collinear move';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+
+  @override
   String get puzzleThemeCornerMate => 'Rohový mat';
 
   @override
@@ -2716,10 +2755,31 @@ class AppLocalizationsSk extends AppLocalizations {
   String get multipleLines => 'Počet variantov';
 
   @override
+  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+
+  @override
+  String get searchTime => 'Search time';
+
+  @override
+  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+
+  @override
+  String get threads => 'Threads';
+
+  @override
+  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+
+  @override
+  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+
+  @override
   String get cpus => 'Procesory';
 
   @override
   String get memory => 'Pamäť';
+
+  @override
+  String get memoryDescription => 'Higher values may improve performance';
 
   @override
   String get infiniteAnalysis => 'Nekonečná analýza';
@@ -2879,7 +2939,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get signupUsernameHint => 'Uistite sa, že si vyberáte rodinne prijateľné používateľské meno! Neskôr ho už nemôžete zmeniť a akýkoľvek účet s nevhodným užívateľským menom bude uzavretý.';
 
   @override
-  String get signupEmailHint => 'Použijeme ho iba pri znovunastavení hesla.';
+  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
 
   @override
   String get password => 'Heslo';
@@ -3763,6 +3823,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neplatný overovací kód';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Pošlite link emailom';
 
   @override
@@ -4131,18 +4200,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'zvoliť/opustiť variant';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Požadujte analýzu počítačom, Poučte sa zo svojich chýb';
-
-  @override
-  String get keyNextBlunder => 'Ďalšia hrubá chyba';
-
-  @override
-  String get keyNextMistake => 'Ďalšia chyba';
-
-  @override
-  String get keyNextInaccuracy => 'Ďalšia nepresnosť';
 
   @override
   String get keyPreviousBranch => 'Predchádzajúca vetva';
@@ -4697,9 +4754,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Súhlasím, že budem dodržiavať všetky pravidlá Lichessu.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Prehľadávať alebo začať novú konverzáciu';
 
   @override
@@ -5057,6 +5111,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Vymazať vyhľadávanie';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Značky';

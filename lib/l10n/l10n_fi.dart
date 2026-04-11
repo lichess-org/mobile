@@ -275,10 +275,43 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\\nNäet sen etusivulla.';
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
   String get mobilePreviousPage => 'Edellinen';
+
+  @override
+  String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
+
+  @override
+  String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
+
+  @override
+  String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
+
+  @override
+  String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -1886,6 +1919,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
 
   @override
+  String get puzzleThemeCollinearMove => 'Kollineaarinen siirto';
+
+  @override
+  String get puzzleThemeCollinearMoveDescription => 'Kaksi eriväristä nappulaa ovat hyökkäyssuunnissaan kohdakkain, ja toinen niistä siirtyy tätä hyökkäyssuuntaa pitkin lyömättä kuitenkaan vastustajan nappulaa.';
+
+  @override
   String get puzzleThemeCornerMate => 'Kulmamatti';
 
   @override
@@ -2660,10 +2699,31 @@ class AppLocalizationsFi extends AppLocalizations {
   String get multipleLines => 'Muunnelmien määrä';
 
   @override
+  String get multipleLinesDescription => 'Aseta analyysirivien sekä laudalla näytettävien siirtonuolien määrä';
+
+  @override
+  String get searchTime => 'Hakuaika';
+
+  @override
+  String get searchTimeDescription => 'Aseta uusien asemien arvioimisaika';
+
+  @override
+  String get threads => 'Säikeitä';
+
+  @override
+  String get threadsDescription => 'Aseta tähän prosessorisi säikeiden määrää pienempi luku, rastit osoittavat hyvän ja turvallisen valinnan';
+
+  @override
+  String get threadsDescriptionMobile => 'Mitä enemmän säikeitä, sitä enemmän akku kuluu analyysin parantamiseksi';
+
+  @override
   String get cpus => 'Suorittimia';
 
   @override
   String get memory => 'Muistia';
+
+  @override
+  String get memoryDescription => 'Korkeammat arvot saattavat parantaa suorituskykyä';
 
   @override
   String get infiniteAnalysis => 'Loputon analyysi';
@@ -2823,7 +2883,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get signupUsernameHint => 'Nimeä käyttäjätunnuksesi niin, että se sopii kaikenikäisten nähtäväksi. Et voi muuttaa tunnusta myöhemmin. Kaikki epäasiallisesti nimetyt käyttäjätunnukset suljetaan!';
 
   @override
-  String get signupEmailHint => 'Käytämme sitä vain, jos pyydät uutta salasanaa.';
+  String get signupEmailPromise => 'Lähetämme sinulle vain käyttäjätunnustasi koskevia sähköposteja emmekä koskaan jaa sähköpostiosoitettasi muille.';
 
   @override
   String get password => 'Salasana';
@@ -3707,6 +3767,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get invalidAuthenticationCode => 'Tunnistautumiskoodi ei kelpaa';
 
   @override
+  String get clearField => 'Tyhjennä kenttä';
+
+  @override
+  String get orSeparator => 'Tai';
+
+  @override
+  String get logInByEmail => 'Kirjaudu sisään sähköpostilla';
+
+  @override
   String get emailMeALink => 'Lähetä minulle linkki';
 
   @override
@@ -4075,18 +4144,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get keyEnterOrExitVariation => 'lisää/poista muunnelma';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Pyydä tietokoneanalyysiä, opi virheistäsi';
-
-  @override
-  String get keyNextBlunder => 'Seuraava vakava virhe';
-
-  @override
-  String get keyNextMistake => 'Seuraava virhe';
-
-  @override
-  String get keyNextInaccuracy => 'Seuraava epätarkkuus';
 
   @override
   String get keyPreviousBranch => 'Edellinen haara';
@@ -4641,9 +4698,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Vakuutan että noudatan Lichessin sääntöjä.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hae tai aloita uusi keskustelu';
 
   @override
@@ -5001,6 +5055,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Tunnisteet';

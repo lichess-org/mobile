@@ -30,23 +30,22 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
 
     _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
+
+    _socketOpenSubscription?.cancel();
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (!ref.mounted) return;
+      _socketClient.send('following_onlines', null);
+    });
+
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
         .then((event) => _parseFriendsList(event));
 
     await _socketClient.firstConnection;
 
-    // Request the list of online friends once the socket is connected.
     _socketClient.send('following_onlines', null);
-
-    // Start watching for online friends.
-    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
-
-    _socketOpenSubscription?.cancel();
-    // Request again the list of online friends every time the socket is reconnected.
-    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      _socketClient.send('following_onlines', null);
-    });
 
     return state;
   }
@@ -71,6 +70,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   }
 
   void _handleSocketTopic(SocketEvent event) {
+    if (!ref.mounted) return;
     if (!state.hasValue) return;
 
     switch (event.topic) {
