@@ -34,7 +34,7 @@ struct DailyPuzzleEntry: TimelineEntry {
             fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
             lastMove: "b8c6",
             rating: 1500,
-            showRating: true,
+            showRating: false,
             boardStyle: BoardStyle.fromAppGroup(),
             error: nil
         )
