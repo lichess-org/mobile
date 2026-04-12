@@ -35,7 +35,6 @@ struct DailyPuzzleWidgetView: View {
 
     // MARK: - Medium (.systemMedium)
 
-    /// Board on the left, puzzle metadata on the right.
     @ViewBuilder
     private var wideView: some View {
         HStack(spacing: 0) {
@@ -68,54 +67,43 @@ struct DailyPuzzleWidgetView: View {
 
     // MARK: - Large (.systemLarge)
 
-    /// Full-bleed board with a single-line metadata strip below it.
     @ViewBuilder
     private var largeView: some View {
         VStack(spacing: 0) {
-            boardView
-
-            Divider()
-
             HStack(spacing: 8) {
                 Image("LichessLogo")
                     .resizable()
-                    .frame(width: 13, height: 13)
+                    .frame(width: 20, height: 20)
                 Text("Daily Puzzle")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.primary)
+                    .lineLimit(1)
 
-                Spacer(minLength: 4)
+                Spacer()
+
+                if entry.showRating, let rating = entry.rating {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+                    Text("\(rating)")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+                }
 
                 Circle()
                     .fill(entry.isWhiteToMove ? Color.white : Color.black)
                     .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
-                    .frame(width: 8, height: 8)
-                Text(entry.isWhiteToMove ? "White to play" : "Black to play")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+                    .frame(width: 14, height: 14)
 
-                if entry.showRating, let rating = entry.rating {
-                    Text("·")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 10))
-                        .foregroundStyle(.secondary)
-                    Text("\(rating)")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
-
-                Text("·")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
                 Text(entry.date.shortTime)
-                    .font(.system(size: 11))
+                    .font(.system(size: 14))
                     .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
+            .padding(.bottom, 4)
+
+            boardView.cornerRadius(5)
         }
+        .border(.red, width: 1)
     }
 
     // MARK: - Reusable sub-views
