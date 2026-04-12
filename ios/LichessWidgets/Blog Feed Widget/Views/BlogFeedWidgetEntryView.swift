@@ -8,9 +8,8 @@ struct BlogFeedWidgetEntryView: View {
     private var showDate: Bool { family == .systemLarge }
     private var lineLimit: Int {
         switch family {
-        case .systemSmall: 4
-        case .systemLarge: 2
-        default: 3
+        case .systemSmall: 3
+        default: 2
         }
     }
 
@@ -76,7 +75,18 @@ struct BlogFeedWidgetEntryView: View {
             Divider()
                 .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
 
-            if family == .systemSmall {
+            if entry.isKidMode {
+                VStack(spacing: BlogFeedWidgetLayout.errorStackSpacing) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: BlogFeedWidgetLayout.errorIconSize))
+                        .foregroundStyle(.secondary)
+                    Text("Not available in Kid Mode")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if family == .systemSmall {
                 itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
