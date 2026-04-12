@@ -18,6 +18,13 @@ struct DailyPuzzleFetcher {
         ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
     }
     
+    /// Returns the date of the next update: an hour from now on failure, next day 00:05 UTC on success.
+    static func nextUpdate(for entry: DailyPuzzleEntry) -> Date {
+        entry.error == nil
+            ? nextUpdateDate
+            : Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+    }
+
     func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
         let boardStyle = BoardStyle.fromAppGroup()
         guard let url = LichessAppGroup.lichessURL(path: "/api/puzzle/daily") else {

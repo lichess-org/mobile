@@ -17,10 +17,7 @@ struct DailyPuzzleStaticProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<DailyPuzzleEntry>) -> Void) {
         Task {
             let entry = await fetcher.fetchEntry(showRating: false)
-            let nextUpdate = entry.error == nil
-                ? DailyPuzzleFetcher.nextUpdateDate
-                : Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
-            completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
+            completion(Timeline(entries: [entry], policy: .after(DailyPuzzleFetcher.nextUpdate(for: entry))))
         }
     }
 }
@@ -55,10 +52,6 @@ struct DailyPuzzleProvider: AppIntentTimelineProvider {
 
     func timeline(for configuration: DailyPuzzleIntent, in context: Context) async -> Timeline<DailyPuzzleEntry> {
         let entry = await fetcher.fetchEntry(showRating: configuration.showRating)
-        // Retry in an hour if the fetch failed; otherwise wait until the next daily puzzle.
-        let nextUpdate = entry.error == nil
-            ? DailyPuzzleFetcher.nextUpdateDate
-            : Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
-        return Timeline(entries: [entry], policy: .after(nextUpdate))
+        return Timeline(entries: [entry], policy: .after(DailyPuzzleFetcher.nextUpdate(for: entry)))
     }
 }
