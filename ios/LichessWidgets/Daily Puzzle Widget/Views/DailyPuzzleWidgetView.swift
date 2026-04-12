@@ -22,14 +22,12 @@ struct DailyPuzzleWidgetView: View {
 
     // MARK: - Small (.systemSmall)
 
-    /// Full-bleed board with a thin "● to move" footer.
     @ViewBuilder
     private var smallView: some View {
         VStack(spacing: 0) {
             boardView
-            sideToMoveBar
-                .padding(.horizontal, 8)
-                .padding(.vertical, 5)
+                .roundedCornerWithBorder(lineWidth: 1, style: .tertiary, radius: 12)
+                .padding(8)
         }
     }
 
@@ -93,7 +91,7 @@ struct DailyPuzzleWidgetView: View {
 
                     Circle()
                         .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                        .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
+                        .overlay(Circle().stroke(Color.primary.opacity(0.4), lineWidth: 0.5))
                         .frame(width: 14, height: 14)
 
                     Text(entry.date.shortTime)
@@ -103,7 +101,7 @@ struct DailyPuzzleWidgetView: View {
                 .padding(.bottom, 5)
 
                 boardView
-                    .cornerRadius(6)
+                    .roundedCornerWithBorder(lineWidth: 1, style: .tertiary, radius: 6)
                     .frame(width: geo.size.width, height: geo.size.width)
             }
         }
