@@ -18,10 +18,12 @@ struct DailyPuzzleEntry: TimelineEntry {
     }
 
     var puzzleURL: URL? {
+        let host = LichessAppGroup.lichessHost
+        let scheme = host.hasPrefix("localhost") ? "http" : "https"
         if let id = puzzleId {
-            URL(string: "https://lichess.org/training/\(id)")
+            return URL(string: "\(scheme)://\(host)/training/\(id)")
         } else {
-            URL(string: "https://lichess.org/training/daily")
+            return URL(string: "\(scheme)://\(host)/training/daily")
         }
     }
 

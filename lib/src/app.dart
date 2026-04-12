@@ -8,6 +8,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
@@ -94,6 +95,7 @@ class _AppState extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+      HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
