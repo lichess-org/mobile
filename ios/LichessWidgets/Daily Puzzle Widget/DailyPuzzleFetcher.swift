@@ -15,9 +15,9 @@ struct DailyPuzzleFetcher {
         components.minute = 5
         components.second = 0
         return utc.date(from: components)
-            ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
+        ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
     }
-
+    
     func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
         let boardStyle = BoardStyle.fromAppGroup()
         guard let url = URL(string: "https://lichess.org/api/puzzle/daily") else {
@@ -32,9 +32,9 @@ struct DailyPuzzleFetcher {
             return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
     }
-
+    
     // MARK: - Private
-
+    
     private struct APIResponse: Decodable {
         struct Puzzle: Decodable {
             let id: String
@@ -44,33 +44,29 @@ struct DailyPuzzleFetcher {
         }
         let puzzle: Puzzle
     }
-
-    private func parse(_ data: Data, showRating: Bool, boardStyle: BoardStyle) throws
-        -> DailyPuzzleEntry
-    {
+    
+    private func parse(_ data: Data,
+                       showRating: Bool,
+                       boardStyle: BoardStyle) throws -> DailyPuzzleEntry {
         let response = try JSONDecoder().decode(APIResponse.self, from: data)
-        return DailyPuzzleEntry(
-            date: .now,
-            puzzleId: response.puzzle.id,
-            fen: response.puzzle.fen,
-            lastMove: response.puzzle.lastMove,
-            rating: response.puzzle.rating,
-            showRating: showRating,
-            boardStyle: boardStyle,
-            error: nil
-        )
+        return DailyPuzzleEntry(date: .now,
+                                puzzleId: response.puzzle.id,
+                                fen: response.puzzle.fen,
+                                lastMove: response.puzzle.lastMove,
+                                rating: response.puzzle.rating,
+                                showRating: showRating,
+                                boardStyle: boardStyle,
+                                error: nil)
     }
-
+    
     private func errorEntry(showRating: Bool, boardStyle: BoardStyle) -> DailyPuzzleEntry {
-        DailyPuzzleEntry(
-            date: .now,
-            puzzleId: nil,
-            fen: nil,
-            lastMove: nil,
-            rating: nil,
-            showRating: showRating,
-            boardStyle: boardStyle,
-            error: "Could not load puzzle"
-        )
+        DailyPuzzleEntry(date: .now,
+                         puzzleId: nil,
+                         fen: nil,
+                         lastMove: nil,
+                         rating: nil,
+                         showRating: showRating,
+                         boardStyle: boardStyle,
+                         error: "Could not load puzzle")
     }
 }

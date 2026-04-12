@@ -7,7 +7,6 @@ struct BoardStyle {
     let lastMoveHighlight: Color
     /// Asset name for image-backed board themes; `nil` means the theme uses solid colours.
     let boardImageName: String?
-    /// The Dart `PieceSet` enum `.name` value (e.g. `"staunty"`, `"kiwenSuwi"`).
     let pieceSet: String
 
     /// Reads the saved board theme and piece set from the shared App Group.
@@ -20,7 +19,7 @@ struct BoardStyle {
 
     // MARK: - Theme → style mapping
     //
-    // Colours are taken from the Dart `ChessboardColorScheme` constants in the
+    // Colors are taken from the Dart `ChessboardColorScheme` constants in the
     // chessground package (board_color_scheme.dart).
     //
     // Solid-colour themes (brown, blue, green, ic, system) — no board image.
@@ -31,10 +30,8 @@ struct BoardStyle {
     static func from(themeName: String, pieceSet: String = "staunty") -> BoardStyle {
         switch themeName {
 
-        // ── Solid-colour themes ────────────────────────────────────────────────
+            // Solid-colour themes
         case "system":
-            // The "system" theme uses Android's Material You colours (nil on iOS),
-            // so the app always falls back to brown on iOS — we do the same.
             return .init(light: 0xF0D9B6, dark: 0xB58863, pieceSet: pieceSet)
         case "blue":
             return .init(light: 0xDEE3E6, dark: 0x8CA2AD, pieceSet: pieceSet)
@@ -43,7 +40,7 @@ struct BoardStyle {
         case "ic":
             return .init(light: 0xECECEC, dark: 0xC1C18E, pieceSet: pieceSet)
 
-        // ── Image-backed themes ────────────────────────────────────────────────
+            // Image-backed themes
         case "blue2":
             return .init(light: 0x97B2C7, dark: 0x546F82,
                          boardImage: "board_blue2", pieceSet: pieceSet)
@@ -117,35 +114,20 @@ struct BoardStyle {
 
     /// Teal last-move highlight used by the green, greenPlastic, and marble themes.
     private static let tealLastMove =
-        Color(red: 0, green: 155 / 255, blue: 199 / 255).opacity(0.41)
+    Color(red: 0, green: 155 / 255, blue: 199 / 255).opacity(0.41)
 
     private static let defaultLastMove =
-        Color(red: 156 / 255, green: 199 / 255, blue: 0).opacity(0.502)
+    Color(red: 156 / 255, green: 199 / 255, blue: 0).opacity(0.502)
 
-    private init(
-        light: UInt,
-        dark: UInt,
-        lastMove: Color? = nil,
-        boardImage: String? = nil,
-        pieceSet: String
-    ) {
+    private init(light: UInt,
+                 dark: UInt,
+                 lastMove: Color? = nil,
+                 boardImage: String? = nil,
+                 pieceSet: String) {
         lightSquare = Color(rgb: light)
         darkSquare = Color(rgb: dark)
         lastMoveHighlight = lastMove ?? BoardStyle.defaultLastMove
         boardImageName = boardImage
         self.pieceSet = pieceSet
-    }
-}
-
-// MARK: - Colour helper
-
-extension Color {
-    /// Initialises a colour from a 24-bit `0xRRGGBB` integer.
-    init(rgb: UInt) {
-        self.init(
-            red: Double((rgb >> 16) & 0xFF) / 255,
-            green: Double((rgb >> 8) & 0xFF) / 255,
-            blue: Double(rgb & 0xFF) / 255
-        )
     }
 }

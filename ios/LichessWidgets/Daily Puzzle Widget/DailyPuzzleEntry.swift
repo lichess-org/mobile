@@ -25,11 +25,8 @@ struct DailyPuzzleEntry: TimelineEntry {
         }
     }
 
-    /// A recognisable position (Italian game after 1.e4 e5 2.Nf3 Nc6, white to play Bc4)
+    /// A recognisable position (Italian game after initial moves)
     /// used as placeholder while the real puzzle loads.
-    ///
-    /// White is to move, so `isWhiteToMove == true` and the board renders from
-    /// white's perspective (`flipped == false`).
     static var placeholder: DailyPuzzleEntry {
         DailyPuzzleEntry(
             date: .now,
