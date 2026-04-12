@@ -22,15 +22,13 @@ struct DailyPuzzleWidgetView: View {
 
     @ViewBuilder
     private var smallView: some View {
-        VStack(spacing: 0) {
-            boardView
-                .roundedCornerWithBorder(
-                    lineWidth: DailyPuzzleWidgetLayout.smallBoardBorderWidth,
-                    style: .tertiary,
-                    radius: DailyPuzzleWidgetLayout.smallBoardCornerRadius
-                )
-                .padding(DailyPuzzleWidgetLayout.smallBoardPadding)
-        }
+        boardView
+            .roundedCornerWithBorder(
+                lineWidth: DailyPuzzleWidgetLayout.smallBoardBorderWidth,
+                style: .tertiary,
+                radius: DailyPuzzleWidgetLayout.smallBoardCornerRadius
+            )
+            .padding(DailyPuzzleWidgetLayout.smallBoardPadding)
     }
 
     // MARK: - Large (.systemLarge)
