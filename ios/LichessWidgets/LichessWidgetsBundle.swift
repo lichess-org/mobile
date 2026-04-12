@@ -4,7 +4,8 @@ import SwiftUI
 @main
 struct LichessWidgetsBundle: WidgetBundle {
     var body: some Widget {
-        DailyPuzzleWidget()
+        DailyPuzzleLargeWidget()
+        DailyPuzzleSmallWidget()
         CommunityBlogWidget()
         UserBlogFeedWidget()
         OfficialBlogWidget()
