@@ -15,6 +15,6 @@ struct DailyPuzzleWidget: Widget {
         .contentMarginsDisabled()
         .configurationDisplayName("Daily Puzzle")
         .description("Today's chess puzzle from lichess.org.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .supportedFamilies([.systemSmall, .systemLarge])
     }
 }

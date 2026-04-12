@@ -11,10 +11,8 @@ struct DailyPuzzleWidgetView: View {
                 errorView(error)
             } else if family == .systemSmall {
                 smallView
-            } else if family == .systemLarge {
-                largeView
             } else {
-                wideView
+                largeView
             }
         }
         .widgetURL(entry.puzzleURL)
@@ -28,38 +26,6 @@ struct DailyPuzzleWidgetView: View {
             boardView
                 .roundedCornerWithBorder(lineWidth: 1, style: .tertiary, radius: 12)
                 .padding(8)
-        }
-    }
-
-    // MARK: - Medium (.systemMedium)
-
-    @ViewBuilder
-    private var wideView: some View {
-        HStack(spacing: 0) {
-            boardView
-                .padding(.trailing, 8)
-
-            VStack(alignment: .leading, spacing: 0) {
-                header
-                Divider()
-                    .padding(.top, 6)
-
-                VStack(alignment: .leading, spacing: 10) {
-                    sideToMoveRow
-                    if entry.showRating, let rating = entry.rating {
-                        ratingRow(rating)
-                    }
-                }
-                .padding(.top, 10)
-
-                Spacer(minLength: 0)
-
-                Text("Updated at \(entry.date.shortTime)")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -122,49 +88,6 @@ struct DailyPuzzleWidgetView: View {
             )
         } else {
             Color.secondary.opacity(0.2)
-        }
-    }
-
-    private var header: some View {
-        HStack(spacing: 6) {
-            Image("LichessLogo")
-                .resizable()
-                .frame(width: 18, height: 18)
-            Text("Daily Puzzle")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-        }
-    }
-
-    private var sideToMoveRow: some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
-                .frame(width: 11, height: 11)
-            Text(entry.isWhiteToMove ? "White to play" : "Black to play")
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-        }
-    }
-
-    private func ratingRow(_ rating: Int) -> some View {
-        Label("\(rating)", systemImage: "chart.line.uptrend.xyaxis")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-    }
-
-    /// Compact one-line bar shown under the board in the small widget.
-    private var sideToMoveBar: some View {
-        HStack(spacing: 4) {
-            Circle()
-                .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
-                .frame(width: 8, height: 8)
-            Text(entry.isWhiteToMove ? "White to play" : "Black to play")
-                .font(.system(size: 10))
-                .foregroundStyle(.secondary)
         }
     }
 
