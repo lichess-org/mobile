@@ -2,6 +2,9 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
+private let displayName = "Daily Puzzle"
+private let widgetDescription = "Today's chess puzzle from lichess.org."
+
 struct DailyPuzzleSmallWidget: Widget {
     let kind = "DailyPuzzleSmallWidget"
 
@@ -11,8 +14,8 @@ struct DailyPuzzleSmallWidget: Widget {
                 .containerBackground(.background, for: .widget)
         }
         .contentMarginsDisabled()
-        .configurationDisplayName("Daily Puzzle")
-        .description("Today's chess puzzle from lichess.org.")
+        .configurationDisplayName(displayName)
+        .description(widgetDescription)
         .supportedFamilies([.systemSmall])
     }
 }
@@ -30,8 +33,8 @@ struct DailyPuzzleLargeWidget: Widget {
                 .containerBackground(.background, for: .widget)
         }
         .contentMarginsDisabled()
-        .configurationDisplayName("Daily Puzzle")
-        .description("Today's chess puzzle from lichess.org.")
+        .configurationDisplayName(displayName)
+        .description(widgetDescription)
         .supportedFamilies([.systemLarge])
     }
 }
