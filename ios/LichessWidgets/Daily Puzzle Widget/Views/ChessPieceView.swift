@@ -15,6 +15,7 @@ struct ChessPieceView: View {
         Image(assetName)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: squareSize * 0.9, height: squareSize * 0.9)
+            .frame(width: squareSize * DailyPuzzleWidgetLayout.pieceSizeFactor,
+                   height: squareSize * DailyPuzzleWidgetLayout.pieceSizeFactor)
     }
 }

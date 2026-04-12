@@ -24,8 +24,12 @@ struct DailyPuzzleWidgetView: View {
     private var smallView: some View {
         VStack(spacing: 0) {
             boardView
-                .roundedCornerWithBorder(lineWidth: 1, style: .tertiary, radius: 12)
-                .padding(8)
+                .roundedCornerWithBorder(
+                    lineWidth: DailyPuzzleWidgetLayout.smallBoardBorderWidth,
+                    style: .tertiary,
+                    radius: DailyPuzzleWidgetLayout.smallBoardCornerRadius
+                )
+                .padding(DailyPuzzleWidgetLayout.smallBoardPadding)
         }
     }
 
@@ -35,12 +39,15 @@ struct DailyPuzzleWidgetView: View {
     private var largeView: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                HStack(spacing: 8) {
+                HStack(spacing: DailyPuzzleWidgetLayout.headerSpacing) {
                     Image("LichessLogo")
                         .resizable()
-                        .frame(width: 20, height: 20)
+                        .frame(
+                            width: DailyPuzzleWidgetLayout.logoSize,
+                            height: DailyPuzzleWidgetLayout.logoSize
+                        )
                     Text("Daily Puzzle")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.system(size: DailyPuzzleWidgetLayout.titleFontSize, weight: .semibold))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
@@ -48,31 +55,43 @@ struct DailyPuzzleWidgetView: View {
 
                     if entry.showRating, let rating = entry.rating {
                         Image(systemName: "chart.line.uptrend.xyaxis")
-                            .font(.system(size: 14))
+                            .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
                             .foregroundStyle(.secondary)
                         Text("\(rating)")
-                            .font(.system(size: 14))
+                            .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
                             .foregroundStyle(.secondary)
                     }
 
                     Circle()
                         .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                        .overlay(Circle().stroke(Color.primary.opacity(0.4), lineWidth: 0.5))
-                        .frame(width: 14, height: 14)
+                        .overlay(
+                            Circle().stroke(
+                                Color.primary.opacity(DailyPuzzleWidgetLayout.sideIndicatorBorderOpacity),
+                                lineWidth: DailyPuzzleWidgetLayout.sideIndicatorBorderWidth
+                            )
+                        )
+                        .frame(
+                            width: DailyPuzzleWidgetLayout.sideIndicatorSize,
+                            height: DailyPuzzleWidgetLayout.sideIndicatorSize
+                        )
 
                     Text(entry.date.shortTime)
-                        .font(.system(size: 14))
+                        .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
                         .foregroundStyle(.secondary)
                 }
-                .padding(.bottom, 5)
+                .padding(.bottom, DailyPuzzleWidgetLayout.headerBottomPadding)
 
                 boardView
-                    .roundedCornerWithBorder(lineWidth: 1, style: .tertiary, radius: 6)
+                    .roundedCornerWithBorder(
+                        lineWidth: DailyPuzzleWidgetLayout.largeBoardBorderWidth,
+                        style: .tertiary,
+                        radius: DailyPuzzleWidgetLayout.largeBoardCornerRadius
+                    )
                     .frame(width: geo.size.width, height: geo.size.width)
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 11)
+        .padding(.horizontal, DailyPuzzleWidgetLayout.largeHorizontalPadding)
+        .padding(.top, DailyPuzzleWidgetLayout.largeTopPadding)
     }
 
     // MARK: - Reusable sub-views
@@ -95,9 +114,9 @@ struct DailyPuzzleWidgetView: View {
 
     @ViewBuilder
     private func errorView(_ message: String) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: DailyPuzzleWidgetLayout.errorStackSpacing) {
             Image(systemName: "exclamationmark.circle")
-                .font(.system(size: 20))
+                .font(.system(size: DailyPuzzleWidgetLayout.errorIconSize))
                 .foregroundStyle(.secondary)
             Text(message)
                 .font(.caption)
