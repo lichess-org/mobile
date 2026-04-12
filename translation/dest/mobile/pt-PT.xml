@@ -18,6 +18,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Início</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers em direto</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Tem de iniciar sessão para visualizar esta página.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Novo jogo</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sem resultados</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Por favor, note que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar funcionalidades o tempo todo.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Não está a seguir nenhum utilizador.</string>
@@ -75,4 +76,5 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">À espera do adversário entrar...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Assistir</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Bem-vindo(a) à aplicação do Lichess!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Ver Jogo</string>
 </resources>
