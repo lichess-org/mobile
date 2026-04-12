@@ -54,10 +54,10 @@ struct ChessBoardView: View {
 
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
-            let sq = side / 8
+            let squareSize = side / 8
 
             ZStack {
-                // ── Board background ──────────────────────────────────────────
+                // Board background
                 // Image-backed themes: one full-board texture scaled to fill.
                 // Solid-colour themes: drawn square-by-square in the grid below.
                 if let imageName = boardStyle.boardImageName {
@@ -66,28 +66,28 @@ struct ChessBoardView: View {
                         .frame(width: side, height: side)
                 }
 
-                // ── Square grid: solid fill · highlights · pieces ─────────────
+                // Square grid: solid fill, highlights, pieces
                 VStack(spacing: 0) {
                     ForEach(0 ..< 8, id: \.self) { row in
                         HStack(spacing: 0) {
                             ForEach(0 ..< 8, id: \.self) { col in
-                                let ri = flipped ? 7 - row : row
-                                let fi = flipped ? 7 - col : col
+                                let rankIndex = flipped ? 7 - row : row
+                                let fileIndex = flipped ? 7 - col : col
                                 // Light squares are where (rankIndex + fileIndex) is even:
                                 // a8=(0,0) is light, b8=(0,1) is dark, a7=(1,0) is dark, etc.
-                                let isLight = (ri + fi) % 2 == 0
-                                let name = squareName(rankIndex: ri, fileIndex: fi)
+                                let isLight = (rankIndex + fileIndex) % 2 == 0
+                                let name = squareName(rankIndex: rankIndex, fileIndex: fileIndex)
                                 let piece: Character? =
-                                    ri < boardData.count && fi < boardData[ri].count
-                                    ? boardData[ri][fi] : nil
+                                rankIndex < boardData.count && fileIndex < boardData[rankIndex].count
+                                ? boardData[rankIndex][fileIndex] : nil
 
                                 ZStack {
                                     if isSolidTheme {
                                         Rectangle()
                                             .fill(
                                                 isLight
-                                                    ? boardStyle.lightSquare
-                                                    : boardStyle.darkSquare
+                                                ? boardStyle.lightSquare
+                                                : boardStyle.darkSquare
                                             )
                                     }
                                     if highlighted.contains(name) {
@@ -96,12 +96,12 @@ struct ChessBoardView: View {
                                     if let piece {
                                         ChessPieceView(
                                             piece: piece,
-                                            squareSize: sq,
+                                            squareSize: squareSize,
                                             pieceSet: boardStyle.pieceSet
                                         )
                                     }
                                 }
-                                .frame(width: sq, height: sq)
+                                .frame(width: squareSize, height: squareSize)
                             }
                         }
                     }
@@ -111,27 +111,5 @@ struct ChessBoardView: View {
             .frame(width: side, height: side)
         }
         .aspectRatio(1, contentMode: .fit)
-    }
-}
-
-// MARK: - Piece view
-
-private struct ChessPieceView: View {
-    let piece: Character
-    let squareSize: CGFloat
-    /// The Dart `PieceSet` enum `.name` value (e.g. `"staunty"`, `"kiwenSuwi"`).
-    let pieceSet: String
-
-    private var assetName: String {
-        let color = piece.isUppercase ? "w" : "b"
-        let kind = piece.uppercased()
-        return "piece_\(pieceSet)_\(color)\(kind)"
-    }
-
-    var body: some View {
-        Image(assetName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: squareSize * 0.9, height: squareSize * 0.9)
     }
 }
