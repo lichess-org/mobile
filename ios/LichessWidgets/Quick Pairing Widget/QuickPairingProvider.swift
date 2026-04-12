@@ -7,6 +7,8 @@ struct QuickPairingSeek {
 	let rated: Bool
 	let variant: String
 
+	static let defaultTimeControlIconGlyph = QuickPairingSpeed.blitz.iconGlyph
+
 	var displayTimeControl: String {
 		"\(clockLabelInMinutes(timeSeconds))+\(incrementSeconds)"
 	}
@@ -30,6 +32,29 @@ struct QuickPairingSeek {
 		}
 	}
 
+	var estimatedDurationSeconds: Int {
+		timeSeconds + incrementSeconds * 40
+	}
+
+	var timeControlIconGlyph: String {
+		timeControlSpeed.iconGlyph
+	}
+
+	private var timeControlSpeed: QuickPairingSpeed {
+		switch estimatedDurationSeconds {
+		case 1 ... 29:
+			.ultrabullet
+		case 30 ... 179:
+			.bullet
+		case 180 ... 479:
+			.blitz
+		case 480 ... 1499:
+			.rapid
+		default:
+			.classical
+		}
+	}
+
 	var deepLinkURL: URL? {
 		var components = URLComponents()
 		components.scheme = "org.lichess.mobile"
@@ -41,6 +66,29 @@ struct QuickPairingSeek {
 			URLQueryItem(name: "variant", value: variant),
 		]
 		return components.url
+	}
+}
+
+private enum QuickPairingSpeed {
+	case ultrabullet
+	case bullet
+	case blitz
+	case rapid
+	case classical
+
+	var iconGlyph: String {
+		switch self {
+		case .ultrabullet:
+			"\u{e806}"
+		case .bullet:
+			"\u{e804}"
+		case .blitz:
+			"\u{e802}"
+		case .rapid:
+			"\u{e805}"
+		case .classical:
+			"\u{e803}"
+		}
 	}
 }
 
