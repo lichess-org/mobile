@@ -33,4 +33,5 @@ enum DailyPuzzleWidgetLayout {
     // Error state
     static let errorIconSize: CGFloat = 20
     static let errorStackSpacing: CGFloat = 6
+    static let errorMessageHorizontalPadding: CGFloat = 16
 }

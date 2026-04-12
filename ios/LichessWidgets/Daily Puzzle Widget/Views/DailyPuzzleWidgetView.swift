@@ -120,6 +120,7 @@ struct DailyPuzzleWidgetView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                .padding(.horizontal, DailyPuzzleWidgetLayout.errorMessageHorizontalPadding)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
