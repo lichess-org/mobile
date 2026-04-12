@@ -9,11 +9,14 @@ struct BoardStyle {
     let boardImageName: String?
     let pieceSet: String
 
+    static let defaultPieceSet = "staunty"
+    static let defaultChessboardTheme = "brown"
+
     /// Reads the saved board theme and piece set from the shared App Group.
     static func fromAppGroup() -> BoardStyle {
         let defaults = UserDefaults(suiteName: LichessAppGroup.id)
-        let themeName = defaults?.string(forKey: LichessAppGroup.boardThemeKey) ?? "brown"
-        let pieceSetName = defaults?.string(forKey: LichessAppGroup.pieceSetKey) ?? "staunty"
+        let themeName = defaults?.string(forKey: LichessAppGroup.boardThemeKey) ?? defaultChessboardTheme
+        let pieceSetName = defaults?.string(forKey: LichessAppGroup.pieceSetKey) ?? defaultPieceSet
         return BoardStyle.from(themeName: themeName, pieceSet: pieceSetName)
     }
 

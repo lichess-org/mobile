@@ -120,9 +120,30 @@ echo "  boards: $board_count imagesets written"
 PIECES_SRC="$PACKAGE/assets/piece_sets"
 PIECES=(bB bK bN bP bQ bR wB wK wN wP wQ wR)
 
+# Converts a kebab-case string to camelCase (e.g. "kiwen-suwi" → "kiwenSuwi").
+# This makes the asset names match the Dart PieceSet enum .name values so the
+# Swift code can use them directly without a separate mapping.
+to_camel_case() {
+    local input="$1" result="" capitalize_next=false
+    for ((i = 0; i < ${#input}; i++)); do
+        local char="${input:$i:1}"
+        if [[ "$char" == "-" ]]; then
+            capitalize_next=true
+        elif $capitalize_next; then
+            result+="${char^^}"
+            capitalize_next=false
+        else
+            result+="$char"
+        fi
+    done
+    echo "$result"
+}
+
 set_count=0
 for set_dir in "$PIECES_SRC"/*/; do
     set_name=$(basename "$set_dir")
+    asset_name=$(to_camel_case "$set_name")
+
     # Skip piece sets that don't follow the standard <color><Kind>.png layout
     # (e.g. "mono" uses single-letter filenames without a colour prefix).
     if [[ ! -f "$set_dir/bB.png" ]]; then
@@ -130,7 +151,7 @@ for set_dir in "$PIECES_SRC"/*/; do
         continue
     fi
     for piece in "${PIECES[@]}"; do
-        dest="$CATALOG/piece_${set_name}_${piece}.imageset"
+        dest="$CATALOG/piece_${asset_name}_${piece}.imageset"
         mkdir -p "$dest"
         cp "$set_dir/${piece}.png"       "$dest/${piece}.png"
         cp "$set_dir/2.0x/${piece}.png"  "$dest/${piece}@2x.png"
