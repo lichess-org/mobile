@@ -69,41 +69,46 @@ struct DailyPuzzleWidgetView: View {
 
     @ViewBuilder
     private var largeView: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 8) {
-                Image("LichessLogo")
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                Text("Daily Puzzle")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                HStack(spacing: 8) {
+                    Image("LichessLogo")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                    Text("Daily Puzzle")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
 
-                Spacer()
+                    Spacer()
 
-                if entry.showRating, let rating = entry.rating {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                        .font(.system(size: 14))
-                        .foregroundStyle(.secondary)
-                    Text("\(rating)")
+                    if entry.showRating, let rating = entry.rating {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.secondary)
+                        Text("\(rating)")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Circle()
+                        .fill(entry.isWhiteToMove ? Color.white : Color.black)
+                        .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
+                        .frame(width: 14, height: 14)
+
+                    Text(entry.date.shortTime)
                         .font(.system(size: 14))
                         .foregroundStyle(.secondary)
                 }
+                .padding(.bottom, 5)
 
-                Circle()
-                    .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                    .overlay(Circle().stroke(Color.secondary.opacity(0.4), lineWidth: 0.5))
-                    .frame(width: 14, height: 14)
-
-                Text(entry.date.shortTime)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                boardView
+                    .cornerRadius(6)
+                    .frame(width: geo.size.width, height: geo.size.width)
             }
-            .padding(.bottom, 4)
-
-            boardView.cornerRadius(5)
         }
-        .border(.red, width: 1)
+        .padding(.horizontal, 16)
+        .padding(.top, 11)
     }
 
     // MARK: - Reusable sub-views

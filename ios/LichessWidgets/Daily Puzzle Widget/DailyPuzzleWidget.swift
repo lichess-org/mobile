@@ -12,6 +12,7 @@ struct DailyPuzzleWidget: Widget {
             DailyPuzzleWidgetView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
+        .contentMarginsDisabled()
         .configurationDisplayName("Daily Puzzle")
         .description("Today's chess puzzle from lichess.org.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
