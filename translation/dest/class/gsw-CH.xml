@@ -115,7 +115,7 @@ Es wird als horizontali Linie azeigt.</string>
   <string name="xisNowAStudentOfTheClass">%s isch jetzt en Schüeler vu de Klass</string>
   <string name="anInvitationHasBeenSentToX">An %s isch e Iladig gsändet worde</string>
   <string name="xAlreadyHasAPendingInvitation">%s hät bereits e usstehendi Iladig</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s isch es Chinder Konto, es chann dini Nachricht nöd empfange. Du muesch e Iladigs-URL manuell übermittle: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s isch es Chinder Konto, es chann dini Nachricht nöd empfange. Du muesch e Iladigs-URL manuell übermittle: %2$s</string>
   <string name="moveToClass">Gang zu %s</string>
   <string name="moveToAnotherClass">Gang ine anderi Klass</string>
   <string name="allowMessagingBetweenStudents">Kontaktustusch zwüsche de Schüeler erlaube</string>

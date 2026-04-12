@@ -115,7 +115,7 @@ Amosará unha liña separadora horizontal.</string>
   <string name="xisNowAStudentOfTheClass">%s xa é un novo estudante da clase</string>
   <string name="anInvitationHasBeenSentToX">Enviouse unha invitación a %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s xa ten unha invitación pendente</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s está en modo infantil e non pode recibir mensaxes. Debes enviarlle a ligazón da invitación de xeito manual: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s está en modo infantil e non pode recibir mensaxes. Debes enviarlle a ligazón da invitación de xeito manual: %2$s</string>
   <string name="moveToClass">Mover a %s</string>
   <string name="moveToAnotherClass">Mover a outra clase</string>
   <string name="allowMessagingBetweenStudents">Permitir mensaxes entre estudantes</string>
