@@ -123,20 +123,13 @@ PIECES=(bB bK bN bP bQ bR wB wK wN wP wQ wR)
 # Converts a kebab-case string to camelCase (e.g. "kiwen-suwi" → "kiwenSuwi").
 # This makes the asset names match the Dart PieceSet enum .name values so the
 # Swift code can use them directly without a separate mapping.
+# Uses awk for POSIX compatibility — bash 3.2 (macOS default) lacks the ${var^^} operator.
 to_camel_case() {
-    local input="$1" result="" capitalize_next=false
-    for ((i = 0; i < ${#input}; i++)); do
-        local char="${input:$i:1}"
-        if [[ "$char" == "-" ]]; then
-            capitalize_next=true
-        elif $capitalize_next; then
-            result+="${char^^}"
-            capitalize_next=false
-        else
-            result+="$char"
-        fi
-    done
-    echo "$result"
+    echo "$1" | awk -F'-' '{
+        r = $1
+        for (i = 2; i <= NF; i++) r = r toupper(substr($i, 1, 1)) substr($i, 2)
+        print r
+    }'
 }
 
 set_count=0
