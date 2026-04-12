@@ -18,4 +18,11 @@ enum LichessAppGroup {
     static var lichessHost: String {
         UserDefaults(suiteName: id)?.string(forKey: lichessHostKey) ?? "lichess.org"
     }
+
+    /// Builds a lichess URL for the given path, using http for localhost and https otherwise.
+    static func lichessURL(path: String) -> URL? {
+        let host = lichessHost
+        let scheme = host.hasPrefix("localhost") ? "http" : "https"
+        return URL(string: "\(scheme)://\(host)\(path)")
+    }
 }

@@ -20,9 +20,7 @@ struct DailyPuzzleFetcher {
     
     func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
         let boardStyle = BoardStyle.fromAppGroup()
-        let host = LichessAppGroup.lichessHost
-        let scheme = host.hasPrefix("localhost") ? "http" : "https"
-        guard let url = URL(string: "\(scheme)://\(host)/api/puzzle/daily") else {
+        guard let url = LichessAppGroup.lichessURL(path: "/api/puzzle/daily") else {
             return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
