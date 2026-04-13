@@ -165,9 +165,9 @@ class _RepeatButtonState extends State<RepeatButton> {
     return MergeSemantics(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onLongPress: _onLongPress,
-        onLongPressCancel: _onPressEnd,
-        onLongPressUp: _onPressEnd,
+        onLongPress: widget.onLongPress != null ? _onLongPress : null,
+        onLongPressCancel: widget.onLongPress != null ? _onPressEnd : null,
+        onLongPressUp: widget.onLongPress != null ? _onPressEnd : null,
         child: widget.child,
       ),
     );

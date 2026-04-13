@@ -131,8 +131,10 @@ class PuzzleController extends Notifier<PuzzleState> {
         else if (nextUci != null) {
           final correctPath = state.currentPath;
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _gameTree.addMoveAt(correctPath, Move.parse(nextUci)!);
-          _setPath(correctPath + UciCharPair.fromUci(nextUci), isNavigating: true);
+          final (nextPath, _) = _gameTree.addMoveAt(correctPath, Move.parse(nextUci)!);
+          if (nextPath != null) {
+            _setPath(nextPath, isNavigating: true);
+          }
         }
         // no more puzzle move: it's a win
         else {
