@@ -80,10 +80,10 @@ struct DailyPuzzleWidgetView: View {
                 .padding(.bottom, DailyPuzzleWidgetLayout.headerBottomPadding)
 
                 boardView
-                    .roundedCornerWithBorder(
-                        lineWidth: DailyPuzzleWidgetLayout.largeBoardBorderWidth,
-                        style: .tertiary,
-                        radius: DailyPuzzleWidgetLayout.largeBoardCornerRadius
+                    .clipShape(ContainerRelativeShape())
+                    .overlay(
+                        ContainerRelativeShape()
+                            .stroke(.tertiary, lineWidth: DailyPuzzleWidgetLayout.largeBoardBorderWidth)
                     )
                     .frame(width: geo.size.width, height: geo.size.width)
             }

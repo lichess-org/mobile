@@ -22,7 +22,6 @@ enum DailyPuzzleWidgetLayout {
     static let smallBoardBorderWidth: CGFloat = 1
 
     // Board — large
-    static let largeBoardCornerRadius: CGFloat = 6
     static let largeBoardBorderWidth: CGFloat = 1
     static let largeHorizontalPadding: CGFloat = 16
     static let largeTopPadding: CGFloat = 11
