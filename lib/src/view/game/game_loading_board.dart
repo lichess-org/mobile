@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -314,25 +315,42 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                             context,
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
+                              // Capture everything that needs BuildContext before the async gap.
+                              final rootNav = Navigator.of(context, rootNavigator: true);
+                              final directedChallengeReq = widget.challengeRequest.copyWith(
+                                destUser: user,
+                              );
+                              final directedChallengeRoute =
+                                  widget.challengeRequest.timeControl ==
+                                      ChallengeTimeControlType.clock
+                                  ? GameScreen.buildRoute(
+                                      context,
+                                      source: UserChallengeSource(directedChallengeReq),
+                                    )
+                                  : null;
+
                               try {
                                 await widget.cancelChallenge();
                               } catch (e) {
                                 debugPrint('Error cancelling open challenge: $e');
                               }
 
-                              final directedChallengeReq = widget.challengeRequest.copyWith(
-                                destUser: user,
-                              );
                               if (!context.mounted) return;
 
-                              if (widget.challengeRequest.timeControl ==
-                                  ChallengeTimeControlType.clock) {
-                                Navigator.of(context).pop();
-                                Navigator.of(context, rootNavigator: true).pushReplacement(
-                                  GameScreen.buildRoute(
-                                    context,
-                                    source: UserChallengeSource(directedChallengeReq),
+                              if (directedChallengeRoute != null) {
+                                // Invalidate the provider so the new GameScreen creates a
+                                // fresh challenge even if the same UserChallengeSource was
+                                // used in a previous game (Freezed equality shares providers).
+                                ref.invalidate(
+                                  gameScreenLoaderProvider(
+                                    UserChallengeSource(directedChallengeReq),
                                   ),
+                                );
+                                // Use pushAndRemoveUntil to clear any old GameScreen from
+                                // the stack without removing unrelated routes.
+                                rootNav.pushAndRemoveUntil(
+                                  directedChallengeRoute,
+                                  (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                 );
                               } else {
                                 await ref
