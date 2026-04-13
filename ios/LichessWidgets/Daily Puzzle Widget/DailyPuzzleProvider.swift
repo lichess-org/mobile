@@ -14,8 +14,6 @@ struct DailyPuzzleIntent: WidgetConfigurationIntent {
 }
 
 struct DailyPuzzleProvider: AppIntentTimelineProvider {
-    private let fetcher = DailyPuzzleFetcher()
-
     func placeholder(in context: Context) -> DailyPuzzleEntry {
         .placeholder
     }
@@ -28,7 +26,7 @@ struct DailyPuzzleProvider: AppIntentTimelineProvider {
     }
 
     func timeline(for configuration: DailyPuzzleIntent, in context: Context) async -> Timeline<DailyPuzzleEntry> {
-        let entry = await fetcher.fetchEntry(showRating: configuration.showRating)
+        let entry = await DailyPuzzleFetcher.fetchEntry(showRating: configuration.showRating)
         return Timeline(entries: [entry], policy: .after(DailyPuzzleFetcher.nextUpdate(for: entry)))
     }
 }

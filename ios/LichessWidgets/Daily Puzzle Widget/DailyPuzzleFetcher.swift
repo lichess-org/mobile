@@ -1,31 +1,18 @@
 import Foundation
 
 struct DailyPuzzleFetcher {
-    /// The next update is scheduled for 00:05 UTC the following day.
+    /// Returns the date of the next update.
     ///
-    /// The daily puzzle is published at midnight UTC, so we use a UTC calendar to
-    /// compute the next trigger time rather than the device's local calendar — a
-    /// device in UTC+12 would otherwise schedule the reload 12 hours too late.
-    static var nextUpdateDate: Date {
-        var utc = Calendar(identifier: .gregorian)
-        utc.timeZone = TimeZone(identifier: "UTC")!
-        var components = utc.dateComponents([.year, .month, .day], from: .now)
-        components.day = (components.day ?? 0) + 1
-        components.hour = 0
-        components.minute = 5
-        components.second = 0
-        return utc.date(from: components)
-        ?? Calendar.current.date(byAdding: .hour, value: 24, to: .now)!
-    }
-    
-    /// Returns the date of the next update: an hour from now on failure, next day 00:05 UTC on success.
+    /// On success: fetchTime + 6 h. Devices naturally stagger across the day
+    /// based on when the widget was first added, so no explicit jitter is needed.
+    /// On failure: 1 hour from the fetch time so a transient error is retried promptly.
     static func nextUpdate(for entry: DailyPuzzleEntry) -> Date {
         entry.error == nil
-            ? nextUpdateDate
-            : Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
+            ? entry.date.addingTimeInterval(6 * 3600)
+            : entry.date.addingTimeInterval(3600)
     }
 
-    func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
+    static func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
         let boardStyle = BoardStyle.fromAppGroup()
         guard let url = LichessAppGroup.lichessURL(path: "/api/puzzle/daily") else {
             return errorEntry(showRating: showRating, boardStyle: boardStyle)
@@ -39,9 +26,9 @@ struct DailyPuzzleFetcher {
             return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
     }
-    
+
     // MARK: - Private
-    
+
     private struct APIResponse: Decodable {
         struct Puzzle: Decodable {
             let id: String
@@ -51,10 +38,10 @@ struct DailyPuzzleFetcher {
         }
         let puzzle: Puzzle
     }
-    
-    private func parse(_ data: Data,
-                       showRating: Bool,
-                       boardStyle: BoardStyle) throws -> DailyPuzzleEntry {
+
+    private static func parse(_ data: Data,
+                               showRating: Bool,
+                               boardStyle: BoardStyle) throws -> DailyPuzzleEntry {
         let response = try JSONDecoder().decode(APIResponse.self, from: data)
         return DailyPuzzleEntry(date: .now,
                                 puzzleId: response.puzzle.id,
@@ -65,8 +52,8 @@ struct DailyPuzzleFetcher {
                                 boardStyle: boardStyle,
                                 error: nil)
     }
-    
-    private func errorEntry(showRating: Bool, boardStyle: BoardStyle) -> DailyPuzzleEntry {
+
+    private static func errorEntry(showRating: Bool, boardStyle: BoardStyle) -> DailyPuzzleEntry {
         DailyPuzzleEntry(date: .now,
                          puzzleId: nil,
                          fen: nil,
