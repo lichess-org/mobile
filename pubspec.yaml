@@ -60,7 +60,7 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.13.0
   # TODO remove pin
-  material_symbols_icons: 4.2906.0
+  material_symbols_icons: 4.2928.1
   meta: ^1.8.0
   multistockfish: ^0.5.0
   package_info_plus: ^9.0.0
