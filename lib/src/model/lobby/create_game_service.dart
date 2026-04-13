@@ -138,8 +138,14 @@ class CreateGameService {
       throw StateError('Already creating a challenge.');
     }
 
+    final keepAlive = ref.keepAlive();
+
     // ensure the pending connection is closed in any case
-    final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
+    final completer = Completer<ChallengeResponse>()
+      ..future.whenComplete(() {
+        keepAlive.close();
+        dispose();
+      });
 
     try {
       final socketPool = ref.read(socketPoolProvider);
@@ -184,7 +190,7 @@ class CreateGameService {
         completer,
       );
     } catch (e) {
-      _log.warning('Failed to create challenge', e);
+      _log.warning('Failed to create challenge socket, completing with error', e);
       // if the completer is not yet completed, complete it with an error
       if (!completer.isCompleted) {
         completer.completeError(e);
