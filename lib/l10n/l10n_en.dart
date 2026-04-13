@@ -1058,6 +1058,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7606,6 +7616,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -11929,7 +11949,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       count,
       locale: localeName,
       other: '≥ $count rated $param2 games',
-      one: '≥ $count $param2 rated game',
+      one: '≥ $count rated $param2 game',
     );
     return '$_temp0';
   }

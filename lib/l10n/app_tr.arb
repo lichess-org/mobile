@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Beraberlik bozma",
   "broadcastGameX": "Oyun {param}",
   "broadcastKnockouts": "Eleme",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} canlı turnuva} other{{count} canlı turnuva}}",
   "broadcastNbViewers": "{count, plural, =1{{count} izleyici} other{{count} izleyici}}",
   "challengeChallengesX": "{param1} karşılaşmaları",

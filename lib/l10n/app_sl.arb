@@ -281,6 +281,8 @@
   "broadcastTiebreaks": "Tiebreaki",
   "broadcastGameX": "Igra {param}",
   "broadcastKnockouts": "Nokauti",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} oddaja} =2{{count} oddaji} few{{count} oddaje} other{{count} oddaj}}",
   "broadcastNbViewers": "{count, plural, =1{{count} gledalec} =2{{count} gledalca} few{{count} gledalci} other{{count} gledalcev}}",
   "challengeChallengesX": "Izzivi:{param1}",

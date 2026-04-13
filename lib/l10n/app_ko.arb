@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "타이브레이커",
   "broadcastGameX": "게임 {param}",
   "broadcastKnockouts": "녹아웃",
+  "broadcastUnderXAgeTournament": "U-{param}",
+  "broadcastUnderXEloTournament": "U-{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} 방송}}",
   "broadcastNbViewers": "{count, plural, other{시청자 {count}명}}",
   "challengeChallengesX": "도전: {param1}",

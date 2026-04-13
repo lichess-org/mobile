@@ -1894,6 +1894,18 @@ abstract class AppLocalizations {
   /// **'Knockouts'**
   String get broadcastKnockouts;
 
+  /// No description provided for @broadcastUnderXAgeTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXAgeTournament(String param);
+
+  /// No description provided for @broadcastUnderXEloTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXEloTournament(String param);
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:

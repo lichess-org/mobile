@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Katkaisupelit",
   "broadcastGameX": "Peli {param}",
   "broadcastKnockouts": "Pudotuspelit",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "Alle {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} lähetys} other{{count} lähetystä}}",
   "broadcastNbViewers": "{count, plural, =1{{count} katsoja} other{{count} katsojaa}}",
   "challengeChallengesX": "Haasteet: {param1}",

@@ -67,7 +67,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tem de iniciar sessão para visualizar esta página.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Novo jogo';
 
   @override
   String get mobileNoSearchResults => 'Sem resultados';
@@ -245,7 +245,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ver Jogo';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -1056,6 +1056,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatórias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -7606,6 +7616,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get broadcastKnockouts => 'Mata-matas';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub-$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
