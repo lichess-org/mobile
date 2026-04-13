@@ -1,3 +1,4 @@
+import ChessgroundAssets
 import Foundation
 
 struct DailyPuzzleFetcher {
@@ -13,7 +14,7 @@ struct DailyPuzzleFetcher {
     }
 
     static func fetchEntry(showRating: Bool) async -> DailyPuzzleEntry {
-        let boardStyle = BoardStyle.fromAppGroup()
+        let boardStyle = ChessboardTheme.fromAppGroup()
         guard let url = LichessAppGroup.lichessURL(path: "/api/puzzle/daily") else {
             return errorEntry(showRating: showRating, boardStyle: boardStyle)
         }
@@ -41,7 +42,7 @@ struct DailyPuzzleFetcher {
 
     private static func parse(_ data: Data,
                                showRating: Bool,
-                               boardStyle: BoardStyle) throws -> DailyPuzzleEntry {
+                               boardStyle: ChessboardTheme) throws -> DailyPuzzleEntry {
         let response = try JSONDecoder().decode(APIResponse.self, from: data)
         return DailyPuzzleEntry(date: .now,
                                 puzzleId: response.puzzle.id,
@@ -53,7 +54,7 @@ struct DailyPuzzleFetcher {
                                 error: nil)
     }
 
-    private static func errorEntry(showRating: Bool, boardStyle: BoardStyle) -> DailyPuzzleEntry {
+    private static func errorEntry(showRating: Bool, boardStyle: ChessboardTheme) -> DailyPuzzleEntry {
         DailyPuzzleEntry(date: .now,
                          puzzleId: nil,
                          fen: nil,

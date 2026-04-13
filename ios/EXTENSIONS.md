@@ -53,19 +53,26 @@ Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfil
 
 ## Chessboard assets
 
-Board textures and piece images used by the widgets are sourced from the
-[flutter-chessground](https://github.com/lichess-org/flutter-chessground) package
-and stored in the widget extension's asset catalog under the `Chessboard` group.
+Board textures, piece images, and theme colour data used by the widgets are
+provided by the `ChessgroundAssets` Swift package, which lives inside the
+[flutter-chessground](https://github.com/lichess-org/flutter-chessground)
+repository. This means the widget always uses the same assets as the Flutter
+app — one source of truth distributed via both pub and SPM.
+
+### Adding the package (one-time Xcode setup)
+
+1. In Xcode, select **File → Add Package Dependencies**.
+2. Enter `https://github.com/lichess-org/flutter-chessground` as the URL.
+3. Choose the version rule and add the `ChessgroundAssets` library to the
+   **LichessWidgets** extension target only (not the Runner target).
 
 ### Keeping assets in sync
 
-After bumping the `chessground` version in `pubspec.yaml` and running
-`flutter pub get`, regenerate the asset catalog group by running:
+Assets are versioned alongside the Dart package. When `chessground` is bumped in
+`pubspec.yaml`, update the SPM dependency to the matching version tag in Xcode
+(**File → Packages → Update to Latest Package Versions**) or pin it to the
+specific tag. No script needs to be run in this repository.
 
-```sh
-./scripts/sync-chessground-assets.sh
-```
-
-The script reads the locked version from `pubspec.lock`, finds the package in
-the local pub cache, and replaces all `board_*` and `piece_*` imagesets in the
-`Chessboard` group. No arguments are needed.
+If you need to regenerate the xcassets on the flutter-chessground side (e.g.
+after a new piece set is added), run `./scripts/gen-swift-xcassets.sh` there and
+commit the result before cutting a new release tag.

@@ -1,3 +1,4 @@
+import ChessgroundAssets
 import SwiftUI
 import WidgetKit
 
