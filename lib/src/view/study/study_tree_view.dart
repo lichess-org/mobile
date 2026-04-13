@@ -7,8 +7,6 @@ import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
-const kNextChapterButtonHeight = 32.0;
-
 class StudyTreeView extends ConsumerWidget {
   const StudyTreeView(this.options);
 
