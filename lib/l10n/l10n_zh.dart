@@ -1038,6 +1038,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastKnockouts => '淘汰赛';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4709,7 +4719,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get correspondenceDesc => '通讯棋对局：每步棋一天或数天';
 
   @override
-  String get puzzleDesc => '国际象棋战术训练器';
+  String get puzzleDesc => '战术训练';
 
   @override
   String get important => '重要提示';

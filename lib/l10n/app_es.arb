@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desempates",
   "broadcastGameX": "Partida {param}",
   "broadcastKnockouts": "Eliminatorias",
+  "broadcastUnderXAgeTournament": "Sub{param}",
+  "broadcastUnderXEloTournament": "Sub{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisión} other{{count} transmisiones}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadores}}",
   "challengeChallengesX": "Desafíos: {param1}",

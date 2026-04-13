@@ -1,10 +1,13 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerWidget {
@@ -140,5 +143,22 @@ class SmallBoardPreview extends ConsumerWidget {
     );
 
     return onTap != null ? InkWell(onTap: onTap, child: content) : content;
+  }
+}
+
+/// Reads a FEN from the clipboard, validates it, and sets it on [controller].
+///
+/// Shows a snackbar if the clipboard content is not a valid FEN.
+Future<void> pasteFenFromClipboard(BuildContext context, TextEditingController controller) async {
+  final data = await Clipboard.getData(Clipboard.kTextPlain);
+  if (data != null) {
+    try {
+      Chess.fromSetup(Setup.parseFen(data.text!.trim()));
+      controller.text = data.text!.trim();
+    } catch (_) {
+      if (context.mounted) {
+        showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
+      }
+    }
   }
 }

@@ -115,7 +115,7 @@ Itt egy vízszintes vonal fog megjelenni.</string>
   <string name="xisNowAStudentOfTheClass">%s mostmár a csoport tanulója</string>
   <string name="anInvitationHasBeenSentToX">A meghívót elküldtük %s részére</string>
   <string name="xAlreadyHasAPendingInvitation">%s már kapott meghívót, még nem válaszolt rá</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s gyerekfiókkal rendelkezik ezért nem kapja meg az üzeneted. Juttasd el hozzá más csatornán a meghívó URL-jét: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s gyerekfiókkal rendelkezik ezért nem kapja meg az üzeneted. Juttasd el hozzá más csatornán a meghívó URL-jét: %2$s</string>
   <string name="moveToClass">Áthelyezés ide: %s</string>
   <string name="moveToAnotherClass">Áthelyezés másik osztályba</string>
   <string name="allowMessagingBetweenStudents">Tanulók közötti üzenetek engedélyezése</string>

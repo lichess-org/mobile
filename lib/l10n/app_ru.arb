@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Тай-брейки",
   "broadcastGameX": "{param} партий",
   "broadcastKnockouts": "Нокауты",
+  "broadcastUnderXAgeTournament": "До {param}",
+  "broadcastUnderXEloTournament": "До {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} трансляция} few{{count} трансляции} many{{count} трансляций} other{{count} трансляций}}",
   "broadcastNbViewers": "{count, plural, =1{{count} зритель} few{{count} зрителя} many{{count} зрителей} other{{count} зрителей}}",
   "challengeChallengesX": "Вызовов: {param1}",
