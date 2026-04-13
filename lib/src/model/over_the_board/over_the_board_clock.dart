@@ -43,7 +43,7 @@ class OverTheBoardClock extends Notifier<OverTheBoardClockState> {
       }
     });
 
-    return OverTheBoardClockState.fromTimeIncrement(TimeIncrement.blitzDefault());
+    return OverTheBoardClockState.fromTimeIncrement(const TimeIncrement.blitzDefault());
   }
 
   void setupClock(TimeIncrement timeIncrement, {Duration? whiteTimeLeft, Duration? blackTimeLeft}) {

@@ -81,7 +81,9 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     });
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
-    chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
+    chosenTimeControlType = timeIncrement.isInfinite
+        ? TimeControlType.unlimited
+        : TimeControlType.realTime;
     super.initState();
   }
 
@@ -95,23 +97,36 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
     setState(() {
       chosenTimeControlType = type;
+
       if (type == TimeControlType.unlimited) {
         timeIncrement = const TimeIncrement.infinite();
       } else if (timeIncrement.isInfinite) {
-        timeIncrement = TimeIncrement.blitzDefault();
+        timeIncrement = const TimeIncrement.blitzDefault();
       }
     });
   }
 
   void _setTotalTime(num seconds) {
     setState(() {
-      timeIncrement = TimeIncrement(seconds.toInt(), timeIncrement.increment);
+      _updateTimeIncrement(TimeIncrement(seconds.toInt(), timeIncrement.increment));
     });
   }
 
   void _setIncrement(num seconds) {
     setState(() {
-      timeIncrement = TimeIncrement(timeIncrement.time, seconds.toInt());
+      _updateTimeIncrement(TimeIncrement(timeIncrement.time, seconds.toInt()));
+    });
+  }
+
+  void _updateTimeIncrement(TimeIncrement newIncrement) {
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(newIncrement);
+    setState(() {
+      timeIncrement = newIncrement;
+      if (timeIncrement.isInfinite) {
+        _setTimeControlType(TimeControlType.unlimited);
+      } else {
+        _setTimeControlType(TimeControlType.realTime);
+      }
     });
   }
 
