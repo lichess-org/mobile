@@ -1,29 +1,6 @@
 import AppIntents
 import WidgetKit
 
-// MARK: - Small widget provider (no configuration)
-
-struct DailyPuzzleStaticProvider: TimelineProvider {
-    private let fetcher = DailyPuzzleFetcher()
-
-    func placeholder(in context: Context) -> DailyPuzzleEntry {
-        .placeholder
-    }
-
-    func getSnapshot(in context: Context, completion: @escaping (DailyPuzzleEntry) -> Void) {
-        completion(.placeholder)
-    }
-
-    func getTimeline(in context: Context, completion: @escaping (Timeline<DailyPuzzleEntry>) -> Void) {
-        Task {
-            let entry = await fetcher.fetchEntry(showRating: false)
-            completion(Timeline(entries: [entry], policy: .after(DailyPuzzleFetcher.nextUpdate(for: entry))))
-        }
-    }
-}
-
-// MARK: - Large widget intent + provider (with configuration)
-
 struct DailyPuzzleIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "Daily Puzzle"
     static var description = IntentDescription("Configure the Daily Puzzle widget.")
