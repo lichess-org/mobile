@@ -721,6 +721,134 @@ void main() {
     expect(captured.length, 1);
     expect(captured[0].solved.length, 0);
   });
+  testWidgets(
+    'can navigate backward and forward through history during play',
+    variant: kPlatformVariant,
+    (tester) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
+      ).thenAnswer((_) async => puzzle2);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
+            return mockBatchStorage;
+          }),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => batch);
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      const orientation = Side.black;
+
+      // wait for previous opponent's move to be played
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      bool isPrevEnabled() {
+        return tester
+                .widget<BottomBarButton>(
+                  find.widgetWithIcon(BottomBarButton, CupertinoIcons.chevron_back),
+                )
+                .onTap !=
+            null;
+      }
+
+      bool isNextEnabled() {
+        return tester
+                .widget<BottomBarButton>(
+                  find.widgetWithIcon(BottomBarButton, CupertinoIcons.chevron_forward),
+                )
+                .onTap !=
+            null;
+      }
+
+      expect(isNextEnabled(), isFalse);
+
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      expect(isPrevEnabled(), isFalse);
+      expect(isNextEnabled(), isTrue);
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+
+      // user plays the first correct move
+      await playMove(tester, 'g4', 'h4', orientation: orientation);
+
+      // wait for computer reply and move animation
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+
+      // computer replied by capturing our rook with its queen
+      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+
+      expect(isPrevEnabled(), isTrue);
+
+      // tap "Previous" once to undo the computer's reply
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      // verify we see our original bold move (black rook on h4)
+      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+
+      // tap "Previous" again to undo our first move
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      // verify we are back at the start (black rook on g4)
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      // check that the user can not play a different move in the starting position
+      await playMove(tester, 'g4', 'g5', orientation: orientation);
+      // check that the rook stayed on g4
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      // check that the "Next" button is now enabled
+      expect(isNextEnabled(), isTrue);
+
+      // tap "Next" twice to return to the active game node
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+
+      // verify we are back to the current state (computer's white queen on h4)
+      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+    },
+  );
 
   testWidgets(
     'Regression test for false positive alternative castling notation (#2345)',
