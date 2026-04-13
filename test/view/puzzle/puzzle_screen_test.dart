@@ -802,6 +802,99 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+  testWidgets(
+    'Regression test for castling by moving and by show solution creating different move objects (#2876)',
+    variant: kPlatformVariant,
+    (tester) async {
+      final buggyPuzzle = Puzzle(
+        puzzle: PuzzleData(
+          id: const PuzzleId('9gsMd'),
+          initialPly: 21,
+          plays: 128846,
+          rating: 2193,
+          solution: IList(const ['e1g1', 'd7d6', 'f4h6']),
+          themes: ISet(const [
+            'middlegame',
+            'short',
+            'castling',
+            'discoveredCheck',
+            'advantage',
+            'discoveredAttack',
+          ]),
+        ),
+        game: const PuzzleGame(
+          rated: true,
+          id: GameId('EyRPebr1'),
+          perf: Perf.rapid,
+          pgn:
+              'e4 e5 Nc3 Nc6 f4 exf4 Nf3 Bc5 d4 Bb4 Bxf4 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Ne5+ Nxe5 Qh5+ g6 Qxe5 Nxc3',
+          black: PuzzleGamePlayer(side: Side.black, name: 'Towelie1356'),
+          white: PuzzleGamePlayer(side: Side.white, name: 'Faustocoppi'),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: buggyPuzzle.puzzle.id,
+        ),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id),
+      ).thenAnswer((_) async => buggyPuzzle);
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => batch);
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+
+      // await for first move to be played (Nxc3)
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+
+      // Play castling move (O-O) by moving king to g1
+      await playMove(tester, 'e1', 'g1', orientation: Side.white);
+
+      // wait for the "View the solution" button to become enabled
+      await tester.pump(const Duration(seconds: 4));
+
+      expect(find.byIcon(Icons.help), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.help));
+
+      // Wait for the move to be triggered
+      await tester.pump(const Duration(seconds: 1));
+
+      // Wait for the move animation to complete
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('h6-whitebishop')), findsOneWidget);
+    },
+  );
 
   group('Puzzle Replay', () {
     testWidgets('Loads a replay puzzle', variant: kPlatformVariant, (tester) async {
