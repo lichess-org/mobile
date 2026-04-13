@@ -409,10 +409,14 @@ class PuzzleController extends Notifier<PuzzleState> {
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
-        final move = Move.parse(uci);
+        final moveObj = Move.parse(uci)!;
         final (pos, nodes) = previous;
-        final (newPos, newSan) = pos.makeSan(move!);
-        return (newPos, nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, move))));
+        final normalizedMove = _gameTree.normalizeMove(pos, moveObj);
+        final (newPos, newSan) = pos.makeSan(normalizedMove);
+        return (
+          newPos,
+          nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, normalizedMove))),
+        );
       },
     );
     _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
