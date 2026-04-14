@@ -229,10 +229,11 @@ class AppLinksService {
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         puzzle: puzzle,
       );
-      await Navigator.of(
-        context,
-        rootNavigator: true,
-      ).push(animated ? route : _withNoTransition(route));
+      await _pushDeepLinkRoute(
+        Navigator.of(context, rootNavigator: true),
+        route,
+        animated: animated,
+      );
     } catch (e, st) {
       _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
     }
@@ -297,7 +298,7 @@ class AppLinksService {
     if (routes != null) {
       final navigator = Navigator.of(context, rootNavigator: true);
       for (final route in routes) {
-        navigator.push(animated ? route : _withNoTransition(route));
+        _pushDeepLinkRoute(navigator, route, animated: animated);
       }
     } else {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
@@ -305,6 +306,30 @@ class AppLinksService {
 
       launchUrl(uri);
     }
+  }
+
+  /// Pushes [route] onto [navigator], replacing the top route instead of
+  /// stacking when the top is already the same screen type — preventing
+  /// duplicates when the user taps a deep link while already on that screen.
+  /// Also applies [_withNoTransition] when [animated] is `false`.
+  static Future<void> _pushDeepLinkRoute(
+    NavigatorState navigator,
+    Route<dynamic> route, {
+    required bool animated,
+  }) {
+    final pushed = animated ? route : _withNoTransition(route);
+    Route<dynamic>? top;
+    navigator.popUntil((r) {
+      top = r;
+      return true;
+    });
+    final topRoute = top;
+    if (topRoute is ScreenRoute &&
+        pushed is ScreenRoute &&
+        topRoute.screen.runtimeType == pushed.screen.runtimeType) {
+      return navigator.pushReplacement(pushed);
+    }
+    return navigator.push(pushed);
   }
 
   /// Returns a copy of [route] with [Duration.zero] transition so the screen

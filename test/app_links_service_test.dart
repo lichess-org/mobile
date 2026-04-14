@@ -192,6 +192,46 @@ void main() {
             .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', true),
       );
     });
+
+    testWidgets('replaces existing PuzzleScreen instead of stacking a duplicate', (tester) async {
+      AppLinksService? capturedService;
+      BuildContext? capturedContext;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride()},
+        home: Consumer(
+          builder: (context, ref, _) {
+            capturedService = ref.read(appLinksServiceProvider);
+            capturedContext = context;
+            return ElevatedButton(
+              onPressed: () {
+                ref.read(appLinksServiceProvider).handleDailyPuzzleLink(context, null);
+              },
+              child: const Text('go to puzzle'),
+            );
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      // First tap: pushes PuzzleScreen.
+      await tester.tap(find.text('go to puzzle'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PuzzleScreen), findsOneWidget);
+
+      // Second call from the home context (still mounted below PuzzleScreen):
+      // should replace rather than push.
+      capturedService!.handleDailyPuzzleLink(capturedContext!, null);
+      await tester.pumpAndSettle();
+
+      // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('go to puzzle'), findsOneWidget);
+      expect(find.byType(PuzzleScreen), findsNothing);
+    });
   });
 
   group('resolveAppLinkUri', () {
