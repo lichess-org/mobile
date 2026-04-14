@@ -18,39 +18,37 @@ struct DailyPuzzleWidgetView: View {
 
     @ViewBuilder
     private var contentView: some View {
-        GeometryReader { geo in
-            VStack(spacing: 0) {
-                HStack(spacing: DailyPuzzleWidgetLayout.headerSpacing) {
-                    Image("LichessLogo")
-                        .resizable()
-                        .frame(
-                            width: DailyPuzzleWidgetLayout.logoSize,
-                            height: DailyPuzzleWidgetLayout.logoSize
-                        )
-                    Text("Daily Puzzle")
-                        .font(.system(size: DailyPuzzleWidgetLayout.titleFontSize, weight: .semibold))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    Text(entry.date, format: entry.date.widgetDateFormat)
-                        .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.bottom, DailyPuzzleWidgetLayout.headerBottomPadding)
-
-                boardView
-                    .clipShape(ContainerRelativeShape())
-                    .overlay(
-                        ContainerRelativeShape()
-                            .stroke(.tertiary, lineWidth: DailyPuzzleWidgetLayout.boardBorderWidth)
+        VStack(spacing: 0) {
+            HStack(spacing: DailyPuzzleWidgetLayout.headerSpacing) {
+                Image("LichessLogo")
+                    .resizable()
+                    .frame(
+                        width: DailyPuzzleWidgetLayout.logoSize,
+                        height: DailyPuzzleWidgetLayout.logoSize
                     )
-                    .frame(width: geo.size.width, height: geo.size.width)
+                Text("Daily Puzzle")
+                    .font(.system(size: DailyPuzzleWidgetLayout.titleFontSize, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                Spacer()
+
+                Text(entry.date, format: entry.date.widgetDateFormat)
+                    .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
+                    .foregroundStyle(.secondary)
             }
+            .padding(.bottom, DailyPuzzleWidgetLayout.headerBottomPadding)
+
+            boardView
+                .clipShape(ContainerRelativeShape())
+                .overlay(
+                    ContainerRelativeShape()
+                        .stroke(.tertiary, lineWidth: DailyPuzzleWidgetLayout.boardBorderWidth)
+                )
         }
         .padding(.horizontal, DailyPuzzleWidgetLayout.horizontalPadding)
         .padding(.top, DailyPuzzleWidgetLayout.topPadding)
+        .padding(.bottom, DailyPuzzleWidgetLayout.bottomPadding)
     }
 
     @ViewBuilder
