@@ -5,8 +5,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
-const kOpeningHeaderHeight = 32.0;
-
 class AnalysisTreeView extends ConsumerWidget {
   const AnalysisTreeView(this.options);
 

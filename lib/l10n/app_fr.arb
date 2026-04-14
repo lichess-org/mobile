@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Bris d'égalité",
   "broadcastGameX": "Partie {param}",
   "broadcastKnockouts": "Éliminatoires",
+  "broadcastUnderXAgeTournament": "Moins de {param}",
+  "broadcastUnderXEloTournament": "Moins de {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} diffusion} other{{count} diffusions}}",
   "broadcastNbViewers": "{count, plural, =1{{count} observateur} other{{count} observateurs}}",
   "challengeChallengesX": "Défis : {param1}",

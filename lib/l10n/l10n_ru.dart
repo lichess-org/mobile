@@ -1098,6 +1098,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastKnockouts => 'Нокауты';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'До $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'До $param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

@@ -21,10 +21,10 @@
   <string name="ongoing">Nun ludata</string>
   <string name="upcoming">Baldaŭ</string>
   <string name="roundName">Raŭndnomo</string>
-  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Nomo de la turniro</string>
+  <string name="tournamentName">Nomo de la turniro</string>
   <string name="tournamentDescription">Mallonga turnira priskribo</string>
-  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Plena eventa priskribo</string>
-  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Laŭvola longa priskribo de la elsendo. %1$s haveblas. Longeco devas esti malpli ol %2$s literoj.</string>
+  <string name="fullDescription">Plena eventa priskribo</string>
+  <string name="fullDescriptionHelp">Laŭvola longa priskribo de la elsendo. %1$s haveblas. Longeco devas esti malpli ol %2$s literoj.</string>
   <string name="sourceSingleUrl">Retadreso de PNG</string>
   <string name="sourceUrlHelp">URL kiun Lichess kontrolos por akiri PGN ĝisdatigojn. Ĝi devas esti publike alirebla en interreto.</string>
   <string name="startDateHelp">Laŭvola, se vi scias, kiam komenciĝas la evento</string>
@@ -59,7 +59,7 @@
   <string name="score">Rezulto</string>
   <string name="allTeams">Ĉiuj teamoj</string>
   <string name="tournamentFormat">Formo de turniro</string>
-  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Loko de turniro</string>
+  <string name="tournamentLocation">Loko de turniro</string>
   <string name="topPlayers">Plej bonaj ludantoj</string>
   <string name="timezone">Horzono</string>
   <string name="fideRatingCategory">Kategorio de rango de FIDE</string>

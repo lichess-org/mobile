@@ -112,7 +112,7 @@
   <string name="xisNowAStudentOfTheClass">%s 现已成为班级的学生</string>
   <string name="anInvitationHasBeenSentToX">已向 %s 发送邀请</string>
   <string name="xAlreadyHasAPendingInvitation">%s 已有待处理的邀请</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s 是儿童账户，无法接收您的消息。您必须手动向其提供邀请链接：%2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s 是儿童账户，无法接收您的消息。您必须手动向其提供邀请链接：%2$s</string>
   <string name="moveToClass">移至 %s</string>
   <string name="moveToAnotherClass">移至另一个班级</string>
   <string name="allowMessagingBetweenStudents">允许学生之间互发消息</string>

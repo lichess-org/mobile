@@ -278,6 +278,8 @@
   "broadcastTiebreaks": "Μπαράζ",
   "broadcastGameX": "Παρτίδα {param}",
   "broadcastKnockouts": "Νοκ άουτ",
+  "broadcastUnderXAgeTournament": "Κ{param}",
+  "broadcastUnderXEloTournament": "Κ{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} μετάδοση} other{{count} μεταδόσεις}}",
   "broadcastNbViewers": "{count, plural, =1{{count} θεατής } other{{count} θεατές}}",
   "challengeChallengesX": "Προκλήσεις: {param1}",

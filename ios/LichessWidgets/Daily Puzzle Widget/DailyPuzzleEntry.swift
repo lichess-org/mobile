@@ -1,3 +1,4 @@
+import ChessgroundAssets
 import WidgetKit
 
 struct DailyPuzzleEntry: TimelineEntry {
@@ -7,7 +8,7 @@ struct DailyPuzzleEntry: TimelineEntry {
     let lastMove: String?
     let rating: Int?
     let showRating: Bool
-    let boardStyle: BoardStyle
+    let boardStyle: ChessboardTheme
     let error: String?
 
     var isWhiteToMove: Bool {
@@ -31,11 +32,11 @@ struct DailyPuzzleEntry: TimelineEntry {
         DailyPuzzleEntry(
             date: .now,
             puzzleId: nil,
-            fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-            lastMove: "b8c6",
-            rating: 1500,
-            showRating: false,
-            boardStyle: BoardStyle.fromAppGroup(),
+            fen: "1n3rk1/4ppbp/rq1p2p1/3P4/2p1P3/2N2P1n/PPN3PP/R1BQ1R1K b - - 1 1",
+            lastMove: "g1h1",
+            rating: 1430,
+            showRating: true,
+            boardStyle: ChessboardTheme.fromAppGroup(),
             error: nil
         )
     }

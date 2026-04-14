@@ -1,40 +1,23 @@
+import ChessgroundAssets
 import SwiftUI
 import WidgetKit
 
 struct DailyPuzzleWidgetView: View {
     let entry: DailyPuzzleEntry
-    @Environment(\.widgetFamily) private var family
 
     var body: some View {
         Group {
             if let error = entry.error {
                 errorView(error)
-            } else if family == .systemSmall {
-                smallView
             } else {
-                largeView
+                contentView
             }
         }
         .widgetURL(entry.puzzleURL)
     }
 
-    // MARK: - Small (.systemSmall)
-
     @ViewBuilder
-    private var smallView: some View {
-        boardView
-            .roundedCornerWithBorder(
-                lineWidth: DailyPuzzleWidgetLayout.smallBoardBorderWidth,
-                style: .tertiary,
-                radius: DailyPuzzleWidgetLayout.smallBoardCornerRadius
-            )
-            .padding(DailyPuzzleWidgetLayout.smallBoardPadding)
-    }
-
-    // MARK: - Large (.systemLarge)
-
-    @ViewBuilder
-    private var largeView: some View {
+    private var contentView: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 HStack(spacing: DailyPuzzleWidgetLayout.headerSpacing) {
@@ -80,19 +63,17 @@ struct DailyPuzzleWidgetView: View {
                 .padding(.bottom, DailyPuzzleWidgetLayout.headerBottomPadding)
 
                 boardView
-                    .roundedCornerWithBorder(
-                        lineWidth: DailyPuzzleWidgetLayout.largeBoardBorderWidth,
-                        style: .tertiary,
-                        radius: DailyPuzzleWidgetLayout.largeBoardCornerRadius
+                    .clipShape(ContainerRelativeShape())
+                    .overlay(
+                        ContainerRelativeShape()
+                            .stroke(.tertiary, lineWidth: DailyPuzzleWidgetLayout.boardBorderWidth)
                     )
                     .frame(width: geo.size.width, height: geo.size.width)
             }
         }
-        .padding(.horizontal, DailyPuzzleWidgetLayout.largeHorizontalPadding)
-        .padding(.top, DailyPuzzleWidgetLayout.largeTopPadding)
+        .padding(.horizontal, DailyPuzzleWidgetLayout.horizontalPadding)
+        .padding(.top, DailyPuzzleWidgetLayout.topPadding)
     }
-
-    // MARK: - Reusable sub-views
 
     @ViewBuilder
     private var boardView: some View {

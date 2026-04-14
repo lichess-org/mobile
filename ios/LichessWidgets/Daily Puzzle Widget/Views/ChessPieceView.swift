@@ -1,3 +1,4 @@
+import ChessgroundAssets
 import SwiftUI
 
 struct ChessPieceView: View {
@@ -12,15 +13,15 @@ struct ChessPieceView: View {
     }
 
     /// Returns the asset name to use, falling back to the default piece set if the
-    /// configured one is missing from the widget's asset catalog.
+    /// configured one is missing from the Chessground asset bundle.
     private var resolvedAssetName: String {
         let name = assetName(for: pieceSet)
-        if UIImage(named: name) != nil { return name }
-        return assetName(for: BoardStyle.defaultPieceSet)
+        if UIImage(named: name, in: ChessgroundAssets.bundle, compatibleWith: nil) != nil { return name }
+        return assetName(for: ChessboardTheme.defaultPieceSet)
     }
 
     var body: some View {
-        Image(resolvedAssetName)
+        Image(resolvedAssetName, bundle: ChessgroundAssets.bundle)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: squareSize * DailyPuzzleWidgetLayout.pieceSizeFactor,

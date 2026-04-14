@@ -1044,7 +1044,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastSemifinals => 'Semifinais';
 
   @override
-  String get broadcastFinals => 'Finais';
+  String get broadcastFinals => 'Final';
 
   @override
   String get broadcastTiebreaks => 'Desempates';
@@ -1056,6 +1056,16 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatorias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4369,7 +4379,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String xJoinsY(String param1, String param2) {
-    return '$param1 únese a $param2';
+    return '$param1 uniuse a $param2';
   }
 
   @override

@@ -1,3 +1,4 @@
+import ChessgroundAssets
 import SwiftUI
 
 /// Renders a chess position from a FEN string as an 8×8 grid.
@@ -13,7 +14,7 @@ struct ChessBoardView: View {
     let fen: String
     let lastMove: String?
     let flipped: Bool
-    let boardStyle: BoardStyle
+    let boardStyle: ChessboardTheme
 
     // MARK: - FEN parsing
 
@@ -61,7 +62,7 @@ struct ChessBoardView: View {
                 // Image-backed themes: one full-board texture scaled to fill.
                 // Solid-colour themes: drawn square-by-square in the grid below.
                 if let imageName = boardStyle.boardImageName {
-                    Image(imageName)
+                    Image(imageName, bundle: ChessgroundAssets.bundle)
                         .resizable()
                         .frame(width: side, height: side)
                 }

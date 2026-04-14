@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "タイブレーク",
   "broadcastGameX": "局数 {param}",
   "broadcastKnockouts": "ノックアウト",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} ブロードキャスト}}",
   "broadcastNbViewers": "{count, plural, other{{count} 人の視聴者}}",
   "challengeChallengesX": "チャレンジ：{param1}",

@@ -36,10 +36,6 @@ const List<String> _kIosBlogWidgetKinds = [
   'CommunityBlogWidget',
   'UserBlogFeedWidget',
 ];
-const List<String> _kIosDailyPuzzleWidgetKinds = [
-  'DailyPuzzleSmallWidget',
-  'DailyPuzzleLargeWidget',
-];
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -118,10 +114,7 @@ class _AppState extends ConsumerState<Application> {
             HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name),
             HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name),
           ]).then((_) {
-            Future.wait([
-              for (final kind in _kIosDailyPuzzleWidgetKinds)
-                HomeWidget.updateWidget(iOSName: kind),
-            ]);
+            HomeWidget.updateWidget(iOSName: 'DailyPuzzleLargeWidget');
           });
         }
       }, fireImmediately: true);

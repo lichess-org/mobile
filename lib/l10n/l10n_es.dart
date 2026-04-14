@@ -1058,6 +1058,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatorias';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
