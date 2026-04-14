@@ -13,7 +13,10 @@ import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -58,6 +61,12 @@ class AppLinksService {
         }
         if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
           _handleOpenWebLink(uri);
+          return;
+        }
+        if (uri.scheme == kLichessUriScheme &&
+            uri.host == 'training' &&
+            uri.pathSegments.firstOrNull == 'daily') {
+          await _handleDailyPuzzleLink(uri.pathSegments.elementAtOrNull(1));
           return;
         }
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -147,6 +156,43 @@ class AppLinksService {
       if (targetUri != null) {
         launchUrl(targetUri, mode: LaunchMode.inAppBrowserView);
       }
+    }
+  }
+
+  /// Opens the native daily-puzzle screen (same path as tapping the daily-puzzle
+  /// card on the puzzle tab) in response to `org.lichess.mobile://training/daily`
+  /// or `org.lichess.mobile://training/daily/{id}` deeplinks emitted by the iOS
+  /// home-screen widget.
+  ///
+  /// When [puzzleId] is provided, that exact puzzle is loaded and marked as the
+  /// daily puzzle — the widget caches for up to 6 hours so the tapped puzzle
+  /// may differ from the current `/api/puzzle/daily` result. Without an id,
+  /// falls back to the current daily puzzle.
+  Future<void> _handleDailyPuzzleLink(String? puzzleId) async {
+    try {
+      Puzzle? puzzle;
+      if (puzzleId != null) {
+        try {
+          final fetched = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
+          puzzle = fetched.copyWith(isDailyPuzzle: true);
+        } catch (e, st) {
+          // Fall back to the current daily puzzle rather than leaving the tap
+          // as a no-op when the widget's cached id is stale or unreachable.
+          _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+        }
+      }
+      puzzle ??= await ref.read(dailyPuzzleProvider.future);
+      final context = ref.read(currentNavigatorKeyProvider).currentContext;
+      if (context == null || !context.mounted) return;
+      await Navigator.of(context, rootNavigator: true).push(
+        PuzzleScreen.buildRoute(
+          context,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzle: puzzle,
+        ),
+      );
+    } catch (e, st) {
+      _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
     }
   }
 

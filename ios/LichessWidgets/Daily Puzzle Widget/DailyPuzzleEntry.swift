@@ -16,11 +16,18 @@ struct DailyPuzzleEntry: TimelineEntry {
         return parts[1] == "w"
     }
 
+    /// Custom-scheme deeplink handled by the Flutter app to open the native
+    /// daily-puzzle screen (titled "Daily Puzzle"). See `AppLinksService`.
+    ///
+    /// Includes the specific puzzle id when known so the app opens the same
+    /// puzzle the widget is showing (the widget caches the daily puzzle for up
+    /// to 6 hours, so a plain `/training/daily` deeplink could otherwise open
+    /// a different puzzle than the one tapped).
     var puzzleURL: URL? {
         if let id = puzzleId {
-            return LichessAppGroup.lichessURL(path: "/training/\(id)")
+            return URL(string: "org.lichess.mobile://training/daily/\(id)")
         } else {
-            return LichessAppGroup.lichessURL(path: "/training/daily")
+            return URL(string: "org.lichess.mobile://training/daily")
         }
     }
 

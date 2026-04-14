@@ -1,7 +1,8 @@
 import Foundation
 
-// Note: puzzle widgets use plain HTTPS URLs (e.g. lichess.org/training/{id})
-// so the app can handle them as universal links and open the native puzzle screen directly.
+// Note: the daily-puzzle widget uses the `org.lichess.mobile://training/daily`
+// custom scheme (optionally suffixed with `/{puzzleId}`) so the Flutter app
+// always opens the native "Daily Puzzle" screen for the tapped puzzle.
 
 extension String {
     /// Encodes the string into the custom scheme the app listens for to open it in the in-app browser.
