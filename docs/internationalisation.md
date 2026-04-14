@@ -14,11 +14,14 @@ ARB files are generated with a script that processes these translations: `script
 
 Then a flutter command is used to generate the dart files from the ARB files.
 
-So, in order to update the dart files we need to run:
+A third script, `scripts/gen-widget-strings.mjs`, generates `ios/LichessWidgets/Localizable.xcstrings`
+— a String Catalog used by the native iOS widget extension to translate its UI strings. See
+[ios/EXTENSIONS.md](../ios/EXTENSIONS.md#internationalisation) for details on adding new widget strings.
+
+All three steps are combined in a single script:
 
 ```bash
-./scripts/gen-arb.mjs
-flutter gen-l10n
+./scripts/gen-translations.sh
 ```
 
 ## How to add new translations
@@ -42,8 +45,7 @@ Note that a module can contain a lot of translations that we don't need in the a
 Once you've added the module to the script, you can run the script to update the translations.
 
 ```bash
-./scripts/gen-arb.mjs
-flutter gen-l10n
+./scripts/gen-translations.sh
 ```
 
 You should see the new strings in the `lib/l10n/app_*.arb` and `lib/l10n/app_*.dart` files.

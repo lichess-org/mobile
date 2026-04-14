@@ -100,11 +100,12 @@ The formatter is configured via `analysis_options.yaml` (`formatter: page_width:
 
 ### Adding New Translations
 1. Edit `translation/source/mobile.xml` for mobile-specific strings
-2. Generate ARB files and Dart code:
+2. Regenerate everything:
 ```bash
-./scripts/gen-arb.mjs
-flutter gen-l10n
+./scripts/gen-translations.sh
 ```
+
+This runs `gen-arb.mjs`, `flutter gen-l10n`, and `gen-widget-strings.mjs` in order.
 
 Mobile-specific translations get a `mobile` prefix (e.g., "foo" becomes `mobileFoo` in Dart).
 
@@ -373,6 +374,8 @@ The Flutter app (via `home_widget` package) writes to the shared App Group from 
 - `isKidMode` — hides blog widgets when active (triggers blog widget reload)
 
 When modifying widget-related settings or board theme/piece set preferences in Dart, ensure the corresponding `HomeWidget.saveWidgetData` call and `HomeWidget.updateWidget` are kept in sync in `lib/src/app.dart`.
+
+Widget UI strings are translated via `ios/LichessWidgets/Localizable.xcstrings` (a String Catalog). To add a new translatable string, register it under `WIDGET_KEYS` in `scripts/gen-widget-strings.mjs` and run `./scripts/gen-translations.sh`.
 
 ### Code Signing
 

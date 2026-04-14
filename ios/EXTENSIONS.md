@@ -51,6 +51,26 @@ This will generate the profile, push it to the certificates repo, and set the co
 
 Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfile` and the `sync_code_signing` call in `fastlane/Fastfile`.
 
+## Internationalisation
+
+Widget UI strings are translated using a String Catalog at `ios/LichessWidgets/Localizable.xcstrings`. This file is generated from the app's ARB translation files and must not be edited by hand.
+
+### How it works
+
+`scripts/gen-widget-strings.mjs` reads every `lib/l10n/app_*.arb` file and extracts the keys listed in its `WIDGET_KEYS` map, then writes them into `Localizable.xcstrings` with all available translations. The String Catalog is picked up automatically by Xcode via the `fileSystemSynchronizedRootGroup` — no project file changes needed.
+
+SwiftUI `Text("Daily Puzzle")` resolves the string at runtime against the catalog using the device locale, so no code changes are needed on the Swift side for existing strings.
+
+### Adding a new translatable string
+
+1. Make sure the string exists in the ARB files (either from Crowdin or from `translation/source/mobile.xml` — see [docs/internationalisation.md](../docs/internationalisation.md)).
+2. Add an entry to `WIDGET_KEYS` in `scripts/gen-widget-strings.mjs`:
+   ```js
+   'English UI string': { arbKey: 'theArbKey', fallback: 'English UI string' },
+   ```
+3. Run `./scripts/gen-translations.sh` to regenerate the catalog.
+4. Use the exact same English string as a `LocalizedStringKey` in SwiftUI (`Text("English UI string")`).
+
 ## Chessboard assets
 
 Board textures, piece images, and theme colour data used by the widgets are
