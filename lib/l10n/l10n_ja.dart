@@ -6467,4 +6467,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2 要素認証';
+
+  @override
+  String get ublogCommunity => 'コミュニティ';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param のブログ';
+  }
 }

@@ -6562,4 +6562,12 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
+
+  @override
+  String get ublogCommunity => 'Hamjamiyat';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogi';
+  }
 }

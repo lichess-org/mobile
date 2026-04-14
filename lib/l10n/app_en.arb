@@ -3732,5 +3732,14 @@
       }
     }
   },
-  "tfaTwoFactorAuth": "Two-factor authentication"
+  "tfaTwoFactorAuth": "Two-factor authentication",
+  "ublogCommunity": "Community",
+  "ublogXBlog": "{param}'s Blog",
+  "@ublogXBlog": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  }
 }

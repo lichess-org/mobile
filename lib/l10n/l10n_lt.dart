@@ -6750,4 +6750,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dviejų lygių tapatumo nustatymas';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param Tinklaraštis';
+  }
 }

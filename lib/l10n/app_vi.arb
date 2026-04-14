@@ -1827,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} năm trước}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{còn {count} phút}}",
   "timeagoNbHoursRemaining": "{count, plural, other{còn {count} giờ}}",
-  "tfaTwoFactorAuth": "Xác thực 2 bước"
+  "tfaTwoFactorAuth": "Xác thực 2 bước",
+  "ublogCommunity": "Cộng đồng",
+  "ublogXBlog": "Bài viết của {param}"
 }

@@ -1599,5 +1599,6 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} tahun yang lalu}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{{count} menit tersisa}}",
   "timeagoNbHoursRemaining": "{count, plural, other{{count} jam tersisa}}",
-  "tfaTwoFactorAuth": "Autentikasi dua-langkah"
+  "tfaTwoFactorAuth": "Autentikasi dua-langkah",
+  "ublogXBlog": "Blog dari {param}"
 }

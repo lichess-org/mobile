@@ -6750,4 +6750,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvoufázové ověření';
+
+  @override
+  String get ublogCommunity => 'Komunita';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog hráče $param';
+  }
 }

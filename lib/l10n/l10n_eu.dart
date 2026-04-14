@@ -6562,4 +6562,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Bi faktoreko autentifikazioa';
+
+  @override
+  String get ublogCommunity => 'Komunitatea';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param erabiltzailearen Bloga';
+  }
 }

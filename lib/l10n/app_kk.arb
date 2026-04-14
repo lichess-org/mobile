@@ -1589,5 +1589,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} жыл бұрын} other{{count} жыл бұрын}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} минут қалды} other{{count} минут қалды}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} сағат қалды} other{{count} сағат қалды}}",
-  "tfaTwoFactorAuth": "Екісатылы өкіл-растау"
+  "tfaTwoFactorAuth": "Екісатылы өкіл-растау",
+  "ublogXBlog": "{param} блогі"
 }

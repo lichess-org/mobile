@@ -6562,4 +6562,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kétlépcsős azonosítás';
+
+  @override
+  String get ublogCommunity => 'Közösség';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogja';
+  }
 }

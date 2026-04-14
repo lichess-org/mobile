@@ -6560,4 +6560,12 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2 mərhələli təsdiqləmə';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

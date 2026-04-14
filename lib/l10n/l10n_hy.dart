@@ -6562,4 +6562,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Երկգործոն նույնականացում';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param-ի բլոգ';
+  }
 }

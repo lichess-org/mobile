@@ -1827,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{剩余 {count} 分钟}}",
   "timeagoNbHoursRemaining": "{count, plural, other{剩余 {count} 小时}}",
-  "tfaTwoFactorAuth": "双重认证"
+  "tfaTwoFactorAuth": "双重认证",
+  "ublogCommunity": "社区",
+  "ublogXBlog": "{param} 的博客"
 }

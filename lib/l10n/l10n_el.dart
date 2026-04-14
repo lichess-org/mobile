@@ -6562,4 +6562,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
+
+  @override
+  String get ublogCommunity => 'Κοινότητα';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Ιστολόγιο του χρήστη $param';
+  }
 }

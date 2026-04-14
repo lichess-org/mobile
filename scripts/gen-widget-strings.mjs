@@ -23,8 +23,12 @@ const L10N_DIR = path.join(ROOT, 'lib', 'l10n');
 const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings');
 
 // Map each widget UI string to its ARB key and English fallback.
+// Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
   'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle' },
+  'Community': { arbKey: 'ublogCommunity', fallback: 'Community' },
+  // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
+  'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
 };
 
 // ARB locale codes use '_', iOS uses '-' for subtags.
@@ -41,18 +45,19 @@ const arbFiles = fs
 // Build the strings dictionary.
 const strings = {};
 
-for (const [uiString, { arbKey, fallback }] of Object.entries(WIDGET_KEYS)) {
+for (const [uiString, { arbKey, fallback, param = false }] of Object.entries(WIDGET_KEYS)) {
   const localizations = {};
 
   for (const { file, locale } of arbFiles) {
     const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));
-    const value = arb[arbKey];
-    if (value && value !== fallback || locale === 'en') {
+    let value = arb[arbKey];
+    if (value == null && locale !== 'en') continue;
+    // ARB uses {param} for placeholders; xcstrings/Swift uses %@.
+    if (param && value) value = value.replace(/\{param\}/g, '%@');
+    const resolved = value ?? fallback;
+    if (resolved !== fallback || locale === 'en') {
       localizations[locale] = {
-        stringUnit: {
-          state: 'translated',
-          value: value ?? fallback,
-        },
+        stringUnit: { state: 'translated', value: resolved },
       };
     }
   }

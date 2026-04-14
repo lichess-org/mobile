@@ -1827,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count}년 전}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{{count}분 남음}}",
   "timeagoNbHoursRemaining": "{count, plural, other{{count}시간 남음}}",
-  "tfaTwoFactorAuth": "2단계 인증"
+  "tfaTwoFactorAuth": "2단계 인증",
+  "ublogCommunity": "커뮤니티",
+  "ublogXBlog": "{param}의 블로그"
 }

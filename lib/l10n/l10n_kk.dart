@@ -6562,4 +6562,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Екісатылы өкіл-растау';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param блогі';
+  }
 }

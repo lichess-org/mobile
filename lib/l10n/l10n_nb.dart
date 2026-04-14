@@ -6562,4 +6562,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tofaktorautentisering';
+
+  @override
+  String get ublogCommunity => 'Fellesskap';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Bloggen til $param';
+  }
 }

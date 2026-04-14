@@ -6752,4 +6752,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvojna avtentikacija';
+
+  @override
+  String get ublogCommunity => 'Skupnost';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blog';
+  }
 }

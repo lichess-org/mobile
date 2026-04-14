@@ -6740,4 +6740,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфактарная аўтэнтыфікацыя';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

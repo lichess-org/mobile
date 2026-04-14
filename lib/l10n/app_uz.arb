@@ -1825,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} yil oldin} other{{count} yil oldin}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} daqiqa qoldi} other{{count} daqiqa qoldi}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} soat qoldi} other{{count} soat qoldi}}",
-  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya"
+  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya",
+  "ublogCommunity": "Hamjamiyat",
+  "ublogXBlog": "{param} blogi"
 }

@@ -69,7 +69,8 @@ struct BlogFeedWidgetEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            BlogFeedWidgetHeader(feedName: entry.headerTitle,
+            BlogFeedWidgetHeader(feed: entry.feed,
+                                 username: entry.username,
                                  updatedAt: entry.date,
                                  showTimestamp: family != .systemSmall)
             Divider()
@@ -90,7 +91,7 @@ struct BlogFeedWidgetEntryView: View {
                 itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                Text("Updated at \(entry.date.shortTime)")
+                Text(entry.date.shortTime)
                     .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
                     .foregroundStyle(.secondary)
                     .padding(.top, BlogFeedWidgetLayout.smallFooterTopPadding)

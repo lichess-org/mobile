@@ -6562,4 +6562,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaheastmeline autentimine';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Kasutaja $param blogi';
+  }
 }
