@@ -68,13 +68,15 @@ class AppLinksService {
           _handleOpenWebLink(uri);
           return;
         }
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (uri.scheme == kLichessUriScheme &&
             uri.host == _kDailyPuzzleDeeplinkHost &&
             uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
-          await _handleDailyPuzzleLink(uri.pathSegments.elementAtOrNull(1));
+          if (context != null && context.mounted) {
+            await handleDailyPuzzleLink(context, uri.pathSegments.elementAtOrNull(1));
+          }
           return;
         }
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context != null && context.mounted) {
           await handleAppLink(context, uri);
         }
@@ -169,26 +171,31 @@ class AppLinksService {
   /// or `org.lichess.mobile://training/daily/{id}` deeplinks emitted by the iOS
   /// home-screen widget.
   ///
-  /// When [puzzleId] is provided, that exact puzzle is loaded and marked as the
-  /// daily puzzle — the widget caches for up to 6 hours so the tapped puzzle
-  /// may differ from the current `/api/puzzle/daily` result. Without an id,
-  /// falls back to the current daily puzzle.
-  Future<void> _handleDailyPuzzleLink(String? puzzleId) async {
+  /// Always fetches the current daily puzzle first (cached, so no extra request
+  /// in the common case). When [puzzleId] matches today's daily, it is used
+  /// directly. When it differs (widget cached a stale id), that specific puzzle
+  /// is fetched but NOT flagged as the daily so the user isn't confused when
+  /// navigating back to the puzzle tab.
+  @visibleForTesting
+  Future<void> handleDailyPuzzleLink(BuildContext context, String? puzzleId) async {
     try {
-      Puzzle? puzzle;
-      if (puzzleId != null) {
+      Puzzle puzzle;
+      final dailyPuzzle = await ref.read(dailyPuzzleProvider.future);
+      if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
+        puzzle = dailyPuzzle;
+      } else {
+        // Widget cached a different puzzle than today's daily — fetch it, but
+        // don't mark as daily to avoid confusing the user.
         try {
-          final fetched = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
-          puzzle = fetched.copyWith(isDailyPuzzle: true);
+          puzzle = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
         } catch (e, st) {
           // Fall back to the current daily puzzle rather than leaving the tap
           // as a no-op when the widget's cached id is stale or unreachable.
           _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+          puzzle = dailyPuzzle;
         }
       }
-      puzzle ??= await ref.read(dailyPuzzleProvider.future);
-      final context = ref.read(currentNavigatorKeyProvider).currentContext;
-      if (context == null || !context.mounted) return;
+      if (!context.mounted) return;
       await Navigator.of(context, rootNavigator: true).push(
         PuzzleScreen.buildRoute(
           context,
