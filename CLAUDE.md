@@ -353,6 +353,31 @@ Generated files are NOT committed to git.
 - **Brand names**: Don't translate names like "Puzzle Storm" or "Puzzle Streak"
 - **FVM users**: Remember to prefix commands with `fvm` (e.g., `fvm flutter test`)
 
+## iOS Home Screen Widgets (WidgetKit Extension)
+
+The app includes a native iOS WidgetKit extension (`ios/LichessWidgets/`) providing home screen widgets. See `ios/EXTENSIONS.md` for contributor setup instructions (requires Apple Developer account configuration).
+
+### Architecture
+
+- **`LichessWidgetsBundle.swift`** — `@main` entry point registering all 4 widgets.
+- **`LichessAppGroup.swift`** — Reads shared `UserDefaults` from App Group `group.org.lichess.mobileV2`:
+  - `lichessHost`, `boardTheme`, `pieceSet`, `isKidMode`
+- **`Deeplinks.swift`** — Custom URI scheme encoding for opening URLs in the in-app browser.
+- **Dependencies**: WidgetKit, ChessgroundAssets (Swift Package, shared with Dart), FeedKit, XMLKit.
+
+### Flutter Integration
+
+The Flutter app (via `home_widget` package) writes to the shared App Group from `app.dart`:
+- `lichessHost` — server URL
+- `boardTheme` / `pieceSet` — board appearance (triggers `DailyPuzzleWidget` reload)
+- `isKidMode` — hides blog widgets when active (triggers blog widget reload)
+
+When modifying widget-related settings or board theme/piece set preferences in Dart, ensure the corresponding `HomeWidget.saveWidgetData` call and `HomeWidget.updateWidget` are kept in sync in `lib/src/app.dart`.
+
+### Code Signing
+
+The extension has its own bundle ID (`org.lichess.mobileV2.LichessWidgets`) and App Group entitlement. fastlane `sync_code_signing` handles provisioning for both targets (see `ios/fastlane/Matchfile`).
+
 ## Debugging
 
 ```bash

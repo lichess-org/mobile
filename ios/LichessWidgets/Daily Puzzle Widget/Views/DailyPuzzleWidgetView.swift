@@ -56,7 +56,7 @@ struct DailyPuzzleWidgetView: View {
                             height: DailyPuzzleWidgetLayout.sideIndicatorSize
                         )
 
-                    Text(entry.date.shortTime)
+                    Text(entry.date, format: entry.date.widgetDateFormat)
                         .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
                         .foregroundStyle(.secondary)
                 }
