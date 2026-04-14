@@ -30,7 +30,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-const String _kIosAppGroupId = 'group.org.lichess.mobileV2';
+const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
