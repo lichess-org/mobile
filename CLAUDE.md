@@ -361,7 +361,7 @@ The app includes a native iOS WidgetKit extension (`ios/LichessWidgets/`) provid
 ### Architecture
 
 - **`LichessWidgetsBundle.swift`** — `@main` entry point registering all 4 widgets.
-- **`LichessAppGroup.swift`** — Reads shared `UserDefaults` from App Group `group.org.lichess.mobileV2`:
+- **`LichessAppGroup.swift`** — Reads shared `UserDefaults` from App Group `group.org.lichess.mobileV2.LichessWidgets`:
   - `lichessHost`, `boardTheme`, `pieceSet`, `isKidMode`
 - **`Deeplinks.swift`** — Custom URI scheme encoding for opening URLs in the in-app browser.
 - **Dependencies**: WidgetKit, ChessgroundAssets (Swift Package, shared with Dart), FeedKit, XMLKit.

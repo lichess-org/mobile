@@ -14,7 +14,7 @@ enum DailyPuzzleWidgetLayout {
     // Board
     static let boardBorderWidth: CGFloat = 1
     static let horizontalPadding: CGFloat = 16
-    static let topPadding: CGFloat = 11
+    static let verticalPadding: CGFloat = 10
 
     // Piece
     static let pieceSizeFactor: CGFloat = 0.9
