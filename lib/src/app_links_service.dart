@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
@@ -54,36 +55,59 @@ class AppLinksService {
   StreamSubscription<Uri>? _linkSubscription;
 
   Future<void> start() async {
+    // Handle the link that cold-started the app (if any) after the first frame
+    // so the navigator is ready. Push without animation — the user launched the
+    // app via this link so the target screen should just be there.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        final initialUri = await _appLinks.getInitialLink();
+        if (initialUri != null) {
+          await _handleUri(initialUri, animated: false);
+        }
+      } catch (e, st) {
+        _logger.severe('Error handling initial app link: $e\n$st');
+      }
+    });
+
+    // Links received while the app is already running get a normal transition.
     _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
       try {
-        // File links are handled by the sharing intent logic, so we can ignore them here.
-        if (uri.scheme == 'file' || uri.scheme == 'content') {
-          return;
-        }
-        if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
-          ref.read(oauthCallbackProvider).add(uri);
-          return;
-        }
-        if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
-          _handleOpenWebLink(uri);
-          return;
-        }
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (uri.scheme == kLichessUriScheme &&
-            uri.host == _kDailyPuzzleDeeplinkHost &&
-            uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
-          if (context != null && context.mounted) {
-            await handleDailyPuzzleLink(context, uri.pathSegments.elementAtOrNull(1));
-          }
-          return;
-        }
-        if (context != null && context.mounted) {
-          await handleAppLink(context, uri);
-        }
+        await _handleUri(uri, animated: true);
       } catch (e, st) {
         _logger.severe('Error handling app link: $e\n$st');
       }
     });
+  }
+
+  Future<void> _handleUri(Uri uri, {required bool animated}) async {
+    // File links are handled by the sharing intent logic, so we can ignore them here.
+    if (uri.scheme == 'file' || uri.scheme == 'content') {
+      return;
+    }
+    if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
+      ref.read(oauthCallbackProvider).add(uri);
+      return;
+    }
+    if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
+      _handleOpenWebLink(uri);
+      return;
+    }
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (uri.scheme == kLichessUriScheme &&
+        uri.host == _kDailyPuzzleDeeplinkHost &&
+        uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
+      if (context != null && context.mounted) {
+        await handleDailyPuzzleLink(
+          context,
+          uri.pathSegments.elementAtOrNull(1),
+          animated: animated,
+        );
+      }
+      return;
+    }
+    if (context != null && context.mounted) {
+      await handleAppLink(context, uri, animated: animated);
+    }
   }
 
   void dispose() {
@@ -177,7 +201,11 @@ class AppLinksService {
   /// is fetched but NOT flagged as the daily so the user isn't confused when
   /// navigating back to the puzzle tab.
   @visibleForTesting
-  Future<void> handleDailyPuzzleLink(BuildContext context, String? puzzleId) async {
+  Future<void> handleDailyPuzzleLink(
+    BuildContext context,
+    String? puzzleId, {
+    bool animated = true,
+  }) async {
     try {
       Puzzle puzzle;
       final dailyPuzzle = await ref.read(dailyPuzzleProvider.future);
@@ -196,13 +224,15 @@ class AppLinksService {
         }
       }
       if (!context.mounted) return;
-      await Navigator.of(context, rootNavigator: true).push(
-        PuzzleScreen.buildRoute(
-          context,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-          puzzle: puzzle,
-        ),
+      final route = PuzzleScreen.buildRoute(
+        context,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        puzzle: puzzle,
       );
+      await Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(animated ? route : _withNoTransition(route));
     } catch (e, st) {
       _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
     }
@@ -260,13 +290,14 @@ class AppLinksService {
   }
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
-  Future<void> handleAppLink(BuildContext context, Uri uri) async {
+  Future<void> handleAppLink(BuildContext context, Uri uri, {bool animated = true}) async {
     final routes = await resolveAppLinkUri(context, uri);
     if (!context.mounted) return;
 
     if (routes != null) {
+      final navigator = Navigator.of(context, rootNavigator: true);
       for (final route in routes) {
-        Navigator.of(context, rootNavigator: true).push(route);
+        navigator.push(animated ? route : _withNoTransition(route));
       }
     } else {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
@@ -274,6 +305,21 @@ class AppLinksService {
 
       launchUrl(uri);
     }
+  }
+
+  /// Returns a copy of [route] with [Duration.zero] transition so the screen
+  /// appears instantly — used when the app is opened via a deep link and a
+  /// transition would be jarring.
+  static Route<dynamic> _withNoTransition(Route<dynamic> route) {
+    if (route is ScreenRoute) {
+      return MaterialScreenRoute(
+        screen: route.screen,
+        settings: route.settings,
+        fullscreenDialog: route.fullscreenDialog,
+        overrideTransitionDuration: Duration.zero,
+      );
+    }
+    return route;
   }
 
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
