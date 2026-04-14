@@ -1,0 +1,31 @@
+import CoreGraphics
+
+/// Layout constants shared across daily puzzle widget views.
+enum DailyPuzzleWidgetLayout {
+    // Typography
+    static let titleFontSize: CGFloat = 17
+    static let metaFontSize: CGFloat = 14
+
+    // Header
+    static let headerSpacing: CGFloat = 8
+    static let headerBottomPadding: CGFloat = 5
+    static let logoSize: CGFloat = 20
+
+    // Side-to-move indicator
+    static let sideIndicatorSize: CGFloat = 14
+    static let sideIndicatorBorderOpacity: CGFloat = 0.4
+    static let sideIndicatorBorderWidth: CGFloat = 0.5
+
+    // Board
+    static let boardBorderWidth: CGFloat = 1
+    static let horizontalPadding: CGFloat = 16
+    static let topPadding: CGFloat = 11
+
+    // Piece
+    static let pieceSizeFactor: CGFloat = 0.9
+
+    // Error state
+    static let errorIconSize: CGFloat = 20
+    static let errorStackSpacing: CGFloat = 6
+    static let errorMessageHorizontalPadding: CGFloat = 16
+}

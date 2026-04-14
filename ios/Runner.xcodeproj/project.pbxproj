@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		2F2A90EB2F6DF5F4008DA3C7 /* LichessWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2F2A90DC2F6DF5F3008DA3C7 /* LichessWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2F2A90F42F6DFF0F008DA3C7 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F2A90F32F6DFF0F008DA3C7 /* FeedKit */; };
 		2F2A90F62F6DFF0F008DA3C7 /* XMLKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F2A90F52F6DFF0F008DA3C7 /* XMLKit */; };
+		2FCBD8E32F8D91DF00E9C376 /* ChessgroundAssets in Frameworks */ = {isa = PBXBuildFile; productRef = 2FCBD8E22F8D91DF00E9C376 /* ChessgroundAssets */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		4C1B4CBC5F6D1FB9AB4B2E2D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 150C426DBDFD9997221AABF1 /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -83,7 +84,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2F2A90F02F6DF5F4008DA3C7 /* Exceptions for "LichessWidgets" folder in "LichessWidgetsExtension" target */ = {
+		2F2A90F02F6DF5F4008DA3C7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/Info.plist,
@@ -93,18 +94,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2F2A90E12F6DF5F3008DA3C7 /* LichessWidgets */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				2F2A90F02F6DF5F4008DA3C7 /* Exceptions for "LichessWidgets" folder in "LichessWidgetsExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = LichessWidgets;
-			sourceTree = "<group>";
-		};
+		2F2A90E12F6DF5F3008DA3C7 /* LichessWidgets */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2F2A90F02F6DF5F4008DA3C7 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LichessWidgets; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FCBD8E32F8D91DF00E9C376 /* ChessgroundAssets in Frameworks */,
 				2F2A90F42F6DFF0F008DA3C7 /* FeedKit in Frameworks */,
 				2F2A90E02F6DF5F3008DA3C7 /* SwiftUI.framework in Frameworks */,
 				2F2A90DE2F6DF5F3008DA3C7 /* WidgetKit.framework in Frameworks */,
@@ -222,6 +213,7 @@
 			packageProductDependencies = (
 				2F2A90F32F6DFF0F008DA3C7 /* FeedKit */,
 				2F2A90F52F6DFF0F008DA3C7 /* XMLKit */,
+				2FCBD8E22F8D91DF00E9C376 /* ChessgroundAssets */,
 			);
 			productName = LichessWidgetsExtension;
 			productReference = 2F2A90DC2F6DF5F3008DA3C7 /* LichessWidgetsExtension.appex */;
@@ -284,6 +276,7 @@
 			mainGroup = 97C146E51CF9000F007C117D;
 			packageReferences = (
 				2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */,
+				2FCBD8E12F8D91DF00E9C376 /* XCRemoteSwiftPackageReference "flutter-chessground" */,
 			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
@@ -326,9 +319,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -416,9 +413,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -918,6 +919,14 @@
 				version = 10.4.0;
 			};
 		};
+		2FCBD8E12F8D91DF00E9C376 /* XCRemoteSwiftPackageReference "flutter-chessground" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lichess-org/flutter-chessground";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -930,6 +939,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F2A90F22F6DFF0F008DA3C7 /* XCRemoteSwiftPackageReference "FeedKit" */;
 			productName = XMLKit;
+		};
+		2FCBD8E22F8D91DF00E9C376 /* ChessgroundAssets */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCBD8E12F8D91DF00E9C376 /* XCRemoteSwiftPackageReference "flutter-chessground" */;
+			productName = ChessgroundAssets;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

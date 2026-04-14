@@ -50,3 +50,29 @@ bundle exec fastlane match appstore --app_identifier org.lichess.mobileV2.<Exten
 This will generate the profile, push it to the certificates repo, and set the correct `PROVISIONING_PROFILE_SPECIFIER` in the Xcode project. After that, `fastlane beta` handles signing for all targets automatically — including in CI.
 
 Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfile` and the `sync_code_signing` call in `fastlane/Fastfile`.
+
+## Chessboard assets
+
+Board textures, piece images, and theme colour data used by the widgets are
+provided by the `ChessgroundAssets` Swift package, which lives inside the
+[flutter-chessground](https://github.com/lichess-org/flutter-chessground)
+repository. This means the widget always uses the same assets as the Flutter
+app — one source of truth distributed via both pub and SPM.
+
+### Adding the package (one-time Xcode setup)
+
+1. In Xcode, select **File → Add Package Dependencies**.
+2. Enter `https://github.com/lichess-org/flutter-chessground` as the URL.
+3. Choose the version rule and add the `ChessgroundAssets` library to the
+   **LichessWidgets** extension target only (not the Runner target).
+
+### Keeping assets in sync
+
+Assets are versioned alongside the Dart package. When `chessground` is bumped in
+`pubspec.yaml`, update the SPM dependency to the matching version tag in Xcode
+(**File → Packages → Update to Latest Package Versions**) or pin it to the
+specific tag. No script needs to be run in this repository.
+
+If you need to regenerate the xcassets on the flutter-chessground side (e.g.
+after a new piece set is added), run `./scripts/gen-swift-xcassets.sh` there and
+commit the result before cutting a new release tag.
