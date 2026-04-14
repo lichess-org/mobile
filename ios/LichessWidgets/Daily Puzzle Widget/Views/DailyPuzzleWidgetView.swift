@@ -34,15 +34,6 @@ struct DailyPuzzleWidgetView: View {
 
                     Spacer()
 
-                    if entry.showRating, let rating = entry.rating {
-                        Image(systemName: "chart.line.uptrend.xyaxis")
-                            .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
-                            .foregroundStyle(.secondary)
-                        Text("\(rating)")
-                            .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
-                            .foregroundStyle(.secondary)
-                    }
-
                     Circle()
                         .fill(entry.isWhiteToMove ? Color.white : Color.black)
                         .overlay(

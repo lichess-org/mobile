@@ -6,8 +6,6 @@ struct DailyPuzzleEntry: TimelineEntry {
     let puzzleId: String?
     let fen: String?
     let lastMove: String?
-    let rating: Int?
-    let showRating: Bool
     let boardStyle: ChessboardTheme
     let error: String?
 
@@ -34,8 +32,6 @@ struct DailyPuzzleEntry: TimelineEntry {
             puzzleId: nil,
             fen: "1n3rk1/4ppbp/rq1p2p1/3P4/2p1P3/2N2P1n/PPN3PP/R1BQ1R1K b - - 1 1",
             lastMove: "g1h1",
-            rating: 1430,
-            showRating: true,
             boardStyle: ChessboardTheme.fromAppGroup(),
             error: nil
         )
