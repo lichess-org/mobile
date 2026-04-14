@@ -34,19 +34,6 @@ struct DailyPuzzleWidgetView: View {
 
                     Spacer()
 
-                    Circle()
-                        .fill(entry.isWhiteToMove ? Color.white : Color.black)
-                        .overlay(
-                            Circle().stroke(
-                                Color.primary.opacity(DailyPuzzleWidgetLayout.sideIndicatorBorderOpacity),
-                                lineWidth: DailyPuzzleWidgetLayout.sideIndicatorBorderWidth
-                            )
-                        )
-                        .frame(
-                            width: DailyPuzzleWidgetLayout.sideIndicatorSize,
-                            height: DailyPuzzleWidgetLayout.sideIndicatorSize
-                        )
-
                     Text(entry.date, format: entry.date.widgetDateFormat)
                         .font(.system(size: DailyPuzzleWidgetLayout.metaFontSize))
                         .foregroundStyle(.secondary)
