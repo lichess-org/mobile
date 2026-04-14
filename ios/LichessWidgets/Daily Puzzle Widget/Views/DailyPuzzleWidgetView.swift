@@ -47,8 +47,7 @@ struct DailyPuzzleWidgetView: View {
                 )
         }
         .padding(.horizontal, DailyPuzzleWidgetLayout.horizontalPadding)
-        .padding(.top, DailyPuzzleWidgetLayout.topPadding)
-        .padding(.bottom, DailyPuzzleWidgetLayout.bottomPadding)
+        .padding(.vertical, DailyPuzzleWidgetLayout.verticalPadding)
     }
 
     @ViewBuilder
