@@ -30,7 +30,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-const String _kIosAppGroupId = 'group.org.lichess.mobileV2';
+const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
@@ -106,10 +106,9 @@ class _AppState extends ConsumerState<Application> {
         }
       }, fireImmediately: true);
       ref.listenManual(boardPreferencesProvider, (prev, state) {
-        // Guard with prev != null (same pattern as kidMode's state.hasValue) so we
-        // don't write + reload the widget on every cold start when nothing changed.
-        if (prev != null &&
-            (prev.boardTheme != state.boardTheme || prev.pieceSet != state.pieceSet)) {
+        if (prev == null ||
+            prev.boardTheme != state.boardTheme ||
+            prev.pieceSet != state.pieceSet) {
           Future.wait([
             HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name),
             HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name),
