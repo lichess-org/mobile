@@ -34,6 +34,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AppLinks');
 
+// Deeplink host/path for the iOS daily-puzzle widget tap.
+// Must stay in sync with Deeplinks.swift in the iOS widget extension.
+const _kDailyPuzzleDeeplinkHost = 'training';
+const _kDailyPuzzleDeeplinkPath = 'daily';
+
 final appLinksServiceProvider = Provider<AppLinksService>((ref) {
   final service = AppLinksService(ref);
   ref.onDispose(() => service.dispose());
@@ -64,8 +69,8 @@ class AppLinksService {
           return;
         }
         if (uri.scheme == kLichessUriScheme &&
-            uri.host == 'training' &&
-            uri.pathSegments.firstOrNull == 'daily') {
+            uri.host == _kDailyPuzzleDeeplinkHost &&
+            uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
           await _handleDailyPuzzleLink(uri.pathSegments.elementAtOrNull(1));
           return;
         }
