@@ -63,6 +63,41 @@ flutter test test/model/engine/engine_test.dart
 flutter test test/model/engine/engine_test.dart --name "test name"
 ```
 
+### Testing Strategy: Prefer HTTP Mocking Over Provider Overrides
+
+**Always mock at the HTTP layer** (override `httpClientFactoryProvider`) rather than overriding Riverpod providers directly. Reasons:
+
+1. **`autoDispose` + `ref.read` interaction**: Many providers are `FutureProvider.autoDispose` and use `ref.withClientCacheFor` which calls `keepAlive()` to prevent premature disposal. Overriding the provider directly bypasses `keepAlive()`, so the provider can be disposed before its future resolves — causing silent test failures where navigation never happens.
+
+2. **Tests provider logic, not mocks**: Most providers contain real logic (caching, fallback, data transformation) that should be exercised in tests. Replacing a provider with `(_) async => fakeValue` skips all that logic.
+
+**Pattern to use:**
+```dart
+overrides: {
+  httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+    return FakeHttpClientFactory(
+      () => MockClient((request) async {
+        if (request.url.path == '/api/puzzle/daily') {
+          return http.Response(mockDailyPuzzleResponse, 200);
+        }
+        return http.Response('', 404);
+      }),
+    );
+  }),
+},
+```
+
+Direct provider overrides are acceptable for **non-network providers** (repositories backed by mocks, services with no HTTP, etc.) where the provider has no `keepAlive` dependency and the override doesn't skip meaningful logic.
+
+### Analysis Rules (CRITICAL)
+
+**Always run `flutter analyze` on every file you edit, including test files, before finishing.**
+
+Two rules the analyzer enforces that are easy to miss:
+
+- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files.
+- **No leading underscores for local identifiers**: local variables and functions must not start with `_`. Reserve `_` for library-private top-level or class members.
+
 ### Code Quality Checks
 ```bash
 # Static analysis

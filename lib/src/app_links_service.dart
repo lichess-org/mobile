@@ -13,7 +13,10 @@ import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -30,6 +33,11 @@ import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AppLinks');
+
+// Deeplink host/path for the iOS daily-puzzle widget tap.
+// Must stay in sync with Deeplinks.swift in the iOS widget extension.
+const _kDailyPuzzleDeeplinkHost = 'training';
+const _kDailyPuzzleDeeplinkPath = 'daily';
 
 final appLinksServiceProvider = Provider<AppLinksService>((ref) {
   final service = AppLinksService(ref);
@@ -61,6 +69,14 @@ class AppLinksService {
           return;
         }
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (uri.scheme == kLichessUriScheme &&
+            uri.host == _kDailyPuzzleDeeplinkHost &&
+            uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
+          if (context != null && context.mounted) {
+            await handleDailyPuzzleLink(context, uri.pathSegments.elementAtOrNull(1));
+          }
+          return;
+        }
         if (context != null && context.mounted) {
           await handleAppLink(context, uri);
         }
@@ -147,6 +163,48 @@ class AppLinksService {
       if (targetUri != null) {
         launchUrl(targetUri, mode: LaunchMode.inAppBrowserView);
       }
+    }
+  }
+
+  /// Opens the native daily-puzzle screen (same path as tapping the daily-puzzle
+  /// card on the puzzle tab) in response to `org.lichess.mobile://training/daily`
+  /// or `org.lichess.mobile://training/daily/{id}` deeplinks emitted by the iOS
+  /// home-screen widget.
+  ///
+  /// Always fetches the current daily puzzle first (cached, so no extra request
+  /// in the common case). When [puzzleId] matches today's daily, it is used
+  /// directly. When it differs (widget cached a stale id), that specific puzzle
+  /// is fetched but NOT flagged as the daily so the user isn't confused when
+  /// navigating back to the puzzle tab.
+  @visibleForTesting
+  Future<void> handleDailyPuzzleLink(BuildContext context, String? puzzleId) async {
+    try {
+      Puzzle puzzle;
+      final dailyPuzzle = await ref.read(dailyPuzzleProvider.future);
+      if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
+        puzzle = dailyPuzzle;
+      } else {
+        // Widget cached a different puzzle than today's daily — fetch it, but
+        // don't mark as daily to avoid confusing the user.
+        try {
+          puzzle = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
+        } catch (e, st) {
+          // Fall back to the current daily puzzle rather than leaving the tap
+          // as a no-op when the widget's cached id is stale or unreachable.
+          _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+          puzzle = dailyPuzzle;
+        }
+      }
+      if (!context.mounted) return;
+      await Navigator.of(context, rootNavigator: true).push(
+        PuzzleScreen.buildRoute(
+          context,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzle: puzzle,
+        ),
+      );
+    } catch (e, st) {
+      _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
     }
   }
 

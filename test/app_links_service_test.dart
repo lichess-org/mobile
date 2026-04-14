@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -14,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
@@ -26,12 +29,37 @@ import 'package:mocktail/mocktail.dart';
 
 import 'example_data.dart';
 import 'model/game/game_socket_example_data.dart';
+import 'model/puzzle/mock_server_responses.dart';
+import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
 import 'test_provider_scope.dart';
+
+// Mock response for a cached widget puzzle with a different id than the daily.
+// Built from the daily mock data to share the same valid game/pgn structure.
+final _mockStalePuzzleJson = mockDailyPuzzleResponse.trim().replaceFirst(
+  '"id":"0XqV2"',
+  '"id":"stale1"',
+);
 
 class MockGameRepository extends Mock implements GameRepository {}
 
 class MockChallengeRepository extends Mock implements ChallengeRepository {}
+
+class _DailyPuzzleLinkTestWidget extends ConsumerWidget {
+  const _DailyPuzzleLinkTestWidget({this.puzzleId});
+
+  final String? puzzleId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () async {
+        await ref.read(appLinksServiceProvider).handleDailyPuzzleLink(context, puzzleId);
+      },
+      child: const Text('test daily link'),
+    );
+  }
+}
 
 class _TestWidget extends ConsumerWidget {
   const _TestWidget({required this.uri});
@@ -64,7 +92,108 @@ Future<void> triggerAppLink(
   await tester.tap(find.text('test link'));
 }
 
+Future<void> triggerDailyPuzzleLink(
+  WidgetTester tester,
+  String? puzzleId, {
+  Map<ProviderOrFamily, Override>? overrides,
+}) async {
+  final app = await makeTestProviderScopeApp(
+    tester,
+    overrides: overrides,
+    home: _DailyPuzzleLinkTestWidget(puzzleId: puzzleId),
+  );
+  await tester.pumpWidget(app);
+  await tester.tap(find.text('test daily link'));
+}
+
 void main() {
+  group('handleDailyPuzzleLink', () {
+    // Builds an httpClientFactoryProvider override whose mock client routes
+    // puzzle API endpoints to controlled responses.
+    Override puzzleHttpOverride({bool failStaleFetch = false}) {
+      return httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(
+          () => MockClient((request) async {
+            if (request.url.path == '/api/puzzle/daily') {
+              return http.Response(mockDailyPuzzleResponse.trim(), 200);
+            }
+            if (request.url.path == '/api/puzzle/stale1') {
+              if (failStaleFetch) return http.Response('Server error', 500);
+              return http.Response(_mockStalePuzzleJson, 200);
+            }
+            return http.Response('', 200);
+          }),
+        );
+      });
+    }
+
+    testWidgets("no puzzle id: opens today's daily puzzle", (tester) async {
+      await triggerDailyPuzzleLink(
+        tester,
+        null,
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride()},
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzle?.puzzle.id, 'puzzle id', const PuzzleId('0XqV2'))
+            .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', true),
+      );
+    });
+
+    testWidgets('puzzle id matches daily: opens daily puzzle without extra fetch', (tester) async {
+      // PuzzleRepository.fetch() does not set isDailyPuzzle, so if puzzleProvider
+      // were called (wrongly) the assertion on isDailyPuzzle: true would fail.
+      await triggerDailyPuzzleLink(
+        tester,
+        '0XqV2', // same id as the daily puzzle
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride()},
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzle?.puzzle.id, 'puzzle id', const PuzzleId('0XqV2'))
+            .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', true),
+      );
+    });
+
+    testWidgets('puzzle id differs from daily: opens specific puzzle not flagged as daily', (
+      tester,
+    ) async {
+      await triggerDailyPuzzleLink(
+        tester,
+        'stale1',
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride()},
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzle?.puzzle.id, 'puzzle id', const PuzzleId('stale1'))
+            .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', isNot(true)),
+      );
+    });
+
+    testWidgets('puzzle id differs from daily and fetch fails: falls back to daily puzzle', (
+      tester,
+    ) async {
+      await triggerDailyPuzzleLink(
+        tester,
+        'stale1',
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride(failStaleFetch: true)},
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzle?.puzzle.id, 'puzzle id', const PuzzleId('0XqV2'))
+            .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', true),
+      );
+    });
+  });
+
   group('resolveAppLinkUri', () {
     testWidgets('Nothing happens for an empty path', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/');
