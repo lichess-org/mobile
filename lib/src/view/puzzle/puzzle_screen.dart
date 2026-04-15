@@ -736,9 +736,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
               return BottomBarButton(
-                icon: Icons.info,
+                icon: Icons.lightbulb_outline,
                 label: context.l10n.getAHint,
-                showLabel: true,
                 highlighted: puzzleState.hintSquare != null,
                 onTap: snapshot.connectionState == ConnectionState.done && !puzzleState.canGoNext
                     ? () => ref.read(ctrlProvider.notifier).toggleHint()
@@ -751,9 +750,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
               return BottomBarButton(
-                icon: Icons.help,
+                icon: Icons.flag_outlined,
                 label: context.l10n.viewTheSolution,
-                showLabel: true,
                 onTap: snapshot.connectionState == ConnectionState.done && !puzzleState.canGoNext
                     ? () => ref.read(ctrlProvider.notifier).viewSolution()
                     : null,
