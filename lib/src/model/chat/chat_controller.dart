@@ -228,12 +228,19 @@ class ChatController extends AsyncNotifier<ChatState> {
       });
     }
   }
+
+  void setInputText(String text) {
+    state = state.whenData((s) => s.copyWith(inputText: text));
+  }
 }
 
 @freezed
 sealed class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
-      _ChatState;
+  const factory ChatState({
+    required IList<ChatMessage> messages,
+    required int unreadMessages,
+    @Default('') String inputText,
+  }) = _ChatState;
 }

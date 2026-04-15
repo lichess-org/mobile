@@ -261,6 +261,16 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   final _textController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final draft = ref.read(chatControllerProvider(widget.options)).asData?.value.inputText ?? '';
+    _textController.text = draft;
+    _textController.addListener(() {
+      ref.read(chatControllerProvider(widget.options).notifier).setInputText(_textController.text);
+    });
+  }
+
+  @override
   void dispose() {
     _textController.dispose();
     super.dispose();
@@ -278,6 +288,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
                     .read(chatControllerProvider(widget.options).notifier)
                     .postMessage(_textController.text);
                 _textController.clear();
+                ref.read(chatControllerProvider(widget.options).notifier).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),
