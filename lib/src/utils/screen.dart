@@ -67,7 +67,7 @@ bool isNearSquareConstraints(BoxConstraints constraints) {
   final longest = constraints.biggest.longestSide;
   final shortest = constraints.biggest.shortestSide;
   if (shortest == 0) return false;
-  return longest / shortest < 1.2;
+  return longest / shortest < 1.1;
 }
 
 enum ScreenType { watch, handset, tablet, desktop }
