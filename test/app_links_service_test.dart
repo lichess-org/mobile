@@ -502,6 +502,47 @@ void main() {
       );
     });
 
+    testWidgets('replaces existing screen instead of stacking a duplicate', (tester) async {
+      AppLinksService? capturedService;
+      BuildContext? capturedContext;
+
+      final uri = Uri.parse('https://lichess.org/training/61044');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, ref, _) {
+            capturedService = ref.read(appLinksServiceProvider);
+            capturedContext = context;
+            return ElevatedButton(
+              onPressed: () {
+                ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+              },
+              child: const Text('go to puzzle'),
+            );
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      // First tap: pushes PuzzleScreen.
+      await tester.tap(find.text('go to puzzle'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PuzzleScreen), findsOneWidget);
+
+      // Second call from the home context (still mounted below PuzzleScreen):
+      // should replace rather than push.
+      capturedService!.handleAppLink(capturedContext!, uri);
+      await tester.pumpAndSettle();
+
+      // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('go to puzzle'), findsOneWidget);
+      expect(find.byType(PuzzleScreen), findsNothing);
+    });
+
     testWidgets('resolves /challengeId link for open challenge', (WidgetTester tester) async {
       const challenge = Challenge(
         id: ChallengeId('abcdefgh'),
