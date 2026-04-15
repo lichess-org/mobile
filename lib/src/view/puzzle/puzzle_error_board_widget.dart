@@ -23,7 +23,8 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
             child: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final orientation = constraints.maxWidth > constraints.maxHeight
+                  final orientation = constraints.maxWidth > constraints.maxHeight &&
+                          !isNearSquareConstraints(constraints)
                       ? Orientation.landscape
                       : Orientation.portrait;
                   final isTablet = isTabletOrLarger(context);

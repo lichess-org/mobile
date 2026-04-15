@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
@@ -229,7 +230,8 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
-            final orientation = constraints.maxWidth > constraints.maxHeight
+            final orientation = constraints.maxWidth > constraints.maxHeight &&
+                    !isNearSquareConstraints(constraints)
                 ? Orientation.landscape
                 : Orientation.portrait;
             final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;

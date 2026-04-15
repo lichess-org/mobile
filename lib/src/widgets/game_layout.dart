@@ -161,9 +161,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final orientation = constraints.maxWidth > constraints.maxHeight
-            ? Orientation.landscape
-            : Orientation.portrait;
+        final orientation =
+            constraints.maxWidth > constraints.maxHeight && !isNearSquareConstraints(constraints)
+                ? Orientation.landscape
+                : Orientation.portrait;
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs.toBoardSettings().copyWith(

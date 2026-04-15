@@ -53,6 +53,23 @@ double pocketSquareSize({required double boardSize, required bool isTablet}) {
   return isTablet ? 0.7 * squareSize : squareSize;
 }
 
+/// Returns true if the given constraints represent a near-square aspect ratio.
+///
+/// On foldable devices like the Samsung Galaxy Z Fold, the inner display has a
+/// near-square aspect ratio (~1.19:1). After subtracting system UI chrome, the
+/// available area can become slightly wider than tall, incorrectly triggering
+/// landscape layout. This shrinks the board by placing it side-by-side with
+/// the move list, instead of letting it fill the full width in portrait mode.
+///
+/// Use this to require a meaningful width advantage before switching to
+/// landscape layout.
+bool isNearSquareConstraints(BoxConstraints constraints) {
+  final longest = constraints.biggest.longestSide;
+  final shortest = constraints.biggest.shortestSide;
+  if (shortest == 0) return false;
+  return longest / shortest < 1.2;
+}
+
 enum ScreenType { watch, handset, tablet, desktop }
 
 extension ScreenTypeComparisonOperators on ScreenType {
