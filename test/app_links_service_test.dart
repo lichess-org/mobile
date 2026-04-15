@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -205,8 +207,8 @@ void main() {
             capturedService = ref.read(appLinksServiceProvider);
             capturedContext = context;
             return ElevatedButton(
-              onPressed: () {
-                ref.read(appLinksServiceProvider).handleDailyPuzzleLink(context, null);
+              onPressed: () async {
+                await ref.read(appLinksServiceProvider).handleDailyPuzzleLink(context, null);
               },
               child: const Text('go to puzzle'),
             );
@@ -221,8 +223,9 @@ void main() {
       expect(find.byType(PuzzleScreen), findsOneWidget);
 
       // Second call from the home context (still mounted below PuzzleScreen):
-      // should replace rather than push.
-      capturedService!.handleDailyPuzzleLink(capturedContext!, null);
+      // should replace rather than push. Fire-and-forget: the push future only
+      // resolves when the route is popped, so we drive it via pumpAndSettle.
+      unawaited(capturedService!.handleDailyPuzzleLink(capturedContext!, null));
       await tester.pumpAndSettle();
 
       // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
@@ -515,8 +518,8 @@ void main() {
             capturedService = ref.read(appLinksServiceProvider);
             capturedContext = context;
             return ElevatedButton(
-              onPressed: () {
-                ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+              onPressed: () async {
+                await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
               },
               child: const Text('go to puzzle'),
             );
@@ -531,8 +534,9 @@ void main() {
       expect(find.byType(PuzzleScreen), findsOneWidget);
 
       // Second call from the home context (still mounted below PuzzleScreen):
-      // should replace rather than push.
-      capturedService!.handleAppLink(capturedContext!, uri);
+      // should replace rather than push. Fire-and-forget: the push future only
+      // resolves when the route is popped, so we drive it via pumpAndSettle.
+      unawaited(capturedService!.handleAppLink(capturedContext!, uri));
       await tester.pumpAndSettle();
 
       // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
