@@ -70,11 +70,19 @@ class GameListTile extends ConsumerWidget {
       direction: opponent.user != null && opponent.aiLevel == null
           ? DismissDirection.endToStart
           : DismissDirection.none,
-      background: Container(
-        color: context.lichessColors.purple,
+      background: const SizedBox.shrink(),
+      secondaryBackground: Container(
+        color: ColorScheme.of(context).primary,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: const Icon(Icons.refresh, color: Colors.white),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(context.l10n.rematch, style: const TextStyle(color: Colors.white)),
+            const SizedBox(width: 8),
+            const Icon(Icons.sync, color: Colors.white),
+          ],
+        ),
       ),
       confirmDismiss: (direction) async {
         final timeControl = game.clock != null
