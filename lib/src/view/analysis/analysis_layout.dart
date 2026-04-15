@@ -196,9 +196,9 @@ class AnalysisLayout extends StatelessWidget {
               builder: (context, constraints) {
                 final orientation =
                     constraints.maxWidth > constraints.maxHeight &&
-                            !isNearSquareConstraints(constraints)
-                        ? Orientation.landscape
-                        : Orientation.portrait;
+                        !isNearSquareConstraints(constraints)
+                    ? Orientation.landscape
+                    : Orientation.portrait;
                 final isTablet = isTabletOrLarger(context);
                 const tabletBoardRadius = Styles.boardBorderRadius;
 

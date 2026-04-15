@@ -440,7 +440,8 @@ class _BodyState extends ConsumerState<_Body> {
         maintainBottomViewPadding: true,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final orientation = constraints.maxWidth > constraints.maxHeight &&
+            final orientation =
+                constraints.maxWidth > constraints.maxHeight &&
                     !isNearSquareConstraints(constraints)
                 ? Orientation.landscape
                 : Orientation.portrait;
