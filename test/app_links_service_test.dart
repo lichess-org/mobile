@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -191,6 +193,47 @@ void main() {
             .having((s) => s.puzzle?.puzzle.id, 'puzzle id', const PuzzleId('0XqV2'))
             .having((s) => s.puzzle?.isDailyPuzzle, 'is daily', true),
       );
+    });
+
+    testWidgets('replaces existing PuzzleScreen instead of stacking a duplicate', (tester) async {
+      AppLinksService? capturedService;
+      BuildContext? capturedContext;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        overrides: {httpClientFactoryProvider: puzzleHttpOverride()},
+        home: Consumer(
+          builder: (context, ref, _) {
+            capturedService = ref.read(appLinksServiceProvider);
+            capturedContext = context;
+            return ElevatedButton(
+              onPressed: () async {
+                await ref.read(appLinksServiceProvider).handleDailyPuzzleLink(context, null);
+              },
+              child: const Text('go to puzzle'),
+            );
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      // First tap: pushes PuzzleScreen.
+      await tester.tap(find.text('go to puzzle'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PuzzleScreen), findsOneWidget);
+
+      // Second call from the home context (still mounted below PuzzleScreen):
+      // should replace rather than push. Fire-and-forget: the push future only
+      // resolves when the route is popped, so we drive it via pumpAndSettle.
+      unawaited(capturedService!.handleDailyPuzzleLink(capturedContext!, null));
+      await tester.pumpAndSettle();
+
+      // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('go to puzzle'), findsOneWidget);
+      expect(find.byType(PuzzleScreen), findsNothing);
     });
   });
 
@@ -460,6 +503,48 @@ void main() {
         tester.widget(find.byType(TvScreen)),
         isA<TvScreen>().having((s) => s.initialGame?.$1, 'id', ongoingGame.id),
       );
+    });
+
+    testWidgets('replaces existing screen instead of stacking a duplicate', (tester) async {
+      AppLinksService? capturedService;
+      BuildContext? capturedContext;
+
+      final uri = Uri.parse('https://lichess.org/training/61044');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, ref, _) {
+            capturedService = ref.read(appLinksServiceProvider);
+            capturedContext = context;
+            return ElevatedButton(
+              onPressed: () async {
+                await ref.read(appLinksServiceProvider).handleAppLink(context, uri);
+              },
+              child: const Text('go to puzzle'),
+            );
+          },
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      // First tap: pushes PuzzleScreen.
+      await tester.tap(find.text('go to puzzle'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PuzzleScreen), findsOneWidget);
+
+      // Second call from the home context (still mounted below PuzzleScreen):
+      // should replace rather than push. Fire-and-forget: the push future only
+      // resolves when the route is popped, so we drive it via pumpAndSettle.
+      unawaited(capturedService!.handleAppLink(capturedContext!, uri));
+      await tester.pumpAndSettle();
+
+      // Pressing back must return to the home widget — no extra PuzzleScreen in the stack.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('go to puzzle'), findsOneWidget);
+      expect(find.byType(PuzzleScreen), findsNothing);
     });
 
     testWidgets('resolves /challengeId link for open challenge', (WidgetTester tester) async {
