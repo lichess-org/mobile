@@ -8,6 +8,10 @@ Contributions to this project are welcome!
 
 If you want to contribute, please read the [contributing guide](./CONTRIBUTING.md).
 
+If you are new to this project, you can [read the documentation](./docs) to get
+started. The [CLAUDE.md](./CLAUDE.md) is also a good resource to understand the
+codebase.
+
 ## Setup
 
 tl;dr: Install Flutter, clone the repo, run in order:
