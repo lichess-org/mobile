@@ -1013,9 +1013,9 @@ void main() {
       // wait for the "View the solution" button to become enabled
       await tester.pump(const Duration(seconds: 4));
 
-      expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.help));
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // Wait for the move to be triggered
       await tester.pump(const Duration(seconds: 1));
