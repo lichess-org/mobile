@@ -341,6 +341,8 @@ class AppLinksService {
         screen: route.screen,
         settings: route.settings,
         fullscreenDialog: route.fullscreenDialog,
+        maintainState: route.maintainState,
+        allowSnapshotting: route.allowSnapshotting,
         overrideTransitionDuration: Duration.zero,
       );
     }
