@@ -218,7 +218,7 @@ void main() {
       // in play mode we don't see the continue button
       expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsNothing);
       // in play mode we see the solution button
-      expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
 
       expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
       expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
@@ -246,7 +246,7 @@ void main() {
       verify(saveDBReq).called(2);
 
       expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
-      expect(find.byIcon(Icons.help), findsNothing);
+      expect(find.byIcon(Icons.flag_outlined), findsNothing);
 
       await tester.tap(find.byIcon(CupertinoIcons.play_arrow_solid));
 
@@ -417,11 +417,14 @@ void main() {
       expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
       // Help button should still be disabled
-      expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
       expect(
         tester
             .firstWidget<BottomBarButton>(
-              find.ancestor(of: find.byIcon(Icons.help), matching: find.byType(BottomBarButton)),
+              find.ancestor(
+                of: find.byIcon(Icons.flag_outlined),
+                matching: find.byType(BottomBarButton),
+              ),
             )
             .enabled,
         isFalse,
@@ -430,7 +433,7 @@ void main() {
       // wait for the solution button to be enabled
       await tester.pump(const Duration(seconds: 4));
 
-      await tester.tap(find.byIcon(Icons.help));
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -517,8 +520,8 @@ void main() {
           await tester.pump(const Duration(seconds: 5));
 
           // view solution
-          expect(find.byIcon(Icons.help), findsOneWidget);
-          await tester.tap(find.byIcon(Icons.help));
+          expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+          await tester.tap(find.byIcon(Icons.flag_outlined));
 
           // wait for solution replay animation to finish
           await tester.pump(const Duration(seconds: 1));
@@ -592,8 +595,8 @@ void main() {
       final customPaintWidgetsBefore = find.byType(CustomPaint).evaluate().toSet();
 
       // get hint and wait for it to show
-      expect(find.byIcon(Icons.info), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.info));
+      expect(find.byIcon(Icons.lightbulb_outline), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.lightbulb_outline));
       await tester.pump(const Duration(milliseconds: 100));
 
       // check hint is set
@@ -604,8 +607,8 @@ void main() {
       expect((diff.first.widget as CustomPaint).painter.runtimeType.toString(), '_CirclePainter');
 
       // view solution
-      expect(find.byIcon(Icons.help), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.help));
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -621,8 +624,8 @@ void main() {
       await tester.pump(const Duration(seconds: 5));
 
       // view solution
-      expect(find.byIcon(Icons.help), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.help));
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -710,8 +713,8 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
 
     // view solution
-    expect(find.byIcon(Icons.help), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.help));
+    expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.flag_outlined));
 
     // wait for solution replay animation to finish
     await tester.pump(const Duration(seconds: 1));
