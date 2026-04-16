@@ -469,6 +469,7 @@ class _GameResultListTile extends StatelessWidget {
       :ratingDiff,
       :opponent,
       :fideTC,
+      :ongoing,
     ) = playerGameResult;
     final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
@@ -527,7 +528,8 @@ class _GameResultListTile extends StatelessWidget {
                       Text(
                         customPoints != null && customPoints != 0.5
                             ? NumberFormat('0.##').format(customPoints)
-                            : points?.resultFor(color).resultToString(color) ?? '*',
+                            : points?.resultFor(color).resultToString(color) ??
+                                  (ongoing ? '*' : ''),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: .bold,
                           color: points?.resultFor(color).colorFor(color, context),
