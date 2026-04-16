@@ -20,55 +20,43 @@ struct DailyPuzzleWidgetView: View {
         .widgetURL(entry.puzzleURL)
     }
 
-    // MARK: - Small layout (board fills widget, header as semi-transparent overlay)
+    // MARK: - Small layout (board fills widget, watermark icon centered behind pieces)
 
     @ViewBuilder
     private var smallContentView: some View {
-        ZStack {
-            boardView
-                .clipShape(ContainerRelativeShape())
+        smallBoardView
+            .clipShape(ContainerRelativeShape())
+    }
 
-            // Top scrim
-            VStack {
-                LinearGradient(
-                    colors: [.black.opacity(DailyPuzzleWidgetLayout.smallScrimOpacity), .clear],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: DailyPuzzleWidgetLayout.smallScrimHeight)
-                Spacer()
-            }
+    @ViewBuilder
+    private var smallBoardView: some View {
+        if let fen = entry.fen {
+            ChessBoardView(
+                fen: fen,
+                lastMove: entry.lastMove,
+                flipped: !entry.isWhiteToMove,
+                boardStyle: entry.boardStyle,
+                watermark: AnyView(puzzleCalendarWatermark),
+                backgroundOpacity: DailyPuzzleWidgetLayout.smallBoardBackgroundOpacity
+            )
+        } else {
+            Color.secondary.opacity(0.2)
+        }
+    }
 
-            // Top-left: logo + title
-            VStack {
-                HStack(spacing: DailyPuzzleWidgetLayout.smallHeaderSpacing) {
-                    Image("LichessLogo")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(.white)
-                        .frame(
-                            width: DailyPuzzleWidgetLayout.smallLogoSize,
-                            height: DailyPuzzleWidgetLayout.smallLogoSize
-                        )
-                        .shadow(color: .black.opacity(0.8), radius: 3, x: 0, y: 1)
-                        .shadow(color: .black.opacity(0.4), radius: 6, x: 0, y: 2)
-                    Text("Daily Puzzle")
-                        .font(
-                            .system(
-                                size: DailyPuzzleWidgetLayout.smallTitleFontSize,
-                                weight: .semibold
-                            )
-                        )
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.8), radius: 3, x: 0, y: 1)
-                        .shadow(color: .black.opacity(0.4), radius: 6, x: 0, y: 2)
-                        .lineLimit(2)
-                    Spacer()
-                }
-                Spacer()
-            }
-            .padding(.horizontal, DailyPuzzleWidgetLayout.smallHeaderHorizontalPadding)
-            .padding(.vertical, DailyPuzzleWidgetLayout.smallHeaderVerticalPadding)
+    private var puzzleCalendarWatermark: some View {
+        let color = entry.boardStyle.lightSquare
+        return GeometryReader { proxy in
+            let size = min(proxy.size.width, proxy.size.height) * 0.75
+
+            Image(systemName: "puzzlepiece.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(color)
+                .frame(width: size, height: size)
+                .blendMode(.screen)
+                .opacity(DailyPuzzleWidgetLayout.smallWatermarkOpacity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 

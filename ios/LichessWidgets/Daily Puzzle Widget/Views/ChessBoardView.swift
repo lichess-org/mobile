@@ -15,6 +15,8 @@ struct ChessBoardView: View {
     let lastMove: String?
     let flipped: Bool
     let boardStyle: ChessboardTheme
+    var watermark: AnyView? = nil
+    var backgroundOpacity: CGFloat = 1.0
 
     // MARK: - FEN parsing
 
@@ -51,46 +53,61 @@ struct ChessBoardView: View {
     var body: some View {
         let boardData = board
         let highlighted = highlightedSquares
-        let isSolidTheme = boardStyle.boardImageName == nil
 
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
             let squareSize = side / 8
 
             ZStack {
-                // Board background
-                // Image-backed themes: one full-board texture scaled to fill.
-                // Solid-colour themes: drawn square-by-square in the grid below.
+                // Pass 1: board background (image or solid squares)
                 if let imageName = boardStyle.boardImageName {
                     Image(imageName, bundle: ChessgroundAssets.bundle)
                         .resizable()
                         .frame(width: side, height: side)
+                        .opacity(backgroundOpacity)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(0 ..< 8, id: \.self) { row in
+                            HStack(spacing: 0) {
+                                ForEach(0 ..< 8, id: \.self) { col in
+                                    let rankIndex = flipped ? 7 - row : row
+                                    let fileIndex = flipped ? 7 - col : col
+                                    let isLight = (rankIndex + fileIndex) % 2 == 0
+                                    Rectangle()
+                                        .fill(
+                                            isLight
+                                            ? boardStyle.lightSquare
+                                            : boardStyle.darkSquare
+                                        )
+                                        .frame(width: squareSize, height: squareSize)
+                                }
+                            }
+                        }
+                    }
+                    .frame(width: side, height: side)
+                    .opacity(backgroundOpacity)
                 }
 
-                // Square grid: solid fill, highlights, pieces
+                // Pass 2: optional watermark, above board background, below pieces
+                if let watermark {
+                    watermark
+                        .frame(width: side, height: side)
+                }
+
+                // Pass 3: highlights and pieces
                 VStack(spacing: 0) {
                     ForEach(0 ..< 8, id: \.self) { row in
                         HStack(spacing: 0) {
                             ForEach(0 ..< 8, id: \.self) { col in
                                 let rankIndex = flipped ? 7 - row : row
                                 let fileIndex = flipped ? 7 - col : col
-                                // Light squares are where (rankIndex + fileIndex) is even:
-                                // a8=(0,0) is light, b8=(0,1) is dark, a7=(1,0) is dark, etc.
-                                let isLight = (rankIndex + fileIndex) % 2 == 0
                                 let name = squareName(rankIndex: rankIndex, fileIndex: fileIndex)
                                 let piece: Character? =
-                                rankIndex < boardData.count && fileIndex < boardData[rankIndex].count
-                                ? boardData[rankIndex][fileIndex] : nil
+                                    rankIndex < boardData.count
+                                    && fileIndex < boardData[rankIndex].count
+                                    ? boardData[rankIndex][fileIndex] : nil
 
                                 ZStack {
-                                    if isSolidTheme {
-                                        Rectangle()
-                                            .fill(
-                                                isLight
-                                                ? boardStyle.lightSquare
-                                                : boardStyle.darkSquare
-                                            )
-                                    }
                                     if highlighted.contains(name) {
                                         Rectangle().fill(boardStyle.lastMoveHighlight)
                                     }
