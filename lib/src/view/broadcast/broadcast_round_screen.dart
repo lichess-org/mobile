@@ -218,8 +218,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             SemanticIconButton(
               icon: const PlatformShareIcon(),
               semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () =>
-                  showBroadcastShareMenu(context, widget.broadcast.tour, roundState.round),
+              onPressed: () => showBroadcastShareMenu(
+                context,
+                asyncTournament.value?.data ?? widget.broadcast.tour,
+                roundState.round,
+              ),
             ),
           ],
         ),
