@@ -15,6 +15,6 @@ struct DailyPuzzleWidget: Widget {
         .contentMarginsDisabled()
         .configurationDisplayName(displayName)
         .description(widgetDescription)
-        .supportedFamilies([.systemLarge])
+        .supportedFamilies([.systemSmall, .systemLarge])
     }
 }
