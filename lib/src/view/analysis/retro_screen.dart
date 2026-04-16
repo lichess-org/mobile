@@ -236,7 +236,7 @@ class _BottomBar extends ConsumerWidget {
       children: [
         if (state.isSolving) ...[
           BottomBarButton(
-            icon: Icons.help,
+            icon: Icons.flag_outlined,
             label: context.l10n.viewTheSolution,
             showLabel: true,
             onTap: ref.read(retroControllerProvider(options).notifier).viewSolution,
