@@ -29,6 +29,8 @@ const _tournamentResponse = '''
 String playerResponse({required String? points, required double? customPoints}) {
   final pointsField = points == null ? 'null' : '"$points"';
   final customField = customPoints == null ? 'null' : '$customPoints';
+  final ongoing = points == null;
+  final ongoingField = ongoing ? '"ongoing": true,' : '';
   return '''
 {
   "name": "Test Player",
@@ -42,6 +44,7 @@ String playerResponse({required String? points, required double? customPoints}) 
       "fideTC": "standard",
       "points": $pointsField,
       "customPoints": $customField,
+      $ongoingField
       "opponent": {"name": "Opponent"}
     }
   ]
