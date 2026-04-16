@@ -6748,4 +6748,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'אימות דו־שלבי';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'הבלוג של $param';
+  }
 }

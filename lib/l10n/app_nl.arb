@@ -1825,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} jaar geleden} other{{count} jaar geleden}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuut resterend} other{{count} minuten resterend}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} uur resterend} other{{count} uur resterend}}",
-  "tfaTwoFactorAuth": "Tweestapsverificatie"
+  "tfaTwoFactorAuth": "Tweestapsverificatie",
+  "ublogCommunity": "Gemeenschap",
+  "ublogXBlog": "Blog van {param}"
 }

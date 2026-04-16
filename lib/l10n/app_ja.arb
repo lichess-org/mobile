@@ -1825,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{残り {count} 分}}",
   "timeagoNbHoursRemaining": "{count, plural, other{残り {count} 時間}}",
-  "tfaTwoFactorAuth": "2 要素認証"
+  "tfaTwoFactorAuth": "2 要素認証",
+  "ublogCommunity": "コミュニティ",
+  "ublogXBlog": "{param} のブログ"
 }

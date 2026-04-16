@@ -1827,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} yıl önce} other{{count} yıl önce}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} dakika kaldı} other{{count} dakika kaldı}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} saat kaldı} other{{count} saat kaldı}}",
-  "tfaTwoFactorAuth": "İki faktörlü kimlik doğrulama"
+  "tfaTwoFactorAuth": "İki faktörlü kimlik doğrulama",
+  "ublogCommunity": "Topluluk",
+  "ublogXBlog": "{param} Bloğu"
 }

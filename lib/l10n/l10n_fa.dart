@@ -6562,4 +6562,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
+
+  @override
+  String get ublogCommunity => 'همدارگان';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'وبنوشتِ $param';
+  }
 }

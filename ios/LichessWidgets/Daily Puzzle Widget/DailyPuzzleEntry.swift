@@ -6,8 +6,6 @@ struct DailyPuzzleEntry: TimelineEntry {
     let puzzleId: String?
     let fen: String?
     let lastMove: String?
-    let rating: Int?
-    let showRating: Bool
     let boardStyle: ChessboardTheme
     let error: String?
 
@@ -18,13 +16,14 @@ struct DailyPuzzleEntry: TimelineEntry {
         return parts[1] == "w"
     }
 
-    var puzzleURL: URL? {
-        if let id = puzzleId {
-            return LichessAppGroup.lichessURL(path: "/training/\(id)")
-        } else {
-            return LichessAppGroup.lichessURL(path: "/training/daily")
-        }
-    }
+    /// Custom-scheme deeplink handled by the Flutter app to open the native
+    /// daily-puzzle screen (titled "Daily Puzzle"). See `AppLinksService`.
+    ///
+    /// Includes the specific puzzle id when known so the app opens the same
+    /// puzzle the widget is showing (the widget caches the daily puzzle for up
+    /// to 6 hours, so a plain `/training/daily` deeplink could otherwise open
+    /// a different puzzle than the one tapped).
+    var puzzleURL: URL? { dailyPuzzleDeeplink(puzzleId: puzzleId) }
 
     /// A recognisable position (Italian game after initial moves)
     /// used as placeholder while the real puzzle loads.
@@ -34,8 +33,6 @@ struct DailyPuzzleEntry: TimelineEntry {
             puzzleId: nil,
             fen: "1n3rk1/4ppbp/rq1p2p1/3P4/2p1P3/2N2P1n/PPN3PP/R1BQ1R1K b - - 1 1",
             lastMove: "g1h1",
-            rating: 1430,
-            showRating: true,
             boardStyle: ChessboardTheme.fromAppGroup(),
             error: nil
         )

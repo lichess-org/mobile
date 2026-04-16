@@ -1677,5 +1677,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count}年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{剩下 {count} 分鐘}}",
   "timeagoNbHoursRemaining": "{count, plural, other{剩下 {count} 小時}}",
-  "tfaTwoFactorAuth": "兩步驟驗證"
+  "tfaTwoFactorAuth": "兩步驟驗證",
+  "ublogCommunity": "社群",
+  "ublogXBlog": "{param}的部落格"
 }

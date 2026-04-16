@@ -6467,6 +6467,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '双重认证';
+
+  @override
+  String get ublogCommunity => '社区';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param 的博客';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12441,4 +12449,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get ublogCommunity => '社群';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param的部落格';
+  }
 }

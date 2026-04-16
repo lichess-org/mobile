@@ -6752,4 +6752,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
+
+  @override
+  String get ublogCommunity => 'Społeczność';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog gracza $param';
+  }
 }

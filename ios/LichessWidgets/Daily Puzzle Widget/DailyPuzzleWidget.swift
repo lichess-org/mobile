@@ -1,4 +1,3 @@
-import AppIntents
 import SwiftUI
 import WidgetKit
 
@@ -9,11 +8,7 @@ struct DailyPuzzleWidget: Widget {
     let kind = "DailyPuzzleLargeWidget"
 
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(
-            kind: kind,
-            intent: DailyPuzzleIntent.self,
-            provider: DailyPuzzleProvider()
-        ) { entry in
+        StaticConfiguration(kind: kind, provider: DailyPuzzleProvider()) { entry in
             DailyPuzzleWidgetView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }

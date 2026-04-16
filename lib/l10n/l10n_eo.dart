@@ -6562,4 +6562,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dufaza aŭtentigo';
+
+  @override
+  String get ublogCommunity => 'Komunumo';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogo de $param';
+  }
 }

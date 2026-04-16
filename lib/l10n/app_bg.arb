@@ -1774,5 +1774,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{преди {count} година} other{преди {count} години}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{остава {count} минутa} other{остават {count} минути}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{остава {count} час} other{остават {count} часа}}",
-  "tfaTwoFactorAuth": "Двуфакторно удостоверяване"
+  "tfaTwoFactorAuth": "Двуфакторно удостоверяване",
+  "ublogCommunity": "Общност",
+  "ublogXBlog": "Блогът на {param}"
 }

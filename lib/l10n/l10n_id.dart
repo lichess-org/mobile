@@ -6473,4 +6473,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentikasi dua-langkah';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog dari $param';
+  }
 }

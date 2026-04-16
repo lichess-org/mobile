@@ -6467,4 +6467,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Xác thực 2 bước';
+
+  @override
+  String get ublogCommunity => 'Cộng đồng';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Bài viết của $param';
+  }
 }

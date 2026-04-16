@@ -6657,4 +6657,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentificare în doi pași';
+
+  @override
+  String get ublogCommunity => 'Comunitate';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog-ul lui $param';
+  }
 }

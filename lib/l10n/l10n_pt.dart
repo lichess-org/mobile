@@ -6562,6 +6562,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -13122,4 +13130,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog do(a) $param';
+  }
 }

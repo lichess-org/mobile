@@ -1826,5 +1826,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} vuosi sitten} other{{count} vuotta sitten}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuutti jäljellä} other{{count} minuuttia jäljellä}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} tunti jäljellä} other{{count} tuntia jäljellä}}",
-  "tfaTwoFactorAuth": "Kaksivaiheinen tunnistautuminen"
+  "tfaTwoFactorAuth": "Kaksivaiheinen tunnistautuminen",
+  "ublogCommunity": "Yhteisön blogit",
+  "ublogXBlog": "Käyttäjän {param} blogi"
 }

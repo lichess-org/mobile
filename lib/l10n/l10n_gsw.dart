@@ -6562,4 +6562,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Autentifizierig';
+
+  @override
+  String get ublogCommunity => 'G\'meinschaft';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

@@ -6562,4 +6562,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Mirëfilltësim dyfaktorësh';
+
+  @override
+  String get ublogCommunity => 'Bashkësi';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogu i $param';
+  }
 }

@@ -1698,5 +1698,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{antaŭ {count} jaro} other{antaŭ {count} jaroj}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{restas {count} minuto} other{restas {count} minutoj}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} horo restas} other{{count} horoj restas}}",
-  "tfaTwoFactorAuth": "Dufaza aŭtentigo"
+  "tfaTwoFactorAuth": "Dufaza aŭtentigo",
+  "ublogCommunity": "Komunumo",
+  "ublogXBlog": "Blogo de {param}"
 }

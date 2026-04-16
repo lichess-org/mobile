@@ -6942,4 +6942,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'التوثيق ذو العاملين';
+
+  @override
+  String get ublogCommunity => 'المجتمع';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'مدونة $param';
+  }
 }

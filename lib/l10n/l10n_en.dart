@@ -6560,6 +6560,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -13120,4 +13128,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

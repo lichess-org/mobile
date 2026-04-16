@@ -1819,5 +1819,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} سال پیش} other{{count} سال پیش}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} دقیقه باقی مانده} other{{count} دقیقه باقی مانده}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} ساعت باقی مانده} other{{count} ساعت باقی مانده}}",
-  "tfaTwoFactorAuth": "راستین‌آزمایی دوعاملی"
+  "tfaTwoFactorAuth": "راستین‌آزمایی دوعاملی",
+  "ublogCommunity": "همدارگان",
+  "ublogXBlog": "وبنوشتِ {param}"
 }

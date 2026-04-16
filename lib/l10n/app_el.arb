@@ -1811,5 +1811,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} χρόνο πριν} other{{count} χρόνια πριν}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{απομένει {count} λεπτό} other{απομένουν {count} λεπτά}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{απομένει {count} ώρα} other{απομένουν {count} ώρες}}",
-  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων"
+  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων",
+  "ublogCommunity": "Κοινότητα",
+  "ublogXBlog": "Ιστολόγιο του χρήστη {param}"
 }

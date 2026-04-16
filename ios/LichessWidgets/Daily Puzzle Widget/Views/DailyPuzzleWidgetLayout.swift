@@ -11,15 +11,10 @@ enum DailyPuzzleWidgetLayout {
     static let headerBottomPadding: CGFloat = 5
     static let logoSize: CGFloat = 20
 
-    // Side-to-move indicator
-    static let sideIndicatorSize: CGFloat = 14
-    static let sideIndicatorBorderOpacity: CGFloat = 0.4
-    static let sideIndicatorBorderWidth: CGFloat = 0.5
-
     // Board
     static let boardBorderWidth: CGFloat = 1
     static let horizontalPadding: CGFloat = 16
-    static let topPadding: CGFloat = 11
+    static let verticalPadding: CGFloat = 10
 
     // Piece
     static let pieceSizeFactor: CGFloat = 0.9

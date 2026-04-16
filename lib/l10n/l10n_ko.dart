@@ -6467,4 +6467,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2단계 인증';
+
+  @override
+  String get ublogCommunity => '커뮤니티';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param의 블로그';
+  }
 }

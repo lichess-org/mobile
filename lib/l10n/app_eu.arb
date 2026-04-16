@@ -1825,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{orain dela urte {count}} other{orain dela {count} urte}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Minutu {count} falta da} other{{count} minutu falta dira}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Ordu {count} falta da} other{{count} ordu falta dira}}",
-  "tfaTwoFactorAuth": "Bi faktoreko autentifikazioa"
+  "tfaTwoFactorAuth": "Bi faktoreko autentifikazioa",
+  "ublogCommunity": "Komunitatea",
+  "ublogXBlog": "{param} erabiltzailearen Bloga"
 }

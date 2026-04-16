@@ -1827,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} ano atrás} other{{count} anos atrás}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuto restante} other{{count} minutos restantes}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hora restante} other{{count} horas restantes}}",
-  "tfaTwoFactorAuth": "Autenticação de dois fatores"
+  "tfaTwoFactorAuth": "Autenticação de dois fatores",
+  "ublogCommunity": "Comunidade",
+  "ublogXBlog": "Blog do(a) {param}"
 }

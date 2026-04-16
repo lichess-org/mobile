@@ -6649,4 +6649,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Divfaktoru autentifikācija';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Lietotāja $param blogs';
+  }
 }

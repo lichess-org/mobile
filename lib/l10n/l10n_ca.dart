@@ -6562,4 +6562,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticació de dos factors';
+
+  @override
+  String get ublogCommunity => 'Comunitat';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }
