@@ -20,14 +20,9 @@ struct BroadcastWidgetHeader: View {
                     .lineLimit(1)
                 if showTimestamp {
                     Spacer()
-                    HStack(alignment: .center, spacing: 4) {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .font(.system(size: BroadcastWidgetLayout.statusIconSize))
-                            .foregroundStyle(.secondary)
-                        Text(updatedAt.shortTime)
-                            .font(.system(size: BroadcastWidgetLayout.secondaryFontSize))
-                            .foregroundStyle(.secondary)
-                    }
+                    Text(updatedAt.shortTime)
+                        .font(.system(size: BroadcastWidgetLayout.secondaryFontSize))
+                        .foregroundStyle(.secondary)
                 }
             }
         }
