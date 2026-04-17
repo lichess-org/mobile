@@ -344,6 +344,56 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           // smaller but pockets only shrink by a fraction of a square.
           final pocketsBoardSize = math.min(maxBoardWidth, constraints.maxHeight);
 
+          // Portrait versions of topTable/bottomTable use mainAxisSize.min so
+          // they report natural height to BoardPortraitLayout. The landscape
+          // variants above keep mainAxisSize.max because they're inside an
+          // Expanded that provides a bounded height.
+          Widget portraitTopTable() => RotatedBox(
+            quarterTurns: widget.topTableUpsideDown ? 2 : 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: widget.topTableUpsideDown
+                  ? VerticalDirection.up
+                  : VerticalDirection.down,
+              children: [
+                if (pockets != null)
+                  PocketsMenu(
+                    side: widget.orientation.opposite,
+                    sideToMove: sideToMove,
+                    playerSide: widget.boardParams.playerSide,
+                    pockets: pockets,
+                    squareSize: pocketSquareSize(boardSize: pocketsBoardSize, isTablet: isTablet),
+                    isUpsideDown: widget.topTableUpsideDown,
+                    premoveDropRole: premoveDropRole,
+                  ),
+                widget.topTable,
+              ],
+            ),
+          );
+
+          Widget portraitBottomTable() => RotatedBox(
+            quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: widget.bottomTableUpsideDown
+                  ? VerticalDirection.up
+                  : VerticalDirection.down,
+              children: [
+                widget.bottomTable,
+                if (pockets != null)
+                  PocketsMenu(
+                    side: widget.orientation,
+                    sideToMove: sideToMove,
+                    playerSide: widget.boardParams.playerSide,
+                    pockets: pockets,
+                    squareSize: pocketSquareSize(boardSize: pocketsBoardSize, isTablet: isTablet),
+                    isUpsideDown: widget.bottomTableUpsideDown,
+                    premoveDropRole: premoveDropRole,
+                  ),
+              ],
+            ),
+          );
+
           return BoardPortraitLayout(
             maxBoardWidth: maxBoardWidth,
             above: Column(
@@ -367,10 +417,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  // topTable returns a Column with mainAxisSize.max, which
-                  // would fill loose constraints. IntrinsicHeight collapses it
-                  // to its natural height so BoardPortraitLayout can measure it.
-                  child: IntrinsicHeight(child: topTable(boardSize: pocketsBoardSize)),
+                  child: portraitTopTable(),
                 ),
               ],
             ),
@@ -394,7 +441,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  child: IntrinsicHeight(child: bottomTable(boardSize: pocketsBoardSize)),
+                  child: portraitBottomTable(),
                 ),
                 if (widget.userActionsBar != null) widget.userActionsBar!,
               ],
