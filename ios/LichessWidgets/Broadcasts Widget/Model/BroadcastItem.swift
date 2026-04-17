@@ -8,8 +8,8 @@ struct BroadcastItem: Identifiable {
     let roundSlug: String
     let isLive: Bool
     let startsAt: Date?
-    let imageData: Data?    // tournament thumbnail
-    let tier: Int?
+    let imageData: Data?    // tournament thumbnail fetched from the API
+    let thumbnailImageName: String? // bundled asset name used as static fallback (widget gallery)
 
     /// Builds the lichess.org broadcast URL for this item.
     /// Slugs are SEO-only so the actual round id drives routing.

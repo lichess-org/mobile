@@ -2,17 +2,19 @@ import SwiftUI
 
 struct BroadcastItemRow: View {
     let item: BroadcastItem
-    let showThumbnail: Bool
+    /// Square thumbnail edge size, or `nil` to hide the thumbnail (e.g. small widget).
+    let thumbnailSize: CGFloat?
     let lineLimit: Int
 
     var body: some View {
         HStack(alignment: .top, spacing: BroadcastWidgetLayout.itemHSpacing) {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(item.title)
                     .font(.system(size: BroadcastWidgetLayout.titleFontSize, weight: .semibold))
                     .lineLimit(lineLimit)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.primary)
+                Spacer(minLength: BroadcastWidgetLayout.statusSpacerMinLength)
                 HStack(spacing: 4) {
                     statusIndicator
                     Text(statusText)
@@ -22,8 +24,8 @@ struct BroadcastItemRow: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            if showThumbnail {
-                thumbnailView
+            if let thumbnailSize {
+                thumbnailView(size: thumbnailSize)
             }
         }
     }
@@ -55,17 +57,28 @@ struct BroadcastItemRow: View {
     }
 
     @ViewBuilder
-    private var thumbnailView: some View {
-        let size = BroadcastWidgetLayout.thumbnailSize
+    private func thumbnailView(size: CGFloat) -> some View {
         Group {
             if let data = item.imageData, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-            } else {
-                Image("BroadcastPlaceholderImage")
+            } else if let imageName = item.thumbnailImageName {
+                Image(imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+            } else {
+                ZStack {
+                    Color.secondary.opacity(0.15)
+                    Image("LichessLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(
+                            width: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio,
+                            height: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio
+                        )
+                        .opacity(0.5)
+                }
             }
         }
         .frame(width: size, height: size)

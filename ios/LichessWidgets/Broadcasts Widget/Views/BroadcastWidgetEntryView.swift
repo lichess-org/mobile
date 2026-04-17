@@ -5,12 +5,23 @@ struct BroadcastWidgetEntryView: View {
     var entry: BroadcastEntry
     @Environment(\.widgetFamily) var family
 
-    private var showThumbnail: Bool { family != .systemSmall }
     private var lineLimit: Int {
         switch family {
         case .systemSmall: return 3
+        case .systemMedium: return 1
         default: return 2
         }
+    }
+
+    /// Computes a thumbnail edge size that makes items fill `availableHeight` without exceeding the static max.
+    private func thumbnailSize(for availableHeight: CGFloat) -> CGFloat? {
+        guard family != .systemSmall else { return nil }
+        let count = CGFloat(max(entry.items.count, 1))
+        let overhead = count * BroadcastWidgetLayout.itemTopPadding
+                     + (count - 1) * BroadcastWidgetLayout.dividerTotalHeight
+        let size = min(max((availableHeight - overhead) / count, BroadcastWidgetLayout.minThumbnailSize),
+                       BroadcastWidgetLayout.maxThumbnailSize)
+        return size
     }
 
     var body: some View {
@@ -28,7 +39,7 @@ struct BroadcastWidgetEntryView: View {
             } else if entry.items.isEmpty {
                 emptyView
             } else if family == .systemSmall {
-                itemsContent
+                itemsContent(thumbnailSize: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 Text("Updated at \(entry.date.shortTime)")
@@ -36,17 +47,20 @@ struct BroadcastWidgetEntryView: View {
                     .foregroundStyle(.secondary)
                     .padding(.top, BroadcastWidgetLayout.smallFooterTopPadding)
             } else {
-                itemsContent
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                // GeometryReader measures remaining height so thumbnails fill the available area.
+                GeometryReader { geo in
+                    itemsContent(thumbnailSize: thumbnailSize(for: geo.size.height))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
         }
     }
 
     @ViewBuilder
-    private var itemsContent: some View {
+    private func itemsContent(thumbnailSize: CGFloat?) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-          ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                let row = BroadcastItemRow(item: item, showThumbnail: showThumbnail, lineLimit: lineLimit)
+            ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
+                let row = BroadcastItemRow(item: item, thumbnailSize: thumbnailSize, lineLimit: lineLimit)
                     .padding(.top, BroadcastWidgetLayout.itemTopPadding)
                 if let dest = item.broadcastURL() {
                     Link(destination: dest) { row }

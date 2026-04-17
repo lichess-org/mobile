@@ -15,59 +15,48 @@ enum BroadcastPlaceholder {
     private static let items: [BroadcastItem] = [
         BroadcastItem(
             id: "1",
-            title: "FIDE World Championship",
-            roundName: "Round 5",
-            tourSlug: "fide-world-championship",
-            roundSlug: "round-5",
+            title: "European Individual Chess Championship",
+            roundName: "Round 10",
+            tourSlug: "european-individual-chess-championship",
+            roundSlug: "round-10",
             isLive: true,
             startsAt: nil,
             imageData: nil,
-            tier: 5
+            thumbnailImageName: "BroadcastPlaceholderImage1"
         ),
         BroadcastItem(
             id: "2",
-            title: "Tata Steel Chess",
-            roundName: "Round 12",
-            tourSlug: "tata-steel-chess",
-            roundSlug: "round-12",
+            title: "Bangkok Chess Club Open",
+            roundName: "Round 7",
+            tourSlug: "bangkok-chess-club-open",
+            roundSlug: "round-7",
             isLive: true,
             startsAt: nil,
             imageData: nil,
-            tier: 4
+            thumbnailImageName: "BroadcastPlaceholderImage2"
         ),
         BroadcastItem(
             id: "3",
-            title: "Candidates Tournament",
-            roundName: "Round 7",
-            tourSlug: "candidates-tournament",
-            roundSlug: "round-7",
+            title: "Austrian Bundesliga",
+            roundName: "Round 8",
+            tourSlug: "austrian-bundesliga",
+            roundSlug: "round-8",
             isLive: false,
             startsAt: hoursFromNow(2),
             imageData: nil,
-            tier: 5
+            thumbnailImageName: "BroadcastPlaceholderImage3"
         ),
         BroadcastItem(
             id: "4",
-            title: "Norway Chess",
-            roundName: "Round 3",
-            tourSlug: "norway-chess",
-            roundSlug: "round-3",
+            title: "Clash of Generations III",
+            roundName: "Round 6",
+            tourSlug: "clash-of-generations-iii",
+            roundSlug: "round-6",
             isLive: false,
             startsAt: hoursFromNow(5),
             imageData: nil,
-            tier: 4
+            thumbnailImageName: "BroadcastPlaceholderImage4"
         ),
-//        BroadcastItem(
-//            id: "5",
-//            title: "Prague Chess Festival",
-//            roundName: "Round 1",
-//            tourSlug: "prague-chess-festival",
-//            roundSlug: "round-1",
-//            isLive: false,
-//            startsAt: hoursFromNow(24),
-//            imageData: nil,
-//            tier: 3
-//        ),
     ]
 
     private static func hoursFromNow(_ hours: Int) -> Date? {

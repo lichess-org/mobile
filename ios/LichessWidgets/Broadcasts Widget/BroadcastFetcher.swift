@@ -2,12 +2,12 @@ import UIKit
 import WidgetKit
 
 struct BroadcastFetcher {
-    // Broadcasts change status frequently; refresh every 15 minutes.
+    /// Broadcasts change status frequently; refresh every 15 minutes.
     static var nextUpdateDate: Date {
         Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
     }
 
-    // Tier thresholds (mirrors lila: PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5).
+    /// Tier threshold for "top" broadcasts (mirrors lila: PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5).
     private static let topTierThreshold = 4
 
     func fetchEntry(filter: BroadcastFilterOption, family: WidgetFamily) async -> BroadcastEntry {
@@ -57,7 +57,7 @@ struct BroadcastFetcher {
                             isLive: isLive,
                             startsAt: startsAt,
                             imageData: imageData,
-                            tier: broadcast.tour.tier
+                            thumbnailImageName: nil
                         ))
                     }
                 }
@@ -80,30 +80,6 @@ struct BroadcastFetcher {
         let spec = family.broadcastThumbnailSpec
         let size = CGSize(width: spec.width * scale, height: spec.height * scale)
         return await source.byPreparingThumbnail(ofSize: size)?.jpegData(compressionQuality: 0.85)
-    }
-}
-
-// MARK: - Widget family helpers
-
-extension WidgetFamily {
-    var broadcastMaxItems: Int {
-        switch self {
-        case .systemSmall: return 1
-        case .systemMedium: return 2
-        default: return 4
-        }
-    }
-
-    var broadcastShowsThumbnails: Bool {
-        switch self {
-        case .systemSmall: return false
-        default: return true
-        }
-    }
-
-    /// Square thumbnail spec used for broadcast images.
-    var broadcastThumbnailSpec: (width: CGFloat, height: CGFloat) {
-        (width: 56, height: 56)
     }
 }
 
