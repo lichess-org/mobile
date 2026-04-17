@@ -37,7 +37,7 @@ enum BroadcastPlaceholder {
         ),
         BroadcastItem(
             id: "3",
-            title: "Austrian Bundesliga",
+            title: "Austrian Women's Bundesliga",
             roundName: "Round 8",
             tourSlug: "austrian-bundesliga",
             roundSlug: "round-8",
@@ -48,7 +48,7 @@ enum BroadcastPlaceholder {
         ),
         BroadcastItem(
             id: "4",
-            title: "Clash of Generations III",
+            title: "Clash of Generations III: Veselin Topalov vs Yağız Kaan",
             roundName: "Round 6",
             tourSlug: "clash-of-generations-iii",
             roundSlug: "round-6",
