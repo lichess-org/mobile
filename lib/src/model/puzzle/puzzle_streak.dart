@@ -84,6 +84,10 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
       puzzle: state.requireValue.puzzle,
       nextPuzzle: state.requireValue.nextPuzzle,
     ));
+
+    ref
+        .read(streakStorageProvider(ref.read(authControllerProvider)?.user.id))
+        .saveActiveStreak(state.requireValue.streak);
   }
 
   /// Advance the streak to the next puzzle.

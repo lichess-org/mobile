@@ -40,11 +40,13 @@ const modules = [
   'team',
   'timeago',
   'tfa',
+  'ublog',
 ]
 
 // list of keys (per module) to include in the ARB file
 // If a module is not listed here, all keys will be included
 const whiteLists = {
+  'ublog': ['community', 'xBlog'],
   'patron': ['donate', 'lichessPatron', 'becomePatron'],
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
@@ -211,7 +213,7 @@ function loadTranslations(module, locale) {
 
 // in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
-  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
+  return str.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
 }
 
 function fixKey(str, module) {

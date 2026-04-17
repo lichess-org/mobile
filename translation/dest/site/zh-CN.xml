@@ -875,7 +875,6 @@
   <string name="agreementAssistance">我同意在对局中任何时刻都不会接受帮助（来自电脑引擎、书籍、数据库或其他人）。</string>
   <string name="agreementNice">我同意我将始终尊重其他棋手。</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">我同意我不会创建多个账户（除非出于 %s 中所述的原因）。</string>
-  <string name="agreementPolicy">我同意我将遵守所有 Lichess 规范。</string>
   <string name="searchOrStartNewDiscussion">搜索或开始新对话</string>
   <string name="edit">编辑</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">超子弹棋</string>
@@ -889,7 +888,7 @@
   <string name="rapidDesc">普速对战：8 到 25 分钟</string>
   <string name="classicalDesc">慢棋对局：25 分钟及以上</string>
   <string name="correspondenceDesc">通讯棋对局：每步棋一天或数天</string>
-  <string name="puzzleDesc">国际象棋战术训练器</string>
+  <string name="puzzleDesc">战术训练</string>
   <string name="important">重要提示</string>
   <string name="yourQuestionMayHaveBeenAnswered">您的问题可能已 %1$s 有了解答</string>
   <string name="inTheFAQ">在常见问题中</string>

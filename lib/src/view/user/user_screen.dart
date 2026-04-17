@@ -67,7 +67,7 @@ class UserScreen extends ConsumerStatefulWidget {
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
-          return CreateChallengeBottomSheet(user.lightUser);
+          return CreateChallengeBottomSheet(user: user.lightUser);
         },
       );
     }
@@ -95,11 +95,16 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       data: (data) => data.user.lightUser.copyWith(isOnline: data.isOnline),
       orElse: () => null,
     );
-    return Scaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: UserFullNameWidget(
-          user: updatedLightUser ?? widget.user,
-          shouldShowOnline: updatedLightUser != null,
+        titleSpacing: 0,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: UserAvatar(updatedLightUser ?? widget.user, radius: 16),
+          title: UserFullNameWidget(user: updatedLightUser ?? widget.user, showFlair: false),
+          subtitle: updatedLightUser != null
+              ? Text(updatedLightUser.isOnline == true ? context.l10n.online : context.l10n.offline)
+              : null,
         ),
         actions: [
           if (isLoading) const PlatformAppBarLoadingIndicator(),

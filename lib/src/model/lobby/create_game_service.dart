@@ -118,24 +118,36 @@ class CreateGameService {
     await ref.withClient((client) => LobbyRepository(client).createSeek(seek, sri: sri));
   }
 
-  /// Create a new real time challenge.
-  ///
-  /// Will listen to the challenge socket and await the response from the destinated user.
-  Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
-    assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
+  /// Create a new challenge that is either open or a directed real-time challenge.
+  Future<Challenge> newOpenOrRealTimeChallenge(ChallengeRequest challengeReq) async {
+    assert(challengeReq.isOpenOrRealTime);
 
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
     }
 
+    return await challengeRepository.create(challengeReq);
+  }
+
+  /// Wait for a response to a [challenge].
+  ///
+  /// Will listen to the challenge socket and await the response from the destinated user.
+  Future<ChallengeResponse> waitForChallengeResponse(Challenge challenge) {
+    assert(challenge.isOpenOrRealTime);
+    if (_challengeConnection != null) {
+      throw StateError('Already creating a challenge.');
+    }
+
+    final keepAlive = ref.keepAlive();
+
     // ensure the pending connection is closed in any case
-    final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
+    final completer = Completer<ChallengeResponse>()
+      ..future.whenComplete(() {
+        keepAlive.close();
+        dispose();
+      });
 
     try {
-      _log.info('Creating new challenge game');
-
-      final challenge = await challengeRepository.create(challengeReq);
-
       final socketPool = ref.read(socketPoolProvider);
       final socketClient = socketPool.open(
         Uri(
@@ -178,7 +190,7 @@ class CreateGameService {
         completer,
       );
     } catch (e) {
-      _log.warning('Failed to create challenge', e);
+      _log.warning('Failed to create challenge socket, completing with error', e);
       // if the completer is not yet completed, complete it with an error
       if (!completer.isCompleted) {
         completer.completeError(e);

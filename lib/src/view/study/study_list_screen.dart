@@ -261,7 +261,7 @@ class StudyListItem extends StatelessWidget {
       onTap: () => Navigator.of(
         context,
         rootNavigator: true,
-      ).push(StudyScreen.buildRoute(context, study.id)),
+      ).push(StudyScreen.buildRoute(context, (id: study.id, initialChapter: null))),
       onLongPress: () {
         showModalBottomSheet<void>(
           context: context,

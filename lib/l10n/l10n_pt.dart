@@ -67,7 +67,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tem de iniciar sessão para visualizar esta página.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Novo jogo';
 
   @override
   String get mobileNoSearchResults => 'Sem resultados';
@@ -245,7 +245,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ver Jogo';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -275,7 +275,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
@@ -1056,6 +1056,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatórias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Concordo que seguirei todas as políticas do Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Pesquisa ou começa uma nova conversa';
 
   @override
@@ -6555,6 +6562,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -6828,7 +6843,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
 
   @override
-  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\\nVocê pode acessá-lo pela aba de início.';
+  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
@@ -7609,6 +7624,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get broadcastKnockouts => 'Mata-matas';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub-$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -11251,9 +11276,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String get agreementPolicy => 'Eu concordo que seguirei todas as normas do Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Procurar ou iniciar nova conversa';
 
   @override
@@ -13108,4 +13130,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog do(a) $param';
+  }
 }

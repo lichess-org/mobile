@@ -275,7 +275,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\\nNäet sen etusivulla.';
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
   String get mobilePreviousPage => 'Edellinen';
@@ -1056,6 +1056,16 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Pudotuspelit';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Alle $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3767,13 +3777,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get invalidAuthenticationCode => 'Tunnistautumiskoodi ei kelpaa';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Tyhjennä kenttä';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Tai';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Kirjaudu sisään sähköpostilla';
 
   @override
   String get emailMeALink => 'Lähetä minulle linkki';
@@ -4696,9 +4706,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Hyväksyn, että en luo useampaa kuin yhtä käyttäjätunnusta (paitsi kohdassa $param mainituista syistä).';
   }
-
-  @override
-  String get agreementPolicy => 'Vakuutan että noudatan Lichessin sääntöjä.';
 
   @override
   String get searchOrStartNewDiscussion => 'Hae tai aloita uusi keskustelu';
@@ -6555,4 +6562,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaksivaiheinen tunnistautuminen';
+
+  @override
+  String get ublogCommunity => 'Yhteisön blogit';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Käyttäjän $param blogi';
+  }
 }

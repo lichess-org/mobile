@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "Konpaktua",
   "mobileDisplayModeDetailed": "Xehetasunekin",
   "mobileOpeningExplorerNotAvailableOffline": "Irekieren esploratzaila ezin da konexio gabe erabili.",
-  "mobileChallengeCreated": "Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\\nHasiera fitxatik sar zaitezke.",
+  "mobileChallengeCreated": "Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\nHasiera fitxatik sar zaitezke.",
   "mobilePreviousPage": "Aurrekoa",
   "mobileOrImportPgnFile": "Edo inportatu PGN fitxategi bat",
   "variantStandardTitle": "Xakearen Lege arruntak (FIDE)",
@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Nire partidetan ez dut inoiz laguntzarik jasoko (ordenagailuak, liburua, datu-base bat edo beste pertsona bat).",
   "agreementNice": "Atsegina izango naiz beste jokalariekin.",
   "agreementMultipleAccounts": "Hitz ematen dut ez dudala kontu bat baino gehiago irekiko ({param} adierazitako kasuetan izan ezik).",
-  "agreementPolicy": "Lichessek ezarritako politikak beteko ditut.",
   "searchOrStartNewDiscussion": "Hizketaldia bilatu edo berria hasi",
   "edit": "Aldatu",
   "ultraBullet": "UltraBullet",
@@ -1826,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{orain dela urte {count}} other{orain dela {count} urte}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Minutu {count} falta da} other{{count} minutu falta dira}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Ordu {count} falta da} other{{count} ordu falta dira}}",
-  "tfaTwoFactorAuth": "Bi faktoreko autentifikazioa"
+  "tfaTwoFactorAuth": "Bi faktoreko autentifikazioa",
+  "ublogCommunity": "Komunitatea",
+  "ublogXBlog": "{param} erabiltzailearen Bloga"
 }

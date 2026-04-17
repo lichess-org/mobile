@@ -63,6 +63,41 @@ flutter test test/model/engine/engine_test.dart
 flutter test test/model/engine/engine_test.dart --name "test name"
 ```
 
+### Testing Strategy: Prefer HTTP Mocking Over Provider Overrides
+
+**Always mock at the HTTP layer** (override `httpClientFactoryProvider`) rather than overriding Riverpod providers directly. Reasons:
+
+1. **`autoDispose` + `ref.read` interaction**: Many providers are `FutureProvider.autoDispose` and use `ref.withClientCacheFor` which calls `keepAlive()` to prevent premature disposal. Overriding the provider directly bypasses `keepAlive()`, so the provider can be disposed before its future resolves — causing silent test failures where navigation never happens.
+
+2. **Tests provider logic, not mocks**: Most providers contain real logic (caching, fallback, data transformation) that should be exercised in tests. Replacing a provider with `(_) async => fakeValue` skips all that logic.
+
+**Pattern to use:**
+```dart
+overrides: {
+  httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+    return FakeHttpClientFactory(
+      () => MockClient((request) async {
+        if (request.url.path == '/api/puzzle/daily') {
+          return http.Response(mockDailyPuzzleResponse, 200);
+        }
+        return http.Response('', 404);
+      }),
+    );
+  }),
+},
+```
+
+Direct provider overrides are acceptable for **non-network providers** (repositories backed by mocks, services with no HTTP, etc.) where the provider has no `keepAlive` dependency and the override doesn't skip meaningful logic.
+
+### Analysis Rules (CRITICAL)
+
+**Always run `flutter analyze` on every file you edit, including test files, before finishing.**
+
+Two rules the analyzer enforces that are easy to miss:
+
+- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files.
+- **No leading underscores for local identifiers**: local variables and functions must not start with `_`. Reserve `_` for library-private top-level or class members.
+
 ### Code Quality Checks
 ```bash
 # Static analysis
@@ -79,17 +114,33 @@ dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not 
 dart format lib/src test
 ```
 
+### Formatting Rules (CRITICAL)
+
+**Always run `dart format` on every file you edit before finishing.** CI will fail if formatting is wrong.
+
+```bash
+dart format path/to/file.dart
+```
+
+The formatter is configured via `analysis_options.yaml` (`formatter: page_width: 100`) and `dart format` picks this up automatically. Key rules enforced by the formatter:
+
+- **Page width: 100 characters** — lines exceeding 100 chars will be reflowed
+- **Trailing commas drive formatting**: a trailing comma after the last argument/parameter forces the formatter to expand the list to one-item-per-line; omitting it allows the formatter to keep items on one line if they fit within 100 chars
+- **Do not manually wrap lines** — let the formatter decide based on trailing commas and line length; hand-wrapping without trailing commas will be reformatted by the tool
+- The formatter may reformat code you didn't touch in the same expression if you change surrounding structure
+
 ## Translations (i18n)
 
 **CRITICAL**: Never manually edit `lib/l10n/app_*.arb` files - they are generated.
 
 ### Adding New Translations
 1. Edit `translation/source/mobile.xml` for mobile-specific strings
-2. Generate ARB files and Dart code:
+2. Regenerate everything:
 ```bash
-./scripts/gen-arb.mjs
-flutter gen-l10n
+./scripts/gen-translations.sh
 ```
+
+This runs `gen-arb.mjs`, `flutter gen-l10n`, and `gen-widget-strings.mjs` in order.
 
 Mobile-specific translations get a `mobile` prefix (e.g., "foo" becomes `mobileFoo` in Dart).
 
@@ -337,6 +388,33 @@ Generated files are NOT committed to git.
 - **Error messages**: Don't translate non-critical error messages (e.g., "could not load XY")
 - **Brand names**: Don't translate names like "Puzzle Storm" or "Puzzle Streak"
 - **FVM users**: Remember to prefix commands with `fvm` (e.g., `fvm flutter test`)
+
+## iOS Home Screen Widgets (WidgetKit Extension)
+
+The app includes a native iOS WidgetKit extension (`ios/LichessWidgets/`) providing home screen widgets. See `ios/EXTENSIONS.md` for contributor setup instructions (requires Apple Developer account configuration).
+
+### Architecture
+
+- **`LichessWidgetsBundle.swift`** — `@main` entry point registering all 4 widgets.
+- **`LichessAppGroup.swift`** — Reads shared `UserDefaults` from App Group `group.org.lichess.mobileV2.LichessWidgets`:
+  - `lichessHost`, `boardTheme`, `pieceSet`, `isKidMode`
+- **`Deeplinks.swift`** — Custom URI scheme encoding for opening URLs in the in-app browser.
+- **Dependencies**: WidgetKit, ChessgroundAssets (Swift Package, shared with Dart), FeedKit, XMLKit.
+
+### Flutter Integration
+
+The Flutter app (via `home_widget` package) writes to the shared App Group from `app.dart`:
+- `lichessHost` — server URL
+- `boardTheme` / `pieceSet` — board appearance (triggers `DailyPuzzleWidget` reload)
+- `isKidMode` — hides blog widgets when active (triggers blog widget reload)
+
+When modifying widget-related settings or board theme/piece set preferences in Dart, ensure the corresponding `HomeWidget.saveWidgetData` call and `HomeWidget.updateWidget` are kept in sync in `lib/src/app.dart`.
+
+Widget UI strings are translated via `ios/LichessWidgets/Localizable.xcstrings` (a String Catalog). To add a new translatable string, register it under `WIDGET_KEYS` in `scripts/gen-widget-strings.mjs` and run `./scripts/gen-translations.sh`.
+
+### Code Signing
+
+The extension has its own bundle ID (`org.lichess.mobileV2.LichessWidgets`) and App Group entitlement. fastlane `sync_code_signing` handles provisioning for both targets (see `ios/fastlane/Matchfile`).
 
 ## Debugging
 

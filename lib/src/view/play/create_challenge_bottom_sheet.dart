@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -27,9 +27,9 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user, {this.positionFen});
+  const CreateChallengeBottomSheet({this.user, this.positionFen});
 
-  final LightUser user;
+  final LightUser? user;
   final String? positionFen;
 
   @override
@@ -263,7 +263,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                   ),
                   controller: _controller,
                   readOnly: true,
-                  onTap: _getClipboardData,
+                  onTap: () => pasteFenFromClipboard(context, _controller),
                 ),
               ),
             ),
@@ -303,107 +303,116 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed: switch (timeControl) {
-                      ChallengeTimeControlType.clock =>
-                        isValidTimeControl && isValidPosition
-                            ? () {
-                                Navigator.of(
-                                  context,
-                                ).popUntil((route) => route is! ModalBottomSheetRoute);
-                                Navigator.of(context, rootNavigator: true).push(
-                                  GameScreen.buildRoute(
-                                    context,
-                                    source: UserChallengeSource(
-                                      preferences.makeRequest(
-                                        widget.user,
-                                        preferences.variant != Variant.fromPosition
-                                            ? null
-                                            : fromPositionFenInput,
-                                      ),
+                    onPressed: timeControl == ChallengeTimeControlType.clock || widget.user == null
+                        ? isValidTimeControl && isValidPosition
+                              ? () {
+                                  final source = UserChallengeSource(
+                                    preferences.makeRequest(
+                                      account,
+                                      widget.user,
+                                      preferences.variant != Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
                                     ),
-                                  ),
-                                );
-                              }
-                            : null,
-                      ChallengeTimeControlType.correspondence ||
-                      ChallengeTimeControlType.unlimited =>
-                        snapshot.connectionState != ConnectionState.waiting
-                            ? () async {
-                                setState(() {
-                                  _pendingCorrespondenceChallenge = createGameService
-                                      .newCorrespondenceChallenge(
-                                        preferences.makeRequest(
-                                          widget.user,
-                                          preferences.variant != Variant.fromPosition
-                                              ? null
-                                              : fromPositionFenInput,
-                                        ),
-                                      );
-                                });
-
-                                try {
-                                  final maybeDeclined = await _pendingCorrespondenceChallenge;
-
-                                  if (!context.mounted) return;
-
+                                  );
+                                  // Invalidate any stale provider state from a previous game
+                                  // with the same source (same opponent + settings), so the
+                                  // new GameScreen always runs build() and creates a fresh
+                                  // challenge instead of showing the old GameCreatedState.
+                                  ref.invalidate(gameScreenLoaderProvider(source));
                                   Navigator.of(
                                     context,
                                   ).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                                  if (maybeDeclined != null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text(context.l10n.challengeChallengeDeclined),
-                                            const SizedBox(height: 8.0),
-                                            const Divider(height: 26.0, thickness: 0.0),
-                                            Text(
-                                              maybeDeclined.label(context.l10n),
-                                              style: const TextStyle(fontStyle: FontStyle.italic),
-                                            ),
-                                            const Divider(height: 26.0, thickness: 0.0),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Text(' — '),
-                                                  UserFullNameWidget(user: widget.user),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        duration: const Duration(seconds: 5),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
-                                    );
-                                  }
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    showSnackBar(
-                                      context,
-                                      context.l10n.mobileSomethingWentWrong,
-                                      type: SnackBarType.error,
-                                    );
-                                  }
-                                } finally {
-                                  if (mounted) {
-                                    setState(() {
-                                      _pendingCorrespondenceChallenge = null;
-                                    });
-                                  }
+                                  // Use pushAndRemoveUntil to clear any old GameScreen from
+                                  // the navigation stack without removing unrelated routes.
+                                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                    GameScreen.buildRoute(context, source: source),
+                                    (route) => route is! ScreenRoute || route.screen is! GameScreen,
+                                  );
                                 }
+                              : null
+                        : snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            setState(() {
+                              _pendingCorrespondenceChallenge = createGameService
+                                  .newCorrespondenceChallenge(
+                                    preferences.makeRequest(
+                                      account,
+                                      widget.user,
+                                      preferences.variant != Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+                            });
+
+                            try {
+                              final maybeDeclined = await _pendingCorrespondenceChallenge;
+
+                              if (!context.mounted) return;
+
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                              if (maybeDeclined != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(context.l10n.challengeChallengeDeclined),
+                                        const SizedBox(height: 8.0),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Text(
+                                          maybeDeclined.label(context.l10n),
+                                          style: const TextStyle(fontStyle: FontStyle.italic),
+                                        ),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text(' — '),
+                                              UserFullNameWidget(user: widget.user),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    duration: const Duration(seconds: 5),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
+                                );
                               }
-                            : null,
-                    },
-                    child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+                            } catch (e) {
+                              if (context.mounted) {
+                                showSnackBar(
+                                  context,
+                                  context.l10n.mobileSomethingWentWrong,
+                                  type: SnackBarType.error,
+                                );
+                              }
+                            } finally {
+                              if (mounted) {
+                                setState(() {
+                                  _pendingCorrespondenceChallenge = null;
+                                });
+                              }
+                            }
+                          }
+                        : null,
+                    child: Text(
+                      widget.user != null
+                          ? context.l10n.challengeX(widget.user!.name)
+                          : context.l10n.challengeAFriend,
+                      style: Styles.bold,
+                    ),
                   ),
                 );
               },
@@ -412,20 +421,6 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
         );
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
-    }
-  }
-
-  Future<void> _getClipboardData() async {
-    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data != null) {
-      try {
-        Chess.fromSetup(Setup.parseFen(data.text!.trim()));
-        _controller.text = data.text!;
-      } catch (_) {
-        if (mounted) {
-          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-        }
-      }
     }
   }
 }

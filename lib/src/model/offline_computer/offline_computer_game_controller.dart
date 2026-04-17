@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -209,10 +210,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
-    } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
-    } else if (state.currentPosition.isInsufficientMaterial) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     } else if (state.currentPosition.isVariantEnd) {
       state = state.copyWith(
         game: state.game.copyWith(
@@ -220,6 +217,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           winner: state.currentPosition.variantOutcome?.winner,
         ),
       );
+    } else if (state.currentPosition.isStalemate) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.isInsufficientMaterial) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
     _moveFeedback(sanMove);
@@ -307,7 +308,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // Makes or updates the comment verdict to goodMove if the move is a known book move.
-    if (state.game.meta.variant == Variant.standard && plyBeforeMove < _kOpeningPlyThreshold) {
+    // The server will reject us unless we are logged in. Only ask then.
+    if (ref.read(isLoggedInProvider) &&
+        state.game.meta.variant == Variant.standard &&
+        plyBeforeMove < _kOpeningPlyThreshold) {
       _makeCommentFromOpeningDb(
         sanMove,
         stepCursor: stepCursorAfterMove,

@@ -1155,7 +1155,6 @@
   "agreementAssistance": "मैं मानता हूं कि मुझे अपने खेल के दौरान (शतरंज के कंप्यूटर, पुस्तक, डेटाबेस या किसी अन्य व्यक्ति से) सहायता प्राप्त नहीं होगी।",
   "agreementNice": "मैं इस बात से सहमत हूं कि मैं हमेशा अन्य खिलाड़ियों के प्रति सम्मानजनक रहूंगा।",
   "agreementMultipleAccounts": "मैं मानता हूं कि मैं एकाधिक खाते नहीं बना सकता ({param} में बताए गए कारणों को छोड़कर)।",
-  "agreementPolicy": "मैं इस बात से सहमत हूं कि मैं सभी Lichess नीतियों का पालन करूंगा।",
   "searchOrStartNewDiscussion": "खोजे या नया वार्तालाप आरम्भ करें",
   "edit": "संशोधन करें",
   "rapid": "रैपिड",
@@ -1504,5 +1503,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} वर्ष पहले} other{{count} वर्षों पहले}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} मिनट बचा है} other{{count} मिनट बचे हैं}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} घंटा बचा है} other{{count} घंटे बचे हैं}}",
-  "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण"
+  "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण",
+  "ublogXBlog": "{param} का ब्लॉग"
 }

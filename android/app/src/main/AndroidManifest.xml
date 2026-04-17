@@ -63,6 +63,7 @@
                 <data android:scheme="org.lichess.mobile" android:host="login-callback" />
             </intent-filter>
 
+            <!-- App Links verified against https://lichess.org/.well-known/assetlinks.json -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -72,12 +73,22 @@
 
                 <data android:pathPattern="/training/....." />
                 <data android:pathPattern="/study/........" />
+                <data android:pathPattern="/study/......../........" />
                 <data android:pathPattern="/tournament/........" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
-                <!-- Game with pov -->
+                <!--
+                  Game or challenge link: any 8-char path (e.g. /abcd1234).
+                  pathPattern cannot exclude known static 8-char routes (e.g. /analysis,
+                  /settings); the app resolver handles false positives by falling back to
+                  launchUrl. On Android 15+, exclusions are enforced server-side via
+                  dynamic_app_link_components in assetlinks.json.
+                -->
+                <data android:pathPattern="/........" />
+
+                <!-- Game with color POV -->
                 <data android:pathPattern="/......../black" />
                 <data android:pathPattern="/......../white" />
             </intent-filter>

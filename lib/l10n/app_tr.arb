@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "Küçük",
   "mobileDisplayModeDetailed": "Ayrıntılı",
   "mobileOpeningExplorerNotAvailableOffline": "Açılış Kaşifi çevrimdışı kullanılamaz.",
-  "mobileChallengeCreated": "Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\\nOyuna ana sekmeden erişebilirsiniz.",
+  "mobileChallengeCreated": "Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.",
   "mobilePreviousPage": "Önceki",
   "mobileOrImportPgnFile": "Veya bir PGN dosyası aktar",
   "variantStandardTitle": "Satrancın standart kuralları (FIDE)",
@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Beraberlik bozma",
   "broadcastGameX": "Oyun {param}",
   "broadcastKnockouts": "Eleme",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} canlı turnuva} other{{count} canlı turnuva}}",
   "broadcastNbViewers": "{count, plural, =1{{count} izleyici} other{{count} izleyici}}",
   "challengeChallengesX": "{param1} karşılaşmaları",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "Maçlar esnasında hiçbir zaman dışarıdan yardım almayacağım (bilgisayardan, kitaptan, veri tabanından veya başka bir insandan).",
   "agreementNice": "Diğer oyunculara karşı her zaman iyi bir tutum içinde olacağım.",
   "agreementMultipleAccounts": "Birden fazla hesap oluşturmayacağımı onaylıyorum ({param}'da sıralanmış durumlar hariç).",
-  "agreementPolicy": "Lichess kurallarını takip edeceğim.",
   "searchOrStartNewDiscussion": "Tartışma ara veya yenisini başlat",
   "edit": "Düzenle",
   "ultraBullet": "UltraBullet",
@@ -1826,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} yıl önce} other{{count} yıl önce}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} dakika kaldı} other{{count} dakika kaldı}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} saat kaldı} other{{count} saat kaldı}}",
-  "tfaTwoFactorAuth": "İki faktörlü kimlik doğrulama"
+  "tfaTwoFactorAuth": "İki faktörlü kimlik doğrulama",
+  "ublogCommunity": "Topluluk",
+  "ublogXBlog": "{param} Bloğu"
 }

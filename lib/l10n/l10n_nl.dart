@@ -275,7 +275,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
   String get mobilePreviousPage => 'Vorige';
@@ -1056,6 +1056,16 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Afvalrondes';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ik ga ermee akkoord dat ik de Lichess-regels zal volgen.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Zoek of start een nieuwe discussie';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tweestapsverificatie';
+
+  @override
+  String get ublogCommunity => 'Gemeenschap';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog van $param';
+  }
 }

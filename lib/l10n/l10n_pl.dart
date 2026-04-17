@@ -275,7 +275,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
 
   @override
-  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\\nMożesz zobaczyć je w głównej zakładce.';
+  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.';
 
   @override
   String get mobilePreviousPage => 'Wróć';
@@ -1096,6 +1096,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminacje';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4754,9 +4764,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Zgadzam się przestrzegać wszystkich zasad Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Szukaj lub rozpocznij nową rozmowę';
 
   @override
@@ -6745,4 +6752,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
+
+  @override
+  String get ublogCommunity => 'Społeczność';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog gracza $param';
+  }
 }

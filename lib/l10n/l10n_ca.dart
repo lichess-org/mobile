@@ -192,7 +192,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Resposta tàctil';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produïra una petita vibració quan es mou o es captura una peça.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produirà una petita vibració quan es mou o es captura una peça.';
 
   @override
   String get mobileSettingsTab => 'Configuració';
@@ -210,7 +210,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSharePuzzle => 'Comparteix aquest problema';
 
   @override
-  String get mobileShowComments => 'Mostra comentaris';
+  String get mobileShowComments => 'Mostra els comentaris';
 
   @override
   String get mobileShowResult => 'Mostra el resultat';
@@ -275,7 +275,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorador d\'obertures no està disponible sense connexió.';
 
   @override
-  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\\nPodeu accedir-hi des de la pantalla d\'inici.';
+  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\nPodeu accedir-hi des de la pantalla d\'inici.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
@@ -1056,6 +1056,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatòria';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'S$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'S$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Estic d’acord que seguiré totes les polítiques de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Cerca o inicia una nova discusió';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticació de dos factors';
+
+  @override
+  String get ublogCommunity => 'Comunitat';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

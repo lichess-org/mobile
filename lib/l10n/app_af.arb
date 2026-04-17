@@ -1177,7 +1177,6 @@
   "agreementAssistance": "Ek stem in om nooit enige hulp te ontvang tydens my spelle nie (vanaf 'n skaakrekenaar, boek, databasis of ander persoon).",
   "agreementNice": "Ek stem in om altyd respek aan ander spelers te betoon.",
   "agreementMultipleAccounts": "Ek verklaar dat ek nie meer as een rekening sal skep nie (met die uitsondering van redes genoem in die {param}).",
-  "agreementPolicy": "Ek stem in om al Lichess se beleide na te volg.",
   "searchOrStartNewDiscussion": "Soek of begin 'n nuwe gesprek",
   "edit": "Pas aan",
   "bullet": "Bullet",
@@ -1563,5 +1562,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} jaar gelede} other{{count} jare gelede}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{nog {count} minuut oor} other{nog {count} minute oor}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{nog {count} uur oor} other{nog {count} ure oor}}",
-  "tfaTwoFactorAuth": "Tweeledige verifikasie"
+  "tfaTwoFactorAuth": "Tweeledige verifikasie",
+  "ublogXBlog": "{param} se webjoernaal"
 }

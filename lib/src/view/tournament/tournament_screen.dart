@@ -44,6 +44,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
@@ -151,6 +152,12 @@ class _Body extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: _Title(state: state),
           actions: [
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: 'Share tournament',
+              onPressed: () =>
+                  launchShareDialog(context, ShareParams(uri: lichessUri('/tournament/$id'))),
+            ),
             if (state.tournament.isFinished != true)
               SocketPingRatingIcon(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
@@ -602,9 +609,11 @@ class _StandingPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentId = state.id;
+    final isMe = ref.watch(authControllerProvider)?.user.id == player.user.id;
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
+      selected: isMe,
       tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
       leading: player.withdraw
           ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
@@ -1492,7 +1501,7 @@ class _PairingTile extends ConsumerWidget {
               padding: EdgeInsets.only(right: 8.0),
               child: Icon(LichessIcons.body_cut, size: 20),
             ),
-          Icon(pairing.color == Side.white ? Icons.circle_outlined : Icons.circle, size: 20),
+          SideIndicator(side: pairing.color, size: 20),
           SizedBox(
             width: 24,
             height: 24,

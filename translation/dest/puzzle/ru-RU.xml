@@ -14,9 +14,9 @@
   <string name="specialMoves">Особые ходы</string>
   <string name="didYouLikeThisPuzzle">Понравилась задача?</string>
   <string name="voteToLoadNextOne">Проголосуйте и перейдите к следующей!</string>
-  <string name="upVote">Задача понравилась</string>
-  <string name="downVote">Задача не понравилась</string>
-  <string name="yourPuzzleRatingWillNotChange">Ваш рейтинг в решении задач не изменится. Решение задач — это не соревнование. Рейтинг помогает лучше подбирать для вас задачи по вашему уровню.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Задача понравилась</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Задача не понравилась</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Ваш рейтинг в решении задач не изменится. Решение задач — это не соревнование. Рейтинг помогает лучше подбирать для вас задачи по вашему уровню.</string>
   <string name="findTheBestMoveForWhite">Найдите лучший ход за белых.</string>
   <string name="findTheBestMoveForBlack">Найдите лучший ход за чёрных.</string>
   <string name="toGetPersonalizedPuzzles">Чтобы получить персонализированные задачи:</string>
@@ -82,7 +82,7 @@
   <string name="fromMyGames">Из моих партий</string>
   <string name="lookupOfPlayer">Искать задачи из партий игрока</string>
   <string name="searchPuzzles">Искать задачи</string>
-  <string name="fromMyGamesNone">В базе данных нет задач из ваших партий, но Lichess надеется на вас.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">В базе данных нет задач из ваших партий, но Lichess надеется на вас.
 Сыграйте больше партий в рапид или с классическим контролем времени, и ваши шансы попасть в список игроков с задачами увеличатся!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Одна задача найдена в играх %2$s</item>
@@ -105,6 +105,6 @@
   </plurals>
   <string name="percentSolved">%s верно</string>
   <string name="noPuzzlesToShow">Ничего нет, решите для начала несколько задач!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Потренируйте эти темы, чтобы улучшить свой прогресс!</string>
+  <string name="improvementAreasDescription">Потренируйте эти темы, чтобы улучшить свой прогресс!</string>
   <string name="strengthDescription">Вы показываете лучшие результаты в этих темах</string>
 </resources>

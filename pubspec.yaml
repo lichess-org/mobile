@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.22.7+002207 # See README.md for details about versioning
+version: 0.23.5+002305 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -30,7 +30,7 @@ dependencies:
       url: https://github.com/veloce/flutter_dynamic_system_colors.git
       ref: main
   fast_immutable_collections: ^11.0.0
-  file_picker: ^10.3.8
+  file_picker: ^11.0.2
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
@@ -47,6 +47,7 @@ dependencies:
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^3.0.0
+  home_widget: ^0.9.0
   http: ^1.1.0
   image_picker: ^1.1.2
   intl: ^0.20.2
@@ -55,7 +56,8 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: ^4.2811.0
+  # TODO remove pin
+  material_symbols_icons: 4.2906.0
   meta: ^1.8.0
   multistockfish: ^0.5.0
   package_info_plus: ^9.0.0
@@ -63,6 +65,7 @@ dependencies:
   path_provider: ^2.1.5
   popover: ^0.4.0
   pub_semver: ^2.1.4
+  qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
   receive_sharing_intent:
     git:

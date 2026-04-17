@@ -14,9 +14,9 @@
   <string name="specialMoves">Movimentos especiais</string>
   <string name="didYouLikeThisPuzzle">Você gostou deste problema?</string>
   <string name="voteToLoadNextOne">Vote para carregar o próximo!</string>
-  <string name="upVote">Aprovar problema</string>
-  <string name="downVote">Reprovar o problema</string>
-  <string name="yourPuzzleRatingWillNotChange">Sua pontuação de problemas não mudará. Note que os problemas não são uma competição. A pontuação indica os problemas que se adequam às suas habilidades.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Aprovar problema</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Reprovar o problema</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Sua pontuação de problemas não mudará. Note que os problemas não são uma competição. A pontuação indica os problemas que se adequam às suas habilidades.</string>
   <string name="findTheBestMoveForWhite">Encontre o melhor lance para as brancas.</string>
   <string name="findTheBestMoveForBlack">Encontre a melhor jogada para as pretas.</string>
   <string name="toGetPersonalizedPuzzles">Para obter desafios personalizados:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Dos meus jogos</string>
   <string name="lookupOfPlayer">Pesquise problemas das partidas um jogador específico</string>
   <string name="searchPuzzles">Procurar problemas</string>
-  <string name="fromMyGamesNone">Você não tem nenhum problema no banco de dados, mas o Lichess ainda te ama muito.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Você não tem nenhum problema no banco de dados, mas o Lichess ainda te ama muito.
 
 Jogue partidas rápidas e clássicas para aumentar suas chances de ter um problema seu adicionado!</string>
   <plurals name="puzzlesFoundInUserGames">
@@ -94,6 +94,6 @@ Jogue partidas rápidas e clássicas para aumentar suas chances de ter um proble
   </plurals>
   <string name="percentSolved">%s resolvido</string>
   <string name="noPuzzlesToShow">Não há nada para mostrar aqui, jogue alguns problemas primeiro!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Treine estes para otimizar o seu progresso!</string>
+  <string name="improvementAreasDescription">Treine estes para otimizar o seu progresso!</string>
   <string name="strengthDescription">Sua perfomance é melhor nesses temas</string>
 </resources>

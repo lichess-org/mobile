@@ -1,5 +1,5 @@
 {
-  "mobileAccountPreferences": "Akkaunt sozlamalari",
+  "mobileAccountPreferences": "Hisob sozlamalari",
   "mobileAccountPreferencesHelp": "Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.",
   "mobileAllGames": "Barcha oʻyinlar",
   "mobileAreYouSure": "Ishonchingiz komilmi?",
@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "Ixcham",
   "mobileDisplayModeDetailed": "Batafsil",
   "mobileOpeningExplorerNotAvailableOffline": "Oflayn rejimda debyutlar bazasi ishlamaydi.",
-  "mobileChallengeCreated": "Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\\nUnga asosiy ekrandan kirishingiz mumkin.",
+  "mobileChallengeCreated": "Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.",
   "mobilePreviousPage": "Oldingi",
   "mobileOrImportPgnFile": "Yoki PGN faylini import qiling",
   "variantStandardTitle": "Standart shaxmat qoidalari (FIDE)",
@@ -854,7 +854,7 @@
   "changePassword": "Parolni oʻzgartirish",
   "changeEmail": "E‑pochta manzilini oʻzgartirish",
   "email": "E‑pochta",
-  "passwordReset": "tiklashingiz",
+  "passwordReset": "Parolni tiklash",
   "forgotPassword": "Parolni unutdingizmi?",
   "error_weakPassword": "Ushbu parol juda oddiy va uni taxmin qilish oson.",
   "error_namePassword": "Foydalanuvchi nomini parol sifatida ishlatmang.",
@@ -1408,7 +1408,6 @@
   "agreementAssistance": "Oʻyinlarim davomida hech qachon (shaxmat kompyuteri, kitob, maʼlumotlar bazasi yoki boshqa shaxsdan) yordam olmaslikka vaʼda beraman.",
   "agreementNice": "Boshqa oʻyinchilarga nisbatan har doim hurmatli munosabatda boʻlishga vaʼda beraman.",
   "agreementMultipleAccounts": "Men bir nechta akkaunt yaratmaslikka vaʼda beraman (bundan {param}dagi holatlar mustasno).",
-  "agreementPolicy": "Lichessʼning barcha qoidalariga amal qilishga vaʼda beraman.",
   "searchOrStartNewDiscussion": "Qidirish yoki yangi suhbat boshlash",
   "edit": "Tahrirlash",
   "ultraBullet": "UltraBullet",
@@ -1826,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} yil oldin} other{{count} yil oldin}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} daqiqa qoldi} other{{count} daqiqa qoldi}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} soat qoldi} other{{count} soat qoldi}}",
-  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya"
+  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya",
+  "ublogCommunity": "Hamjamiyat",
+  "ublogXBlog": "{param} blogi"
 }

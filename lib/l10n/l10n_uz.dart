@@ -9,7 +9,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Akkaunt sozlamalari';
+  String get mobileAccountPreferences => 'Hisob sozlamalari';
 
   @override
   String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
@@ -275,7 +275,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Oflayn rejimda debyutlar bazasi ishlamaydi.';
 
   @override
-  String get mobileChallengeCreated => 'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\\nUnga asosiy ekrandan kirishingiz mumkin.';
+  String get mobileChallengeCreated => 'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.';
 
   @override
   String get mobilePreviousPage => 'Oldingi';
@@ -1056,6 +1056,16 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Nokaut';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2898,7 +2908,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get email => 'E‑pochta';
 
   @override
-  String get passwordReset => 'tiklashingiz';
+  String get passwordReset => 'Parolni tiklash';
 
   @override
   String get forgotPassword => 'Parolni unutdingizmi?';
@@ -4696,9 +4706,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Men bir nechta akkaunt yaratmaslikka vaʼda beraman (bundan ${param}dagi holatlar mustasno).';
   }
-
-  @override
-  String get agreementPolicy => 'Lichessʼning barcha qoidalariga amal qilishga vaʼda beraman.';
 
   @override
   String get searchOrStartNewDiscussion => 'Qidirish yoki yangi suhbat boshlash';
@@ -6555,4 +6562,12 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
+
+  @override
+  String get ublogCommunity => 'Hamjamiyat';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogi';
+  }
 }

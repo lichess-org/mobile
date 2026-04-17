@@ -275,7 +275,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
 
   @override
-  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\\n홈 탭에서 들어갈 수 있습니다.';
+  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
 
   @override
   String get mobilePreviousPage => '이전';
@@ -1036,6 +1036,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => '녹아웃';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U-$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U-$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3739,13 +3749,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get invalidAuthenticationCode => '잘못된 인증코드';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => '필드 지우기';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => '또는';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => '이메일로 로그인';
 
   @override
   String get emailMeALink => '메일로 링크를 보내주세요';
@@ -4670,9 +4680,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '나는 모든 Lichess 정책을 따르겠습니다.';
-
-  @override
   String get searchOrStartNewDiscussion => '대화 찾기 또는 새 대화 시작하기';
 
   @override
@@ -5033,7 +5040,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return '\"$param\"에 대한 결과 없음';
   }
 
   @override
@@ -6460,4 +6467,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2단계 인증';
+
+  @override
+  String get ublogCommunity => '커뮤니티';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param의 블로그';
+  }
 }

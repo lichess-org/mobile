@@ -275,13 +275,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Книга дебютов недоступна офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\\nВы можете получить доступ к нему с главной вкладки.';
+  String get mobileChallengeCreated => 'Вызов создан: вы получите уведомление о начале партии.\nВы можете получить доступ к нему с главной вкладки.';
 
   @override
   String get mobilePreviousPage => 'Предыдущие';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
@@ -1096,6 +1096,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Нокауты';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'До $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'До $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3823,13 +3833,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidAuthenticationCode => 'Неверный код аутентификации';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Очистить поле';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Или';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Авторизация через электронную почту';
 
   @override
   String get emailMeALink => 'Прислать ссылку мне на почту';
@@ -4752,9 +4762,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String agreementMultipleAccounts(String param) {
     return 'Я согласен с тем, что не должен создавать множество учётных записей (за исключением причин, указанных в $param).';
   }
-
-  @override
-  String get agreementPolicy => 'Подтверждаю, что я буду следовать всем правилам Lichess.';
 
   @override
   String get searchOrStartNewDiscussion => 'Найти обсуждение или начать новое';
@@ -6745,4 +6752,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
+
+  @override
+  String get ublogCommunity => 'Сообщество';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

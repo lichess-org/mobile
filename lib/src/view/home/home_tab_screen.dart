@@ -160,6 +160,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
 
+        final isKidMode = ref.watch(kidModeProvider).value ?? false;
+
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
         final shouldShowWelcomeScreen =
@@ -241,7 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 shouldShow: status.isOnline,
                 child: FeaturedTournamentsWidget(featured: featuredTournaments),
               ),
-              if (_worker != null)
+              if (_worker != null && !isKidMode)
                 _EditableWidget(
                   widget: HomeEditableWidget.blogCarousel,
                   shouldShow: status.isOnline,
@@ -288,7 +290,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     children: [
                       const SizedBox(height: 8.0),
                       FeaturedTournamentsWidget(featured: featuredTournaments),
-                      if (_worker != null)
+                      if (_worker != null && !isKidMode)
                         _EditableWidget(
                           widget: HomeEditableWidget.blogCarousel,
                           shouldShow: status.isOnline,
@@ -344,7 +346,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: status.isOnline,
               child: FeaturedTournamentsWidget(featured: featuredTournaments),
             ),
-            if (_worker != null)
+            if (_worker != null && !isKidMode)
               _EditableWidget(
                 widget: HomeEditableWidget.blogCarousel,
                 shouldShow: status.isOnline,
@@ -559,6 +561,11 @@ class _EditableWidget extends ConsumerWidget {
               Expanded(
                 child: IgnorePointer(ignoring: isEditing, child: child),
               ),
+              if (widget == HomeEditableWidget.quickPairing)
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => showTimeControlPicker(context, ref),
+                ),
             ],
           )
         : widget.alwaysEnabled || isEnabled
@@ -1018,6 +1025,13 @@ class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
 
 class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
   bool _openedSettings = false;
+  late Future<bool> _checkNNUEFilesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1035,11 +1049,14 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
       // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
       onFocusRegained: () {
         if (_openedSettings) {
-          setState(() {});
+          setState(() {
+            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
+            _openedSettings = false;
+          });
         }
       },
       child: FutureBuilder(
-        future: nnueService.hasOutdatedNNUEFiles(),
+        future: _checkNNUEFilesFuture,
         builder: (context, snapshot) {
           final hasOutdatedNNUEFiles = snapshot.data ?? false;
           if (!hasOutdatedNNUEFiles) {

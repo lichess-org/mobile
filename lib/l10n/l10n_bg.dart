@@ -275,7 +275,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
@@ -1056,6 +1056,16 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Съгласявам се, че ше спазвам всички правила на Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Търси или започни нов разговор';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двуфакторно удостоверяване';
+
+  @override
+  String get ublogCommunity => 'Общност';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блогът на $param';
+  }
 }

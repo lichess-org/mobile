@@ -1360,7 +1360,6 @@
   "agreementAssistance": "Съгласявам се, че никога няма да получавам помощ по време на игра (от компютър, книга, база данни или друг човек).",
   "agreementNice": "Съгласявам се, че винаги ще уважавам другите играчи.",
   "agreementMultipleAccounts": "Съгласявам се, че няма да се регистрирам няколко пъти (с изключение на причините изброени в {param}).",
-  "agreementPolicy": "Съгласявам се, че ше спазвам всички правила на Lichess.",
   "searchOrStartNewDiscussion": "Търси или започни нов разговор",
   "edit": "Редактиране",
   "ultraBullet": "UltraBullet",
@@ -1775,5 +1774,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{преди {count} година} other{преди {count} години}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{остава {count} минутa} other{остават {count} минути}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{остава {count} час} other{остават {count} часа}}",
-  "tfaTwoFactorAuth": "Двуфакторно удостоверяване"
+  "tfaTwoFactorAuth": "Двуфакторно удостоверяване",
+  "ublogCommunity": "Общност",
+  "ublogXBlog": "Блогът на {param}"
 }

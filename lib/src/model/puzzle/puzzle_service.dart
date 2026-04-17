@@ -62,6 +62,9 @@ sealed class PuzzleContext with _$PuzzleContext {
     /// If true, the result won't be recorded on the server for this puzzle.
     bool? casual,
     bool? isPuzzleStreak,
+
+    /// Remaining puzzle IDs to replay after the current one.
+    IList<PuzzleId>? replayRemaining,
   }) = _PuzzleContext;
 }
 

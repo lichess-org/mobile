@@ -275,7 +275,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
 
   @override
-  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\\n您可以在首页选项卡中访问它。';
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
   String get mobilePreviousPage => '上一页';
@@ -1036,6 +1036,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => '淘汰赛';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4670,9 +4680,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '我同意我将遵守所有 Lichess 规范。';
-
-  @override
   String get searchOrStartNewDiscussion => '搜索或开始新对话';
 
   @override
@@ -4712,7 +4719,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get correspondenceDesc => '通讯棋对局：每步棋一天或数天';
 
   @override
-  String get puzzleDesc => '国际象棋战术训练器';
+  String get puzzleDesc => '战术训练';
 
   @override
   String get important => '重要提示';
@@ -6460,6 +6467,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '双重认证';
+
+  @override
+  String get ublogCommunity => '社区';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param 的博客';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -10774,9 +10789,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get agreementPolicy => '我同意我將會遵守Lichess的規則';
-
-  @override
   String get searchOrStartNewDiscussion => '尋找或開始聊天';
 
   @override
@@ -12437,4 +12449,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get ublogCommunity => '社群';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param的部落格';
+  }
 }

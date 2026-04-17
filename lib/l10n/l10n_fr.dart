@@ -275,7 +275,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorateur d\'ouvertures n\'est pas accessible hors ligne.';
 
   @override
-  String get mobileChallengeCreated => 'Défi créé : Vous recevrez une notification lorsque la partie commencera.\\nVous pouvez y accéder depuis l’onglet Accueil.';
+  String get mobileChallengeCreated => 'Défi créé : Vous recevrez une notification lorsque la partie commencera.\nVous pouvez y accéder depuis l’onglet Accueil.';
 
   @override
   String get mobilePreviousPage => 'Précédent';
@@ -296,7 +296,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
 
   @override
-  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagner la partie.';
+  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
 
   @override
   String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
@@ -1056,6 +1056,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Éliminatoires';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Moins de $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Moins de $param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Je m\'engage à respecter toutes les règles de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Rechercher ou démarrer une nouvelle conversation';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Authentification à deux facteurs';
+
+  @override
+  String get ublogCommunity => 'Communauté';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogue de $param';
+  }
 }

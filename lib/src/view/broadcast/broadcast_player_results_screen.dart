@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
+import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
@@ -26,21 +27,21 @@ final broadcastTournamentIdProvider = FutureProvider.autoDispose
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreenLoading({
     required this.roundId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
-    BroadcastPlayer player,
-    String playerId,
-  ) {
+    String playerId, {
+    BroadcastPlayer? player,
+  }) {
     return buildScreenRoute(
       context,
       screen: BroadcastPlayerResultsScreenLoading(
@@ -73,14 +74,14 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastPlayerResultsScreen extends StatelessWidget {
+class BroadcastPlayerResultsScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreen({
     required this.tournamentId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
@@ -101,10 +102,19 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final displayPlayer =
+        player ??
+        switch (ref.watch(broadcastPlayerProvider((tournamentId, playerId)))) {
+          AsyncData(value: final data) => data.playerWithOverallResult.player,
+          _ => null,
+        };
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+        title: displayPlayer != null
+            ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
+            : const SizedBox.shrink(),
       ),
       body: _Body(tournamentId, playerId),
     );
@@ -495,33 +505,16 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: showTCIcon ? 72 : 60,
+        width: showTCIcon ? 75 : 60,
         child: Row(
           mainAxisSize: .min,
           mainAxisAlignment: .center,
           children: [
             SizedBox(
               width: 30,
-              child: Center(
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    border:
-                        (Theme.of(context).brightness == .light && color == .white ||
-                            Theme.of(context).brightness == .dark && color == .black)
-                        ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
-                        : null,
-                    shape: .circle,
-                    color: switch (color) {
-                      .white => Colors.white.withValues(alpha: 0.9),
-                      .black => Colors.black.withValues(alpha: 0.9),
-                    },
-                  ),
-                ),
-              ),
+              child: Center(child: SideIndicator(side: color, size: 15)),
             ),
-            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 15)),
+            if (showTCIcon) Icon(fideTC.icon, size: 15),
             SizedBox(
               width: 30,
               child: Column(

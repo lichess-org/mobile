@@ -275,7 +275,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
 
   @override
-  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\\nホームタブからアクセスできます。';
+  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
 
   @override
   String get mobilePreviousPage => '前';
@@ -1036,6 +1036,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'ノックアウト';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4670,9 +4680,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '私は Lichess のすべてのポリシーに従うことに同意します。';
-
-  @override
   String get searchOrStartNewDiscussion => '検索または新しいトピックを始める';
 
   @override
@@ -6460,4 +6467,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2 要素認証';
+
+  @override
+  String get ublogCommunity => 'コミュニティ';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param のブログ';
+  }
 }

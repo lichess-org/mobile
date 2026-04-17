@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "Kompakt",
   "mobileDisplayModeDetailed": "Detailliert",
   "mobileOpeningExplorerNotAvailableOffline": "Der Eröffnungs-Explorer ist offline nicht verfügbar.",
-  "mobileChallengeCreated": "Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\\n Du kannst über den Home-Tab darauf zugreifen.",
+  "mobileChallengeCreated": "Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\n Du kannst über den Home-Tab darauf zugreifen.",
   "mobilePreviousPage": "Zurück",
   "mobileOrImportPgnFile": "Oder importiere eine PGN-Datei",
   "variantStandardTitle": "Standardschachregeln (FIDE)",
@@ -1407,7 +1407,6 @@
   "agreementAssistance": "Ich stimme zu, dass ich zu keiner Zeit während meiner Partien Hilfe in Anspruch nehmen werde (durch einen Schachcomputer, Buch, Datenbank oder eine andere Person).",
   "agreementNice": "Ich stimme zu, dass ich anderen Spielern immer respektvoll gegenübertreten werde.",
   "agreementMultipleAccounts": "Ich stimme zu, dass ich nicht mehrere Konten erstellen werde (außer aus den in den {param} angegebenen Gründen).",
-  "agreementPolicy": "Ich stimme zu, dass ich allen Lichess-Richtlinien folgen werde.",
   "searchOrStartNewDiscussion": "Suche oder beginne eine neue Konversation",
   "edit": "Bearbeiten",
   "ultraBullet": "UltraBullet",
@@ -1825,5 +1824,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{vor {count} Jahr} other{vor {count} Jahren}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} Minute verbleibend} other{{count} Minuten verbleibend}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} Stunde verbleiben} other{{count} Stunden verbleiben}}",
-  "tfaTwoFactorAuth": "Zwei-Faktor-Authentifizierung"
+  "tfaTwoFactorAuth": "Zwei-Faktor-Authentifizierung",
+  "ublogCommunity": "Gemeinschaft",
+  "ublogXBlog": "Blog von {param}"
 }

@@ -85,7 +85,7 @@
   "mobileDisplayModeCompact": "简洁模式",
   "mobileDisplayModeDetailed": "详细模式",
   "mobileOpeningExplorerNotAvailableOffline": "离线状态下无法使用开局探索器",
-  "mobileChallengeCreated": "挑战已创建：对局开始时您将收到通知。\\n您可以在首页选项卡中访问它。",
+  "mobileChallengeCreated": "挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。",
   "mobilePreviousPage": "上一页",
   "mobileOrImportPgnFile": "或者导入 PGN 文件",
   "variantStandardTitle": "国际象棋标准规则（国际棋联）",
@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "加赛",
   "broadcastGameX": "第 {param} 局",
   "broadcastKnockouts": "淘汰赛",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} 场转播}}",
   "broadcastNbViewers": "{count, plural, other{{count} 名观众}}",
   "challengeChallengesX": "挑战：{param1}",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "我同意在对局中任何时刻都不会接受帮助（来自电脑引擎、书籍、数据库或其他人）。",
   "agreementNice": "我同意我将始终尊重其他棋手。",
   "agreementMultipleAccounts": "我同意我不会创建多个账户（除非出于 {param} 中所述的原因）。",
-  "agreementPolicy": "我同意我将遵守所有 Lichess 规范。",
   "searchOrStartNewDiscussion": "搜索或开始新对话",
   "edit": "编辑",
   "ultraBullet": "超子弹棋",
@@ -1422,7 +1423,7 @@
   "rapidDesc": "普速对战：8 到 25 分钟",
   "classicalDesc": "慢棋对局：25 分钟及以上",
   "correspondenceDesc": "通讯棋对局：每步棋一天或数天",
-  "puzzleDesc": "国际象棋战术训练器",
+  "puzzleDesc": "战术训练",
   "important": "重要提示",
   "yourQuestionMayHaveBeenAnswered": "您的问题可能已 {param1} 有了解答",
   "inTheFAQ": "在常见问题中",
@@ -1826,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{剩余 {count} 分钟}}",
   "timeagoNbHoursRemaining": "{count, plural, other{剩余 {count} 小时}}",
-  "tfaTwoFactorAuth": "双重认证"
+  "tfaTwoFactorAuth": "双重认证",
+  "ublogCommunity": "社区",
+  "ublogXBlog": "{param} 的博客"
 }
