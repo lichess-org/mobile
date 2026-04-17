@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
@@ -535,7 +536,13 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               );
             } else {
-              final defaultBoardSize = constraints.biggest.shortestSide;
+              // On near-square foldable constraints, cap the board height so
+              // that fixed chrome (feedback, status, bottom bar) fits. Normal
+              // portrait constraints keep full shortestSide - their Expanded
+              // chrome absorbs the extra height without overflow.
+              final defaultBoardSize = isNearSquareConstraints(constraints)
+                  ? math.min(constraints.biggest.shortestSide, constraints.maxHeight - 220)
+                  : constraints.biggest.shortestSide;
               final double boardSize = isTablet
                   ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                   : defaultBoardSize;
