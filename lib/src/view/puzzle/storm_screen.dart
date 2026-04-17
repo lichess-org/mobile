@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/board_portrait_layout.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -289,50 +290,41 @@ class _BodyState extends ConsumerState<_Body> {
                           ),
                         );
                       } else {
-                        final defaultBoardSize = constraints.biggest.shortestSide;
-                        final double boardSize = isTablet
-                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                            : defaultBoardSize;
+                        final maxBoardWidth = isTablet
+                            ? constraints.biggest.shortestSide -
+                                  kTabletBoardTableSidePadding * 2
+                            : constraints.biggest.shortestSide;
 
-                        return Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                                ),
-                                child: _TopTable(widget.data),
-                              ),
+                        return BoardPortraitLayout(
+                          maxBoardWidth: maxBoardWidth,
+                          above: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                             ),
-                            Padding(
-                              padding: isTablet
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: kTabletBoardTableSidePadding,
-                                    )
-                                  : EdgeInsets.zero,
-                              child: BoardWidget(
-                                boardKey: _boardKey,
-                                size: boardSize,
-                                fen: stormState.position.fen,
-                                orientation: stormState.pov,
-                                gameData: gameData,
-                                lastMove: stormState.lastMove,
-                                shapes: userShapes,
-                                settings: defaultSettings,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
+                            child: _TopTable(widget.data),
+                          ),
+                          boardBuilder: (context, size) => BoardWidget(
+                            boardKey: _boardKey,
+                            size: size,
+                            fen: stormState.position.fen,
+                            orientation: stormState.pov,
+                            gameData: gameData,
+                            lastMove: stormState.lastMove,
+                            shapes: userShapes,
+                            settings: defaultSettings,
+                          ),
+                          below: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                                 ),
                                 child: _Combo(stormState.combo),
                               ),
-                            ),
-                            _BottomBar(widget.data),
-                          ],
+                              _BottomBar(widget.data),
+                            ],
+                          ),
                         );
                       }
                     },

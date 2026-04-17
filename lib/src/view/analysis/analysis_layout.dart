@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
@@ -333,7 +335,17 @@ class AnalysisLayout extends StatelessWidget {
                   );
                 } else {
                   final evalGaugeWidth = getEvalGaugeWidth(context);
-                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  // On near-square foldable constraints, reserve vertical space
+                  // for the tab bar view below the board so the board doesn't
+                  // consume the entire available height.
+                  const kMinTabBarViewHeight = 200.0;
+                  final unconstrainedBoardSize = constraints.biggest.shortestSide;
+                  final defaultBoardSize = isNearSquareConstraints(constraints)
+                      ? math.min(
+                          unconstrainedBoardSize,
+                          constraints.maxHeight - kMinTabBarViewHeight,
+                        )
+                      : unconstrainedBoardSize;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
                   final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;

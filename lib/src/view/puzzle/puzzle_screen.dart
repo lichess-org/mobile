@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
@@ -44,6 +43,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/board_portrait_layout.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -536,63 +536,47 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               );
             } else {
-              // On near-square foldable constraints, cap the board height so
-              // that fixed chrome (feedback, status, bottom bar) fits. Normal
-              // portrait constraints keep full shortestSide - their Expanded
-              // chrome absorbs the extra height without overflow.
-              final defaultBoardSize = isNearSquareConstraints(constraints)
-                  ? math.min(constraints.biggest.shortestSide, constraints.maxHeight - 220)
+              final maxBoardWidth = isTablet
+                  ? constraints.biggest.shortestSide - kTabletBoardTableSidePadding * 2
                   : constraints.biggest.shortestSide;
-              final double boardSize = isTablet
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
 
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                      ),
-                      child: Center(
-                        child: PuzzleFeedbackWidget(
-                          puzzle: puzzleState.puzzle,
-                          state: puzzleState,
-                          onStreak: false,
-                        ),
-                      ),
-                    ),
+              return BoardPortraitLayout(
+                maxBoardWidth: maxBoardWidth,
+                above: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  Padding(
-                    padding: isTablet
-                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                        : EdgeInsets.zero,
-                    child: BoardWidget(
-                      boardKey: widget.boardKey,
-                      size: boardSize,
-                      fen: puzzleState.currentPosition.fen,
-                      orientation: puzzleState.pov,
-                      gameData: gameData,
-                      lastMove: puzzleState.lastMove,
-                      shapes: shapes,
-                      settings: defaultSettings,
-                    ),
+                  child: PuzzleFeedbackWidget(
+                    puzzle: puzzleState.puzzle,
+                    state: puzzleState,
+                    onStreak: false,
                   ),
-                  Expanded(
-                    child: Padding(
+                ),
+                boardBuilder: (context, size) => BoardWidget(
+                  boardKey: widget.boardKey,
+                  size: size,
+                  fen: puzzleState.currentPosition.fen,
+                  orientation: puzzleState.pov,
+                  gameData: gameData,
+                  lastMove: puzzleState.lastMove,
+                  shapes: shapes,
+                  settings: defaultSettings,
+                ),
+                below: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
                       child: _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
                     ),
-                  ),
-                  _BottomBar(
-                    initialPuzzleContext: widget.initialPuzzleContext,
-                    puzzleId: puzzleState.puzzle.puzzle.id,
-                  ),
-                ],
+                    _BottomBar(
+                      initialPuzzleContext: widget.initialPuzzleContext,
+                      puzzleId: puzzleState.puzzle.puzzle.id,
+                    ),
+                  ],
+                ),
               );
             }
           },
@@ -645,6 +629,7 @@ class _PuzzleStatus extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (puzzleState.glicko != null)

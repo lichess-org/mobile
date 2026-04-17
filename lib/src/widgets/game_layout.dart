@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/board_portrait_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
@@ -321,84 +322,83 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             ),
           );
         } else {
-          // On near-square foldable constraints, cap the board height so
-          // that fixed chrome (player rows, move list, action bar) fits.
-          // Normal portrait constraints keep full shortestSide - their
-          // Expanded rows absorb the extra height without overflow.
-          final defaultBoardSize = isNearSquareConstraints(constraints)
-              ? math.min(constraints.biggest.shortestSide, constraints.maxHeight - 200)
-              : constraints.biggest.shortestSide;
-
           final isShortScreen = isShortVerticalScreen(context);
 
-          final pocketsPadding = (pockets != null && (isTablet || isShortScreen))
+          final double pocketsPadding = (pockets != null && (isTablet || isShortScreen))
               ? _kAdditionalBoardSidePaddingForPockets
-              : 0;
+              : 0.0;
 
-          double effectiveBoardSize =
-              (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
+          double maxBoardWidth =
+              (isTablet
+                  ? constraints.biggest.shortestSide - kTabletBoardTableSidePadding * 2
+                  : constraints.biggest.shortestSide) -
               pocketsPadding;
 
           if (isShortScreen) {
-            effectiveBoardSize -= 16;
+            maxBoardWidth -= 16;
           }
 
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (boardPrefs.moveListDisplay &&
-                  slicedMoves != null &&
-                  !isShortScreen &&
-                  !(isTablet && pockets != null))
-                if (widget.zenMode)
-                  // display empty move list to keep the layout consistent in zen mode
-                  const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
-                else
-                  MoveList(
-                    type: MoveListType.inline,
-                    slicedMoves: slicedMoves,
-                    currentMoveIndex: widget.currentMoveIndex,
-                    onSelectMove: widget.onSelectMove,
-                  ),
-              Expanded(
-                flex: widget.topTableFlex,
-                child: Padding(
+          // Pockets need a board size upfront for their square sizing. Use an
+          // upper bound that matches what the layout will produce in wide-screen
+          // cases; on near-square constraints the actual board may be slightly
+          // smaller but pockets only shrink by a fraction of a square.
+          final pocketsBoardSize = math.min(maxBoardWidth, constraints.maxHeight);
+
+          return BoardPortraitLayout(
+            maxBoardWidth: maxBoardWidth,
+            above: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (boardPrefs.moveListDisplay &&
+                    slicedMoves != null &&
+                    !isShortScreen &&
+                    !(isTablet && pockets != null))
+                  if (widget.zenMode)
+                    // display empty move list to keep the layout consistent in zen mode
+                    const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
+                  else
+                    MoveList(
+                      type: MoveListType.inline,
+                      slicedMoves: slicedMoves,
+                      currentMoveIndex: widget.currentMoveIndex,
+                      onSelectMove: widget.onSelectMove,
+                    ),
+                Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  child: topTable(boardSize: effectiveBoardSize),
+                  // topTable returns a Column with mainAxisSize.max, which
+                  // would fill loose constraints. IntrinsicHeight collapses it
+                  // to its natural height so BoardPortraitLayout can measure it.
+                  child: IntrinsicHeight(child: topTable(boardSize: pocketsBoardSize)),
                 ),
-              ),
-              Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                    : EdgeInsets.zero,
-                child: BoardWidget(
-                  size: effectiveBoardSize,
-                  fen: fen,
-                  orientation: widget.orientation,
-                  gameData: gameData,
-                  lastMove: widget.lastMove,
-                  shapes: shapes,
-                  settings: settings,
-                  boardKey: widget.boardKey,
-                  boardOverlay: widget.boardOverlay,
-                  error: widget.errorMessage,
-                  explosionSquares: widget.explosionSquares,
-                ),
-              ),
-              Expanded(
-                flex: widget.bottomTableFlex,
-                child: Padding(
+              ],
+            ),
+            boardBuilder: (context, size) => BoardWidget(
+              size: size,
+              fen: fen,
+              orientation: widget.orientation,
+              gameData: gameData,
+              lastMove: widget.lastMove,
+              shapes: shapes,
+              settings: settings,
+              boardKey: widget.boardKey,
+              boardOverlay: widget.boardOverlay,
+              error: widget.errorMessage,
+              explosionSquares: widget.explosionSquares,
+            ),
+            below: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                   ),
-                  child: bottomTable(boardSize: effectiveBoardSize),
+                  child: IntrinsicHeight(child: bottomTable(boardSize: pocketsBoardSize)),
                 ),
-              ),
-              if (widget.userActionsBar != null) widget.userActionsBar!,
-            ],
+                if (widget.userActionsBar != null) widget.userActionsBar!,
+              ],
+            ),
           );
         }
       },
