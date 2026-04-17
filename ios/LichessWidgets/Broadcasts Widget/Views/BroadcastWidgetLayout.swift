@@ -14,6 +14,7 @@ enum BroadcastWidgetLayout {
     // Item row
     static let itemHSpacing: CGFloat = 10
     static let statusSpacerMinLength: CGFloat = 4
+    static let statusIndicatorSpacing: CGFloat = 4
     static let liveIndicatorSize: CGFloat = 8
     static let statusIconSize: CGFloat = 12
 
@@ -30,6 +31,8 @@ enum BroadcastWidgetLayout {
     /// Lichess logo rendered inside the thumbnail when no artwork is available.
     /// Sized relative to the thumbnail so it scales with adaptive layouts.
     static let thumbnailFallbackLogoRatio: CGFloat = 0.5
+    static let thumbnailFallbackBgOpacity: CGFloat = 0.15
+    static let thumbnailFallbackLogoOpacity: CGFloat = 0.5
 
     // Small widget footer
     static let smallFooterTopPadding: CGFloat = 6

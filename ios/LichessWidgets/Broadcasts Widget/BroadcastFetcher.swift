@@ -2,9 +2,8 @@ import UIKit
 import WidgetKit
 
 struct BroadcastFetcher {
-    /// Broadcasts change status frequently; refresh every 15 minutes.
     static var nextUpdateDate: Date {
-        Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
+        Calendar.current.date(byAdding: .hour, value: 1, to: .now)!
     }
 
     /// Tier threshold for "top" broadcasts (mirrors lila: PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5).

@@ -15,7 +15,7 @@ struct BroadcastItemRow: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.primary)
                 Spacer(minLength: BroadcastWidgetLayout.statusSpacerMinLength)
-                HStack(spacing: 4) {
+                HStack(spacing: BroadcastWidgetLayout.statusIndicatorSpacing) {
                     statusIndicator
                     Text(statusText)
                         .font(.system(size: BroadcastWidgetLayout.metaFontSize))
@@ -69,7 +69,7 @@ struct BroadcastItemRow: View {
                     .aspectRatio(contentMode: .fill)
             } else {
                 ZStack {
-                    Color.secondary.opacity(0.15)
+                    Color.secondary.opacity(BroadcastWidgetLayout.thumbnailFallbackBgOpacity)
                     Image("LichessLogo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -77,7 +77,7 @@ struct BroadcastItemRow: View {
                             width: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio,
                             height: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio
                         )
-                        .opacity(0.5)
+                        .opacity(BroadcastWidgetLayout.thumbnailFallbackLogoOpacity)
                 }
             }
         }
