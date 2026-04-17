@@ -47,16 +47,12 @@ class BoardPortraitLayout extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return CustomMultiChildLayout(
-          delegate: _BoardPortraitDelegate(
-            maxBoardWidth: maxBoardWidth ?? constraints.maxWidth,
-          ),
+          delegate: _BoardPortraitDelegate(maxBoardWidth: maxBoardWidth ?? constraints.maxWidth),
           children: [
             if (above != null) LayoutId(id: _Slot.above, child: above!),
             LayoutId(
               id: _Slot.board,
-              child: LayoutBuilder(
-                builder: (ctx, c) => boardBuilder(ctx, c.maxWidth),
-              ),
+              child: LayoutBuilder(builder: (ctx, c) => boardBuilder(ctx, c.maxWidth)),
             ),
             if (below != null) LayoutId(id: _Slot.below, child: below!),
           ],
@@ -80,20 +76,11 @@ class _BoardPortraitDelegate extends MultiChildLayoutDelegate {
         : Size.zero;
     final belowMaxHeight = math.max(0.0, size.height - aboveSize.height);
     final belowSize = hasChild(_Slot.below)
-        ? layoutChild(
-            _Slot.below,
-            BoxConstraints.loose(Size(size.width, belowMaxHeight)),
-          )
+        ? layoutChild(_Slot.below, BoxConstraints.loose(Size(size.width, belowMaxHeight)))
         : Size.zero;
 
-    final availableHeight = math.max(
-      0.0,
-      size.height - aboveSize.height - belowSize.height,
-    );
-    final boardSide = math.max(
-      0.0,
-      math.min(math.min(size.width, maxBoardWidth), availableHeight),
-    );
+    final availableHeight = math.max(0.0, size.height - aboveSize.height - belowSize.height);
+    final boardSide = math.max(0.0, math.min(math.min(size.width, maxBoardWidth), availableHeight));
     layoutChild(_Slot.board, BoxConstraints.tight(Size(boardSide, boardSide)));
 
     final usedHeight = aboveSize.height + boardSide + belowSize.height;

@@ -291,8 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
                         );
                       } else {
                         final maxBoardWidth = isTablet
-                            ? constraints.biggest.shortestSide -
-                                  kTabletBoardTableSidePadding * 2
+                            ? constraints.biggest.shortestSide - kTabletBoardTableSidePadding * 2
                             : constraints.biggest.shortestSide;
 
                         return BoardPortraitLayout(
