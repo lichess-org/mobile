@@ -42,7 +42,7 @@ struct BroadcastWidgetEntryView: View {
                 itemsContent(thumbnailSize: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                Text("Updated at \(entry.date.shortTime)")
+                Text(entry.date.shortTime)
                     .font(.system(size: BroadcastWidgetLayout.secondaryFontSize))
                     .foregroundStyle(.secondary)
                     .padding(.top, BroadcastWidgetLayout.smallFooterTopPadding)
