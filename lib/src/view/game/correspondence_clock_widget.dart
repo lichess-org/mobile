@@ -65,7 +65,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
   @override
   void didUpdateWidget(CorrespondenceClock oldClock) {
     super.didUpdateWidget(oldClock);
-    if (widget.duration != oldClock.duration) {
+    if (widget.duration != oldClock.duration || (widget.active != oldClock.active)) {
       timeLeft = widget.duration;
     }
     if (widget.active) {
