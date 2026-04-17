@@ -284,6 +284,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
 
   @override

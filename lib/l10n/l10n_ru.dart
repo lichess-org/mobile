@@ -284,6 +284,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
 
   @override

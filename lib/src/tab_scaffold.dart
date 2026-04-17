@@ -7,8 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/learn/learn_tab_screen.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -136,13 +138,17 @@ class MainTabScaffold extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
 
+    final isServerReachable = ref.watch(serverStatusProvider).value ?? true;
+
     final extendBody = Theme.of(context).platform == TargetPlatform.iOS;
 
     return FullScreenBackground(
       child: MainTabScaffoldProperties(
         extendBody: extendBody,
         child: Scaffold(
-          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
+          body: isServerReachable
+              ? _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder)
+              : const ServerOutage(),
           extendBody: extendBody,
           bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS
               ? _CupertinoTabBar(
