@@ -16,8 +16,7 @@ enum LichessAppGroup {
     /// The lichess host configured in the main app (e.g. "lichess.org" or "localhost:8080").
     /// Falls back to "lichess.org" when the main app has never been launched.
     static var lichessHost: String {
-        "lichess.org"
-//        UserDefaults(suiteName: id)?.string(forKey: lichessHostKey) ?? "lichess.org"
+        UserDefaults(suiteName: id)?.string(forKey: lichessHostKey) ?? "lichess.org"
     }
 
     /// Builds a lichess URL for the given path, using http for localhost and https otherwise.
