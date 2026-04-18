@@ -97,13 +97,6 @@ class AppLinksService {
       _handleOpenWebLink(uri);
       return;
     }
-    if (_isQuickPairingLink(uri)) {
-      final context = ref.read(currentNavigatorKeyProvider).currentContext;
-      if (context != null && context.mounted) {
-        _handleQuickPairingLink(context, uri);
-      }
-      return;
-    }
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (uri.scheme == kLichessUriScheme &&
         uri.host == _kDailyPuzzleDeeplinkHost &&
@@ -348,6 +341,11 @@ class AppLinksService {
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
   Future<void> handleAppLink(BuildContext context, Uri uri, {bool animated = true}) async {
+    if (_isQuickPairingLink(uri)) {
+      _handleQuickPairingLink(context, uri);
+      return;
+    }
+
     final routes = await resolveAppLinkUri(context, uri);
     if (!context.mounted) return;
 
