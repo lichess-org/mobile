@@ -65,25 +65,6 @@ class AppLinksService {
     // app via this link so the target screen should just be there.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        // File links are handled by the sharing intent logic, so we can ignore them here.
-        if (uri.scheme == 'file' || uri.scheme == 'content') {
-          return;
-        }
-        if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
-          ref.read(oauthCallbackProvider).add(uri);
-          return;
-        }
-        if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
-          _handleOpenWebLink(uri);
-          return;
-        }
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context != null && context.mounted) {
-          if (_isQuickPairingLink(uri)) {
-            _handleQuickPairingLink(context, uri);
-            return;
-          }
-          await handleAppLink(context, uri);
         final initialUri = await _appLinks.getInitialLink();
         if (initialUri != null) {
           await _handleUri(initialUri, animated: false);
@@ -114,6 +95,13 @@ class AppLinksService {
     }
     if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
       _handleOpenWebLink(uri);
+      return;
+    }
+    if (_isQuickPairingLink(uri)) {
+      final context = ref.read(currentNavigatorKeyProvider).currentContext;
+      if (context != null && context.mounted) {
+        _handleQuickPairingLink(context, uri);
+      }
       return;
     }
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -256,6 +244,8 @@ class AppLinksService {
       rated: rated,
       variant: variant == Variant.standard ? null : variant,
     );
+  }
+
   /// Opens the native daily-puzzle screen (same path as tapping the daily-puzzle
   /// card on the puzzle tab) in response to `org.lichess.mobile://training/daily`
   /// or `org.lichess.mobile://training/daily/{id}` deeplinks emitted by the iOS
@@ -357,12 +347,6 @@ class AppLinksService {
   }
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
-  Future<void> handleAppLink(BuildContext context, Uri uri) async {
-    if (_isQuickPairingLink(uri)) {
-      _handleQuickPairingLink(context, uri);
-      return;
-    }
-
   Future<void> handleAppLink(BuildContext context, Uri uri, {bool animated = true}) async {
     final routes = await resolveAppLinkUri(context, uri);
     if (!context.mounted) return;
