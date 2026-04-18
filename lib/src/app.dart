@@ -38,7 +38,7 @@ const String _kIosQuickPairingSeekIncrementKey = 'quickPairingSeekIncrement';
 const String _kIosQuickPairingSeekRatedKey = 'quickPairingSeekRated';
 const String _kIosQuickPairingSeekVariantKey = 'quickPairingSeekVariant';
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
-const List<String> _kIosBlogWidgetKinds = [
+const List<String> _kIosWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
   'UserBlogFeedWidget',
