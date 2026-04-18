@@ -284,6 +284,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
+  String get mobilePgnLabels => 'PGN labels';
+
+  @override
   String get variantStandardTitle => 'Πρότυποι κανόνες του σκακιού (FIDE)';
 
   @override
