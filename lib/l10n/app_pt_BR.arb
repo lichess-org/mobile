@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desempates",
   "broadcastGameX": "Partida {param}",
   "broadcastKnockouts": "Mata-matas",
+  "broadcastUnderXAgeTournament": "Sub-{param}",
+  "broadcastUnderXEloTournament": "Sub {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmissão} other{{count} transmissões}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadores}}",
   "challengeChallengesX": "Desafios: {param1}",
@@ -1825,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} ano atrás} other{{count} anos atrás}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuto restante} other{{count} minutos restantes}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hora restante} other{{count} horas restantes}}",
-  "tfaTwoFactorAuth": "Autenticação de dois fatores"
+  "tfaTwoFactorAuth": "Autenticação de dois fatores",
+  "ublogCommunity": "Comunidade",
+  "ublogXBlog": "Blog do(a) {param}"
 }

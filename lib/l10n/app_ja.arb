@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "タイブレーク",
   "broadcastGameX": "局数 {param}",
   "broadcastKnockouts": "ノックアウト",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} ブロードキャスト}}",
   "broadcastNbViewers": "{count, plural, other{{count} 人の視聴者}}",
   "challengeChallengesX": "チャレンジ：{param1}",
@@ -1823,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{残り {count} 分}}",
   "timeagoNbHoursRemaining": "{count, plural, other{残り {count} 時間}}",
-  "tfaTwoFactorAuth": "2 要素認証"
+  "tfaTwoFactorAuth": "2 要素認証",
+  "ublogCommunity": "コミュニティ",
+  "ublogXBlog": "{param} のブログ"
 }

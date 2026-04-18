@@ -1058,6 +1058,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6550,6 +6560,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -7604,6 +7622,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -11929,7 +11957,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       count,
       locale: localeName,
       other: '≥ $count rated $param2 games',
-      one: '≥ $count $param2 rated game',
+      one: '≥ $count rated $param2 game',
     );
     return '$_temp0';
   }
@@ -13100,4 +13128,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

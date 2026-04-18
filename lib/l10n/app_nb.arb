@@ -1825,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{for {count} år siden} other{for {count} år siden}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minutt igjen} other{{count} minutter igjen}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} time igjen} other{{count} timer igjen}}",
-  "tfaTwoFactorAuth": "Tofaktorautentisering"
+  "tfaTwoFactorAuth": "Tofaktorautentisering",
+  "ublogCommunity": "Fellesskap",
+  "ublogXBlog": "Bloggen til {param}"
 }

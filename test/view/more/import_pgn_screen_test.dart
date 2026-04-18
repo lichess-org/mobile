@@ -11,28 +11,6 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
 import '../../test_provider_scope.dart';
 
-class _MockFilePicker extends FilePicker {
-  _MockFilePicker(this._result);
-
-  final FilePickerResult? _result;
-
-  @override
-  Future<FilePickerResult?> pickFiles({
-    String? dialogTitle,
-    String? initialDirectory,
-    FileType type = FileType.any,
-    List<String>? allowedExtensions,
-    dynamic Function(FilePickerStatus)? onFileLoading,
-    bool allowCompression = true,
-    int compressionQuality = 30,
-    bool allowMultiple = false,
-    bool withData = false,
-    bool withReadStream = false,
-    bool lockParentWindow = false,
-    bool readSequential = false,
-  }) async => _result;
-}
-
 void _mockClipboard(String text) {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
     SystemChannels.platform,
@@ -45,15 +23,19 @@ void _mockClipboard(String text) {
   );
 }
 
-Future<Widget> _makeApp(WidgetTester tester) => makeTestProviderScopeApp(
-  tester,
-  home: const ImportPgnScreen(),
-  defaultPreferences: {
-    PrefCategory.engineEvaluation.storageKey: jsonEncode(
-      EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
-    ),
-  },
-);
+Future<Widget> _makeApp(WidgetTester tester, {FilePickerResult? pickResult}) =>
+    makeTestProviderScopeApp(
+      tester,
+      home: const ImportPgnScreen(),
+      overrides: pickResult != null
+          ? {pickPgnFileProvider: pickPgnFileProvider.overrideWithValue(() async => pickResult)}
+          : null,
+      defaultPreferences: {
+        PrefCategory.engineEvaluation.storageKey: jsonEncode(
+          EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
+        ),
+      },
+    );
 
 void main() {
   tearDown(() {
@@ -197,11 +179,12 @@ void main() {
           '1. e4 e5 2. Nf3 Nc6 3. Bb5 *';
 
       final pgnBytes = utf8.encode(pgn);
-      FilePicker.platform = _MockFilePicker(
-        FilePickerResult([PlatformFile(name: 'game.pgn', size: pgnBytes.length, bytes: pgnBytes)]),
+      final app = await _makeApp(
+        tester,
+        pickResult: FilePickerResult([
+          PlatformFile(name: 'game.pgn', size: pgnBytes.length, bytes: pgnBytes),
+        ]),
       );
-
-      final app = await _makeApp(tester);
       await tester.pumpWidget(app);
 
       await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));
@@ -233,11 +216,12 @@ void main() {
           '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n';
 
       final pgnBytes = utf8.encode(pgn);
-      FilePicker.platform = _MockFilePicker(
-        FilePickerResult([PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes)]),
+      final app = await _makeApp(
+        tester,
+        pickResult: FilePickerResult([
+          PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes),
+        ]),
       );
-
-      final app = await _makeApp(tester);
       await tester.pumpWidget(app);
 
       await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));
@@ -312,11 +296,12 @@ void main() {
           '1. Nf3 c5 2. e3 Nf6 3. b3 g6 0-1\n';
 
       final pgnBytes = utf8.encode(pgn);
-      FilePicker.platform = _MockFilePicker(
-        FilePickerResult([PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes)]),
+      final app = await _makeApp(
+        tester,
+        pickResult: FilePickerResult([
+          PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes),
+        ]),
       );
-
-      final app = await _makeApp(tester);
       await tester.pumpWidget(app);
 
       await tester.tap(find.widgetWithText(FilledButton, 'Or import a PGN file'));

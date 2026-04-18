@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct BlogFeedWidgetHeader: View {
-    let feedName: String
+    let feed: BlogFeedChoice
+    let username: String?
     let updatedAt: Date
     var showTimestamp: Bool = true
 
@@ -11,17 +12,31 @@ struct BlogFeedWidgetHeader: View {
                 .resizable()
                 .frame(width: BlogFeedWidgetLayout.logoSize, height: BlogFeedWidgetLayout.logoSize)
             HStack(alignment: .lastTextBaseline, spacing: 0) {
-                Text(feedName)
+                headerTitle
                     .font(.system(size: BlogFeedWidgetLayout.titleFontSize, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 if showTimestamp {
                     Spacer()
-                    Text("Updated at \(updatedAt.shortTime)")
+                    Text(updatedAt.shortTime)
                         .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
                         .foregroundStyle(.secondary)
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var headerTitle: some View {
+        switch feed {
+        case .communityBlog:
+            Text("Community")
+        case .officialBlog:
+            // Resolves via "xBlog %@" key → e.g. "Lichess's Blog" / "Blogue de Lichess"
+            Text("xBlog \(String("Lichess"))")
+        case .userBlog:
+            // Resolves via "xBlog %@" key → e.g. "johndoe's Blog" / "Blogue de johndoe"
+            Text("xBlog \(username ?? "")")
         }
     }
 }

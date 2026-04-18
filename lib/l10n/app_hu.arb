@@ -1807,5 +1807,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} éve} other{{count} éve}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} perc van hátra} other{{count} perc van hátra}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} óra van hátra} other{{count} óra van hátra}}",
-  "tfaTwoFactorAuth": "Kétlépcsős azonosítás"
+  "tfaTwoFactorAuth": "Kétlépcsős azonosítás",
+  "ublogCommunity": "Közösség",
+  "ublogXBlog": "{param} blogja"
 }

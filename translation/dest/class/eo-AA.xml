@@ -115,7 +115,7 @@ Jen la ligo por aliri la klason.</string>
   <string name="xisNowAStudentOfTheClass">%s nun apartenas al la klaso</string>
   <string name="anInvitationHasBeenSentToX">Invito sendis al %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s jam havas pritraktota invito</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s estas infana kono kaj ne povas ricevi vian mesaĝo. Vi devas aldoni al ili la invita URL permane: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s estas infana kono kaj ne povas ricevi vian mesaĝo. Vi devas aldoni al ili la invita URL permane: %2$s</string>
   <string name="moveToClass">Movi al %s</string>
   <string name="moveToAnotherClass">Movi al alia klaso</string>
   <string name="allowMessagingBetweenStudents">Permesi mesaĝojn inter studentoj</string>

@@ -1058,6 +1058,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastKnockouts => 'Kiütések';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6552,4 +6562,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kétlépcsős azonosítás';
+
+  @override
+  String get ublogCommunity => 'Közösség';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogja';
+  }
 }

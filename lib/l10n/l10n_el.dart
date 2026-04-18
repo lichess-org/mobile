@@ -1058,6 +1058,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastKnockouts => 'Νοκ άουτ';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Κ$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Κ$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6552,4 +6562,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
+
+  @override
+  String get ublogCommunity => 'Κοινότητα';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Ιστολόγιο του χρήστη $param';
+  }
 }

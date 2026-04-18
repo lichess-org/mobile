@@ -1894,6 +1894,18 @@ abstract class AppLocalizations {
   /// **'Knockouts'**
   String get broadcastKnockouts;
 
+  /// No description provided for @broadcastUnderXAgeTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXAgeTournament(String param);
+
+  /// No description provided for @broadcastUnderXEloTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXEloTournament(String param);
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:
@@ -11157,6 +11169,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Two-factor authentication'**
   String get tfaTwoFactorAuth;
+
+  /// No description provided for @ublogCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get ublogCommunity;
+
+  /// No description provided for @ublogXBlog.
+  ///
+  /// In en, this message translates to:
+  /// **'{param}\'s Blog'**
+  String ublogXBlog(String param);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1058,6 +1058,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6550,4 +6560,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'दो-चरण प्रमाणीकरण';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param का ब्लॉग';
+  }
 }

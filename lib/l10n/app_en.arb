@@ -592,6 +592,22 @@
     }
   },
   "broadcastKnockouts": "Knockouts",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "@broadcastUnderXAgeTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastUnderXEloTournament": "U{param}",
+  "@broadcastUnderXEloTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -3716,5 +3732,14 @@
       }
     }
   },
-  "tfaTwoFactorAuth": "Two-factor authentication"
+  "tfaTwoFactorAuth": "Two-factor authentication",
+  "ublogCommunity": "Community",
+  "ublogXBlog": "{param}'s Blog",
+  "@ublogXBlog": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  }
 }

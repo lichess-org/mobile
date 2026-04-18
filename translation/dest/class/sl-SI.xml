@@ -121,7 +121,7 @@ Prikazal bo horizontalno črto.</string>
   <string name="xisNowAStudentOfTheClass">%s je zdaj učenec razreda</string>
   <string name="anInvitationHasBeenSentToX">Povabilo je bilo poslano na %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s že ima čakajoče povabilo</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s je otroški račun in ne more prejeti vašega sporočila. Ročno jim morate dati URL povabila: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s je otroški račun in ne more prejeti vašega sporočila. Ročno jim morate dati URL povabila: %2$s</string>
   <string name="moveToClass">Premakni v %s</string>
   <string name="moveToAnotherClass">Premakni se v drug razred</string>
   <string name="allowMessagingBetweenStudents">Dovoli sporočila med študenti</string>

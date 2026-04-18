@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Tiebreaks",
   "broadcastGameX": "Game {param}",
   "broadcastKnockouts": "Knockouts",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "broadcastNbViewers": "{count, plural, =1{{count} viewer} other{{count} viewers}}",
   "challengeChallengesX": "Challenges: {param1}",
@@ -1546,7 +1548,7 @@
   "nbStudies": "{count, plural, =1{{count} study} other{{count} studies}}",
   "nbSimuls": "{count, plural, =1{{count} simul} other{{count} simuls}}",
   "moreThanNbRatedGames": "{count, plural, =1{≥ {count} rated game} other{≥ {count} rated games}}",
-  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} {param2} rated game} other{≥ {count} rated {param2} games}}",
+  "moreThanNbPerfRatedGames": "{count, plural, =1{≥ {count} rated {param2} game} other{≥ {count} rated {param2} games}}",
   "needNbMorePerfGames": "{count, plural, =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}",
   "needNbMoreGames": "{count, plural, =1{You need to play {count} more rated game} other{You need to play {count} more rated games}}",
   "nbImportedGames": "{count, plural, =1{{count} imported game} other{{count} imported games}}",
@@ -1825,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} year ago} other{{count} years ago}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
-  "tfaTwoFactorAuth": "Two-factor authentication"
+  "tfaTwoFactorAuth": "Two-factor authentication",
+  "ublogCommunity": "Community",
+  "ublogXBlog": "{param}'s Blog"
 }

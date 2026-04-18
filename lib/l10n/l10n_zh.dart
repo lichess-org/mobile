@@ -1038,6 +1038,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastKnockouts => '淘汰赛';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4709,7 +4719,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get correspondenceDesc => '通讯棋对局：每步棋一天或数天';
 
   @override
-  String get puzzleDesc => '国际象棋战术训练器';
+  String get puzzleDesc => '战术训练';
 
   @override
   String get important => '重要提示';
@@ -6457,6 +6467,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '双重认证';
+
+  @override
+  String get ublogCommunity => '社区';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param 的博客';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12431,4 +12449,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get ublogCommunity => '社群';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param的部落格';
+  }
 }

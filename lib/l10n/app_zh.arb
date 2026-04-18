@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "加赛",
   "broadcastGameX": "第 {param} 局",
   "broadcastKnockouts": "淘汰赛",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} 场转播}}",
   "broadcastNbViewers": "{count, plural, other{{count} 名观众}}",
   "challengeChallengesX": "挑战：{param1}",
@@ -1421,7 +1423,7 @@
   "rapidDesc": "普速对战：8 到 25 分钟",
   "classicalDesc": "慢棋对局：25 分钟及以上",
   "correspondenceDesc": "通讯棋对局：每步棋一天或数天",
-  "puzzleDesc": "国际象棋战术训练器",
+  "puzzleDesc": "战术训练",
   "important": "重要提示",
   "yourQuestionMayHaveBeenAnswered": "您的问题可能已 {param1} 有了解答",
   "inTheFAQ": "在常见问题中",
@@ -1825,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{剩余 {count} 分钟}}",
   "timeagoNbHoursRemaining": "{count, plural, other{剩余 {count} 小时}}",
-  "tfaTwoFactorAuth": "双重认证"
+  "tfaTwoFactorAuth": "双重认证",
+  "ublogCommunity": "社区",
+  "ublogXBlog": "{param} 的博客"
 }
