@@ -135,9 +135,12 @@ final puzzleThemesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey, Puz
 }, name: 'PuzzleThemesProvider');
 
 /// Fetches available puzzle openings.
-final puzzleOpeningsProvider = FutureProvider.autoDispose<IList<PuzzleOpeningFamily>>((Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleOpenings(),
-    const Duration(days: 1),
-  );
-}, name: 'PuzzleOpeningsProvider');
+final puzzleOpeningsProvider = FutureProvider.autoDispose
+    .family<IList<PuzzleOpeningFamily>, PuzzleOpeningSort>((Ref ref, PuzzleOpeningSort sort) {
+      return ref.withClientCacheFor(
+        (client) => PuzzleRepository(
+          client,
+        ).puzzleOpenings(alphabetical: sort == PuzzleOpeningSort.alphabetical),
+        const Duration(days: 1),
+      );
+    }, name: 'PuzzleOpeningsProvider');

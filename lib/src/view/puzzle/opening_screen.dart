@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -11,21 +12,29 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-final _openingsProvider =
-    FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
-      final connectivity = await ref.watch(connectivityChangesProvider.future);
+final _openingsSortProvider = StateProvider.autoDispose<PuzzleOpeningSort>(
+  (ref) => PuzzleOpeningSort.popular,
+);
+
+final _openingsProvider = FutureProvider.autoDispose
+    .family<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?), PuzzleOpeningSort>((
+      ref,
+      sort,
+    ) async {
+      final connectivityStatus = await ref.watch(connectivityChangesProvider.future);
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
       IList<PuzzleOpeningFamily>? onlineOpenings;
       try {
-        onlineOpenings = await ref.watch(puzzleOpeningsProvider.future);
+        onlineOpenings = await ref.watch(puzzleOpeningsProvider(sort).future);
       } catch (e) {
         onlineOpenings = null;
       }
-      return (connectivity.isOnline, savedOpenings, onlineOpenings);
+      return (connectivityStatus.isOnline, savedOpenings, onlineOpenings);
     });
 
-class OpeningThemeScreen extends StatelessWidget {
+class OpeningThemeScreen extends ConsumerWidget {
   const OpeningThemeScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -33,9 +42,35 @@ class OpeningThemeScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sort = ref.watch(_openingsSortProvider);
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.puzzlePuzzlesByOpenings),
+        actions: [
+          ContextMenuIconButton(
+            consumeOutsideTap: true,
+            icon: const Icon(Icons.sort_outlined),
+            semanticsLabel: 'Sort openings',
+            actions: [
+              ContextMenuAction(
+                icon: sort == PuzzleOpeningSort.popular ? Icons.check : null,
+                label: context.l10n.popularOpenings,
+                onPressed: () {
+                  ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.popular;
+                },
+              ),
+              ContextMenuAction(
+                icon: sort == PuzzleOpeningSort.alphabetical ? Icons.check : null,
+                label: 'Alphabetical',
+                onPressed: () {
+                  ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.alphabetical;
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
       body: const _Body(),
     );
   }
@@ -46,7 +81,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final openings = ref.watch(_openingsProvider);
+    final sort = ref.watch(_openingsSortProvider);
+    final openings = ref.watch(_openingsProvider(sort));
     return openings.when(
       data: (data) {
         final (isOnline, savedOpenings, onlineOpenings) = data;
