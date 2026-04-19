@@ -170,12 +170,14 @@ class PuzzleRepository {
     );
   }
 
-  Future<IList<PuzzleOpeningFamily>> puzzleOpenings() {
-    return client.readJson(
+  Future<IList<PuzzleOpeningFamily>> puzzleOpenings({bool alphabetical = false}) async {
+    final result = await client.readJson(
       Uri(path: '/training/openings'),
       headers: {'Accept': 'application/json'},
       mapper: _puzzleOpeningFromJson,
     );
+    if (!alphabetical) return result;
+    return result.sort((a, b) => a.name.compareTo(b.name));
   }
 
   Future<IList<PuzzleId>> puzzleReplay(int days, String theme) {

@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -12,20 +13,25 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-final _openingsProvider =
-    FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
+final _openingsSortAlphabeticalProvider = StateProvider.autoDispose<bool>((ref) => false);
+
+final _openingsProvider = FutureProvider.autoDispose
+    .family<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?), bool>((
+      ref,
+      alphabetical,
+    ) async {
       final connectivity = await ref.watch(connectivityChangesProvider.future);
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
       IList<PuzzleOpeningFamily>? onlineOpenings;
       try {
-        onlineOpenings = await ref.watch(puzzleOpeningsProvider.future);
+        onlineOpenings = await ref.watch(puzzleOpeningsProvider(alphabetical).future);
       } catch (e) {
         onlineOpenings = null;
       }
       return (connectivity.isOnline, savedOpenings, onlineOpenings);
     });
 
-class OpeningThemeScreen extends StatelessWidget {
+class OpeningThemeScreen extends ConsumerWidget {
   const OpeningThemeScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -33,9 +39,21 @@ class OpeningThemeScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAlphabetical = ref.watch(_openingsSortAlphabeticalProvider);
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.puzzlePuzzlesByOpenings),
+        actions: [
+          IconButton(
+            icon: Icon(isAlphabetical ? Icons.sort_by_alpha : Icons.trending_up),
+            tooltip: isAlphabetical ? 'Sort by popularity' : 'Sort alphabetically',
+            onPressed: () {
+              ref.read(_openingsSortAlphabeticalProvider.notifier).state = !isAlphabetical;
+            },
+          ),
+        ],
+      ),
       body: const _Body(),
     );
   }
@@ -46,7 +64,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final openings = ref.watch(_openingsProvider);
+    final isAlphabetical = ref.watch(_openingsSortAlphabeticalProvider);
+    final openings = ref.watch(_openingsProvider(isAlphabetical));
     return openings.when(
       data: (data) {
         final (isOnline, savedOpenings, onlineOpenings) = data;

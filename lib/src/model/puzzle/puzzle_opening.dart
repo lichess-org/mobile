@@ -15,7 +15,7 @@ typedef PuzzleOpeningData = ({String key, String name, int count});
 final flatOpeningsListProvider = FutureProvider.autoDispose<IList<PuzzleOpeningData>>((
   Ref ref,
 ) async {
-  final families = await ref.watch(puzzleOpeningsProvider.future);
+  final families = await ref.watch(puzzleOpeningsProvider(false).future);
   return families
       .map(
         (f) => [
