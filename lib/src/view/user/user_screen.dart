@@ -217,7 +217,7 @@ class _UserProfileListView extends ConsumerWidget {
                         GameHistoryScreen.buildRoute(
                           context,
                           user: authUser.user,
-                          isOnline: isOnline == true,
+                          isOnline: isOnline,
                           gameFilter: GameFilterState(opponent: user),
                         ),
                       );
