@@ -14,8 +14,10 @@ import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -30,11 +32,17 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
+const String _kIosQuickPairingWidgetKind = 'QuickPairingWidget';
+const String _kIosQuickPairingSeekTimeKey = 'quickPairingSeekTime';
+const String _kIosQuickPairingSeekIncrementKey = 'quickPairingSeekIncrement';
+const String _kIosQuickPairingSeekRatedKey = 'quickPairingSeekRated';
+const String _kIosQuickPairingSeekVariantKey = 'quickPairingSeekVariant';
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
-const List<String> _kIosBlogWidgetKinds = [
+const List<String> _kIosWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
   'UserBlogFeedWidget',
+  _kIosQuickPairingWidgetKind,
 ];
 
 /// Application initialization and main entry point.
@@ -95,12 +103,35 @@ class _AppState extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+
+      ref.listenManual<RecentGameSeekPrefs>(recentGameSeekProvider, (previous, next) {
+        if (previous?.seeks == next.seeks || next.seeks.isEmpty) {
+          return;
+        }
+
+        final seek = next.seeks.first;
+        final clock = seek.clock;
+        if (clock == null) {
+          return;
+        }
+
+        final variant = seek.variant ?? Variant.standard;
+        Future.wait([
+          HomeWidget.saveWidgetData<int>(_kIosQuickPairingSeekTimeKey, clock.$1.inSeconds),
+          HomeWidget.saveWidgetData<int>(_kIosQuickPairingSeekIncrementKey, clock.$2.inSeconds),
+          HomeWidget.saveWidgetData<bool>(_kIosQuickPairingSeekRatedKey, seek.rated),
+          HomeWidget.saveWidgetData<String>(_kIosQuickPairingSeekVariantKey, variant.name),
+        ]).then((_) {
+          HomeWidget.updateWidget(iOSName: _kIosQuickPairingWidgetKind);
+        });
+      }, fireImmediately: true);
+
       HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
             Future.wait([
-              for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
+              for (final kind in _kIosWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
             ]);
           });
         }
