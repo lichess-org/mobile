@@ -50,7 +50,8 @@ Future<int?> _getDatabaseVersion(Database db) async {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
     final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
-  } catch (_) {
+  } catch (e) {
+    _logger.warning('Error occurred while fetching SQLite version: $e');
     return null;
   }
 }
@@ -78,14 +79,16 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
       },
       onOpen: (db) async {
-        await Future.wait([
-          _deleteOldEntries(db, 'puzzle', puzzleTTL),
-          _deleteOldEntries(db, 'correspondence_game', corresGameTTL),
-          _deleteOldEntries(db, 'game', gameTTL),
-          _deleteOldEntries(db, 'chat_read_messages', chatReadMessagesTTL),
-          _deleteOldEntries(db, 'http_log', httpLogTTL),
-          _deleteOldEntries(db, 'app_log', appLogTTL),
-        ]);
+        await db.transaction((txn) async {
+          await Future.wait([
+            _deleteOldEntries(txn, 'puzzle', puzzleTTL),
+            _deleteOldEntries(txn, 'correspondence_game', corresGameTTL),
+            _deleteOldEntries(txn, 'game', gameTTL),
+            _deleteOldEntries(txn, 'chat_read_messages', chatReadMessagesTTL),
+            _deleteOldEntries(txn, 'http_log', httpLogTTL),
+            _deleteOldEntries(txn, 'app_log', appLogTTL),
+          ]);
+        });
       },
       onCreate: (db, version) async {
         final batch = db.batch();
@@ -234,7 +237,7 @@ void _createAppLogTableV5(Batch batch) {
     ''');
 }
 
-Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
+Future<void> _deleteOldEntries(DatabaseExecutor db, String table, Duration ttl) async {
   final date = DateTime.now().subtract(ttl);
 
   if (!await _doesTableExist(db, table)) {
@@ -244,7 +247,7 @@ Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
   await db.delete(table, where: 'lastModified < ?', whereArgs: [date.toIso8601String()]);
 }
 
-Future<bool> _doesTableExist(Database db, String table) async {
+Future<bool> _doesTableExist(DatabaseExecutor db, String table) async {
   final tableExists = await db.rawQuery(
     "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
   );
