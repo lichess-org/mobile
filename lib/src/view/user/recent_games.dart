@@ -46,7 +46,7 @@ class RecentGamesWidget extends ConsumerWidget {
           onHeaderTap: nbOfGames > list.length
               ? () {
                   Navigator.of(context).push(
-                    GameHistoryScreen.buildRoute(context, user: user, isOnline: isOnline == true),
+                    GameHistoryScreen.buildRoute(context, user: user, isOnline: isOnline),
                   );
                 }
               : null,
