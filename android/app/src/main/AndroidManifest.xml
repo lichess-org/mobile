@@ -5,7 +5,6 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules">
 
         <meta-data
