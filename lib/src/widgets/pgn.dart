@@ -4,7 +4,9 @@ import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -522,8 +524,15 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
               vertical: kCommentVerticalPadding,
               horizontal: kViewHorizontalPadding,
             ),
-            child: Text.rich(
-              TextSpan(children: _comments(rootComments, textStyle: _baseTextStyle)),
+            child: Consumer(
+              builder: (context, ref, _) => Linkify(
+                onOpen: (link) async =>
+                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                linkifiers: AppLinksService.kLichessLinkifiers,
+                text: rootComments.join(' '),
+                style: _baseTextStyle.copyWith(fontSize: _baseTextStyle.fontSize! - 2),
+                linkStyle: Styles.linkStyle,
+              ),
             ),
           ),
         ...subtrees
@@ -831,8 +840,13 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
         if (params.shouldShowComments && lastBranch?.hasTextComment == true)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: kViewHorizontalPadding),
-            child: Text.rich(
-              TextSpan(children: _comments(lastBranch!.textComments, textStyle: textStyle)),
+            child: Linkify(
+              onOpen: (link) async =>
+                  await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+              linkifiers: AppLinksService.kLichessLinkifiers,
+              text: lastBranch!.textComments.join(' '),
+              style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+              linkStyle: Styles.linkStyle,
             ),
           ),
       ],
@@ -1456,11 +1470,22 @@ class _MoveContextMenu extends ConsumerWidget {
   }
 }
 
-List<TextSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) => comments
-    .map(
-      (comment) => TextSpan(
-        text: comment,
-        style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2.0),
+List<InlineSpan> _comments(Iterable<String> comments, {required TextStyle textStyle}) {
+  return [
+    WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Consumer(
+        builder: (context, ref, _) => Linkify(
+          onOpen: (link) async =>
+              await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          text: comments.join(' '),
+          options: const LinkifyOptions(humanize: false),
+          style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2),
+          linkStyle: Styles.linkStyle,
+        ),
       ),
-    )
-    .toList(growable: false);
+    ),
+  ];
+}
