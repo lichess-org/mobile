@@ -18,10 +18,10 @@ final _themesProvider =
     FutureProvider.autoDispose<
       (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
     >((ref) async {
-      final connectivity = await ref.watch(connectivityChangesProvider.future);
+      final isOnline = await ref.watch(onlineStatusProvider.future);
       final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
       IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-      if (connectivity.isOnline) {
+      if (isOnline) {
         try {
           onlineThemes = await ref.watch(puzzleThemesProvider.future);
         } catch (e) {
@@ -29,7 +29,7 @@ final _themesProvider =
         }
       }
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-      return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
+      return (isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
     });
 
 class PuzzleThemesScreen extends StatelessWidget {
