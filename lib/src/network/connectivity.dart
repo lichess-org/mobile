@@ -19,7 +19,7 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 /// This provider is derived from [connectivityChangesProvider] and only exposes the `isOnline ` field of the connectivity status.
 final onlineStatusProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(connectivityChangesProvider.selectAsync((status) => status.isOnline));
-}, name: 'OnlineChangesProvider');
+}, name: 'OnlineStatusProvider');
 
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
