@@ -149,11 +149,11 @@ class OfflineBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnlineAsync = ref.watch(onlineStatusProvider);
     final theme = Theme.of(context);
-    return connectivity.when(
-      data: (data) {
-        if (data.isOnline) {
+    return isOnlineAsync.when(
+      data: (isOnline) {
+        if (isOnline) {
           return const SizedBox.shrink();
         }
         return Material(
