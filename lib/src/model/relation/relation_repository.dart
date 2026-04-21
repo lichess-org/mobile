@@ -1,7 +1,14 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+
+
+/// A provider for [RelationRepository].
+  final relationRepositoryProvider = Provider<RelationRepository>((ref) {
+    return RelationRepository(ref.watch(lichessClientProvider));
+  }, name: 'RelationRepositoryProvider');
 
 class RelationRepository {
   const RelationRepository(this.client);
@@ -33,6 +40,11 @@ class RelationRepository {
 
   Future<void> unblock(UserId userId) async {
     final uri = Uri(path: '/api/rel/unblock/$userId');
+    await client.postRead(uri);
+  }
+
+  Future<void> deleteThread(UserId userId) async {
+    final uri = Uri(path: '/inbox/$userId/delete');
     await client.postRead(uri);
   }
 }

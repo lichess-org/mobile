@@ -64,6 +64,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileLiveStreamers => '主播';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
 
   @override

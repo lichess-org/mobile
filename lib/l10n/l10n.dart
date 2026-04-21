@@ -298,6 +298,24 @@ abstract class AppLocalizations {
   /// **'Live streamers'**
   String get mobileLiveStreamers;
 
+  /// No description provided for @mobileMessageDeleteConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete conversation'**
+  String get mobileMessageDeleteConversation;
+
+  /// No description provided for @mobileMessageDeleteConversationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete conversation'**
+  String get mobileMessageDeleteConversationTitle;
+
+  /// No description provided for @mobileMessageDeleteConversationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this conversation?'**
+  String get mobileMessageDeleteConversationConfirm;
+
   /// No description provided for @mobileMustBeLoggedIn.
   ///
   /// In en, this message translates to:
