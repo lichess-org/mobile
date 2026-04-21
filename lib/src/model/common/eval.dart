@@ -327,7 +327,11 @@ double _rawWinningChances(num cp) {
 String _evalString(int? cp, int? mate) {
   if (cp != null) {
     final e = cpToPawns(cp);
-    return e > 0 ? '+${e.toStringAsFixed(1)}' : e.toStringAsFixed(1);
+    final s = e.toStringAsFixed(1);
+    if (s == '0.0' || s == '-0.0') {
+      return '0.0';
+    }
+    return e > 0 ? '+$s' : s;
   } else if (mate != null) {
     return '#$mate';
   } else {
