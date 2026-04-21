@@ -4,11 +4,10 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
-
 /// A provider for [RelationRepository].
-  final relationRepositoryProvider = Provider<RelationRepository>((ref) {
-    return RelationRepository(ref.watch(lichessClientProvider));
-  }, name: 'RelationRepositoryProvider');
+final relationRepositoryProvider = Provider<RelationRepository>((ref) {
+  return RelationRepository(ref.watch(lichessClientProvider));
+}, name: 'RelationRepositoryProvider');
 
 class RelationRepository {
   const RelationRepository(this.client);
