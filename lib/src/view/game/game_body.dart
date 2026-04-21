@@ -162,6 +162,7 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.black
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        side: Side.black,
                         clockTenths: clockTenths,
                       );
                     },
@@ -211,6 +212,7 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.white
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        side: Side.white,
                         clockTenths: clockTenths,
                       );
                     },
