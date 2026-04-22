@@ -396,7 +396,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               onConfirm: () {
                 Navigator.of(context).pop();
                 ref
-                    .read(studyControllerProvider(widget.id).notifier)
+                    .read(studyControllerProvider(widget.options).notifier)
                     .deleteChapter(chapter.id)
                     .catchError((Object e) {
                       if (context.mounted) {
@@ -425,7 +425,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
             onSubmitted: (value) {
               if (value.trim().isNotEmpty) {
                 ref
-                    .read(studyControllerProvider(widget.id).notifier)
+                    .read(studyControllerProvider(widget.options).notifier)
                     .editChapter(chapter.id, name: value.trim());
               }
               Navigator.of(context).pop();
@@ -441,7 +441,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
                 final value = textController.text;
                 if (value.trim().isNotEmpty) {
                   ref
-                      .read(studyControllerProvider(widget.id).notifier)
+                      .read(studyControllerProvider(widget.options).notifier)
                       .editChapter(chapter.id, name: value.trim());
                 }
                 Navigator.of(context).pop();
@@ -472,7 +472,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       labelBuilder: (side) => Text(side == Side.white ? context.l10n.white : context.l10n.black),
       onSelectedItemChanged: (side) {
         ref
-            .read(studyControllerProvider(widget.id).notifier)
+            .read(studyControllerProvider(widget.options).notifier)
             .editChapter(chapter.id, orientation: side);
       },
     );
