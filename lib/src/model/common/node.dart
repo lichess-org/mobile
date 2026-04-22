@@ -214,16 +214,17 @@ abstract class Node {
     Duration? clock,
     bool isUserAdded = false,
   }) {
-    final pos = nodeAt(path).position;
+    final parentNode = nodeAt(path);
+    final normalizedMove = normalizeMove(parentNode.position, move);
 
-    final normalizedMove = normalizeMove(pos, move);
-
-    final (newPos, newSan) = pos.makeSan(normalizedMove);
+    final (newPos, newSan) = parentNode.position.makeSan(normalizedMove);
+    final willBeMainline =
+        (prepend || replace || parentNode.children.isEmpty) && isOnMainline(path);
     final newNode = Branch(
       sanMove: SanMove(newSan, normalizedMove),
       position: newPos,
       comments: (clock != null) ? [PgnComment(clock: clock)] : null,
-      isUserAdded: isUserAdded,
+      isUserAdded: isUserAdded && willBeMainline,
     );
     return addNodeAt(path, newNode, prepend: prepend, replace: replace);
   }

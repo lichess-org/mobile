@@ -1262,11 +1262,10 @@ class InlineMove extends ConsumerWidget {
         .watch(pieceNotationProvider)
         .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
     final moveFontFamily = pieceNotation == PieceNotation.symbol ? 'ChessFont' : null;
-    final isItalic = lineInfo.type != _LineType.mainline || branch.isUserAdded;
     final moveTextStyle = textStyle.copyWith(
       fontFamily: moveFontFamily,
       fontWeight: lineInfo.type == _LineType.inlineSideline ? FontWeight.normal : FontWeight.w600,
-      fontStyle: isItalic ? FontStyle.italic : FontStyle.normal,
+      fontStyle: branch.isUserAdded ? FontStyle.italic : FontStyle.normal,
     );
 
     final indexTextStyle = textStyle.copyWith(color: _textColor(context, kIndexOpacity));
