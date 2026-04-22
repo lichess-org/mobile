@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateGameWidget extends ConsumerWidget {
@@ -155,6 +156,7 @@ class CreateGameWidget extends ConsumerWidget {
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Theme.of(context).dividerColor),
+                        foregroundColor: canUseRatingRange ? null : Theme.of(context).disabledColor,
                       ),
                       onPressed: canUseRatingRange
                           ? () {
@@ -181,7 +183,24 @@ class CreateGameWidget extends ConsumerWidget {
                                 },
                               );
                             }
-                          : null,
+                          : () {
+                              showAdaptiveDialog<void>(
+                                context: context,
+                                builder: (context) => AlertDialog.adaptive(
+                                  content: Text(
+                                    context
+                                        .l10n
+                                        .ratingRangeIsDisabledBecauseYourRatingIsProvisional,
+                                  ),
+                                  actions: [
+                                    PlatformDialogAction(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      child: Text(context.l10n.mobileOkButton),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                       child: canUseRatingRange
                           ? Text(
                               '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
