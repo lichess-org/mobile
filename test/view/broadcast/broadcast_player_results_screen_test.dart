@@ -88,9 +88,13 @@ Future<void> pumpPlayerResultsScreen(
 
   await tester.pumpWidget(app);
 
-  // Pump for: tournament load, player load, UI rebuild
+  // Load the tournament data
   await tester.pump();
+
+  // Load the player data
   await tester.pump();
+
+  // Build the game list
   await tester.pump();
 }
 
@@ -103,61 +107,63 @@ void expectGameTileShows(String expected) {
 void main() {
   group('BroadcastPlayerResultsScreen game result display', () {
     group('without custom scoring', () {
-      testWidgets('win shows 1', (tester) async {
+      testWidgets('win shows 1', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1', customPoints: null);
         expectGameTileShows('1');
       });
 
-      testWidgets('draw shows ½', (tester) async {
+      testWidgets('draw shows ½', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: null);
         expectGameTileShows('½');
       });
 
-      testWidgets('loss shows 0', (tester) async {
+      testWidgets('loss shows 0', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '0', customPoints: null);
         expectGameTileShows('0');
       });
 
-      testWidgets('ongoing shows *', (tester) async {
+      testWidgets('ongoing shows *', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: null, customPoints: null);
         expectGameTileShows('*');
       });
     });
 
     group('with custom scoring different from standard', () {
-      testWidgets('custom win 3 points shows 3', (tester) async {
+      testWidgets('custom win 3 points shows 3', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1', customPoints: 3.0);
         expectGameTileShows('3');
       });
 
-      testWidgets('custom draw 1.5 points shows 1.5', (tester) async {
+      testWidgets('custom draw 1.5 points shows 1.5', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 1.5);
         expectGameTileShows('1.5');
       });
 
-      testWidgets('custom draw 1 point shows 1', (tester) async {
+      testWidgets('custom draw 1 point shows 1', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 1.0);
         expectGameTileShows('1');
       });
 
-      testWidgets('custom draw with 0 custom points shows ½', (tester) async {
+      testWidgets('custom draw with 0 custom points shows ½', variant: kPlatformVariant, (
+        tester,
+      ) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 0.0);
         expectGameTileShows('½');
       });
     });
 
     group('with custom scoring matching standard values', () {
-      testWidgets('custom win 1.0 shows standard 1', (tester) async {
+      testWidgets('custom win 1.0 shows standard 1', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1', customPoints: 1.0);
         expectGameTileShows('1');
       });
 
-      testWidgets('custom draw 0.5 shows standard ½', (tester) async {
+      testWidgets('custom draw 0.5 shows standard ½', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 0.5);
         expectGameTileShows('½');
       });
 
-      testWidgets('custom loss 0.0 shows standard 0', (tester) async {
+      testWidgets('custom loss 0.0 shows standard 0', variant: kPlatformVariant, (tester) async {
         await pumpPlayerResultsScreen(tester, points: '0', customPoints: 0.0);
         expectGameTileShows('0');
       });
