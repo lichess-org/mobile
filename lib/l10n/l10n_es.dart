@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta página.';
 
   @override
-  String get mobileNewGame => 'Partida nueva';
+  String get mobileNewGame => 'Nueva Partida';
 
   @override
   String get mobileNoSearchResults => 'Sin resultados';
@@ -1056,6 +1056,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatorias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Me comprometo a seguir las normas de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Buscar o empezar una nueva conversación';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
+
+  @override
+  String get ublogCommunity => 'Comunidad';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,12 +6,12 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -57,18 +56,40 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 
   late TimeIncrement timeIncrement;
 
+  String? _fromPositionFen;
+  final _fenController = TextEditingController();
+
   @override
   void initState() {
-    chosenVariant = widget.initialVariant == Variant.fromPosition
-        ? Variant.standard
-        : widget.initialVariant;
+    // Auto-switch variant to fromPosition when an initialFen is given for a
+    // standard game (mirrors the controller's fromVariant logic), and fall back
+    // to standard when fromPosition arrives without a FEN (e.g. "New game"
+    // after a fromPosition game).
+    if (widget.initialFen != null && widget.initialVariant == Variant.standard) {
+      chosenVariant = Variant.fromPosition;
+    } else if (widget.initialFen == null && widget.initialVariant == Variant.fromPosition) {
+      chosenVariant = Variant.standard;
+    } else {
+      chosenVariant = widget.initialVariant;
+    }
+    _fromPositionFen = widget.initialFen;
+    if (widget.initialFen != null) {
+      _fenController.text = widget.initialFen!;
+    }
+    _fenController.addListener(() {
+      setState(() => _fromPositionFen = _fenController.text.isEmpty ? null : _fenController.text);
+    });
     final clockProvider = ref.read(overTheBoardClockProvider);
     timeIncrement = clockProvider.timeIncrement;
     chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
     super.initState();
   }
 
-  bool get _hasInitialFen => widget.initialFen != null;
+  @override
+  void dispose() {
+    _fenController.dispose();
+    super.dispose();
+  }
 
   void _setTimeControlType(TimeControlType type) {
     ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
@@ -94,33 +115,14 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     });
   }
 
+  bool get _isPlayEnabled =>
+      chosenVariant != Variant.fromPosition ||
+      (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
+
   @override
   Widget build(BuildContext context) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-
     return BottomSheetScrollableContainer(
       children: [
-        if (_hasInitialFen)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Center(
-              child: SizedBox(
-                width: 150,
-                height: 150,
-                child: StaticChessboard(
-                  size: 150,
-                  fen: widget.initialFen!,
-                  orientation: Side.white,
-                  pieceAssets: boardPrefs.pieceSet.assets,
-                  colorScheme: boardPrefs.boardTheme.colors,
-                  brightness: boardPrefs.brightness,
-                  hue: boardPrefs.hue,
-                  enableCoordinates: false,
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                ),
-              ),
-            ),
-          ),
         ListSection(
           materialFilledCard: true,
           children: [
@@ -130,9 +132,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               onTap: () {
                 showChoicePicker<Variant>(
                   context,
-                  choices: playSupportedVariants
-                      .where((variant) => variant != Variant.fromPosition)
-                      .toList(),
+                  choices: playSupportedVariants.toList(),
                   selectedItem: chosenVariant,
                   labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) => setState(() {
@@ -140,6 +140,26 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                   }),
                 );
               },
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.fastOutSlowIn,
+              child: chosenVariant == Variant.fromPosition
+                  ? SmallBoardPreview(
+                      orientation: Side.white,
+                      fen: _fromPositionFen ?? kEmptyFEN,
+                      description: TextField(
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.pasteTheFenStringHere,
+                          suffixIcon: const Icon(Icons.paste),
+                        ),
+                        controller: _fenController,
+                        readOnly: true,
+                        onTap: () => pasteFenFromClipboard(context, _fenController),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.timeControl),
@@ -209,13 +229,15 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
-            onPressed: () {
-              ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
-              ref
-                  .read(overTheBoardGameControllerProvider.notifier)
-                  .startNewGame(chosenVariant, timeIncrement, initialFen: widget.initialFen);
-              Navigator.pop(context);
-            },
+            onPressed: _isPlayEnabled
+                ? () {
+                    ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
+                    ref
+                        .read(overTheBoardGameControllerProvider.notifier)
+                        .startNewGame(chosenVariant, timeIncrement, initialFen: _fromPositionFen);
+                    Navigator.pop(context);
+                  }
+                : null,
             child: Text(context.l10n.play, style: Styles.bold),
           ),
         ),

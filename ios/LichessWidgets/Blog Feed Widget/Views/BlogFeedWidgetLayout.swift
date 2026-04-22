@@ -3,9 +3,9 @@ import CoreGraphics
 /// Layout constants shared across blog feed widget views.
 enum BlogFeedWidgetLayout {
     // Typography
-    static let titleFontSize: CGFloat = 15
-    static let metaFontSize: CGFloat = 12
-    static let secondaryFontSize: CGFloat = 11
+    static let titleFontSize: CGFloat = 17
+    static let metaFontSize: CGFloat = 14
+    static let secondaryFontSize: CGFloat = 14
 
     // Header
     static let headerSpacing: CGFloat = 6
@@ -17,7 +17,7 @@ enum BlogFeedWidgetLayout {
 
     // Item list — these constants are used both in `spec(for:)` and the actual view layout,
     // keeping the geometry calculation in sync with what's rendered.
-    static let itemTopPadding: CGFloat = 8
+    static let itemTopPadding: CGFloat = 6
     /// Divider (~1pt) plus its 8pt top padding — total vertical space consumed between items.
     static let dividerTotalHeight: CGFloat = 9
 

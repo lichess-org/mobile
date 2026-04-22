@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Dogrywki",
   "broadcastGameX": "Partia {param}",
   "broadcastKnockouts": "Eliminacje",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisja} few{{count} transmisje} many{{count} transmisji} other{{count} transmisji}}",
   "broadcastNbViewers": "{count, plural, =1{{count} oglądający} few{{count} oglądających} many{{count} oglądających} other{{count} oglądających}}",
   "challengeChallengesX": "Wyzwania: {param1}",
@@ -1405,7 +1407,6 @@
   "agreementAssistance": "Zgadzam się nie korzystać z pomocy podczas gry (programów szachowych, książek, baz danych, czy innych osób).",
   "agreementNice": "Zgadzam się odnosić zawsze z szacunkiem do innych graczy.",
   "agreementMultipleAccounts": "Zgadzam się, że nie będę tworzyć wielu kont (z wyjątkiem powodów podanych w {param}).",
-  "agreementPolicy": "Zgadzam się przestrzegać wszystkich zasad Lichess.",
   "searchOrStartNewDiscussion": "Szukaj lub rozpocznij nową rozmowę",
   "edit": "Edytuj",
   "ultraBullet": "UltraBullet",
@@ -1823,5 +1824,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} rok temu} few{{count} lata temu} many{{count} lat temu} other{{count} lat temu}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Pozostała {count} minuta} few{Pozostały {count} minuty} many{Pozostało {count} minut} other{Pozostało {count} minut}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Pozostała {count} godzina} few{Pozostały {count} godziny} many{Pozostało {count} godzin} other{Pozostało {count} godzin}}",
-  "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe"
+  "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe",
+  "ublogCommunity": "Społeczność",
+  "ublogXBlog": "Blog gracza {param}"
 }

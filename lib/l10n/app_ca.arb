@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desempats",
   "broadcastGameX": "Partida {param}",
   "broadcastKnockouts": "Eliminatòria",
+  "broadcastUnderXAgeTournament": "S{param}",
+  "broadcastUnderXEloTournament": "S{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} retransmissió} other{{count} retransmissions}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadors}}",
   "challengeChallengesX": "Desafiaments: {param1}",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "Estic d’acord que mai rebré assistència durant les meves partides (ni d’ordinadors, llibres, base de dades o d’una altra persona).",
   "agreementNice": "Estic d’acord que sempre seré respectuós amb els altres jugadors.",
   "agreementMultipleAccounts": "Estic d'acord en no crear múltiples comptes (excepte per les raons detallades als {param}).",
-  "agreementPolicy": "Estic d’acord que seguiré totes les polítiques de Lichess.",
   "searchOrStartNewDiscussion": "Cerca o inicia una nova discusió",
   "edit": "Edita",
   "ultraBullet": "Ultra-Bala",
@@ -1826,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{fa {count} any} other{fa {count} anys}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Queda {count} minut} other{Queden {count} minuts}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Queda {count} hora} other{Queden {count} hores}}",
-  "tfaTwoFactorAuth": "Autenticació de dos factors"
+  "tfaTwoFactorAuth": "Autenticació de dos factors",
+  "ublogCommunity": "Comunitat",
+  "ublogXBlog": "Blog de {param}"
 }

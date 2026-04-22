@@ -100,8 +100,6 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
-    } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     } else if (state.currentPosition.variantOutcome != null) {
       switch (state.currentPosition.variantOutcome!.winner) {
         case Side.white:
@@ -115,6 +113,8 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
         case null:
           state = state.copyWith(game: state.game.copyWith(status: GameStatus.variantEnd));
       }
+    } else if (state.currentPosition.isStalemate) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     }
 
     _moveFeedback(sanMove);

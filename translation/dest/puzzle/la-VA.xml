@@ -6,8 +6,8 @@
   <string name="advanced">Provectus</string>
   <string name="mates">Matta</string>
   <string name="origin">Origo</string>
-  <string name="upVote">Suffragium pro aenigma</string>
-  <string name="downVote">Suffragium contra aenigma</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Suffragium pro aenigma</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Suffragium contra aenigma</string>
   <string name="findTheBestMoveForWhite">Optimus motus per albi inveni.</string>
   <string name="puzzleId">Compositio %s</string>
   <string name="puzzleOfTheDay">Compositio cotidiana</string>

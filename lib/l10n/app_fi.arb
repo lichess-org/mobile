@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Katkaisupelit",
   "broadcastGameX": "Peli {param}",
   "broadcastKnockouts": "Pudotuspelit",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "Alle {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} lähetys} other{{count} lähetystä}}",
   "broadcastNbViewers": "{count, plural, =1{{count} katsoja} other{{count} katsojaa}}",
   "challengeChallengesX": "Haasteet: {param1}",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "Vakuutan etten ota vastaan ulkopuolista apua pelieni aikana (shakkitietokoneilta, kirjoilta, tietokannoilta enkä muilta ihmisiltä).",
   "agreementNice": "Vakuutan että käyttäydyn aina muita pelaajia kunnioittaen.",
   "agreementMultipleAccounts": "Hyväksyn, että en luo useampaa kuin yhtä käyttäjätunnusta (paitsi kohdassa {param} mainituista syistä).",
-  "agreementPolicy": "Vakuutan että noudatan Lichessin sääntöjä.",
   "searchOrStartNewDiscussion": "Hae tai aloita uusi keskustelu",
   "edit": "Muokkaa",
   "ultraBullet": "UltraBullet",
@@ -1825,5 +1826,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} vuosi sitten} other{{count} vuotta sitten}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuutti jäljellä} other{{count} minuuttia jäljellä}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} tunti jäljellä} other{{count} tuntia jäljellä}}",
-  "tfaTwoFactorAuth": "Kaksivaiheinen tunnistautuminen"
+  "tfaTwoFactorAuth": "Kaksivaiheinen tunnistautuminen",
+  "ublogCommunity": "Yhteisön blogit",
+  "ublogXBlog": "Käyttäjän {param} blogi"
 }

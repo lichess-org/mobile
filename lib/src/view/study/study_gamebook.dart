@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudyGamebook extends StatelessWidget {
-  const StudyGamebook(this.id);
+  const StudyGamebook(this.options);
 
-  final StudyId id;
+  final StudyOptions options;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +17,8 @@ class StudyGamebook extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _Comment(id: id),
-          _Hint(id: id),
+          _Comment(options: options),
+          _Hint(options: options),
         ],
       ),
     );
@@ -27,8 +26,8 @@ class StudyGamebook extends StatelessWidget {
 }
 
 class _Comment extends ConsumerStatefulWidget {
-  const _Comment({required this.id});
-  final StudyId id;
+  const _Comment({required this.options});
+  final StudyOptions options;
 
   @override
   ConsumerState<_Comment> createState() => _CommentState();
@@ -45,7 +44,7 @@ class _CommentState extends ConsumerState<_Comment> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(studyControllerProvider(widget.id)).requireValue;
+    final state = ref.watch(studyControllerProvider(widget.options)).requireValue;
 
     final comment =
         state.gamebookComment ??
@@ -79,9 +78,9 @@ class _CommentState extends ConsumerState<_Comment> {
 }
 
 class _Hint extends ConsumerStatefulWidget {
-  const _Hint({required this.id});
+  const _Hint({required this.options});
 
-  final StudyId id;
+  final StudyOptions options;
 
   @override
   ConsumerState<_Hint> createState() => _HintState();
@@ -98,17 +97,17 @@ class _HintState extends ConsumerState<_Hint> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(studyControllerProvider(widget.id).select((state) => state.value?.gamebookState), (
-      prev,
-      next,
-    ) {
-      if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
-        _hideHint();
-      }
-    });
+    ref.listen(
+      studyControllerProvider(widget.options).select((state) => state.value?.gamebookState),
+      (prev, next) {
+        if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
+          _hideHint();
+        }
+      },
+    );
 
     ref.listen(
-      studyControllerProvider(widget.id).select((state) => state.value?.currentChapter.id),
+      studyControllerProvider(widget.options).select((state) => state.value?.currentChapter.id),
       (prev, next) {
         if (prev != next) {
           _hideHint();
@@ -116,7 +115,7 @@ class _HintState extends ConsumerState<_Hint> {
       },
     );
 
-    final hint = ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
+    final hint = ref.watch(studyControllerProvider(widget.options)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()
         : SizedBox(

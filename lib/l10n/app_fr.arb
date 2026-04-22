@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Bris d'égalité",
   "broadcastGameX": "Partie {param}",
   "broadcastKnockouts": "Éliminatoires",
+  "broadcastUnderXAgeTournament": "Moins de {param}",
+  "broadcastUnderXEloTournament": "Moins de {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} diffusion} other{{count} diffusions}}",
   "broadcastNbViewers": "{count, plural, =1{{count} observateur} other{{count} observateurs}}",
   "challengeChallengesX": "Défis : {param1}",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "Je m'engage à ne jamais recevoir d'aide pendant mes parties (ni d'un programme d'échecs, ni d'un livre, ni d'une base de données, ni d'autrui).",
   "agreementNice": "Je m'engage à toujours être agréable envers les autres.",
   "agreementMultipleAccounts": "J'accepte de ne pas créer de comptes multiples (sauf pour les raisons indiquées dans les {param}).",
-  "agreementPolicy": "Je m'engage à respecter toutes les règles de Lichess.",
   "searchOrStartNewDiscussion": "Rechercher ou démarrer une nouvelle conversation",
   "edit": "Éditer",
   "ultraBullet": "Ultrabullet",
@@ -1826,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{il y a {count} an} other{il y a {count} ans}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute restante} other{{count} minutes restantes}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} heure restante} other{{count} heures restantes}}",
-  "tfaTwoFactorAuth": "Authentification à deux facteurs"
+  "tfaTwoFactorAuth": "Authentification à deux facteurs",
+  "ublogCommunity": "Communauté",
+  "ublogXBlog": "Blogue de {param}"
 }

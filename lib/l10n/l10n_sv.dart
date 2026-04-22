@@ -1058,6 +1058,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4698,9 +4708,6 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jag instämmer med att jag kommer att följa alla Lichess-regler.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Sök eller starta ny konversation';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tvåfaktorsautentisering';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '${param}s blogg';
+  }
 }

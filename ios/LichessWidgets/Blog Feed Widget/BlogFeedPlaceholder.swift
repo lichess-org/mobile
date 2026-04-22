@@ -9,7 +9,8 @@ enum BlogFeedPlaceholder {
             feed: feed,
             username: username,
             items: Array(items(for: feed).prefix(family.maxItems)),
-            error: nil
+            error: nil,
+            isKidMode: false
         )
     }
 

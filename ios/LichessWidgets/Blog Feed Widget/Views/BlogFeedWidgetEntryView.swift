@@ -8,9 +8,8 @@ struct BlogFeedWidgetEntryView: View {
     private var showDate: Bool { family == .systemLarge }
     private var lineLimit: Int {
         switch family {
-        case .systemSmall: 4
-        case .systemLarge: 2
-        default: 3
+        case .systemSmall: 3
+        default: 2
         }
     }
 
@@ -70,17 +69,29 @@ struct BlogFeedWidgetEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            BlogFeedWidgetHeader(feedName: entry.headerTitle,
+            BlogFeedWidgetHeader(feed: entry.feed,
+                                 username: entry.username,
                                  updatedAt: entry.date,
                                  showTimestamp: family != .systemSmall)
             Divider()
                 .padding(.top, BlogFeedWidgetLayout.itemTopPadding)
 
-            if family == .systemSmall {
+            if entry.isKidMode {
+                VStack(spacing: BlogFeedWidgetLayout.errorStackSpacing) {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: BlogFeedWidgetLayout.errorIconSize))
+                        .foregroundStyle(.secondary)
+                    Text("Not available in Kid Mode")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if family == .systemSmall {
                 itemsContent(spec: nil)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
-                Text("Updated at \(entry.date.shortTime)")
+                Text(entry.date.shortTime)
                     .font(.system(size: BlogFeedWidgetLayout.secondaryFontSize))
                     .foregroundStyle(.secondary)
                     .padding(.top, BlogFeedWidgetLayout.smallFooterTopPadding)

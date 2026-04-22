@@ -290,7 +290,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the center to win the game.';
+  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
@@ -1136,6 +1136,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4810,9 +4820,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'أوافق على أني سأتبع سياسات الموقع.';
-
-  @override
   String get searchOrStartNewDiscussion => 'البحث أو بدء محادثة جديدة';
 
   @override
@@ -6935,4 +6942,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'التوثيق ذو العاملين';
+
+  @override
+  String get ublogCommunity => 'المجتمع';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'مدونة $param';
+  }
 }

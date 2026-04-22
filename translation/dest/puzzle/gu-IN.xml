@@ -14,9 +14,9 @@
   <string name="specialMoves">ખાસ ચાલ</string>
   <string name="didYouLikeThisPuzzle">શું તમને આ પઝલ ગમી?</string>
   <string name="voteToLoadNextOne">આગળની પઝલ લોડ કરવા માટે વોટ કરો!</string>
-  <string name="upVote">પઝલને અપ વોટ કરો</string>
-  <string name="downVote">પઝલને ડાઉન વોટ કરો</string>
-  <string name="yourPuzzleRatingWillNotChange">તમારું પઝલ રેટિંગ બદલાશે નહીં. નોંધ લો કે પઝલ કોઈ સ્પર્ધા નથી. તમારું રેટિંગ તમારી વર્તમાન કુશળતા માટે શ્રેષ્ઠ પઝલ પસંદ કરવામાં મદદ કરે છે.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">પઝલને અપ વોટ કરો</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">પઝલને ડાઉન વોટ કરો</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">તમારું પઝલ રેટિંગ બદલાશે નહીં. નોંધ લો કે પઝલ કોઈ સ્પર્ધા નથી. તમારું રેટિંગ તમારી વર્તમાન કુશળતા માટે શ્રેષ્ઠ પઝલ પસંદ કરવામાં મદદ કરે છે.</string>
   <string name="findTheBestMoveForWhite">સફેદ માટે શ્રેષ્ઠ ચાલ શોધો.</string>
   <string name="findTheBestMoveForBlack">કાળા માટે શ્રેષ્ઠ ચાલ શોધો.</string>
   <string name="toGetPersonalizedPuzzles">વ્યક્તિગત પઝલ મેળવવા માટે:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">મારી રમતોમાંથી</string>
   <string name="lookupOfPlayer">એક ખેલાડીની રમતોમાંથી પઝલ જુઓ</string>
   <string name="searchPuzzles">પઝલ શોધો</string>
-  <string name="fromMyGamesNone">તમારા ડેટાબેઝમાં કોઈ પઝલ નથી, પરંતુ Lichess તમને હજી પણ ખૂબ પ્રેમ કરે છે. તમારી પઝલ ઉમેરવાની શક્યતાઓ વધારવા માટે રેપિડ અને ક્લાસિકલ ગેમ્સ રમો!</string>
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">તમારા ડેટાબેઝમાં કોઈ પઝલ નથી, પરંતુ Lichess તમને હજી પણ ખૂબ પ્રેમ કરે છે. તમારી પઝલ ઉમેરવાની શક્યતાઓ વધારવા માટે રેપિડ અને ક્લાસિકલ ગેમ્સ રમો!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">%2$s દ્વારા રમતોમાં એક પઝલ મળી</item>
     <item quantity="other">%1$s પઝલ %2$s દ્વારા રમતોમાં મળી</item>
@@ -92,6 +92,6 @@
   </plurals>
   <string name="percentSolved">%s ઉકેલાયા</string>
   <string name="noPuzzlesToShow">દર્શાવવા માટે કંઈ નથી, પહેલા કેટલીક પઝલ રમો!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">તમારી પ્રગતિને શ્રેષ્ઠ બનાવવા માટે આની તાલીમ લો!</string>
+  <string name="improvementAreasDescription">તમારી પ્રગતિને શ્રેષ્ઠ બનાવવા માટે આની તાલીમ લો!</string>
   <string name="strengthDescription">તમે આ થીમ્સમાં શ્રેષ્ઠ પ્રદર્શન કરો છો</string>
 </resources>

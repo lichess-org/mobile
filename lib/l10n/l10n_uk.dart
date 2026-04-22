@@ -1098,6 +1098,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastKnockouts => 'Нокаути';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'До$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'До$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2355,10 +2365,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsSettings => 'Налаштування';
 
   @override
-  String get settingsCloseAccount => 'Закрити обліковий запис';
+  String get settingsCloseAccount => 'Видалити обліковий запис';
 
   @override
-  String get settingsManagedAccountCannotBeClosed => 'Ваш обліковий запис керований і не може бути закритим.';
+  String get settingsManagedAccountCannotBeClosed => 'Вашим обліковим записом керує інший користувач, тож його не можна видалити.';
 
   @override
   String get settingsCantOpenSimilarAccount => 'Ви не зможете створити новий обліковий запис з такою ж назвою, навіть зі зміною регістру.';
@@ -2367,7 +2377,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Скасувати та зберегти мій обліковий запис';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Ви впевнені, що хочете закрити свій обліковий запис?';
+  String get settingsCloseAccountAreYouSure => 'Ви впевнені, що хочете видалити свій обліковий запис?';
 
   @override
   String get settingsThisAccountIsClosed => 'Цей обліковий запис видалено.';
@@ -4754,9 +4764,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Я погоджуюся, що я буду слідувати усім правилам Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Шукати або розпочати бесіду';
 
   @override
@@ -6447,7 +6454,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyVariantsAreSupportedText => 'Так, Ви можете вивчати Crazyhouse<br>та усі інші режими Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Розділі зберігаються назавжди.<br>Насолоджуйтесь організацією власного шахового контенту!';
+  String get studyChapterConclusionText => 'Розділи зберігаються назавжди.<br>Насолоджуйтесь організацією власного шахового контенту!';
 
   @override
   String get studyDoubleDefeat => 'Подвійна поразка';
@@ -6745,4 +6752,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двофакторна автентифікація';
+
+  @override
+  String get ublogCommunity => 'Спільнота';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

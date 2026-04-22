@@ -14,9 +14,9 @@
   <string name="specialMoves">Специални ходове</string>
   <string name="didYouLikeThisPuzzle">Хареса ли Ви този пъзел?</string>
   <string name="voteToLoadNextOne">Гласувайте и преминете към следващия!</string>
-  <string name="upVote">Задачата ми хареса</string>
-  <string name="downVote">Задачата не ми хареса</string>
-  <string name="yourPuzzleRatingWillNotChange">Пъзел рейтингът Ви няма да се промени. Обърнете внимание, че пъзелите не са състезание. Вашият рейтинг помага за подбирането на най-подходящите пъзели спрямо настоящите Ви умения.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Задачата ми хареса</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Задачата не ми хареса</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Пъзел рейтингът Ви няма да се промени. Обърнете внимание, че пъзелите не са състезание. Вашият рейтинг помага за подбирането на най-подходящите пъзели спрямо настоящите Ви умения.</string>
   <string name="findTheBestMoveForWhite">Открийте най-добрия ход за белите.</string>
   <string name="findTheBestMoveForBlack">Открийте най-добрия ход за черните.</string>
   <string name="toGetPersonalizedPuzzles">За да получите персонализирани задачи:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">От моите партии</string>
   <string name="lookupOfPlayer">Търсене на задачи от партиите на играч</string>
   <string name="searchPuzzles">Търсене на задачи</string>
-  <string name="fromMyGamesNone">В базата данни няма задачи от Ваши игри но Lichess разчита на Вас.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">В базата данни няма задачи от Ваши игри но Lichess разчита на Вас.
 Играйте още ускорени и класически партии за да увеличите шансовете задачи от Ваши партии да бъдат добавени!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Една задача е намерена в игрите на %2$s</item>
@@ -93,6 +93,6 @@
   </plurals>
   <string name="percentSolved">%s решени</string>
   <string name="noPuzzlesToShow">Няма нищо за показване, първо порешавайте малко пъзели!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Упражнявайте се върху тези, за да оптимизирате прогреса си!</string>
+  <string name="improvementAreasDescription">Упражнявайте се върху тези, за да оптимизирате прогреса си!</string>
   <string name="strengthDescription">Справяте се най-добре в тези теми</string>
 </resources>

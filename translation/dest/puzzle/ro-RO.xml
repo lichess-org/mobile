@@ -14,9 +14,9 @@
   <string name="specialMoves">Mutări speciale</string>
   <string name="didYouLikeThisPuzzle">Ți-a plăcut această problemă?</string>
   <string name="voteToLoadNextOne">Votează pentru a-l încărca pe următorul!</string>
-  <string name="upVote">Îmi place</string>
-  <string name="downVote">Vot negativ</string>
-  <string name="yourPuzzleRatingWillNotChange">Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vot pozitiv</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Vot negativ</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.</string>
   <string name="findTheBestMoveForWhite">Găsiți cea mai bună mutare pentru alb.</string>
   <string name="findTheBestMoveForBlack">Găsiți cea mai bună mutare pentru negru.</string>
   <string name="toGetPersonalizedPuzzles">Pentru a primi probleme de șah personalizate:</string>
@@ -79,7 +79,7 @@
   <string name="fromMyGames">Din jocurile mele</string>
   <string name="lookupOfPlayer">Caută puzzle-uri din jocurile unui jucător</string>
   <string name="searchPuzzles">Caută puzzle-uri</string>
-  <string name="fromMyGamesNone">Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.
 Joacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Un puzzle găsit în jocurile utilizatorului %2$s</item>
@@ -99,6 +99,6 @@ Joacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată
   </plurals>
   <string name="percentSolved">%s rezolvate</string>
   <string name="noPuzzlesToShow">Nimic de arătat, joacă mai întâi câteva puzzle-uri!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Antreneaza-te pentru a-ti optimiza progresul!</string>
+  <string name="improvementAreasDescription">Antreneaza-te pentru a-ti optimiza progresul!</string>
   <string name="strengthDescription">Obțineți cele mai bune rezultate la aceste teme</string>
 </resources>

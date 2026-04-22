@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Тай-брейки",
   "broadcastGameX": "{param} партий",
   "broadcastKnockouts": "Нокауты",
+  "broadcastUnderXAgeTournament": "До {param}",
+  "broadcastUnderXEloTournament": "До {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} трансляция} few{{count} трансляции} many{{count} трансляций} other{{count} трансляций}}",
   "broadcastNbViewers": "{count, plural, =1{{count} зритель} few{{count} зрителя} many{{count} зрителей} other{{count} зрителей}}",
   "challengeChallengesX": "Вызовов: {param1}",
@@ -1408,7 +1410,6 @@
   "agreementAssistance": "Подтверждаю, что я никогда не воспользуюсь посторонней помощью в своих играх (из шахматных программ, книг, баз данных и от других игроков).",
   "agreementNice": "Подтверждаю, что я буду с уважением относиться к другим игрокам.",
   "agreementMultipleAccounts": "Я согласен с тем, что не должен создавать множество учётных записей (за исключением причин, указанных в {param}).",
-  "agreementPolicy": "Подтверждаю, что я буду следовать всем правилам Lichess.",
   "searchOrStartNewDiscussion": "Найти обсуждение или начать новое",
   "edit": "Изменить",
   "ultraBullet": "Ультра-пуля",
@@ -1826,5 +1827,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} год назад} few{{count} года назад} many{{count} лет назад} other{{count} лет назад}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{осталась {count} минута} few{осталось {count} минуты} many{осталось {count} минут} other{осталось {count} минут}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{остался {count} час} few{осталось {count} часа} many{осталось {count} часов} other{осталось {count} часов}}",
-  "tfaTwoFactorAuth": "Двухфакторная аутентификация"
+  "tfaTwoFactorAuth": "Двухфакторная аутентификация",
+  "ublogCommunity": "Сообщество",
+  "ublogXBlog": "Блог {param}"
 }

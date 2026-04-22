@@ -1093,7 +1093,6 @@
   "agreementAssistance": "Հաստատում եմ, որ իմ խաղերում երբեք չեմ օգտվի կողմնակի օգնությունից (շախմատային ծրագրերից, գրքերից, տվյալների բազաներից և այլ խաղացողներից)։",
   "agreementNice": "Հաստատում եմ, որ հարգանքով եմ վերաբերվելու այլ խաղացողներին։",
   "agreementMultipleAccounts": "Համաձայն եմ, որ չպետք է ստեղծեմ բազմաթիվ մասնակցային հաշիվներ (բացառությամբ {param}ում նշված պատճառների)։",
-  "agreementPolicy": "Հաստատում եմ, որ հետևելու եմ Lichess-ի բոլոր կանոններին։",
   "searchOrStartNewDiscussion": "Գտնել քննարկումը կամ ստեղծել նորը",
   "edit": "Խմբագրել",
   "blitz": "Բլից",
@@ -1450,5 +1449,6 @@
   "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}",
-  "tfaTwoFactorAuth": "Երկգործոն նույնականացում"
+  "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
+  "ublogXBlog": "{param}-ի բլոգ"
 }

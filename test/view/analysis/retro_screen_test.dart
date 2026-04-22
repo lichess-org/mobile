@@ -164,13 +164,13 @@ void main() {
       await tester.pump();
 
       expect(find.text('No significant mistakes found for White'), findsOneWidget);
-      expect(find.text('Review Black mistakes'), findsOneWidget);
+      expect(find.text("Review black's mistakes"), findsOneWidget);
 
-      await tester.tap(find.text('Review Black mistakes'));
+      await tester.tap(find.text("Review black's mistakes"));
       await tester.pump(); // Wait for side to flip
 
       expect(find.text('No significant mistakes found for Black'), findsOneWidget);
-      expect(find.text('Review White mistakes'), findsOneWidget);
+      expect(find.text("Review white's mistakes"), findsOneWidget);
     });
 
     testWidgets('One mistake by both sides', (WidgetTester tester) async {
@@ -234,10 +234,10 @@ void main() {
       await tester.tap(find.text('Next mistake'));
       await tester.pump();
 
-      expect(find.text('Done reviewing White mistakes'), findsOneWidget);
-      expect(find.text('Review Black mistakes'), findsOneWidget);
+      expect(find.text("Done reviewing white's mistakes"), findsOneWidget);
+      expect(find.text("Review black's mistakes"), findsOneWidget);
 
-      await tester.tap(find.text('Review Black mistakes'));
+      await tester.tap(find.text("Review black's mistakes"));
       await tester.pump(); // Wait for side to flip
 
       expect(find.text('1... e5 was played'), findsOneWidget);
@@ -255,8 +255,8 @@ void main() {
       await tester.tap(find.text('Next mistake'));
       await tester.pump();
 
-      expect(find.text('Done reviewing Black mistakes'), findsOneWidget);
-      expect(find.text('Review White mistakes'), findsOneWidget);
+      expect(find.text("Done reviewing black's mistakes"), findsOneWidget);
+      expect(find.text("Review white's mistakes"), findsOneWidget);
     });
 
     testWidgets('Master move is also a solution', (WidgetTester tester) async {

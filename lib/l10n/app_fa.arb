@@ -1403,7 +1403,6 @@
   "agreementAssistance": "من موافقم که در طول بازی‌هایم هیچگاه کمکی نخواهم گرفت (از یک رایانه شطرنج، کتاب، دادگان یا شخص دیگری).",
   "agreementNice": "می‌پذیرم که همواره به بازیکنان دیگر احترام گزارم.",
   "agreementMultipleAccounts": "موافقم که چندین حساب نخواهم ساخت (جز به دلیل‌های ذکر شده در {param}).",
-  "agreementPolicy": "با پیروی از همهٔ خط‌مشی‌های لیچس، موافقم.",
   "searchOrStartNewDiscussion": "جستجو یا شروع کردن مکالمه جدید",
   "edit": "ویرایش",
   "ultraBullet": "اولاگلوله",
@@ -1820,5 +1819,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} سال پیش} other{{count} سال پیش}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} دقیقه باقی مانده} other{{count} دقیقه باقی مانده}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} ساعت باقی مانده} other{{count} ساعت باقی مانده}}",
-  "tfaTwoFactorAuth": "راستین‌آزمایی دوعاملی"
+  "tfaTwoFactorAuth": "راستین‌آزمایی دوعاملی",
+  "ublogCommunity": "همدارگان",
+  "ublogXBlog": "وبنوشتِ {param}"
 }

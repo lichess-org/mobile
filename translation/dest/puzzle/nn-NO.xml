@@ -14,9 +14,9 @@
   <string name="specialMoves">Spesialtrekk</string>
   <string name="didYouLikeThisPuzzle">Likte du denne oppgåva?</string>
   <string name="voteToLoadNextOne">Stem for å laste den neste!</string>
-  <string name="upVote">God oppgåve</string>
-  <string name="downVote">Mindre god oppgåve</string>
-  <string name="yourPuzzleRatingWillNotChange">Oppgåve-ratinga di vil ikkje endre seg. Merk at oppgåver ikkje er konkurranse. Ratinga er til hjelp når det gjeld å finne dei mest passande oppgåvene for ditt noverande dugleiksnivå.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">God oppgåve</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Mindre god oppgåve</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Oppgåve-ratinga di vil ikkje endre seg. Merk at oppgåver ikkje er konkurranse. Ratinga er til hjelp når det gjeld å finne dei mest passande oppgåvene for ditt noverande dugleiksnivå.</string>
   <string name="findTheBestMoveForWhite">Finn det beste trekket for kvit.</string>
   <string name="findTheBestMoveForBlack">Finn det beste trekket for svart.</string>
   <string name="toGetPersonalizedPuzzles">For å få personleg tilpassa oppgåver:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Frå partia mine</string>
   <string name="lookupOfPlayer">Søk etter sjakknøtter frå partia til ein vald spelar</string>
   <string name="searchPuzzles">Søk etter sjakknøtter</string>
-  <string name="fromMyGamesNone">Du har ingen sjakknøtter i databasen, men like fullt set Lichess umåtelig stor pris på deg.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Du har ingen sjakknøtter i databasen, men like fullt set Lichess umåtelig stor pris på deg.
 Spel parti i snøggsjakk og klassisk sjakk for å auke sjansen for å få med ei sjakknøtt!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Ei oppgåve funne i parti av %2$s</item>
@@ -93,6 +93,6 @@ Spel parti i snøggsjakk og klassisk sjakk for å auke sjansen for å få med ei
   </plurals>
   <string name="percentSolved">%s løyst</string>
   <string name="noPuzzlesToShow">Ikkje noko å visa, spel nokre oppgåver fyrst!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Øv på desse for å betra framgongen!</string>
+  <string name="improvementAreasDescription">Øv på desse for å betra framgongen!</string>
   <string name="strengthDescription">Du klarar deg best i disse temaa</string>
 </resources>

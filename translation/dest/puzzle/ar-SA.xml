@@ -13,9 +13,9 @@
   <string name="specialMoves">نقلات مميزة</string>
   <string name="didYouLikeThisPuzzle">هل أعجبك هذا اللغز؟</string>
   <string name="voteToLoadNextOne">صوت لتبدأ الغز التالي!</string>
-  <string name="upVote">أعجبني اللغز</string>
-  <string name="downVote">لم يعجبني اللغز</string>
-  <string name="yourPuzzleRatingWillNotChange">تقييم الألغاز الخاص بك لن يتغير. لاحظ أن الألغاز ليست مسابقة. التقييم يساعد على اختيار أفضل الألغاز لمهاراتك الحالية.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">أعجبني اللغز</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">لم يعجبني اللغز</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">تقييم الألغاز الخاص بك لن يتغير. لاحظ أن الألغاز ليست مسابقة. التقييم يساعد على اختيار أفضل الألغاز لمهاراتك الحالية.</string>
   <string name="findTheBestMoveForWhite">جد أفضل نقلة للأبيض.</string>
   <string name="findTheBestMoveForBlack">جد أفضل نقلة للأسود.</string>
   <string name="toGetPersonalizedPuzzles">للحصول على ألغاز خصيصة لك:</string>
@@ -87,7 +87,7 @@
   <string name="fromMyGames">من مبارياتي</string>
   <string name="lookupOfPlayer">ابحث عن ألغاز في مباريات لاعبين آخريين</string>
   <string name="searchPuzzles">ابحث عن ألغاز</string>
-  <string name="fromMyGamesNone">ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.
 إلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="zero">يوجد %1$s لُغز في مباريات اللاعب %2$s</item>
@@ -116,6 +116,6 @@
   </plurals>
   <string name="percentSolved">تم حل %s</string>
   <string name="noPuzzlesToShow">لا شيء لإظهاره، اذهب والعب بعض الألغاز!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">تدرب بهذه لتحسين تقدمك!</string>
+  <string name="improvementAreasDescription">تدرب بهذه لتحسين تقدمك!</string>
   <string name="strengthDescription">أنت تقوم بهذه المهارة بأفضل شكل</string>
 </resources>

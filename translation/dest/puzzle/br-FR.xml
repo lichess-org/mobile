@@ -38,7 +38,7 @@
   <string name="improvementAreas">Ar pezh a zo da wellaat</string>
   <string name="failed">n\'eo ket mat</string>
   <string name="fromMyGames">Diwar ma c\'hrogadoù</string>
-  <string name="fromMyGamesNone">N\'eus poelladenn ebet tennet diwar ho krogadoù met gant Lichess oc\'h karet memestra.
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">N\'eus poelladenn ebet tennet diwar ho krogadoù met gant Lichess oc\'h karet memestra.
 Kontant e vefec\'h e vefe savet ur boelladenn diwar unan eus ho partiennoù? C\'hoariit krogadoù prim pe glasel evit kaout muioc\'h a chañs!</string>
   <string name="puzzleDashboardDescription">Pleustriñ, dielfennañ, mont war-raok</string>
   <string name="improvementAreasDescription">Pleustrit war ar re-mañ evit mont war-raok!</string>

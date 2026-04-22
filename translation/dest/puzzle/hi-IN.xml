@@ -13,9 +13,9 @@
   <string name="specialMoves">विशेष चाल</string>
   <string name="didYouLikeThisPuzzle">क्या आपको यह पहेली पसंद आई?</string>
   <string name="voteToLoadNextOne">अगले एक को लोड करने के लिए वोट दें!</string>
-  <string name="upVote">पहेली को उपवोट करिये</string>
-  <string name="downVote">पहेली को डाउनवोट करिये</string>
-  <string name="yourPuzzleRatingWillNotChange">आपकी पज़ल रेटिङ नही बदलेगी।पज़ल एक स्पर्धा नही है रेटिङ आपके अनुकुल पज़ल चुनने मे मदद करती है।</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">पहेली को उपवोट करिये</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">पहेली को डाउनवोट करिये</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">आपकी पज़ल रेटिङ नही बदलेगी।पज़ल एक स्पर्धा नही है रेटिङ आपके अनुकुल पज़ल चुनने मे मदद करती है।</string>
   <string name="findTheBestMoveForWhite">सफेद रंग के लिए सर्वश्रेष्ठ चाल का पता लगाएं।</string>
   <string name="findTheBestMoveForBlack">काले रंग के लिए सर्वश्रेष्ठ चाल का पता लगाएं।</string>
   <string name="toGetPersonalizedPuzzles">वैयक्तिकृत पहेलियाँ प्राप्त करने के लिए:</string>
@@ -75,7 +75,7 @@
   <string name="fromMyGames">मेरे खेलों से</string>
   <string name="lookupOfPlayer">किसी खिलाड़ी के खेल से पहेलियाँ खोजें</string>
   <string name="searchPuzzles">पज़ल खोजे</string>
-  <string name="fromMyGamesNone">आपके डेटाबेस में कोई पहेली नहीं है, लेकिन लिचेस अभी भी आपसे बहुत प्यार करता है।
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">आपके डेटाबेस में कोई पहेली नहीं है, लेकिन लिचेस अभी भी आपसे बहुत प्यार करता है।
 
 आपकी कोई पहेली जुड़ने की संभावना बढ़ाने के लिए तेज़ और शास्त्रीय गेम खेलें!</string>
 </resources>

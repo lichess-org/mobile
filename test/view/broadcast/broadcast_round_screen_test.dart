@@ -231,7 +231,7 @@ void main() {
       expect(find.text('Seville, Spain'), findsOneWidget);
       expect(find.text('Xu, Bonelli, Jacobson'), findsOneWidget);
       expect(find.text('Official website'), findsOneWidget);
-      expect(find.text('Official Standings'), findsOneWidget);
+      expect(find.text('Official standings'), findsOneWidget);
     });
   });
 

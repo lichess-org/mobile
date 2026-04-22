@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 final _openingsProvider =
     FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
-      final connectivity = await ref.watch(connectivityChangesProvider.future);
+      final isOnline = await ref.watch(onlineStatusProvider.future);
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
       IList<PuzzleOpeningFamily>? onlineOpenings;
       try {
@@ -22,7 +22,7 @@ final _openingsProvider =
       } catch (e) {
         onlineOpenings = null;
       }
-      return (connectivity.isOnline, savedOpenings, onlineOpenings);
+      return (isOnline, savedOpenings, onlineOpenings);
     });
 
 class OpeningThemeScreen extends StatelessWidget {

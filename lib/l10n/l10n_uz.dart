@@ -9,7 +9,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Akkaunt sozlamalari';
+  String get mobileAccountPreferences => 'Hisob sozlamalari';
 
   @override
   String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
@@ -1056,6 +1056,16 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Nokaut';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -4698,9 +4708,6 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichessʼning barcha qoidalariga amal qilishga vaʼda beraman.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Qidirish yoki yangi suhbat boshlash';
 
   @override
@@ -6555,4 +6562,12 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
+
+  @override
+  String get ublogCommunity => 'Hamjamiyat';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogi';
+  }
 }

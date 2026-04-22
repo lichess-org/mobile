@@ -14,9 +14,9 @@
   <string name="specialMoves">Özel hamleler</string>
   <string name="didYouLikeThisPuzzle">Bulmacayı beğendiniz mi?</string>
   <string name="voteToLoadNextOne">Sıradakine geçmek için oy verin!</string>
-  <string name="upVote">Bulmacayı beğen</string>
-  <string name="downVote">Bulmacayı beğenme</string>
-  <string name="yourPuzzleRatingWillNotChange">Bulmaca puanınız değişmeyecek. Bulmacaların bir yarış olmadığını unutmayın. Bu puan mevcut becerilerinize en uygun bulmacayı seçmeye yardımcı olur.</string>
+  <string name="upVote" comment="This used to say &quot;Up vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Bulmacayı beğen</string>
+  <string name="downVote" comment="This used to say &quot;Down vote puzzle&quot;. It has since been rephrased to indicate what the button actually does.">Bulmacayı beğenme</string>
+  <string name="yourPuzzleRatingWillNotChange" comment="The skill level mentioned here is the player's *current* skill level.&#10;&#10;This text used to be slightly different towards the end, stating &quot;[...] Your rating helps selecting the best puzzles for your current skill.&quot; - but it had the same meaning.">Bulmaca puanınız değişmeyecek. Bulmacaların bir yarış olmadığını unutmayın. Bu puan mevcut becerilerinize en uygun bulmacayı seçmeye yardımcı olur.</string>
   <string name="findTheBestMoveForWhite">Beyaz için en iyi hamleyi bulunuz.</string>
   <string name="findTheBestMoveForBlack">Siyah için en iyi hamleyi bulun.</string>
   <string name="toGetPersonalizedPuzzles">Kişiselleştirilmiş bulmacalar için:</string>
@@ -76,7 +76,7 @@
   <string name="fromMyGames">Benim oyunlarımdan</string>
   <string name="lookupOfPlayer">Bir oyuncunun oyunlarından bulmaca ara</string>
   <string name="searchPuzzles">Bulmaca ara</string>
-  <string name="fromMyGamesNone">Veri tabanında sizin maçlarınızdan bir bulmaca bulamadık ama dert etmeyin, Lichess pabucunuzu dama atmadı. Size ait bulmacaların eklenme şansını artırmak için rapid ve klasik maçlar oynayın!</string>
+  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Veri tabanında sizin maçlarınızdan bir bulmaca bulamadık ama dert etmeyin, Lichess pabucunuzu dama atmadı. Size ait bulmacaların eklenme şansını artırmak için rapid ve klasik maçlar oynayın!</string>
   <plurals name="puzzlesFoundInUserGames">
     <item quantity="one">Bir bulmaca oyunlar arasında %2$s tarafından bulundu</item>
     <item quantity="other">%1$s bulmaca oyunlar arasında %2$s tarafından bulundu</item>
@@ -92,6 +92,6 @@
   </plurals>
   <string name="percentSolved">%s çözüldü</string>
   <string name="noPuzzlesToShow">Gösterilecek bir şey yok. Önce biraz bulmaca çöz!</string>
-  <string name="improvementAreasDescription" comment="Appears in the improvement areas section: https://lichess.org/training/dashboard/30/improvementAreas">Gelişiminizi optimize etmek için bunlar üzerine çalışın!</string>
+  <string name="improvementAreasDescription">Gelişiminizi optimize etmek için bunlar üzerine çalışın!</string>
   <string name="strengthDescription">En iyi performansı bu temalarda gösteriyorsunuz</string>
 </resources>
