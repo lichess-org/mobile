@@ -140,7 +140,7 @@ void main() {
         expectGameTileShows('1');
       });
 
-      testWidgets('custom draw with 0 custom points shows ½ (Norway Chess case)', (tester) async {
+      testWidgets('custom draw with 0 custom points shows ½', (tester) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 0.0);
         expectGameTileShows('½');
       });
