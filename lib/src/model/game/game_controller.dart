@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -785,6 +786,13 @@ class GameController extends AsyncNotifier<GameState> {
           ),
           premove: null,
         );
+
+        // A rated game just changed the user's rating. Invalidate accountProvider
+        // so the next consumer (e.g. "New Opponent" rebuilding a lobby seek from
+        // the ratingDelta) reads the updated rating instead of the stale cache.
+        if (curState.game.meta.rated && endData.ratingDiff != null) {
+          ref.invalidate(accountProvider);
+        }
 
         if (endData.clock != null) {
           newState = newState.copyWith.game.clock!(
