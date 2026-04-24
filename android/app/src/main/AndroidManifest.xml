@@ -55,6 +55,13 @@
 
                 <data android:pathSuffix=".pgn" />
             </intent-filter>
+            <intent-filter>
+               <action android:name="android.intent.action.SEND" />
+               <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/x-chess-pgn" />
+                <data android:mimeType="application/vnd.chess-pgn" />
+                <data android:mimeType="text/x-chess-pgn" />
+            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
