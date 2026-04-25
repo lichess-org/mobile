@@ -1,31 +1,43 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.options, {super.key});
+  const ServerAnalysisSummary({
+    required this.serverAnalysisSource,
+    required this.playersAnalysis,
+    required this.pgnHeaders,
+    required this.acplChartParams,
+    required this.onRequestServerAnalysis,
+    super.key,
+  });
 
-  final AnalysisOptions options;
+  final ServerAnalysisSource? serverAnalysisSource;
+
+  final PlayersAnalysis? playersAnalysis;
+
+  final IMap<String, String> pgnHeaders;
+
+  final AcplChartParams? acplChartParams;
+
+  final Future<void> Function() onRequestServerAnalysis;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final ctrlProvider = analysisControllerProvider(options);
 
-    final analysisState = ref.watch(ctrlProvider).requireValue;
-    final playersAnalysis = analysisState.playersAnalysis;
-    final canShowGameSummary = analysisState.canShowGameSummary;
-    final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
-    if (analysisPrefs.enableServerAnalysis == false || !canShowGameSummary) {
+    final bool serverAnalysisAllowed = serverAnalysisSource != null;
+    if (analysisPrefs.enableServerAnalysis == false || !serverAnalysisAllowed) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -34,7 +46,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             children: [
               const Spacer(),
               Text(context.l10n.computerAnalysisDisabled),
-              if (canShowGameSummary)
+              if (serverAnalysisAllowed)
                 FilledButton.tonal(
                   onPressed: () {
                     ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
@@ -51,30 +63,14 @@ class ServerAnalysisSummary extends ConsumerWidget {
     return playersAnalysis != null
         ? ListView(
             children: [
-              if (currentGameAnalysis == options.gameId)
+              if (serverAnalysisSource == currentGameAnalysis)
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
 
-              _AnalysisAcplChart(options),
-              GameSummaryTable(
-                pgnHeaders: pgnHeaders,
-                whiteSummary: (
-                  accuracy: playersAnalysis.white.accuracy,
-                  inaccuracies: playersAnalysis.white.inaccuracies,
-                  mistakes: playersAnalysis.white.mistakes,
-                  blunders: playersAnalysis.white.blunders,
-                  acpl: playersAnalysis.white.acpl,
-                ),
-                blackSummary: (
-                  accuracy: playersAnalysis.black.accuracy,
-                  inaccuracies: playersAnalysis.black.inaccuracies,
-                  mistakes: playersAnalysis.black.mistakes,
-                  blunders: playersAnalysis.black.blunders,
-                  acpl: playersAnalysis.black.acpl,
-                ),
-              ),
+              if (acplChartParams != null) AcplChart(params: acplChartParams!),
+              GameSummaryTable(pgnHeaders: pgnHeaders, playersAnalysis: playersAnalysis!),
             ],
           )
         : Column(
@@ -82,7 +78,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              if (currentGameAnalysis == options.gameId)
+              if (currentGameAnalysis == serverAnalysisSource)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -113,18 +109,17 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                       ? null
                                       : () {
                                           setState(() {
-                                            pendingRequest = ref
-                                                .read(ctrlProvider.notifier)
-                                                .requestServerAnalysis()
-                                                .catchError((Object e) {
-                                                  if (context.mounted) {
-                                                    showSnackBar(
-                                                      context,
-                                                      e.toString(),
-                                                      type: SnackBarType.error,
-                                                    );
-                                                  }
-                                                });
+                                            pendingRequest = onRequestServerAnalysis().catchError((
+                                              Object e,
+                                            ) {
+                                              if (context.mounted) {
+                                                showSnackBar(
+                                                  context,
+                                                  e.toString(),
+                                                  type: SnackBarType.error,
+                                                );
+                                              }
+                                            });
                                           });
                                         },
                                   child: Text(context.l10n.requestAComputerAnalysis),
@@ -158,33 +153,6 @@ class WaitingForServerAnalysis extends StatelessWidget {
         const SizedBox(width: 8.0),
         const CircularProgressIndicator.adaptive(),
       ],
-    );
-  }
-}
-
-class _AnalysisAcplChart extends ConsumerWidget {
-  const _AnalysisAcplChart(this.options);
-
-  final AnalysisOptions options;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(analysisControllerProvider(options)).requireValue;
-    final acplChartData = state.acplChartData;
-
-    if (acplChartData == null) {
-      return const SizedBox.shrink();
-    }
-
-    return AcplChart(
-      acplChartData: acplChartData,
-      division: state.division,
-      rootPly: state.root.position.ply,
-      currentNodePly: state.currentNode.position.ply,
-      isOnMainline: state.isOnMainline,
-      onJumpToNode: (index) {
-        ref.read(analysisControllerProvider(options).notifier).jumpToNthNodeOnMainline(index);
-      },
     );
   }
 }

@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -155,9 +156,10 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     tabs = [
       if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
       AnalysisTab.moves,
+      AnalysisTab.summary,
     ];
 
-    _tabController = TabController(vsync: this, initialIndex: tabs.length - 1, length: tabs.length);
+    _tabController = TabController(vsync: this, initialIndex: tabs.length - 2, length: tabs.length);
   }
 
   @override
@@ -168,13 +170,14 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     // anymore, we keep the tabs as they are.
     // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
     if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
-      tabs = [AnalysisTab.explorer, AnalysisTab.moves];
+      tabs = [AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
       _tabController = TabController(
         vsync: this,
-        initialIndex: tabs.length - 1,
+        initialIndex: tabs.length - 2,
         length: tabs.length,
       );
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -483,6 +486,27 @@ class _Body extends ConsumerWidget {
             } else {
               return const Center(child: Text('Opening explorer not available.'));
             }
+          case AnalysisTab.summary:
+            return ServerAnalysisSummary(
+              serverAnalysisSource: studyState.serverAnalysisSource,
+              playersAnalysis: studyState.playersAnalysis,
+              pgnHeaders: studyState.pgnHeaders,
+              acplChartParams: studyState.acplChartData != null
+                  ? (
+                      acplChartData: studyState.acplChartData!,
+                      division: studyState.analysisSummary?.division,
+                      rootPly: studyState.root!.position.ply,
+                      currentNodePly: studyState.currentPosition!.ply,
+                      isOnMainline: studyState.isOnMainline,
+                      onJumpToNode: ref
+                          .read(studyControllerProvider(options).notifier)
+                          .jumpToNthNodeOnMainline,
+                    )
+                  : null,
+              onRequestServerAnalysis: ref
+                  .read(studyControllerProvider(options).notifier)
+                  .requestServerAnalysis,
+            );
           case _:
             return bottomChild;
         }

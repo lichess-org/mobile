@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -612,7 +614,7 @@ sealed class BroadcastAnalysisState
 
     /// The analysis summary sent by the server.
     /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
-    BroadcastAnalysisSummary? analysisSummary,
+    AnalysisSummary? analysisSummary,
 
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;
@@ -657,6 +659,10 @@ sealed class BroadcastAnalysisState
 
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
+
+  PlayersAnalysis? get playersAnalysis => analysisSummary != null
+      ? (white: analysisSummary!.white, black: analysisSummary!.black)
+      : null;
 
   EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
     isLocalEngineAvailable: isEngineAvailable(prefs),

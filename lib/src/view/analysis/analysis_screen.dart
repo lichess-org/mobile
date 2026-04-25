@@ -336,7 +336,24 @@ class _Body extends ConsumerWidget {
           ),
           AnalysisTreeView(options),
           if (options case ArchivedGame())
-            ServerAnalysisSummary(options)
+            ServerAnalysisSummary(
+              serverAnalysisSource: analysisState.serverAnalysisSource,
+              playersAnalysis: analysisState.playersAnalysis,
+              pgnHeaders: analysisState.pgnHeaders,
+              acplChartParams: analysisState.acplChartData != null
+                  ? (
+                      acplChartData: analysisState.acplChartData!,
+                      division: analysisState.division,
+                      rootPly: analysisState.root.position.ply,
+                      currentNodePly: analysisState.currentPosition.ply,
+                      isOnMainline: analysisState.isOnMainline,
+                      onJumpToNode: ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .jumpToNthNodeOnMainline,
+                    )
+                  : null,
+              onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
+            )
           else if (options case ActiveCorrespondenceGame())
             ConditionalPremoves(options),
         ],

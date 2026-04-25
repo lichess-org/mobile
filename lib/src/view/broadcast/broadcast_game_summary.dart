@@ -49,14 +49,16 @@ class _BroadcastAcplChart extends ConsumerWidget {
     }
 
     return AcplChart(
-      acplChartData: acplChartData,
-      division: state.analysisSummary!.division,
-      rootPly: state.root.position.ply,
-      currentNodePly: state.currentNode.position.ply,
-      isOnMainline: state.isOnMainline,
-      onJumpToNode: (index) {
-        ref.read(ctrlProvider.notifier).jumpToNthNodeOnMainline(index);
-      },
+      params: (
+        acplChartData: acplChartData,
+        division: state.analysisSummary!.division,
+        rootPly: state.root.position.ply,
+        currentNodePly: state.currentNode.position.ply,
+        isOnMainline: state.isOnMainline,
+        onJumpToNode: (index) {
+          ref.read(ctrlProvider.notifier).jumpToNthNodeOnMainline(index);
+        },
+      ),
     );
   }
 }
@@ -71,24 +73,10 @@ class _GameSummaryTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final analysisState = ref.watch(ctrlProvider).requireValue;
-    final summary = analysisState.analysisSummary!;
 
     return GameSummaryTable(
       pgnHeaders: analysisState.pgnHeaders,
-      whiteSummary: (
-        accuracy: summary.white.accuracy,
-        inaccuracies: summary.white.inaccuracies,
-        mistakes: summary.white.mistakes,
-        blunders: summary.white.blunders,
-        acpl: summary.white.acpl,
-      ),
-      blackSummary: (
-        accuracy: summary.black.accuracy,
-        inaccuracies: summary.black.inaccuracies,
-        mistakes: summary.black.mistakes,
-        blunders: summary.black.blunders,
-        acpl: summary.black.acpl,
-      ),
+      playersAnalysis: analysisState.playersAnalysis!,
     );
   }
 }

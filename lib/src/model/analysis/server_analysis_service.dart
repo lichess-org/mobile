@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -16,6 +17,20 @@ import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 
+part 'server_analysis_service.freezed.dart';
+
+@freezed
+sealed class ServerAnalysisSource with _$ServerAnalysisSource {
+  const ServerAnalysisSource._();
+
+  const factory ServerAnalysisSource.game({required GameId gameId}) = _GameServerAnalysisSource;
+
+  const factory ServerAnalysisSource.studyChapter({
+    required StudyId studyId,
+    required StudyChapterId chapterId,
+  }) = _StudyChapterServerAnalysisSource;
+}
+
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
 /// A provider for [ServerAnalysisService].
@@ -26,21 +41,22 @@ final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) 
 class ServerAnalysisService {
   ServerAnalysisService(this.ref);
 
-  (GameAnyId, StreamSubscription<SocketEvent>)? _socketSubscription;
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
   final Ref ref;
 
-  final _currentAnalysis = ValueNotifier<GameId?>(null);
+  final _currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
 
   Completer<void>? _analysisCompleter;
 
-  final _analysisProgress = ValueNotifier<(GameAnyId, ServerEvalEvent)?>(null);
+  final _analysisProgress = ValueNotifier<(ServerAnalysisSource, ServerEvalEvent)?>(null);
 
   /// The current game being analyzed.
-  ValueListenable<GameId?> get currentAnalysis => _currentAnalysis;
+  ValueListenable<ServerAnalysisSource?> get currentAnalysis => _currentAnalysis;
 
   /// The last analysis progress event received from the server.
-  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent => _analysisProgress;
+  ValueListenable<(ServerAnalysisSource, ServerEvalEvent)?> get lastAnalysisEvent =>
+      _analysisProgress;
 
   SocketClient? _socketClient;
 
@@ -48,16 +64,24 @@ class ServerAnalysisService {
   ///
   /// This will return a future that completes when the server analysis is
   /// launched (but not when it is finished).
-  Future<void> requestAnalysis(GameId id, [Side? side]) async {
-    // If we are already listening for analysis updates of this exact game,
+  Future<void> requestAnalysis(ServerAnalysisSource source, [Side? side]) async {
+    // If we are already listening for analysis updates of this exact game/study,
     // don't tear everything down and reconnect.
-    if (_currentAnalysis.value == id && _socketSubscription != null && _analysisCompleter != null) {
+    if (_currentAnalysis.value == source &&
+        _socketSubscription != null &&
+        _analysisCompleter != null) {
       return;
     }
 
     _cancelAnalysis();
 
-    final uri = Uri(path: '/watch/$id/${side?.name ?? Side.white}/v6');
+    final uri = Uri(
+      path: switch (source) {
+        _GameServerAnalysisSource(:final gameId) => '/watch/$gameId/${side?.name ?? Side.white}/v6',
+        _StudyChapterServerAnalysisSource(:final studyId) => '/study/$studyId/socket/v6',
+      },
+    );
+
     _socketClient = SocketClient(
       uri,
       channelFactory: ref.read(webSocketChannelFactoryProvider),
@@ -68,49 +92,58 @@ class ServerAnalysisService {
     );
     _socketClient!.connect();
     _analysisCompleter = Completer<void>();
-    _socketSubscription = (
-      id,
-      _socketClient!.stream.listen(
-        (event) {
-          if (event.topic == 'analysisProgress') {
-            final data = ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
+    _socketSubscription = _socketClient!.stream.listen(
+      (event) {
+        if (event.topic == 'analysisProgress') {
+          final data = ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
 
-            _analysisProgress.value = (id, data);
+          _analysisProgress.value = (source, data);
 
-            if (data.isAnalysisComplete) {
-              if (_analysisCompleter != null && !_analysisCompleter!.isCompleted) {
-                _analysisCompleter?.complete();
-              }
+          if (data.isAnalysisComplete) {
+            if (_analysisCompleter != null && !_analysisCompleter!.isCompleted) {
+              _analysisCompleter?.complete();
             }
           }
-        },
-        onDone: () {
-          _cancelAnalysis();
-        },
-        cancelOnError: true,
-      ),
+        }
+      },
+      onDone: () {
+        _cancelAnalysis();
+      },
+      cancelOnError: true,
     );
 
-    try {
-      await ref.read(gameRepositoryProvider).requestServerAnalysis(id.gameId);
-      _currentAnalysis.value = id.gameId;
-    } on ServerException catch (e) {
-      // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
-      // for updates.
-      // TODO: should disambiguate this better. Server will also return an error when max number
-      // of analyses is reached.
-      if (e.statusCode == 400) {
-        debugPrint('Analysis already requested for game $id');
-        _currentAnalysis.value = id.gameId;
-      } else {
-        debugPrint('ServerException requesting server analysis: $e');
-        _cancelAnalysis();
-        rethrow;
-      }
-    } catch (e) {
-      debugPrint('Error requesting server analysis: $e');
-      _cancelAnalysis();
-      rethrow;
+    switch (source) {
+      case _GameServerAnalysisSource(:final gameId):
+        try {
+          await ref.read(gameRepositoryProvider).requestServerAnalysis(gameId);
+          _currentAnalysis.value = source;
+        } on ServerException catch (e) {
+          // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
+          // for updates.
+          // TODO: should disambiguate this better. Server will also return an error when max number
+          // of analyses is reached.
+          if (e.statusCode == 400) {
+            debugPrint('Analysis already requested for game $gameId');
+            _currentAnalysis.value = source;
+          } else {
+            debugPrint('ServerException requesting server analysis: $e');
+            _cancelAnalysis();
+            rethrow;
+          }
+        } catch (e) {
+          debugPrint('Error requesting server analysis: $e');
+          _cancelAnalysis();
+          rethrow;
+        }
+
+      case _StudyChapterServerAnalysisSource(:final chapterId):
+        _currentAnalysis.value = source;
+        _socketClient!.firstConnection
+            .timeout(const Duration(seconds: 3))
+            .onError((_, _) {})
+            .whenComplete(() {
+              _socketClient!.send('requestAnalysis', chapterId);
+            });
     }
 
     _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {
@@ -120,7 +153,7 @@ class ServerAnalysisService {
 
   /// Cancel the ongoing server analysis, if any.
   void _cancelAnalysis() {
-    _socketSubscription?.$2.cancel();
+    _socketSubscription?.cancel();
     _socketSubscription = null;
     _currentAnalysis.value = null;
     _analysisCompleter = null;
@@ -181,14 +214,15 @@ class ServerAnalysisService {
 }
 
 /// A provider that exposes the current game being analyzed by the server.
-final currentAnalysisProvider = NotifierProvider.autoDispose<CurrentAnalysis, GameId?>(
-  CurrentAnalysis.new,
-  name: 'CurrentAnalysisProvider',
-);
+final currentAnalysisProvider =
+    NotifierProvider.autoDispose<CurrentAnalysis, ServerAnalysisSource?>(
+      CurrentAnalysis.new,
+      name: 'CurrentAnalysisProvider',
+    );
 
-class CurrentAnalysis extends Notifier<GameId?> {
+class CurrentAnalysis extends Notifier<ServerAnalysisSource?> {
   @override
-  GameId? build() {
+  ServerAnalysisSource? build() {
     final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;
 
     listenable.addListener(_listener);
@@ -201,9 +235,9 @@ class CurrentAnalysis extends Notifier<GameId?> {
   }
 
   void _listener() {
-    final gameId = ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
-    if (state != gameId) {
-      state = gameId;
+    final source = ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
+    if (state != source) {
+      state = source;
     }
   }
 }

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/forecast.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -27,6 +28,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
@@ -125,7 +127,7 @@ void clearSavedStandaloneAnalysis() {
 }
 
 class AnalysisController extends AsyncNotifier<AnalysisState>
-    with EngineEvaluationMixin
+    with EngineEvaluationMixin, ServerAnalysisMixin<AnalysisState>
     implements PgnTreeNotifier {
   AnalysisController(this.options);
 
@@ -151,11 +153,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
   @override
   Future<AnalysisState> build() async {
-    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
-
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -170,7 +169,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     late final String pgn;
     late final LightOpening? opening;
-    late final ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis;
+    late final PlayersAnalysis? playersAnalysis;
     late final Division? division;
     late final PlayableGame? activeCorrespondenceGame;
 
@@ -183,8 +182,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           _variant = archivedGame!.meta.variant;
           pgn = archivedGame.makePgn();
           opening = archivedGame.data.opening;
-          serverAnalysis = archivedGame.serverAnalysis;
           division = archivedGame.meta.division;
+          playersAnalysis = archivedGame.playersAnalysis;
           activeCorrespondenceGame = null;
         }
       case Pgn(:final variant, pgn: final gamePgn):
@@ -192,8 +191,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           _variant = variant;
           pgn = gamePgn;
           opening = null;
-          serverAnalysis = null;
           division = null;
+          playersAnalysis = null;
           activeCorrespondenceGame = null;
         }
       case Standalone(:final variant):
@@ -201,8 +200,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           _variant = _savedStandalone != null ? _savedStandalone!.variant : variant;
           pgn = '';
           opening = null;
-          serverAnalysis = null;
           division = null;
+          playersAnalysis = null;
           activeCorrespondenceGame = null;
 
           // We want to keep the standalone analysis session alive even if the user navigates away
@@ -218,8 +217,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           _variant = game.meta.variant;
           pgn = game.makePgn();
           opening = game.meta.opening;
-          serverAnalysis = null;
           division = null;
+          playersAnalysis = null;
           activeCorrespondenceGame = game;
         }
     }
@@ -338,8 +337,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
-
     final analysisState = AnalysisState(
       variant: _variant,
       gameId: options.gameId,
@@ -364,8 +361,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         variant: _variant,
         initialPosition: _root.position,
       ),
-      playersAnalysis: serverAnalysis,
-      acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
+      playersAnalysis: playersAnalysis,
+      acplChartData: playersAnalysis != null ? makeAcplChartData() : null,
       division: division,
     );
 
@@ -650,14 +647,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: headers));
   }
 
-  Future<void> requestServerAnalysis() {
-    if (state.requireValue.canRequestServerAnalysis) {
-      final service = ref.read(serverAnalysisServiceProvider);
-      return service.requestAnalysis(options.gameId!, options.orientation);
-    }
-    return Future.error('Cannot request server analysis');
-  }
-
   /// Gets the node and maybe the associated branch opening at the given path.
   (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);
@@ -804,60 +793,27 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
   }
 
-  void _listenToServerAnalysisEvents() {
-    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
-    if (event != null && event.$1 == state.requireValue.gameId) {
-      ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
-      state = AsyncData(
-        state.requireValue.copyWith(
-          acplChartData: _makeAcplChartData(),
-          playersAnalysis: event.$2.analysis != null
-              ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
-              : null,
-          root: _root.view,
-        ),
-      );
-    }
-  }
-
-  IList<ExternalEval>? _makeAcplChartData() {
-    if (!_root.mainline.any((node) => node.lichessAnalysisComments != null)) {
-      return null;
-    }
-    final list = _root.mainline
-        .map(
-          (node) => (
-            node.position.isCheckmate,
-            node.position.turn,
-            node.lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval,
-          ),
-        )
-        .map((el) {
-          final (isCheckmate, side, eval) = el;
-          return eval != null
-              ? ExternalEval(
-                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                  mate: eval.mate,
-                  depth: eval.depth,
-                )
-              : ExternalEval(
-                  cp: null,
-                  // hack to display checkmate as the max eval
-                  mate: isCheckmate
-                      ? side == Side.white
-                            ? -1
-                            : 1
-                      : null,
-                );
-        })
-        .toList(growable: false);
-    return list.isEmpty ? null : IList(list);
+  @override
+  Future<void> onServerAnalysisEvent(ServerEvalEvent event) async {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        acplChartData: makeAcplChartData(),
+        playersAnalysis: event.analysis != null
+            ? (white: event.analysis!.white, black: event.analysis!.black)
+            : null,
+        root: _root.view,
+      ),
+    );
   }
 }
 
 @freezed
 sealed class AnalysisState
-    with _$AnalysisState, AnalysisExplosionMixin, EvaluationMixinState<AnalysisState>
+    with
+        _$AnalysisState,
+        AnalysisExplosionMixin,
+        EvaluationMixinState<AnalysisState>,
+        ServerAnalysisMixinState
     implements CommonAnalysisState {
   const AnalysisState._();
 
@@ -927,9 +883,9 @@ sealed class AnalysisState
     Opening? currentBranchOpening,
 
     /// Optional server analysis to display player stats.
-    ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,
+    PlayersAnalysis? playersAnalysis,
 
-    /// Optional game division data, given by server analysis.
+    /// Optional game division data, given by the server for finished games (even without server analysis)
     Division? division,
 
     /// Optional ACPL chart data of the game, coming from lichess server analysis.
@@ -952,17 +908,17 @@ sealed class AnalysisState
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
 
-  /// Whether the user can request server analysis.
+  /// Non-null if server analysis can be be requested.
   ///
-  /// It must be a lichess game, which is finished and not already analyzed or an imported game.
-  bool get canRequestServerAnalysis =>
-      gameId != null && !hasServerAnalysis && pgnHeaders['Result'] != '*' ||
-      archivedGame?.source == .import;
+  /// It must be a finished lichess game or an imported game.
+  @override
+  ServerAnalysisSource? get serverAnalysisSource =>
+      gameId != null && (pgnHeaders['Result'] != '*' || archivedGame?.source == .import)
+      ? ServerAnalysisSource.game(gameId: gameId!)
+      : null;
 
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => playersAnalysis != null;
-
-  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
