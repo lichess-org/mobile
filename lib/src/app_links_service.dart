@@ -109,7 +109,8 @@ class AppLinksService {
       return;
     }
     if (context != null && context.mounted) {
-      await handleAppLink(context, uri, animated: animated);
+      // For app deep links, we don't want to allow falling back to the browser as it might trigger an infinite loop if the app isn't properly handling the link
+      await handleAppLink(context, uri, animated: animated, allowBrowserFallback: false);
     }
   }
 
@@ -331,7 +332,12 @@ class AppLinksService {
   }
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
-  Future<void> handleAppLink(BuildContext context, Uri uri, {bool animated = true}) async {
+  Future<void> handleAppLink(
+    BuildContext context,
+    Uri uri, {
+    bool animated = true,
+    bool allowBrowserFallback = true,
+  }) async {
     final routes = await resolveAppLinkUri(context, uri);
     if (!context.mounted) return;
 
@@ -344,7 +350,11 @@ class AppLinksService {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
       if (isChallengeLink) return;
 
-      launchUrl(uri);
+      if (allowBrowserFallback) {
+        launchUrl(uri);
+      } else {
+        _logger.warning('Could not resolve app link $uri');
+      }
     }
   }
 
