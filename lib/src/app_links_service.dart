@@ -307,7 +307,7 @@ class AppLinksService {
 
       if (!context.mounted) return null;
 
-      if (game.finished) {
+      if (game.finished || game.source == .import) {
         return [
           AnalysisScreen.buildRoute(
             context,
