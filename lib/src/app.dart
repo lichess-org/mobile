@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
@@ -29,7 +31,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-const String _kIosAppGroupId = 'group.org.lichess.mobileV2';
+const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
@@ -94,12 +96,25 @@ class _AppState extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+      HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
             Future.wait([
               for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
             ]);
+          });
+        }
+      }, fireImmediately: true);
+      ref.listenManual(boardPreferencesProvider, (prev, state) {
+        if (prev == null ||
+            prev.boardTheme != state.boardTheme ||
+            prev.pieceSet != state.pieceSet) {
+          Future.wait([
+            HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name),
+            HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name),
+          ]).then((_) {
+            HomeWidget.updateWidget(iOSName: 'DailyPuzzleLargeWidget');
           });
         }
       }, fireImmediately: true);
@@ -197,7 +212,8 @@ class _AppState extends ConsumerState<Application> {
       if (context == null || !context.mounted) return;
 
       final file = File(filePath);
-      final pgnText = await file.readAsString();
+      final bytes = await file.readAsBytes();
+      final pgnText = utf8.decode(bytes, allowMalformed: true);
 
       if (context.mounted) {
         ImportPgnScreen.handlePgnText(context, pgnText);

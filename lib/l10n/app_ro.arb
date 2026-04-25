@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Departajări",
   "broadcastGameX": "Joc {param}",
   "broadcastKnockouts": "Eliminatorii",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisiune} few{{count} transmisiuni} other{{count} de transmisiuni}}",
   "broadcastNbViewers": "{count, plural, =1{{count} spectator} few{{count} spectatori} other{{count} spectatori}}",
   "challengeChallengesX": "Provocări: {param1}",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Deschideri populare",
   "endgamePositions": "Poziții de sfârșit",
   "chess960StartPosition": "Poziție de start Chess960: {param}",
+  "randomChess960Position": "Poziție aleatoare Chess960",
   "startPosition": "Poziția de start",
   "clearBoard": "Curăță tabla",
   "loadPosition": "Încarcă poziția",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{cu un an în urmă} few{cu {count} ani în urmă} other{cu {count} de ani în urmă}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{un minut rămas} few{{count} minute rămase} other{{count} de minute rămase}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{o oră rămasă} few{{count} ore rămase} other{{count} de ore rămase}}",
-  "tfaTwoFactorAuth": "Autentificare în doi pași"
+  "tfaTwoFactorAuth": "Autentificare în doi pași",
+  "ublogCommunity": "Comunitate",
+  "ublogXBlog": "Blog-ul lui {param}"
 }

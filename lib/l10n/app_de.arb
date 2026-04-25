@@ -1,6 +1,6 @@
 {
   "mobileAccountPreferences": "Kontoeinstellungen",
-  "mobileAccountPreferencesHelp": "Diese Einstellungen werden auf dein Lichess - Konto angewendet und werden auf allen Geräten verwendet.",
+  "mobileAccountPreferencesHelp": "Diese Einstellungen werden auf dein Lichess-Konto angewendet und werden auf allen Geräten verwendet.",
   "mobileAllGames": "Alle Partien",
   "mobileAreYouSure": "Bist du sicher?",
   "mobileBoardSettings": "Bretteinstellungen",
@@ -534,6 +534,7 @@
   "puzzleThemeCapturingDefender": "Schlage den Verteidiger",
   "puzzleThemeCapturingDefenderDescription": "Ein Verteidiger einer Figur (oder eines Feldes) wird geschlagen, wodurch das eigentliche Ziel die Deckung verliert.",
   "puzzleThemeCollinearMove": "Kollinearer Zug",
+  "puzzleThemeCollinearMoveDescription": "Zwei gegnerische Figuren stehen sich gegenüber und eine zieht vorbei auf der Angriffslinie vorbei, ohne die gegnerische Figur zu schlagen.",
   "puzzleThemeCornerMate": "Eck-Matt",
   "puzzleThemeCornerMateDescription": "Sperrt den König in einer Ecke des Bretts ein, um dann mit Turm oder Dame und einem Springer Matt zu setzen.",
   "puzzleThemeCrushing": "Vernichtend",
@@ -1049,7 +1050,8 @@
   "setTheBoard": "Brett aufbauen",
   "popularOpenings": "Beliebte Eröffnungen",
   "endgamePositions": "Endspielstellungen",
-  "chess960StartPosition": "Schach960 Anfangsstellung: {param}",
+  "chess960StartPosition": "Chess960-Anfangsstellung: {param}",
+  "randomChess960Position": "Zufällige Chess960-Stellung",
   "startPosition": "Anfangsposition",
   "clearBoard": "Brett räumen",
   "loadPosition": "Stellung laden",
@@ -1824,5 +1826,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{vor {count} Jahr} other{vor {count} Jahren}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} Minute verbleibend} other{{count} Minuten verbleibend}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} Stunde verbleiben} other{{count} Stunden verbleiben}}",
-  "tfaTwoFactorAuth": "Zwei-Faktor-Authentifizierung"
+  "tfaTwoFactorAuth": "Zwei-Faktor-Authentifizierung",
+  "ublogCommunity": "Gemeinschaft",
+  "ublogXBlog": "Blog von {param}"
 }

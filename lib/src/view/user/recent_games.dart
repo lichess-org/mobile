@@ -32,7 +32,7 @@ class RecentGamesWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
     return recentGames.when(
       data: (data) {
@@ -45,13 +45,9 @@ class RecentGamesWidget extends ConsumerWidget {
           hasLeading: true,
           onHeaderTap: nbOfGames > list.length
               ? () {
-                  Navigator.of(context).push(
-                    GameHistoryScreen.buildRoute(
-                      context,
-                      user: user,
-                      isOnline: connectivity.value?.isOnline == true,
-                    ),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(GameHistoryScreen.buildRoute(context, user: user, isOnline: isOnline));
                 }
               : null,
           children: [for (final item in list) GameListTile(item: item)],

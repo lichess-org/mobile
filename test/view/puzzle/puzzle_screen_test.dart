@@ -218,7 +218,7 @@ void main() {
       // in play mode we don't see the continue button
       expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsNothing);
       // in play mode we see the solution button
-      expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
 
       expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
       expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
@@ -246,7 +246,7 @@ void main() {
       verify(saveDBReq).called(2);
 
       expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
-      expect(find.byIcon(Icons.help), findsNothing);
+      expect(find.byIcon(Icons.flag_outlined), findsNothing);
 
       await tester.tap(find.byIcon(CupertinoIcons.play_arrow_solid));
 
@@ -417,11 +417,14 @@ void main() {
       expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
       // Help button should still be disabled
-      expect(find.byIcon(Icons.help), findsOneWidget);
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
       expect(
         tester
             .firstWidget<BottomBarButton>(
-              find.ancestor(of: find.byIcon(Icons.help), matching: find.byType(BottomBarButton)),
+              find.ancestor(
+                of: find.byIcon(Icons.flag_outlined),
+                matching: find.byType(BottomBarButton),
+              ),
             )
             .enabled,
         isFalse,
@@ -430,7 +433,7 @@ void main() {
       // wait for the solution button to be enabled
       await tester.pump(const Duration(seconds: 4));
 
-      await tester.tap(find.byIcon(Icons.help));
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -517,8 +520,8 @@ void main() {
           await tester.pump(const Duration(seconds: 5));
 
           // view solution
-          expect(find.byIcon(Icons.help), findsOneWidget);
-          await tester.tap(find.byIcon(Icons.help));
+          expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+          await tester.tap(find.byIcon(Icons.flag_outlined));
 
           // wait for solution replay animation to finish
           await tester.pump(const Duration(seconds: 1));
@@ -592,8 +595,8 @@ void main() {
       final customPaintWidgetsBefore = find.byType(CustomPaint).evaluate().toSet();
 
       // get hint and wait for it to show
-      expect(find.byIcon(Icons.info), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.info));
+      expect(find.byIcon(Icons.lightbulb_outline), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.lightbulb_outline));
       await tester.pump(const Duration(milliseconds: 100));
 
       // check hint is set
@@ -604,8 +607,8 @@ void main() {
       expect((diff.first.widget as CustomPaint).painter.runtimeType.toString(), '_CirclePainter');
 
       // view solution
-      expect(find.byIcon(Icons.help), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.help));
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -621,8 +624,8 @@ void main() {
       await tester.pump(const Duration(seconds: 5));
 
       // view solution
-      expect(find.byIcon(Icons.help), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.help));
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.flag_outlined));
 
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
@@ -710,8 +713,8 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
 
     // view solution
-    expect(find.byIcon(Icons.help), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.help));
+    expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.flag_outlined));
 
     // wait for solution replay animation to finish
     await tester.pump(const Duration(seconds: 1));
@@ -721,6 +724,134 @@ void main() {
     expect(captured.length, 1);
     expect(captured[0].solved.length, 0);
   });
+  testWidgets(
+    'can navigate backward and forward through history during play',
+    variant: kPlatformVariant,
+    (tester) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
+      ).thenAnswer((_) async => puzzle2);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
+            return mockBatchStorage;
+          }),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => batch);
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      const orientation = Side.black;
+
+      // wait for previous opponent's move to be played
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      bool isPrevEnabled() {
+        return tester
+                .widget<BottomBarButton>(
+                  find.widgetWithIcon(BottomBarButton, CupertinoIcons.chevron_back),
+                )
+                .onTap !=
+            null;
+      }
+
+      bool isNextEnabled() {
+        return tester
+                .widget<BottomBarButton>(
+                  find.widgetWithIcon(BottomBarButton, CupertinoIcons.chevron_forward),
+                )
+                .onTap !=
+            null;
+      }
+
+      expect(isNextEnabled(), isFalse);
+
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      expect(isPrevEnabled(), isFalse);
+      expect(isNextEnabled(), isTrue);
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+
+      // user plays the first correct move
+      await playMove(tester, 'g4', 'h4', orientation: orientation);
+
+      // wait for computer reply and move animation
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+
+      // computer replied by capturing our rook with its queen
+      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+
+      expect(isPrevEnabled(), isTrue);
+
+      // tap "Previous" once to undo the computer's reply
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      // verify we see our original bold move (black rook on h4)
+      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+
+      // tap "Previous" again to undo our first move
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+
+      // verify we are back at the start (black rook on g4)
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      // check that the user can not play a different move in the starting position
+      await playMove(tester, 'g4', 'g5', orientation: orientation);
+      // check that the rook stayed on g4
+      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+
+      // check that the "Next" button is now enabled
+      expect(isNextEnabled(), isTrue);
+
+      // tap "Next" twice to return to the active game node
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
+      await tester.pump();
+
+      // verify we are back to the current state (computer's white queen on h4)
+      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+    },
+  );
 
   testWidgets(
     'Regression test for false positive alternative castling notation (#2345)',
@@ -800,6 +931,99 @@ void main() {
       // wait for move cancel and animation
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
+    },
+  );
+  testWidgets(
+    'Regression test for castling by moving and by show solution creating different move objects (#2876)',
+    variant: kPlatformVariant,
+    (tester) async {
+      final buggyPuzzle = Puzzle(
+        puzzle: PuzzleData(
+          id: const PuzzleId('9gsMd'),
+          initialPly: 21,
+          plays: 128846,
+          rating: 2193,
+          solution: IList(const ['e1g1', 'd7d6', 'f4h6']),
+          themes: ISet(const [
+            'middlegame',
+            'short',
+            'castling',
+            'discoveredCheck',
+            'advantage',
+            'discoveredAttack',
+          ]),
+        ),
+        game: const PuzzleGame(
+          rated: true,
+          id: GameId('EyRPebr1'),
+          perf: Perf.rapid,
+          pgn:
+              'e4 e5 Nc3 Nc6 f4 exf4 Nf3 Bc5 d4 Bb4 Bxf4 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Ne5+ Nxe5 Qh5+ g6 Qxe5 Nxc3',
+          black: PuzzleGamePlayer(side: Side.black, name: 'Towelie1356'),
+          white: PuzzleGamePlayer(side: Side.white, name: 'Faustocoppi'),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: buggyPuzzle.puzzle.id,
+        ),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id),
+      ).thenAnswer((_) async => buggyPuzzle);
+
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => batch);
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+
+      // await for first move to be played (Nxc3)
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+
+      // Play castling move (O-O) by moving king to g1
+      await playMove(tester, 'e1', 'g1', orientation: Side.white);
+
+      // wait for the "View the solution" button to become enabled
+      await tester.pump(const Duration(seconds: 4));
+
+      expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.flag_outlined));
+
+      // Wait for the move to be triggered
+      await tester.pump(const Duration(seconds: 1));
+
+      // Wait for the move animation to complete
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('h6-whitebishop')), findsOneWidget);
     },
   );
 

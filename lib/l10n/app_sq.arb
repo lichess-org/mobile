@@ -1014,6 +1014,7 @@
   "popularOpenings": "Hapje popullore",
   "endgamePositions": "Pozicione fundi loje",
   "chess960StartPosition": "Pozicion nisjeje Chess960: {param}",
+  "randomChess960Position": "Pozicion Chess960 kuturu",
   "startPosition": "Pozicioni fillestar",
   "clearBoard": "Spastro fushën",
   "loadPosition": "Ngarko pozicionin",
@@ -1778,5 +1779,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} vit më parë} other{para {count} viteve}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Edhe {count} minutë} other{Edhe {count} minuta}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Edhe {count} orë} other{Edhe {count} orë}}",
-  "tfaTwoFactorAuth": "Mirëfilltësim dyfaktorësh"
+  "tfaTwoFactorAuth": "Mirëfilltësim dyfaktorësh",
+  "ublogCommunity": "Bashkësi",
+  "ublogXBlog": "Blogu i {param}"
 }

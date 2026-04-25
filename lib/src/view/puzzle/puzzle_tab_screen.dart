@@ -249,8 +249,7 @@ class _PuzzleMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final bool isOnline = connectivity.value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
     return ListSection(
       hasLeading: true,
@@ -424,7 +423,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(

@@ -1058,6 +1058,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatorias';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3541,6 +3551,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Posición aleatoria de Ajedrez960';
+
+  @override
   String get startPosition => 'Posición inicial';
 
   @override
@@ -4155,7 +4168,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get toggleVariationArrows => 'Activa o desactiva flechas de variantes';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Alterna entre la siguiente variante y la anterior';
+  String get cyclePreviousOrNextVariation => 'Alterna entre la siguiente variante y la anterior.';
 
   @override
   String get toggleGlyphAnnotations => 'Activa o desactiva la anotación de figurines';
@@ -6552,4 +6565,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
+
+  @override
+  String get ublogCommunity => 'Comunidad';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

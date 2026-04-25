@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Dogrywki",
   "broadcastGameX": "Partia {param}",
   "broadcastKnockouts": "Eliminacje",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisja} few{{count} transmisje} many{{count} transmisji} other{{count} transmisji}}",
   "broadcastNbViewers": "{count, plural, =1{{count} oglądający} few{{count} oglądających} many{{count} oglądających} other{{count} oglądających}}",
   "challengeChallengesX": "Wyzwania: {param1}",
@@ -1048,6 +1050,7 @@
   "popularOpenings": "Popularne otwarcia",
   "endgamePositions": "Pozycje końcowe",
   "chess960StartPosition": "Pozycja startowa w Szachach 960: {param}",
+  "randomChess960Position": "Losowa pozycja Chess960",
   "startPosition": "Ustawienie początkowe",
   "clearBoard": "Wyczyść szachownicę",
   "loadPosition": "Wczytaj ustawienie",
@@ -1822,5 +1825,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} rok temu} few{{count} lata temu} many{{count} lat temu} other{{count} lat temu}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Pozostała {count} minuta} few{Pozostały {count} minuty} many{Pozostało {count} minut} other{Pozostało {count} minut}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Pozostała {count} godzina} few{Pozostały {count} godziny} many{Pozostało {count} godzin} other{Pozostało {count} godzin}}",
-  "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe"
+  "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe",
+  "ublogCommunity": "Społeczność",
+  "ublogXBlog": "Blog gracza {param}"
 }

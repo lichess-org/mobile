@@ -1058,6 +1058,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastKnockouts => 'ناک اوت';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3539,6 +3549,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'وضعیت آغازین شطرنج۹۶۰: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'وضعیت آغازش';
@@ -6552,4 +6565,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
+
+  @override
+  String get ublogCommunity => 'همدارگان';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'وبنوشتِ $param';
+  }
 }

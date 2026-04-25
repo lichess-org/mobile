@@ -9,11 +9,14 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -57,19 +60,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
             children: [
               Text(context.l10n.mobileWaitingForOpponentToJoin),
               const SizedBox(height: 26.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(widget.seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    widget.seek.timeIncrement?.display ??
-                        '${context.l10n.daysPerTurn}: ${widget.seek.days}',
-                    style: TextTheme.of(context).titleLarge,
-                  ),
-                ],
-              ),
+              _GameParamsDisplay.seek(widget.seek),
               //Do not show rating range if the default values (-500, +500) are used
               if (widget.seek.ratingRange != null &&
                   !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
@@ -160,19 +151,7 @@ class _UserChallengeLoadingContentState extends State<UserChallengeLoadingConten
                 style: TextTheme.of(context).titleLarge,
               ),
               const SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(widget.challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    widget.challenge.timeIncrement?.display ??
-                        '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
-                    style: TextTheme.of(context).titleLarge,
-                  ),
-                ],
-              ),
+              _GameParamsDisplay.challengeRequest(widget.challenge),
             ],
           ),
         ),
@@ -259,22 +238,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                   mainAxisSize: MainAxisSize.min,
                   spacing: 20.0,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          widget.challengeRequest.perf.icon,
-                          color: DefaultTextStyle.of(context).style.color,
-                        ),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          widget.challengeRequest.timeIncrement?.display ??
-                              '${context.l10n.daysPerTurn}: ${widget.challengeRequest.days}',
-                          style: TextTheme.of(context).titleLarge,
-                        ),
-                      ],
-                    ),
+                    _GameParamsDisplay.challengeRequest(widget.challengeRequest),
                     Text(context.l10n.toInviteSomeoneToPlayGiveThisUrl),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -314,25 +278,42 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                             context,
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
+                              // Capture everything that needs BuildContext before the async gap.
+                              final rootNav = Navigator.of(context, rootNavigator: true);
+                              final directedChallengeReq = widget.challengeRequest.copyWith(
+                                destUser: user,
+                              );
+                              final directedChallengeRoute =
+                                  widget.challengeRequest.timeControl ==
+                                      ChallengeTimeControlType.clock
+                                  ? GameScreen.buildRoute(
+                                      context,
+                                      source: UserChallengeSource(directedChallengeReq),
+                                    )
+                                  : null;
+
                               try {
                                 await widget.cancelChallenge();
                               } catch (e) {
                                 debugPrint('Error cancelling open challenge: $e');
                               }
 
-                              final directedChallengeReq = widget.challengeRequest.copyWith(
-                                destUser: user,
-                              );
                               if (!context.mounted) return;
 
-                              if (widget.challengeRequest.timeControl ==
-                                  ChallengeTimeControlType.clock) {
-                                Navigator.of(context).pop();
-                                Navigator.of(context, rootNavigator: true).pushReplacement(
-                                  GameScreen.buildRoute(
-                                    context,
-                                    source: UserChallengeSource(directedChallengeReq),
+                              if (directedChallengeRoute != null) {
+                                // Invalidate the provider so the new GameScreen creates a
+                                // fresh challenge even if the same UserChallengeSource was
+                                // used in a previous game (Freezed equality shares providers).
+                                ref.invalidate(
+                                  gameScreenLoaderProvider(
+                                    UserChallengeSource(directedChallengeReq),
                                   ),
+                                );
+                                // Use pushAndRemoveUntil to clear any old GameScreen from
+                                // the stack without removing unrelated routes.
+                                rootNav.pushAndRemoveUntil(
+                                  directedChallengeRoute,
+                                  (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                 );
                               } else {
                                 await ref
@@ -422,6 +403,41 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
               },
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class _GameParamsDisplay extends StatelessWidget {
+  const _GameParamsDisplay({required this.perf, required this.timeIncrement, required this.days});
+
+  _GameParamsDisplay.seek(GameSeek seek)
+    : perf = seek.perf,
+      timeIncrement = seek.timeIncrement,
+      days = seek.days;
+
+  _GameParamsDisplay.challengeRequest(ChallengeRequest challenge)
+    : perf = challenge.perf,
+      timeIncrement = challenge.timeIncrement,
+      days = challenge.days;
+
+  final Perf perf;
+  final TimeIncrement? timeIncrement;
+  final int? days;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(perf.icon, color: DefaultTextStyle.of(context).style.color),
+        const SizedBox(width: 8.0),
+        Text(
+          timeIncrement?.display ??
+              (days != null ? '${context.l10n.daysPerTurn}: $days' : context.l10n.unlimited),
+          style: TextTheme.of(context).titleLarge,
         ),
       ],
     );

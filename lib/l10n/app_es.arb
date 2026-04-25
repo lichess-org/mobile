@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desempates",
   "broadcastGameX": "Partida {param}",
   "broadcastKnockouts": "Eliminatorias",
+  "broadcastUnderXAgeTournament": "Sub{param}",
+  "broadcastUnderXEloTournament": "Sub{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisión} other{{count} transmisiones}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadores}}",
   "challengeChallengesX": "Desafíos: {param1}",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Aperturas populares",
   "endgamePositions": "Posiciones de finales",
   "chess960StartPosition": "Posición inicial de Ajedrez 960: {param}",
+  "randomChess960Position": "Posición aleatoria de Ajedrez960",
   "startPosition": "Posición inicial",
   "clearBoard": "Limpiar el tablero",
   "loadPosition": "Cargar posicion",
@@ -1243,7 +1246,7 @@
   "keyPreviousBranch": "Rama anterior",
   "keyNextBranch": "Rama siguiente",
   "toggleVariationArrows": "Activa o desactiva flechas de variantes",
-  "cyclePreviousOrNextVariation": "Alterna entre la siguiente variante y la anterior",
+  "cyclePreviousOrNextVariation": "Alterna entre la siguiente variante y la anterior.",
   "toggleGlyphAnnotations": "Activa o desactiva la anotación de figurines",
   "togglePositionAnnotations": "Activa o desactiva anotaciones de posición",
   "toggleObservationAnnotations": "Alternar las anotaciones de observación",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{hace {count} año} other{hace {count} años}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuto restante} other{{count} minutos restantes}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hora restante} other{{count} horas restantes}}",
-  "tfaTwoFactorAuth": "Autenticación en dos pasos"
+  "tfaTwoFactorAuth": "Autenticación en dos pasos",
+  "ublogCommunity": "Comunidad",
+  "ublogXBlog": "Blog de {param}"
 }

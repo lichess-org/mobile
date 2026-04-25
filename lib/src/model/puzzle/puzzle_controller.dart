@@ -129,8 +129,12 @@ class PuzzleController extends Notifier<PuzzleState> {
         }
         // another puzzle move: let's continue
         else if (nextUci != null) {
+          final correctPath = state.currentPath;
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _addMove(Move.parse(nextUci)!);
+          final (nextPath, _) = _gameTree.addMoveAt(correctPath, Move.parse(nextUci)!);
+          if (nextPath != null) {
+            _setPath(nextPath, isNavigating: true);
+          }
         }
         // no more puzzle move: it's a win
         else {
@@ -140,8 +144,10 @@ class PuzzleController extends Notifier<PuzzleState> {
         state = state.copyWith(feedback: PuzzleFeedback.bad);
         _onFailOrWin(PuzzleResult.lose);
         if (initialContext.isPuzzleStreak != true) {
+          final wrongPath = state.currentPath;
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _setPath(state.currentPath.penultimate);
+          _gameTree.deleteAt(wrongPath);
+          _setPath(wrongPath.penultimate);
         }
       }
     }
@@ -409,10 +415,14 @@ class PuzzleController extends Notifier<PuzzleState> {
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
-        final move = Move.parse(uci);
+        final moveObj = Move.parse(uci)!;
         final (pos, nodes) = previous;
-        final (newPos, newSan) = pos.makeSan(move!);
-        return (newPos, nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, move))));
+        final normalizedMove = _gameTree.normalizeMove(pos, moveObj);
+        final (newPos, newSan) = pos.makeSan(normalizedMove);
+        return (
+          newPos,
+          nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, normalizedMove))),
+        );
       },
     );
     _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
@@ -455,9 +465,9 @@ sealed class PuzzleState with _$PuzzleState {
 
   String get fen => node.position.fen;
 
-  bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
+  bool get canGoNext => node.children.isNotEmpty;
 
-  bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
+  bool get canGoBack => currentPath.size > initialPath.penultimate.size;
 
   NormalMove? get _nextSolutionMove {
     final uci = puzzle.puzzle.solution.getOrNull(currentPath.size - initialPath.size);

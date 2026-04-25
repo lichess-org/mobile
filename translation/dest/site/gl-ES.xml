@@ -526,6 +526,7 @@
   <string name="popularOpenings">Aperturas populares</string>
   <string name="endgamePositions">Posicións de finais</string>
   <string name="chess960StartPosition">Posición inicial de Chess960: %s</string>
+  <string name="randomChess960Position">Posición aleatoria de Xadrez 960</string>
   <string name="startPosition">Posición inicial</string>
   <string name="clearBoard">Limpar o taboleiro</string>
   <string name="loadPosition">Cargar unha posición</string>
@@ -805,7 +806,7 @@
     <item quantity="other">Dispoñible en %s idiomas!</item>
   </plurals>
   <string name="xHostsY">%1$s crea %2$s</string>
-  <string name="xJoinsY">%1$s únese a %2$s</string>
+  <string name="xJoinsY">%1$s uniuse a %2$s</string>
   <string name="xLikesY">A %1$s gústalle %2$s</string>
   <string name="quickPairing">Emparellamento rápido</string>
   <string name="lobby">Retos</string>

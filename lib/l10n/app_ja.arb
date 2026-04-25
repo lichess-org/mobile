@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "タイブレーク",
   "broadcastGameX": "局数 {param}",
   "broadcastKnockouts": "ノックアウト",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, other{{count} ブロードキャスト}}",
   "broadcastNbViewers": "{count, plural, other{{count} 人の視聴者}}",
   "challengeChallengesX": "チャレンジ：{param1}",
@@ -793,6 +795,7 @@
   "searchTime": "検索時間",
   "searchTimeDescription": "新しい局面を評価するための時間を設定",
   "threads": "スレッド数",
+  "threadsDescription": "CPU のスレッド数より小さい値に設定してください。目盛りは安全な推奨値を示しています",
   "threadsDescriptionMobile": "スレッド数が多いと解析精度が上がりますがバッテリー消費も増えます",
   "cpus": "スレッド数",
   "memory": "メモリ",
@@ -1050,6 +1053,7 @@
   "popularOpenings": "人気のオープニング",
   "endgamePositions": "エンドゲームの局面",
   "chess960StartPosition": "チェス960 開始局面: {param}",
+  "randomChess960Position": "チェス960 のランダムな配置",
   "startPosition": "開始局面",
   "clearBoard": "盤面をクリアする",
   "loadPosition": "局面を読み込む",
@@ -1514,6 +1518,7 @@
   "offline": "オフライン",
   "search": "検索",
   "clearSearch": "検索をクリア",
+  "thereAreNoResultsForX": "「{param}」の検索結果はありません",
   "tags": "タグ",
   "enPassant": "アンパッサン",
   "opponentLeftCounter": "{count, plural, other{相手がいなくなりました。あと {count} 秒で勝ちにできます。}}",
@@ -1823,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{残り {count} 分}}",
   "timeagoNbHoursRemaining": "{count, plural, other{残り {count} 時間}}",
-  "tfaTwoFactorAuth": "2 要素認証"
+  "tfaTwoFactorAuth": "2 要素認証",
+  "ublogCommunity": "コミュニティ",
+  "ublogXBlog": "{param} のブログ"
 }

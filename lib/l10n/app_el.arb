@@ -278,6 +278,8 @@
   "broadcastTiebreaks": "Μπαράζ",
   "broadcastGameX": "Παρτίδα {param}",
   "broadcastKnockouts": "Νοκ άουτ",
+  "broadcastUnderXAgeTournament": "Κ{param}",
+  "broadcastUnderXEloTournament": "Κ{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} μετάδοση} other{{count} μεταδόσεις}}",
   "broadcastNbViewers": "{count, plural, =1{{count} θεατής } other{{count} θεατές}}",
   "challengeChallengesX": "Προκλήσεις: {param1}",
@@ -1035,6 +1037,7 @@
   "popularOpenings": "Δημοφιλή ανοίγματα",
   "endgamePositions": "Θέσεις φινάλε",
   "chess960StartPosition": "Αρχική θέση Chess960: {param}",
+  "randomChess960Position": "Τυχαία θέση Chess960",
   "startPosition": "Αρχική διάταξη",
   "clearBoard": "Εκκαθάριση σκακιέρας",
   "loadPosition": "Φορτώστε θέση",
@@ -1809,5 +1812,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} χρόνο πριν} other{{count} χρόνια πριν}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{απομένει {count} λεπτό} other{απομένουν {count} λεπτά}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{απομένει {count} ώρα} other{απομένουν {count} ώρες}}",
-  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων"
+  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων",
+  "ublogCommunity": "Κοινότητα",
+  "ublogXBlog": "Ιστολόγιο του χρήστη {param}"
 }

@@ -8,17 +8,21 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
     .family<BroadcastTournamentId, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
@@ -103,10 +107,12 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final asyncData = ref.watch(_playerAndTournamentProvider((tournamentId, playerId)));
+
     final displayPlayer =
         player ??
-        switch (ref.watch(broadcastPlayerProvider((tournamentId, playerId)))) {
-          AsyncData(value: final data) => data.playerWithOverallResult.player,
+        switch (asyncData) {
+          AsyncData(value: final data) => data.$1.playerWithOverallResult.player,
           _ => null,
         };
 
@@ -115,6 +121,27 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),
+        actions: [
+          if (asyncData case AsyncData(value: final data))
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: context.l10n.studyShareAndExport,
+              onPressed: () {
+                final (playerData, tournament) = data;
+                final playerId = playerData.playerWithOverallResult.player.id;
+
+                final baseUri = lichessUri(
+                  '/broadcast/${tournament.data.slug}/${tournament.data.id}',
+                );
+
+                final shareUri = playerId != null
+                    ? baseUri.replace(fragment: 'players/$playerId')
+                    : baseUri;
+
+                launchShareDialog(context, ShareParams(uri: shareUri));
+              },
+            ),
+        ],
       ),
       body: _Body(tournamentId, playerId),
     );
@@ -525,7 +552,7 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.5
+                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
                             : points?.resultFor(color).resultToString(color) ?? '*',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

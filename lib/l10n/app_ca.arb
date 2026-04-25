@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desempats",
   "broadcastGameX": "Partida {param}",
   "broadcastKnockouts": "Eliminatòria",
+  "broadcastUnderXAgeTournament": "S{param}",
+  "broadcastUnderXEloTournament": "S{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} retransmissió} other{{count} retransmissions}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadors}}",
   "challengeChallengesX": "Desafiaments: {param1}",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Obertures populars",
   "endgamePositions": "Posicions de finals",
   "chess960StartPosition": "Posició inicial d'Escacs960 Fischer: {param}",
+  "randomChess960Position": "Posició d'escacs960 Aleatòria",
   "startPosition": "Posició inicial",
   "clearBoard": "Netejar el tauler",
   "loadPosition": "Carregar la posició",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{fa {count} any} other{fa {count} anys}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Queda {count} minut} other{Queden {count} minuts}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Queda {count} hora} other{Queden {count} hores}}",
-  "tfaTwoFactorAuth": "Autenticació de dos factors"
+  "tfaTwoFactorAuth": "Autenticació de dos factors",
+  "ublogCommunity": "Comunitat",
+  "ublogXBlog": "Blog de {param}"
 }

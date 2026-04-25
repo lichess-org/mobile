@@ -66,6 +66,9 @@ class GameController extends AsyncNotifier<GameState> {
 
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
+  /// Whether the app was put in background since the previous move was sent.
+  bool _wasInBackground = false;
+
   static Uri socketUri(GameFullId gameFullId) => Uri(path: '/play/$gameFullId/v6');
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
@@ -95,7 +98,6 @@ class GameController extends AsyncNotifier<GameState> {
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       _socketClient.version = fullEvent.socketEventVersion;
@@ -146,6 +148,9 @@ class GameController extends AsyncNotifier<GameState> {
     if (!state.hasValue || !state.requireValue.game.playable) {
       return;
     }
+
+    _wasInBackground = true;
+
     // real time games need the socket to stay connected otherwise lichess will think the player leaved
     // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
     if (state.requireValue.game.meta.speed == Speed.correspondence) {
@@ -522,11 +527,14 @@ class GameController extends AsyncNotifier<GameState> {
       DropMove(:final role, :final to) => ('drop', {'role': role.name, 'pos': to.name}),
     };
 
+    final withBlur = _wasInBackground;
+    _wasInBackground = false;
     _socketClient.send(
       topic,
       {
         ...data,
         if (moveTime != null) 's': (moveTime.inMilliseconds * 0.1).round().toRadixString(36),
+        if (withBlur) 'b': 1,
       },
       ackable: true,
       withLag: _clock != null && (moveTime == null || withLag),
@@ -852,6 +860,15 @@ class GameController extends AsyncNotifier<GameState> {
             newState = newState.copyWith(opponentLeftCountdown: null);
           }
         }
+        final watcherData = data['watchers'];
+        if (watcherData != null && watcherData is Map<String, dynamic>) {
+          final nb = watcherData['nb'] as int? ?? 0;
+          final users =
+              (watcherData['users'] as List<dynamic>?)?.map((e) => e.toString()).toIList() ??
+              const IList.empty();
+          newState = newState.copyWith(nbWatchers: nb, watcherNames: users);
+        }
+
         state = AsyncValue.data(newState);
 
       // Gone event, sent when the opponent has quit the game for long enough
@@ -1043,6 +1060,8 @@ sealed class GameState with _$GameState {
   const GameState._();
 
   const factory GameState({
+    @Default(0) int nbWatchers,
+    @Default(IList<String>.empty()) IList<String> watcherNames,
     required GameFullId gameFullId,
     required PlayableGame game,
     required int stepCursor,

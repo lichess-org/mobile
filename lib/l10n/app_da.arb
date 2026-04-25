@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Tiebreaks",
   "broadcastGameX": "Parti {param}",
   "broadcastKnockouts": "Elimineringsrunder",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} udsendelse} other{{count} udsendelser}}",
   "broadcastNbViewers": "{count, plural, =1{{count} seer} other{{count} seere}}",
   "challengeChallengesX": "Udfordringer: {param1}",
@@ -1047,6 +1049,7 @@
   "popularOpenings": "Populære åbninger",
   "endgamePositions": "Slutspilsstillinger",
   "chess960StartPosition": "Chess960 startposition: {param}",
+  "randomChess960Position": "Tilfældig Chess960-position",
   "startPosition": "Startopstilling",
   "clearBoard": "Fjern alle brikker",
   "loadPosition": "Indlæs stilling",
@@ -1821,5 +1824,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} år siden} other{{count} år siden}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minut tilbage} other{{count} minutter tilbage}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} time tilbage} other{{count} timer tilbage}}",
-  "tfaTwoFactorAuth": "To-faktor-godkendelse"
+  "tfaTwoFactorAuth": "To-faktor-godkendelse",
+  "ublogCommunity": "Fællesskab",
+  "ublogXBlog": "Blog - {param}"
 }

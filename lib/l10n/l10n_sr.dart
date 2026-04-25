@@ -1075,6 +1075,16 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2016,10 +2026,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeEndgame => 'Завршница';
 
   @override
-  String get puzzleThemeEndgameDescription => 'Тактика у току последње фазе партије.';
+  String get puzzleThemeEndgameDescription => 'Тактика током последње фазе партије.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Тактика која укључује ан пасан правило, где пешак може однети противничког пешака који га је заобишао користећи његов иницијални потез од два поља.';
+  String get puzzleThemeEnPassantDescription => 'Тактика која укључује ан пасан правило, где пешак може узети противничког пешака који га је заобишао користећи његов почетни потез од два поља.';
 
   @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
@@ -2031,7 +2041,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleThemeExposedKing => 'Изложен краљ';
 
   @override
-  String get puzzleThemeExposedKingDescription => 'Тактика која укључује краља са малим бројем бранилаца око њега, често доводи до мата.';
+  String get puzzleThemeExposedKingDescription => 'Тактика која укључује краља са малим бројем бранилаца око њега, често доводи до шах-мата.';
 
   @override
   String get puzzleThemeFork => 'Виљушка';
@@ -3555,6 +3565,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Почетна позиција за шах960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Почетна позиција';
@@ -6614,4 +6627,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двофакторска аутентификација';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

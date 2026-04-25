@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Bris d'égalité",
   "broadcastGameX": "Partie {param}",
   "broadcastKnockouts": "Éliminatoires",
+  "broadcastUnderXAgeTournament": "Moins de {param}",
+  "broadcastUnderXEloTournament": "Moins de {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} diffusion} other{{count} diffusions}}",
   "broadcastNbViewers": "{count, plural, =1{{count} observateur} other{{count} observateurs}}",
   "challengeChallengesX": "Défis : {param1}",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Ouvertures courantes",
   "endgamePositions": "Positions de finale",
   "chess960StartPosition": "Position de départ – Chess960 : {param}",
+  "randomChess960Position": "Position d'échecs 960",
   "startPosition": "Position de départ",
   "clearBoard": "Vider l'échiquier",
   "loadPosition": "Charger une position",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{il y a {count} an} other{il y a {count} ans}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute restante} other{{count} minutes restantes}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} heure restante} other{{count} heures restantes}}",
-  "tfaTwoFactorAuth": "Authentification à deux facteurs"
+  "tfaTwoFactorAuth": "Authentification à deux facteurs",
+  "ublogCommunity": "Communauté",
+  "ublogXBlog": "Blogue de {param}"
 }

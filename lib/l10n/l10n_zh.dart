@@ -1038,6 +1038,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastKnockouts => '淘汰赛';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2766,7 +2776,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signUp => '注册';
 
   @override
-  String get computersAreNotAllowedToPlay => '禁止使用电脑或借助电脑程序进行对弈。对弈时，请勿使用国际象棋引擎、对局数据库或向其他棋手寻求协助。另外，强烈建议您不要创建备用账户。过度使用多余的账户会导致账户被封禁。';
+  String get computersAreNotAllowedToPlay => '禁止计算机程序以及借助计算机辅助的玩家参与对弈。对弈时，请勿寻求国际象棋引擎、对局数据库或其他棋手的协助。另外，强烈建议不要创建多个账号，滥用多账号将导致封禁。';
 
   @override
   String get games => '对局';
@@ -2855,7 +2865,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signupUsernameHint => '请务必选择一个和谐的用户名，用户名设置后无法更改，并且不合规的用户名会导致账户被封禁！';
 
   @override
-  String get signupEmailPromise => '我们只会向您发送与您账户相关的邮件，绝不会将您的邮箱共享给第三方！';
+  String get signupEmailPromise => '我们只会向您发送与您账户相关的邮件，绝不会将您的邮箱共享给第三方。';
 
   @override
   String get password => '密码';
@@ -3511,6 +3521,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 起始局面：$param';
   }
+
+  @override
+  String get randomChess960Position => '随机 Chess960 局面';
 
   @override
   String get startPosition => '起始局面';
@@ -4709,7 +4722,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get correspondenceDesc => '通讯棋对局：每步棋一天或数天';
 
   @override
-  String get puzzleDesc => '国际象棋战术训练器';
+  String get puzzleDesc => '战术训练';
 
   @override
   String get important => '重要提示';
@@ -6457,6 +6470,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '双重认证';
+
+  @override
+  String get ublogCommunity => '社区';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param 的博客';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12431,4 +12452,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get ublogCommunity => '社群';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param的部落格';
+  }
 }

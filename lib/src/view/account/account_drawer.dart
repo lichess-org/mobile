@@ -118,9 +118,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     final client = ref.read(defaultClientProvider);
-    final isOnline = ref.watch(
-      connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
-    );
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
     final account = ref.watch(accountProvider);

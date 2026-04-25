@@ -1098,6 +1098,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3593,6 +3603,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Základní postavení Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Základní postavení';
@@ -6740,4 +6753,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvoufázové ověření';
+
+  @override
+  String get ublogCommunity => 'Komunita';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog hráče $param';
+  }
 }

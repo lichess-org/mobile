@@ -1,5 +1,5 @@
 {
-  "mobileAccountPreferences": "Hisob sozlamalari",
+  "mobileAccountPreferences": "Akkaunt sozlamalari",
   "mobileAccountPreferencesHelp": "Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.",
   "mobileAllGames": "Barcha oʻyinlar",
   "mobileAreYouSure": "Ishonchingiz komilmi?",
@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Tay‑breyk",
   "broadcastGameX": "{param}‑oʻyin",
   "broadcastKnockouts": "Nokaut",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} translyatsiya} other{{count} translyatsiya}}",
   "broadcastNbViewers": "{count, plural, =1{{count} ta kuzatuvchi} other{{count} ta kuzatuvchi}}",
   "challengeChallengesX": "{param1} ta chorlov",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Mashhur debyutlar",
   "endgamePositions": "Endshpil pozitsiyalari",
   "chess960StartPosition": "Fisher shaxmati boshlangʻich pozitsiya: {param}",
+  "randomChess960Position": "Tasodifiy Fisher shaxmati pozitsiyasi",
   "startPosition": "Boshlangʻich pozitsiya",
   "clearBoard": "Taxtani tozalash",
   "loadPosition": "Pozitsiyani yuklash",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} yil oldin} other{{count} yil oldin}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} daqiqa qoldi} other{{count} daqiqa qoldi}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} soat qoldi} other{{count} soat qoldi}}",
-  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya"
+  "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya",
+  "ublogCommunity": "Hamjamiyat",
+  "ublogXBlog": "{param} blogi"
 }

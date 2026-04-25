@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Тай-брейки",
   "broadcastGameX": "{param} партий",
   "broadcastKnockouts": "Нокауты",
+  "broadcastUnderXAgeTournament": "До {param}",
+  "broadcastUnderXEloTournament": "До {param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} трансляция} few{{count} трансляции} many{{count} трансляций} other{{count} трансляций}}",
   "broadcastNbViewers": "{count, plural, =1{{count} зритель} few{{count} зрителя} many{{count} зрителей} other{{count} зрителей}}",
   "challengeChallengesX": "Вызовов: {param1}",
@@ -1051,6 +1053,7 @@
   "popularOpenings": "Популярные дебюты",
   "endgamePositions": "Эндшпильные позиции",
   "chess960StartPosition": "Начальная позиция в шахматах Фишера: {param}",
+  "randomChess960Position": "Случайная позиция в шахматах Фишера",
   "startPosition": "Начальная позиция",
   "clearBoard": "Очистить доску",
   "loadPosition": "Загрузить позицию",
@@ -1825,5 +1828,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} год назад} few{{count} года назад} many{{count} лет назад} other{{count} лет назад}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{осталась {count} минута} few{осталось {count} минуты} many{осталось {count} минут} other{осталось {count} минут}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{остался {count} час} few{осталось {count} часа} many{осталось {count} часов} other{осталось {count} часов}}",
-  "tfaTwoFactorAuth": "Двухфакторная аутентификация"
+  "tfaTwoFactorAuth": "Двухфакторная аутентификация",
+  "ublogCommunity": "Сообщество",
+  "ublogXBlog": "Блог {param}"
 }
