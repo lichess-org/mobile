@@ -70,14 +70,14 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
     @Default(TimeControlType.realTime) TimeControlType timeControlType,
-    @Default(TimeIncrement(300, 3)) TimeIncrement timeIncrement,
+    @Default(TimeIncrement.blitzDefault()) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
     timeControlType: TimeControlType.realTime,
-    timeIncrement: TimeIncrement(500, 3),
+    timeIncrement: TimeIncrement.blitzDefault(),
   );
 
   factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {
