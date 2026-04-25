@@ -303,6 +303,12 @@ enum BroadcastPoints {
   half,
   zero;
 
+  double get value => switch (this) {
+    BroadcastPoints.one => 1.0,
+    BroadcastPoints.half => 0.5,
+    BroadcastPoints.zero => 0.0,
+  };
+
   BroadcastResult resultFor(Side side) => switch (this) {
     BroadcastPoints.one =>
       side == Side.white ? BroadcastResult.whiteWins : BroadcastResult.blackWins,
