@@ -680,7 +680,7 @@ void main() {
       await triggerAppLink(tester, uri);
       await tester.pumpAndSettle();
 
-      expect(find.byType(TvScreen), findsNothing);
+      expect(find.byType(TvScreen), findsOneWidget);
       expect(find.text('Invalid TV channel: not-a-real-channel'), findsOneWidget);
     });
   });
