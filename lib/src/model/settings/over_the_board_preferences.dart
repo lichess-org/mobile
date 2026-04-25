@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 part 'over_the_board_preferences.freezed.dart';
@@ -41,6 +42,10 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   Future<void> setTimeControlType(TimeControlType type) {
     return save(state.copyWith(timeControlType: type));
   }
+
+  Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
+    return save(state.copyWith(timeIncrement: timeIncrement));
+  }
 }
 
 enum TimeControlType {
@@ -65,12 +70,14 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
     @Default(TimeControlType.realTime) TimeControlType timeControlType,
+    @Default(TimeIncrement(300, 3)) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
     timeControlType: TimeControlType.realTime,
+    timeIncrement: TimeIncrement(500, 3),
   );
 
   factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {
