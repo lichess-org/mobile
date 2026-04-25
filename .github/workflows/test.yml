@@ -56,5 +56,5 @@ jobs:
       #   run: dart run custom_lint
 
       - name: Run unit tests
-        run: flutter test
+        run: flutter test --reporter=github
 
