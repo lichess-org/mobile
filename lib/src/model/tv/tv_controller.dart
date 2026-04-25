@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -201,6 +202,16 @@ class TvController extends AsyncNotifier<TvState> {
         } else {
           _onReload?.call();
         }
+      case 'crowd':
+        final data = event.data as Map<String, dynamic>;
+        final watcherData = data['watchers'];
+        if (watcherData != null && watcherData is Map<String, dynamic>) {
+          final nb = watcherData['nb'] as int? ?? 0;
+          final users =
+              (watcherData['users'] as List<dynamic>?)?.map((e) => e.toString()).toIList() ??
+              const IList.empty();
+          state = AsyncData(state.requireValue.copyWith(nbWatchers: nb, watcherNames: users));
+        }
       case 'rematchTaken':
         _onReload?.call();
       case 'move':
@@ -274,6 +285,8 @@ sealed class TvState with _$TvState {
     required PlayableGame game,
     required int stepCursor,
     required Side orientation,
+    @Default(0) int nbWatchers,
+    @Default(IList<String>.empty()) IList<String> watcherNames,
   }) = _TvState;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;

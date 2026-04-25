@@ -98,7 +98,6 @@ class GameController extends AsyncNotifier<GameState> {
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       _socketClient.version = fullEvent.socketEventVersion;
@@ -861,6 +860,15 @@ class GameController extends AsyncNotifier<GameState> {
             newState = newState.copyWith(opponentLeftCountdown: null);
           }
         }
+        final watcherData = data['watchers'];
+        if (watcherData != null && watcherData is Map<String, dynamic>) {
+          final nb = watcherData['nb'] as int? ?? 0;
+          final users =
+              (watcherData['users'] as List<dynamic>?)?.map((e) => e.toString()).toIList() ??
+              const IList.empty();
+          newState = newState.copyWith(nbWatchers: nb, watcherNames: users);
+        }
+
         state = AsyncValue.data(newState);
 
       // Gone event, sent when the opponent has quit the game for long enough
@@ -1052,6 +1060,8 @@ sealed class GameState with _$GameState {
   const GameState._();
 
   const factory GameState({
+    @Default(0) int nbWatchers,
+    @Default(IList<String>.empty()) IList<String> watcherNames,
     required GameFullId gameFullId,
     required PlayableGame game,
     required int stepCursor,

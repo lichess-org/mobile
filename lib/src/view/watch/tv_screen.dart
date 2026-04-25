@@ -89,7 +89,10 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       const Icon(Icons.live_tv),
                     ],
                   ),
-            actions: const [ToggleSoundButton()],
+            actions: [
+              _WatcherButton(tvGameCtrl: _tvGameCtrl),
+              const ToggleSoundButton(),
+            ],
           ),
           body: SafeArea(
             child: Column(
@@ -276,5 +279,28 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
   void _moveForward(WidgetRef ref) {
     ref.read(_tvGameCtrl.notifier).cursorForward();
+  }
+}
+
+class _WatcherButton extends ConsumerWidget {
+  const _WatcherButton({required this.tvGameCtrl});
+
+  final AsyncNotifierProvider<TvController, TvState> tvGameCtrl;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nb = ref.watch(tvGameCtrl.select((s) => s.value?.nbWatchers ?? 0));
+    if (nb <= 0) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.person_outlined, size: 20),
+          const SizedBox(width: 4),
+          Text('$nb', style: Theme.of(context).textTheme.bodyMedium),
+        ],
+      ),
+    );
   }
 }
