@@ -162,12 +162,14 @@ class _RepeatButtonState extends State<RepeatButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onLongPress: _onLongPress,
-      onLongPressCancel: _onPressEnd,
-      onLongPressUp: _onPressEnd,
-      child: widget.child,
+    return MergeSemantics(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPress: widget.onLongPress != null ? _onLongPress : null,
+        onLongPressCancel: widget.onLongPress != null ? _onPressEnd : null,
+        onLongPressUp: widget.onLongPress != null ? _onPressEnd : null,
+        child: widget.child,
+      ),
     );
   }
 }
