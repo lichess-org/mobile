@@ -619,6 +619,10 @@ void main() {
       when(() => mockUserRepository.getUser(const UserId('thibault'))).thenAnswer(
         (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
       );
+      final testGame = generateExportedGames(count: 1).first;
+      when(
+        () => mockUserRepository.getCurrentGame(const UserId('thibault')),
+      ).thenAnswer((_) async => testGame);
 
       await triggerAppLink(
         tester,
@@ -627,6 +631,20 @@ void main() {
           userRepositoryProvider: userRepositoryProvider.overrideWith((_) => mockUserRepository),
         },
       );
+
+      // Wait a frame for the async getCurrentGame lookup to complete
+      await tester.pump();
+
+      sendServerSocketMessages(Uri(path: '/watch/${testGame.id.value}/white/v6'), [
+        makeFullEvent(
+          testGame.id,
+          '',
+          whiteUserName: testGame.white.user?.name ?? 'White',
+          blackUserName: testGame.black.user?.name ?? 'Black',
+        ),
+      ]);
+      await tester.pump(); // Process socket message
+
       await tester.pumpAndSettle(); // Wait for tv screen to load
 
       expect(
@@ -658,7 +676,37 @@ void main() {
 
     testWidgets('Shows tv screen for /tv/<channel> link', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/tv/blitz');
-      await triggerAppLink(tester, uri);
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (request.url.path == '/api/tv/channels') {
+                  const body = '''
+                  {
+                    "blitz": {"color": "white", "gameId": "v3pIFdTz", "rating": 2615, "user": {"id": "whitePlayer", "name": "whitePlayer"}}
+                  }''';
+                  return http.Response(body, 200, headers: {'content-type': 'application/json'});
+                }
+                return http.Response('', 404);
+              }),
+            );
+          }),
+        },
+      );
+      await tester.pump(kFakeWebSocketConnectionLag);
+      sendServerSocketMessages(Uri(path: '/watch/v3pIFdTz/white/v6'), [
+        makeFullEvent(
+          const GameId('gameid11'),
+          '',
+          whiteUserName: 'whitePlayer',
+          blackUserName: 'blackPlayer',
+        ),
+      ]);
+      await tester.pump(); // Process socket message
+
       await tester.pumpAndSettle(); // Wait for TV screen to load
 
       expect(
