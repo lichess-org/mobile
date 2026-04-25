@@ -192,7 +192,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       AsyncData(value: final roundState) => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
-          title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
+          title: AppBarTitleText(
+            asyncTournament.value?.data.name ?? widget.broadcast.title,
+            maxLines: 2,
+          ),
           bottom: TabBar(
             controller: _tabController,
             tabs: <Widget>[
@@ -218,8 +221,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             SemanticIconButton(
               icon: const PlatformShareIcon(),
               semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () =>
-                  showBroadcastShareMenu(context, widget.broadcast.tour, roundState.round),
+              onPressed: () => showBroadcastShareMenu(
+                context,
+                asyncTournament.value?.data ?? widget.broadcast.tour,
+                roundState.round,
+              ),
             ),
           ],
         ),
@@ -231,7 +237,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               AsyncData(:final value) => BroadcastBoardsTab(
                 tournamentId: _selectedTournamentId,
                 roundId: _selectedRoundId ?? value.defaultRoundId,
-                tournamentSlug: widget.broadcast.tour.slug,
+                tournamentSlug: value.data.slug,
                 showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
               ),
               _ => const SizedBox.shrink(),
@@ -242,7 +248,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 AsyncData(:final value) => BroadcastTeamsTab(
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
-                  tournamentSlug: widget.broadcast.tour.slug,
+                  tournamentSlug: value.data.slug,
                 ),
                 _ => const SizedBox.shrink(),
               },
