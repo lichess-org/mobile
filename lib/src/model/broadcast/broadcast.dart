@@ -329,7 +329,6 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
     required double? customPoints,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
-    required bool ongoing,
   }) = _BroadcastPlayerGameResult;
 }
 
