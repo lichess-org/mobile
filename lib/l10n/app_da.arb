@@ -1049,6 +1049,7 @@
   "popularOpenings": "Populære åbninger",
   "endgamePositions": "Slutspilsstillinger",
   "chess960StartPosition": "Chess960 startposition: {param}",
+  "randomChess960Position": "Tilfældig Chess960-position",
   "startPosition": "Startopstilling",
   "clearBoard": "Fjern alle brikker",
   "loadPosition": "Indlæs stilling",

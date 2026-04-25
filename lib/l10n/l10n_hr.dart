@@ -3577,6 +3577,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Početna pozicija';
 
   @override
@@ -4431,7 +4434,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Svi jezici';
 
   @override
   String get background => 'Pozadina';

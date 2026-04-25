@@ -3549,6 +3549,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Starting position';
 
   @override
@@ -10115,6 +10118,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String chess960StartPosition(String param) {
     return 'Chess960 start position: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Starting position';

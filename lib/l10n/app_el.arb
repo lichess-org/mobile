@@ -1037,6 +1037,7 @@
   "popularOpenings": "Δημοφιλή ανοίγματα",
   "endgamePositions": "Θέσεις φινάλε",
   "chess960StartPosition": "Αρχική θέση Chess960: {param}",
+  "randomChess960Position": "Τυχαία θέση Chess960",
   "startPosition": "Αρχική διάταξη",
   "clearBoard": "Εκκαθάριση σκακιέρας",
   "loadPosition": "Φορτώστε θέση",

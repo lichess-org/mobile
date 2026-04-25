@@ -6520,6 +6520,12 @@ abstract class AppLocalizations {
   /// **'Chess960 start position: {param}'**
   String chess960StartPosition(String param);
 
+  /// No description provided for @randomChess960Position.
+  ///
+  /// In en, this message translates to:
+  /// **'Random Chess960 position'**
+  String get randomChess960Position;
+
   /// No description provided for @startPosition.
   ///
   /// In en, this message translates to:

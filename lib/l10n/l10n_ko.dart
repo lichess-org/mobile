@@ -3523,6 +3523,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => '시작 포지션';
 
   @override

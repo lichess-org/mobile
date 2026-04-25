@@ -3607,6 +3607,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Случайная позиция в шахматах Фишера';
+
+  @override
   String get startPosition => 'Начальная позиция';
 
   @override

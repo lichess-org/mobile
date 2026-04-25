@@ -1053,6 +1053,7 @@
   "popularOpenings": "Популярные дебюты",
   "endgamePositions": "Эндшпильные позиции",
   "chess960StartPosition": "Начальная позиция в шахматах Фишера: {param}",
+  "randomChess960Position": "Случайная позиция в шахматах Фишера",
   "startPosition": "Начальная позиция",
   "clearBoard": "Очистить доску",
   "loadPosition": "Загрузить позицию",

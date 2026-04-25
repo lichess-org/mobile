@@ -1144,6 +1144,7 @@
   "anonymous": "Anoniman igrač",
   "yourScore": "Tvoj rezultat: {param}",
   "language": "Jezik",
+  "allLanguages": "Svi jezici",
   "background": "Pozadina",
   "light": "Svijetla",
   "dark": "Tamna",

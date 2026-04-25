@@ -3551,6 +3551,9 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Posición aleatoria de Xadrez 960';
+
+  @override
   String get startPosition => 'Posición inicial';
 
   @override

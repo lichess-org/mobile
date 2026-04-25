@@ -1053,6 +1053,7 @@
   "popularOpenings": "Ouvertures courantes",
   "endgamePositions": "Positions de finale",
   "chess960StartPosition": "Position de départ – Chess960 : {param}",
+  "randomChess960Position": "Position d'échecs 960",
   "startPosition": "Position de départ",
   "clearBoard": "Vider l'échiquier",
   "loadPosition": "Charger une position",

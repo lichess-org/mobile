@@ -1014,6 +1014,7 @@
   "popularOpenings": "Hapje popullore",
   "endgamePositions": "Pozicione fundi loje",
   "chess960StartPosition": "Pozicion nisjeje Chess960: {param}",
+  "randomChess960Position": "Pozicion Chess960 kuturu",
   "startPosition": "Pozicioni fillestar",
   "clearBoard": "Spastro fushën",
   "loadPosition": "Ngarko pozicionin",

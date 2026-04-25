@@ -282,6 +282,8 @@
   "broadcastTiebreaks": "Desberdinketak",
   "broadcastGameX": "{param} partida",
   "broadcastKnockouts": "Kanporaketak",
+  "broadcastUnderXAgeTournament": "<{param}",
+  "broadcastUnderXEloTournament": "<{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{Zuzeneko {count}} other{{count} zuzeneko}}",
   "broadcastNbViewers": "{count, plural, =1{Ikusle {count}} other{{count} ikusle}}",
   "challengeChallengesX": "Erronkak: {param1}",
