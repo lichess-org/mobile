@@ -284,6 +284,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
 
   @override
+  String get mobilePgnLabels => 'PGN labels';
+
+  @override
   String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
 
   @override

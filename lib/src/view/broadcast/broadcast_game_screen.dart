@@ -1,7 +1,9 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -12,6 +14,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -37,6 +40,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastTournamentId? tournamentId;
@@ -90,9 +94,9 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   void initState() {
     super.initState();
 
-    tabs = [AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
+    tabs = [AnalysisTab.pgn, AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
-    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
+    _tabController = TabController(vsync: this, initialIndex: 2, length: tabs.length);
   }
 
   @override
@@ -320,6 +324,7 @@ class _Body extends ConsumerWidget {
               roundSlug: roundSlug,
             ),
             children: [
+              _PgnTagsView(roundId, gameId),
               _OpeningExplorerTab(roundId, gameId),
               _BroadcastGameTreeView(roundId, gameId),
               BroadcastGameSummary(roundId: roundId, gameId: gameId),
@@ -361,6 +366,98 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         displayMode: broadcastPrefs.inlineNotation
             ? PgnTreeDisplayMode.inlineNotation
             : PgnTreeDisplayMode.twoColumn,
+      ),
+    );
+  }
+}
+
+enum PgnTags {
+  white('White', isLink: false),
+  whiteElo('WhiteElo', isLink: false),
+  whiteTitle('WhiteTitle', isLink: false),
+  whiteFideId('WhiteFideId', isLink: true),
+  black('Black', isLink: false),
+  blackElo('BlackElo', isLink: false),
+  blackTitle('BlackTitle', isLink: false),
+  blackFideId('BlackFideId', isLink: true),
+  timeControl('TimeControl', isLink: false),
+  result('Result', isLink: false),
+  site('Site', isLink: false),
+  event('Event', isLink: false),
+  round('Round', isLink: false);
+
+  const PgnTags(this.tagName, {required this.isLink});
+
+  final String tagName;
+  final bool isLink;
+
+  String? buildUrl(String value) {
+    if (value.isEmpty) return null;
+    switch (this) {
+      case .whiteFideId:
+      case .blackFideId:
+        return '$kFideRatingsUrl$value';
+      default:
+        return null;
+    }
+  }
+}
+
+class _PgnTagsView extends ConsumerWidget {
+  const _PgnTagsView(this.roundId, this.gameId);
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+    final state = ref.watch(ctrlProvider).requireValue;
+    final pgnHeaders = state.pgnHeaders;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+      child: Table(
+        columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
+        defaultVerticalAlignment: TableCellVerticalAlignment.top,
+        children: [
+          for (final (index, tag) in PgnTags.values.indexed)
+            if (pgnHeaders.containsKey(tag.tagName))
+              TableRow(
+                decoration: BoxDecoration(
+                  color: index.isEven ? Theme.of(context).colorScheme.surfaceContainerLow : null,
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      '${tag.tagName}: ',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Builder(
+                      builder: (_) {
+                        final value = pgnHeaders[tag.tagName]!;
+                        final url = tag.isLink ? tag.buildUrl(value) : null;
+                        if (url != null) {
+                          return RichText(
+                            text: TextSpan(
+                              text: value,
+                              style: Styles.linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => launchUrlString(url),
+                            ),
+                          );
+                        }
+                        return Text(value.isEmpty ? '-' : value);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+        ],
       ),
     );
   }

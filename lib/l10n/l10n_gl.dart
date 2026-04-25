@@ -284,6 +284,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get mobilePgnLabels => 'PGN labels';
+
+  @override
   String get variantStandardTitle => 'Regras do xadrez estándar (FIDE)';
 
   @override

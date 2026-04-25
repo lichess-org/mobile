@@ -25,6 +25,7 @@ const _tournamentId = BroadcastTournamentId('RAIoMC7L');
 const _roundId = BroadcastRoundId('6VuqTjes');
 const _gameId = BroadcastGameId('G2LUflKg');
 const _gameIdWithServerAnalysis = BroadcastGameId('Wf2MqRBR');
+const _gameIdWithEmptyFideId = BroadcastGameId('EmptyFide1');
 
 final client = MockClient((request) {
   if (request.url.path == '/api/broadcast/-/-/$_roundId') {
@@ -47,6 +48,13 @@ final client = MockClient((request) {
     }
     return mockResponse(
       broadcastGamePgnResponses[_gameId]!,
+      200,
+      headers: {'content-type': 'application/x-chess-pgn'},
+    );
+  }
+  if (request.url.path == '/api/study/$_roundId/$_gameIdWithEmptyFideId.pgn') {
+    return mockResponse(
+      broadcastGamePgnResponses[_gameIdWithEmptyFideId]!,
       200,
       headers: {'content-type': 'application/x-chess-pgn'},
     );
@@ -114,6 +122,77 @@ void main() {
 
     //   expect(find.byKey(const Key('e3-whitebishop')), findsOneWidget);
     // });
+    testWidgets('PGN tags tab shows player info and FIDE ID links', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      expect(find.byType(Chessboard), findsOneWidget);
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      expect(find.byIcon(LichessIcons.flow_cascade), findsOne);
+      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('PGN labels'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('White: '), findsOne);
+      expect(find.text('WhiteElo: '), findsOne);
+      expect(find.text('WhiteFideId: '), findsOne);
+      expect(find.text('6300014', findRichText: true), findsOne);
+      expect(find.text('BlackFideId: '), findsOne);
+      expect(find.text('6336760', findRichText: true), findsOne);
+    });
+
+    testWidgets('PGN tags tab shows dash for empty FIDE ID', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameIdWithEmptyFideId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      expect(find.byType(Chessboard), findsOneWidget);
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('PGN labels'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('WhiteFideId: '), findsOne);
+      expect(find.text('BlackFideId: '), findsOne);
+      expect(find.text('-'), findsAtLeast(2));
+    });
+
     testWidgets('Broadcast Game Summary available', variant: kPlatformVariant, (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

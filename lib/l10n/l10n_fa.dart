@@ -284,6 +284,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'یا یک فایل PGN را بارگذاری کنید';
 
   @override
+  String get mobilePgnLabels => 'PGN labels';
+
+  @override
   String get variantStandardTitle => 'قانون‌های اِستاندهٔ شطرنج (فیده)';
 
   @override

@@ -116,6 +116,7 @@
   "mobileChallengeCreated": "Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.",
   "mobilePreviousPage": "Previous",
   "mobileOrImportPgnFile": "Or import a PGN file",
+  "mobilePgnLabels": "PGN labels",
   "variantStandardTitle": "Standard rules of chess (FIDE)",
   "variantChess960Title": "The starting position of the home rank pieces is randomised.",
   "variantKingOfTheHillTitle": "Bring your King to the centre to win the game.",

@@ -24,6 +24,7 @@ typedef BoardBuilder =
 typedef EngineGaugeBuilder = Widget Function(BuildContext context);
 
 enum AnalysisTab {
+  pgn(Icons.sell_outlined),
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
@@ -36,6 +37,8 @@ enum AnalysisTab {
 
   String l10n(AppLocalizations l10n) {
     switch (this) {
+      case AnalysisTab.pgn:
+        return l10n.mobilePgnLabels;
       case AnalysisTab.explorer:
         return l10n.openingExplorerAndTablebase;
       case AnalysisTab.moves:

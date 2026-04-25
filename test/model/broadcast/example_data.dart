@@ -146,6 +146,26 @@ const Map<BroadcastGameId, String> broadcastGamePgnResponses = {
 
 1. Nf3 { [%clk 1:30:32] } 1... Nf6 { [%clk 1:30:05] } 2. g3 { [%clk 1:30:47] } 2... g6 { [%clk 1:29:44] } 3. Bg2 { [%clk 1:30:58] } 3... Bg7 { [%clk 1:30:07] } 4. O-O { [%clk 1:31:12] } 4... O-O { [%clk 1:30:27] } 5. d4 { [%clk 1:30:11] } 5... d5 { [%clk 1:29:40] } 6. c4 { [%clk 1:30:17] } 6... dxc4 { [%clk 1:22:10] } 7. Na3 { [%clk 1:29:35] } 7... c5 { [%clk 1:22:30] } 8. Nxc4 { [%clk 1:23:58] } 8... Be6 { [%clk 1:22:23] } 9. Nfe5 { [%clk 1:13:51] } 9... Bd5 { [%clk 0:56:58] } 10. dxc5 { [%clk 1:12:39] } 10... Bxg2 { [%clk 0:57:21] } 11. Kxg2 { [%clk 1:09:12] } 11... Qc8 { [%clk 0:57:31] } *
 ''',
+  BroadcastGameId('EmptyFide1'): '''
+[Event "Round 1.1: Van Foreest, Jorden - Haast, Anne"]
+[Site "https://lichess.org/study/6VuqTjes/EmptyFide1"]
+[Date "2024-12-19"]
+[Round "1.1"]
+[White "Van Foreest, Jorden"]
+[Black "Haast, Anne"]
+[Result "*"]
+[WhiteElo "2694"]
+[WhiteTitle "GM"]
+[WhiteFideId ""]
+[BlackElo "2315"]
+[BlackTitle "WIM"]
+[BlackFideId ""]
+[Variant "Standard"]
+[ECO "C50"]
+[Opening "Italian Game"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 *
+''',
   BroadcastGameId('Wf2MqRBR'): '''
 [Event "Round 4.1: Yilmazyerli, Mert - Tarhan, Adar"]
 [Site "https://lichess.org/study/6VuqTjes/Wf2MqRBR"]

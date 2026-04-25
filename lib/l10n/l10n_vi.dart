@@ -284,6 +284,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
+  String get mobilePgnLabels => 'PGN labels';
+
+  @override
   String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
 
   @override
