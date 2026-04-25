@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -466,6 +467,34 @@ void main() {
             .having((s) => s.options.gameId, 'id', finishedGame.id.value)
             .having((s) => s.options.orientation, 'player color', Side.black),
       );
+    });
+
+    testWidgets('resolves /gameid link for imported game to analysis', (WidgetTester tester) async {
+      final mockGameRepository = MockGameRepository();
+      final importedGame = generateExportedGames(count: 1).first.copyWith(
+        status: GameStatus.started,
+        source: GameSource.import,
+        black: const Player(),
+        white: const Player(),
+      );
+      when(() => mockGameRepository.getGame(importedGame.id)).thenAnswer((_) async => importedGame);
+
+      final uri = Uri.parse('https://lichess.org/${importedGame.id.value}');
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>().having((s) => s.options.gameId, 'id', importedGame.id.value),
+      );
+      expect(find.byType(TvScreen), findsNothing);
     });
 
     testWidgets('resolves /gameid link for ongoing game', (WidgetTester tester) async {
