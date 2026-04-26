@@ -12,7 +12,6 @@
   <string name="origin">Asal</string>
   <string name="specialMoves">Langkah spesial</string>
   <string name="didYouLikeThisPuzzle">Apakah anda menyukai teka-teki ini?</string>
-  <string name="voteToLoadNextOne">Isi untuk memanggil yang satunya lagi!</string>
   <string name="findTheBestMoveForWhite">Temukan langkah terbaik putih.</string>
   <string name="findTheBestMoveForBlack">Temukan langkah terbaik hitam.</string>
   <string name="toGetPersonalizedPuzzles">Untuk mendapatkan teka-teki yang diatur:</string>
@@ -64,7 +63,7 @@
   <string name="fromMyGames">Dari permainan saya</string>
   <string name="lookupOfPlayer">Cari teka-teki dari sebuah permainan pemain</string>
   <string name="searchPuzzles">Cari teka-teki</string>
-  <string name="fromMyGamesNone" comment="All games on Lichess are generated from players' games. This feature lets you see if any puzzles have been generated from your games (and in this case, they haven't).&#10;&#10;This text used to say &quot;[...] your chances of having a puzzle of yours added!&quot;. We have since clarified the English text to note they are puzzles added from your games.">Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.
+  <string name="fromMyGamesNone">Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.
 Mainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!</string>
   <string name="puzzleDashboardDescription">Latih, analisis, meningkat</string>
   <plurals name="nbPlayed">
