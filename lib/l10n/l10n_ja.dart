@@ -2693,7 +2693,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get threads => 'スレッド数';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'CPU のスレッド数より小さい値に設定してください。目盛りは安全な推奨値を示しています';
 
   @override
   String get threadsDescriptionMobile => 'スレッド数が多いと解析精度が上がりますがバッテリー消費も増えます';
@@ -3521,6 +3521,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'チェス960 開始局面: $param';
   }
+
+  @override
+  String get randomChess960Position => 'チェス960 のランダムな配置';
 
   @override
   String get startPosition => '開始局面';
@@ -5040,7 +5043,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return '「$param」の検索結果はありません';
   }
 
   @override

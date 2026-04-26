@@ -3551,6 +3551,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Posição inicial';
 
   @override
@@ -7627,7 +7630,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'Sub-$param';
+    return 'Sub $param';
   }
 
   @override
@@ -10117,6 +10120,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String chess960StartPosition(String param) {
     return 'Posição inicial do Xadrez960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Posição aleatória de Xadrez960';
 
   @override
   String get startPosition => 'Posição inicial';

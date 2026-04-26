@@ -3523,6 +3523,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Thế trận Chess960 ngẫu nhiên';
+
+  @override
   String get startPosition => 'Thế cờ ban đầu';
 
   @override

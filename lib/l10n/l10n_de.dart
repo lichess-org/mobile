@@ -12,7 +12,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileAccountPreferences => 'Kontoeinstellungen';
 
   @override
-  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess - Konto angewendet und werden auf allen Geräten verwendet.';
+  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess-Konto angewendet und werden auf allen Geräten verwendet.';
 
   @override
   String get mobileAllGames => 'Alle Partien';
@@ -1932,7 +1932,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeCollinearMove => 'Kollinearer Zug';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Zwei gegnerische Figuren stehen sich gegenüber und eine zieht vorbei auf der Angriffslinie vorbei, ohne die gegnerische Figur zu schlagen.';
 
   @override
   String get puzzleThemeCornerMate => 'Eck-Matt';
@@ -3547,8 +3547,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String chess960StartPosition(String param) {
-    return 'Schach960 Anfangsstellung: $param';
+    return 'Chess960-Anfangsstellung: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Zufällige Chess960-Stellung';
 
   @override
   String get startPosition => 'Anfangsposition';

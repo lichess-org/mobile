@@ -1053,6 +1053,7 @@
   "popularOpenings": "Popular openings",
   "endgamePositions": "Endgame positions",
   "chess960StartPosition": "Chess960 start position: {param}",
+  "randomChess960Position": "Random Chess960 position",
   "startPosition": "Starting position",
   "clearBoard": "Clear board",
   "loadPosition": "Load position",

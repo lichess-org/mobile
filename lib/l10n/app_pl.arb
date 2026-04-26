@@ -1050,6 +1050,7 @@
   "popularOpenings": "Popularne otwarcia",
   "endgamePositions": "Pozycje końcowe",
   "chess960StartPosition": "Pozycja startowa w Szachach 960: {param}",
+  "randomChess960Position": "Losowa pozycja Chess960",
   "startPosition": "Ustawienie początkowe",
   "clearBoard": "Wyczyść szachownicę",
   "loadPosition": "Wczytaj ustawienie",

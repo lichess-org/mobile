@@ -3575,6 +3575,9 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Sākuma pozīcija';
 
   @override

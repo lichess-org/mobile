@@ -9,7 +9,7 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Hisob sozlamalari';
+  String get mobileAccountPreferences => 'Akkaunt sozlamalari';
 
   @override
   String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
@@ -3549,6 +3549,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Fisher shaxmati boshlangʻich pozitsiya: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tasodifiy Fisher shaxmati pozitsiyasi';
 
   @override
   String get startPosition => 'Boshlangʻich pozitsiya';

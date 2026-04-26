@@ -3551,6 +3551,9 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Pozicion Chess960 kuturu';
+
+  @override
   String get startPosition => 'Pozicioni fillestar';
 
   @override

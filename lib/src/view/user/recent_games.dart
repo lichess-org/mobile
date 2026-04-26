@@ -54,7 +54,7 @@ class RecentGamesWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('SEVERE: [RecentGames] could not recent games; $error\n$stackTrace');
+        debugPrint('SEVERE: [RecentGames] could not load recent games: $error\n$stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load recent games.'),

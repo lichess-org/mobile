@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
@@ -17,7 +18,9 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
@@ -26,6 +29,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -46,6 +50,8 @@ final _mockStalePuzzleJson = mockDailyPuzzleResponse.trim().replaceFirst(
 class MockGameRepository extends Mock implements GameRepository {}
 
 class MockChallengeRepository extends Mock implements ChallengeRepository {}
+
+class MockUserRepository extends Mock implements UserRepository {}
 
 class _DailyPuzzleLinkTestWidget extends ConsumerWidget {
   const _DailyPuzzleLinkTestWidget({this.puzzleId});
@@ -88,7 +94,7 @@ Future<void> triggerAppLink(
   final app = await makeTestProviderScopeApp(
     tester,
     overrides: overrides,
-    home: _TestWidget(uri: appLinkUri),
+    home: Scaffold(body: _TestWidget(uri: appLinkUri)),
   );
   await tester.pumpWidget(app);
   await tester.tap(find.text('test link'));
@@ -583,6 +589,99 @@ void main() {
       expect(find.text('Accept'), findsOneWidget);
       // challenges from link cannot be declined
       expect(find.text('Cancel'), findsOneWidget);
+    });
+
+    testWidgets('resolves /@/user link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/@/thibault');
+      final mockUserRepository = MockUserRepository();
+      when(() => mockUserRepository.getUser(const UserId('thibault'))).thenAnswer(
+        (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
+      );
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          userRepositoryProvider: userRepositoryProvider.overrideWith((_) => mockUserRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for user screen to load
+
+      expect(
+        tester.widget(find.byType(UserScreen)),
+        isA<UserScreen>().having((s) => s.user.id, 'user id', const UserId('thibault')),
+      );
+    });
+
+    testWidgets('resolves /@/user/tv link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/@/thibault/tv');
+      final mockUserRepository = MockUserRepository();
+      when(() => mockUserRepository.getUser(const UserId('thibault'))).thenAnswer(
+        (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
+      );
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          userRepositoryProvider: userRepositoryProvider.overrideWith((_) => mockUserRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for tv screen to load
+
+      expect(
+        tester.widget(find.byType(TvScreen)),
+        isA<TvScreen>().having((s) => s.user?.id, 'user id', const UserId('thibault')),
+      );
+    });
+
+    testWidgets('Shows error snackbar for invalid user', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/@/hikaru');
+      final mockUserRepository = MockUserRepository();
+      when(
+        () => mockUserRepository.getUser(const UserId('hikaru')),
+      ).thenThrow(Exception('User not found'));
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          userRepositoryProvider: userRepositoryProvider.overrideWith((_) => mockUserRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for snackbar to show
+
+      expect(find.byType(UserScreen), findsNothing);
+
+      expect(find.text('Cannot find user hikaru'), findsOneWidget);
+    });
+
+    testWidgets('Shows tv screen for /tv/<channel> link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/tv/blitz');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait for TV screen to load
+
+      expect(
+        tester.widget(find.byType(TvScreen)),
+        isA<TvScreen>().having((s) => s.channel, 'channel', TvChannel.blitz),
+      );
+    });
+
+    testWidgets('does not resolve /tv link without a channel', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/tv');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(find.byType(TvScreen), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('does not resolve /tv/<invalid> link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/tv/not-a-real-channel');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TvScreen), findsNothing);
+      expect(find.text('Invalid TV channel: not-a-real-channel'), findsOneWidget);
     });
   });
 }

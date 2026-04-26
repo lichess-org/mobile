@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateGameWidget extends ConsumerWidget {
@@ -151,10 +152,30 @@ class CreateGameWidget extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(context.l10n.ratingFilter, style: labelStyle),
+                    GestureDetector(
+                      onTap: canUseRatingRange
+                          ? null
+                          : () => _showDisabledRatingRangeExplanation(context),
+                      child: Row(
+                        mainAxisSize: .min,
+                        children: [
+                          Text(context.l10n.ratingFilter, style: labelStyle),
+                          if (!canUseRatingRange)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 16.0,
+                                color: Theme.of(context).disabledColor,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: Theme.of(context).dividerColor),
+                        foregroundColor: canUseRatingRange ? null : Theme.of(context).disabledColor,
                       ),
                       onPressed: canUseRatingRange
                           ? () {
@@ -181,7 +202,7 @@ class CreateGameWidget extends ConsumerWidget {
                                 },
                               );
                             }
-                          : null,
+                          : () => _showDisabledRatingRangeExplanation(context),
                       child: canUseRatingRange
                           ? Text(
                               '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
@@ -218,6 +239,21 @@ class CreateGameWidget extends ConsumerWidget {
           label: Text(context.l10n.createLobbyGame),
         ),
       ],
+    );
+  }
+
+  void _showDisabledRatingRangeExplanation(BuildContext context) {
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        content: Text(context.l10n.ratingRangeIsDisabledBecauseYourRatingIsProvisional),
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      ),
     );
   }
 }

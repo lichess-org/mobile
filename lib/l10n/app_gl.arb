@@ -1053,6 +1053,7 @@
   "popularOpenings": "Aperturas populares",
   "endgamePositions": "Posicións de finais",
   "chess960StartPosition": "Posición inicial de Chess960: {param}",
+  "randomChess960Position": "Posición aleatoria de Xadrez 960",
   "startPosition": "Posición inicial",
   "clearBoard": "Limpar o taboleiro",
   "loadPosition": "Cargar unha posición",

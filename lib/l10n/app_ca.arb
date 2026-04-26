@@ -1053,6 +1053,7 @@
   "popularOpenings": "Obertures populars",
   "endgamePositions": "Posicions de finals",
   "chess960StartPosition": "Posició inicial d'Escacs960 Fischer: {param}",
+  "randomChess960Position": "Posició d'escacs960 Aleatòria",
   "startPosition": "Posició inicial",
   "clearBoard": "Netejar el tauler",
   "loadPosition": "Carregar la posició",

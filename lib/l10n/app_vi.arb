@@ -1053,6 +1053,7 @@
   "popularOpenings": "Khai cuộc phổ biến",
   "endgamePositions": "Các thế cờ trong tàn cuộc",
   "chess960StartPosition": "Ván đấu Chess960 bắt đầu bằng thế cờ: {param}",
+  "randomChess960Position": "Thế trận Chess960 ngẫu nhiên",
   "startPosition": "Thế cờ ban đầu",
   "clearBoard": "Xóa bàn cờ",
   "loadPosition": "Tải thế cờ",

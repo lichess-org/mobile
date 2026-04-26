@@ -5,7 +5,6 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules">
 
         <meta-data
@@ -55,6 +54,13 @@
 
                 <data android:pathSuffix=".pgn" />
             </intent-filter>
+            <intent-filter>
+               <action android:name="android.intent.action.SEND" />
+               <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/x-chess-pgn" />
+                <data android:mimeType="application/vnd.chess-pgn" />
+                <data android:mimeType="text/x-chess-pgn" />
+            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -75,6 +81,9 @@
                 <data android:pathPattern="/study/........" />
                 <data android:pathPattern="/study/......../........" />
                 <data android:pathPattern="/tournament/........" />
+
+                <data android:pathPattern="/@/.*" />
+                <data android:pathPattern="/tv/.*" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />

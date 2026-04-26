@@ -140,7 +140,7 @@ class _GamebookBottomBar extends ConsumerWidget {
               showLabel: true,
             ),
             BottomBarButton(
-              icon: Icons.help,
+              icon: Icons.flag_outlined,
               label: context.l10n.viewTheSolution,
               showLabel: true,
               onTap: ref.read(studyControllerProvider(options).notifier).showGamebookSolution,

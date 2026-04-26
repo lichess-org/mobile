@@ -3607,6 +3607,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Випадкова позиція в шахи-960';
+
+  @override
   String get startPosition => 'Початкова позиція';
 
   @override
@@ -4245,7 +4248,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tournamentHomeTitle => 'Шаховий турнір із різними контролем часу та варіантами';
 
   @override
-  String get tournamentHomeDescription => 'Грайте у швидкі шахи на турнірі! Приєднуйтеся до запланованих офіційних турнірів або створіть власний. Куля, бліц, класичні шахи, шахи Фішера, \"Цар гори\", \"Три шахи\" та інші варіанти забезпечать нескінченне задоволення.';
+  String get tournamentHomeDescription => 'Грайте на швидких турнірах із шахів! Приєднуйтеся до запланованих офіційних турнірів або створіть власний. Куля, бліц, класичні шахи, шахи-960, цар гори, три шахи та інші варіанти нададуть нескінченне задоволення.';
 
   @override
   String get tournamentNotFound => 'Турнір не знайдено';

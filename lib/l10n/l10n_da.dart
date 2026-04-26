@@ -3551,6 +3551,9 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Tilfældig Chess960-position';
+
+  @override
   String get startPosition => 'Startopstilling';
 
   @override

@@ -3551,6 +3551,9 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Τυχαία θέση Chess960';
+
+  @override
   String get startPosition => 'Αρχική διάταξη';
 
   @override

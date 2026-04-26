@@ -24,8 +24,10 @@ import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
+import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -208,7 +210,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           appBar: AppBar(
             leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
             title: _StandaloneGameTitle(id: createdGameId, lastMoveAt: widget.lastMoveAt),
-            actions: [_GameMenu(gameId: createdGameId)],
+            actions: [
+              _WatcherButton(gameId: createdGameId),
+              _GameMenu(gameId: createdGameId),
+            ],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -475,6 +480,31 @@ class _StandaloneGameTitle extends ConsumerWidget {
         ),
       ),
       error: (error, _) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _WatcherButton extends ConsumerWidget {
+  const _WatcherButton({required this.gameId});
+  final GameFullId gameId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(gameControllerProvider(gameId).select((s) => s.value));
+    final nb = state?.nbWatchers ?? 0;
+    if (nb <= 0) return const SizedBox.shrink();
+    return SemanticIconButton(
+      semanticsLabel: context.l10n.spectatorRoom,
+      onPressed: () {
+        final s = ref.read(gameControllerProvider(gameId)).value;
+        if (s == null) return;
+        showModalBottomSheet<void>(
+          context: context,
+          builder: (_) =>
+              WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
+        );
+      },
+      icon: Badge(label: Text('$nb'), child: const Icon(Icons.person_outline)),
     );
   }
 }
