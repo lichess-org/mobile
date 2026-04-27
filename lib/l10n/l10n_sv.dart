@@ -1604,9 +1604,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Gillade du det här problemet?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Rösta för att ladda nästa!';
-
-  @override
   String get puzzleUpVote => 'Rösta upp pussel';
 
   @override

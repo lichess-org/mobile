@@ -1582,9 +1582,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
 
   @override
-  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
-
-  @override
   String get puzzleUpVote => '퍼즐 추천';
 
   @override
@@ -3523,7 +3520,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => '랜덤 체스960 포지션';
 
   @override
   String get startPosition => '시작 포지션';

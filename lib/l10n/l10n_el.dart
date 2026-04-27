@@ -1604,9 +1604,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτό το τακτικό;';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
-
-  @override
   String get puzzleUpVote => 'Μου άρεσε το τακτικό';
 
   @override

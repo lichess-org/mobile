@@ -1604,9 +1604,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
-
-  @override
   String get puzzleUpVote => 'Jepini një votë ushtrimit';
 
   @override

@@ -1604,9 +1604,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => '¿Te ha gustado este ejercicio?';
 
   @override
-  String get puzzleVoteToLoadNextOne => '¡Vota para pasar al siguiente!';
-
-  @override
   String get puzzleUpVote => 'Votar positivamente el ejercicio';
 
   @override
@@ -4168,7 +4165,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get toggleVariationArrows => 'Activa o desactiva flechas de variantes';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Alterna entre la siguiente variante y la anterior.';
+  String get cyclePreviousOrNextVariation => 'Alterna entre la siguiente variante y la anterior';
 
   @override
   String get toggleGlyphAnnotations => 'Activa o desactiva la anotación de figurines';

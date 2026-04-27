@@ -1582,9 +1582,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => '您喜欢这道谜题吗？';
 
   @override
-  String get puzzleVoteToLoadNextOne => '投票以加载下一题';
-
-  @override
   String get puzzleUpVote => '赞';
 
   @override
@@ -2776,7 +2773,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get signUp => '注册';
 
   @override
-  String get computersAreNotAllowedToPlay => '禁止计算机程序以及借助计算机辅助的玩家参与对弈。对弈时，请勿寻求国际象棋引擎、对局数据库或其他棋手的协助。另外，强烈建议不要创建多个账号，滥用多账号将导致封禁。';
+  String get computersAreNotAllowedToPlay => '禁止使用电脑或借助电脑程序进行对弈。对弈时，请勿使用国际象棋引擎、对局数据库或向其他棋手寻求协助。另外，强烈建议您不要创建备用账户，滥用账户行为将导致账户被封禁。';
 
   @override
   String get games => '对局';
@@ -4190,17 +4187,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
-    return '您超过了 $param1% 的 $param2 棋手。';
+    return '您超过了 $param1 的 $param2 棋手。';
   }
 
   @override
   String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
-    return '$param1 超过了 $param2% 的 $param3 棋手。';
+    return '$param1 超过了 $param2 的 $param3 棋手。';
   }
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return '超过了 $param1% 的 $param2 棋手';
+    return '超过了 $param1 的 $param2 棋手';
   }
 
   @override
@@ -6727,6 +6724,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get variantStandardTitle => '標準西洋棋規則';
 
   @override
+  String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
+
+  @override
   String get activityActivity => '活動';
 
   @override
@@ -7466,50 +7466,50 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get contactContactLichess => '聯繫 Lichess';
 
   @override
-  String get coordinatesCoordinates => '座標';
+  String get coordinatesCoordinates => '坐標';
 
   @override
-  String get coordinatesCoordinateTraining => '座標訓練';
+  String get coordinatesCoordinateTraining => '坐標訓練';
 
   @override
   String coordinatesAverageScoreAsWhiteX(String param) {
-    return '白棋方平均分數: $param';
+    return '白方平均分數： $param';
   }
 
   @override
   String coordinatesAverageScoreAsBlackX(String param) {
-    return '黑棋方平均分數: $param';
+    return '黑方平均分數： $param';
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard => '能快速對照棋盤上的座標與其位置是一項很重要的技巧。';
+  String get coordinatesKnowingTheChessBoard => '能知道棋盤上格子的坐標是一個很重要的技巧，因為：';
 
   @override
-  String get coordinatesMostChessCourses => '大多數的西洋棋課程都很頻繁的使用代數記譜法。';
+  String get coordinatesMostChessCourses => '大多數的西洋棋課程都會大量使用代數記譜法。';
 
   @override
-  String get coordinatesTalkToYourChessFriends => '這讓你跟和棋友更容易聊天，因為你們都知道「西洋棋的共同語言」。';
+  String get coordinatesTalkToYourChessFriends => '更容易與棋友討論，因為你們都知道「西洋棋的共同語言」。';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively => '如果能夠快速地辨認座標，可以更有效率的分析一場棋局。';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '如果能夠快速辨認坐標，便可以更有效地分析一場棋局。';
 
   @override
-  String get coordinatesACoordinateAppears => '座標將在棋盤上出現，您必須點擊對應的棋格。';
+  String get coordinatesACoordinateAppears => '棋盤上將出現坐標，您必須點擊對應的格子。';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation => '棋格將在棋盤上以紅色光提示，您必須輸入它的座標(例如「e4」)。';
+  String get coordinatesASquareIsHighlightedExplanation => '輸入亮起來的格子的坐標（例如「e4」）。';
 
   @override
-  String get coordinatesYouHaveThirtySeconds => '您有30秒時間正確配對盡可能多的棋格。';
+  String get coordinatesYouHaveThirtySeconds => '30秒內配對越多正確的格子越好！';
 
   @override
   String get coordinatesGoAsLongAsYouWant => '沒有時間限制，盡情練習吧！';
 
   @override
-  String get coordinatesShowCoordinates => '顯示座標';
+  String get coordinatesShowCoordinates => '顯示坐標';
 
   @override
-  String get coordinatesShowCoordsOnAllSquares => '在每一格顯示座標';
+  String get coordinatesShowCoordsOnAllSquares => '每一格皆顯示坐標';
 
   @override
   String get coordinatesShowPieces => '顯示棋子';
@@ -7518,10 +7518,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get coordinatesStartTraining => '開始訓練';
 
   @override
-  String get coordinatesFindSquare => '尋找方格';
+  String get coordinatesFindSquare => '尋找格子';
 
   @override
-  String get coordinatesNameSquare => '說出方格的名字';
+  String get coordinatesNameSquare => '說出格子的名字';
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => '只練習部分列與行';
@@ -7882,9 +7882,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => '您喜歡這道謎題嗎？';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '告訴我們加載下一題!';
 
   @override
   String get puzzleUpVote => '投票為好謎題';
@@ -8525,10 +8522,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settingsThisAccountIsClosed => '此帳號已被關閉。';
 
   @override
-  String get gameSetup => '棋局設置';
+  String get gameSetup => '棋局設定';
 
   @override
-  String get challengeAFriend => '挑戰一位朋友';
+  String get challengeAFriend => '挑戰朋友';
 
   @override
   String get playAgainstComputer => '與電腦對局';
@@ -8547,6 +8544,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get orLetYourOpponentScanQrCode => '或是讓對手掃描這個 QR code';
+
+  @override
+  String get permanentLinkForAnyoneToChallengeYou => '任何人都可以此設定挑戰你的永久連結。';
 
   @override
   String get waiting => '等待對手確認中';
@@ -11132,6 +11132,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get clearSearch => '清除搜索';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '找不到符合「$param」的結果';
+  }
 
   @override
   String get tags => '標籤';

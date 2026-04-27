@@ -1582,9 +1582,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'この問題は気に入りましたか？';
 
   @override
-  String get puzzleVoteToLoadNextOne => '投票すると次を読み込みます！';
-
-  @override
   String get puzzleUpVote => '上げ投票';
 
   @override

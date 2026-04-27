@@ -1626,9 +1626,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ți-a plăcut această problemă?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
-
-  @override
   String get puzzleUpVote => 'Vot pozitiv';
 
   @override

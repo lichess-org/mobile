@@ -1604,9 +1604,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ushbu masala yoqdimi?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Keyingisini yuklash uchun ovoz bering!';
-
-  @override
   String get puzzleUpVote => 'Masala yoqdi';
 
   @override

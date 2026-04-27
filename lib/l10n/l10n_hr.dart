@@ -1625,9 +1625,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Sviđa li ti se ovaj zadatak?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Ocijeni i prijeđi na sljedeći zadatak!';
-
-  @override
   String get puzzleUpVote => 'Glasaj za zagonetku';
 
   @override

@@ -1604,9 +1604,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Бұл жұмбақ ұнай ма?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Келесін ашу үшін дауыс беріңіз!';
-
-  @override
   String get puzzleUpVote => 'Дәрежесін көтеру';
 
   @override

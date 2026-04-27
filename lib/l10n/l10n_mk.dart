@@ -1604,13 +1604,10 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Дали Ви се допадна оваа загатка?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Гласај и премини на наредната!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Вашиот рејтинг нема да се промени. Имајте на ум дека загатките не се натпреварување. Вашиот рејтинг помага во изборот на најсоодветните загатки за вашата моментална вештина.';

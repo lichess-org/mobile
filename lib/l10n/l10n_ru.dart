@@ -1648,9 +1648,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Понравилась задача?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Проголосуйте и перейдите к следующей!';
-
-  @override
   String get puzzleUpVote => 'Задача понравилась';
 
   @override

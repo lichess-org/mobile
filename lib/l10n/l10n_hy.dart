@@ -1604,9 +1604,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Հավանեցի՞ք խնդիրը։';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Քվեարկե՛ք և անցե՛ք հաջորդին։';
-
-  @override
   String get puzzleUpVote => 'Խնդիրը հավանեցի';
 
   @override

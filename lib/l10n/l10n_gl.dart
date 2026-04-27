@@ -1604,13 +1604,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Gustouche este crebacabezas?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vota para cargar o seguinte!';
+  String get puzzleUpVote => 'Excelente crebacabezas!';
 
   @override
-  String get puzzleUpVote => 'Vota a favor do crebacabezas';
-
-  @override
-  String get puzzleDownVote => 'Vota en contra do crebacabezas';
+  String get puzzleDownVote => 'Crebacabezas ruín!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'A túa puntuación en crebacabezas non cambiará. Ten en conta que os crebacabezas non son unha competición. A túa puntuación axuda a escollerche os crebacabezas máis axeitados ó teu nivel.';
@@ -4377,7 +4374,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String xHostsY(String param1, String param2) {
-    return '$param1 crea $param2';
+    return '$param1 creou $param2';
   }
 
   @override
@@ -5037,7 +5034,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get showMeEverything => 'Amósamo todo';
 
   @override
-  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto.\nTodos os custos de funcionamento, desenvolvemento e contidos fináncianse unicamente mediante as doazóns dos usuarios.';
+  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto. Dependemos das doazóns dos usuarios para sufragar os custos de funcionamento, desenvolvemento e de contidos. Sen a nosa xenerosa comunidade non seriamos quen de manter o sitio funcionando. Grazas por unirte a nós!  ';
 
   @override
   String get nothingToSeeHere => 'Nada que ver aquí polo de agora.';

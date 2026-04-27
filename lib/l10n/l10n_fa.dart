@@ -1604,9 +1604,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'این معما را دوست داشتید؟';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'رأی‌ دهید تا معمای بعدی بار شود!';
-
-  @override
   String get puzzleUpVote => 'رأیِ مثبت به معما';
 
   @override

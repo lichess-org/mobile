@@ -1648,9 +1648,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Czy podobało Ci się to zadanie?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Zagłosuj, by wczytać następny!';
-
-  @override
   String get puzzleUpVote => 'Daj plusa zadaniu';
 
   @override

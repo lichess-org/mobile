@@ -1604,9 +1604,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Kas sulle meeldis see pusle?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Hääleta, nii saad edasi!';
-
-  @override
   String get puzzleUpVote => 'Hääleta poolt';
 
   @override

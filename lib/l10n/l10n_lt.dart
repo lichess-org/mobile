@@ -1648,9 +1648,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ar jums patiko ši užduotis?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Nubalsuokite norėdami pakrauti kitą!';
-
-  @override
   String get puzzleUpVote => 'Prabalsuoti už';
 
   @override

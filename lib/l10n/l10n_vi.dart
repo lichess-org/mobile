@@ -1582,9 +1582,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Bạn thích câu đố này chứ?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Bình chọn để đến câu đố tiếp theo!';
-
-  @override
   String get puzzleUpVote => 'Thích câu đố';
 
   @override

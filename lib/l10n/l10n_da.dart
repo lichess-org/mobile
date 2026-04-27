@@ -1604,9 +1604,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Kunne du lide denne opgave?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stem for at indlæse den næste!';
-
-  @override
   String get puzzleUpVote => 'Stem opgave op';
 
   @override

@@ -1604,9 +1604,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Avez-vous aimé ce problème ?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votez pour afficher le suivant !';
-
-  @override
   String get puzzleUpVote => 'Voter pour ce problème';
 
   @override

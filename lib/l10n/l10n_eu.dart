@@ -1604,9 +1604,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ariketa gustukoa izan da?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Eman bozka hurrengoa kargatzeko!';
-
-  @override
   String get puzzleUpVote => 'Ariketari +1 botoa';
 
   @override
@@ -3551,7 +3548,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => '960 xakeko ausazko posizioa';
 
   @override
   String get startPosition => 'Hasierako posizioa';

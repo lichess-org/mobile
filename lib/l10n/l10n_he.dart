@@ -1646,9 +1646,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'אהבת את החידה?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'יש לדרג לקבלת החידה הבאה!';
-
-  @override
   String get puzzleUpVote => 'הצבעה בעד החידה';
 
   @override

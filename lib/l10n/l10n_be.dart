@@ -1644,9 +1644,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ці спадабалася задача?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Прагаласуйце, каб перайсці да наступнай!';
-
-  @override
   String get puzzleUpVote => 'Задача спадабалася';
 
   @override

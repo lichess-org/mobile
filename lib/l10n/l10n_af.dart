@@ -1604,9 +1604,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Hou jy van hierdie raaisel?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stem om die volgende een te laai!';
-
-  @override
   String get puzzleUpVote => 'Stem vir raaisel';
 
   @override

@@ -1604,9 +1604,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'আপনি এই ধাঁধা তি কি পছন্দ করেছেন?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'পরের ধাঁধা তি তে জেতে ভতে দিন!';
-
-  @override
   String get puzzleUpVote => 'ধাঁধা কে আপ-ভোট করুন';
 
   @override

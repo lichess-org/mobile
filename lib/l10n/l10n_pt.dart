@@ -1604,9 +1604,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Gostaste deste problema?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vota para carregares o próximo!';
-
-  @override
   String get puzzleUpVote => 'Aprove o puzzle';
 
   @override
@@ -8173,9 +8170,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Você gostou deste problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vote para carregar o próximo!';
 
   @override
   String get puzzleUpVote => 'Aprovar problema';

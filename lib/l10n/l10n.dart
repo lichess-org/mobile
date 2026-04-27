@@ -2878,22 +2878,16 @@ abstract class AppLocalizations {
   /// **'Did you like this puzzle?'**
   String get puzzleDidYouLikeThisPuzzle;
 
-  /// No description provided for @puzzleVoteToLoadNextOne.
-  ///
-  /// In en, this message translates to:
-  /// **'Vote to load the next one!'**
-  String get puzzleVoteToLoadNextOne;
-
   /// No description provided for @puzzleUpVote.
   ///
   /// In en, this message translates to:
-  /// **'Rate puzzle positively'**
+  /// **'Great puzzle!'**
   String get puzzleUpVote;
 
   /// No description provided for @puzzleDownVote.
   ///
   /// In en, this message translates to:
-  /// **'Rate puzzle negatively'**
+  /// **'Bad puzzle!'**
   String get puzzleDownVote;
 
   /// No description provided for @puzzleYourPuzzleRatingWillNotChange.
@@ -9247,7 +9241,7 @@ abstract class AppLocalizations {
   /// No description provided for @lichessPatronInfo.
   ///
   /// In en, this message translates to:
-  /// **'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.'**
+  /// **'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  '**
   String get lichessPatronInfo;
 
   /// No description provided for @nothingToSeeHere.

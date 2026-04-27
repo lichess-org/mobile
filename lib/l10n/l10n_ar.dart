@@ -21,7 +21,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAreYouSure => 'هل أنت متأكد؟';
 
   @override
-  String get mobileBoardSettings => 'إعدادات اللوحة';
+  String get mobileBoardSettings => 'إعدادات الرقعة';
 
   @override
   String get mobileCancelTakebackOffer => 'إلغاء عرض الإسترجاع';
@@ -30,7 +30,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileClearButton => 'مسح';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'مسح النقل المحفوظ';
+  String get mobileCorrespondenceClearSavedMove => 'مسح النقلة المحفوظ';
 
   @override
   String get mobileCustomGameJoinAGame => 'الإنضمام إلى مباراة';
@@ -55,7 +55,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'يـوم طيـب';
 
   @override
-  String get mobileHideVariation => 'إخفاء النقلات المرشحة';
+  String get mobileHideVariation => 'إخفاء التفريع';
 
   @override
   String get mobileHomeTab => 'الرئيسية';
@@ -67,7 +67,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'لعرض هذه الصفحة، قم بتسجيل الدخول.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'مباراة جديدة';
 
   @override
   String get mobileNoSearchResults => 'لا توجد نتائج';
@@ -82,7 +82,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOkButton => 'موافق';
 
   @override
-  String get mobileOverTheBoard => 'على اللوحة';
+  String get mobileOverTheBoard => 'على الرقعة';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -114,7 +114,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'ستفقد سلسلة حلولِك الحالية وستُحفظ نتيجتك.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'حل الألغاز المتعلقة بإفتتاحاتك المفضلة، أو اختر موضوعاً.';
+  String get mobilePuzzleThemesSubtitle => 'حل الألغاز المتعلقة بإفتتاحياتك المفضلة، أو اختر موضوعاً.';
 
   @override
   String get mobilePuzzlesTab => 'الألغاز';
@@ -251,16 +251,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'تجاهل';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'تخصيص';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'توقف إظهار التهديد';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'مكتمل';
 
   @override
   String get mobileTournamentJumpToMyPage => 'Jump to my page';
@@ -272,7 +272,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detailed';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'مستكشف الإفتتحيات غير متاح دون إتصال';
 
   @override
   String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
@@ -284,7 +284,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
-  String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+  String get variantStandardTitle => 'قواعد الشطرنج القياسية (FIDE)';
 
   @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
@@ -299,7 +299,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
 
   @override
-  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+  String get variantAtomicTitle => 'فجّر ملك خصمك لتنتصر.';
 
   @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
@@ -1690,9 +1690,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'هل أعجبك هذا اللغز؟';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'صوت لتبدأ الغز التالي!';
 
   @override
   String get puzzleUpVote => 'أعجبني اللغز';

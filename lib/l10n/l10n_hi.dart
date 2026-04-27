@@ -1604,9 +1604,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'क्या आपको यह पहेली पसंद आई?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'अगले एक को लोड करने के लिए वोट दें!';
-
-  @override
   String get puzzleUpVote => 'पहेली को उपवोट करिये';
 
   @override

@@ -1648,9 +1648,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Páčila sa vám táto úloha?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Hlasujte a prejdite k ďalšej úlohe!';
-
-  @override
   String get puzzleUpVote => 'Posunúť úlohu vyššie';
 
   @override

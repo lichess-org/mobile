@@ -1604,9 +1604,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Hät dir d\'Ufgab g\'falle?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stimm ab, um die Nächscht z\'lade!';
-
-  @override
   String get puzzleUpVote => 'Die Ufgab positiv bewerte';
 
   @override
