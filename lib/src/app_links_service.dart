@@ -307,6 +307,7 @@ class AppLinksService {
 
       if (!context.mounted) return null;
 
+      print('game finished: ${game.finished}, source: ${game.source}');
       if (game.finished || game.source == .import) {
         return [
           AnalysisScreen.buildRoute(

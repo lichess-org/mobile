@@ -79,7 +79,7 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (makeStudy(), '{root comment} 1. e4 {wow} e5 {such chess}'));
+      ).thenAnswer((_) async => (makeStudy(), null, '{root comment} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -125,13 +125,13 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -212,7 +212,7 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -239,6 +239,7 @@ void main() {
           makeStudy(
             chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.black),
           ),
+          null,
           '',
         ),
       );
@@ -283,6 +284,7 @@ void main() {
           makeStudy(
             chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.white),
           ),
+          null,
           '',
         ),
       );
@@ -320,6 +322,7 @@ void main() {
               gamebook: true,
             ),
           ),
+          null,
           '''
 [Event "Improve Your Chess Calculation: Candidates| Ex 1: Hard"]
 [Site "https://lichess.org/study/xgZOEizT/OfF4eLmN"]
@@ -454,6 +457,7 @@ void main() {
             hints: ['Hint 1', null, null, null, 'Hint 2'].lock,
             deviationComments: [null, 'Shown if any move other than d4 is played', null, null].lock,
           ),
+          null,
           '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
         ),
       );
@@ -469,6 +473,7 @@ void main() {
             ),
             hints: ['Hint 1'].lock,
           ),
+          null,
           '1. e4 e5',
         ),
       );
@@ -565,11 +570,11 @@ void main() {
       // First chapter has a valid position
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       // Second chapter has an illegal position (no pieces on Board)
       when(
@@ -577,6 +582,7 @@ void main() {
       ).thenAnswer(
         (_) async => (
           studyChapter2,
+          null,
           '''
 [FEN "8/8/8/8/8/8/8/8 w - - 0 1"]
 { Random comment } { [%csl Gd5,Ge5,Ge4,Gd4] }
@@ -635,6 +641,7 @@ void main() {
             gamebook: false,
           ),
         ),
+        null,
         '''
 [Event "annotation bug test: Chapter 2"]
 [Date "2025.09.28"]
@@ -729,6 +736,7 @@ void main() {
             gamebook: false,
           ),
         ),
+        null,
         '''
 [Event "Test castling annotations"]
 [Date "2025.09.28"]

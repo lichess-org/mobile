@@ -640,6 +640,15 @@ extension ClientExtension on Client {
     return response.body;
   }
 
+  /// Send s an HTTP GET request with the given headers to the given URL and returns a Future that completes to the response.
+  ///
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  Future<Response> getAndThrowOnError(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response;
+  }
+
   /// Sends an HTTP DELETE request with the given headers and body to the given URL and read response body.
   ///
   /// Returns a Future that completes to the body of the response as a string.

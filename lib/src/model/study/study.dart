@@ -117,6 +117,8 @@ sealed class StudyChapter with _$StudyChapter {
   factory StudyChapter.fromJson(Map<String, Object?> json) => _$StudyChapterFromJson(json);
 }
 
+typedef StudyServerEval = ({String path, bool done});
+
 typedef StudyChapterFeatures = ({bool computer, bool explorer});
 
 StudyChapterFeatures studyChapterFeaturesFromJson(Map<String, Object?> json) {

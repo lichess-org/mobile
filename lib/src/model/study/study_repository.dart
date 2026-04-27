@@ -4,6 +4,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
@@ -64,7 +65,7 @@ class StudyRepository {
     );
   }
 
-  Future<(Study study, String pgn)> getStudy({
+  Future<(Study study, AnalysisSummary? analysisSummary, String pgn)> getStudy({
     required StudyId id,
     StudyChapterId? chapterId,
   }) async {
@@ -77,12 +78,15 @@ class StudyRepository {
       mapper: Study.fromServerJson,
     );
 
-    final pgnBytes = await client.readBytes(
-      Uri(path: '/api/study/$id/${chapterId ?? study.chapter.id}.pgn'),
+    final response = await client.getAndThrowOnError(
+      Uri(
+        path: '/api/study/$id/${chapterId ?? study.chapter.id}.pgn',
+        queryParameters: {'analysisHeader': '1'},
+      ),
       headers: {'Accept': 'application/x-chess-pgn'},
     );
 
-    return (study, utf8.decode(pgnBytes));
+    return (study, readAnalysisSummaryFromHeader(response), utf8.decode(response.bodyBytes));
   }
 
   Future<String> getStudyPgn(StudyId id) async {
