@@ -207,6 +207,10 @@ class _AppState extends ConsumerState<Application> {
   Future<void> _processSharedFiles(List<SharedMediaFile> files) async {
     if (files.isEmpty) return;
     final filePath = files.first.path;
+    if (filePath.startsWith('http')) {
+      debugPrint('Ignored shared URL in file processor: $filePath');
+      return;
+    }
     try {
       final context = _navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
