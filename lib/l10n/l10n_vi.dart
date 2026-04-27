@@ -64,6 +64,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
 
   @override

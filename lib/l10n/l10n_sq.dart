@@ -64,6 +64,15 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileLiveStreamers => 'Transmetues drejtpërsëdrejti';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override

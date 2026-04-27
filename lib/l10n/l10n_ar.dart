@@ -64,6 +64,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileLiveStreamers => 'البثوث المباشرة';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'لعرض هذه الصفحة، قم بتسجيل الدخول.';
 
   @override

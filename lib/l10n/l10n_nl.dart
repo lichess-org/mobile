@@ -64,6 +64,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override

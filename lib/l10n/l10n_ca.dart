@@ -64,6 +64,15 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileLiveStreamers => 'Retransmissors en directe';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Has d\'estar connectat per veure aquesta pàgina.';
 
   @override

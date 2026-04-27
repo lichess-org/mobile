@@ -17,6 +17,9 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">Hide variation</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
+  <string name="messageDeleteConversation" comment="Tooltip on the delete button in the conversation screen app bar.">Delete conversation</string>
+  <string name="messageDeleteConversationTitle" comment="Title of the confirmation dialog when deleting a conversation.">Delete conversation</string>
+  <string name="messageDeleteConversationConfirm" comment="Content of the confirmation dialog when deleting a conversation.">Are you sure you want to delete this conversation?</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">You must be logged in to view this page.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">New game</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>

@@ -64,6 +64,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileLiveStreamers => '방송 중인 스트리머';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
 
   @override

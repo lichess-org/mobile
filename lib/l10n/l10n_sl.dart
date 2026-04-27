@@ -64,6 +64,15 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileLiveStreamers => 'Prenašalci v živo';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Prijavite se za ogled te strani.';
 
   @override

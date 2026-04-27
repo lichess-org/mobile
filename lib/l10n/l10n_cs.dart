@@ -64,6 +64,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileLiveStreamers => 'Streameři';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override

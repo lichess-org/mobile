@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 sealed class DisplayItem {}
 
@@ -77,6 +78,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(conversationControllerProvider(widget.user.id)).value;
+    final canInteract =
+        state != null && !state.isBot && state.convo.postable && state.convo.messages.isNotEmpty;
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
@@ -85,9 +90,37 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           leading: UserAvatar(widget.user, radius: 16),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
-          onTap: () =>
-              Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user)),
+          onTap: () async {
+            await Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
+            ref.invalidate(conversationControllerProvider(widget.user.id));
+          },
         ),
+        actions: [
+          if (canInteract)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: context.l10n.mobileMessageDeleteConversation,
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => YesNoDialog(
+                    title: Text(context.l10n.mobileMessageDeleteConversationTitle),
+                    content: Text(context.l10n.mobileMessageDeleteConversationConfirm),
+                    onYes: () => Navigator.of(context).pop(true),
+                    onNo: () => Navigator.of(context).pop(false),
+                  ),
+                );
+                if (confirmed == true && context.mounted) {
+                  await ref
+                      .read(conversationControllerProvider(widget.user.id).notifier)
+                      .deleteThread();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
+            ),
+        ],
       ),
       body: _Body(user: widget.user),
     );
@@ -399,8 +432,7 @@ class _MessageInput extends ConsumerStatefulWidget {
 class _MessageInputState extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
-  bool get isBlocked =>
-      widget.state.convo.relations.inward == false || widget.state.convo.relations.outward == false;
+  bool get isBlocked => widget.state.isBlocked ?? false;
 
   bool get isBot => widget.state.isBot;
 

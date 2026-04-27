@@ -64,6 +64,15 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileLiveStreamers => 'Canlı yayımçılar';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Bu səhifəni görmək üçün daxil olmalısınız.';
 
   @override

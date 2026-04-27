@@ -64,6 +64,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileLiveStreamers => 'Стримеры в эфире';
 
   @override
+  String get mobileMessageDeleteConversation => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationTitle => 'Delete conversation';
+
+  @override
+  String get mobileMessageDeleteConversationConfirm => 'Are you sure you want to delete this conversation?';
+
+  @override
   String get mobileMustBeLoggedIn => 'Вы должны войти для просмотра этой страницы.';
 
   @override
