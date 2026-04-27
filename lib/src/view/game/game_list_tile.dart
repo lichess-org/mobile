@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -18,6 +20,8 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -30,7 +34,7 @@ import 'package:share_plus/share_plus.dart';
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
-class GameListTile extends StatelessWidget {
+class GameListTile extends ConsumerWidget {
   const GameListTile({required this.item, this.padding, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
@@ -38,7 +42,7 @@ class GameListTile extends StatelessWidget {
   final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
@@ -61,41 +65,87 @@ class GameListTile extends StatelessWidget {
       rating: opponent.rating,
     );
 
-    return ListTile(
-      onTap: () => openGameScreen(
-        context,
-        game: item.game,
-        orientation: item.pov,
-        loadingFen: game.lastFen,
-        loadingLastMove: game.lastMove,
-        lastMoveAt: game.lastMoveAt,
-      ),
-      onLongPress: () {
-        showModalBottomSheet<void>(
-          context: context,
-          useRootNavigator: true,
-          isDismissible: true,
-          isScrollControlled: true,
-          builder: (context) => GameContextMenu(
-            game: game,
-            mySide: youAre,
-            opponentTitle: opponentTitle,
-            onPressedBookmark: onPressedBookmark,
-          ),
-        );
-      },
-      leading: Icon(game.perf.icon),
-      title: opponentTitle,
-      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (me.analysis != null) ...[
-            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-            const SizedBox(width: 5),
+    return Dismissible(
+      key: Key(game.id.toString()),
+      direction: opponent.user != null && opponent.aiLevel == null
+          ? DismissDirection.endToStart
+          : DismissDirection.none,
+      background: const SizedBox.shrink(),
+      secondaryBackground: Container(
+        color: ColorScheme.of(context).primary,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(context.l10n.rematch, style: const TextStyle(color: Colors.white)),
+            const SizedBox(width: 8),
+            const Icon(Icons.sync, color: Colors.white),
           ],
-          getResultIcon(game, youAre),
-        ],
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        final timeControl = game.clock != null
+            ? ChallengeTimeControlType.clock
+            : game.daysPerTurn != null
+            ? ChallengeTimeControlType.correspondence
+            : ChallengeTimeControlType.unlimited;
+
+        final request = ChallengeRequest(
+          destUser: opponent.user,
+          variant: game.variant,
+          rated: game.rated,
+          sideChoice: SideChoice.random,
+          timeControl: timeControl,
+          clock: game.clock != null
+              ? (time: game.clock!.initial, increment: game.clock!.increment)
+              : null,
+          days: game.daysPerTurn,
+        );
+        final source = UserChallengeSource(request);
+        ref.invalidate(gameScreenLoaderProvider(source));
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(GameScreen.buildRoute(context, source: source));
+        return false as bool?;
+      },
+      child: ListTile(
+        onTap: () => openGameScreen(
+          context,
+          game: item.game,
+          orientation: item.pov,
+          loadingFen: game.lastFen,
+          loadingLastMove: game.lastMove,
+          lastMoveAt: game.lastMoveAt,
+        ),
+        onLongPress: () {
+          showModalBottomSheet<void>(
+            context: context,
+            useRootNavigator: true,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (context) => GameContextMenu(
+              game: game,
+              mySide: youAre,
+              opponentTitle: opponentTitle,
+              onPressedBookmark: onPressedBookmark,
+            ),
+          );
+        },
+        leading: Icon(game.perf.icon),
+        title: opponentTitle,
+        subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (me.analysis != null) ...[
+              Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
+              const SizedBox(width: 5),
+            ],
+            getResultIcon(game, youAre),
+          ],
+        ),
       ),
     );
   }
