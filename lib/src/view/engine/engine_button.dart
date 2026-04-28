@@ -290,7 +290,7 @@ class _EnginePopup extends ConsumerWidget {
         engineState != EngineState.computing &&
         (work == null || work.isDeeper != true);
 
-    final currentEval = switch (engineState) {
+    final ClientEval? currentEval = switch (engineState) {
       EngineState.computing || EngineState.idle => evalStateEval,
       _ => null,
     };
@@ -299,7 +299,7 @@ class _EnginePopup extends ConsumerWidget {
       return ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(context.l10n.cloudAnalysis),
-        subtitle: Text(context.l10n.depthX('${currentEval!.depth}')),
+        subtitle: Text(context.l10n.depthX('${currentEval.depth}')),
         trailing: canGoDeeper
             ? IconButton(
                 icon: const Icon(Icons.add_circle_outlined),
