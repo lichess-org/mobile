@@ -341,8 +341,5 @@ CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) => ILi
 );
 
 Division _divisionFromPick(RequiredPick pick) {
-  return Division(
-    middlegame: pick('middle').asDoubleOrNull(),
-    endgame: pick('end').asDoubleOrNull(),
-  );
+  return Division(middlegame: pick('middle').asIntOrNull(), endgame: pick('end').asIntOrNull());
 }

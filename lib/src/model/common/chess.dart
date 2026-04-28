@@ -263,7 +263,7 @@ sealed class LightOpening with _$LightOpening implements Opening {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class Division with _$Division {
-  const factory Division({double? middlegame, double? endgame}) = _Division;
+  const factory Division({int? middlegame, int? endgame}) = _Division;
 
   factory Division.fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
 }
