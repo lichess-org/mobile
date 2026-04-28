@@ -440,6 +440,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: recomputeRootView ? _root.view : state.requireValue.root,
         currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
