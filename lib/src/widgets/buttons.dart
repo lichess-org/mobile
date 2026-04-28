@@ -130,6 +130,15 @@ class _RepeatButtonState extends State<RepeatButton> {
   Timer? _holdTimer;
 
   @override
+  void didUpdateWidget(RepeatButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If the button becomes disabled mid-press stop the press
+    if (oldWidget.onLongPress != null && widget.onLongPress == null) {
+      _onPressEnd();
+    }
+  }
+
+  @override
   void dispose() {
     _holdTimer?.cancel();
     super.dispose();
