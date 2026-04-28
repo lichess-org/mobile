@@ -90,11 +90,16 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
+          leading: Theme.of(context).platform == TargetPlatform.android
+              ? null
+              : const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
           centerTitle: true,
+          actions: [
+            if (Theme.of(context).platform == TargetPlatform.android) const AndroidOverflowMenu(),
+          ],
         ),
-        drawer: const AccountDrawer(),
+        drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {

@@ -390,10 +390,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   : PlatformAppBar(
                       title: const AppBarLichessTitle(),
                       centerTitle: true,
-                      leading: const AccountDrawerIconButton(),
-                      actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
+                      leading: Theme.of(context).platform == TargetPlatform.android
+                          ? null
+                          : const AccountDrawerIconButton(),
+                      actions: [
+                        const _ChallengeScreenButton(),
+                        const _PlayerScreenButton(),
+                        if (Theme.of(context).platform == TargetPlatform.android)
+                          const AndroidOverflowMenu(),
+                      ],
                     ),
-              drawer: const AccountDrawer(),
+              drawer: Theme.of(context).platform == TargetPlatform.android
+                  ? null
+                  : const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(
