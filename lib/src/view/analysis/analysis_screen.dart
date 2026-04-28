@@ -318,7 +318,7 @@ class _Body extends ConsumerWidget {
                 analyisState: analysisState,
               )
             : null,
-        bottomBar: _BottomBar(options: options),
+        bottomBar: _BottomBar(options: options, tabController: controller),
         pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
@@ -423,9 +423,10 @@ class _Clock extends StatelessWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.options});
+  const _BottomBar({required this.options, required this.tabController});
 
   final AnalysisOptions options;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -565,6 +566,26 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (options case ArchivedGame())
+          if (analysisState.canRequestServerAnalysis)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.requestAComputerAnalysis),
+              onPressed: () {
+                if (authUser == null) {
+                  showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                  return;
+                }
+                ref
+                    .read(analysisControllerProvider(options).notifier)
+                    .requestServerAnalysis()
+                    .catchError((Object e) {
+                      if (context.mounted) {
+                        showSnackBar(context, e.toString(), type: SnackBarType.error);
+                      }
+                    });
+                tabController.animateTo(2);
+              },
+            ),
         if (options case ArchivedGame())
           if (analysisState.isComputerAnalysisAllowed)
             if (mySide != null)
