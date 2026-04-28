@@ -238,7 +238,7 @@ class _AccountSection extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [UserAvatar(user, radius: 10), const SizedBox(width: 8), Text(user.name)],
             )
-          : Text(context.l10n.settingsSettings),
+          : null,
       hasLeading: true,
       children: [
         if (user != null) ...[
