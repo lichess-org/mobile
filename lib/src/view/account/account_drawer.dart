@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
@@ -462,6 +463,124 @@ class AboutScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+enum _OverflowMenuItem { profile, inbox, settings, signIn, signOut, ping }
+
+/// An Android-only overflow menu button (⋮) for the app bar, replacing the
+/// drawer and providing access to account actions from any tab.
+class AndroidOverflowMenu extends ConsumerWidget {
+  const AndroidOverflowMenu();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authUser = ref.watch(authControllerProvider);
+    final kidMode = ref.watch(accountProvider).value?.kid ?? false;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final ping = ref.watch(socketPingProvider(null));
+    final isLoggedIn = authUser != null;
+    final showInbox = isLoggedIn && !kidMode;
+
+    Widget item(Widget icon, String label) =>
+        Row(children: [icon, const SizedBox(width: 12), Text(label)]);
+
+    Widget iconItem(IconData icon, String label) =>
+        item(Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary), label);
+
+    return Badge.count(
+      count: unreadMessages,
+      isLabelVisible: showInbox && unreadMessages > 0,
+      child: PopupMenuButton<_OverflowMenuItem>(
+        onSelected: (menuItem) async {
+          switch (menuItem) {
+            case _OverflowMenuItem.profile:
+              ref.invalidate(accountProvider);
+              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
+            case _OverflowMenuItem.inbox:
+              Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute(context));
+            case _OverflowMenuItem.settings:
+              Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
+            case _OverflowMenuItem.signIn:
+              await signInMutation.run(ref, (tsx) async {
+                await tsx.get(authControllerProvider.notifier).signIn();
+              });
+            case _OverflowMenuItem.signOut:
+              _showSignOutConfirmDialog(context, ref);
+            case _OverflowMenuItem.ping:
+              launchUrl(Uri.parse('https://lichess.org/lag'));
+          }
+        },
+        itemBuilder: (context) => [
+          if (isLoggedIn) ...[
+            PopupMenuItem(
+              value: _OverflowMenuItem.profile,
+              child: iconItem(Icons.person_outlined, context.l10n.profile),
+            ),
+            if (showInbox)
+              PopupMenuItem(
+                value: _OverflowMenuItem.inbox,
+                enabled: isOnline,
+                child: iconItem(Icons.mail_outline, context.l10n.inbox),
+              ),
+          ] else
+            PopupMenuItem(
+              value: _OverflowMenuItem.signIn,
+              enabled: isOnline,
+              child: iconItem(Icons.login_outlined, context.l10n.signIn),
+            ),
+          const PopupMenuDivider(),
+          PopupMenuItem(
+            value: _OverflowMenuItem.settings,
+            child: iconItem(Icons.settings_outlined, context.l10n.settingsSettings),
+          ),
+          if (isLoggedIn)
+            PopupMenuItem(
+              value: _OverflowMenuItem.signOut,
+              enabled: isOnline,
+              child: iconItem(Icons.logout_outlined, context.l10n.logOut),
+            ),
+          const PopupMenuDivider(),
+          PopupMenuItem(
+            value: _OverflowMenuItem.ping,
+            enabled: ping.averageLag > Duration.zero,
+            child: item(
+              LagIndicator(lagRating: ping.rating, size: 20),
+              ping.averageLag > Duration.zero
+                  ? 'PING ${ping.averageLag.inMilliseconds} ms'
+                  : context.l10n.noNetwork,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(context.l10n.logOut),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(context.l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                await signOutMutation.run(ref, (tsx) async {
+                  await tsx.get(authControllerProvider.notifier).signOut();
+                });
+              },
+              child: Text(context.l10n.mobileOkButton),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -118,13 +118,19 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
+          leading: Theme.of(context).platform == TargetPlatform.android
+              ? null
+              : const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
           centerTitle: true,
-          actions: const [_DashboardButton(), _HistoryButton()],
+          actions: [
+            const _DashboardButton(),
+            const _HistoryButton(),
+            if (Theme.of(context).platform == TargetPlatform.android) const AndroidOverflowMenu(),
+          ],
         ),
 
-        drawer: const AccountDrawer(),
+        drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
