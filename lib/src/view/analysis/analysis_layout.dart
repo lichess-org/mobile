@@ -1,8 +1,10 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -125,7 +127,7 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
 ///
 /// The length of the [children] list must match the [tabController]'s
 /// [TabController.length] and the length of the [AppBarAnalysisTabIndicator.tabs]
-class AnalysisLayout extends StatelessWidget {
+class AnalysisLayout extends ConsumerWidget {
   const AnalysisLayout({
     this.tabController,
     required this.boardBuilder,
@@ -186,7 +188,7 @@ class AnalysisLayout extends StatelessWidget {
   final Pockets? pockets;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Expanded(
@@ -221,9 +223,15 @@ class AnalysisLayout extends StatelessWidget {
                                 (kTabletBoardTableSidePadding * 2)) -
                       headerAndFooterHeight;
 
+                  final boardPrefs = ref.watch(boardPreferencesProvider);
+
                   return Padding(
                     padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                     child: Row(
+                      textDirection: switch (boardPrefs.landscapeBoardPosition) {
+                        .left => TextDirection.ltr,
+                        .right => TextDirection.rtl,
+                      },
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Column(
