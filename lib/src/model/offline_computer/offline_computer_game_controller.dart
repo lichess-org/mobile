@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
@@ -70,6 +71,9 @@ const _kMoveEvalMinSearchTime = Duration(milliseconds: 1000);
 ///
 /// We want a fast feedback here, and since multipv=1 the search should be fast.
 const _kMoveEvalMaxSearchTime = Duration(milliseconds: 2000);
+
+/// Extra breathing room after the configured piece animation before starting local engine work.
+const _kEngineMoveAnimationBuffer = Duration(milliseconds: 50);
 
 /// Depth threshold for using an engine evaluation for move evaluation in practice mode.
 ///
@@ -158,7 +162,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     } else {
       _applyMove(move);
       if (state.game.playable) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
     }
   }
@@ -178,7 +182,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       } else {
         _applyMove(move);
         if (state.game.playable) {
-          _playEngineMove();
+          _playEngineMoveAfterPlayerAnimation();
         }
       }
     }
@@ -296,7 +300,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (preMoveEval == null || preMoveEval.pvs.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
       if (state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
       return;
     }
@@ -334,7 +338,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
       return;
     }
@@ -380,14 +384,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
     } catch (e) {
       _logger.warning('Error evaluating move: $e');
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
         if (state.game.playable && state.turn != state.game.playerSide) {
-          _playEngineMove();
+          _playEngineMoveAfterPlayerAnimation();
         }
       }
     }
@@ -682,6 +686,21 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         state = state.copyWith(isEngineThinking: false);
       }
     }
+  }
+
+  Future<void> _playEngineMoveAfterPlayerAnimation() async {
+    await _waitForPlayerMoveAnimation();
+    if (!ref.mounted) return;
+    if (!state.game.playable || state.turn == state.game.playerSide) return;
+    await _playEngineMove();
+  }
+
+  Future<void> _waitForPlayerMoveAnimation() {
+    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
+    if (animationDuration <= Duration.zero) {
+      return Future<void>.value();
+    }
+    return Future<void>.delayed(animationDuration + _kEngineMoveAnimationBuffer);
   }
 
   void resign() {
