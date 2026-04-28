@@ -492,7 +492,8 @@ class _WatcherButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameControllerProvider(gameId).select((s) => s.value));
     final nb = state?.nbWatchers ?? 0;
-    if (nb <= 0) return const SizedBox.shrink();
+    final isZenModeActive = state?.isZenModeActive ?? false;
+    if (nb <= 0 || isZenModeActive) return const SizedBox.shrink();
     return SemanticIconButton(
       semanticsLabel: context.l10n.spectatorRoom,
       onPressed: () {
@@ -504,7 +505,12 @@ class _WatcherButton extends ConsumerWidget {
               WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
         );
       },
-      icon: Badge(label: Text('$nb'), child: const Icon(Icons.person_outline)),
+      icon: Badge(
+        label: Text('$nb'),
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        child: const Icon(Icons.person_outline, size: 20),
+      ),
     );
   }
 }
