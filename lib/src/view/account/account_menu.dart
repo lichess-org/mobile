@@ -100,7 +100,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
       body: Column(
         children: [
           Expanded(
-            child: Column(
+            child: (Theme.of(context).platform == TargetPlatform.iOS ? Column.new : ListView.new)(
               children: [
                 if (user != null) ...[
                   ListTile(
