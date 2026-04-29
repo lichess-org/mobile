@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -20,7 +21,9 @@ import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -39,6 +42,7 @@ class SettingsScreen extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
+    final signOutState = ref.watch(signOutMutation);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
@@ -181,6 +185,20 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.of(context).push(AppLogSettingsScreen.buildRoute(context));
                 },
               ),
+              if (authUser != null)
+                switch (signOutState) {
+                  MutationPending() => const ListTile(
+                    leading: Icon(Icons.logout_outlined),
+                    enabled: false,
+                    title: Center(child: ButtonLoadingIndicator()),
+                  ),
+                  _ => ListTile(
+                    leading: const Icon(Icons.logout_outlined),
+                    title: Text(context.l10n.logOut),
+                    enabled: isOnline,
+                    onTap: () => _showSignOutConfirmDialog(context, ref),
+                  ),
+                },
             ],
           ),
           Padding(
@@ -189,6 +207,48 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return showCupertinoActionSheet(
+        context: context,
+        actions: [
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.logOut),
+            isDestructiveAction: true,
+            onPressed: () async {
+              await signOutMutation.run(ref, (tsx) async {
+                await tsx.get(authControllerProvider.notifier).signOut();
+              });
+            },
+          ),
+        ],
+      );
+    }
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(context.l10n.logOut),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(context.l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                await signOutMutation.run(ref, (tsx) async {
+                  await tsx.get(authControllerProvider.notifier).signOut();
+                });
+              },
+              child: Text(context.l10n.mobileOkButton),
+            ),
+          ],
+        );
+      },
     );
   }
 

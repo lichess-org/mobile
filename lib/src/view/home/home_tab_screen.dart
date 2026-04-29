@@ -34,7 +34,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -387,20 +387,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       automaticallyImplyLeading: false,
                     )
                   : PlatformAppBar(
-                      title: const AppBarLichessTitle(),
-                      centerTitle: Theme.of(context).platform != TargetPlatform.android,
-                      leading: Theme.of(context).platform == TargetPlatform.android
-                          ? null
-                          : const AccountDrawerIconButton(),
-                      actions: [
-                        const _ChallengeScreenButton(),
-                        if (Theme.of(context).platform == TargetPlatform.android)
-                          const AndroidAccountButton(),
-                      ],
+                      title: Theme.of(context).platform == TargetPlatform.iOS
+                          ? AppBarLichessTitle(
+                              iconSize: Theme.of(context).textTheme.headlineMedium?.fontSize ?? 24,
+                            )
+                          : const AppBarLichessTitle(),
+                      centerTitle: false,
+                      titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+                          ? Theme.of(context).textTheme.headlineMedium
+                          : null,
+                      actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),
-              drawer: Theme.of(context).platform == TargetPlatform.android
-                  ? null
-                  : const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(

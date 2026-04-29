@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -13,7 +12,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -24,8 +23,6 @@ import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -47,16 +44,17 @@ class MoreTabScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          title: const AppBarLichessTitle(),
-          centerTitle: Theme.of(context).platform != TargetPlatform.android,
-          leading: Theme.of(context).platform == TargetPlatform.android
-              ? null
-              : const AccountDrawerIconButton(),
-          actions: [
-            if (Theme.of(context).platform == TargetPlatform.android) const AndroidAccountButton(),
-          ],
+          title: Theme.of(context).platform == TargetPlatform.iOS
+              ? AppBarLichessTitle(
+                  iconSize: Theme.of(context).textTheme.headlineMedium?.fontSize ?? 24,
+                )
+              : const AppBarLichessTitle(),
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineMedium
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),
         body: const _Body(),
       ),
     );
@@ -227,18 +225,12 @@ class _AccountSection extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final signOutState = ref.watch(signOutMutation);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     final user = authUser?.user;
 
     return ListSection(
-      header: user != null
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [UserAvatar(user, radius: 10), const SizedBox(width: 8), Text(user.name)],
-            )
-          : null,
+      header: user != null ? SettingsSectionTitle(user.name) : null,
       hasLeading: true,
       children: [
         if (user != null) ...[
@@ -275,63 +267,7 @@ class _AccountSection extends ConsumerWidget {
             Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
           },
         ),
-        if (user != null)
-          switch (signOutState) {
-            MutationPending() => const ListTile(
-              leading: Icon(Icons.logout_outlined),
-              enabled: false,
-              title: Center(child: ButtonLoadingIndicator()),
-            ),
-            _ => ListTile(
-              leading: const Icon(Icons.logout_outlined),
-              title: Text(context.l10n.logOut),
-              enabled: isOnline,
-              onTap: () => _showSignOutConfirmDialog(context, ref),
-            ),
-          },
       ],
-    );
-  }
-
-  Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return showCupertinoActionSheet(
-        context: context,
-        actions: [
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.logOut),
-            isDestructiveAction: true,
-            onPressed: () async {
-              await signOutMutation.run(ref, (tsx) async {
-                await tsx.get(authControllerProvider.notifier).signOut();
-              });
-            },
-          ),
-        ],
-      );
-    }
-    return showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: Text(context.l10n.logOut),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(context.l10n.cancel),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(dialogContext).pop();
-                await signOutMutation.run(ref, (tsx) async {
-                  await tsx.get(authControllerProvider.notifier).signOut();
-                });
-              },
-              child: Text(context.l10n.mobileOkButton),
-            ),
-          ],
-        );
-      },
     );
   }
 }

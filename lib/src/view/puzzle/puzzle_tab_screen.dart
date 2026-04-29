@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -117,17 +117,13 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: Theme.of(context).platform == TargetPlatform.android
-              ? null
-              : const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
-          centerTitle: Theme.of(context).platform != TargetPlatform.android,
-          actions: [
-            if (Theme.of(context).platform == TargetPlatform.android) const AndroidAccountButton(),
-          ],
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineMedium
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-
-        drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
