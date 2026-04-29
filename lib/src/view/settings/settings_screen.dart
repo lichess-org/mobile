@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -183,6 +184,16 @@ class SettingsScreen extends ConsumerWidget {
                     : null,
                 onTap: () {
                   Navigator.of(context).push(AppLogSettingsScreen.buildRoute(context));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.star_outline),
+                title: const Text('Rate this app'),
+                onTap: () {
+                  final uri = Theme.of(context).platform == TargetPlatform.android
+                      ? Uri.parse('market://details?id=org.lichess.mobileV2')
+                      : Uri.parse('https://apps.apple.com/us/app/lichess/id1662361230');
+                  launchUrl(uri, mode: LaunchMode.externalApplication);
                 },
               ),
               if (authUser != null)
