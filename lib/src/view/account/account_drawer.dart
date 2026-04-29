@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
@@ -467,90 +466,325 @@ class AboutScreen extends ConsumerWidget {
   }
 }
 
-enum _OverflowMenuItem { profile, inbox, settings, signIn, signOut, ping }
-
-/// An Android-only overflow menu button (⋮) for the app bar, replacing the
-/// drawer and providing access to account actions from any tab.
-class AndroidOverflowMenu extends ConsumerWidget {
-  const AndroidOverflowMenu();
+/// Android-only avatar button that opens [AndroidAccountMenuScreen].
+class AndroidAccountButton extends ConsumerStatefulWidget {
+  const AndroidAccountButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    final kidMode = ref.watch(accountProvider).value?.kid ?? false;
+  ConsumerState<AndroidAccountButton> createState() => _AndroidAccountButtonState();
+}
+
+class _AndroidAccountButtonState extends ConsumerState<AndroidAccountButton> {
+  bool _errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final account = ref.watch(accountProvider);
+    final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final client = ref.watch(defaultClientProvider);
+
+    void openMenu() {
+      Navigator.of(context, rootNavigator: true).push(AndroidAccountMenuScreen.buildRoute(context));
+    }
+
+    return switch (account) {
+      AsyncData(:final value) => Badge.count(
+        offset: const Offset(-4, 0),
+        count: unreadMessages,
+        isLabelVisible: !kidMode && unreadMessages > 0,
+        child: IconButton(
+          tooltip: value == null ? context.l10n.signIn : value.username,
+          icon: value == null
+              ? const Icon(Icons.account_circle_outlined, size: 30)
+              : CircleAvatar(
+                  radius: 16,
+                  foregroundImage: value.flair != null && !_errorLoadingFlair
+                      ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
+                      : null,
+                  onForegroundImageError: value.flair != null
+                      ? (error, _) => setState(() => _errorLoadingFlair = true)
+                      : null,
+                  backgroundColor: value.flair == null || _errorLoadingFlair
+                      ? null
+                      : ColorScheme.of(context).surfaceContainer,
+                  child: value.flair == null || _errorLoadingFlair ? Text(value.initials) : null,
+                ),
+          onPressed: openMenu,
+        ),
+      ),
+      _ => IconButton(
+        icon: const Icon(Icons.account_circle_outlined, size: 30),
+        tooltip: context.l10n.signIn,
+        onPressed: openMenu,
+      ),
+    };
+  }
+}
+
+/// Full-screen account menu for Android, opened by [AndroidAccountButton].
+///
+/// Slides in from the right and mirrors the content of [AccountDrawer].
+class AndroidAccountMenuScreen extends ConsumerStatefulWidget {
+  const AndroidAccountMenuScreen({super.key});
+
+  static Route<void> buildRoute(BuildContext context) {
+    return PageRouteBuilder<void>(
+      pageBuilder: (_, a, b) => const AndroidAccountMenuScreen(),
+      transitionsBuilder: (_, animation, b, child) {
+        final tween = Tween(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeInOut));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      },
+    );
+  }
+
+  @override
+  ConsumerState<AndroidAccountMenuScreen> createState() => _AndroidAccountMenuScreenState();
+}
+
+class _AndroidAccountMenuScreenState extends ConsumerState<AndroidAccountMenuScreen>
+    with WidgetsBindingObserver {
+  bool _errorLoadingFlair = false;
+  bool _pendingKidModeRefresh = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _pendingKidModeRefresh) {
+      _pendingKidModeRefresh = false;
+      ref.invalidate(accountProvider);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final client = ref.read(defaultClientProvider);
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
-    final ping = ref.watch(socketPingProvider(null));
-    final isLoggedIn = authUser != null;
-    final showInbox = isLoggedIn && !kidMode;
+    final signInState = ref.watch(signInMutation);
+    final signOutState = ref.watch(signOutMutation);
+    final account = ref.watch(accountProvider);
+    final authUser = ref.watch(authControllerProvider);
+    final kidMode = account.value?.kid ?? false;
+    final LightUser? user = account.value?.lightUser ?? authUser?.user;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
 
-    Widget item(Widget icon, String label) =>
-        Row(children: [icon, const SizedBox(width: 12), Text(label)]);
-
-    Widget iconItem(IconData icon, String label) =>
-        item(Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary), label);
-
-    return Badge.count(
-      count: unreadMessages,
-      isLabelVisible: showInbox && unreadMessages > 0,
-      child: PopupMenuButton<_OverflowMenuItem>(
-        onSelected: (menuItem) async {
-          switch (menuItem) {
-            case _OverflowMenuItem.profile:
-              ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
-            case _OverflowMenuItem.inbox:
-              Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute(context));
-            case _OverflowMenuItem.settings:
-              Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
-            case _OverflowMenuItem.signIn:
-              await signInMutation.run(ref, (tsx) async {
-                await tsx.get(authControllerProvider.notifier).signIn();
-              });
-            case _OverflowMenuItem.signOut:
-              _showSignOutConfirmDialog(context, ref);
-            case _OverflowMenuItem.ping:
-              launchUrl(Uri.parse('https://lichess.org/lag'));
-          }
-        },
-        itemBuilder: (context) => [
-          if (isLoggedIn) ...[
-            PopupMenuItem(
-              value: _OverflowMenuItem.profile,
-              child: iconItem(Icons.person_outlined, context.l10n.profile),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                if (user != null) ...[
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    leading: switch (account) {
+                      AsyncData(:final value) =>
+                        value == null
+                            ? const Icon(Icons.account_circle_outlined, size: 30)
+                            : CircleAvatar(
+                                radius: 20,
+                                foregroundImage: value.flair != null && !_errorLoadingFlair
+                                    ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
+                                    : null,
+                                onForegroundImageError: value.flair != null
+                                    ? (error, _) => setState(() => _errorLoadingFlair = true)
+                                    : null,
+                                backgroundColor: value.flair == null || _errorLoadingFlair
+                                    ? null
+                                    : ColorScheme.of(context).surfaceContainer,
+                                child: value.flair == null || _errorLoadingFlair
+                                    ? Text(value.initials)
+                                    : null,
+                              ),
+                      _ => const Icon(Icons.account_circle_outlined, size: 30),
+                    },
+                    title: AutoSizeText(
+                      user.name,
+                      style: Styles.callout,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      maxFontSize: 18,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    enabled: isOnline,
+                    onTap: () {
+                      ref.invalidate(accountProvider);
+                      Navigator.of(context).pop();
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(ProfileScreen.buildRoute(context));
+                    },
+                  ),
+                  if (kidMode)
+                    ListTile(
+                      textColor: Theme.of(context).colorScheme.primary,
+                      iconColor: Theme.of(context).colorScheme.primary,
+                      leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                      title: Text(
+                        context.l10n.kidModeIsEnabled,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        _pendingKidModeRefresh = true;
+                        launchUrl(lichessUri('/account/kid'));
+                      },
+                    ),
+                ] else ...[
+                  Center(
+                    child: FilledButton(
+                      onPressed: switch (signInState) {
+                        MutationPending() => null,
+                        _ => () {
+                          signInMutation.run(ref, (tsx) async {
+                            await tsx.get(authControllerProvider.notifier).signIn();
+                          });
+                        },
+                      },
+                      child: Text(context.l10n.signIn),
+                    ),
+                  ),
+                ],
+                const PlatformDivider(indent: 0),
+                ListSection(
+                  children: [
+                    if (user != null)
+                      ListTile(
+                        leading: const Icon(Icons.person_outlined),
+                        title: Text(context.l10n.profile),
+                        enabled: isOnline,
+                        onTap: () {
+                          ref.invalidate(accountProvider);
+                          Navigator.of(context).pop();
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).push(ProfileScreen.buildRoute(context));
+                        },
+                      ),
+                    if (user != null && account.hasValue && !kidMode)
+                      ListTile(
+                        leading: Badge.count(
+                          isLabelVisible: unreadMessages > 0,
+                          count: unreadMessages,
+                          child: const Icon(Icons.mail_outline),
+                        ),
+                        title: Text(context.l10n.inbox),
+                        enabled: isOnline,
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).push(ContactsScreen.buildRoute(context));
+                        },
+                      ),
+                    ListTile(
+                      leading: const Icon(Icons.settings_outlined),
+                      title: Text(context.l10n.settingsSettings),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(SettingsScreen.buildRoute(context));
+                      },
+                    ),
+                    if (user != null)
+                      switch (signOutState) {
+                        MutationPending() => const ListTile(
+                          leading: Icon(Icons.logout_outlined),
+                          enabled: false,
+                          title: Center(child: ButtonLoadingIndicator()),
+                        ),
+                        _ => ListTile(
+                          leading: const Icon(Icons.logout_outlined),
+                          title: Text(context.l10n.logOut),
+                          enabled: isOnline,
+                          onTap: () => _showSignOutConfirmDialog(context, ref),
+                        ),
+                      },
+                  ],
+                ),
+                ListSection(
+                  children: [
+                    if (Theme.of(context).platform == TargetPlatform.android)
+                      ListTile(
+                        leading: Icon(
+                          LichessIcons.patron,
+                          semanticLabel: context.l10n.patronLichessPatron,
+                        ),
+                        title: Text(context.l10n.patronDonate),
+                        enabled: isOnline,
+                        onTap: () => launchUrl(Uri.parse('https://lichess.org/patron')),
+                      ),
+                    ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      title: Text(context.l10n.about),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(AboutScreen.buildRoute(context));
+                      },
+                    ),
+                  ],
+                ),
+                const SocketPingRatingListTile(),
+              ],
             ),
-            if (showInbox)
-              PopupMenuItem(
-                value: _OverflowMenuItem.inbox,
-                enabled: isOnline,
-                child: iconItem(Icons.mail_outline, context.l10n.inbox),
-              ),
-          ] else
-            PopupMenuItem(
-              value: _OverflowMenuItem.signIn,
-              enabled: isOnline,
-              child: iconItem(Icons.login_outlined, context.l10n.signIn),
-            ),
-          const PopupMenuDivider(),
-          PopupMenuItem(
-            value: _OverflowMenuItem.settings,
-            child: iconItem(Icons.settings_outlined, context.l10n.settingsSettings),
           ),
-          if (isLoggedIn)
-            PopupMenuItem(
-              value: _OverflowMenuItem.signOut,
-              enabled: isOnline,
-              child: iconItem(Icons.logout_outlined, context.l10n.logOut),
-            ),
-          const PopupMenuDivider(),
-          PopupMenuItem(
-            value: _OverflowMenuItem.ping,
-            enabled: ping.averageLag > Duration.zero,
-            child: item(
-              LagIndicator(lagRating: ping.rating, size: 20),
-              ping.averageLag > Duration.zero
-                  ? 'PING ${ping.averageLag.inMilliseconds} ms'
-                  : context.l10n.noNetwork,
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextTheme.of(context).bodyMedium,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    ),
+                    onPressed: () => launchUrl(Uri.parse('https://lichess.org/privacy')),
+                    child: Text(context.l10n.privacyPolicy),
+                  ),
+                  Text('  •  ', style: TextTheme.of(context).bodyMedium),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextTheme.of(context).bodyMedium,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    ),
+                    onPressed: () => launchUrl(Uri.parse('https://lichess.org/terms-of-service')),
+                    child: Text(context.l10n.termsOfService),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

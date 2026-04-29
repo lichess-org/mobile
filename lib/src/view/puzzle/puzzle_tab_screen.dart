@@ -121,9 +121,9 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
               ? null
               : const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
-          centerTitle: true,
+          centerTitle: Theme.of(context).platform != TargetPlatform.android,
           actions: [
-            if (Theme.of(context).platform == TargetPlatform.android) const AndroidOverflowMenu(),
+            if (Theme.of(context).platform == TargetPlatform.android) const AndroidAccountButton(),
           ],
         ),
 

@@ -94,9 +94,9 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               ? null
               : const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
-          centerTitle: true,
+          centerTitle: Theme.of(context).platform != TargetPlatform.android,
           actions: [
-            if (Theme.of(context).platform == TargetPlatform.android) const AndroidOverflowMenu(),
+            if (Theme.of(context).platform == TargetPlatform.android) const AndroidAccountButton(),
           ],
         ),
         drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),

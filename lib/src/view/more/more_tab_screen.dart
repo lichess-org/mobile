@@ -48,12 +48,12 @@ class MoreTabScreen extends ConsumerWidget {
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: const AppBarLichessTitle(),
-          centerTitle: true,
+          centerTitle: Theme.of(context).platform != TargetPlatform.android,
           leading: Theme.of(context).platform == TargetPlatform.android
               ? null
               : const AccountDrawerIconButton(),
           actions: [
-            if (Theme.of(context).platform == TargetPlatform.android) const AndroidOverflowMenu(),
+            if (Theme.of(context).platform == TargetPlatform.android) const AndroidAccountButton(),
           ],
         ),
         drawer: Theme.of(context).platform == TargetPlatform.android ? null : const AccountDrawer(),

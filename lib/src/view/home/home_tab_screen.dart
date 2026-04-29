@@ -50,7 +50,6 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
-import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -389,15 +388,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     )
                   : PlatformAppBar(
                       title: const AppBarLichessTitle(),
-                      centerTitle: true,
+                      centerTitle: Theme.of(context).platform != TargetPlatform.android,
                       leading: Theme.of(context).platform == TargetPlatform.android
                           ? null
                           : const AccountDrawerIconButton(),
                       actions: [
                         const _ChallengeScreenButton(),
-                        const _PlayerScreenButton(),
                         if (Theme.of(context).platform == TargetPlatform.android)
-                          const AndroidOverflowMenu(),
+                          const AndroidAccountButton(),
                       ],
                     ),
               drawer: Theme.of(context).platform == TargetPlatform.android
@@ -891,32 +889,6 @@ class PreviewGameList<T> extends StatelessWidget {
           ),
           for (final data in list.take(maxGamesToShow)) builder(data),
         ],
-      ),
-    );
-  }
-}
-
-class _PlayerScreenButton extends ConsumerWidget {
-  const _PlayerScreenButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
-
-    return isOnlineAsync.maybeWhen(
-      data: (isOnline) => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: !isOnline
-            ? null
-            : () {
-                Navigator.of(context).push(PlayerScreen.buildRoute(context));
-              },
-      ),
-      orElse: () => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
       ),
     );
   }

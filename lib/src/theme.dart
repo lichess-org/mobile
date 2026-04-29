@@ -258,15 +258,6 @@ ThemeData _makeBackgroundImageTheme({
     ),
     searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: PageTransitionsTheme(
-      builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(
-          backgroundColor: seedColor.withValues(alpha: 0),
-        ),
-        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
-      },
-    ),
-
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
