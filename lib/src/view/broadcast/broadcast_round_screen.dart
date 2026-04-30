@@ -209,13 +209,23 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           actions: [
             SemanticIconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () => showModalBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                builder: (_) =>
-                    _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
-              ),
+              onPressed: () {
+                final games = asyncRound.value.games.values;
+                final allCount = games.length;
+                final ongoingCount = games.where((g) => g.isOngoing).length;
+
+                showModalBottomSheet<void>(
+                  context: context,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (_) => _BroadcastSettingsBottomSheet(
+                    filter,
+                    allGamesCount: allCount,
+                    ongoingGamesCount: ongoingCount,
+                    onGameFilterChange: setGameFilter,
+                  ),
+                );
+              },
               semanticsLabel: context.l10n.settingsSettings,
             ),
             SemanticIconButton(
@@ -515,9 +525,16 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet(this.selectedFilter, {required this.onGameFilterChange});
+  const _BroadcastSettingsBottomSheet(
+    this.selectedFilter, {
+    required this.allGamesCount,
+    required this.ongoingGamesCount,
+    required this.onGameFilterChange,
+  });
 
   final _BroadcastGameFilter selectedFilter;
+  final int allGamesCount;
+  final int ongoingGamesCount;
   final void Function(_BroadcastGameFilter filter) onGameFilterChange;
 
   @override
@@ -558,7 +575,13 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                 filterType: FilterType.singleChoice,
                 choices: _BroadcastGameFilter.values,
                 choiceSelected: (choice) => filter == choice,
-                choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                choiceLabel: (category) {
+                  final label = category.l10n(context.l10n);
+                  final count = category == _BroadcastGameFilter.all
+                      ? widget.allGamesCount
+                      : widget.ongoingGamesCount;
+                  return Text('$label ($count)');
+                },
                 onSelected: (value, selected) {
                   setState(() => filter = value);
                   widget.onGameFilterChange.call(value);
