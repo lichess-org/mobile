@@ -228,6 +228,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                   ],
                 ),
                 ListSection(
+                  margin: Styles.bodySectionPadding.copyWith(top: 0),
                   children: [
                     if (Theme.of(context).platform == TargetPlatform.android)
                       ListTile(
