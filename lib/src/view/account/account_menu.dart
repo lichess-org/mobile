@@ -263,7 +263,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
             top: false,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 16.0,
+                vertical: Theme.of(context).platform == TargetPlatform.iOS ? 8.0 : 16.0,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
