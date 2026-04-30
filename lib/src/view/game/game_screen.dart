@@ -509,7 +509,7 @@ class _WatcherButton extends ConsumerWidget {
         label: Text('$nb'),
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        child: const Icon(Icons.person_outline, size: 20),
+        child: const Icon(Icons.person_outline),
       ),
     );
   }
