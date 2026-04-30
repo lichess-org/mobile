@@ -389,12 +389,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   : PlatformAppBar(
                       title: Theme.of(context).platform == TargetPlatform.iOS
                           ? AppBarLichessTitle(
-                              iconSize: Theme.of(context).textTheme.headlineMedium?.fontSize ?? 24,
+                              iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
                             )
                           : const AppBarLichessTitle(),
                       centerTitle: false,
                       titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                          ? Theme.of(context).textTheme.headlineMedium
+                          ? Theme.of(context).textTheme.headlineSmall
                           : null,
                       actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),

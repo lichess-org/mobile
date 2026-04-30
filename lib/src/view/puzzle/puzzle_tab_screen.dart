@@ -120,7 +120,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           title: Text(context.l10n.puzzles),
           centerTitle: false,
           titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineMedium
+              ? Theme.of(context).textTheme.headlineSmall
               : null,
           actions: const [AccountMenuButton()],
         ),

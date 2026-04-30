@@ -365,7 +365,7 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
   bool _errorLoadingFlair = false;
 
   static const _materialAnonIconSize = 30.0;
-  static const _cupertinoAnonIconSize = 36.0;
+  static const _cupertinoAnonIconSize = 32.0;
 
   @override
   Widget build(BuildContext context) {
