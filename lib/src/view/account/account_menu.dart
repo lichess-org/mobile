@@ -157,14 +157,16 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                 ] else ...[
                   Center(
                     child: FilledButton(
-                      onPressed: switch (signInState) {
-                        MutationPending() => null,
-                        _ => () {
-                          signInMutation.run(ref, (tsx) async {
-                            await tsx.get(authControllerProvider.notifier).signIn();
-                          });
-                        },
-                      },
+                      onPressed: isOnline
+                          ? switch (signInState) {
+                              MutationPending() => null,
+                              _ => () {
+                                signInMutation.run(ref, (tsx) async {
+                                  await tsx.get(authControllerProvider.notifier).signIn();
+                                });
+                              },
+                            }
+                          : null,
                       child: Text(context.l10n.signIn),
                     ),
                   ),
@@ -300,7 +302,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
     final navigator = Navigator.of(context);
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       navigator.pop();
-      Future.delayed(const Duration(milliseconds: 200), () => navigator.push(route));
+      navigator.push(route);
     } else {
       navigator.push(route);
     }
