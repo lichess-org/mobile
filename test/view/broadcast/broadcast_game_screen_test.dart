@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -140,12 +139,7 @@ void main() {
       // Load the broadcast round game provider
       await tester.pump();
 
-      expect(find.byIcon(LichessIcons.flow_cascade), findsOne);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      //allow animation on iOS to complete
-      await tester.pumpAndSettle();
-      expect(find.text('Computer analysis'), findsOne);
-      await tester.tap(find.text('Computer analysis'));
+      await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
       //allow switching tabs animation to complete
       await tester.pumpAndSettle();
       expect(find.text('61%'), findsOne);

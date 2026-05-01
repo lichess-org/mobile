@@ -10,8 +10,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 /// The height of the board header or footer in the analysis layout.
@@ -29,7 +27,6 @@ enum AnalysisTab {
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
-  // TODO add hint dialog on new install to show this tab
   conditionalPremoves(Icons.save);
 
   const AnalysisTab(this.icon);
@@ -50,74 +47,6 @@ enum AnalysisTab {
   }
 }
 
-/// Indicator for the analysis tab, typically shown in the app bar.
-class AppBarAnalysisTabIndicator extends StatefulWidget {
-  const AppBarAnalysisTabIndicator({required this.tabs, required this.controller, super.key});
-
-  final TabController controller;
-
-  /// Typically a list of two or more [AnalysisTab] widgets.
-  ///
-  /// The length of this list must match the [controller]'s [TabController.length]
-  /// and the length of the [AnalysisLayout.children] list.
-  final List<AnalysisTab> tabs;
-
-  @override
-  State<AppBarAnalysisTabIndicator> createState() => _AppBarAnalysisTabIndicatorState();
-}
-
-class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    widget.controller.animation?.addListener(_handleTabAnimationTick);
-    widget.controller.addListener(_handleTabChange);
-  }
-
-  @override
-  void dispose() {
-    widget.controller.animation?.removeListener(_handleTabAnimationTick);
-    widget.controller.removeListener(_handleTabChange);
-    super.dispose();
-  }
-
-  void _handleTabAnimationTick() {
-    if (widget.controller.indexIsChanging) {
-      setState(() {
-        // Rebuild the widget when the tab index is changing.
-      });
-    }
-  }
-
-  void _handleTabChange() {
-    setState(() {
-      // Rebuild the widget when the tab changes.
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticIconButton(
-      icon: Icon(widget.tabs[widget.controller.index].icon),
-      semanticsLabel: widget.tabs[widget.controller.index].l10n(context.l10n),
-      onPressed: () {
-        showAdaptiveActionSheet<void>(
-          context: context,
-          actions: widget.tabs.map((tab) {
-            return BottomSheetAction(
-              leading: Icon(tab.icon),
-              makeLabel: (context) => Text(tab.l10n(context.l10n)),
-              onPressed: () {
-                widget.controller.animateTo(widget.tabs.indexOf(tab));
-              },
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
-}
-
 /// Layout for the analysis and similar screens (study, broadcast, etc.).
 ///
 /// The layout is responsive and adapts to the screen size and orientation.
@@ -130,6 +59,7 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
 class AnalysisLayout extends ConsumerWidget {
   const AnalysisLayout({
     this.tabController,
+    this.tabs,
     required this.boardBuilder,
     required this.children,
     required this.pov,
@@ -145,6 +75,9 @@ class AnalysisLayout extends ConsumerWidget {
 
   /// The tab controller for the tab view.
   final TabController? tabController;
+
+  /// If non-null, a tab indicator bar will be shown above the tab view.
+  final List<AnalysisTab>? tabs;
 
   /// The builder for the board widget.
   final BoardBuilder boardBuilder;
@@ -170,7 +103,7 @@ class AnalysisLayout extends ConsumerWidget {
   /// The children of the tab view.
   ///
   /// The length of this list must match the [tabController]'s [TabController.length]
-  /// and the length of the [AppBarAnalysisTabIndicator.tabs] list.
+  /// and the length of the [tabs] list.
   final List<Widget> children;
 
   /// A builder for the engine gauge widget.
@@ -314,7 +247,11 @@ class AnalysisLayout extends ConsumerWidget {
                                 child: Card(
                                   clipBehavior: Clip.hardEdge,
                                   semanticContainer: false,
-                                  child: TabBarView(controller: tabController, children: children),
+                                  child: _AnalysisTabView(
+                                    tabs: tabs,
+                                    controller: tabController,
+                                    children: children,
+                                  ),
                                 ),
                               ),
                               if (pockets != null)
@@ -443,7 +380,11 @@ class AnalysisLayout extends ConsumerWidget {
                             decoration: BoxDecoration(
                               color: ColorScheme.of(context).surfaceContainerLowest,
                             ),
-                            child: TabBarView(controller: tabController, children: children),
+                            child: _AnalysisTabView(
+                              tabs: tabs,
+                              controller: tabController,
+                              children: children,
+                            ),
                           ),
                         ),
                       ),
@@ -455,6 +396,42 @@ class AnalysisLayout extends ConsumerWidget {
           ),
         ),
         if (bottomBar != null) bottomBar!,
+      ],
+    );
+  }
+}
+
+class _AnalysisTabView extends StatelessWidget {
+  const _AnalysisTabView({required this.tabs, required this.controller, required this.children});
+
+  final List<AnalysisTab>? tabs;
+  final TabController? controller;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    const iconSize = 18.0;
+
+    return Column(
+      children: [
+        if (tabs != null && tabs!.length > 1)
+          Container(
+            decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
+            child: TabBar(
+              controller: controller,
+              tabs: tabs!
+                  .map(
+                    (tab) => Tab(
+                      height: iconSize + 8.0,
+                      icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        Expanded(
+          child: TabBarView(controller: controller, children: children),
+        ),
       ],
     );
   }
