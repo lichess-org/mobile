@@ -90,6 +90,8 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
+  Timer? _incorrectMoveTimer;
+
   @override
   @protected
   late SocketClient socketClient;
@@ -103,6 +105,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
+      _incorrectMoveTimer?.cancel();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
@@ -234,7 +237,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
     return RetroState(
       serverAnalysisAvailable: true,
-      mistakes: mistakes.toIList(),
+      mistakes: mistakes,
       currentMistakeIndex: 0,
       feedback: mistakes.isNotEmpty ? RetroFeedback.findMove : RetroFeedback.done,
       mainlinePath: _root.mainlinePath,
@@ -440,6 +443,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: recomputeRootView ? _root.view : state.requireValue.root,
         currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -454,7 +458,8 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
           if (state.currentMistake!.isSolution(state.currentNode)) {
             _onCorrectMove();
           } else if (state.currentPosition == state.currentMistake!.userBranch.position) {
-            Timer(const Duration(milliseconds: 500), () {
+            _incorrectMoveTimer?.cancel();
+            _incorrectMoveTimer = Timer(const Duration(milliseconds: 500), () {
               _onIncorrectMove();
             });
           } else {
