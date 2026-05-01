@@ -1061,7 +1061,7 @@ sealed class AnalysisCurrentNode
       return AnalysisCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
-        isRoot: node is Root,
+        isRoot: false,
         hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,
