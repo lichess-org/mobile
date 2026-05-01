@@ -754,6 +754,10 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         });
       }
 
+      if (opening == null) {
+        _fetchOpeningsForPath(path);
+      }
+
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
@@ -801,6 +805,27 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final curState = state.requireValue;
     if (curState.currentPath == path) {
       _refreshCurrentNode();
+    } else {
+      final (_, newOpening) = _nodeOpeningAt(_root, curState.currentPath);
+      if (newOpening != null && newOpening != curState.currentBranchOpening) {
+        state = AsyncData(curState.copyWith(currentBranchOpening: newOpening));
+      }
+    }
+  }
+
+  void _fetchOpeningsForPath(UciPath path) {
+    UciPath currentPrefix = UciPath.empty;
+    for (final branch in _root.branchesOn(path)) {
+      currentPrefix = currentPrefix + branch.id;
+      if (branch.opening == null && branch.position.ply <= 30) {
+        final prefixAtIteration = currentPrefix;
+        _fetchOpening(branch.position.fen, prefixAtIteration).then((value) {
+          if (value != null) {
+            final (fetchedPath, fetchedOpening) = value;
+            _updateOpening(fetchedPath, fetchedOpening);
+          }
+        });
+      }
     }
   }
 
