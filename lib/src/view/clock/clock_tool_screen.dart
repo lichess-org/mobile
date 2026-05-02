@@ -110,7 +110,8 @@ class ClockTile extends ConsumerStatefulWidget {
   ConsumerState<ClockTile> createState() => _ClockTileState();
 }
 
-class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProviderStateMixin {
+class _ClockTileState extends ConsumerState<ClockTile>
+    with SingleTickerProviderStateMixin {
   late AnimationController _blinkController;
   bool _inEmergency = false;
 
@@ -121,7 +122,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
-    widget.clockState.getDuration(widget.playerType).addListener(_onTimeChanged);
+    widget.clockState
+        .getDuration(widget.playerType)
+        .addListener(_onTimeChanged);
   }
 
   @override
@@ -129,8 +132,12 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
     super.didUpdateWidget(oldWidget);
     if (oldWidget.clockState.getDuration(oldWidget.playerType) !=
         widget.clockState.getDuration(widget.playerType)) {
-      oldWidget.clockState.getDuration(oldWidget.playerType).removeListener(_onTimeChanged);
-      widget.clockState.getDuration(widget.playerType).addListener(_onTimeChanged);
+      oldWidget.clockState
+          .getDuration(oldWidget.playerType)
+          .removeListener(_onTimeChanged);
+      widget.clockState
+          .getDuration(widget.playerType)
+          .addListener(_onTimeChanged);
     }
     // Re-evaluate emergency when active side changes (e.g. after a tap).
     _onTimeChanged();
@@ -138,7 +145,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
 
   @override
   void dispose() {
-    widget.clockState.getDuration(widget.playerType).removeListener(_onTimeChanged);
+    widget.clockState
+        .getDuration(widget.playerType)
+        .removeListener(_onTimeChanged);
     _blinkController.dispose();
     super.dispose();
   }
@@ -148,10 +157,13 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
     final initialTime = widget.playerType == ClockSide.top
         ? widget.clockState.options.topTime
         : widget.clockState.options.bottomTime;
-    final threshold = Duration(milliseconds: (initialTime.inMilliseconds * 0.1).round());
+    final threshold = Duration(
+      milliseconds: (initialTime.inMilliseconds * 0.1).round(),
+    );
     final timeLeft = widget.clockState.getDuration(widget.playerType).value;
     final isActive = widget.clockState.isActivePlayer(widget.playerType);
-    final isEmergency = timeLeft > Duration.zero && timeLeft <= threshold && isActive;
+    final isEmergency =
+        timeLeft > Duration.zero && timeLeft <= threshold && isActive;
     if (isEmergency == _inEmergency) return;
     _inEmergency = isEmergency;
     if (isEmergency) {
@@ -189,7 +201,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
       emergencyBackgroundColor: Colors.transparent,
     );
 
-    final clockOrientation = ref.watch(clockToolControllerProvider).clockOrientation;
+    final clockOrientation = ref
+        .watch(clockToolControllerProvider)
+        .clockOrientation;
     final emergencyColor = context.lichessColors.error;
 
     return AnimatedOpacity(
@@ -205,7 +219,11 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
           animation: _blinkController,
           builder: (context, child) {
             final backgroundColor = _inEmergency
-                ? Color.lerp(normalBackground, emergencyColor, _blinkController.value)!
+                ? Color.lerp(
+                    normalBackground,
+                    emergencyColor,
+                    _blinkController.value,
+                  )!
                 : normalBackground;
             return Stack(
               alignment: Alignment.center,
@@ -217,11 +235,15 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                     splashFactory: NoSplash.splashFactory,
                     onTapDown: !clockState.started
                         ? (_) {
-                            ref.read(clockToolControllerProvider.notifier).start(playerType);
+                            ref
+                                .read(clockToolControllerProvider.notifier)
+                                .start(playerType);
                           }
                         : clockState.isPlayersMoveAllowed(playerType)
                         ? (_) {
-                            ref.read(clockToolControllerProvider.notifier).onTap(playerType);
+                            ref
+                                .read(clockToolControllerProvider.notifier)
+                                .onTap(playerType);
                           }
                         : null,
                     child: Padding(
@@ -263,14 +285,17 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                       '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
                       style: TextStyle(
                         fontSize: 13,
-                        color: !clockState.paused && clockState.isPlayersTurn(playerType)
+                        color:
+                            !clockState.paused &&
+                                clockState.isPlayersTurn(playerType)
                             ? clockStyle.activeTextColor
                             : clockStyle.textColor,
                       ),
                     ),
                   ),
                 ),
-                if (widget.orientation == Orientation.portrait && clockOrientation.isPortrait)
+                if (widget.orientation == Orientation.portrait &&
+                    clockOrientation.isPortrait)
                   Positioned(
                     top: 24,
                     left: 24,
@@ -304,31 +329,49 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                                 ? null
                                 : () => showModalBottomSheet<void>(
                                     context: context,
-                                    builder: (BuildContext context) => CustomClockSettings(
-                                      player: playerType,
-                                      clock: playerType == ClockSide.top
-                                          ? TimeIncrement.fromDurations(
-                                              clockState.options.topTime,
-                                              clockState.options.topIncrement,
-                                            )
-                                          : TimeIncrement.fromDurations(
-                                              clockState.options.bottomTime,
-                                              clockState.options.bottomIncrement,
-                                            ),
-                                      onSubmit: (ClockSide player, TimeIncrement clock) {
-                                        Navigator.of(context).pop();
-                                        ref
-                                            .read(clockToolControllerProvider.notifier)
-                                            .updateOptionsCustom(clock, player);
-                                      },
-                                    ),
+                                    builder: (BuildContext context) =>
+                                        CustomClockSettings(
+                                          player: playerType,
+                                          clock: playerType == ClockSide.top
+                                              ? TimeIncrement.fromDurations(
+                                                  clockState.options.topTime,
+                                                  clockState
+                                                      .options
+                                                      .topIncrement,
+                                                )
+                                              : TimeIncrement.fromDurations(
+                                                  clockState.options.bottomTime,
+                                                  clockState
+                                                      .options
+                                                      .bottomIncrement,
+                                                ),
+                                          onSubmit:
+                                              (
+                                                ClockSide player,
+                                                TimeIncrement clock,
+                                              ) {
+                                                Navigator.of(context).pop();
+                                                ref
+                                                    .read(
+                                                      clockToolControllerProvider
+                                                          .notifier,
+                                                    )
+                                                    .updateOptionsCustom(
+                                                      clock,
+                                                      player,
+                                                    );
+                                              },
+                                        ),
                                   ),
                           ),
                           if (clockState.options.hasIncrement(playerType)) ...[
                             const SizedBox(width: 8),
                             Text(
-                              '+${clockState.options.getIncrement(playerType)}',
-                              style: TextStyle(fontSize: 28, color: clockStyle.textColor),
+                              '${clockState.options.type == ClockTimeControlType.increment ? '+' : 'd'}${clockState.options.getIncrement(playerType)}',
+                              style: TextStyle(
+                                fontSize: 28,
+                                color: clockStyle.textColor,
+                              ),
                             ),
                           ],
                         ],
