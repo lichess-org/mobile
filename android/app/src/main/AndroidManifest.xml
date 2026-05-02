@@ -62,13 +62,6 @@
                 <data android:mimeType="text/x-chess-pgn" />
             </intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="org.lichess.mobile" android:host="login-callback" />
-            </intent-filter>
-
             <!-- App Links verified against https://lichess.org/.well-known/assetlinks.json -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -103,6 +96,21 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
+        <!-- Trampoline for the OAuth redirect URI. Receives org.lichess.mobile://login-callback,
+             forwards it to the running MainActivity via FLAG_ACTIVITY_CLEAR_TOP|SINGLE_TOP so
+             that onNewIntent is called on the existing instance, then finishes immediately. -->
+        <activity
+            android:name=".OAuthCallbackActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="org.lichess.mobile" android:host="login-callback" />
+            </intent-filter>
+        </activity>
+
         <receiver android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
         <!-- Don't delete the meta-data below.
