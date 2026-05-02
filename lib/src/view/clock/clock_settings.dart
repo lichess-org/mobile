@@ -18,7 +18,8 @@ class ClockSettings extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockToolControllerProvider);
-    final buttonsEnabled = !state.started || state.paused || state.flagged != null;
+    final buttonsEnabled =
+        !state.started || state.paused || state.flagged != null;
     final clockOrientation = state.clockOrientation;
 
     final isSoundEnabled = ref.watch(
@@ -66,7 +67,9 @@ class ClockSettings extends ConsumerWidget {
                         selectedItem: state.options.type,
                         labelBuilder: (type) => Text(type.label),
                         onSelectedItemChanged: (type) {
-                          ref.read(clockToolControllerProvider.notifier).updateClockType(type);
+                          ref
+                              .read(clockToolControllerProvider.notifier)
+                              .updateClockType(type);
                         },
                       );
                     }
@@ -84,14 +87,20 @@ class ClockSettings extends ConsumerWidget {
               iconSize: _iconSize,
               onPressed: buttonsEnabled
                   ? () {
-                      final double screenHeight = MediaQuery.sizeOf(context).height;
+                      final double screenHeight = MediaQuery.sizeOf(
+                        context,
+                      ).height;
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
-                        constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+                        constraints: BoxConstraints(
+                          maxHeight: screenHeight - (screenHeight / 10),
+                        ),
                         builder: (BuildContext context) {
                           final options = ref.watch(
-                            clockToolControllerProvider.select((value) => value.options),
+                            clockToolControllerProvider.select(
+                              (value) => value.options,
+                            ),
                           );
                           return TimeControlModal(
                             excludeUltraBullet: true,
@@ -100,7 +109,9 @@ class ClockSettings extends ConsumerWidget {
                               options.bottomIncrement.inSeconds,
                             ),
                             onSelected: (choice) {
-                              ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
+                              ref
+                                  .read(clockToolControllerProvider.notifier)
+                                  .updateOptions(choice);
                             },
                           );
                         },
@@ -119,7 +130,9 @@ class ClockSettings extends ConsumerWidget {
               iconSize: _iconSize,
               tooltip: context.l10n.sound,
               onPressed: buttonsEnabled
-                  ? () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled()
+                  ? () => ref
+                        .read(generalPreferencesProvider.notifier)
+                        .toggleSoundEnabled()
                   : null,
               icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
             ),
@@ -149,7 +162,9 @@ class ClockSettings extends ConsumerWidget {
               padding: _kIconPadding,
               tooltip: context.l10n.close,
               iconSize: _iconSize,
-              onPressed: buttonsEnabled ? () => Navigator.of(context).pop() : null,
+              onPressed: buttonsEnabled
+                  ? () => Navigator.of(context).pop()
+                  : null,
               icon: const Icon(Icons.home),
             ),
           ),
