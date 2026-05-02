@@ -52,7 +52,7 @@ class _AndroidGesturesExclusionWidgetState extends State<AndroidGesturesExclusio
 
   @override
   Widget build(BuildContext context) {
-    initialViewPadding ??= MediaQuery.of(context).viewPadding;
+    initialViewPadding ??= MediaQuery.viewPaddingOf(context);
 
     return MediaQuery(
       // Always set the view padding to the initial value to avoid an UI shift when immersive mode
