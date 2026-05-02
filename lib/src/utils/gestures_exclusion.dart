@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
@@ -123,7 +122,7 @@ Future<void> setAndroidBoardGesturesExclusion(
         squareSize,
         height + verticalThreshold,
       );
-      GesturesExclusion.instance.setRects([leftRect, rightRect]);
+      await GesturesExclusion.instance.setRects([leftRect, rightRect]);
     }
   }
 }
@@ -134,8 +133,8 @@ Future<void> clearAndroidBoardGesturesExclusion() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final androidInfo = await _deviceInfoPlugin.androidInfo;
     if (androidInfo.version.sdkInt >= 29) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      GesturesExclusion.instance.clearRects();
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      await GesturesExclusion.instance.clearRects();
     }
   }
 }
@@ -153,15 +152,14 @@ class GesturesExclusion {
     }
 
     final rectsAsMaps = rects
+        .where((r) => !r.hasNaN && !r.isInfinite) // Filter out bad rects first
         .map(
-          (r) => r.hasNaN || r.isInfinite
-              ? null
-              : {
-                  'left': r.left.floor(),
-                  'top': r.top.floor(),
-                  'right': r.right.floor(),
-                  'bottom': r.bottom.floor(),
-                },
+          (r) => {
+            'left': r.left.floor(),
+            'top': r.top.floor(),
+            'right': r.right.floor(),
+            'bottom': r.bottom.floor(),
+          },
         )
         .toList();
 
@@ -178,7 +176,7 @@ class GesturesExclusion {
     }
 
     try {
-      await _channel.invokeMethod<void>('setSystemGestureExclusionRects', <Rect>[]);
+      await _channel.invokeMethod<void>('setSystemGestureExclusionRects', <Map<String, int>>[]);
     } on PlatformException catch (e) {
       debugPrint('Failed to clear rects: ${e.message}');
     }
