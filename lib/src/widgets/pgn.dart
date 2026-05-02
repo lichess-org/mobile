@@ -155,6 +155,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.premovePaths,
     required this.pgnRootComments,
     this.notifier,
+    this.showTopDivider = true,
     this.shouldShowComputerAnalysis = true,
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
@@ -179,6 +180,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
   final PgnTreeNotifier? notifier;
+
+  /// Whether to show a divider line above the first mainline part.
+  final bool showTopDivider;
 
   /// Whether to show computer analysis informations.
   ///
@@ -290,6 +294,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         pathToCurrentMove: pathToCurrentMove,
         pathToLiveMove: pathToLiveMove,
         premovePaths: widget.premovePaths,
+        showTopDivider: widget.showTopDivider,
         displayMode: widget.displayMode,
         notifier: widget.notifier,
       ),
@@ -310,6 +315,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Paths relative to [_PgnTreeViewParams.pathToLiveMove] that are currently saved as premoves in an ongoing correspondence game.
   IList<UciPath>? premovePaths,
+
+  /// Whether to show a divider line above the first mainline part.
+  bool showTopDivider,
 
   /// Whether to show analysis variations.
   bool shouldShowComputerAnalysis,
@@ -769,6 +777,8 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
 
     final initialFullmoves = nodes.first.position.fullmoves;
 
+    final isFirstPart = initialPath.isEmpty;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -779,7 +789,9 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
                 ? const Color(0x0BFFFFFF)
                 : const Color(0x05000000),
             border: Border(
-              top: BorderSide(color: dividerColor),
+              top: isFirstPart && !params.showTopDivider
+                  ? BorderSide.none
+                  : BorderSide(color: dividerColor),
               bottom: BorderSide(color: dividerColor),
             ),
           ),

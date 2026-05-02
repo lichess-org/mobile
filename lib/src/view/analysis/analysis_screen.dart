@@ -115,10 +115,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
 
-    final appBarActions = [
-      AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      _AnalysisMenu(options: widget.options, state: asyncState),
-    ];
+    final appBarActions = [_AnalysisMenu(options: widget.options, state: asyncState)];
 
     switch (asyncState) {
       case AsyncData(:final value):
@@ -130,7 +127,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
               title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
               actions: appBarActions,
             ),
-            body: _Body(options: widget.options, controller: _tabController),
+            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
@@ -210,10 +207,11 @@ class _AnalysisMenu extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller});
+  const _Body({required this.options, required this.controller, required this.tabs});
 
   final TabController controller;
   final AnalysisOptions options;
+  final List<AnalysisTab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -299,6 +297,7 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
+        tabs: tabs,
         tabController: controller,
         pov: pov,
         sideToMove: analysisState.currentPosition.turn,
