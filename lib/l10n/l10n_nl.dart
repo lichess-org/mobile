@@ -284,9 +284,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
 
   @override

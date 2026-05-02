@@ -284,9 +284,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Xakearen Lege arruntak (FIDE)';
 
   @override

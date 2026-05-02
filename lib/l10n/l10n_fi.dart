@@ -284,9 +284,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
 
   @override

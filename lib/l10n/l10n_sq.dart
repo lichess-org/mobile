@@ -284,9 +284,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Rregulla standarde shahu (FIDE)';
 
   @override

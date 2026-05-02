@@ -284,9 +284,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Schtandard-Schachregle (FIDE)';
 
   @override

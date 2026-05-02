@@ -284,9 +284,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Standard sakk szabályok (FIDE)';
 
   @override

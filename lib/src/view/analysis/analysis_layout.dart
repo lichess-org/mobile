@@ -38,7 +38,7 @@ enum AnalysisTab {
   String l10n(AppLocalizations l10n) {
     switch (this) {
       case AnalysisTab.pgn:
-        return l10n.mobilePgnLabels;
+        return l10n.studyPgnTags;
       case AnalysisTab.explorer:
         return l10n.openingExplorerAndTablebase;
       case AnalysisTab.moves:

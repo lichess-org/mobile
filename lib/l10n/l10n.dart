@@ -730,12 +730,6 @@ abstract class AppLocalizations {
   /// **'Or import a PGN file'**
   String get mobileOrImportPgnFile;
 
-  /// No description provided for @mobilePgnLabels.
-  ///
-  /// In en, this message translates to:
-  /// **'PGN labels'**
-  String get mobilePgnLabels;
-
   /// No description provided for @variantStandardTitle.
   ///
   /// In en, this message translates to:

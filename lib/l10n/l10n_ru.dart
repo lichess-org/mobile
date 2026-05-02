@@ -284,9 +284,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
-  String get mobilePgnLabels => 'PGN labels';
-
-  @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
 
   @override
