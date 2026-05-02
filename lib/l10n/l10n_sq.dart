@@ -1604,9 +1604,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
-
-  @override
   String get puzzleUpVote => 'Jepini një votë ushtrimit';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Pozicion nisjeje Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Pozicion Chess960 kuturu';
 
   @override
   String get startPosition => 'Pozicioni fillestar';

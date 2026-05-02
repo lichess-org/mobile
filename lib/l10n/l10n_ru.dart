@@ -1648,9 +1648,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Понравилась задача?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Проголосуйте и перейдите к следующей!';
-
-  @override
   String get puzzleUpVote => 'Задача понравилась';
 
   @override
@@ -3605,6 +3602,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Начальная позиция в шахматах Фишера: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Случайная позиция в шахматах Фишера';
 
   @override
   String get startPosition => 'Начальная позиция';

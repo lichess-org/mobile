@@ -1648,9 +1648,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ar jums patiko ši užduotis?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Nubalsuokite norėdami pakrauti kitą!';
-
-  @override
   String get puzzleUpVote => 'Prabalsuoti už';
 
   @override
@@ -3603,6 +3600,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 pradinė pozicija: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Pradinė pozicija';

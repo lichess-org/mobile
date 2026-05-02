@@ -28,6 +28,7 @@ StudyChapter makeChapter({
   required StudyChapterId id,
   Side orientation = Side.white,
   bool gamebook = false,
+  StudyChapterFeatures? features,
 }) {
   return StudyChapter(
     id: id,
@@ -38,7 +39,7 @@ StudyChapter makeChapter({
       fromFen: null,
     ),
     conceal: null,
-    features: (computer: false, explorer: false),
+    features: features ?? (computer: false, explorer: false),
     gamebook: gamebook,
     practise: false,
   );
@@ -112,7 +113,10 @@ void main() {
       final mockRepository = MockStudyRepository();
 
       final studyChapter1 = makeStudy(
-        chapter: makeChapter(id: const StudyChapterId('1')),
+        chapter: makeChapter(
+          id: const StudyChapterId('1'),
+          features: (computer: false, explorer: false),
+        ),
         chapters: IList(const [
           StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
           StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
@@ -120,7 +124,10 @@ void main() {
       );
 
       final studyChapter2 = studyChapter1.copyWith(
-        chapter: makeChapter(id: const StudyChapterId('2')),
+        chapter: makeChapter(
+          id: const StudyChapterId('2'),
+          features: (computer: false, explorer: true),
+        ),
       );
 
       when(
@@ -149,6 +156,9 @@ void main() {
 
       expect(find.text('pgn 1'), findsOneWidget);
       expect(find.text('pgn 2'), findsNothing);
+
+      // First chapter does not allow opening explorer
+      expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsNothing);
 
       // 2nd press should not have any effect, we're already at the last chapter
       await tester.tap(find.text('Next chapter'));
@@ -187,6 +197,9 @@ void main() {
       await tester.tap(find.text('1 Chapter 1', findRichText: true));
       // Wait for chapter to load
       await tester.pumpAndSettle();
+
+      // Second chapter allows opening explorer, so tab should be displayed now.
+      expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsOneWidget);
 
       expect(find.text('1. Chapter 1'), findsOneWidget);
       expect(find.text('2. Chapter 2'), findsNothing);

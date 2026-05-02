@@ -1604,9 +1604,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Bulmacayı beğendiniz mi?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Sıradakine geçmek için oy verin!';
-
-  @override
   String get puzzleUpVote => 'Bulmacayı beğen';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 başlangıç pozisyonu: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Rastgele Satranç960 pozisyonu';
 
   @override
   String get startPosition => 'Başlangıç konumu';

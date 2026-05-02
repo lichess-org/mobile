@@ -3,17 +3,21 @@ import 'dart:convert';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -22,11 +26,15 @@ import '../../test_provider_scope.dart';
 
 const testId = GameId('abcdefgh');
 
+class MockServerAnalysisService extends Mock implements ServerAnalysisService {}
+
 Future<Widget> makeTestApp(
   WidgetTester tester, {
   required String moves,
   Iterable<ExternalEval>? evals,
   IMap<String, OpeningExplorerEntry> openingExplorerEntries = const IMap.empty(),
+  bool alreadyHasServerAnalysis = true,
+  Map<ProviderOrFamily, Override> overrides = const {},
 }) async {
   final mockClient = MockClient((request) {
     if (request.url.path == '/game/export/$testId') {
@@ -43,32 +51,22 @@ Future<Widget> makeTestApp(
   "status": "resign",
   "players": {
     "white": {
+      ${alreadyHasServerAnalysis ? '"analysis": {"inaccuracy": 2, "mistake": 1, "blunder": 3, "acpl": 90},' : ""}
       "user": {
         "name": "veloce",
         "id": "veloce"
       },
       "rating": 1789,
-      "ratingDiff": 9,
-      "analysis": {
-        "inaccuracy": 2,
-        "mistake": 1,
-        "blunder": 3,
-        "acpl": 90
-      }
+      "ratingDiff": 9
     },
     "black": {
+      ${alreadyHasServerAnalysis ? '"analysis": {"inaccuracy": 3, "mistake": 0, "blunder": 5, "acpl": 135},' : ""}
       "user": {
         "name": "chabrot",
         "id": "chabrot"
       },
       "rating": 1810,
-      "ratingDiff": -9,
-      "analysis": {
-        "inaccuracy": 3,
-        "mistake": 0,
-        "blunder": 5,
-        "acpl": 135
-      }
+      "ratingDiff": -9
     }
   },
   "winner": "white",
@@ -126,6 +124,7 @@ Future<Widget> makeTestApp(
       httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
         return FakeHttpClientFactory(() => mockClient);
       }),
+      ...overrides,
     },
     defaultPreferences: {},
   );
@@ -308,6 +307,81 @@ void main() {
       await playMove(tester, 'd2', 'd4');
       expect(find.text('Good move'), findsOneWidget);
       expect(find.text('Next'), findsOneWidget);
+    });
+
+    testWidgets('Requests server analysis if not already running', (WidgetTester tester) async {
+      final mockAnalysisService = MockServerAnalysisService();
+      final currentAnalysis = ValueNotifier<GameId?>(null);
+      final evalEvents = ValueNotifier<(GameAnyId, ServerEvalEvent)?>(null);
+      when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
+      when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
+      when(() => mockAnalysisService.requestAnalysis(testId)).thenAnswer((_) async {
+        currentAnalysis.value = testId;
+      });
+
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          moves: 'e4 e5',
+          alreadyHasServerAnalysis: false,
+          overrides: {
+            serverAnalysisServiceProvider: serverAnalysisServiceProvider.overrideWithValue(
+              mockAnalysisService,
+            ),
+          },
+        ),
+      );
+
+      // Wait for loading screen to appear
+      await tester.pump();
+
+      expect(find.text('Calculating moves...'), findsOneWidget);
+
+      expect(currentAnalysis.value, testId);
+
+      // Finish analysis
+      evalEvents.value = (
+        testId,
+        ServerEvalEvent(evals: <ExternalEval>[].lock, tree: {}, isAnalysisComplete: true),
+      );
+      await tester.pump(); // Wait for eval event to be processed
+      expect(find.text('No significant mistakes found for White'), findsOneWidget);
+    });
+
+    testWidgets('Does not request analysis if already running', (WidgetTester tester) async {
+      final mockAnalysisService = MockServerAnalysisService();
+      final currentAnalysis = ValueNotifier<GameId?>(testId);
+      final evalEvents = ValueNotifier<(GameAnyId, ServerEvalEvent)?>(null);
+      when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
+      when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
+
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          moves: 'e4 e5',
+          alreadyHasServerAnalysis: false,
+          overrides: {
+            serverAnalysisServiceProvider: serverAnalysisServiceProvider.overrideWithValue(
+              mockAnalysisService,
+            ),
+          },
+        ),
+      );
+
+      // Wait for loading screen to appear
+      await tester.pump();
+
+      expect(find.text('Calculating moves...'), findsOneWidget);
+
+      // Finish analysis
+      evalEvents.value = (
+        testId,
+        ServerEvalEvent(evals: <ExternalEval>[].lock, tree: {}, isAnalysisComplete: true),
+      );
+      await tester.pump(); // Wait for eval event to be processed
+      expect(find.text('No significant mistakes found for White'), findsOneWidget);
+
+      verifyNever(() => mockAnalysisService.requestAnalysis(testId));
     });
   });
 }

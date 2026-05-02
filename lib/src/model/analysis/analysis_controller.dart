@@ -252,7 +252,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     final isComputerAnalysisAllowed = switch (options) {
       Pgn(:final isComputerAnalysisAllowed) => isComputerAnalysisAllowed,
-      ArchivedGame() => isGameFinished,
+      ArchivedGame() => isGameFinished || archivedGame?.source == .import,
       Standalone() => true,
       ActiveCorrespondenceGame() => false,
     };
@@ -954,9 +954,10 @@ sealed class AnalysisState
 
   /// Whether the user can request server analysis.
   ///
-  /// It must be a lichess game, which is finished and not already analyzed.
+  /// It must be a lichess game, which is finished and not already analyzed or an imported game.
   bool get canRequestServerAnalysis =>
-      gameId != null && !hasServerAnalysis && pgnHeaders['Result'] != '*';
+      gameId != null && !hasServerAnalysis && pgnHeaders['Result'] != '*' ||
+      archivedGame?.source == .import;
 
   /// Whether the server analysis is available.
   bool get hasServerAnalysis => playersAnalysis != null;
@@ -1060,7 +1061,7 @@ sealed class AnalysisCurrentNode
       return AnalysisCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
-        isRoot: node is Root,
+        isRoot: false,
         hasChild: node.children.isNotEmpty,
         opening: node.opening,
         eval: node.eval,

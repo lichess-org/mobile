@@ -1604,9 +1604,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Хареса ли Ви този пъзел?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Гласувайте и преминете към следващия!';
-
-  @override
   String get puzzleUpVote => 'Задачата ми хареса';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Начална позиция в Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Начална позиция';

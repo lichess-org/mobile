@@ -115,7 +115,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
   Widget build(BuildContext context) {
     String? evalDisplay = widget.position.outcome != null
         ? widget.position.outcome!.winner == null
-              ? ''
+              ? '0.0'
               : '#'
         : widget.eval?.evalString ?? oldEval?.evalString;
 
@@ -156,7 +156,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                   valueColor: EngineGauge.valueColor(context),
                   value: value,
                 ),
-                child: toValue != 0.5
+                child: evalDisplay != null && evalDisplay.isNotEmpty
                     ? Align(
                         alignment: toValue >= 0.5
                             ? widget.orientation == Side.white
@@ -169,7 +169,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                           padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 3.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [Text(evalDisplay ?? '', style: evalStyle)],
+                            children: [Text(evalDisplay, style: evalStyle)],
                           ),
                         ),
                       )

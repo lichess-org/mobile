@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -237,12 +238,17 @@ class _AppState extends ConsumerState<Application> {
   Future<void> _processSharedFiles(List<SharedMediaFile> files) async {
     if (files.isEmpty) return;
     final filePath = files.first.path;
+    if (filePath.startsWith('http')) {
+      debugPrint('Ignored shared URL in file processor: $filePath');
+      return;
+    }
     try {
       final context = _navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
 
       final file = File(filePath);
-      final pgnText = await file.readAsString();
+      final bytes = await file.readAsBytes();
+      final pgnText = utf8.decode(bytes, allowMalformed: true);
 
       if (context.mounted) {
         ImportPgnScreen.handlePgnText(context, pgnText);

@@ -22,7 +22,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   late SocketClient _socketClient;
 
   @override
-  Future<IList<OnlineFriend>> build() async {
+  Future<IList<OnlineFriend>> build() {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _socketOpenSubscription?.cancel();
@@ -43,8 +43,12 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
         .firstWhere((e) => e.topic == 'following_onlines')
         .then((event) => _parseFriendsList(event));
 
-    await _socketClient.firstConnection;
-
+    // Send immediately if the socket is already connected; if it is still
+    // connecting, this is a no-op and _socketOpenSubscription will send the
+    // request once the connection is established.
+    // We deliberately avoid awaiting firstConnection here: SocketClient.close()
+    // replaces the firstConnection completer, which would permanently orphan
+    // the await and leave the provider in AsyncLoading forever.
     _socketClient.send('following_onlines', null);
 
     return state;

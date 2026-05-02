@@ -1604,9 +1604,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'আপনি এই ধাঁধা তি কি পছন্দ করেছেন?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'পরের ধাঁধা তি তে জেতে ভতে দিন!';
-
-  @override
   String get puzzleUpVote => 'ধাঁধা কে আপ-ভোট করুন';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 এর শুরুর অবস্থান: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'শুরুর অবস্থান';

@@ -1029,11 +1029,9 @@ void main() {
       expect(find.byKey(const Key('d3-whitebishop')), findsOneWidget);
       expect(find.byKey(const Key('b5-lastMove')), findsOneWidget);
       expect(find.byKey(const Key('d3-lastMove')), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle(); // wait for the moves tab menu to open
-      expect(find.text('Moves played'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
       // computer analysis is not available when game is not finished
-      expect(find.text('Computer analysis'), findsNothing);
+      expect(find.bySemanticsLabel(RegExp('Computer analysis')), findsNothing);
     });
 
     testWidgets('for a finished game', (WidgetTester tester) async {
@@ -1053,10 +1051,11 @@ void main() {
       expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
       expect(find.byKey(const Key('d5-lastMove')), findsOneWidget);
       expect(find.byKey(const Key('e6-lastMove')), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle(); // wait for the moves tab menu to open
-      expect(find.text('Moves played'), findsOneWidget);
-      expect(find.text('Computer analysis'), findsOneWidget); // computer analysis is available
+      expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp('Computer analysis')),
+        findsOneWidget,
+      ); // computer analysis is available
     });
   });
 

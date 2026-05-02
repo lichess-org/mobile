@@ -411,11 +411,20 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
   @override
   void initState() {
     super.initState();
-    controller.addListener(() {
-      if (controller.text.isNotEmpty) {
-        ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
-      }
-    });
+    controller.addListener(_handleTypingStatus);
+  }
+
+  void _handleTypingStatus() {
+    if (controller.text.isNotEmpty && mounted) {
+      ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_handleTypingStatus);
+    controller.dispose();
+    super.dispose();
   }
 
   @override

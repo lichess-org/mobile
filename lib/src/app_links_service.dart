@@ -20,7 +20,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -34,6 +36,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -111,7 +114,8 @@ class AppLinksService {
       return;
     }
     if (context != null && context.mounted) {
-      await handleAppLink(context, uri, animated: animated);
+      // For app deep links, we don't want to allow falling back to the browser as it might trigger an infinite loop if the app isn't properly handling the link
+      await handleAppLink(context, uri, animated: animated, allowBrowserFallback: false);
     }
   }
 
@@ -173,6 +177,43 @@ class AppLinksService {
             puzzleId: PuzzleId(id),
           ),
         ];
+      case 'tv':
+        if (appLinkUri.pathSegments.length < 2) return null;
+        final channel = TvChannel.nameMap.entryOrNull(appLinkUri.pathSegments[1]);
+        if (channel != null) {
+          return [TvScreen.buildRoute(context, channel: channel.value)];
+        } else {
+          if (!context.mounted) return null;
+          showSnackBar(
+            context,
+            'Invalid TV channel: ${appLinkUri.pathSegments[1]}',
+            type: SnackBarType.error,
+          );
+          return [];
+        }
+      case '@':
+        final isTv = appLinkUri.pathSegments.getOrNull(2) == 'tv';
+        if (appLinkUri.pathSegments.length > 2 && !isTv) {
+          return null;
+        }
+        try {
+          final user = await ref
+              .read(userRepositoryProvider)
+              .getUser(UserId.fromUserName(appLinkUri.pathSegments[1]));
+          if (!context.mounted) return null;
+
+          return isTv
+              ? [TvScreen.buildRoute(context, user: user.lightUser)]
+              : [UserOrProfileScreen.buildRoute(context, user.lightUser)];
+        } catch (e) {
+          if (!context.mounted) return null;
+          showSnackBar(
+            context,
+            'Cannot find user ${appLinkUri.pathSegments[1]}',
+            type: SnackBarType.error,
+          );
+          return [];
+        }
       // This might be a challenge or a game link. There's currently no API endpoint that resolves both games and challenges
       // at the same time, so check if it's a game link first, and if that fails, we later check if it's a challenge link.
       case _:
@@ -315,7 +356,7 @@ class AppLinksService {
 
       if (!context.mounted) return null;
 
-      if (game.finished) {
+      if (game.finished || game.source == .import) {
         return [
           AnalysisScreen.buildRoute(
             context,
@@ -358,7 +399,11 @@ class AppLinksService {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
       if (isChallengeLink) return;
 
-      launchUrl(uri);
+      if (allowBrowserFallback) {
+        launchUrl(uri);
+      } else {
+        _logger.warning('Could not resolve app link $uri');
+      }
     }
   }
 

@@ -1604,9 +1604,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Gostaste deste problema?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vota para carregares o próximo!';
-
-  @override
   String get puzzleUpVote => 'Aprove o puzzle';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Posição inicial do Xadrez960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Posição inicial';
@@ -7627,7 +7627,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'Sub-$param';
+    return 'Sub $param';
   }
 
   @override
@@ -8170,9 +8170,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Você gostou deste problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vote para carregar o próximo!';
 
   @override
   String get puzzleUpVote => 'Aprovar problema';
@@ -10117,6 +10114,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String chess960StartPosition(String param) {
     return 'Posição inicial do Xadrez960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Posição aleatória de Xadrez960';
 
   @override
   String get startPosition => 'Posição inicial';

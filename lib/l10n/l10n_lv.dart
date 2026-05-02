@@ -1623,9 +1623,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Vai patika šis uzdevums?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Balsojiet, lai ielādētu nākamo!';
-
-  @override
   String get puzzleUpVote => 'Patīk puzle';
 
   @override
@@ -3573,6 +3570,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String chess960StartPosition(String param) {
     return '960-šaha sākumpozīcija: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Sākuma pozīcija';

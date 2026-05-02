@@ -1604,9 +1604,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'این معما را دوست داشتید؟';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'رأی‌ دهید تا معمای بعدی بار شود!';
-
-  @override
   String get puzzleUpVote => 'رأیِ مثبت به معما';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'وضعیت آغازین شطرنج۹۶۰: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'وضعیت آغازش';

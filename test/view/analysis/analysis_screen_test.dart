@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -1447,25 +1446,18 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.byIcon(LichessIcons.flow_cascade), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
+      expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsOneWidget);
 
-      // Wait for menu to open
-      await tester.pumpAndSettle();
-
-      // Menu should not contain conditional premoves tab
-      expect(find.byIcon(Icons.save), findsNothing);
+      // Should not display the conditional premoves tab.
+      expect(find.bySemanticsLabel(RegExp('Conditional premoves')), findsNothing);
     });
 
     Future<void> switchToPremoveTab(WidgetTester tester) async {
-      expect(find.byIcon(LichessIcons.flow_cascade), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
+      // Wait for analysis tabs to be rendered if necessary
+      await tester.pump();
 
-      // Wait for menu to open
-      await tester.pumpAndSettle();
-
-      expect(find.byIcon(Icons.save), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.save));
+      await tester.tap(find.bySemanticsLabel(RegExp('Conditional premoves')));
 
       // Wait for premove tab to open
       await tester.pumpAndSettle();
