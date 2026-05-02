@@ -66,7 +66,9 @@ class ClockSettings extends ConsumerWidget {
                         selectedItem: state.options.type,
                         labelBuilder: (type) => Text(type.label),
                         onSelectedItemChanged: (type) {
-                          ref.read(clockToolControllerProvider.notifier).updateClockType(type);
+                          ref
+                              .read(clockToolControllerProvider.notifier)
+                              .updateClockType(type);
                         },
                       );
                     }
