@@ -263,8 +263,8 @@ class ClockToolController extends Notifier<ClockState> {
       ClockTimeControlType.increment => increment,
       ClockTimeControlType.simpleDelay => Duration.zero,
       ClockTimeControlType.bronsteinDelay =>
-        thinkTime != null && thinkTime > Duration.zero
-            ? _minDuration(thinkTime, increment)
+        thinkTime != null && thinkTime >= const Duration(milliseconds: 100)
+            ? _minDuration(_roundDownToTick(thinkTime), increment)
             : Duration.zero,
     };
     if (bonus > Duration.zero) {
@@ -292,6 +292,13 @@ class ClockToolController extends Notifier<ClockState> {
 }
 
 Duration _minDuration(Duration a, Duration b) => a < b ? a : b;
+
+Duration _roundDownToTick(Duration duration) {
+  const tickDelay = Duration(milliseconds: 100);
+  return Duration(
+    milliseconds: duration.inMilliseconds ~/ tickDelay.inMilliseconds * tickDelay.inMilliseconds,
+  );
+}
 
 @freezed
 sealed class ClockOptions with _$ClockOptions {

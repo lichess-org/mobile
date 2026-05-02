@@ -159,7 +159,7 @@ void main() {
     });
   });
 
-  test('start side settles partial tick before switching', () {
+  test('start side does not settle partial tick before switching', () {
     fakeAsync((async) {
       final clock = ChessClock(
         whiteTime: const Duration(seconds: 5),
@@ -170,7 +170,7 @@ void main() {
 
       final thinkTime = clock.startSide(Side.black);
       expect(thinkTime, const Duration(milliseconds: 50));
-      expect(clock.whiteTime.value, const Duration(milliseconds: 4950));
+      expect(clock.whiteTime.value, const Duration(seconds: 5));
     });
   });
 
