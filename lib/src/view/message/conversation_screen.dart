@@ -99,13 +99,13 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           if (canInteract)
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              tooltip: context.l10n.mobileMessageDeleteConversation,
+              tooltip: 'Delete conversation',
               onPressed: () async {
                 final confirmed = await showDialog<bool>(
                   context: context,
                   builder: (context) => YesNoDialog(
-                    title: Text(context.l10n.mobileMessageDeleteConversationTitle),
-                    content: Text(context.l10n.mobileMessageDeleteConversationConfirm),
+                    title: Text(context.l10n.mobileAreYouSure),
+                    content: const Text('Are you sure you want to delete this conversation?'),
                     onYes: () => Navigator.of(context).pop(true),
                     onNo: () => Navigator.of(context).pop(false),
                   ),
