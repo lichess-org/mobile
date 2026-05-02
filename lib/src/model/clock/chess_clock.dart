@@ -135,10 +135,6 @@ class ChessClock {
   void start({Duration? delay}) {
     _lastStarted = clock.now().add(delay ?? Duration.zero);
     _startDelayTimer?.cancel();
-    _timer?.cancel();
-    _stopwatch
-      ..stop()
-      ..reset();
     _startDelayTimer = Timer(delay ?? Duration.zero, _scheduleTick);
   }
 

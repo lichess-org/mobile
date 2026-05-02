@@ -51,6 +51,7 @@ class ClockToolController extends Notifier<ClockState> {
   DateTime? _delayStartedAt;
   Duration? _delayDuration;
   Duration? _pausedDelayRemaining;
+  Duration? _activeTurnStartedWithTime;
 
   @override
   ClockState build() {
@@ -114,6 +115,7 @@ class ClockToolController extends Notifier<ClockState> {
   void onTap(ClockSide playerType) {
     final started = state.activeSide != null;
     final wasRunning = _clock.isRunning;
+    final thinkTime = wasRunning ? _clock.stop() : null;
     state = state.copyWith(
       activeSide: playerType.opposite,
       topMoves: playerType == ClockSide.top && started ? state.topMoves + 1 : state.topMoves,
@@ -122,8 +124,8 @@ class ClockToolController extends Notifier<ClockState> {
           : state.bottomMoves,
     );
     ref.read(soundServiceProvider).play(Sound.clock);
-    final thinkTime = _startActiveSide(playerType.opposite);
-    _applyMoveBonus(playerType, wasRunning ? thinkTime : null);
+    _applyMoveBonus(playerType, wasRunning ? thinkTime : null, _activeTurnStartedWithTime);
+    _startActiveSide(playerType.opposite);
   }
 
   void updateDuration(ClockSide playerType, Duration duration) {
@@ -191,6 +193,7 @@ class ClockToolController extends Notifier<ClockState> {
     );
     _clock.stop();
     _clock.setTimes(blackTime: state.options.topTime, whiteTime: state.options.bottomTime);
+    _activeTurnStartedWithTime = null;
     // Reset low time sound flags for both players
     _hasPlayedLowTimeSound[ClockSide.top] = false;
     _hasPlayedLowTimeSound[ClockSide.bottom] = false;
@@ -244,9 +247,12 @@ class ClockToolController extends Notifier<ClockState> {
     if (initialOfActive.inMilliseconds != 0 || hasActiveMoved) {
       final delay = _delayFor(activeSide);
       _markDelay(delay);
-      return _clock.startSide(activeSide.chessClockSide, delay: delay);
+      _activeTurnStartedWithTime = state.getDuration(activeSide).value;
+      _clock.startSide(activeSide.chessClockSide, delay: delay);
+      return null;
     } else {
       _markDelay(null);
+      _activeTurnStartedWithTime = null;
       return _clock.stop();
     }
   }
@@ -257,18 +263,23 @@ class ClockToolController extends Notifier<ClockState> {
         : null;
   }
 
-  void _applyMoveBonus(ClockSide playerType, Duration? thinkTime) {
+  void _applyMoveBonus(ClockSide playerType, Duration? thinkTime, Duration? turnStartedWithTime) {
     final increment = state.options.getIncrementDuration(playerType);
     final bonus = switch (state.options.type) {
       ClockTimeControlType.increment => increment,
       ClockTimeControlType.simpleDelay => Duration.zero,
       ClockTimeControlType.bronsteinDelay =>
-        thinkTime != null && thinkTime >= const Duration(milliseconds: 100)
-            ? _minDuration(_roundDownToTick(thinkTime), increment)
+        thinkTime != null && thinkTime > Duration.zero
+            ? _minDuration(thinkTime, increment)
             : Duration.zero,
     };
     if (bonus > Duration.zero) {
       _clock.incTime(playerType.chessClockSide, bonus);
+      if (state.options.type == ClockTimeControlType.bronsteinDelay &&
+          turnStartedWithTime != null &&
+          state.getDuration(playerType).value > turnStartedWithTime) {
+        _clock.setTime(playerType.chessClockSide, turnStartedWithTime);
+      }
     }
   }
 
@@ -292,13 +303,6 @@ class ClockToolController extends Notifier<ClockState> {
 }
 
 Duration _minDuration(Duration a, Duration b) => a < b ? a : b;
-
-Duration _roundDownToTick(Duration duration) {
-  const tickDelay = Duration(milliseconds: 100);
-  return Duration(
-    milliseconds: duration.inMilliseconds ~/ tickDelay.inMilliseconds * tickDelay.inMilliseconds,
-  );
-}
 
 @freezed
 sealed class ClockOptions with _$ClockOptions {
