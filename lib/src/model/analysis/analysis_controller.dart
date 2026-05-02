@@ -481,7 +481,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state.requireValue.currentPath,
       move,
       replace: shouldReplace,
-      isUserAdded: true,
+      isUserAdded: options.isLichessGameAnalysis,
     );
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);

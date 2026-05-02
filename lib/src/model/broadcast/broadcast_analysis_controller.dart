@@ -302,11 +302,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(
-      state.requireValue.currentPath,
-      move,
-      isUserAdded: true,
-    );
+    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }

@@ -538,6 +538,48 @@ void main() {
     });
   });
 
+  group('addMoveAt isUserAdded', () {
+    test('isUserAdded is true when extending the mainline', () {
+      // Simulates adding a move at the end of a Lichess archived game
+      final root = Root.fromPgnMoves('e4 e5');
+      final mainlinePath = root.mainlinePath;
+      final (newPath, _) = root.addMoveAt(mainlinePath, Move.parse('g1f3')!, isUserAdded: true);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is false when creating a sideline mid-game', () {
+      // Simulates adding a sideline: the position already has a child (the game move)
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      // Add a different move at position after e4 (which already has e5 as child)
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (newPath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is false when isUserAdded param is false', () {
+      // Simulates PGN import or broadcast: isUserAdded is never set to true
+      final root = Root.fromPgnMoves('e4 e5');
+      final mainlinePath = root.mainlinePath;
+      final (newPath, _) = root.addMoveAt(mainlinePath, Move.parse('g1f3')!);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is false when adding a move inside a sideline', () {
+      // Simulates adding a second move within a sideline: the sideline path is not on mainline
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      // First create a sideline with d5
+      final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
+      // Now add a move within that sideline (not on mainline)
+      final (newPath, _) = root.addMoveAt(sidelinePath!, Move.parse('e4d5')!, isUserAdded: true);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+  });
+
   group('ViewNode', () {
     test('mainline', () {
       const pgn = '1. e4 e5 (1... d5 2. a4) 2. a4';
