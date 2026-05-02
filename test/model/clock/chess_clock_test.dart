@@ -140,6 +140,40 @@ void main() {
     });
   });
 
+  test('start side with delay cancels previous side tick', () {
+    fakeAsync((async) {
+      final clock = ChessClock(
+        whiteTime: const Duration(seconds: 5),
+        blackTime: const Duration(seconds: 5),
+      );
+      clock.start();
+      async.elapse(const Duration(seconds: 1));
+      expect(clock.whiteTime.value, const Duration(seconds: 4));
+
+      clock.startSide(Side.black, delay: const Duration(seconds: 2));
+      async.elapse(const Duration(seconds: 2));
+      expect(clock.blackTime.value, const Duration(seconds: 5));
+
+      async.elapse(const Duration(milliseconds: 100));
+      expect(clock.blackTime.value, const Duration(milliseconds: 4900));
+    });
+  });
+
+  test('start side settles partial tick before switching', () {
+    fakeAsync((async) {
+      final clock = ChessClock(
+        whiteTime: const Duration(seconds: 5),
+        blackTime: const Duration(seconds: 5),
+      );
+      clock.start();
+      async.elapse(const Duration(milliseconds: 50));
+
+      final thinkTime = clock.startSide(Side.black);
+      expect(thinkTime, const Duration(milliseconds: 50));
+      expect(clock.whiteTime.value, const Duration(milliseconds: 4950));
+    });
+  });
+
   test('increment times', () {
     fakeAsync((async) {
       final clock = ChessClock(

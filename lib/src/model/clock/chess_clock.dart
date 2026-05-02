@@ -123,8 +123,9 @@ class ChessClock {
     if (isRunning && _activeSide == side) {
       return _thinkTime;
     }
-    _activeSide = side;
     final thinkTime = _thinkTime;
+    _settleActiveTick();
+    _activeSide = side;
     start(delay: delay);
     return thinkTime;
   }
@@ -135,6 +136,10 @@ class ChessClock {
   void start({Duration? delay}) {
     _lastStarted = clock.now().add(delay ?? Duration.zero);
     _startDelayTimer?.cancel();
+    _timer?.cancel();
+    _stopwatch
+      ..stop()
+      ..reset();
     _startDelayTimer = Timer(delay ?? Duration.zero, _scheduleTick);
   }
 
@@ -177,13 +182,22 @@ class ChessClock {
   }
 
   void _tick() {
-    final newTime = _activeTime.value - _stopwatch.elapsed;
-    _activeTime.value = newTime < Duration.zero ? Duration.zero : newTime;
+    _settleActiveTick(force: true);
     _checkEmergency();
     if (_activeTime.value == Duration.zero) {
       onFlag?.call();
     }
     _scheduleTick();
+  }
+
+  void _settleActiveTick({bool force = false}) {
+    if ((force || _timer?.isActive == true) && _stopwatch.isRunning) {
+      final newTime = _activeTime.value - _stopwatch.elapsed;
+      _activeTime.value = newTime < Duration.zero ? Duration.zero : newTime;
+      _stopwatch
+        ..stop()
+        ..reset();
+    }
   }
 
   void _checkEmergency() {

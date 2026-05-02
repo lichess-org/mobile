@@ -327,7 +327,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                           if (clockState.options.hasIncrement(playerType)) ...[
                             const SizedBox(width: 8),
                             Text(
-                              '+${clockState.options.getIncrement(playerType)}',
+                              '${clockState.options.type == ClockTimeControlType.increment ? '+' : 'd'}${clockState.options.getIncrement(playerType)}',
                               style: TextStyle(fontSize: 28, color: clockStyle.textColor),
                             ),
                           ],
