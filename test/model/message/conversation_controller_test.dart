@@ -3,7 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 
+import '../../network/fake_http_client_factory.dart';
+import '../../network/fake_websocket_channel.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
 
@@ -13,12 +17,11 @@ const _userId = UserId('opponent');
 const _inboxResponse = '''
 {
   "me": {"name": "me", "id": "me"},
+  "bot": false,
   "convo": {
-    "u": {"name": "opponent", "id": "opponent"},
+    "user": {"name": "opponent", "id": "opponent"},
     "msgs": [],
-    "relations": {},
-    "postable": true,
-    "bot": false
+    "postable": true
   }
 }
 ''';
@@ -29,12 +32,11 @@ const _inboxResponse = '''
 const _inboxNotPostableResponse = '''
 {
   "me": {"name": "me", "id": "me"},
+  "bot": false,
   "convo": {
-    "u": {"name": "opponent", "id": "opponent"},
+    "user": {"name": "opponent", "id": "opponent"},
     "msgs": [],
-    "relations": {},
-    "postable": false,
-    "bot": false
+    "postable": false
   }
 }
 ''';
@@ -45,12 +47,11 @@ const _inboxNotPostableResponse = '''
 const _inboxPostableWithExistingConvoResponse = '''
 {
   "me": {"name": "me", "id": "me"},
+  "bot": false,
   "convo": {
-    "u": {"name": "opponent", "id": "opponent"},
-    "msgs": [{"t": "hello", "u": "opponent", "d": 1621533013388}],
-    "relations": {},
-    "postable": true,
-    "bot": false
+    "user": {"name": "opponent", "id": "opponent"},
+    "msgs": [{"text": "hello", "user": "opponent", "date": 1621533013388}],
+    "postable": true
   }
 }
 ''';
@@ -59,12 +60,11 @@ const _inboxPostableWithExistingConvoResponse = '''
 const _inboxBotResponse = '''
 {
   "me": {"name": "me", "id": "me"},
+  "bot": true,
   "convo": {
-    "u": {"name": "opponent", "id": "opponent"},
+    "user": {"name": "opponent", "id": "opponent"},
     "msgs": [],
-    "relations": {},
-    "postable": false,
-    "bot": true
+    "postable": false
   }
 }
 ''';
@@ -105,7 +105,16 @@ Future<ProviderContainer> _makeContainer(String inboxJson, String userJson) {
     }
     return mockResponse('', 200);
   });
-  return lichessClientContainer(mockClient);
+  return makeContainer(
+    overrides: {
+      httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
+      }),
+      webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith((ref) {
+        return FakeWebSocketChannelFactory((uri) => FakeWebSocketChannel(uri));
+      }),
+    },
+  );
 }
 
 void main() {
