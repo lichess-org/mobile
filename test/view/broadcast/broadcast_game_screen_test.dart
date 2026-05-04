@@ -145,10 +145,7 @@ void main() {
       // Load the broadcast round game provider
       await tester.pump();
 
-      expect(find.byIcon(LichessIcons.flow_cascade), findsOne);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('PGN tags'));
+      await tester.tap(find.byIcon(Icons.sell_outlined));
       await tester.pumpAndSettle();
 
       expect(find.text('White: '), findsOne);
@@ -182,9 +179,7 @@ void main() {
       // Load the broadcast round game provider
       await tester.pump();
 
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('PGN tags'));
+      await tester.tap(find.byIcon(Icons.sell_outlined));
       await tester.pumpAndSettle();
 
       expect(find.text('WhiteFideId: '), findsOne);
