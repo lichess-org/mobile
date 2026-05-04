@@ -551,7 +551,6 @@ void main() {
     test('isUserAdded is false when creating a sideline mid-game', () {
       // Simulates adding a sideline: the position already has a child (the game move)
       final root = Root.fromPgnMoves('e4 e5 Nf3');
-      // Add a different move at position after e4 (which already has e5 as child)
       final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final (newPath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
       final newBranch = root.branchAt(newPath!);
@@ -571,9 +570,7 @@ void main() {
       // Simulates adding a second move within a sideline: the sideline path is not on mainline
       final root = Root.fromPgnMoves('e4 e5 Nf3');
       final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
-      // First create a sideline with d5
       final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
-      // Now add a move within that sideline (not on mainline)
       final (newPath, _) = root.addMoveAt(sidelinePath!, Move.parse('e4d5')!, isUserAdded: true);
       final newBranch = root.branchAt(newPath!);
       expect(newBranch?.isUserAdded, isFalse);
