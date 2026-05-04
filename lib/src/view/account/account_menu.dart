@@ -33,6 +33,10 @@ class AccountMenuScreen extends ConsumerStatefulWidget {
   const AccountMenuScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return buildScreenRoute(context, screen: const AccountMenuScreen());
+    }
+
     return PageRouteBuilder<void>(
       pageBuilder: (_, a, b) => const AccountMenuScreen(),
       transitionsBuilder: (_, animation, b, child) {
@@ -87,74 +91,78 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        title: Text(context.l10n.mobileAccount),
+        automaticallyImplyLeading: Theme.of(context).platform == TargetPlatform.iOS,
         actions: [
-          IconButton(
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? const Icon(CupertinoIcons.clear_circled, size: 36)
-                : const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          if (Theme.of(context).platform != TargetPlatform.iOS)
+            IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: (Theme.of(context).platform == TargetPlatform.iOS ? Column.new : ListView.new)(
+            child: ListView(
               children: [
-                if (user != null) ...[
-                  ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    leading: switch (account) {
-                      AsyncData(:final value) =>
-                        value == null
-                            ? const Icon(Icons.account_circle_outlined, size: 30)
-                            : CircleAvatar(
-                                radius: 20,
-                                foregroundImage: value.flair != null && !_errorLoadingFlair
-                                    ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                                    : null,
-                                onForegroundImageError: value.flair != null
-                                    ? (error, _) => setState(() => _errorLoadingFlair = true)
-                                    : null,
-                                backgroundColor: value.flair == null || _errorLoadingFlair
-                                    ? null
-                                    : ColorScheme.of(context).surfaceContainer,
-                                child: value.flair == null || _errorLoadingFlair
-                                    ? Text(value.initials)
-                                    : null,
-                              ),
-                      _ => const Icon(Icons.account_circle_outlined, size: 30),
-                    },
-                    title: AutoSizeText(
-                      user.name,
-                      style: Styles.callout,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      maxFontSize: 18,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    enabled: isOnline,
-                    onTap: () {
-                      ref.invalidate(accountProvider);
-                      _navigate(context, ProfileScreen.buildRoute(context));
-                    },
-                  ),
-                  if (kidMode)
-                    ListTile(
-                      textColor: Theme.of(context).colorScheme.primary,
-                      iconColor: Theme.of(context).colorScheme.primary,
-                      leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
-                      title: Text(
-                        context.l10n.kidModeIsEnabled,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                if (user != null)
+                  ListSection(
+                    children: [
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        leading: switch (account) {
+                          AsyncData(:final value) =>
+                            value == null
+                                ? const Icon(Icons.account_circle_outlined, size: 30)
+                                : CircleAvatar(
+                                    radius: 20,
+                                    foregroundImage: value.flair != null && !_errorLoadingFlair
+                                        ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
+                                        : null,
+                                    onForegroundImageError: value.flair != null
+                                        ? (error, _) => setState(() => _errorLoadingFlair = true)
+                                        : null,
+                                    backgroundColor: value.flair == null || _errorLoadingFlair
+                                        ? null
+                                        : ColorScheme.of(context).surfaceContainer,
+                                    child: value.flair == null || _errorLoadingFlair
+                                        ? Text(value.initials)
+                                        : null,
+                                  ),
+                          _ => const Icon(Icons.account_circle_outlined, size: 30),
+                        },
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        title: AutoSizeText(
+                          user.name,
+                          style: Styles.callout,
+                          maxLines: 1,
+                          minFontSize: 14,
+                          maxFontSize: 18,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        enabled: isOnline,
+                        onTap: () {
+                          ref.invalidate(accountProvider);
+                          _navigate(context, ProfileScreen.buildRoute(context));
+                        },
                       ),
-                      onTap: () {
-                        _pendingKidModeRefresh = true;
-                        launchUrl(lichessUri('/account/kid'));
-                      },
-                    ),
-                ] else ...[
+                      if (kidMode)
+                        ListTile(
+                          textColor: Theme.of(context).colorScheme.primary,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                          title: Text(
+                            context.l10n.kidModeIsEnabled,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          onTap: () {
+                            _pendingKidModeRefresh = true;
+                            launchUrl(lichessUri('/account/kid'));
+                          },
+                        ),
+                    ],
+                  )
+                else ...[
                   Center(
                     child: FilledButton(
                       onPressed: isOnline
@@ -171,22 +179,8 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                     ),
                   ),
                 ],
-                const PlatformDivider(indent: 0),
                 ListSection(
                   children: [
-                    if (user != null)
-                      ListTile(
-                        leading: const Icon(Icons.person_outlined),
-                        trailing: Theme.of(context).platform == TargetPlatform.iOS
-                            ? const CupertinoListTileChevron()
-                            : null,
-                        title: Text(context.l10n.profile),
-                        enabled: isOnline,
-                        onTap: () {
-                          ref.invalidate(accountProvider);
-                          _navigate(context, ProfileScreen.buildRoute(context));
-                        },
-                      ),
                     if (user != null && account.hasValue && !kidMode)
                       ListTile(
                         leading: Badge.count(
@@ -230,7 +224,6 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                   ],
                 ),
                 ListSection(
-                  margin: Styles.bodySectionPadding.copyWith(top: 0),
                   children: [
                     if (Theme.of(context).platform == TargetPlatform.android)
                       ListTile(
@@ -254,7 +247,6 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                     ),
                   ],
                 ),
-                const PlatformDivider(indent: 0),
                 const SocketPingRatingListTile(),
               ],
             ),
@@ -299,13 +291,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   }
 
   void _navigate(BuildContext context, Route<dynamic> route) {
-    final navigator = Navigator.of(context);
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      navigator.pop();
-      navigator.push(route);
-    } else {
-      navigator.push(route);
-    }
+    Navigator.of(context).push(route);
   }
 
   void _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
@@ -378,11 +364,7 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
     final client = ref.watch(defaultClientProvider);
 
     void openMenu() {
-      if (Theme.of(context).platform == TargetPlatform.android) {
-        Navigator.of(context, rootNavigator: true).push(AccountMenuScreen.buildRoute(context));
-      } else {
-        showCupertinoSheet<void>(context: context, builder: (_) => const AccountMenuScreen());
-      }
+      Navigator.of(context, rootNavigator: true).push(AccountMenuScreen.buildRoute(context));
     }
 
     return switch (account) {

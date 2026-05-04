@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Account",
   "mobileAccountPreferences": "Account preferences",
   "mobileAccountPreferencesHelp": "These preferences are applied to your Lichess account and will be used across all devices.",
   "mobileAllGames": "All games",

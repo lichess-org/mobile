@@ -196,6 +196,12 @@ abstract class AppLocalizations {
     Locale('zh', 'TW')
   ];
 
+  /// No description provided for @mobileAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get mobileAccount;
+
   /// No description provided for @mobileAccountPreferences.
   ///
   /// In en, this message translates to:

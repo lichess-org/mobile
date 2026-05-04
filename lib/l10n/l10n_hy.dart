@@ -9,6 +9,9 @@ class AppLocalizationsHy extends AppLocalizations {
   AppLocalizationsHy([String locale = 'hy']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Հաշվի նախընտրություններ';
 
   @override
