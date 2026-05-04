@@ -23,7 +23,9 @@ const _inboxResponse = '''
 }
 ''';
 
-// /inbox response where the conversation is not postable (contact does not accept messages).
+// /inbox response where the conversation is not postable.
+// This happens when the contact has set their message preference to "Only existing conversations"
+// and there is no prior conversation.
 const _inboxNotPostableResponse = '''
 {
   "me": {"name": "me", "id": "me"},
@@ -32,6 +34,22 @@ const _inboxNotPostableResponse = '''
     "msgs": [],
     "relations": {},
     "postable": false,
+    "bot": false
+  }
+}
+''';
+
+// /inbox response where the conversation is postable because a prior conversation already exists.
+// When the contact has set their message preference to "Only existing conversations",
+// posting is allowed if there are already messages.
+const _inboxPostableWithExistingConvoResponse = '''
+{
+  "me": {"name": "me", "id": "me"},
+  "convo": {
+    "u": {"name": "opponent", "id": "opponent"},
+    "msgs": [{"t": "hello", "u": "opponent", "d": 1621533013388}],
+    "relations": {},
+    "postable": true,
     "bot": false
   }
 }
@@ -122,11 +140,23 @@ void main() {
       expect(state.isBot, isTrue);
     });
 
-    test('postable is false when contact does not accept messages', () async {
+    test('postable is false when contact does not accept new messages', () async {
       final container = await _makeContainer(_inboxNotPostableResponse, _userNotBlockedResponse);
       container.listen(conversationControllerProvider(_userId), (_, _) {});
       final state = await container.read(conversationControllerProvider(_userId).future);
       expect(state.convo.postable, isFalse);
+      expect(state.isBlocked, isFalse);
+      expect(state.isBot, isFalse);
+    });
+
+    test('postable is true when existing conversation allows further messages', () async {
+      final container = await _makeContainer(
+        _inboxPostableWithExistingConvoResponse,
+        _userNotBlockedResponse,
+      );
+      container.listen(conversationControllerProvider(_userId), (_, _) {});
+      final state = await container.read(conversationControllerProvider(_userId).future);
+      expect(state.convo.postable, isTrue);
       expect(state.isBlocked, isFalse);
       expect(state.isBot, isFalse);
     });
