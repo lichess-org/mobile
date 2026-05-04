@@ -6,16 +6,18 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppBarLichessTitle extends StatelessWidget {
-  const AppBarLichessTitle({super.key});
+  const AppBarLichessTitle({super.key, this.iconSize = 24});
+
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
         children: [
-          const WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Icon(LichessIcons.logo_lichess, size: 24),
+          WidgetSpan(
+            alignment: .bottom,
+            child: Icon(LichessIcons.logo_lichess, size: iconSize),
           ),
           const TextSpan(text: ' lichess'),
           TextSpan(

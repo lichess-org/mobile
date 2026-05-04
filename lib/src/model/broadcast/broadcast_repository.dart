@@ -411,6 +411,7 @@ BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
     points: points,
     customPoints: pick('customPoints').asDoubleOrNull(),
     opponent: _playerFromPick(pick('opponent').required()),
+    ongoing: pick('ongoing').asBoolOrNull() ?? false,
   );
 }
 

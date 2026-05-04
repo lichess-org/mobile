@@ -199,10 +199,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
             Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
           ],
         ),
-        actions: [
-          if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          _StudyMenu(options: widget.options),
-        ],
+        actions: [_StudyMenu(options: widget.options)],
       ),
       body: _Body(options: widget.options, tabController: _tabController, tabs: tabs),
     );
@@ -441,7 +438,9 @@ class _Body extends ConsumerWidget {
     final isLocalEvaluationEnabled = studyState.isEngineAvailable(enginePrefs);
     final pov = studyState.pov;
 
-    final bottomChild = gamebookActive ? StudyGamebook(options) : StudyTreeView(options);
+    final bottomChild = gamebookActive
+        ? StudyGamebook(options)
+        : StudyTreeView(options, showTopDivider: tabs.length == 1);
 
     return AnalysisLayout(
       tabController: tabController,
@@ -468,6 +467,7 @@ class _Body extends ConsumerWidget {
           : null,
       bottomBar: StudyBottomBar(options: options),
       pockets: studyState.currentPosition?.pockets,
+      tabs: tabs,
       children: tabs.map((tab) {
         switch (tab) {
           case AnalysisTab.explorer:

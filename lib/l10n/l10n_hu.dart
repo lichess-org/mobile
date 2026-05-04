@@ -1604,9 +1604,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Tetszett ez a feladvány?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Szavazz egy újért cserébe!';
-
-  @override
   String get puzzleUpVote => 'Tetszett';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 kezdőállás: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Alapállás';

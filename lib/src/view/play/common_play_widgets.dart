@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 
 class PlayRatingRange extends StatefulWidget {
   const PlayRatingRange({
@@ -105,25 +106,40 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
               ],
             ),
           )
-        : ListTile(
-            enabled: false,
-            title: Text(context.l10n.ratingFilter),
-            subtitle: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Flexible(child: NonLinearSlider(value: -500, values: kSubtractingRatingRange)),
-                const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(width: 44.0, child: Center(child: Text('-500'))),
-                    SizedBox(width: 8.0),
-                    Text('/'),
-                    SizedBox(width: 8.0),
-                    SizedBox(width: 44.0, child: Center(child: Text('+500'))),
-                  ],
-                ),
-                Flexible(child: NonLinearSlider(value: 500, values: kAddingRatingRange)),
-              ],
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => showAdaptiveDialog<void>(
+              context: context,
+              builder: (context) => AlertDialog.adaptive(
+                content: Text(context.l10n.ratingRangeIsDisabledBecauseYourRatingIsProvisional),
+                actions: [
+                  PlatformDialogAction(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(context.l10n.mobileOkButton),
+                  ),
+                ],
+              ),
+            ),
+            child: ListTile(
+              enabled: false,
+              title: Text(context.l10n.ratingFilter),
+              subtitle: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(child: NonLinearSlider(value: -500, values: kSubtractingRatingRange)),
+                  const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(width: 44.0, child: Center(child: Text('-500'))),
+                      SizedBox(width: 8.0),
+                      Text('/'),
+                      SizedBox(width: 8.0),
+                      SizedBox(width: 44.0, child: Center(child: Text('+500'))),
+                    ],
+                  ),
+                  Flexible(child: NonLinearSlider(value: 500, values: kAddingRatingRange)),
+                ],
+              ),
             ),
           );
   }

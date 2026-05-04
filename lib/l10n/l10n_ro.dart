@@ -1626,9 +1626,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ți-a plăcut această problemă?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
-
-  @override
   String get puzzleUpVote => 'Vot pozitiv';
 
   @override
@@ -3577,6 +3574,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Poziție de start Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Poziție aleatoare Chess960';
 
   @override
   String get startPosition => 'Poziția de start';

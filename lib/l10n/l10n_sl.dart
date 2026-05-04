@@ -1648,9 +1648,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ali ti je všeč šahovski problem?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Glasujte za nalaganje naslednjega!';
-
-  @override
   String get puzzleUpVote => 'Glas ZA uganko';
 
   @override
@@ -3605,6 +3602,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Šah 960 začetna pozicija: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Začetna pozicija';

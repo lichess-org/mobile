@@ -1604,9 +1604,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Avez-vous aimé ce problème ?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votez pour afficher le suivant !';
-
-  @override
   String get puzzleUpVote => 'Voter pour ce problème';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Position de départ – Chess960 : $param';
   }
+
+  @override
+  String get randomChess960Position => 'Position d\'échecs 960';
 
   @override
   String get startPosition => 'Position de départ';

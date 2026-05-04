@@ -1646,9 +1646,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'אהבת את החידה?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'יש לדרג לקבלת החידה הבאה!';
-
-  @override
   String get puzzleUpVote => 'הצבעה בעד החידה';
 
   @override
@@ -3601,6 +3598,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'עמדת הפתיחה: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'עמדת הפתיחה';

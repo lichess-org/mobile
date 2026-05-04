@@ -150,6 +150,22 @@ class _Body extends ConsumerWidget {
                 );
               },
             ),
+            if (isTabletOrLarger(context))
+              SettingsListTile(
+                settingsLabel: const Text('Board position in landscape mode'), // TODO l10n
+                settingsValue: boardPrefs.landscapeBoardPosition.label(context.l10n),
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: LandscapeBoardPosition.values,
+                    selectedItem: boardPrefs.landscapeBoardPosition,
+                    labelBuilder: (t) => Text(t.label(context.l10n)),
+                    onSelectedItemChanged: (LandscapeBoardPosition? value) => ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setLandscapeBoardPosition(value ?? LandscapeBoardPosition.left),
+                  );
+                },
+              ),
           ],
         ),
         ListSection(

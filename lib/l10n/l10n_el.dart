@@ -1604,9 +1604,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτό το τακτικό;';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
-
-  @override
   String get puzzleUpVote => 'Μου άρεσε το τακτικό';
 
   @override
@@ -3549,6 +3546,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Αρχική θέση Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Τυχαία θέση Chess960';
 
   @override
   String get startPosition => 'Αρχική διάταξη';

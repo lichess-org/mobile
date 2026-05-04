@@ -1059,12 +1059,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'U$param';
+    return '<$param';
   }
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return '<$param';
   }
 
   @override
@@ -1602,9 +1602,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ariketa gustukoa izan da?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Eman bozka hurrengoa kargatzeko!';
 
   @override
   String get puzzleUpVote => 'Ariketari +1 botoa';
@@ -3549,6 +3546,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String chess960StartPosition(String param) {
     return '960Xakearen hasiera posizioa: $param';
   }
+
+  @override
+  String get randomChess960Position => '960 xakeko ausazko posizioa';
 
   @override
   String get startPosition => 'Hasierako posizioa';
