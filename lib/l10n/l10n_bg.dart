@@ -9,6 +9,9 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Предпочитания за акаунта';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Хареса ли Ви този пъзел?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Гласувайте и преминете към следващия!';
 
   @override
   String get puzzleUpVote => 'Задачата ми хареса';
@@ -3549,6 +3549,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Начална позиция в Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Начална позиция';

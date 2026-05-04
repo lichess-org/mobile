@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 
 part 'over_the_board_clock.freezed.dart';
 
@@ -43,7 +44,7 @@ class OverTheBoardClock extends Notifier<OverTheBoardClockState> {
       }
     });
 
-    return OverTheBoardClockState.fromTimeIncrement(TimeIncrement.blitzDefault());
+    return OverTheBoardClockState.fromTimeIncrement(OverTheBoardPrefs.defaults.timeIncrement);
   }
 
   void setupClock(TimeIncrement timeIncrement, {Duration? whiteTimeLeft, Duration? blackTimeLeft}) {

@@ -9,6 +9,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   AppLocalizationsGsw([String locale = 'gsw']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Konto Ischtellige';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Hät dir d\'Ufgab g\'falle?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stimm ab, um die Nächscht z\'lade!';
 
   @override
   String get puzzleUpVote => 'Die Ufgab positiv bewerte';
@@ -3549,6 +3549,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Schach960 Afangsschtellig: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Afangsposition';

@@ -9,6 +9,9 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontaj Preferoj';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ĉu vi ŝatis la puzlon?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Voĉdonu por iri al la venonta puzlo!';
 
   @override
   String get puzzleUpVote => 'Supren voĉdoni puzlo';
@@ -3549,6 +3549,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Ŝako960 komenca pozicio: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Komenca aranĝo';

@@ -122,7 +122,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       appBar: AppBar(
         title: title,
         actions: [
-          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _BroadcastGameMenu(
             roundId: widget.roundId,
             gameId: widget.gameId,
@@ -138,6 +137,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         widget.tournamentSlug,
         widget.roundSlug,
         tabController: _tabController,
+        tabs: tabs,
       ),
     );
   }
@@ -252,6 +252,7 @@ class _Body extends ConsumerWidget {
     this.tournamentSlug,
     this.roundSlug, {
     required this.tabController,
+    required this.tabs,
   });
 
   final BroadcastTournamentId? tournamentId;
@@ -260,6 +261,7 @@ class _Body extends ConsumerWidget {
   final String? tournamentSlug;
   final String? roundSlug;
   final TabController tabController;
+  final List<AnalysisTab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -279,6 +281,7 @@ class _Body extends ConsumerWidget {
             pov: pov,
             sideToMove: state.currentPosition.turn,
             tabController: tabController,
+            tabs: tabs,
             boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
               roundId: roundId,
               gameId: gameId,
@@ -358,6 +361,8 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         currentPath: state.currentPath,
         livePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
+        // Avoid overlap with the divider of the tab bar
+        showTopDivider: false,
         shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
         shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
         shouldShowAnnotations:
@@ -599,8 +604,7 @@ class _PlayerWidget extends ConsumerWidget {
               );
             }
           },
-          child: Container(
-            color: ColorScheme.of(context).surfaceContainer,
+          child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [

@@ -9,6 +9,9 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Hou jy van hierdie raaisel?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem om die volgende een te laai!';
 
   @override
   String get puzzleUpVote => 'Stem vir raaisel';
@@ -3549,6 +3549,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Skaak960 begin posisie: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Begin posisie';

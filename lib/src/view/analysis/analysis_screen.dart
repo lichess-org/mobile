@@ -115,10 +115,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
 
-    final appBarActions = [
-      AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      _AnalysisMenu(options: widget.options, state: asyncState),
-    ];
+    final appBarActions = [_AnalysisMenu(options: widget.options, state: asyncState)];
 
     switch (asyncState) {
       case AsyncData(:final value):
@@ -130,7 +127,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
               title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
               actions: appBarActions,
             ),
-            body: _Body(options: widget.options, controller: _tabController),
+            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
@@ -210,10 +207,11 @@ class _AnalysisMenu extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller});
+  const _Body({required this.options, required this.controller, required this.tabs});
 
   final TabController controller;
   final AnalysisOptions options;
+  final List<AnalysisTab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -299,6 +297,7 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
+        tabs: tabs,
         tabController: controller,
         pov: pov,
         sideToMove: analysisState.currentPosition.turn,
@@ -318,7 +317,7 @@ class _Body extends ConsumerWidget {
                 analyisState: analysisState,
               )
             : null,
-        bottomBar: _BottomBar(options: options),
+        bottomBar: _BottomBar(options: options, tabController: controller),
         pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
@@ -423,9 +422,10 @@ class _Clock extends StatelessWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.options});
+  const _BottomBar({required this.options, required this.tabController});
 
   final AnalysisOptions options;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -565,6 +565,26 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (options case ArchivedGame())
+          if (analysisState.canRequestServerAnalysis)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.requestAComputerAnalysis),
+              onPressed: () {
+                if (authUser == null) {
+                  showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                  return;
+                }
+                ref
+                    .read(analysisControllerProvider(options).notifier)
+                    .requestServerAnalysis()
+                    .catchError((Object e) {
+                      if (context.mounted) {
+                        showSnackBar(context, e.toString(), type: SnackBarType.error);
+                      }
+                    });
+                tabController.animateTo(2);
+              },
+            ),
         if (options case ArchivedGame())
           if (analysisState.isComputerAnalysisAllowed)
             if (mySide != null)

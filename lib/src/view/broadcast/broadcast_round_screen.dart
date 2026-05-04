@@ -192,7 +192,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       AsyncData(value: final roundState) => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
-          title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
+          title: AppBarTitleText(
+            asyncTournament.value?.data.name ?? widget.broadcast.title,
+            maxLines: 2,
+          ),
           bottom: TabBar(
             controller: _tabController,
             tabs: <Widget>[
@@ -206,20 +209,33 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           actions: [
             SemanticIconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () => showModalBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                builder: (_) =>
-                    _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
-              ),
+              onPressed: () {
+                final games = asyncRound.value.games.values;
+                final allCount = games.length;
+                final ongoingCount = games.where((g) => g.isOngoing).length;
+
+                showModalBottomSheet<void>(
+                  context: context,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (_) => _BroadcastSettingsBottomSheet(
+                    filter,
+                    allGamesCount: allCount,
+                    ongoingGamesCount: ongoingCount,
+                    onGameFilterChange: setGameFilter,
+                  ),
+                );
+              },
               semanticsLabel: context.l10n.settingsSettings,
             ),
             SemanticIconButton(
               icon: const PlatformShareIcon(),
               semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () =>
-                  showBroadcastShareMenu(context, widget.broadcast.tour, roundState.round),
+              onPressed: () => showBroadcastShareMenu(
+                context,
+                asyncTournament.value?.data ?? widget.broadcast.tour,
+                roundState.round,
+              ),
             ),
           ],
         ),
@@ -231,7 +247,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               AsyncData(:final value) => BroadcastBoardsTab(
                 tournamentId: _selectedTournamentId,
                 roundId: _selectedRoundId ?? value.defaultRoundId,
-                tournamentSlug: widget.broadcast.tour.slug,
+                tournamentSlug: value.data.slug,
                 showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
               ),
               _ => const SizedBox.shrink(),
@@ -242,7 +258,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 AsyncData(:final value) => BroadcastTeamsTab(
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
-                  tournamentSlug: widget.broadcast.tour.slug,
+                  tournamentSlug: value.data.slug,
                 ),
                 _ => const SizedBox.shrink(),
               },
@@ -509,9 +525,16 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet(this.selectedFilter, {required this.onGameFilterChange});
+  const _BroadcastSettingsBottomSheet(
+    this.selectedFilter, {
+    required this.allGamesCount,
+    required this.ongoingGamesCount,
+    required this.onGameFilterChange,
+  });
 
   final _BroadcastGameFilter selectedFilter;
+  final int allGamesCount;
+  final int ongoingGamesCount;
   final void Function(_BroadcastGameFilter filter) onGameFilterChange;
 
   @override
@@ -552,7 +575,13 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                 filterType: FilterType.singleChoice,
                 choices: _BroadcastGameFilter.values,
                 choiceSelected: (choice) => filter == choice,
-                choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                choiceLabel: (category) {
+                  final label = category.l10n(context.l10n);
+                  final count = category == _BroadcastGameFilter.all
+                      ? widget.allGamesCount
+                      : widget.ongoingGamesCount;
+                  return Text('$label ($count)');
+                },
                 onSelected: (value, selected) {
                   setState(() => filter = value);
                   widget.onGameFilterChange.call(value);
