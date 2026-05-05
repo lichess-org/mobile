@@ -2,21 +2,26 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -39,11 +44,17 @@ class MoreTabScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          title: const AppBarLichessTitle(),
-          centerTitle: true,
-          leading: const AccountDrawerIconButton(),
+          title: Theme.of(context).platform == TargetPlatform.iOS
+              ? AppBarLichessTitle(
+                  iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                )
+              : const AppBarLichessTitle(),
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: const AccountDrawer(),
         body: const _Body(),
       ),
     );
@@ -168,6 +179,7 @@ class _Body extends ConsumerWidget {
                 ),
             ],
           ),
+          const _AccountSection(),
           if (Theme.of(context).platform == TargetPlatform.android)
             ListSection(
               hasLeading: true,
@@ -176,12 +188,19 @@ class _Body extends ConsumerWidget {
                   leading: PatronIcon(color: 10, size: IconTheme.of(context).size),
                   title: Text(context.l10n.patronDonate),
                   subtitle: Text(context.l10n.patronBecomePatron),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
                   enabled: isOnline,
                   onTap: () {
                     launchUrl(Uri.parse('https://lichess.org/patron'));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: Text(context.l10n.about),
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(AboutScreen.buildRoute(context));
                   },
                 ),
               ],
@@ -192,6 +211,63 @@ class _Body extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AccountSection extends ConsumerWidget {
+  const _AccountSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final account = ref.watch(accountProvider);
+    final authUser = ref.watch(authControllerProvider);
+    final kidMode = account.value?.kid ?? false;
+    final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    final user = authUser?.user;
+
+    return ListSection(
+      header: user != null ? SettingsSectionTitle(user.name) : null,
+      hasLeading: true,
+      children: [
+        if (user != null) ...[
+          ListTile(
+            leading: const Icon(Icons.person_outlined),
+            title: Text(context.l10n.profile),
+            trailing: isIOS ? const CupertinoListTileChevron() : null,
+            enabled: isOnline,
+            onTap: () {
+              ref.invalidate(accountProvider);
+              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
+            },
+          ),
+          if (!kidMode)
+            ListTile(
+              leading: Badge.count(
+                isLabelVisible: unreadMessages > 0,
+                count: unreadMessages,
+                child: const Icon(Icons.mail_outline),
+              ),
+              title: Text(context.l10n.inbox),
+              trailing: isIOS ? const CupertinoListTileChevron() : null,
+              enabled: isOnline,
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute(context));
+              },
+            ),
+        ],
+        ListTile(
+          leading: const Icon(Icons.settings_outlined),
+          title: Text(context.l10n.settingsSettings),
+          trailing: isIOS ? const CupertinoListTileChevron() : null,
+          onTap: () {
+            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
+          },
+        ),
+      ],
     );
   }
 }

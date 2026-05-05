@@ -5,7 +5,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
@@ -18,6 +22,8 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -297,6 +303,49 @@ class _BodyState extends ConsumerState<_Body> {
                         ? ActionPane(
                             motion: const StretchMotion(),
                             children: [
+                              if (game.source == GameSource.friend)
+                                Builder(
+                                  builder: (context) {
+                                    final opponent = pov == Side.white ? game.black : game.white;
+                                    final sideChoice = pov == Side.white
+                                        ? SideChoice.black
+                                        : SideChoice.white;
+                                    final timeControl = game.clock != null
+                                        ? ChallengeTimeControlType.clock
+                                        : game.daysPerTurn != null
+                                        ? ChallengeTimeControlType.correspondence
+                                        : ChallengeTimeControlType.unlimited;
+                                    return SlidableAction(
+                                      backgroundColor: ColorScheme.of(context).primary,
+                                      foregroundColor: ColorScheme.of(context).onPrimary,
+                                      onPressed: opponent.user != null
+                                          ? (_) {
+                                              final request = ChallengeRequest(
+                                                destUser: opponent.user,
+                                                variant: game.variant,
+                                                rated: game.rated,
+                                                sideChoice: sideChoice,
+                                                timeControl: timeControl,
+                                                clock: game.clock != null
+                                                    ? (
+                                                        time: game.clock!.initial,
+                                                        increment: game.clock!.increment,
+                                                      )
+                                                    : null,
+                                                days: game.daysPerTurn,
+                                              );
+                                              final source = UserChallengeSource(request);
+                                              ref.invalidate(gameScreenLoaderProvider(source));
+                                              Navigator.of(context, rootNavigator: true).push(
+                                                GameScreen.buildRoute(context, source: source),
+                                              );
+                                            }
+                                          : null,
+                                      icon: Icons.sync,
+                                      label: context.l10n.rematch,
+                                    );
+                                  },
+                                ),
                               SlidableAction(
                                 backgroundColor: context.lichessColors.brag,
                                 onPressed: onPressedBookmark,

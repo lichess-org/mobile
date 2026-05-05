@@ -9,6 +9,9 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Pengaturan akun';
 
   @override
@@ -1585,13 +1588,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Apakah anda menyukai teka-teki ini?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Isi untuk memanggil yang satunya lagi!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
@@ -3525,6 +3525,9 @@ class AppLocalizationsId extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Posisi awal Catur960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Posisi Awal';

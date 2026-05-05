@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 
@@ -75,19 +76,21 @@ class _GameSummaryTable extends ConsumerWidget {
 
     return GameSummaryTable(
       pgnHeaders: analysisState.pgnHeaders,
-      whiteSummary: (
-        accuracy: summary.white.accuracy,
-        inaccuracies: summary.white.inaccuracies,
-        mistakes: summary.white.mistakes,
-        blunders: summary.white.blunders,
-        acpl: summary.white.acpl,
-      ),
-      blackSummary: (
-        accuracy: summary.black.accuracy,
-        inaccuracies: summary.black.inaccuracies,
-        mistakes: summary.black.mistakes,
-        blunders: summary.black.blunders,
-        acpl: summary.black.acpl,
+      playersAnalysis: (
+        white: PlayerAnalysis(
+          accuracy: summary.white.accuracy,
+          inaccuracies: summary.white.inaccuracies,
+          mistakes: summary.white.mistakes,
+          blunders: summary.white.blunders,
+          acpl: summary.white.acpl,
+        ),
+        black: PlayerAnalysis(
+          accuracy: summary.black.accuracy,
+          inaccuracies: summary.black.inaccuracies,
+          mistakes: summary.black.mistakes,
+          blunders: summary.black.blunders,
+          acpl: summary.black.acpl,
+        ),
       ),
     );
   }

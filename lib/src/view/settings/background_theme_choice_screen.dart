@@ -492,11 +492,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                           ? context.l10n.mobileSettingsPickAnImageHideBoard
                           : context.l10n.mobileSettingsPickAnImageShowBoard,
                     ),
-                    onPressed: () => {
-                      setState(() {
-                        showBoard = !showBoard;
-                      }),
-                    },
+                    onPressed: () => setState(() {
+                      showBoard = !showBoard;
+                    }),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,

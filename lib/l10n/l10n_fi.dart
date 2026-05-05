@@ -9,6 +9,9 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Käyttäjätunnuksen asetukset';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Piditkö tästä tehtävästä?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Anna arviosi, niin seuraava latautuu!';
 
   @override
   String get puzzleUpVote => 'Arvioi tehtävä hyväksi';
@@ -3551,6 +3551,9 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Satunnainen shakki960-asema';
+
+  @override
   String get startPosition => 'Alkuasema';
 
   @override
@@ -5068,7 +5071,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Ei tuloksia haulla \"$param\"';
   }
 
   @override

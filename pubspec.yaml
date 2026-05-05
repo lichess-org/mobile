@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.23.5+002305 # See README.md for details about versioning
+version: 0.23.12+002312 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -77,7 +77,7 @@ dependencies:
   result_extensions: ^0.2.0
   share_plus: ^12.0.0
   shared_preferences: ^2.1.0
-  signal_strength_indicator: ^0.4.1
+  signal_strength_indicator: ^0.5.0
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
   sqflite_common_ffi: ^2.2.3

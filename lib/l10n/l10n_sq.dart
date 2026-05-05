@@ -9,6 +9,9 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Parapëlqime llogarie';
 
   @override
@@ -1602,9 +1605,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
 
   @override
   String get puzzleUpVote => 'Jepini një votë ushtrimit';
@@ -3549,6 +3549,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Pozicion nisjeje Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Pozicion Chess960 kuturu';
 
   @override
   String get startPosition => 'Pozicioni fillestar';

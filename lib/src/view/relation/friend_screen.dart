@@ -247,11 +247,9 @@ class _Following extends ConsumerWidget {
                   ),
                   child: UserListTile.fromUser(
                     user,
-                    onTap: () => {
-                      Navigator.of(
-                        context,
-                      ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
-                    },
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
                   ),
                 );
               },

@@ -92,8 +92,7 @@ abstract mixin class BaseGame {
     return side == Side.white ? white : black;
   }
 
-  ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
-      white.analysis != null && black.analysis != null
+  PlayersAnalysis? get playersAnalysis => white.analysis != null && black.analysis != null
       ? (white: white.analysis!, black: black.analysis!)
       : null;
 

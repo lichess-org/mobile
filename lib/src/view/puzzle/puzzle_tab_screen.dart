@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -118,13 +117,13 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
-          centerTitle: true,
-          actions: const [_DashboardButton(), _HistoryButton()],
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-
-        drawer: const AccountDrawer(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,6 +249,7 @@ class _PuzzleMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final authUser = ref.watch(authControllerProvider);
 
     return ListSection(
       hasLeading: true,
@@ -292,6 +292,29 @@ class _PuzzleMenu extends ConsumerWidget {
                 }
               : null,
         ),
+        if (authUser != null) ...[
+          _PuzzleMenuListTile(
+            icon: Icons.assessment_outlined,
+            title: context.l10n.puzzlePuzzleDashboard,
+            subtitle: context.l10n.puzzlePuzzleDashboardDescription,
+            enabled: isOnline,
+            onTap: isOnline
+                ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context))
+                : null,
+          ),
+          _PuzzleMenuListTile(
+            icon: Icons.history_outlined,
+            title: context.l10n.puzzleHistory,
+            subtitle: 'Review your past puzzle attempts.',
+            enabled: isOnline,
+            onTap: isOnline
+                ? () => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(PuzzleHistoryScreen.buildRoute(context))
+                : null,
+          ),
+        ],
       ],
     );
   }
@@ -352,60 +375,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           child: ListSection.loading(itemsNumber: 5, header: true),
         ),
       ),
-    );
-  }
-}
-
-class _DashboardButton extends ConsumerWidget {
-  const _DashboardButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    if (authUser == null) {
-      return const SizedBox.shrink();
-    }
-    final onPressed = ref
-        .watch(connectivityChangesProvider)
-        .whenIs(
-          online: () => () {
-            Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context));
-          },
-          offline: () => null,
-        );
-
-    return SemanticIconButton(
-      icon: const Icon(Icons.assessment_outlined),
-      semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-      onPressed: onPressed,
-    );
-  }
-}
-
-class _HistoryButton extends ConsumerWidget {
-  const _HistoryButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    if (authUser == null) {
-      return const SizedBox.shrink();
-    }
-    final onPressed = ref
-        .watch(connectivityChangesProvider)
-        .whenIs(
-          online: () => () {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(PuzzleHistoryScreen.buildRoute(context));
-          },
-          offline: () => null,
-        );
-    return SemanticIconButton(
-      icon: const Icon(Icons.history_outlined),
-      semanticsLabel: context.l10n.puzzleHistory,
-      onPressed: onPressed,
     );
   }
 }

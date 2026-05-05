@@ -41,27 +41,6 @@ void main() {
       expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
-    testWidgets('shows players button', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(
-        tester
-            .widget<SemanticIconButton>(
-              find.ancestor(
-                of: find.byIcon(Icons.group_outlined),
-                matching: find.byType(SemanticIconButton),
-              ),
-            )
-            .onPressed,
-        isNotNull,
-      );
-    });
-
     testWidgets('shows challenge button if has challenges', (tester) async {
       final app = await makeTestProviderScope(
         tester,
@@ -277,28 +256,6 @@ void main() {
       await tester.pump();
 
       expect(find.byType(FloatingActionButton), findsOneWidget);
-    });
-
-    testWidgets('shows disabled players button', (tester) async {
-      final app = await makeOfflineTestProviderScope(tester, child: const Application());
-
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(
-        tester
-            .widget<SemanticIconButton>(
-              find.ancestor(
-                of: find.byIcon(Icons.group_outlined),
-                matching: find.byType(SemanticIconButton),
-              ),
-            )
-            .onPressed,
-        isNull,
-      );
     });
 
     testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {

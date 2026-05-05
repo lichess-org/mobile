@@ -9,6 +9,9 @@ class AppLocalizationsHr extends AppLocalizations {
   AppLocalizationsHr([String locale = 'hr']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1623,9 +1626,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Sviđa li ti se ovaj zadatak?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ocijeni i prijeđi na sljedeći zadatak!';
 
   @override
   String get puzzleUpVote => 'Glasaj za zagonetku';
@@ -3577,6 +3577,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Početna pozicija';
 
   @override
@@ -4431,7 +4434,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Svi jezici';
 
   @override
   String get background => 'Pozadina';

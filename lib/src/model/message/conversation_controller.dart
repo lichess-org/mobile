@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -6,7 +7,9 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
@@ -49,7 +52,8 @@ class ConversationController extends AsyncNotifier<ConversationState> {
 
     final repo = ref.read(messageRepositoryProvider);
     final convoData = await repo.loadConvo(userId);
-
+    final userRepo = ref.read(userRepositoryProvider);
+    final userData = await userRepo.getUser(userId);
     final oldFirstMsg = convoData.convo.messages.length >= kMessagesPerPage
         ? convoData.convo.messages[kMessagesPerPage - 1]
         : null;
@@ -59,6 +63,7 @@ class ConversationController extends AsyncNotifier<ConversationState> {
       isBot: convoData.isBot,
       convo: convoData.convo,
       canGetMoreSince: oldFirstMsg?.date,
+      isBlocked: userData.blocking ?? false,
     );
   }
 
@@ -100,6 +105,10 @@ class ConversationController extends AsyncNotifier<ConversationState> {
     _typingThrottler(() {
       _client.send('msgType', destUserId.toString());
     });
+  }
+
+  Future<void> deleteThread() async {
+    await ref.read(relationRepositoryProvider).deleteThread(userId);
   }
 
   void _connectSocket() {
@@ -155,5 +164,6 @@ sealed class ConversationState with _$ConversationState {
     required Convo convo,
     DateTime? canGetMoreSince,
     bool? contactTyping,
+    bool? isBlocked,
   }) = _ConversationState;
 }

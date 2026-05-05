@@ -9,6 +9,9 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1644,9 +1647,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'אהבת את החידה?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'יש לדרג לקבלת החידה הבאה!';
 
   @override
   String get puzzleUpVote => 'הצבעה בעד החידה';
@@ -3601,6 +3601,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'עמדת הפתיחה: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'עמדת הפתיחה';

@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -90,11 +90,13 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
-          centerTitle: true,
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: const AccountDrawer(),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
