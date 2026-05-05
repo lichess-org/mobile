@@ -9,6 +9,9 @@ class AppLocalizationsKk extends AppLocalizations {
   AppLocalizationsKk([String locale = 'kk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Тіркелгіні баптау';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Бұл жұмбақ ұнай ма?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Келесін ашу үшін дауыс беріңіз!';
 
   @override
   String get puzzleUpVote => 'Дәрежесін көтеру';
@@ -3555,6 +3555,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Шахмат960 бастапқы күйі: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Бастапқы күй';

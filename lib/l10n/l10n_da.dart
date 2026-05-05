@@ -9,6 +9,9 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontoindstillinger';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Kunne du lide denne opgave?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for at indlæse den næste!';
 
   @override
   String get puzzleUpVote => 'Stem opgave op';
@@ -3555,6 +3555,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 startposition: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tilfældig Chess960-position';
 
   @override
   String get startPosition => 'Startopstilling';

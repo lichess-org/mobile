@@ -4,43 +4,30 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-/// Unified interface for both broadcast and regular game analysis.
-typedef PlayerAnalysisSummary = ({
-  int? accuracy,
-  int inaccuracies,
-  int mistakes,
-  int blunders,
-  int? acpl,
-});
 
 /// A reusable table displaying game summary with player names, result, and analysis statistics.
 ///
 /// Shows player names, game result, accuracy, inaccuracies, mistakes, blunders, and ACPL
 /// in a formatted table layout.
 class GameSummaryTable extends StatelessWidget {
-  const GameSummaryTable({
-    required this.pgnHeaders,
-    required this.whiteSummary,
-    required this.blackSummary,
-    super.key,
-  });
+  const GameSummaryTable({required this.pgnHeaders, required this.playersAnalysis, super.key});
 
   /// PGN headers containing player names, titles, and result
   final IMap<String, String> pgnHeaders;
 
-  /// White player's analysis summary
-  final PlayerAnalysisSummary whiteSummary;
-
-  /// Black player's analysis summary
-  final PlayerAnalysisSummary blackSummary;
+  /// White and Black player's analysis summary
+  final PlayersAnalysis playersAnalysis;
 
   @override
   Widget build(BuildContext context) {
     final result = pgnHeaders.get('Result') ?? '';
+
+    final whiteAnalysis = playersAnalysis.white;
+    final blackAnalysis = playersAnalysis.black;
 
     return Center(
       child: SizedBox(
@@ -68,10 +55,10 @@ class GameSummaryTable extends StatelessWidget {
                 ],
               ),
 
-              if (whiteSummary.accuracy != null && blackSummary.accuracy != null)
+              if (whiteAnalysis.accuracy != null && blackAnalysis.accuracy != null)
                 TableRow(
                   children: [
-                    _SummaryNumber('${whiteSummary.accuracy}%'),
+                    _SummaryNumber('${whiteAnalysis.accuracy}%'),
                     Center(
                       heightFactor: 1.8,
                       child: InkWell(
@@ -99,24 +86,24 @@ class GameSummaryTable extends StatelessWidget {
                         ),
                       ),
                     ),
-                    _SummaryNumber('${blackSummary.accuracy}%'),
+                    _SummaryNumber('${blackAnalysis.accuracy}%'),
                   ],
                 ),
               for (final item in [
                 (
-                  whiteSummary.inaccuracies.toString(),
+                  whiteAnalysis.inaccuracies.toString(),
                   context.l10n.numberInaccuracies(2).replaceAll('2', '').trim(),
-                  blackSummary.inaccuracies.toString(),
+                  blackAnalysis.inaccuracies.toString(),
                 ),
                 (
-                  whiteSummary.mistakes.toString(),
+                  whiteAnalysis.mistakes.toString(),
                   context.l10n.numberMistakes(2).replaceAll('2', '').trim(),
-                  blackSummary.mistakes.toString(),
+                  blackAnalysis.mistakes.toString(),
                 ),
                 (
-                  whiteSummary.blunders.toString(),
+                  whiteAnalysis.blunders.toString(),
                   context.l10n.numberBlunders(2).replaceAll('2', '').trim(),
-                  blackSummary.blunders.toString(),
+                  blackAnalysis.blunders.toString(),
                 ),
               ])
                 TableRow(
@@ -126,10 +113,10 @@ class GameSummaryTable extends StatelessWidget {
                     _SummaryNumber(item.$3),
                   ],
                 ),
-              if (whiteSummary.acpl != null && blackSummary.acpl != null)
+              if (whiteAnalysis.acpl != null && blackAnalysis.acpl != null)
                 TableRow(
                   children: [
-                    _SummaryNumber(whiteSummary.acpl.toString()),
+                    _SummaryNumber(whiteAnalysis.acpl.toString()),
                     Center(
                       heightFactor: 1.5,
                       child: Text(
@@ -138,7 +125,7 @@ class GameSummaryTable extends StatelessWidget {
                         textAlign: .center,
                       ),
                     ),
-                    _SummaryNumber(blackSummary.acpl.toString()),
+                    _SummaryNumber(blackAnalysis.acpl.toString()),
                   ],
                 ),
             ],

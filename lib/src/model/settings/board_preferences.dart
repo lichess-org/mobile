@@ -108,6 +108,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(clockPosition: clockPosition));
   }
 
+  Future<void> setLandscapeBoardPosition(LandscapeBoardPosition landscapeBoardPosition) {
+    return save(state.copyWith(landscapeBoardPosition: landscapeBoardPosition));
+  }
+
   Future<void> toggleMoveListDisplay() {
     return save(state.copyWith(moveListDisplay: !state.moveListDisplay));
   }
@@ -148,6 +152,11 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(defaultValue: ClockPosition.right, unknownEnumValue: ClockPosition.right)
     required ClockPosition clockPosition,
+    @JsonKey(
+      defaultValue: LandscapeBoardPosition.left,
+      unknownEnumValue: LandscapeBoardPosition.left,
+    )
+    required LandscapeBoardPosition landscapeBoardPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
     @JsonKey(
@@ -182,6 +191,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
+    landscapeBoardPosition: LandscapeBoardPosition.left,
     moveListDisplay: true,
     premoves: true,
     confirmResignAndDraw: true,
@@ -451,6 +461,16 @@ enum ClockPosition {
   String label(AppLocalizations l10n) => switch (this) {
     ClockPosition.left => l10n.mobilePositionLeft,
     ClockPosition.right => l10n.mobilePositionRight,
+  };
+}
+
+enum LandscapeBoardPosition {
+  left,
+  right;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    LandscapeBoardPosition.left => l10n.mobilePositionLeft,
+    LandscapeBoardPosition.right => l10n.mobilePositionRight,
   };
 }
 

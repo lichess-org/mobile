@@ -9,6 +9,9 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Likte du denne sjakknøtten?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for å laste den neste!';
 
   @override
   String get puzzleUpVote => 'Bra sjakknøtt';
@@ -3553,8 +3553,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String chess960StartPosition(String param) {
-    return 'Fischersjakkutgangsstilling: $param';
+    return 'Sjakk-960-utgangsstilling: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tilfeldig sjakk-960 stilling';
 
   @override
   String get startPosition => 'Utgangsstilling';

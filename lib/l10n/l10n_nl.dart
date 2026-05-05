@@ -9,6 +9,9 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Accountvoorkeuren';
 
   @override
@@ -1065,12 +1068,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'U$param';
+    return 'Onder$param';
   }
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return 'Onder$param';
   }
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Vond je deze puzzel leuk?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem om de volgende te laden!';
 
   @override
   String get puzzleUpVote => 'Puzzel leuk vinden';
@@ -3555,6 +3555,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Beginstelling Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Willekeurige Schaak960-positie';
 
   @override
   String get startPosition => 'Beginstelling';

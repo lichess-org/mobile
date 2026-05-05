@@ -80,7 +80,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCWidgetKind"
-            value = "DailyPuzzleLargeWidget"
+            value = "BroadcastWidget"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable

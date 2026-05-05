@@ -9,6 +9,9 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Настройки аккаунта';
 
   @override
@@ -1652,9 +1655,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Понравилась задача?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Проголосуйте и перейдите к следующей!';
 
   @override
   String get puzzleUpVote => 'Задача понравилась';
@@ -3611,6 +3611,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Начальная позиция в шахматах Фишера: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Случайная позиция в шахматах Фишера';
 
   @override
   String get startPosition => 'Начальная позиция';

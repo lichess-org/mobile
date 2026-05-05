@@ -267,6 +267,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
+              textDirection: switch (boardPrefs.landscapeBoardPosition) {
+                .left => TextDirection.ltr,
+                .right => TextDirection.rtl,
+              },
               mainAxisSize: MainAxisSize.max,
               children: [
                 BoardWidget(

@@ -9,6 +9,9 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Fiókbeállítások';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Tetszett ez a feladvány?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Szavazz egy újért cserébe!';
 
   @override
   String get puzzleUpVote => 'Tetszett';
@@ -3555,6 +3555,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 kezdőállás: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Alapállás';

@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import io.flutter.embedding.android.FlutterActivity
@@ -57,14 +58,21 @@ class MainActivity: FlutterActivity() {
     }
   }
 
-  private fun decodeExclusionRects(inputRects: List<Map<String, Int>>): List<Rect> =
-    inputRects.mapIndexed { index, item ->
-      Rect(
-        item["left"] ?: error("rect at index $index doesn't contain 'left' property"),
-        item["top"] ?: error("rect at index $index doesn't contain 'top' property"),
-        item["right"] ?: error("rect at index $index doesn't contain 'right' property"),
-        item["bottom"] ?: error("rect at index $index doesn't contain 'bottom' property")
-      )
+private fun decodeExclusionRects(inputRects: List<Map<String, Int>>): List<Rect> =
+    inputRects.mapNotNull { item ->
+        val left = item["left"]
+        val top = item["top"]
+        val right = item["right"]
+        val bottom = item["bottom"]
+
+        // If any of these are null, the whole block returns null
+        if (left != null && top != null && right != null && bottom != null) {
+            Rect(left, top, right, bottom)
+        } else {
+            // Log a warning instead
+            Log.w("RectDecoder", "Skipping malformed rect: $item")
+            null
+        }
     }
 
   private fun getAvailableMemory(): ActivityManager.MemoryInfo {

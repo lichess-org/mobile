@@ -9,6 +9,9 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'खाता प्राथमिकताएं';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'क्या आपको यह पहेली पसंद आई?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'अगले एक को लोड करने के लिए वोट दें!';
 
   @override
   String get puzzleUpVote => 'पहेली को उपवोट करिये';
@@ -3553,6 +3553,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'चेस960 खेल की प्रारम्भिक स्थिति: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'शुरू करने की स्थिति:';

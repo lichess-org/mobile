@@ -29,6 +29,7 @@ const WIDGET_KEYS = {
   'Community': { arbKey: 'ublogCommunity', fallback: 'Community' },
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
+  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts' },
 };
 
 // ARB locale codes use '_', iOS uses '-' for subtags.

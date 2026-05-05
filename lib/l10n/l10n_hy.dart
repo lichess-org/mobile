@@ -9,6 +9,9 @@ class AppLocalizationsHy extends AppLocalizations {
   AppLocalizationsHy([String locale = 'hy']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Հաշվի նախընտրություններ';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Հավանեցի՞ք խնդիրը։';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Քվեարկե՛ք և անցե՛ք հաջորդին։';
 
   @override
   String get puzzleUpVote => 'Խնդիրը հավանեցի';
@@ -3555,6 +3555,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Շախմատ 960-ի սկզբնական դիրք՝ $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Սկզբնական դիրք';

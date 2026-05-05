@@ -50,7 +50,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final online = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final online = ref.watch(onlineStatusProvider).value ?? false;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,

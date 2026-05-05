@@ -9,6 +9,9 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Ρυθμίσεις';
 
   @override
@@ -1608,9 +1611,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτό το τακτικό;';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
 
   @override
   String get puzzleUpVote => 'Μου άρεσε το τακτικό';
@@ -3555,6 +3555,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Αρχική θέση Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Τυχαία θέση Chess960';
 
   @override
   String get startPosition => 'Αρχική διάταξη';

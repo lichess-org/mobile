@@ -9,6 +9,9 @@ class AppLocalizationsBe extends AppLocalizations {
   AppLocalizationsBe([String locale = 'be']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Налады ўліковага запісу';
 
   @override
@@ -1648,9 +1651,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ці спадабалася задача?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Прагаласуйце, каб перайсці да наступнай!';
 
   @override
   String get puzzleUpVote => 'Задача спадабалася';
@@ -3607,6 +3607,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Пачатковая пазіцыя ў шахматах Фішэра: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Пачатковая пазіцыя';

@@ -9,6 +9,9 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => '계정 환경 설정';
 
   @override
@@ -1586,9 +1589,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
 
   @override
   String get puzzleUpVote => '퍼즐 추천';
@@ -3527,6 +3527,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String chess960StartPosition(String param) {
     return '체스960 시작 포지션: $param';
   }
+
+  @override
+  String get randomChess960Position => '랜덤 체스960 포지션';
 
   @override
   String get startPosition => '시작 포지션';

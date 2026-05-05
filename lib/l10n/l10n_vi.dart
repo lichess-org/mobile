@@ -9,6 +9,9 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Tùy chỉnh tài khoản';
 
   @override
@@ -1586,9 +1589,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Bạn thích câu đố này chứ?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Bình chọn để đến câu đố tiếp theo!';
 
   @override
   String get puzzleUpVote => 'Thích câu đố';
@@ -3527,6 +3527,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Ván đấu Chess960 bắt đầu bằng thế cờ: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Thế trận Chess960 ngẫu nhiên';
 
   @override
   String get startPosition => 'Thế cờ ban đầu';
