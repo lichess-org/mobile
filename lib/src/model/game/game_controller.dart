@@ -185,7 +185,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
 
     if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move, promotionMove: null));
       return;
     }
 

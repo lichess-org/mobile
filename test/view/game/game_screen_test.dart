@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -295,6 +296,49 @@ void main() {
   });
 
   group('Game actions', () {
+    testWidgets('promotion with move confirmation closes promotion picker after piece selection', (
+      WidgetTester tester,
+    ) async {
+      // Position: white pawn on e7 ready to promote, black king on g8, white king on e1.
+      // Black king must not be on d8 or f8 (pawn attack squares).
+      const promotionFen = '6k1/4P3/8/8/8/8/8/4K3 w - - 0 1';
+
+      await createTestGame(
+        tester,
+        variant: Variant.fromPosition,
+        initialFen: promotionFen,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.never,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      // Play pawn from e7 to e8 to trigger the promotion picker
+      await playMove(tester, 'e7', 'e8');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(const GameFullId('qVChCOTcHSeW'));
+
+      // Promotion picker must be showing, no move pending confirmation yet
+      expect(container.read(ctrlProvider).requireValue.promotionMove, isNotNull);
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNull);
+
+      // Select the queen (displayed at the e8 square in the promotion picker)
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.tapAt(squareOffset(Square.fromName('e8'), boardRect));
+      await tester.pump();
+
+      // After piece selection: promotion picker must be gone and move must await confirmation
+      expect(container.read(ctrlProvider).requireValue.promotionMove, isNull);
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+    });
+
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
         tester,
