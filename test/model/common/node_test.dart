@@ -571,7 +571,54 @@ void main() {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
       final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
-      final (newPath, _) = root.addMoveAt(sidelinePath!, Move.parse('e4d5')!, isUserAdded: true);
+      final (newPath, _) = root.addMoveAt(sidelinePath!, Move.parse('e4d5')!);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is true when prepend is true on mainline', () {
+      // prepend=true counts as willBeMainline even when children already exist
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE5 = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+      );
+      final (newPath, _) = root.addMoveAt(
+        afterE5,
+        Move.parse('d2d4')!,
+        prepend: true,
+        isUserAdded: true,
+      );
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is true when replace is true on mainline', () {
+      // replace=true counts as willBeMainline even when children already exist
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE5 = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+      );
+      final (newPath, _) = root.addMoveAt(
+        afterE5,
+        Move.parse('d2d4')!,
+        replace: true,
+        isUserAdded: true,
+      );
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is false when prepend is true but not on mainline', () {
+      // prepend=true does not override the isOnMainline check
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!);
+      final (newPath, _) = root.addMoveAt(
+        sidelinePath!,
+        Move.parse('e4d5')!,
+        prepend: true,
+        isUserAdded: true,
+      );
       final newBranch = root.branchAt(newPath!);
       expect(newBranch?.isUserAdded, isFalse);
     });

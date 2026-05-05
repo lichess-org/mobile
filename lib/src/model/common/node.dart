@@ -206,6 +206,8 @@ abstract class Node {
   ///
   /// If [prepend] is true, the new node is added at the beginning of the children.
   /// If [replace] is true, the children of the existing node are replaced.
+  /// If [isUserAdded] is true and the new node will be on the mainline, it is
+  /// marked as user-added, which causes it to be displayed in italic in the move list.
   (UciPath?, bool) addMoveAt(
     UciPath path,
     Move move, {
