@@ -90,9 +90,14 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           leading: UserAvatar(widget.user, radius: 16),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
-          onTap: () async {
-            await Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
-            ref.invalidate(conversationControllerProvider(widget.user.id));
+          onTap: () {
+            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user))
+            // invalidate to refresh potential blocking status change
+            .then((_) {
+              if (context.mounted) {
+                ref.invalidate(conversationControllerProvider(widget.user.id));
+              }
+            });
           },
         ),
         actions: [
