@@ -84,8 +84,8 @@ void main() {
 
       // Verify new game bottom sheet is displayed
 
-      // Verify computer level slider is shown
-      expect(find.textContaining('Computer level'), findsOneWidget);
+      // Verify level slider is shown
+      expect(find.textContaining('Level'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
 
       // Verify side selection (label is "Side" with value showing default "Random side")

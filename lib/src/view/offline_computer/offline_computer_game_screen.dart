@@ -813,7 +813,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: 'Computer level: ',
+                  text: '${context.l10n.level}: ',
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
