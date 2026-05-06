@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/clock/clock_time_sliders.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
@@ -121,11 +120,55 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 
   @override
   Widget build(BuildContext context) {
+    final hasClock = chosenTimeControlType == TimeControlType.clock;
+
     return BottomSheetScrollableContainer(
       children: [
         ListSection(
           materialFilledCard: true,
           children: [
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.timeControl),
+              settingsValue: chosenTimeControlType.label(context.l10n),
+              onTap: () {
+                showChoicePicker<TimeControlType>(
+                  context,
+                  title: Text(context.l10n.timeControl),
+                  choices: TimeControlType.values,
+                  selectedItem: chosenTimeControlType,
+                  labelBuilder: (TimeControlType control) => Text(control.label(context.l10n)),
+                  onSelectedItemChanged: (TimeControlType control) => _setTimeControlType(control),
+                );
+              },
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOut,
+              alignment: Alignment.topCenter,
+              child: hasClock
+                  ? Column(
+                      children: [
+                        ListTile(
+                          title: const Text('Clock type'),
+                          trailing: Text(
+                            context.l10n.increment,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                          ),
+                        ),
+                        ...clockTimeSliderTiles(
+                          context,
+                          timeIncrement: timeIncrement,
+                          onTimeChange: _setTotalTime,
+                          onTimeChangeEnd: _setTotalTime,
+                          onIncrementChange: _setIncrement,
+                          onIncrementChangeEnd: _setIncrement,
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
               settingsValue: chosenVariant.label,
@@ -160,69 +203,6 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                       ),
                     )
                   : const SizedBox.shrink(),
-            ),
-            SettingsListTile(
-              settingsLabel: Text(context.l10n.timeControl),
-              settingsValue: chosenTimeControlType.label(context.l10n),
-              onTap: () {
-                showChoicePicker<TimeControlType>(
-                  context,
-                  choices: TimeControlType.values,
-                  selectedItem: chosenTimeControlType,
-                  labelBuilder: (TimeControlType control) => Text(control.label(context.l10n)),
-                  onSelectedItemChanged: (TimeControlType control) => _setTimeControlType(control),
-                );
-              },
-            ),
-            AnimatedCrossFade(
-              duration: const Duration(milliseconds: 400),
-              firstChild: const SizedBox.shrink(),
-              secondChild: Column(
-                children: [
-                  ListTile(
-                    title: Text.rich(
-                      TextSpan(
-                        text: '${context.l10n.minutesPerSide}: ',
-                        children: [
-                          TextSpan(
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                            text: clockLabelInMinutes(timeIncrement.time),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: NonLinearSlider(
-                      value: timeIncrement.time,
-                      values: kAvailableTimesInSeconds,
-                      labelBuilder: clockLabelInMinutes,
-                      onChange: _setTotalTime,
-                      onChangeEnd: _setTotalTime,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text.rich(
-                      TextSpan(
-                        text: '${context.l10n.incrementInSeconds}: ',
-                        children: [
-                          TextSpan(
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                            text: timeIncrement.increment.toString(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: NonLinearSlider(
-                      value: timeIncrement.increment,
-                      values: kAvailableIncrementsInSeconds,
-                      onChange: _setIncrement,
-                      onChangeEnd: _setIncrement,
-                    ),
-                  ),
-                ],
-              ),
-              crossFadeState: timeIncrement.isInfinite
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
             ),
           ],
         ),

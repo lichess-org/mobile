@@ -305,7 +305,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                                 : () => showModalBottomSheet<void>(
                                     context: context,
                                     builder: (BuildContext context) => CustomClockSettings(
-                                      player: playerType,
+                                      clockType: clockState.options.type,
                                       clock: playerType == ClockSide.top
                                           ? TimeIncrement.fromDurations(
                                               clockState.options.topTime,
@@ -315,11 +315,10 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                                               clockState.options.bottomTime,
                                               clockState.options.bottomIncrement,
                                             ),
-                                      onSubmit: (ClockSide player, TimeIncrement clock) {
-                                        Navigator.of(context).pop();
+                                      onTimeSelected: (TimeIncrement clock) {
                                         ref
                                             .read(clockToolControllerProvider.notifier)
-                                            .updateOptionsCustom(clock, player);
+                                            .updateOptionsCustom(clock, playerType);
                                       },
                                     ),
                                   ),
