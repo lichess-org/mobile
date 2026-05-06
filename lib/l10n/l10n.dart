@@ -196,6 +196,12 @@ abstract class AppLocalizations {
     Locale('zh', 'TW')
   ];
 
+  /// No description provided for @mobileAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get mobileAccount;
+
   /// No description provided for @mobileAccountPreferences.
   ///
   /// In en, this message translates to:
@@ -4744,6 +4750,18 @@ abstract class AppLocalizations {
   /// **'Average rating: {param}'**
   String averageRatingX(String param);
 
+  /// No description provided for @minRatingX.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum rating of {param}'**
+  String minRatingX(String param);
+
+  /// No description provided for @maxRatingX.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum rating of {param}'**
+  String maxRatingX(String param);
+
   /// No description provided for @recentGames.
   ///
   /// In en, this message translates to:
@@ -4905,12 +4923,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show variation arrows'**
   String get showVariationArrows;
-
-  /// No description provided for @evaluationGauge.
-  ///
-  /// In en, this message translates to:
-  /// **'Evaluation gauge'**
-  String get evaluationGauge;
 
   /// No description provided for @visualMotifs.
   ///
@@ -5446,23 +5458,11 @@ abstract class AppLocalizations {
   /// **'Also check your spam folder, it might end up there. If so, mark it as not spam.'**
   String get checkSpamFolder;
 
-  /// No description provided for @emailForSignupHelp.
+  /// No description provided for @sendEmailForAccountVerification.
   ///
   /// In en, this message translates to:
-  /// **'If everything else fails, then send us this email:'**
-  String get emailForSignupHelp;
-
-  /// No description provided for @copyTextToEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy and paste the above text and send it to {param}'**
-  String copyTextToEmail(String param);
-
-  /// No description provided for @waitForSignupHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'We will respond shortly to help you complete your registration.'**
-  String get waitForSignupHelp;
+  /// **'If you can\'t find your confirmation email, send an email to {param} and we\'ll confirm your account for you.'**
+  String sendEmailForAccountVerification(String param);
 
   /// No description provided for @accountConfirmed.
   ///

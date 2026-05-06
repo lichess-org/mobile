@@ -207,7 +207,12 @@ class SettingsScreen extends ConsumerWidget {
                   }
                 },
               ),
-              if (authUser != null)
+            ],
+          ),
+          if (authUser != null)
+            ListSection(
+              hasLeading: true,
+              children: [
                 switch (signOutState) {
                   MutationPending() => const ListTile(
                     leading: Icon(Icons.logout_outlined),
@@ -221,8 +226,8 @@ class SettingsScreen extends ConsumerWidget {
                     onTap: () => _showSignOutConfirmDialog(context, ref),
                   ),
                 },
-            ],
-          ),
+              ],
+            ),
           Padding(
             padding: Styles.bodySectionPadding,
             child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),

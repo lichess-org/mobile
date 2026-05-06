@@ -219,7 +219,7 @@ Future<Widget> makeTestProviderScope(
     connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
-    openingServiceProvider: openingServiceProvider.overrideWithValue(FakeOpeningService()),
+    openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),
     preloadedDataProvider: preloadedDataProvider.overrideWith((ref) {
       return (
         sri: 'test-sri',

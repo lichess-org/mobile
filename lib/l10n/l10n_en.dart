@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -2601,6 +2604,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Recent games';
 
   @override
@@ -2684,9 +2697,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Evaluation gauge';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2966,15 +2976,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
-  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'We will respond shortly to help you complete your registration.';
 
   @override
   String accountConfirmed(String param) {
@@ -6575,6 +6579,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs(): super('en_US');
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account settings';
 
   @override
@@ -9254,9 +9261,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get showVariationArrows => 'Show variation arrows';
 
   @override
-  String get evaluationGauge => 'Evaluation gauge';
-
-  @override
   String get visualMotifs => 'Visual motifs';
 
   @override
@@ -9534,15 +9538,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
-  String get emailForSignupHelp => 'If you still have questions, please send us an email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param, and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'We will respond shortly to help you complete your registration.';
 
   @override
   String accountConfirmed(String param) {

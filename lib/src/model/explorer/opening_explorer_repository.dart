@@ -78,6 +78,13 @@ final openingExplorerRepositoryProvider = Provider<OpeningExplorerRepository>((R
   return OpeningExplorerRepository(ref.watch(lichessClientProvider));
 }, name: 'OpeningExplorerRepositoryProvider');
 
+Uri _explorerUri(String path, [Map<String, dynamic>? queryParameters]) =>
+    kLichessOpeningExplorerHost.startsWith('localhost') ||
+        kLichessOpeningExplorerHost.startsWith('10.') ||
+        kLichessOpeningExplorerHost.startsWith('192.168.')
+    ? Uri.http(kLichessOpeningExplorerHost, path, queryParameters)
+    : Uri.https(kLichessOpeningExplorerHost, path, queryParameters);
+
 class OpeningExplorerRepository {
   const OpeningExplorerRepository(this.client);
 
@@ -85,7 +92,7 @@ class OpeningExplorerRepository {
 
   Future<OpeningExplorerEntry> getMasterDatabase(String fen, {int? since}) {
     return client.readJson(
-      Uri.https(kLichessOpeningExplorerHost, '/masters', {
+      _explorerUri('/masters', {
         'source': 'mobile',
         'fen': fen,
         if (since != null) 'since': since.toString(),
@@ -101,7 +108,7 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readJson(
-      Uri.https(kLichessOpeningExplorerHost, '/lichess', {
+      _explorerUri('/lichess', {
         'source': 'mobile',
         'fen': fen,
         if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
@@ -121,7 +128,7 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readNdJsonStream(
-      Uri.https(kLichessOpeningExplorerHost, '/player', {
+      _explorerUri('/player', {
         'source': 'mobile',
         'fen': fen,
         'player': usernameOrId,

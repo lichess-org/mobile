@@ -21,11 +21,11 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final playersAnalysis = analysisState.playersAnalysis;
-    final canShowGameSummary = analysisState.canShowGameSummary;
     final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
-    if (analysisPrefs.enableServerAnalysis == false || !canShowGameSummary) {
+    final serverAnalysisAllowed = analysisState.serverAnalysisSource != null;
+    if (analysisPrefs.enableServerAnalysis == false || !serverAnalysisAllowed) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -34,7 +34,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             children: [
               const Spacer(),
               Text(context.l10n.computerAnalysisDisabled),
-              if (canShowGameSummary)
+              if (serverAnalysisAllowed)
                 FilledButton.tonal(
                   onPressed: () {
                     ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
@@ -51,30 +51,14 @@ class ServerAnalysisSummary extends ConsumerWidget {
     return playersAnalysis != null
         ? ListView(
             children: [
-              if (currentGameAnalysis == options.gameId)
+              if (currentGameAnalysis == analysisState.serverAnalysisSource)
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
 
               _AnalysisAcplChart(options),
-              GameSummaryTable(
-                pgnHeaders: pgnHeaders,
-                whiteSummary: (
-                  accuracy: playersAnalysis.white.accuracy,
-                  inaccuracies: playersAnalysis.white.inaccuracies,
-                  mistakes: playersAnalysis.white.mistakes,
-                  blunders: playersAnalysis.white.blunders,
-                  acpl: playersAnalysis.white.acpl,
-                ),
-                blackSummary: (
-                  accuracy: playersAnalysis.black.accuracy,
-                  inaccuracies: playersAnalysis.black.inaccuracies,
-                  mistakes: playersAnalysis.black.mistakes,
-                  blunders: playersAnalysis.black.blunders,
-                  acpl: playersAnalysis.black.acpl,
-                ),
-              ),
+              GameSummaryTable(pgnHeaders: pgnHeaders, playersAnalysis: playersAnalysis),
             ],
           )
         : Column(
@@ -82,7 +66,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              if (currentGameAnalysis == options.gameId)
+              if (currentGameAnalysis == analysisState.serverAnalysisSource)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),

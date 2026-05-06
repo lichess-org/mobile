@@ -538,6 +538,92 @@ void main() {
     });
   });
 
+  group('addMoveAt isUserAdded', () {
+    test('isUserAdded is true when extending the mainline', () {
+      // Simulates adding a move at the end of a Lichess archived game
+      final root = Root.fromPgnMoves('e4 e5');
+      final mainlinePath = root.mainlinePath;
+      final (newPath, _) = root.addMoveAt(mainlinePath, Move.parse('g1f3')!, isUserAdded: true);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is false when creating a sideline mid-game', () {
+      // Simulates adding a sideline: the position already has a child (the game move)
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (newPath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is false when isUserAdded param is false', () {
+      // Simulates PGN import or broadcast: isUserAdded is never set to true
+      final root = Root.fromPgnMoves('e4 e5');
+      final mainlinePath = root.mainlinePath;
+      final (newPath, _) = root.addMoveAt(mainlinePath, Move.parse('g1f3')!);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is false when adding a move inside a sideline', () {
+      // Simulates adding a second move within a sideline: the sideline path is not on mainline
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!, isUserAdded: true);
+      final (newPath, _) = root.addMoveAt(sidelinePath!, Move.parse('e4d5')!);
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+
+    test('isUserAdded is true when prepend is true on mainline', () {
+      // prepend=true counts as willBeMainline even when children already exist
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE5 = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+      );
+      final (newPath, _) = root.addMoveAt(
+        afterE5,
+        Move.parse('d2d4')!,
+        prepend: true,
+        isUserAdded: true,
+      );
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is true when replace is true on mainline', () {
+      // replace=true counts as willBeMainline even when children already exist
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE5 = UciPath.fromIds(
+        [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
+      );
+      final (newPath, _) = root.addMoveAt(
+        afterE5,
+        Move.parse('d2d4')!,
+        replace: true,
+        isUserAdded: true,
+      );
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isTrue);
+    });
+
+    test('isUserAdded is false when prepend is true but not on mainline', () {
+      // prepend=true does not override the isOnMainline check
+      final root = Root.fromPgnMoves('e4 e5 Nf3');
+      final afterE4 = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (sidelinePath, _) = root.addMoveAt(afterE4, Move.parse('d7d5')!);
+      final (newPath, _) = root.addMoveAt(
+        sidelinePath!,
+        Move.parse('e4d5')!,
+        prepend: true,
+        isUserAdded: true,
+      );
+      final newBranch = root.branchAt(newPath!);
+      expect(newBranch?.isUserAdded, isFalse);
+    });
+  });
+
   group('ViewNode', () {
     test('mainline', () {
       const pgn = '1. e4 e5 (1... d5 2. a4) 2. a4';

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">账户设置</string>
+  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">账户</string>
+  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">账户设置</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">这些设置将应用于您的 Lichess 账户，并在所有设备上生效。</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有对局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您确定吗？</string>

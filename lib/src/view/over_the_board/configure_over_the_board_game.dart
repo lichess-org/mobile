@@ -78,9 +78,11 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text.isEmpty ? null : _fenController.text);
     });
-    final clockProvider = ref.read(overTheBoardClockProvider);
-    timeIncrement = clockProvider.timeIncrement;
-    chosenTimeControlType = ref.read(overTheBoardPreferencesProvider).timeControlType;
+    final prefs = ref.read(overTheBoardPreferencesProvider);
+    chosenTimeControlType = prefs.timeControlType;
+    timeIncrement = chosenTimeControlType == TimeControlType.unlimited
+        ? const TimeIncrement.infinite()
+        : prefs.timeIncrement;
     super.initState();
   }
 
@@ -94,23 +96,32 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
     setState(() {
       chosenTimeControlType = type;
+
       if (type == TimeControlType.unlimited) {
         timeIncrement = const TimeIncrement.infinite();
       } else if (timeIncrement.isInfinite) {
-        timeIncrement = TimeIncrement.blitzDefault();
+        timeIncrement = ref.read(overTheBoardPreferencesProvider).timeIncrement;
       }
     });
   }
 
   void _setTotalTime(num seconds) {
-    setState(() {
-      timeIncrement = TimeIncrement(seconds.toInt(), timeIncrement.increment);
-    });
+    _updateTimeIncrement(TimeIncrement(seconds.toInt(), timeIncrement.increment));
   }
 
   void _setIncrement(num seconds) {
+    _updateTimeIncrement(TimeIncrement(timeIncrement.time, seconds.toInt()));
+  }
+
+  void _updateTimeIncrement(TimeIncrement newIncrement) {
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(newIncrement);
+    final newTimeControlType = newIncrement.isInfinite
+        ? TimeControlType.unlimited
+        : TimeControlType.clock;
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(newTimeControlType);
     setState(() {
-      timeIncrement = TimeIncrement(timeIncrement.time, seconds.toInt());
+      timeIncrement = newIncrement;
+      chosenTimeControlType = newTimeControlType;
     });
   }
 
