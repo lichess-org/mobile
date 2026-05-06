@@ -44,7 +44,7 @@ class GameListDetailTile extends StatelessWidget {
       height: 1,
     );
 
-    final scaledTitleFontSize = MediaQuery.of(context).textScaler.scale(titleFontSize);
+    final scaledTitleFontSize = MediaQuery.textScalerOf(context).scale(titleFontSize);
 
     return InkWell(
       onLongPress: () {

@@ -9,6 +9,9 @@ class AppLocalizationsSl extends AppLocalizations {
   AppLocalizationsSl([String locale = 'sl']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Nastavitve računa';
 
   @override
@@ -2407,10 +2410,10 @@ class AppLocalizationsSl extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Ali pa naj vaš nasprotnik skenira to QR kodo';
 
   @override
-  String get reusableChallengeUrl => 'Reusable challenge URL';
+  String get reusableChallengeUrl => 'URL izziva za večkratno uporabo';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Stalna povezava za vsakogar, ki vas lahko izzove s temi natančnimi nastavitvami.';
 
   @override
   String get waiting => 'Čakam';
@@ -2659,6 +2662,16 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedavne igre';
 
   @override
@@ -2742,9 +2755,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Prikaži puščice z variacijami';
-
-  @override
-  String get evaluationGauge => 'Kazalnik ocene';
 
   @override
   String get visualMotifs => 'Vizualni motivi';
@@ -2901,7 +2911,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get variants => 'Različice';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Več načinov igranja';
 
   @override
   String get timeControl => 'Ura';
@@ -3024,15 +3034,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get checkSpamFolder => 'Preverite tudi mapo za neželeno pošto, morda se znajde tam. Če je tako, jo označite kot zaželeno.';
 
   @override
-  String get emailForSignupHelp => 'Če vse drugo ne uspe, nam pošljite to e-poštno sporočilo:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopirajte in prilepite zgornje besedilo ter ga pošljite na naslov $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Če ne najdete potrditvenega e-poštnega sporočila, pošljite e-pošto na $param in potrdili bomo vaš račun.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Kmalu vas bomo kontaktirali in vam pomagali dokončati prijavo.';
 
   @override
   String accountConfirmed(String param) {
@@ -3132,7 +3136,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get unlimited => 'Neomejeno';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Vzemi si ves čas, ki ga potrebuješ';
 
   @override
   String get mode => 'Način';
@@ -3604,7 +3608,7 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Naključna pozicija v šahu960';
 
   @override
   String get startPosition => 'Začetna pozicija';
@@ -4494,7 +4498,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get brightness => 'Svetlost';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Kontrast';
 
   @override
   String get hue => 'Odtenek';
@@ -5124,7 +5128,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Ni rezultatov za \"$param\"';
   }
 
   @override

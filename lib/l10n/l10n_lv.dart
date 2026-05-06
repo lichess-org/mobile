@@ -9,6 +9,9 @@ class AppLocalizationsLv extends AppLocalizations {
   AppLocalizationsLv([String locale = 'lv']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -2627,6 +2630,16 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nesenas spēles';
 
   @override
@@ -2710,9 +2723,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Rādīt varianta bultiņas';
-
-  @override
-  String get evaluationGauge => 'Novērtējuma rādītājs';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2992,15 +3002,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get checkSpamFolder => 'Pārbaudiet arī mēstuļu nodalījumu – iespējams, mūsu ziņa tur nonākusi. Tādā gadījumā, lūdzu atzīmējiet, ka tā nav mēstule.';
 
   @override
-  String get emailForSignupHelp => 'Ja nekas cits neizdodas, nosūtiet mums šo epastu:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopējiet augšup esošo tekstu un sūtiet to $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Drīz mēs jums pievērsīsimies un palīdzēsim pabeigt reģistrāciju.';
 
   @override
   String accountConfirmed(String param) {

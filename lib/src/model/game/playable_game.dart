@@ -326,6 +326,7 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   return CorrespondenceClockData(
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    resetId: DateTime.now().millisecondsSinceEpoch,
   );
 }
 
@@ -341,8 +342,5 @@ CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) => ILi
 );
 
 Division _divisionFromPick(RequiredPick pick) {
-  return Division(
-    middlegame: pick('middle').asDoubleOrNull(),
-    endgame: pick('end').asDoubleOrNull(),
-  );
+  return Division(middlegame: pick('middle').asIntOrNull(), endgame: pick('end').asIntOrNull());
 }

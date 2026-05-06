@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 struct BroadcastItemRow: View {
     let item: BroadcastItem
@@ -56,32 +57,40 @@ struct BroadcastItemRow: View {
         }
     }
 
+    @Environment(\.widgetRenderingMode) private var renderingMode
+
     @ViewBuilder
     private func thumbnailView(size: CGFloat) -> some View {
-        Group {
-            if let data = item.imageData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else if let imageName = item.thumbnailImageName {
-                Image(imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                ZStack {
-                    Color.secondary.opacity(BroadcastWidgetLayout.thumbnailFallbackBgOpacity)
-                    Image("LichessLogo")
+        // In .accented (Tinted) and .vibrant (Clear) rendering modes WidgetKit converts
+        // all views to flat monochrome, so photos become solid-coloured boxes.
+        // Hiding thumbnails in those modes avoids the white-box artefact; the text
+        // column expands to fill the space naturally.
+        if renderingMode == .fullColor {
+            Group {
+                if let data = item.imageData, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(
-                            width: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio,
-                            height: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio
-                        )
-                        .opacity(BroadcastWidgetLayout.thumbnailFallbackLogoOpacity)
+                        .aspectRatio(contentMode: .fill)
+                } else if let imageName = item.thumbnailImageName {
+                    Image(imageName)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else {
+                    ZStack {
+                        Color.secondary.opacity(BroadcastWidgetLayout.thumbnailFallbackBgOpacity)
+                        Image("LichessLogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(
+                                width: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio,
+                                height: size * BroadcastWidgetLayout.thumbnailFallbackLogoRatio
+                            )
+                            .opacity(BroadcastWidgetLayout.thumbnailFallbackLogoOpacity)
+                    }
                 }
             }
+            .frame(width: size, height: size)
+            .clipShape(RoundedRectangle(cornerRadius: BroadcastWidgetLayout.thumbnailCornerRadius))
         }
-        .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: BroadcastWidgetLayout.thumbnailCornerRadius))
     }
 }

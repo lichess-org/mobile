@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Предпочитания за акаунта</string>
+  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">Профил</string>
+  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Предпочитания за акаунта</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Тези предпочитания се прилагат към вашия Lichess акаунт и ще се използват на всички устройства.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Всички игри</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Сигурни ли сте?</string>
@@ -18,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Начало</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стриймъри на живо</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Влезте в профила си, за да видите страницата.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Нова партия</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма резултати</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Моля, обърнете внимание, че не всички функции от старото приложение и уебсайта са налични в момента, но постоянно добавяме нови.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Все още не следвате никого.</string>
@@ -79,4 +81,13 @@
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Съвет: Можете да добавите още уиджети към началния екран или да премахнете тези, които не ви трябват!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Затвори</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">Настройки</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Скрий заплахата</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Приключили</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Към моята страница</string>
+  <string name="displayModeCompact" comment="">Компактен</string>
+  <string name="displayModeDetailed" comment="">Подробен</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Дебютният справочник не е достъпен офлайн.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Предизвикателството е създадено: Ще получите известие, когато партията започне.\nМожете да го отворите от началния раздел.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Предишна</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Или зареди PGN файл</string>
 </resources>

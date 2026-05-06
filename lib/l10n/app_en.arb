@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Account",
   "mobileAccountPreferences": "Account preferences",
   "mobileAccountPreferencesHelp": "These preferences are applied to your Lichess account and will be used across all devices.",
   "mobileAllGames": "All games",
@@ -1337,6 +1338,22 @@
       }
     }
   },
+  "minRatingX": "Minimum rating of {param}",
+  "@minRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "maxRatingX": "Maximum rating of {param}",
+  "@maxRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "recentGames": "Recent games",
   "topGames": "Top games",
   "masterDbExplanation": "OTB games of {param1}+ FIDE-rated players from {param2} to {param3}",
@@ -1384,7 +1401,6 @@
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
   "showVariationArrows": "Show variation arrows",
-  "evaluationGauge": "Evaluation gauge",
   "visualMotifs": "Visual motifs",
   "undefendedPieces": "Undefended pieces",
   "pinnedPieces": "Pinned pieces",
@@ -1512,16 +1528,14 @@
   "emailCanTakeSomeTime": "It can take some time to arrive.",
   "refreshInboxAfterFiveMinutes": "Wait 5 minutes and refresh your email inbox.",
   "checkSpamFolder": "Also check your spam folder, it might end up there. If so, mark it as not spam.",
-  "emailForSignupHelp": "If everything else fails, then send us this email:",
-  "copyTextToEmail": "Copy and paste the above text and send it to {param}",
-  "@copyTextToEmail": {
+  "sendEmailForAccountVerification": "If you can't find your confirmation email, send an email to {param} and we'll confirm your account for you.",
+  "@sendEmailForAccountVerification": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "waitForSignupHelp": "We will respond shortly to help you complete your registration.",
   "accountConfirmed": "The user {param} is successfully confirmed.",
   "@accountConfirmed": {
     "placeholders": {

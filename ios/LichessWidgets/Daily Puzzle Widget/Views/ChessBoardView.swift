@@ -1,5 +1,6 @@
 import ChessgroundAssets
 import SwiftUI
+import WidgetKit
 
 /// Renders a chess position from a FEN string as an 8×8 grid.
 ///
@@ -8,6 +9,12 @@ import SwiftUI
 ///   lay highlights and pieces on top.
 /// - Solid-colour themes (brown, blue, green, ic) draw individual light/dark squares.
 ///
+/// In `.accented` (Tinted) and `.vibrant` (Clear) widget rendering modes the themed
+/// board is replaced by a transparent checkerboard: dark squares use a subtle neutral
+/// fill marked `.widgetAccentable(false)` so the system puts them in the background
+/// layer, while pieces remain in the default (accented) layer and are tinted with the
+/// system accent colour — keeping them clearly visible.
+///
 /// Piece images are driven by `boardStyle.pieceSet`; all piece sets supported by
 /// the app are bundled in the widget extension's `Assets.xcassets`.
 struct ChessBoardView: View {
@@ -15,6 +22,12 @@ struct ChessBoardView: View {
     let lastMove: String?
     let flipped: Bool
     let boardStyle: ChessboardTheme
+
+    @Environment(\.widgetRenderingMode) private var renderingMode
+
+    private var isTransparentMode: Bool {
+        renderingMode == .accented || renderingMode == .vibrant
+    }
 
     // MARK: - FEN parsing
 
@@ -61,7 +74,9 @@ struct ChessBoardView: View {
                 // Board background
                 // Image-backed themes: one full-board texture scaled to fill.
                 // Solid-colour themes: drawn square-by-square in the grid below.
-                if let imageName = boardStyle.boardImageName {
+                // In accented/vibrant rendering modes the image is skipped so the
+                // widget container background shows through.
+                if !isTransparentMode, let imageName = boardStyle.boardImageName {
                     Image(imageName, bundle: ChessgroundAssets.bundle)
                         .resizable()
                         .frame(width: side, height: side)
@@ -79,20 +94,35 @@ struct ChessBoardView: View {
                                 let isLight = (rankIndex + fileIndex) % 2 == 0
                                 let name = squareName(rankIndex: rankIndex, fileIndex: fileIndex)
                                 let piece: Character? =
-                                rankIndex < boardData.count && fileIndex < boardData[rankIndex].count
-                                ? boardData[rankIndex][fileIndex] : nil
+                                    rankIndex < boardData.count && fileIndex < boardData[rankIndex].count
+                                    ? boardData[rankIndex][fileIndex] : nil
 
                                 ZStack {
-                                    if isSolidTheme {
+                                    if isTransparentMode {
+                                        // Transparent board: dark squares get a subtle neutral
+                                        // fill in the background (non-accented) layer so pieces
+                                        // in the accented layer remain clearly visible.
+                                        if !isLight {
+                                            Rectangle()
+                                                .fill(Color(white: 0, opacity: 0.18))
+                                                .widgetAccentable(false)
+                                        }
+                                    } else if isSolidTheme {
                                         Rectangle()
                                             .fill(
                                                 isLight
-                                                ? boardStyle.lightSquare
-                                                : boardStyle.darkSquare
+                                                    ? boardStyle.lightSquare
+                                                    : boardStyle.darkSquare
                                             )
                                     }
                                     if highlighted.contains(name) {
-                                        Rectangle().fill(boardStyle.lastMoveHighlight)
+                                        Rectangle()
+                                            .fill(
+                                                isTransparentMode
+                                                    ? Color(white: 1, opacity: 0.35)
+                                                    : boardStyle.lastMoveHighlight
+                                            )
+                                            .widgetAccentable(false)
                                     }
                                     if let piece {
                                         ChessPieceView(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">खाता प्राथमिकताएं</string>
+  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">खाता प्राथमिकताएं</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ये प्राथमिकताएं आपके लीचेस खाते पर लागू होती हैं और सभी डिवाइसों पर उपयोग की जाएंगी।</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">सारे गेम्स</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">पक्का?</string>

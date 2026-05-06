@@ -76,3 +76,5 @@ sealed class PlayerAnalysis with _$PlayerAnalysis {
 
   factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
 }
+
+typedef PlayersAnalysis = ({PlayerAnalysis white, PlayerAnalysis black});

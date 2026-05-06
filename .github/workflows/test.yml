@@ -6,6 +6,7 @@ on:
       - 'lib/**'
       - '!lib/l10n/**'
       - 'test/**'
+      - 'pubspec.yaml'
     branches:
       - main
       - v0.18.x
@@ -14,6 +15,7 @@ on:
       - 'lib/**'
       - '!lib/l10n/**'
       - 'test/**'
+      - 'pubspec.yaml'
     branches:
       - main
       - v0.18.x
@@ -31,8 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: subosito/flutter-action@v2
-      - run: flutter doctor -v
+      - name: 🐦 Install flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+          flutter-version-file: pubspec.yaml
 
       - name: Install requirements for sqflite_common_ffi package
         run: sudo apt-get -y install libsqlite3-0 libsqlite3-dev

@@ -122,8 +122,8 @@ class AcplChart extends StatelessWidget {
   List<VerticalLine> _buildDivisionLines(BuildContext context, Division? division) {
     final divisionLines = <VerticalLine>[];
 
-    VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
-      x: x,
+    VerticalLine phaseVerticalBar(int x, String label) => VerticalLine(
+      x: x.toDouble(),
       color: const Color(0xFF707070),
       strokeWidth: 0.5,
       label: VerticalLineLabel(
@@ -141,10 +141,10 @@ class AcplChart extends StatelessWidget {
 
     if (division?.middlegame != null) {
       if (division!.middlegame! > 0) {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.opening));
         divisionLines.add(phaseVerticalBar(division.middlegame! - 1, context.l10n.middlegame));
       } else {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.middlegame));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.middlegame));
       }
     }
 
@@ -152,7 +152,7 @@ class AcplChart extends StatelessWidget {
       if (division!.endgame! > 0) {
         divisionLines.add(phaseVerticalBar(division.endgame! - 1, context.l10n.endgame));
       } else {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.endgame));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.endgame));
       }
     }
 
