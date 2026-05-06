@@ -1,7 +1,7 @@
 Lichess is a free/libre, open-source chess application powered by volunteers and donations.
 Today, Lichess users play more than five million games every day. Lichess is one of the most popular chess websites in the world while remaining 100% free.
 
-Note: To enable push notifications, a unified push distributor such as https://f-droid.org/packages/org.unifiedpush.distributor.sunup/ needs to be installed.
+Note: Push notifications are a work in progress and should not be expected to work correctly. To enable them, a Unified Push distributor such as https://f-droid.org/packages/org.unifiedpush.distributor.sunup/ needs to be installed.
 
 The following features are available right now:
 - play real time or correspondence chess
