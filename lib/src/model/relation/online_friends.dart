@@ -76,7 +76,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
         final patronColor = event.json?['patronColor'] as int?;
         final user = _parseFriend(event.data.toString(), patronColor);
         final playing = event.json?['playing'] as bool? ?? false;
-        
+
         // Prevent duplicate entries
         if (!currentList.any((v) => v.user.id == user.id)) {
           state = AsyncValue.data(currentList.add((user: user, playing: playing)));
@@ -120,7 +120,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
     final friends = event.data as List<dynamic>;
     final patronColors = event.json?['patronColors'] as List<dynamic>? ?? [];
     final playing = event.json?['playing'] as List<dynamic>? ?? [];
-    
+
     return friends.mapIndexed((i, v) {
       final patronColor = friends.length == patronColors.length ? patronColors[i] as int? : null;
       final user = _parseFriend(

@@ -24,20 +24,23 @@ final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.withClient((client) => RelationRepository(client).getFollowing());
 });
 
-final onlineAndFollowingProvider = Provider.autoDispose<AsyncValue<(IList<OnlineFriend> onlineFriends, IList<User> following)>>((ref) {
-  final online = ref.watch(onlineFriendsProvider);
-  final following = ref.watch(followingProvider);
+final onlineAndFollowingProvider =
+    Provider.autoDispose<AsyncValue<(IList<OnlineFriend> onlineFriends, IList<User> following)>>((
+      ref,
+    ) {
+      final online = ref.watch(onlineFriendsProvider);
+      final following = ref.watch(followingProvider);
 
-  return online.when(
-    data: (onlineData) => following.when(
-      data: (followingData) => AsyncValue.data((onlineData, followingData)),
-      error: (e, st) => AsyncValue.error(e, st),
-      loading: () => const AsyncValue.loading(),
-    ),
-    error: (e, st) => AsyncValue.error(e, st),
-    loading: () => const AsyncValue.loading(),
-  );
-});
+      return online.when(
+        data: (onlineData) => following.when(
+          data: (followingData) => AsyncValue.data((onlineData, followingData)),
+          error: (e, st) => AsyncValue.error(e, st),
+          loading: () => const AsyncValue.loading(),
+        ),
+        error: (e, st) => AsyncValue.error(e, st),
+        loading: () => const AsyncValue.loading(),
+      );
+    });
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
@@ -81,10 +84,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
             ],
           ),
         ),
-        body: TabBarView(
-          controller: _tabController, 
-          children: const [_Online(), _Following()],
-        ),
+        body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
       ),
       error: (error, stack) => PlatformScaffold(
         appBar: PlatformAppBar(title: Text(context.l10n.friends)),
@@ -154,8 +154,10 @@ class _OnlineFriendListTile extends ConsumerWidget {
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(context, rootNavigator: true)
-                    .push(TvScreen.buildRoute(context, user: user));
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(TvScreen.buildRoute(context, user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
@@ -186,9 +188,8 @@ class _Online extends ConsumerWidget {
         }
         return ListView.separated(
           itemCount: value.length,
-          separatorBuilder: (context, index) => 
-            Theme.of(context).platform == TargetPlatform.iOS 
-              ? const PlatformDivider(height: 1) 
+          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider(height: 1)
               : const SizedBox.shrink(),
           itemBuilder: (context, index) => _OnlineFriendListTile(onlineFriend: value[index]),
         );
@@ -213,9 +214,8 @@ class _Following extends ConsumerWidget {
         }
         return ListView.separated(
           itemCount: followingList.length,
-          separatorBuilder: (context, index) => 
-            Theme.of(context).platform == TargetPlatform.iOS 
-              ? const PlatformDivider(height: 1) 
+          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider(height: 1)
               : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final user = followingList[index];
@@ -234,7 +234,11 @@ class _Following extends ConsumerWidget {
                         ref.invalidate(followingProvider);
                       } catch (e) {
                         if (context.mounted) {
-                          return showSnackBar(context, 'Failed to unfollow: ${user.id}', type: SnackBarType.error);
+                          return showSnackBar(
+                            context,
+                            'Failed to unfollow: ${user.id}',
+                            type: SnackBarType.error,
+                          );
                         }
                       }
                     },
@@ -247,17 +251,15 @@ class _Following extends ConsumerWidget {
               ),
               child: UserListTile.fromUser(
                 user,
-                onTap: () => Navigator.of(context).push(
-                  UserOrProfileScreen.buildRoute(context, user.lightUser),
-                ),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
               ),
             );
           },
         );
       },
-      error: (e, st) => FullScreenRetryRequest(
-        onRetry: () => ref.invalidate(followingProvider),
-      ),
+      error: (e, st) => FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider)),
       loading: () => const CenterLoadingIndicator(),
     );
   }
