@@ -22,13 +22,8 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   late SocketClient _socketClient;
 
   @override
-  Future<IList<OnlineFriend>> build() {
-    ref.onDispose(() {
-      _socketSubscription?.cancel();
-      _socketOpenSubscription?.cancel();
-    });
-
-    _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
+  FutureOr<IList<OnlineFriend>> build() {
+    _socketClient = ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
@@ -39,43 +34,39 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
       _socketClient.send('following_onlines', null);
     });
 
-    final state = _socketClient.stream
-        .firstWhere((e) => e.topic == 'following_onlines')
-        .then((event) => _parseFriendsList(event));
+    ref.onDispose(() {
+      _socketSubscription?.cancel();
+      _socketOpenSubscription?.cancel();
+    });
 
-    // Send immediately if the socket is already connected; if it is still
-    // connecting, this is a no-op and _socketOpenSubscription will send the
-    // request once the connection is established.
-    // We deliberately avoid awaiting firstConnection here: SocketClient.close()
-    // replaces the firstConnection completer, which would permanently orphan
-    // the await and leave the provider in AsyncLoading forever.
-    _socketClient.send('following_onlines', null);
+    // Ask for the list immediately if the socket is already active
+    if (_socketClient.isActive) {
+      _socketClient.send('following_onlines', null);
+    } else {
+      _socketClient.connect();
+    }
 
-    return state;
+    // Return an empty list immediately
+    return const IListConst([]);
   }
 
   void startWatchingFriends() {
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
-    _socketOpenSubscription?.cancel();
-    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      _socketClient.send('following_onlines', null);
-    });
     if (!_socketClient.isActive) {
       _socketClient.connect();
     } else {
       _socketClient.send('following_onlines', null);
     }
+    _socketSubscription?.resume();
   }
 
   void stopWatchingFriends() {
-    _socketSubscription?.cancel();
-    _socketOpenSubscription?.cancel();
+    _socketSubscription?.pause();
   }
 
   void _handleSocketTopic(SocketEvent event) {
     if (!ref.mounted) return;
-    if (!state.hasValue) return;
+
+    final currentList = state.value ?? const IListConst([]);
 
     switch (event.topic) {
       case 'following_onlines':
@@ -85,37 +76,33 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
         final patronColor = event.json?['patronColor'] as int?;
         final user = _parseFriend(event.data.toString(), patronColor);
         final playing = event.json?['playing'] as bool? ?? false;
-        state = AsyncValue.data(state.requireValue.add((user: user, playing: playing)));
+        
+        // Prevent duplicate entries
+        if (!currentList.any((v) => v.user.id == user.id)) {
+          state = AsyncValue.data(currentList.add((user: user, playing: playing)));
+        }
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.user.id == data.id));
+        state = AsyncValue.data(currentList.removeWhere((v) => v.user.id == data.id));
 
       case 'following_playing':
         final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
-          state.requireValue.map((v) {
-            if (v.user.id == data.id) {
-              return (user: v.user, playing: true);
-            }
-            return v;
+          currentList.map((v) {
+            return v.user.id == data.id ? (user: v.user, playing: true) : v;
           }).toIList(),
         );
 
       case 'following_stopped_playing':
         final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
-          state.requireValue.map((v) {
-            if (v.user.id == data.id) {
-              return (user: v.user, playing: false);
-            }
-            return v;
+          currentList.map((v) {
+            return v.user.id == data.id ? (user: v.user, playing: false) : v;
           }).toIList(),
         );
     }
   }
-
-  SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   LightUser _parseFriend(String friend, [int? patronColor]) {
     final splitted = friend.split(' ');
@@ -133,11 +120,11 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
     final friends = event.data as List<dynamic>;
     final patronColors = event.json?['patronColors'] as List<dynamic>? ?? [];
     final playing = event.json?['playing'] as List<dynamic>? ?? [];
+    
     return friends.mapIndexed((i, v) {
       final patronColor = friends.length == patronColors.length ? patronColors[i] as int? : null;
       final user = _parseFriend(
         v.toString(),
-        // patron colors here being sent as 0 when the user is not a patron
         patronColor != null && patronColor > 0 ? patronColor : null,
       );
       final isPlaying = playing.contains(user.id.toString());

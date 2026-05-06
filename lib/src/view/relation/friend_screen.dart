@@ -24,15 +24,20 @@ final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.withClient((client) => RelationRepository(client).getFollowing());
 });
 
-final onlineAndFollowingProvider =
-    FutureProvider.autoDispose<(IList<OnlineFriend> onlineFriends, IList<User> following)>((
-      ref,
-    ) async {
-      final onlineFriends = await ref.watch(onlineFriendsProvider.future);
-      final following = await ref.watch(followingProvider.future);
+final onlineAndFollowingProvider = Provider.autoDispose<AsyncValue<(IList<OnlineFriend> onlineFriends, IList<User> following)>>((ref) {
+  final online = ref.watch(onlineFriendsProvider);
+  final following = ref.watch(followingProvider);
 
-      return (onlineFriends, following);
-    });
+  return online.when(
+    data: (onlineData) => following.when(
+      data: (followingData) => AsyncValue.data((onlineData, followingData)),
+      error: (e, st) => AsyncValue.error(e, st),
+      loading: () => const AsyncValue.loading(),
+    ),
+    error: (e, st) => AsyncValue.error(e, st),
+    loading: () => const AsyncValue.loading(),
+  );
+});
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
@@ -64,32 +69,37 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
   Widget build(BuildContext context) {
     final onlineAndFollowing = ref.watch(onlineAndFollowingProvider);
 
-    switch (onlineAndFollowing) {
-      case AsyncData(:final value):
-        return PlatformScaffold(
-          appBar: PlatformAppBar(
-            title: Text(context.l10n.friends),
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: <Widget>[
-                Tab(text: context.l10n.nbFriendsOnline(value.$1.length)),
-                Tab(text: context.l10n.nbFollowing(value.$2.length)),
-              ],
-            ),
+    return onlineAndFollowing.when(
+      data: (value) => PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text(context.l10n.friends),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: <Widget>[
+              Tab(text: context.l10n.nbFriendsOnline(value.$1.length)),
+              Tab(text: context.l10n.nbFollowing(value.$2.length)),
+            ],
           ),
-          body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
-        );
-      case AsyncError():
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
-          body: FullScreenRetryRequest(onRetry: () => ref.invalidate(onlineAndFollowingProvider)),
-        );
-      case _:
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
-          body: const CenterLoadingIndicator(),
-        );
-    }
+        ),
+        body: TabBarView(
+          controller: _tabController, 
+          children: const [_Online(), _Following()],
+        ),
+      ),
+      error: (error, stack) => PlatformScaffold(
+        appBar: PlatformAppBar(title: Text(context.l10n.friends)),
+        body: FullScreenRetryRequest(
+          onRetry: () {
+            ref.invalidate(onlineFriendsProvider);
+            ref.invalidate(followingProvider);
+          },
+        ),
+      ),
+      loading: () => PlatformScaffold(
+        appBar: PlatformAppBar(title: Text(context.l10n.friends)),
+        body: const CenterLoadingIndicator(),
+      ),
+    );
   }
 }
 
@@ -103,29 +113,28 @@ class OnlineFriendsWidget extends ConsumerWidget {
     return Shimmer(
       child: onlineFriends.when(
         data: (data) {
+          if (data.isEmpty) return const SizedBox.shrink();
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            onHeaderTap: () => _handleTap(context, data),
+            onHeaderTap: () => _handleTap(context),
             children: [
               for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
           );
         },
         error: (error, stackTrace) {
-          debugPrint(
-            'SEVERE: [PlayerScreen] could not load following online users; $error\n $stackTrace',
-          );
-          return const Center(child: Text('Could not load online friends'));
+          debugPrint('SEVERE: [OnlineFriendsWidget] load failed: $error');
+          return const SizedBox.shrink();
         },
         loading: () => ShimmerLoading(
           isLoading: true,
-          child: ListSection.loading(itemsNumber: 5, header: true),
+          child: ListSection.loading(itemsNumber: 3, header: true),
         ),
       ),
     );
   }
 
-  void _handleTap(BuildContext context, IList<OnlineFriend> followingOnlines) {
+  void _handleTap(BuildContext context) {
     Navigator.of(context).push(FriendScreen.buildRoute(context));
   }
 }
@@ -145,10 +154,8 @@ class _OnlineFriendListTile extends ConsumerWidget {
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(TvScreen.buildRoute(context, user: user));
+                Navigator.of(context, rootNavigator: true)
+                    .push(TvScreen.buildRoute(context, user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
@@ -157,10 +164,8 @@ class _OnlineFriendListTile extends ConsumerWidget {
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
-        isScrollControlled: true,
         showDragHandle: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        isScrollControlled: true,
         builder: (context) => UserContextMenu(userId: user.id),
       ),
     );
@@ -174,23 +179,23 @@ class _Online extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final onlineFriends = ref.watch(onlineFriendsProvider);
 
-    switch (onlineFriends) {
-      case AsyncData(:final value):
+    return onlineFriends.when(
+      data: (value) {
         if (value.isEmpty) {
           return Center(child: Text(context.l10n.nbFriendsOnline(0)));
         }
         return ListView.separated(
           itemCount: value.length,
-          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
-              ? const PlatformDivider(height: 1)
+          separatorBuilder: (context, index) => 
+            Theme.of(context).platform == TargetPlatform.iOS 
+              ? const PlatformDivider(height: 1) 
               : const SizedBox.shrink(),
-          itemBuilder: (context, index) {
-            return _OnlineFriendListTile(onlineFriend: value[index]);
-          },
+          itemBuilder: (context, index) => _OnlineFriendListTile(onlineFriend: value[index]),
         );
-      case _:
-        return const CenterLoadingIndicator();
-    }
+      },
+      error: (_, _) => const Center(child: Text('Could not load online friends')),
+      loading: () => const CenterLoadingIndicator(),
+    );
   }
 }
 
@@ -199,68 +204,61 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final following = ref.watch(followingProvider);
+    final followingAsync = ref.watch(followingProvider);
 
-    switch (following) {
-      case AsyncData(:final value):
-        IList<User> following = value;
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            if (following.isEmpty) {
-              return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
-            }
-            return ListView.separated(
-              itemCount: following.length,
-              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
-                  ? const PlatformDivider(height: 1)
-                  : const SizedBox.shrink(),
-              itemBuilder: (context, index) {
-                final user = following[index];
-                return Slidable(
-                  dragStartBehavior: DragStartBehavior.start,
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    extentRatio: 0.3,
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) async {
-                          final oldState = following;
-                          setState(() {
-                            following = following.removeWhere((v) => v.id == user.id);
-                          });
-                          try {
-                            await ref.withClient(
-                              (client) => RelationRepository(client).unfollow(user.id),
-                            );
-                          } catch (_) {
-                            setState(() {
-                              following = oldState;
-                            });
-                          }
-                        },
-                        backgroundColor: context.lichessColors.error,
-                        foregroundColor: Colors.white,
-                        icon: Icons.person_remove,
-                        label: context.l10n.unfollow,
-                      ),
-                    ],
+    return followingAsync.when(
+      data: (followingList) {
+        if (followingList.isEmpty) {
+          return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
+        }
+        return ListView.separated(
+          itemCount: followingList.length,
+          separatorBuilder: (context, index) => 
+            Theme.of(context).platform == TargetPlatform.iOS 
+              ? const PlatformDivider(height: 1) 
+              : const SizedBox.shrink(),
+          itemBuilder: (context, index) {
+            final user = followingList[index];
+            return Slidable(
+              dragStartBehavior: DragStartBehavior.start,
+              endActionPane: ActionPane(
+                motion: const StretchMotion(),
+                extentRatio: 0.3,
+                children: [
+                  SlidableAction(
+                    onPressed: (context) async {
+                      try {
+                        await ref.withClient(
+                          (client) => RelationRepository(client).unfollow(user.id),
+                        );
+                        ref.invalidate(followingProvider);
+                      } catch (e) {
+                        if (context.mounted) {
+                          return showSnackBar(context, 'Failed to unfollow: ${user.id}', type: SnackBarType.error);
+                        }
+                      }
+                    },
+                    backgroundColor: context.lichessColors.error,
+                    foregroundColor: Colors.white,
+                    icon: Icons.person_remove,
+                    label: context.l10n.unfollow,
                   ),
-                  child: UserListTile.fromUser(
-                    user,
-                    onTap: () => Navigator.of(
-                      context,
-                    ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
-                  ),
-                );
-              },
+                ],
+              ),
+              child: UserListTile.fromUser(
+                user,
+                onTap: () => Navigator.of(context).push(
+                  UserOrProfileScreen.buildRoute(context, user.lightUser),
+                ),
+              ),
             );
           },
         );
-      case AsyncError(:final error, :final stackTrace):
-        debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
-      case _:
-        return const CenterLoadingIndicator();
-    }
+      },
+      error: (e, st) => FullScreenRetryRequest(
+        onRetry: () => ref.invalidate(followingProvider),
+      ),
+      loading: () => const CenterLoadingIndicator(),
+    );
   }
 }
