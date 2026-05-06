@@ -147,25 +147,14 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               alignment: Alignment.topCenter,
               child: hasClock
                   ? Column(
-                      children: [
-                        ListTile(
-                          title: const Text('Clock type'),
-                          trailing: Text(
-                            context.l10n.increment,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                          ),
-                        ),
-                        ...clockTimeSliderTiles(
-                          context,
-                          timeIncrement: timeIncrement,
-                          onTimeChange: _setTotalTime,
-                          onTimeChangeEnd: _setTotalTime,
-                          onIncrementChange: _setIncrement,
-                          onIncrementChangeEnd: _setIncrement,
-                        ),
-                      ],
+                      children: clockTimeSliderTiles(
+                        context,
+                        timeIncrement: timeIncrement,
+                        onTimeChange: _setTotalTime,
+                        onTimeChangeEnd: _setTotalTime,
+                        onIncrementChange: _setIncrement,
+                        onIncrementChangeEnd: _setIncrement,
+                      ),
                     )
                   : const SizedBox.shrink(),
             ),
