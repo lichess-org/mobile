@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/clock/clock_time_sliders.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -39,7 +40,6 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
 
   void _setClockType(ClockTimeControlType type) {
     setState(() => _clockType = type);
-    widget.onClockTypeSelected(type);
   }
 
   void _setTotalTime(num seconds) {
@@ -54,16 +54,10 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
     });
   }
 
-  void _applyTotalTime(num seconds) {
-    final timeIncrement = TimeIncrement(seconds.toInt(), _timeIncrement.increment);
-    setState(() => _timeIncrement = timeIncrement);
-    widget.onTimeSelected(timeIncrement);
-  }
-
-  void _applyIncrement(num seconds) {
-    final timeIncrement = TimeIncrement(_timeIncrement.time, seconds.toInt());
-    setState(() => _timeIncrement = timeIncrement);
-    widget.onTimeSelected(timeIncrement);
+  void _submit(BuildContext context) {
+    widget.onClockTypeSelected(_clockType);
+    widget.onTimeSelected(_timeIncrement);
+    Navigator.of(context).pop();
   }
 
   String _clockValueInSecondsLabel(BuildContext context) {
@@ -99,11 +93,18 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
               timeIncrement: _timeIncrement,
               incrementLabel: _clockValueInSecondsLabel(context),
               onTimeChange: _setTotalTime,
-              onTimeChangeEnd: _applyTotalTime,
+              onTimeChangeEnd: _setTotalTime,
               onIncrementChange: _setIncrement,
-              onIncrementChangeEnd: _applyIncrement,
+              onIncrementChangeEnd: _setIncrement,
             ),
           ],
+        ),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FilledButton(
+            onPressed: () => _submit(context),
+            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+          ),
         ),
       ],
     );

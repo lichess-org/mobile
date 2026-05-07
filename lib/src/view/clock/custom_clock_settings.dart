@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/clock/clock_time_sliders.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -42,16 +43,9 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
     });
   }
 
-  void _applyTotalTime(num seconds) {
-    final clock = TimeIncrement(seconds.toInt(), _clock.increment);
-    setState(() => _clock = clock);
-    widget.onTimeSelected(clock);
-  }
-
-  void _applyIncrement(num seconds) {
-    final clock = TimeIncrement(_clock.time, seconds.toInt());
-    setState(() => _clock = clock);
-    widget.onTimeSelected(clock);
+  void _submit(BuildContext context) {
+    widget.onTimeSelected(_clock);
+    Navigator.of(context).pop();
   }
 
   String _clockValueInSecondsLabel(BuildContext context) {
@@ -74,11 +68,18 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
               timeLabel: 'Minutes',
               incrementLabel: _clockValueInSecondsLabel(context),
               onTimeChange: _setTotalTime,
-              onTimeChangeEnd: _applyTotalTime,
+              onTimeChangeEnd: _setTotalTime,
               onIncrementChange: _setIncrement,
-              onIncrementChangeEnd: _applyIncrement,
+              onIncrementChangeEnd: _setIncrement,
             ),
           ],
+        ),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FilledButton(
+            onPressed: () => _submit(context),
+            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+          ),
         ),
       ],
     );
