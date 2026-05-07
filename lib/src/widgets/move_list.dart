@@ -113,41 +113,39 @@ class _MoveListState extends ConsumerState<MoveList> {
             ),
           )
         : Card(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: widget.slicedMoves
-                      .mapIndexed(
-                        (index, moves) => Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            StackedMoveCount(count: index + 1),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  ...moves.map((move) {
-                                    // cursor index starts at 0, move index starts at 1
-                                    final isCurrentMove = widget.currentMoveIndex == move.key + 1;
-                                    return Expanded(
-                                      child: StackedMoveItem(
-                                        key: isCurrentMove ? currentMoveKey : null,
-                                        move: move,
-                                        pieceNotation: pieceNotation,
-                                        current: isCurrentMove,
-                                        onSelectMove: widget.onSelectMove,
-                                      ),
-                                    );
-                                  }),
-                                ],
-                              ),
+              child: Column(
+                children: widget.slicedMoves
+                    .mapIndexed(
+                      (index, moves) => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          StackedMoveCount(count: index + 1),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                ...moves.map((move) {
+                                  // cursor index starts at 0, move index starts at 1
+                                  final isCurrentMove = widget.currentMoveIndex == move.key + 1;
+                                  return Expanded(
+                                    child: StackedMoveItem(
+                                      key: isCurrentMove ? currentMoveKey : null,
+                                      move: move,
+                                      pieceNotation: pieceNotation,
+                                      current: isCurrentMove,
+                                      onSelectMove: widget.onSelectMove,
+                                    ),
+                                  );
+                                }),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
-                      .toList(growable: false),
-                ),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(growable: false),
               ),
             ),
           );
