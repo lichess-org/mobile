@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -48,6 +49,22 @@ abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
 
   @override
   bool get writeable => true;
+}
+
+@freezed
+abstract class TvChatOptions extends ChatOptions with _$TvChatOptions {
+  const TvChatOptions._();
+  const factory TvChatOptions(
+    TvControllerParams params, {
+    required GameId id,
+    required bool writeable,
+  }) = _TvChatOptions;
+
+  @override
+  LightUser? get opponent => null;
+
+  @override
+  bool get isPublic => true;
 }
 
 @freezed
@@ -130,6 +147,9 @@ class ChatController extends AsyncNotifier<ChatState> {
       StudyChatOptions(:final options) => (await ref.read(
         studyControllerProvider(options).future,
       )).study.chat?.lines,
+      TvChatOptions(:final params) => (await ref.read(
+        tvControllerProvider(params).future,
+      )).game.chat?.lines,
     };
 
     final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);
@@ -152,26 +172,21 @@ class ChatController extends AsyncNotifier<ChatState> {
       throw ArgumentError('Cannot report a message without a username');
     }
     final uri = Uri(path: '/report/flag');
-    final body = switch (options) {
-      GameChatOptions(:final id) => {
-        'username': username,
-        'resource': 'game/${id.gameId}',
-        'text': message.message,
-      },
-      TournamentChatOptions(:final id) => {
-        'username': username,
-        'resource': 'tournament/$id',
-        'text': message.message,
-      },
-      StudyChatOptions(:final id) => {
-        'username': username,
-        'resource': 'study/$id',
-        'text': message.message,
-      },
+
+    final resource = switch (options) {
+      GameChatOptions(:final id) => 'game/${id.gameId}',
+      TournamentChatOptions(:final id) => 'tournament/$id',
+      StudyChatOptions(:final id) => 'study/$id',
+      TvChatOptions(:final id) => 'game/$id',
     };
+
     await ref
         .read(lichessClientProvider)
-        .postRead(uri, headers: {'Accept': 'application/json'}, body: body);
+        .postRead(
+          uri,
+          headers: {'Accept': 'application/json'},
+          body: {'username': username, 'resource': resource, 'text': message.message},
+        );
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.

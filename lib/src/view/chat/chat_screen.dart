@@ -18,10 +18,11 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
-  const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
+  const ChatBottomBarButton({required this.options, this.showLabel = false, this.onTap, super.key});
 
   final ChatOptions options;
   final bool showLabel;
+  final void Function(ChatOptions)? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,9 +31,9 @@ class ChatBottomBarButton extends ConsumerWidget {
     return BottomBarButton(
       label: context.l10n.chatRoom,
       showLabel: showLabel,
-      onTap: () {
-        Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
-      },
+      onTap: () => onTap != null
+          ? onTap!(options)
+          : Navigator.of(context).push(ChatScreen.buildRoute(context, options: options)),
       icon: Icons.chat_bubble_outline,
       badgeLabel: switch (chatUnread) {
         AsyncData(:final value) =>
@@ -89,7 +90,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
       case AsyncData(:final value):
         return Scaffold(
           appBar: AppBar(
-            title: widget.options.isPublic
+            title: widget.options is TvChatOptions
+                ? Text(context.l10n.spectatorRoom)
+                : widget.options.isPublic
                 ? Text(context.l10n.chatRoom)
                 : widget.options.opponent == null
                 ? Text(context.l10n.chatRoom)
