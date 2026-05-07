@@ -30,9 +30,7 @@ class ChatBottomBarButton extends ConsumerWidget {
     return BottomBarButton(
       label: context.l10n.chatRoom,
       showLabel: showLabel,
-      onTap: () {
-        Navigator.of(context).push(ChatScreen.buildRoute(options: options));
-      },
+      onTap: () => Navigator.of(context).push(ChatScreen.buildRoute(options: options)),
       icon: Icons.chat_bubble_outline,
       badgeLabel: switch (chatUnread) {
         AsyncData(:final value) =>
@@ -89,7 +87,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
       case AsyncData(:final value):
         return Scaffold(
           appBar: AppBar(
-            title: widget.options.isPublic
+            title: widget.options is TvChatOptions
+                ? Text(context.l10n.spectatorRoom)
+                : widget.options.isPublic
                 ? Text(context.l10n.chatRoom)
                 : widget.options.opponent == null
                 ? Text(context.l10n.chatRoom)
