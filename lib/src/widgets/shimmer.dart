@@ -149,10 +149,11 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     }
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
-    final offsetWithinShimmer = shimmer.getDescendantOffset(
-      // ignore: cast_nullable_to_non_nullable
-      descendant: context.findRenderObject() as RenderBox,
-    );
+    final renderObject = context.findRenderObject() as RenderBox?;
+    if (renderObject == null) {
+      return const SizedBox();
+    }
+    final offsetWithinShimmer = shimmer.getDescendantOffset(descendant: renderObject);
 
     return ShaderMask(
       blendMode: scaffoldOpacity == 0 ? BlendMode.modulate : BlendMode.srcATop,

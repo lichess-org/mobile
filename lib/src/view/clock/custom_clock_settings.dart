@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/clock/clock_time_sliders.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CustomClockSettings extends StatefulWidget {
   const CustomClockSettings({
@@ -62,15 +63,44 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
         ListSection(
           materialFilledCard: true,
           children: [
-            ...clockTimeSliderTiles(
-              context,
-              timeIncrement: _clock,
-              timeLabel: 'Minutes',
-              incrementLabel: _clockValueInSecondsLabel(context),
-              onTimeChange: _setTotalTime,
-              onTimeChangeEnd: _setTotalTime,
-              onIncrementChange: _setIncrement,
-              onIncrementChangeEnd: _setIncrement,
+            ListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: 'Minutes: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: clockLabelInMinutes(_clock.time),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _clock.time,
+                values: kAvailableTimesInSeconds,
+                labelBuilder: clockLabelInMinutes,
+                onChange: _setTotalTime,
+                onChangeEnd: _setTotalTime,
+              ),
+            ),
+            ListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${_clockValueInSecondsLabel(context)}: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: _clock.increment.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _clock.increment,
+                values: kAvailableIncrementsInSeconds,
+                onChange: _setIncrement,
+                onChangeEnd: _setIncrement,
+              ),
             ),
           ],
         ),

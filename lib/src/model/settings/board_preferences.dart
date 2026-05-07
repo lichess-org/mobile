@@ -135,7 +135,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
-    @JsonKey(defaultValue: PieceSet.staunty, unknownEnumValue: PieceSet.staunty)
+    @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
@@ -181,7 +181,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
-    pieceSet: PieceSet.staunty,
+    pieceSet: PieceSet.cburnett,
     boardTheme: BoardTheme.brown,
     immersiveModeWhilePlaying: false,
     hapticFeedback: true,

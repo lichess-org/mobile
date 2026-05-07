@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/clock/clock_time_sliders.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
@@ -78,11 +79,11 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text.isEmpty ? null : _fenController.text);
     });
-    final prefs = ref.read(overTheBoardPreferencesProvider);
-    chosenTimeControlType = prefs.timeControlType;
-    timeIncrement = chosenTimeControlType == TimeControlType.unlimited
-        ? const TimeIncrement.infinite()
-        : prefs.timeIncrement;
+    final clockProvider = ref.read(overTheBoardClockProvider);
+    timeIncrement = clockProvider.timeIncrement;
+    chosenTimeControlType = timeIncrement.isInfinite
+        ? TimeControlType.unlimited
+        : TimeControlType.clock;
     super.initState();
   }
 
@@ -100,28 +101,32 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
       if (type == TimeControlType.unlimited) {
         timeIncrement = const TimeIncrement.infinite();
       } else if (timeIncrement.isInfinite) {
-        timeIncrement = ref.read(overTheBoardPreferencesProvider).timeIncrement;
+        timeIncrement = OverTheBoardPrefs.defaults.timeIncrement;
       }
     });
   }
 
   void _setTotalTime(num seconds) {
-    _updateTimeIncrement(TimeIncrement(seconds.toInt(), timeIncrement.increment));
+    setState(() {
+      _updateTimeIncrement(TimeIncrement(seconds.toInt(), timeIncrement.increment));
+    });
   }
 
   void _setIncrement(num seconds) {
-    _updateTimeIncrement(TimeIncrement(timeIncrement.time, seconds.toInt()));
+    setState(() {
+      _updateTimeIncrement(TimeIncrement(timeIncrement.time, seconds.toInt()));
+    });
   }
 
   void _updateTimeIncrement(TimeIncrement newIncrement) {
     ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(newIncrement);
-    final newTimeControlType = newIncrement.isInfinite
-        ? TimeControlType.unlimited
-        : TimeControlType.clock;
-    ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(newTimeControlType);
     setState(() {
       timeIncrement = newIncrement;
-      chosenTimeControlType = newTimeControlType;
+      if (timeIncrement.isInfinite) {
+        _setTimeControlType(TimeControlType.unlimited);
+      } else {
+        _setTimeControlType(TimeControlType.clock);
+      }
     });
   }
 
@@ -158,14 +163,47 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               alignment: Alignment.topCenter,
               child: hasClock
                   ? Column(
-                      children: clockTimeSliderTiles(
-                        context,
-                        timeIncrement: timeIncrement,
-                        onTimeChange: _setTotalTime,
-                        onTimeChangeEnd: _setTotalTime,
-                        onIncrementChange: _setIncrement,
-                        onIncrementChangeEnd: _setIncrement,
-                      ),
+                      children: [
+                        ListTile(
+                          title: Text.rich(
+                            TextSpan(
+                              text: '${context.l10n.minutesPerSide}: ',
+                              children: [
+                                TextSpan(
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                  text: clockLabelInMinutes(timeIncrement.time),
+                                ),
+                              ],
+                            ),
+                          ),
+                          subtitle: NonLinearSlider(
+                            value: timeIncrement.time,
+                            values: kAvailableTimesInSeconds,
+                            labelBuilder: clockLabelInMinutes,
+                            onChange: _setTotalTime,
+                            onChangeEnd: _setTotalTime,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text.rich(
+                            TextSpan(
+                              text: '${context.l10n.incrementInSeconds}: ',
+                              children: [
+                                TextSpan(
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                  text: timeIncrement.increment.toString(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          subtitle: NonLinearSlider(
+                            value: timeIncrement.increment,
+                            values: kAvailableIncrementsInSeconds,
+                            onChange: _setIncrement,
+                            onChangeEnd: _setIncrement,
+                          ),
+                        ),
+                      ],
                     )
                   : const SizedBox.shrink(),
             ),

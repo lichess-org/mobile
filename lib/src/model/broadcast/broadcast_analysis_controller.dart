@@ -88,6 +88,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (!ref.mounted) return;
       if (state.value?.isNewOrOngoing == true) {
         _syncDebouncer(() {
           _reloadPgn();
@@ -99,6 +100,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
+        if (!ref.mounted) return;
         if (state.value?.isNewOrOngoing == true) {
           _syncDebouncer(() {
             _reloadPgn();
