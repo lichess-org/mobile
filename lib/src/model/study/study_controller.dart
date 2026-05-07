@@ -58,6 +58,8 @@ class StudyController extends AsyncNotifier<StudyState>
 
   late SocketClient _socketClient;
 
+  static Uri socketUri(StudyId id) => Uri(path: '/study/$id/socket/v6');
+
   @override
   @protected
   SocketClient get socketClient => _socketClient;
@@ -75,7 +77,7 @@ class StudyController extends AsyncNotifier<StudyState>
     });
 
     final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/${options.id}/socket/v6'));
+    _socketClient = socketPool.open(socketUri(options.id));
 
     final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);
 
