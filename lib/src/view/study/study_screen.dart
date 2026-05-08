@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -148,33 +149,34 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
+  void _initTabs() {
+    tabs = [
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
+      AnalysisTab.moves,
+      if (widget.studyState.isServerAnalysisAllowed) AnalysisTab.summary,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      length: tabs.length,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
 
-    tabs = [
-      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
-      AnalysisTab.moves,
-    ];
-
-    _tabController = TabController(vsync: this, initialIndex: tabs.length - 1, length: tabs.length);
+    _initTabs();
   }
 
   @override
   void didUpdateWidget(covariant _StudyScreen oldWidget) {
-    // If the study has not yet loaded the opening explorer and it is now available
-    // with this chapter, add the opening tab.
-    // We don't want to remove a tab, so if the opening explorer is not available
-    // anymore, we keep the tabs as they are.
-    // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
-    if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
-      tabs = [AnalysisTab.explorer, AnalysisTab.moves];
-      _tabController = TabController(
-        vsync: this,
-        initialIndex: tabs.length - 1,
-        length: tabs.length,
-      );
+    if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
+      _tabController.dispose();
+      _initTabs();
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -401,6 +403,19 @@ class _StudyMenu extends ConsumerWidget {
   }
 }
 
+class _CannotRequestServerAnalysisReason extends StatelessWidget {
+  const _CannotRequestServerAnalysisReason({required this.reason});
+
+  final String reason;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: Text(reason)),
+    );
+  }
+}
+
 class _Body extends ConsumerWidget {
   const _Body({required this.options, required this.tabController, required this.tabs});
 
@@ -482,6 +497,38 @@ class _Body extends ConsumerWidget {
               );
             } else {
               return const Center(child: Text('Opening explorer not available.'));
+            }
+          case AnalysisTab.summary:
+            switch (studyState.chapterServerAnalysisStatus) {
+              case ChapterServerAnalysisStatus.canRequest || ChapterServerAnalysisStatus.available:
+                return ServerAnalysisSummary(
+                  serverAnalysisSource: studyState.serverAnalysisSource,
+                  playersAnalysis: studyState.playersAnalysis,
+                  pgnHeaders: studyState.pgnHeaders,
+                  acplChartParams: studyState.acplChartData != null
+                      ? (
+                          acplChartData: studyState.acplChartData!,
+                          division: studyState.analysisSummary?.division,
+                          rootPly: studyState.root!.position.ply,
+                          currentNodePly: studyState.currentPosition!.ply,
+                          isOnMainline: studyState.isOnMainline,
+                          onJumpToNode: ref
+                              .read(studyControllerProvider(options).notifier)
+                              .jumpToNthNodeOnMainline,
+                        )
+                      : null,
+                  onRequestServerAnalysis: ref
+                      .read(studyControllerProvider(options).notifier)
+                      .requestServerAnalysis,
+                );
+              case ChapterServerAnalysisStatus.notEnoughMoves:
+                return _CannotRequestServerAnalysisReason(
+                  reason: context.l10n.studyTheChapterIsTooShortToBeAnalysed,
+                );
+              case ChapterServerAnalysisStatus.notWriteable:
+                return _CannotRequestServerAnalysisReason(
+                  reason: context.l10n.studyOnlyContributorsCanRequestAnalysis,
+                );
             }
           case _:
             return bottomChild;

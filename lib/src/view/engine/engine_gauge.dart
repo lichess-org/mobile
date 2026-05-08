@@ -143,7 +143,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
       curve: Curves.ease,
       builder: (BuildContext context, double value, Widget? child) {
         return Semantics(
-          label: context.l10n.evaluationGauge,
+          label: 'Engine evaluation',
           value: evalDisplay ?? context.l10n.loadingEngine,
           child: RepaintBoundary(
             child: Container(

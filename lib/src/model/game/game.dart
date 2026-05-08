@@ -92,8 +92,7 @@ abstract mixin class BaseGame {
     return side == Side.white ? white : black;
   }
 
-  ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
-      white.analysis != null && black.analysis != null
+  PlayersAnalysis? get playersAnalysis => white.analysis != null && black.analysis != null
       ? (white: white.analysis!, black: black.analysis!)
       : null;
 
@@ -361,8 +360,15 @@ sealed class GameMeta with _$GameMeta {
 @Freezed(fromJson: true, toJson: true)
 sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   const CorrespondenceClockData._();
-  const factory CorrespondenceClockData({required Duration white, required Duration black}) =
-      _CorrespondenceClockData;
+  const factory CorrespondenceClockData({
+    required Duration white,
+    required Duration black,
+    // Opaque token that the CorrespondenceClock widget uses to detect a new
+    // server-authoritative reading and reset its displayed time. Excluded from
+    // JSON so that serialized games always deserialize to resetId == 0, which
+    // is fine: the offline screen drives resets via lastModified instead.
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default(0) int resetId,
+  }) = _CorrespondenceClockData;
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);

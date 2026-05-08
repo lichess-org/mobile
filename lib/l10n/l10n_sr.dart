@@ -9,6 +9,9 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Преференсе налога';
 
   @override
@@ -2619,6 +2622,16 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Недавне партије';
 
   @override
@@ -2702,9 +2715,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Прикажи стрелице за варијацију';
-
-  @override
-  String get evaluationGauge => 'Мерило процене';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2984,15 +2994,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get checkSpamFolder => 'Такође провери фасциклу са спам порукама, можда је тамо. Ако је ту, обележи поруку тако да није спам.';
 
   @override
-  String get emailForSignupHelp => 'Ако ништа од овога не помаже, онда нам пошаљи овај мејл:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Ископирај горњи текст и пошаљи га на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ускоро ћемо те контактирати како бисмо ти помогли да завршиш своју регистрацију.';
 
   @override
   String accountConfirmed(String param) {

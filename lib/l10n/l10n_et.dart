@@ -9,6 +9,9 @@ class AppLocalizationsEt extends AppLocalizations {
   AppLocalizationsEt([String locale = 'et']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -2603,6 +2606,16 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Hiljutised mängud';
 
   @override
@@ -2686,9 +2699,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Hinnangunäidik';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2968,15 +2978,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get checkSpamFolder => 'Kiri võib sattuda ka rämpsposti kausta. Sel juhul palun märkige see mitte rämpspostina.';
 
   @override
-  String get emailForSignupHelp => 'Kui kõik muu ei õnnestu, saatke meile see e-kiri:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopeerige ülaltoodud tekst ja saatke see aadressile $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Me võtame teiega peagi ühendust, et aidata teil registreerimist lõpule viia.';
 
   @override
   String accountConfirmed(String param) {

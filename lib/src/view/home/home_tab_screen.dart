@@ -459,19 +459,19 @@ class _LichessMessageBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .push(
-              ConversationScreen.buildRoute(
-                context,
-                user: const LightUser(id: UserId('lichess'), name: 'lichess'),
-              ),
-            )
-            .then((_) => ref.invalidate(unreadMessagesProvider));
-      },
-      child: ColoredBox(
-        color: theme.colorScheme.tertiaryContainer,
+    return Material(
+      color: theme.colorScheme.tertiaryContainer,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(
+                ConversationScreen.buildRoute(
+                  context,
+                  user: const LightUser(id: UserId('lichess'), name: 'lichess'),
+                ),
+              )
+              .then((_) => ref.invalidate(unreadMessagesProvider));
+        },
         child: Padding(
           padding: Styles.bodyPadding,
           child: Column(

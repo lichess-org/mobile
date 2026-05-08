@@ -29,21 +29,14 @@ class BoardEditorController extends Notifier<BoardEditorState> {
         params?.initialFen ??
         (variant == Variant.chess960 ? randomChess960Position() : variant.initialPosition).fen;
     final setup = Setup.parseFen(fen);
-    final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
     final pieces = readFen(fen).lock;
 
-    final castlingRights = IMap({
-      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
-      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
-      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
-      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
-    });
     return BoardEditorState(
       orientation: Side.white,
       sideToPlay: setup.turn,
       variant: variant,
       pieces: pieces,
-      castlingRights: castlingRights,
+      castlingRights: _getCastlingRights(variant, setup),
       editorPointerMode: EditorPointerMode.drag,
       enPassantOptions: _calculateEnPassantOptions(pieces, setup.turn),
       enPassantSquare: setup.epSquare,
@@ -93,7 +86,36 @@ class BoardEditorController extends Notifier<BoardEditorState> {
   }
 
   void loadFen(String fen) {
-    _updatePosition(readFen(fen).lock);
+    final fenParts = fen.trim().split(RegExp(r'\s+'));
+    final setup = Setup.parseFen(fen);
+    final pieces = readFen(fen).lock;
+
+    if (fenParts.length == 1) {
+      // Partial FEN (piece placement only): preserve existing state for side to play,
+      // castling rights, etc. Castling is filtered by piece positions in _castlingRightsPart.
+      _updatePosition(pieces);
+    } else {
+      // Full FEN: update all fields from the parsed FEN.
+      state = state.copyWith(
+        pieces: pieces,
+        sideToPlay: setup.turn,
+        castlingRights: _getCastlingRights(state.variant, setup),
+        enPassantOptions: _calculateEnPassantOptions(pieces, setup.turn),
+        enPassantSquare: setup.epSquare,
+        halfmoves: setup.halfmoves,
+        fullmoves: setup.fullmoves,
+      );
+    }
+  }
+
+  IMap<CastlingRight, bool> _getCastlingRights(Variant variant, Setup setup) {
+    final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
+    return IMap({
+      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
+      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
+      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
+      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
+    });
   }
 
   /// Calculates the squares where an en passant capture could be possible.

@@ -9,6 +9,9 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontaj Preferoj';
 
   @override
@@ -2603,6 +2606,16 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Lastaj ludoj';
 
   @override
@@ -2686,9 +2699,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Montri variaĵojn sagojn';
-
-  @override
-  String get evaluationGauge => 'Gaŭĝo de rangado';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2968,15 +2978,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get checkSpamFolder => 'Ankaŭ kontrolu vian trudmesaĝujon, ĝi povus alveni tie. Se estas tiel, marku ĝin kiel ne truda.';
 
   @override
-  String get emailForSignupHelp => 'Se ĉio antaŭdirita ne funkcias, sendu al ni ĉi tiun retleteron:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiu kaj algluu la supran tekston kaj sendu ĝin al $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ni estos kun vi baldaŭ por helpi vin plenigi vian registriĝon.';
 
   @override
   String accountConfirmed(String param) {

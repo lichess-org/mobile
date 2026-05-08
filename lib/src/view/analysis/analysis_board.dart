@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -99,7 +101,7 @@ abstract class AnalysisBoardState<
 
     final bestMoveShapes = computeBestMoveShapes(
       // cloud eval might have more lines than local eval so make sure to only show as many as allowed
-      eval.bestMoves.take(enginePrefs.numEvalLines).toIList(),
+      eval.bestMoves.take(math.max(1, enginePrefs.numEvalLines)).toIList(),
       currentPosition.turn,
       pieceAssets,
       // Same colors as in the Web UI with a slightly different opacity

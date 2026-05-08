@@ -114,7 +114,10 @@ class Engineline extends ConsumerWidget {
     final evalString = pvData.evalString;
 
     return InkWell(
-      onTap: () => onTapMove?.call(Move.parse(pvData.moves[0])!),
+      onTap: () {
+        final move = Move.parse(pvData.moves[0]);
+        if (move != null) onTapMove?.call(move);
+      },
       child: SizedBox(
         height: kEngineLineHeight,
         child: Padding(

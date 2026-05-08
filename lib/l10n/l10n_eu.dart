@@ -9,6 +9,9 @@ class AppLocalizationsEu extends AppLocalizations {
   AppLocalizationsEu([String locale = 'eu']) : super(locale);
 
   @override
+  String get mobileAccount => 'Kontua';
+
+  @override
   String get mobileAccountPreferences => 'Kontuaren ezarpenak';
 
   @override
@@ -2603,6 +2606,16 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Azken partidak';
 
   @override
@@ -2686,9 +2699,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Erakutsi aldaeren geziak';
-
-  @override
-  String get evaluationGauge => 'Ebaluazio langa';
 
   @override
   String get visualMotifs => 'Ikurrak';
@@ -2968,15 +2978,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get checkSpamFolder => 'Zabor mezuen karpetan begiratu, batzuetan horra joaten dira-eta emailak. Horrela bada, esan zaborra ez dela.';
 
   @override
-  String get emailForSignupHelp => 'Beste guztiak huts egin badu, bidali guri email hau:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiatu eta itsatsi goiko mezua eta bidali $param helbidera';
+  String sendEmailForAccountVerification(String param) {
+    return 'Zure baieztapen emaila ezin baduzu aurkitu, idatzi $param helbidera eta kontua baieztatu egingo dugu.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Laster jarriko gara zurekin harremanetan zure izen-ematea osatzeko.';
 
   @override
   String accountConfirmed(String param) {

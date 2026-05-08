@@ -385,6 +385,49 @@ void main() {
         expect(find.byKey(const Key('f1-whitebishop')), findsNothing);
       });
 
+      testWidgets('Pasting FEN with black to move correctly sets side to play', (tester) async {
+        // Same position as above but with black to move
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 2 3';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        final state = container.read(boardEditorControllerProvider(null));
+        expect(state.sideToPlay, Side.black);
+      });
+
+      testWidgets('Pasting FEN correctly updates castling rights', (tester) async {
+        // Start with a position that has all castling rights (default start)
+        // then paste a FEN where only white king-side and black queen-side castling remain
+        const fen = 'r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w Kq - 0 1';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        final state = container.read(boardEditorControllerProvider(null));
+
+        expect(state.castlingRights[CastlingRight.whiteKing], isTrue);
+        expect(state.castlingRights[CastlingRight.whiteQueen], isFalse);
+        expect(state.castlingRights[CastlingRight.blackKing], isFalse);
+        expect(state.castlingRights[CastlingRight.blackQueen], isTrue);
+      });
+
       testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
         _mockClipboard('not a valid fen');
 

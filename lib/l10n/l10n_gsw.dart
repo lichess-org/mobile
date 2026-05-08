@@ -9,6 +9,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   AppLocalizationsGsw([String locale = 'gsw']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Konto Ischtellige';
 
   @override
@@ -2603,6 +2606,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Aktuelli Schpiel';
 
   @override
@@ -2686,9 +2699,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Pfil für Variante azeige';
-
-  @override
-  String get evaluationGauge => 'Bewertigs-Massschtab';
 
   @override
   String get visualMotifs => 'Visuelli Motiv';
@@ -2968,15 +2978,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get checkSpamFolder => 'Lueg au im Spam-Ordner, es chönnt det glandet si. Wänn ja, lösch d\'Spam-Markierig.';
 
   @override
-  String get emailForSignupHelp => 'Wänn alles nöd gaht, schick eus die E-Mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier de oberi Text, füeg en i und schick en an $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Mir mälded eus in Chürzi, dass du dini Amäldig abschlüsse chasch.';
 
   @override
   String accountConfirmed(String param) {

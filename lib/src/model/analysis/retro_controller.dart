@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.d
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:logging/logging.dart';
@@ -79,7 +81,8 @@ final retroControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'RetroControllerProvider',
     );
 
-class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMixin {
+class RetroController extends AsyncNotifier<RetroState>
+    with EngineEvaluationMixin, ServerAnalysisMixin {
   RetroController(this.options);
 
   final RetroOptions options;
@@ -98,15 +101,12 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
   @override
   @protected
-  Node get positionTree => _root;
+  Root get positionTree => _root;
 
   @override
   Future<RetroState> build() async {
-    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
-
     ref.onDispose(() {
       _incorrectMoveTimer?.cancel();
-      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -118,8 +118,9 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
     _root = _game.makeTree();
 
-    if (_game.serverAnalysis == null) {
+    if (_game.playersAnalysis == null) {
       final retroState = RetroState(
+        gameId: options.id,
         serverAnalysisAvailable: false,
         mistakes: const IList.empty(),
         currentMistakeIndex: 0,
@@ -139,15 +140,11 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
       state = AsyncValue.data(retroState);
 
-      // Attach listener BEFORE possibly requesting analysis,
-      // so we don't miss the first progress event.
-      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
-
-      if (serverAnalysisService.currentAnalysis.value != options.id) {
-        await serverAnalysisService.requestAnalysis(options.id);
-      } else {
-        // Analysis is already running, call the listener immediately to update the progress bar.
-        _listenToServerAnalysisEvents();
+      if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
+        requestServerAnalysis().catchError((Object e, StackTrace s) {
+          _logger.warning('Failed to request server analysis', e, s);
+          state = AsyncError(e, s);
+        });
       }
 
       unawaited(
@@ -236,6 +233,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     )).nonNulls.toIList();
 
     return RetroState(
+      gameId: options.id,
       serverAnalysisAvailable: true,
       mistakes: mistakes,
       currentMistakeIndex: 0,
@@ -474,22 +472,19 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     }
   }
 
-  Future<void> _listenToServerAnalysisEvents() async {
+  @override
+  Future<void> onServerAnalysisEvent(ServerEvalEvent event) async {
     if (!state.hasValue) return;
 
-    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
-    if (event != null && event.$1 == options.id) {
-      ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
-      final progress = event.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
-      state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
+    final progress = event.evals.where((e) => e.hasEval).length / _root.mainline.length;
+    state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
-      if (event.$2.isAnalysisComplete) {
-        if (_serverAnalysisCompleter.isCompleted == false) {
-          _serverAnalysisCompleter.complete();
-        }
-        state = AsyncData(await _computeMistakes(options.initialSide));
-        requestEval();
+    if (event.isAnalysisComplete) {
+      if (_serverAnalysisCompleter.isCompleted == false) {
+        _serverAnalysisCompleter.complete();
       }
+      state = AsyncData(await _computeMistakes(options.initialSide));
+      requestEval();
     }
   }
 }
@@ -498,7 +493,11 @@ enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, do
 
 @freezed
 sealed class RetroState
-    with _$RetroState, AnalysisExplosionMixin, EvaluationMixinState<RetroState>
+    with
+        _$RetroState,
+        AnalysisExplosionMixin,
+        EvaluationMixinState<RetroState>,
+        ServerAnalysisMixinState
     implements CommonAnalysisState {
   const RetroState._();
 
@@ -507,6 +506,7 @@ sealed class RetroState
       copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory RetroState({
+    required GameId gameId,
     required bool serverAnalysisAvailable,
 
     /// Progress of server analysis for the whole game, from 0.0 to 1.0.
@@ -526,6 +526,9 @@ sealed class RetroState
     NormalMove? promotionMove,
     @Default(false) bool engineInThreatMode,
   }) = _RetroState;
+
+  @override
+  ServerAnalysisSource get serverAnalysisSource => ServerAnalysisSource.game(gameId: gameId);
 
   @override
   bool get alwaysRequestCloudEval => false;

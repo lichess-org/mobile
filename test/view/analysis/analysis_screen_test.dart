@@ -1077,6 +1077,13 @@ void main() {
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(BoardShapeWidget), findsOne);
       });
+
+      testWidgets('is displayed even when number of engine lines is set to 0', (tester) async {
+        await makeEngineTestApp(tester, numEvalLines: 0);
+        // ensure that the eval is displayed and pending eval throttle time is over
+        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+        expect(find.byType(BoardShapeWidget), findsOne);
+      });
     });
 
     group('show threat button', () {

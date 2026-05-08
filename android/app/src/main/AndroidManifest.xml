@@ -75,7 +75,42 @@
                 <data android:pathPattern="/study/......../........" />
                 <data android:pathPattern="/tournament/........" />
 
-                <data android:pathPattern="/@/.*" />
+                <!--
+                  User profile links: /@/<username> where usernames are 2–30 chars.
+                  Fixed-length patterns are used instead of /@/.* to exclude sub-paths
+                  like /@/username/blog/... which are not supported in the app.
+                  pathPattern matches the full path so /@/.. only matches a 2-char username,
+                  not /@/username/blog/slug/id.
+                -->
+                <data android:pathPattern="/@/.." />
+                <data android:pathPattern="/@/..." />
+                <data android:pathPattern="/@/...." />
+                <data android:pathPattern="/@/....." />
+                <data android:pathPattern="/@/......" />
+                <data android:pathPattern="/@/......." />
+                <data android:pathPattern="/@/........" />
+                <data android:pathPattern="/@/........." />
+                <data android:pathPattern="/@/.........." />
+                <data android:pathPattern="/@/..........." />
+                <data android:pathPattern="/@/............" />
+                <data android:pathPattern="/@/............." />
+                <data android:pathPattern="/@/.............." />
+                <data android:pathPattern="/@/..............." />
+                <data android:pathPattern="/@/................" />
+                <data android:pathPattern="/@/................." />
+                <data android:pathPattern="/@/.................." />
+                <data android:pathPattern="/@/..................." />
+                <data android:pathPattern="/@/...................." />
+                <data android:pathPattern="/@/....................." />
+                <data android:pathPattern="/@/......................" />
+                <data android:pathPattern="/@/......................." />
+                <data android:pathPattern="/@/........................" />
+                <data android:pathPattern="/@/........................." />
+                <data android:pathPattern="/@/.........................." />
+                <data android:pathPattern="/@/..........................." />
+                <data android:pathPattern="/@/............................" />
+                <data android:pathPattern="/@/............................." />
+                <data android:pathPattern="/@/.............................." />
                 <data android:pathPattern="/tv/.*" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
