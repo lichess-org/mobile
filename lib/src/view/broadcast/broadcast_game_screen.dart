@@ -387,8 +387,6 @@ enum PgnTags {
   blackFideId('BlackFideId', isLink: true),
   timeControl('TimeControl', isLink: false),
   result('Result', isLink: false),
-  site('Site', isLink: false),
-  event('Event', isLink: false),
   round('Round', isLink: false);
 
   const PgnTags(this.tagName, {required this.isLink});
