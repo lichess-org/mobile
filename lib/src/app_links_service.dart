@@ -381,7 +381,12 @@ class AppLinksService {
   }
 
   /// Handles an app link [Uri] by navigating to the corresponding screen(s).
-  Future<void> handleAppLink(BuildContext context, Uri uri, {bool animated = true}) async {
+  Future<void> handleAppLink(
+    BuildContext context,
+    Uri uri, {
+    bool animated = true,
+    bool allowBrowserFallback = true,
+  }) async {
     if (_isQuickPairingLink(uri)) {
       _handleQuickPairingLink(context, uri);
       return;
