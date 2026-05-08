@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
-import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 
@@ -270,8 +269,7 @@ class TvController extends AsyncNotifier<TvState> {
         final json = event.data as Map<String, dynamic>;
         final eventChannel = pick(json, 'channel').asTvChannelOrNull();
         if (eventChannel != null && eventChannel == params.channel) {
-          final data = TvSelectEvent.fromJson(json);
-          _moveToNextGame((data.id, data.orientation));
+          unawaited(startWatching());
         }
     }
   }
