@@ -1150,7 +1150,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             if (selectedTeamId == null) {
                               return; // User cancelled
                             }
-
+                            if (!mounted) return;
                             setState(() {
                               joinOrLeaveInProgress = true;
                             });
@@ -1166,7 +1166,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             if (entryCode == null || entryCode.isEmpty) {
                               return;
                             }
-
+                            if (!mounted) return;
                             setState(() {
                               joinOrLeaveInProgress = true;
                             });
@@ -1176,6 +1176,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                                   .read(tournamentControllerProvider(widget.state.id).notifier)
                                   .joinOrPause(entryCode: entryCode);
                             } catch (e) {
+                              if (!mounted) return;
                               setState(() {
                                 joinOrLeaveInProgress = false;
                               });

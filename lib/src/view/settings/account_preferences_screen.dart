@@ -56,9 +56,11 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
     try {
       await f();
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

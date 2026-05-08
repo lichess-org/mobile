@@ -161,6 +161,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       );
                       if (isOk == true) {
                         await ref.read(nnueServiceProvider).deleteNNUEFiles();
+                        if (!mounted) return;
                         setState(() {
                           _hasVerifiedNNUEFiles = false;
                         });

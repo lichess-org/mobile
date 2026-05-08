@@ -32,9 +32,11 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
       try {
         await precachePieceImages(value);
       } finally {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
     }
   }
