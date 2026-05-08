@@ -311,12 +311,14 @@ void main() {
 
     testWidgets('Requests server analysis if not already running', (WidgetTester tester) async {
       final mockAnalysisService = MockServerAnalysisService();
-      final currentAnalysis = ValueNotifier<GameId?>(null);
-      final evalEvents = ValueNotifier<(GameAnyId, ServerEvalEvent)?>(null);
+      final currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
+      final evalEvents = ValueNotifier<(ServerAnalysisSource, ServerEvalEvent)?>(null);
       when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
       when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
-      when(() => mockAnalysisService.requestAnalysis(testId)).thenAnswer((_) async {
-        currentAnalysis.value = testId;
+      when(
+        () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
+      ).thenAnswer((_) async {
+        currentAnalysis.value = const ServerAnalysisSource.game(gameId: testId);
       });
 
       await tester.pumpWidget(
@@ -337,11 +339,11 @@ void main() {
 
       expect(find.text('Calculating moves...'), findsOneWidget);
 
-      expect(currentAnalysis.value, testId);
+      expect(currentAnalysis.value, const ServerAnalysisSource.game(gameId: testId));
 
       // Finish analysis
       evalEvents.value = (
-        testId,
+        const ServerAnalysisSource.game(gameId: testId),
         ServerEvalEvent(evals: <ExternalEval>[].lock, tree: {}, isAnalysisComplete: true),
       );
       await tester.pump(); // Wait for eval event to be processed
@@ -350,8 +352,10 @@ void main() {
 
     testWidgets('Does not request analysis if already running', (WidgetTester tester) async {
       final mockAnalysisService = MockServerAnalysisService();
-      final currentAnalysis = ValueNotifier<GameId?>(testId);
-      final evalEvents = ValueNotifier<(GameAnyId, ServerEvalEvent)?>(null);
+      final currentAnalysis = ValueNotifier<ServerAnalysisSource?>(
+        const ServerAnalysisSource.game(gameId: testId),
+      );
+      final evalEvents = ValueNotifier<(ServerAnalysisSource, ServerEvalEvent)?>(null);
       when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
       when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
 
@@ -375,13 +379,15 @@ void main() {
 
       // Finish analysis
       evalEvents.value = (
-        testId,
+        const ServerAnalysisSource.game(gameId: testId),
         ServerEvalEvent(evals: <ExternalEval>[].lock, tree: {}, isAnalysisComplete: true),
       );
       await tester.pump(); // Wait for eval event to be processed
       expect(find.text('No significant mistakes found for White'), findsOneWidget);
 
-      verifyNever(() => mockAnalysisService.requestAnalysis(testId));
+      verifyNever(
+        () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
+      );
     });
   });
 }

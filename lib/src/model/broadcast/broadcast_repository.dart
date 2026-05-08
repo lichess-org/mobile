@@ -100,10 +100,7 @@ class BroadcastRepository {
   }
 
   Division _divisionFromPick(RequiredPick pick) {
-    return Division(
-      middlegame: pick('middle').asDoubleOrNull(),
-      endgame: pick('end').asDoubleOrNull(),
-    );
+    return Division(middlegame: pick('middle').asIntOrNull(), endgame: pick('end').asIntOrNull());
   }
 
   Future<IList<BroadcastPlayerWithOverallResult>> getPlayers(BroadcastTournamentId tournamentId) {

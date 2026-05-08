@@ -1277,6 +1277,7 @@ class InlineMove extends ConsumerWidget {
     final moveTextStyle = textStyle.copyWith(
       fontFamily: moveFontFamily,
       fontWeight: lineInfo.type == _LineType.inlineSideline ? FontWeight.normal : FontWeight.w600,
+      fontStyle: branch.isUserAdded ? FontStyle.italic : FontStyle.normal,
     );
 
     final indexTextStyle = textStyle.copyWith(color: _textColor(context, kIndexOpacity));

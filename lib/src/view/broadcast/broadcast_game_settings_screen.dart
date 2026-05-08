@@ -65,7 +65,8 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
-                title: Text(context.l10n.evaluationGauge),
+                // TODO: l10n
+                title: const Text('Show evaluation gauge'),
                 value: broadcastPrefs.showEvaluationGauge,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),

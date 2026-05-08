@@ -259,9 +259,8 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                     ? context.lichessColors.error
                     : Colors.transparent,
                 child: GestureDetector(
-                  onTap: () => {
-                    ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
-                  },
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
                   child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
                 ),
               ),

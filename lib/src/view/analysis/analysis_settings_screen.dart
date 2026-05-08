@@ -63,7 +63,8 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                       },
                     ),
                     SwitchSettingTile(
-                      title: Text(context.l10n.evaluationGauge),
+                      // TODO: l10n
+                      title: const Text('Show evaluation gauge'),
                       value: prefs.showEvaluationGauge,
                       onChanged: (value) => ref
                           .read(analysisPreferencesProvider.notifier)

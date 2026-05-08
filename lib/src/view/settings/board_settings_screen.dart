@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
+import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -46,6 +48,27 @@ class _Body extends ConsumerWidget {
           header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           hasLeading: false,
           children: [
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.board),
+              settingsValue: boardPrefs.boardTheme.label,
+              onTap: () {
+                Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
+              },
+            ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.pieceSet),
+              settingsValue: boardPrefs.pieceSet.label,
+              onTap: () {
+                Navigator.of(context).push(PieceSetScreen.buildRoute(context));
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesBoardCoordinates),
+              value: boardPrefs.coordinates,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
+              },
+            ),
             SwitchSettingTile(
               title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
               value: boardPrefs.magnifyDraggedPiece,

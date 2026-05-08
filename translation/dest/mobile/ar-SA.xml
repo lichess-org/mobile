@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">تفضيلات الحساب</string>
+  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">تفضيلات الحساب</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">سيتم تطبيق هذه التفضيلات على حساب ليتشيس الخاص بك وسيتم إستخدامها عبر جميع الأجهزة.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">جميع المباريات</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">هل أنت متأكد؟</string>
@@ -21,6 +21,7 @@
   <string name="newGame" comment="New game button in OTB and play against offline computer features">مباراة جديدة</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">لا توجد نتائج</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">أنت لا تتابع أي مستخدمين.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">موافق</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">على الرقعة</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">لاعبين بإسم \"%s\"</string>
@@ -44,7 +45,7 @@
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">الواجهات الرئيسية المصغّرة</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">وضع ملء الشاشة</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">إخفاء واجهة الجهاز أثناء اللعب. إستخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">إخفاء واجهة الجهاز أثناء اللعب. استخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">القطع المأسورة</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">اختر صورة</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">الخلفية المخصصة تعمل فقط في الوضع المظلم. يُوصى بصورة مظلمة.</string>
@@ -75,9 +76,18 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">في إنتظار الطرف الآخر...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">شاهد</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">مرحباً بكم في تطبيق Lichess!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">عرض اللعبة</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">نصيحة: يمكنك إضافة المزيد من الأدوات إلى الشاشة الرئيسية أو إزالة تلك التي لا تحتاج اليها!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">تجاهل</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">تخصيص</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">توقف إظهار التهديد</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">مكتمل</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">انتقل إلى صفحتي</string>
+  <string name="displayModeCompact" comment="">مصغر</string>
+  <string name="displayModeDetailed" comment="">مفصّل</string>
   <string name="openingExplorerNotAvailableOffline" comment="">مستكشف الإفتتحيات غير متاح دون إتصال</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">تم إنشاء التحدي: سيتم إبلاغك عند بداية اللعبة
+يمكنك فتحها في الصفحة الرئيسة</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">السابق</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">أو استيراد ملف PGN</string>
 </resources>

@@ -167,10 +167,12 @@ class GameBody extends ConsumerWidget {
                     },
                   ),
                 )
-              : gameState.game.correspondenceClock != null
+              : gameState.game.correspondenceClock != null &&
+                    gameState.game.lastPosition.fullmoves > 1
               ? CorrespondenceClock(
                   duration: gameState.game.correspondenceClock!.black,
                   active: gameState.activeClockSide == Side.black,
+                  resetId: gameState.game.correspondenceClock!.resetId,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
@@ -216,10 +218,12 @@ class GameBody extends ConsumerWidget {
                     },
                   ),
                 )
-              : gameState.game.correspondenceClock != null
+              : gameState.game.correspondenceClock != null &&
+                    gameState.game.lastPosition.fullmoves > 1
               ? CorrespondenceClock(
                   duration: gameState.game.correspondenceClock!.white,
                   active: gameState.activeClockSide == Side.white,
+                  resetId: gameState.game.correspondenceClock!.resetId,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
@@ -525,9 +529,10 @@ class _GameBottomBar extends ConsumerWidget {
                     final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
                     if (gamesWithMyTurn.isEmpty) return null;
                     final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
+                    // If the current game is the only one where it's my turn, disable.
+                    if (currentIndex != -1 && gamesWithMyTurn.length == 1) return null;
                     final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
-                    final nextTurn = gamesWithMyTurn.isEmpty ? null : gamesWithMyTurn[nextIndex];
-                    return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
+                    return () => onLoadGameCallback(gamesWithMyTurn[nextIndex].fullId);
                   },
                   orElse: () => null,
                 ),
