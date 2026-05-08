@@ -120,11 +120,6 @@ class TvController extends AsyncNotifier<TvState> {
     });
   }
 
-  Future<void> _moveToNextGame((GameId id, Side orientation) game) async {
-    final newState = await _connectWebsocket(game);
-    state = AsyncValue.data(newState);
-  }
-
   bool canGoBack() => state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
 
   bool canGoForward() =>
