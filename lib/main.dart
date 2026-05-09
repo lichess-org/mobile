@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
-Future<void> main() async {
+Future<void> main(List<String> args) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = AppLichessBinding.ensureInitialized();
 
@@ -35,10 +35,12 @@ Future<void> main() async {
   }
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    final lifecycleState = WidgetsBinding.instance.lifecycleState;
-    // Skip display initialization when the app is in detached state (no active view),
-    // which can happen when a Unified Push distributor forwards a message to the app.
-    if (lifecycleState != AppLifecycleState.detached) {
+    // Skip display initialization when the app is started in the background by Unified Push to
+    // avoid a crash.
+    //
+    // Ideally, we should also skip runApp to avoid running the full app when receiving a
+    // notification.
+    if (!args.contains('--unifiedpush-bg')) {
       await androidDisplayInitialization(widgetsBinding);
     }
   }

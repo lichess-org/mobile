@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
 import 'package:unifiedpush/unifiedpush.dart';
 
@@ -77,6 +79,9 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
+  /// Whether the device has been registered for push notifications.
+  bool _registeredDevice = false;
+
   AppLocalizations get _l10n => _ref.read(localizationsProvider).strings;
 
   FlutterLocalNotificationsPlugin get _notificationDisplay =>
@@ -90,70 +95,28 @@ class NotificationService {
   ///
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
-  Future<void> start() {
-    return UnifiedPush.initialize(
+  Future<void> start() async {
+    try {
+      await _notificationDisplay
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission();
+    } catch (err) {
+      _logger.warning('notification permission request failed with error: $err}');
+    }
+
+    final isRegistered = await UnifiedPush.initialize(
       onNewEndpoint: onNewEndpoint,
       onRegistrationFailed: onRegistrationFailed,
       onUnregistered: onUnregistered,
       onMessage: onMessage,
-    ).then((registered) {
-      if (registered) {
-        UnifiedPush.register(vapid: kLichessVapidPublicKey);
-      }
-    });
-  }
-
-  void onNewEndpoint(PushEndpoint endpoint, String instance) {
-    if (endpoint.pubKeySet == null) {
-      _logger.warning('no public key found');
-      return;
-    }
-
-    final body = {
-      'endpoint': endpoint.url,
-      'keys': {'auth': endpoint.pubKeySet!.auth, 'p256dh': endpoint.pubKeySet!.pubKey},
-    };
-
-    _ref
-        .withClient(
-          (client) => client.post(
-            Uri(path: '/push/subscribe'),
-            body: jsonEncode(body),
-            headers: {'Content-Type': 'application/json'},
-          ),
-        )
-        .then((response) {
-          final statusCode = response.statusCode;
-          if (200 <= statusCode && statusCode < 300) {
-            _logger.info('new endpoint sent succesfully');
-          } else {
-            _logger.warning('new endpoint sent but request failed with status code $statusCode');
-          }
-        })
-        .catchError((Object err) {
-          _logger.warning('sending new endpoint failed with error $err');
-        });
-  }
-
-  void onRegistrationFailed(FailedReason reason, String instance) {
-    _logger.warning('registration failed for reason: $reason');
-  }
-
-  void onUnregistered(String instance) {
-    _logger.info('device unregistered');
-  }
-
-  void onMessage(PushMessage message, String instance) {
-    final content = jsonDecode(utf8.decode(message.content)) as Map<String, dynamic>;
-    final channel = content['tag'] as String;
-    _notificationDisplay.show(
-      id: 0,
-      title: content['title'] as String,
-      body: content['body'] as String,
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(channel, channel),
-      ),
     );
+    if (isRegistered) {
+      UnifiedPush.register(vapid: kLichessVapidPublicKey);
+    } else {
+      if (_ref.read(isLoggedInProvider)) {
+        registerDevice();
+      }
+    }
   }
 
   /// Shows a notification.
@@ -205,20 +168,76 @@ class NotificationService {
   }
 
   /// Register the device for push notifications.
-  Future<void> registerDevice() {
+  ///
+  /// Returns true if the device was successfully registered, false otherwise.
+  Future<bool> registerDevice() async {
     _logger.info('register device for the first time');
-    return UnifiedPush.tryUseCurrentOrDefaultDistributor().then((success) {
-      if (success) {
-        UnifiedPush.register(vapid: kLichessVapidPublicKey);
-      } else {
-        _logger.info('could not find a distributor');
-      }
-    });
+    final canRegister = await UnifiedPush.tryUseCurrentOrDefaultDistributor();
+    if (canRegister) {
+      await UnifiedPush.register(vapid: kLichessVapidPublicKey);
+      return true;
+    } else {
+      _logger.info('could not find a distributor');
+      return false;
+    }
   }
 
   /// Unregister the device from push notifications.
-  Future<void> unregister() {
+  Future<void> unregister() async {
     _logger.info('will unregister');
-    return UnifiedPush.unregister();
+    return await UnifiedPush.unregister();
+  }
+
+  void onNewEndpoint(PushEndpoint endpoint, String instance) {
+    if (endpoint.pubKeySet == null) {
+      _logger.warning('no public key found');
+      return;
+    }
+
+    final body = {
+      'endpoint': endpoint.url,
+      'keys': {'auth': endpoint.pubKeySet!.auth, 'p256dh': endpoint.pubKeySet!.pubKey},
+    };
+
+    _ref
+        .withClient(
+          (client) => client.post(
+            Uri(path: '/push/subscribe'),
+            body: jsonEncode(body),
+            headers: {'Content-Type': 'application/json'},
+          ),
+        )
+        .then((response) {
+          final statusCode = response.statusCode;
+          if (200 <= statusCode && statusCode < 300) {
+            _logger.info('new endpoint sent succesfully');
+          } else {
+            _logger.warning('new endpoint sent but request failed with status code $statusCode');
+          }
+        })
+        .catchError((Object err) {
+          _logger.warning('sending new endpoint failed with error $err');
+        });
+  }
+
+  void onRegistrationFailed(FailedReason reason, String instance) {
+    _logger.warning('registration failed for reason: $reason');
+  }
+
+  void onUnregistered(String instance) {
+    _logger.info('device unregistered');
+  }
+
+  void onMessage(PushMessage message, String instance) {
+    final content = jsonDecode(utf8.decode(message.content)) as Map<String, dynamic>;
+    final channel = content['tag'] as String;
+    _notificationDisplay.show(
+      id: DateTime.now().microsecondsSinceEpoch % 100000000,
+      title: content['title'] as String,
+      body: content['body'] as String,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(channel, channel),
+      ),
+    );
   }
 }
