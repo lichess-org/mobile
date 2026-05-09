@@ -39,8 +39,8 @@ class ContactsScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<ContactsScreen> createState() => _ContactsScreenState();
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ContactsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ContactsScreen());
   }
 }
 
@@ -56,7 +56,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   Future<void> pushConversationScreen(LightUser user) async {
-    await Navigator.push(context, ConversationScreen.buildRoute(context, user: user));
+    await Navigator.push(context, ConversationScreen.buildRoute(user: user));
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
     controller.clear();

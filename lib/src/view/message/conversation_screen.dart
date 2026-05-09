@@ -46,8 +46,8 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
   const ConversationScreen({super.key, required this.user});
 
-  static Route<dynamic> buildRoute(BuildContext context, {required LightUser user}) {
-    return buildScreenRoute(context, screen: ConversationScreen(user: user));
+  static Route<dynamic> buildRoute({required LightUser user}) {
+    return buildScreenRoute(screen: ConversationScreen(user: user));
   }
 
   @override
@@ -91,7 +91,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () {
-            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user))
+            Navigator.push(context, UserOrProfileScreen.buildRoute(widget.user))
             // invalidate to refresh potential blocking status change
             .then((_) {
               if (context.mounted) {

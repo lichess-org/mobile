@@ -22,8 +22,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ThemeSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ThemeSettingsScreen());
   }
 
   @override
@@ -32,7 +32,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
   }
 }
 
-String shapeColorL10n(BuildContext context, ShapeColor shapeColor) => switch (shapeColor) {
+String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
   ShapeColor.green => 'Green',
   ShapeColor.red => 'Red',
   ShapeColor.blue => 'Blue',
@@ -142,7 +142,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? generalPrefs.backgroundColor!.$1.label
                           : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                       onTap: () {
-                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
+                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
                       },
                     ),
                     if (generalPrefs.backgroundColor != null ||
@@ -161,7 +161,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.board),
                       settingsValue: boardPrefs.boardTheme.label,
                       onTap: () {
-                        Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
+                        Navigator.of(context).push(BoardChoiceScreen.buildRoute());
                       },
                     ),
                     SettingsListTile(
@@ -169,7 +169,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.pieceSet),
                       settingsValue: boardPrefs.pieceSet.label,
                       onTap: () {
-                        Navigator.of(context).push(PieceSetScreen.buildRoute(context));
+                        Navigator.of(context).push(PieceSetScreen.buildRoute());
                       },
                     ),
                     SettingsListTile(
@@ -177,7 +177,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: const Text('Drawn shape color'),
                       explanation:
                           'This color is only used for shapes drawn by hand using two fingers.',
-                      settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
+                      settingsValue: shapeColorL10n(boardPrefs.shapeColor),
                       onTap: () {
                         showChoicePicker(
                           context,
@@ -186,7 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
                           labelBuilder: (t) => Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: shapeColorL10n(context, t)),
+                                TextSpan(text: shapeColorL10n(t)),
                                 const TextSpan(text: '   '),
                                 WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
                               ],

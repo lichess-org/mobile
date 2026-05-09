@@ -542,9 +542,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.biotech,
                 badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                  Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
                 },
               ),
             ] else if (gameState.game.finished)
@@ -633,9 +631,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
         if (gameState.game.abortable)
@@ -741,9 +737,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(TournamentScreen.buildRoute(context, gameState.tournament!.id));
+              Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
             },
           ),
       ],

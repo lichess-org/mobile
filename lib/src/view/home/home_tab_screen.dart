@@ -69,8 +69,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 
   final bool editModeEnabled;
 
-  static Route<dynamic> buildRoute(BuildContext context, {bool editModeEnabled = false}) {
-    return buildScreenRoute(context, screen: HomeTabScreen(editModeEnabled: editModeEnabled));
+  static Route<dynamic> buildRoute({bool editModeEnabled = false}) {
+    return buildScreenRoute(screen: HomeTabScreen(editModeEnabled: editModeEnabled));
   }
 
   @override
@@ -466,7 +466,6 @@ class _LichessMessageBanner extends ConsumerWidget {
           Navigator.of(context)
               .push(
                 ConversationScreen.buildRoute(
-                  context,
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
                 ),
               )
@@ -627,7 +626,7 @@ class _GreetingWidget extends ConsumerWidget {
         child: GestureDetector(
           onTap: () {
             ref.invalidate(accountProvider);
-            Navigator.of(context).push(ProfileScreen.buildRoute(context));
+            Navigator.of(context).push(ProfileScreen.buildRoute());
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -737,7 +736,6 @@ class _OngoingGamesCarousel extends ConsumerWidget {
             final game = list[index];
             Navigator.of(context, rootNavigator: true).push(
               GameScreen.buildRoute(
-                context,
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
                   fen: game.fen,
@@ -748,7 +746,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
             );
           },
           builder: (game) => OngoingGameCarouselItem(game: game),
-          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
+          moreScreenRouteBuilder: (context) => OngoingGamesScreen.buildRoute(),
           maxGamesToShow: maxGamesToShow,
         );
       case _:
@@ -775,9 +773,10 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
           list: data,
           onTap: (index) {
             final el = data[index];
-            Navigator.of(context, rootNavigator: true).push(
-              OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (el.$1, el.$2)),
-            );
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)));
           },
           builder: (el) => OngoingGameCarouselItem(
             game: OngoingGame(
@@ -796,7 +795,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
               secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
             ),
           ),
-          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
+          moreScreenRouteBuilder: (context) => OfflineCorrespondenceGamesScreen.buildRoute(),
           maxGamesToShow: maxGamesToShow,
         );
       },
@@ -827,7 +826,7 @@ class _OngoingGamesPreview extends ConsumerWidget {
           maxGamesToShow: maxGamesToShow,
           builder: (el) =>
               OngoingGamePreview(game: el, padding: const EdgeInsets.symmetric(vertical: 8.0)),
-          moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
+          moreScreenRouteBuilder: (context) => OngoingGamesScreen.buildRoute(),
         );
       case _:
         return const SizedBox.shrink();
@@ -850,7 +849,7 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
           list: data,
           maxGamesToShow: maxGamesToShow,
           builder: (el) => OfflineCorrespondenceGamePreview(game: el.$2, lastModified: el.$1),
-          moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
+          moreScreenRouteBuilder: (context) => OfflineCorrespondenceGamesScreen.buildRoute(),
         );
       },
       orElse: () => const SizedBox.shrink(),
@@ -910,7 +909,7 @@ class _PlayerScreenButton extends ConsumerWidget {
         onPressed: !isOnline
             ? null
             : () {
-                Navigator.of(context).push(PlayerScreen.buildRoute(context));
+                Navigator.of(context).push(PlayerScreen.buildRoute());
               },
       ),
       orElse: () => SemanticIconButton(
@@ -953,7 +952,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
             ? null
             : () {
                 ref.invalidate(challengesProvider);
-                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
               },
       ),
       _ => SemanticIconButton(
@@ -1109,7 +1108,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
                             Navigator.of(
                               context,
                               rootNavigator: true,
-                            ).push(EngineSettingsScreen.buildRoute(context));
+                            ).push(EngineSettingsScreen.buildRoute());
                           },
                           // TODO l10n
                           child: const Text('Open settings'),
@@ -1142,7 +1141,7 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
         LichessBinding.instance.numAppStarts <= kColdAppStartsHideCustomizationTipThreshold;
   }
 
-  void _setHideHomeWidgetCustomizationTip(BuildContext context) {
+  void _setHideHomeWidgetCustomizationTip() {
     LichessBinding.instance.sharedPreferences.setBool(kHideHomeWidgetCustomizationTip, true);
 
     // trigger rebuild to hide the tip
@@ -1184,15 +1183,15 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
                       Navigator.of(
                         context,
                         rootNavigator: true,
-                      ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+                      ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
 
-                      _setHideHomeWidgetCustomizationTip(context);
+                      _setHideHomeWidgetCustomizationTip();
                     },
                     child: Text(context.l10n.mobileCustomizeButton),
                   ),
                   TextButton(
                     onPressed: () {
-                      _setHideHomeWidgetCustomizationTip(context);
+                      _setHideHomeWidgetCustomizationTip();
                     },
                     child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
                   ),

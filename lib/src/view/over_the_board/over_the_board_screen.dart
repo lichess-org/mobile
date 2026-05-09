@@ -42,13 +42,8 @@ class OverTheBoardScreen extends StatelessWidget {
   /// Initial variant to be preselected in the "New Game" dialog.
   final Variant? initialVariant;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -418,7 +413,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,

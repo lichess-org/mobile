@@ -51,8 +51,8 @@ class StudyScreen extends StatelessWidget {
 
   final StudyOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, StudyOptions options) {
-    return buildScreenRoute(context, screen: StudyScreen(options: options));
+  static Route<dynamic> buildRoute(StudyOptions options) {
+    return buildScreenRoute(screen: StudyScreen(options: options));
   }
 
   @override
@@ -234,7 +234,7 @@ class _StudyMenu extends ConsumerWidget {
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () {
-            Navigator.of(context).push(StudySettingsScreen.buildRoute(context, options));
+            Navigator.of(context).push(StudySettingsScreen.buildRoute(options));
           },
         ),
         if (authUser != null)
@@ -387,7 +387,7 @@ class _StudyMenu extends ConsumerWidget {
           ContextMenuAction(
             label: context.l10n.chatRoom,
             onPressed: () {
-              Navigator.of(context).push(ChatScreen.buildRoute(context, options: chatOptions));
+              Navigator.of(context).push(ChatScreen.buildRoute(options: chatOptions));
             },
             icon: Icons.chat_bubble_outline,
           ),
@@ -665,7 +665,7 @@ class _StudyMembersSheet extends ConsumerWidget {
           ListTile(
             title: UserFullNameWidget(user: member.user),
             onTap: () {
-              Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, member.user));
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(member.user));
             },
           ),
       ],

@@ -514,7 +514,7 @@ void main() {
               child: const Text('Go to game'),
               onPressed: () => Navigator.of(
                 context,
-              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -563,7 +563,7 @@ void main() {
               child: const Text('Go to game'),
               onPressed: () => Navigator.of(
                 context,
-              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),

@@ -73,13 +73,8 @@ class OfflineComputerGameScreen extends ConsumerWidget {
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -397,7 +392,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
@@ -1038,7 +1032,6 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.pop(context);
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: game.id,
                   orientation: game.playerSide,

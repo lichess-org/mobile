@@ -289,7 +289,6 @@ class _GameRowState extends ConsumerState<_GameRow> {
         onTap: () {
           Navigator.of(context).push(
             BroadcastGameScreen.buildRoute(
-              context,
               tournamentId: widget.tournamentId,
               roundId: widget.roundId,
               gameId: widget.game.id,

@@ -35,7 +35,7 @@ class AccountMenuScreen extends ConsumerStatefulWidget {
 
   static Route<void> buildRoute(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return buildScreenRoute(context, screen: const AccountMenuScreen());
+      return buildScreenRoute(screen: const AccountMenuScreen());
     }
 
     return PageRouteBuilder<void>(
@@ -144,7 +144,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                         enabled: isOnline,
                         onTap: () {
                           ref.invalidate(accountProvider);
-                          _navigate(context, ProfileScreen.buildRoute(context));
+                          _navigate(context, ProfileScreen.buildRoute());
                         },
                       ),
                       if (kidMode)
@@ -195,7 +195,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                         title: Text(context.l10n.inbox),
                         enabled: isOnline,
                         onTap: () {
-                          _navigate(context, ContactsScreen.buildRoute(context));
+                          _navigate(context, ContactsScreen.buildRoute());
                         },
                       ),
                     ListTile(
@@ -205,7 +205,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                           : null,
                       title: Text(context.l10n.settingsSettings),
                       onTap: () {
-                        _navigate(context, SettingsScreen.buildRoute(context));
+                        _navigate(context, SettingsScreen.buildRoute());
                       },
                     ),
                     if (user != null)
@@ -243,7 +243,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                           : null,
                       title: Text(context.l10n.about),
                       onTap: () {
-                        _navigate(context, AboutScreen.buildRoute(context));
+                        _navigate(context, AboutScreen.buildRoute());
                       },
                     ),
                   ],
@@ -420,8 +420,8 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
 class AboutScreen extends ConsumerWidget {
   const AboutScreen({super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const AboutScreen());
+  static Route<void> buildRoute() {
+    return buildScreenRoute(screen: const AboutScreen());
   }
 
   @override

@@ -173,7 +173,7 @@ Widget _buildMainListItem(
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+          ).push(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
         },
       );
     default:
@@ -181,10 +181,7 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: angle,
         onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: angle));
+          Navigator.of(context, rootNavigator: true).push(PuzzleScreen.buildRoute(angle: angle));
         },
       );
   }
@@ -259,7 +256,7 @@ class _PuzzleMenu extends ConsumerWidget {
           title: context.l10n.puzzlePuzzleThemes,
           subtitle: context.l10n.mobilePuzzleThemesSubtitle,
           onTap: () {
-            Navigator.of(context).push(PuzzleThemesScreen.buildRoute(context));
+            Navigator.of(context).push(PuzzleThemesScreen.buildRoute());
           },
         ),
         _PuzzleMenuListTile(
@@ -277,7 +274,7 @@ class _PuzzleMenu extends ConsumerWidget {
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }
               : null,
         ),
@@ -288,7 +285,7 @@ class _PuzzleMenu extends ConsumerWidget {
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
                 }
               : null,
         ),
@@ -299,7 +296,7 @@ class _PuzzleMenu extends ConsumerWidget {
             subtitle: context.l10n.puzzlePuzzleDashboardDescription,
             enabled: isOnline,
             onTap: isOnline
-                ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context))
+                ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute())
                 : null,
           ),
           _PuzzleMenuListTile(
@@ -311,7 +308,7 @@ class _PuzzleMenu extends ConsumerWidget {
                 ? () => Navigator.of(
                     context,
                     rootNavigator: true,
-                  ).push(PuzzleHistoryScreen.buildRoute(context))
+                  ).push(PuzzleHistoryScreen.buildRoute())
                 : null,
           ),
         ],
@@ -357,7 +354,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           clipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           onHeaderTap: showHeader
-              ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context))
+              ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute())
               : null,
           children: [PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5)],
         );
@@ -440,11 +437,7 @@ class DailyPuzzle extends ConsumerWidget {
           onTap: () {
             if (!context.mounted) return;
             Navigator.of(context, rootNavigator: true).push(
-              PuzzleScreen.buildRoute(
-                context,
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzle: data,
-              ),
+              PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzle: data),
             );
           },
         );

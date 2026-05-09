@@ -27,8 +27,8 @@ final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const FriendScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const FriendScreen());
   }
 
   @override
@@ -83,7 +83,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
         data: (data) {
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            onHeaderTap: () => _handleTap(context, data),
+            onHeaderTap: () => _handleTap(context),
             children: [
               for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
@@ -103,8 +103,8 @@ class OnlineFriendsWidget extends ConsumerWidget {
     );
   }
 
-  void _handleTap(BuildContext context, IList<OnlineFriend> followingOnlines) {
-    Navigator.of(context).push(FriendScreen.buildRoute(context));
+  void _handleTap(BuildContext context) {
+    Navigator.of(context).push(FriendScreen.buildRoute());
   }
 }
 
@@ -123,15 +123,12 @@ class _OnlineFriendListTile extends ConsumerWidget {
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(TvScreen.buildRoute(context, user: user));
+                Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
           : null,
-      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user)),
+      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
@@ -225,9 +222,8 @@ class _Following extends ConsumerWidget {
                   ),
                   child: UserListTile.fromUser(
                     user,
-                    onTap: () => Navigator.of(
-                      context,
-                    ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
+                    onTap: () =>
+                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(user.lightUser)),
                   ),
                 );
               },

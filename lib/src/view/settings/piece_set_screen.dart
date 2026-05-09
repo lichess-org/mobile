@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 class PieceSetScreen extends ConsumerStatefulWidget {
   const PieceSetScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PieceSetScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const PieceSetScreen());
   }
 
   @override

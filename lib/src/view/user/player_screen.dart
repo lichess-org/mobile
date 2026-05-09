@@ -18,8 +18,8 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PlayerScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const PlayerScreen());
   }
 
   @override
@@ -71,9 +71,8 @@ class _BodyState extends ConsumerState<_Body> {
             focusNode: _focusNode,
             onTap: () => Navigator.of(context).push(
               SearchScreen.buildRoute(
-                context,
                 onUserTap: (user) {
-                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user));
+                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
                 },
               ),
             ),

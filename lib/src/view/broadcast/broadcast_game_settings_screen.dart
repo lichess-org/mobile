@@ -16,12 +16,11 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
   }) {
-    return buildScreenRoute(context, screen: BroadcastGameSettingsScreen(roundId, gameId));
+    return buildScreenRoute(screen: BroadcastGameSettingsScreen(roundId, gameId));
   }
 
   @override

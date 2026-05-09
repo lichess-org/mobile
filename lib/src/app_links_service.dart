@@ -127,7 +127,7 @@ class AppLinksService {
         final id = appLinkUri.pathSegments[1];
         final chapter = appLinkUri.pathSegments.getOrNull(2);
         return [
-          StudyScreen.buildRoute(context, (
+          StudyScreen.buildRoute((
             id: StudyId(id),
             initialChapter: chapter != null ? StudyChapterId(chapter) : null,
           )),
@@ -137,12 +137,8 @@ class AppLinksService {
         if (appLinkUri.pathSegments.length > 4) {
           final gameId = BroadcastGameId(appLinkUri.pathSegments[4]);
           return [
-            BroadcastRoundScreenLoading.buildRoute(
-              context,
-              roundId,
-              initialTab: BroadcastRoundTab.boards,
-            ),
-            BroadcastGameScreen.buildRoute(context, roundId: roundId, gameId: gameId),
+            BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: BroadcastRoundTab.boards),
+            BroadcastGameScreen.buildRoute(roundId: roundId, gameId: gameId),
           ];
         } else {
           final fragment = appLinkUri.fragment;
@@ -151,32 +147,25 @@ class AppLinksService {
             final playerId = Uri.decodeComponent(fragment.substring('players/'.length));
             return [
               BroadcastRoundScreenLoading.buildRoute(
-                context,
                 roundId,
                 initialTab: BroadcastRoundTab.players,
               ),
-              BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, playerId),
+              BroadcastPlayerResultsScreenLoading.buildRoute(roundId, playerId),
             ];
           }
-          return [BroadcastRoundScreenLoading.buildRoute(context, roundId, initialTab: tab)];
+          return [BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: tab)];
         }
       case 'tournament':
         final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
-        return [TournamentScreen.buildRoute(context, tournamentId)];
+        return [TournamentScreen.buildRoute(tournamentId)];
       case 'training':
         final id = appLinkUri.pathSegments[1];
-        return [
-          PuzzleScreen.buildRoute(
-            context,
-            angle: PuzzleAngle.fromKey('mix'),
-            puzzleId: PuzzleId(id),
-          ),
-        ];
+        return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
       case 'tv':
         if (appLinkUri.pathSegments.length < 2) return null;
         final channel = TvChannel.nameMap.entryOrNull(appLinkUri.pathSegments[1]);
         if (channel != null) {
-          return [TvScreen.buildRoute(context, channel: channel.value)];
+          return [TvScreen.buildRoute(channel: channel.value)];
         } else {
           if (!context.mounted) return null;
           showSnackBar(
@@ -198,8 +187,8 @@ class AppLinksService {
           if (!context.mounted) return null;
 
           return isTv
-              ? [TvScreen.buildRoute(context, user: user.lightUser)]
-              : [UserOrProfileScreen.buildRoute(context, user.lightUser)];
+              ? [TvScreen.buildRoute(user: user.lightUser)]
+              : [UserOrProfileScreen.buildRoute(user.lightUser)];
         } catch (e) {
           if (!context.mounted) return null;
           showSnackBar(
@@ -266,7 +255,6 @@ class AppLinksService {
       }
       if (!context.mounted) return;
       final route = PuzzleScreen.buildRoute(
-        context,
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         puzzle: puzzle,
       );
@@ -310,7 +298,6 @@ class AppLinksService {
       if (game.finished || game.source == .import) {
         return [
           AnalysisScreen.buildRoute(
-            context,
             AnalysisOptions.archivedGame(
               orientation: orientation,
               gameId: gameId,
@@ -322,7 +309,7 @@ class AppLinksService {
 
       final user = game.playerOf(orientation).user;
       if (user != null) {
-        return [TvScreen.buildRoute(context, gameId: gameId, user: user, orientation: orientation)];
+        return [TvScreen.buildRoute(gameId: gameId, user: user, orientation: orientation)];
       }
     } catch (e, st) {
       _logger.info('Not a game link: $e', e, st);
@@ -411,7 +398,6 @@ class AppLinksService {
       final username = link.originText.substring(1);
       Navigator.of(context).push(
         UserOrProfileScreen.buildRoute(
-          context,
           LightUser(id: UserId.fromUserName(username), name: username),
         ),
       );

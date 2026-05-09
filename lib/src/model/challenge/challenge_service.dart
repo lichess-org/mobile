@@ -135,7 +135,7 @@ class ChallengeService {
         if (challenge != null) {
           showConfirmDialog(context, challenge);
         } else {
-          Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+          Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
         }
     }
   }
@@ -160,7 +160,7 @@ class ChallengeService {
     Navigator.of(
       context,
       rootNavigator: true,
-    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
+    ).push(GameScreen.buildRoute(source: ExistingGameSource(fullId)));
   }
 
   /// Accept a challenge and open the GameScreen for the created game.

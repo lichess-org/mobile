@@ -270,7 +270,7 @@ void main() {
               child: const Text('OTB'),
               onPressed: () => Navigator.of(
                 context,
-              ).push(buildScreenRoute<void>(context, screen: const OverTheBoardScreen())),
+              ).push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
             ),
           ),
         ),

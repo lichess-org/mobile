@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 class EngineSettingsScreen extends ConsumerStatefulWidget {
   const EngineSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const EngineSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const EngineSettingsScreen());
   }
 
   @override

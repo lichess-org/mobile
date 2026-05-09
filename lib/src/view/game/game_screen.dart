@@ -52,14 +52,12 @@ class GameScreen extends ConsumerStatefulWidget {
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required GameScreenSource source,
     LoadingPosition? loadingPosition,
     DateTime? lastMoveAt,
   }) {
     return buildScreenRoute(
-      context,
       screen: GameScreen(source: source, loadingPosition: loadingPosition, lastMoveAt: lastMoveAt),
     );
   }
@@ -195,7 +193,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   final savedSetup = ref.read(gameSetupPreferencesProvider);
                   Navigator.of(context, rootNavigator: true).pushReplacement(
                     GameScreen.buildRoute(
-                      context,
                       source: LobbySource(GameSeek.newOpponentFromGame(game, savedSetup)),
                     ),
                   );

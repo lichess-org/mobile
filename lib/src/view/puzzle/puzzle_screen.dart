@@ -74,8 +74,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   /// If set, load puzzles to replay from the given number of days.
   final int? replayDays;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
     Puzzle? puzzle,
@@ -83,7 +82,6 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     int? replayDays,
   }) {
     return buildScreenRoute(
-      context,
       screen: PuzzleScreen(
         angle: angle,
         puzzleId: puzzleId,
@@ -771,7 +769,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             onTap: () {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(
-                  context,
                   puzzleState.makeAnalysisOptions(
                     ref
                         .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
@@ -844,7 +841,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               if (context.mounted) {
                 Navigator.of(context).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.archivedGame(
                       orientation: puzzleState.pov,
                       gameId: game.id,
@@ -977,9 +973,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+                Navigator.of(context).push(BoardSettingsScreen.buildRoute(fullscreenDialog: true));
               },
             ),
           ],

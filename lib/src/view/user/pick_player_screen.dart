@@ -19,13 +19,11 @@ class PickPlayerScreen extends ConsumerWidget {
   final void Function(LightUser) onUserTap;
   final Widget title;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required void Function(LightUser) onUserTap,
     required Widget title,
   }) {
     return buildScreenRoute(
-      context,
       screen: PickPlayerScreen(onUserTap: onUserTap, title: title),
     );
   }
@@ -113,7 +111,6 @@ class _PlayersListState extends State<_PlayersList> {
             focusNode: _searchFocusNode,
             onTap: () => Navigator.of(context).push(
               SearchScreen.buildRoute(
-                context,
                 onUserTap: (user) {
                   Navigator.of(context).pop();
                   widget.onUserTap(user);

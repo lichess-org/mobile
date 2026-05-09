@@ -59,8 +59,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.title,
   });
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     BroadcastTournamentId? tournamentId,
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
@@ -69,7 +68,6 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? title,
   }) {
     return buildScreenRoute(
-      context,
       screen: BroadcastGameScreen(
         tournamentId: tournamentId,
         roundId: roundId,
@@ -173,9 +171,9 @@ class _BroadcastGameMenu extends ConsumerWidget {
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () {
-            Navigator.of(context).push(
-              BroadcastGameSettingsScreen.buildRoute(context, roundId: roundId, gameId: gameId),
-            );
+            Navigator.of(
+              context,
+            ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId));
           },
         ),
         ContextMenuAction(
@@ -589,14 +587,8 @@ class _PlayerWidget extends ConsumerWidget {
             if (player.id != null) {
               Navigator.of(context).push(
                 (tournamentId != null)
-                    ? BroadcastPlayerResultsScreen.buildRoute(
-                        context,
-                        tournamentId!,
-                        player,
-                        player.id!,
-                      )
+                    ? BroadcastPlayerResultsScreen.buildRoute(tournamentId!, player, player.id!)
                     : BroadcastPlayerResultsScreenLoading.buildRoute(
-                        context,
                         roundId,
                         player.id!,
                         player: player,

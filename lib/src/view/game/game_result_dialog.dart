@@ -197,9 +197,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             if (value.game.userAnalysable)
               FilledButton.tonal(
                 onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, value.analysisOptions));
+                  Navigator.of(context).push(AnalysisScreen.buildRoute(value.analysisOptions));
                 },
                 child: Text(context.l10n.analysis, textAlign: TextAlign.center),
               ),
@@ -250,7 +248,6 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,

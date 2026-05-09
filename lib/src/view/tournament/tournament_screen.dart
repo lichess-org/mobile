@@ -56,9 +56,8 @@ class TournamentScreen extends ConsumerStatefulWidget {
 
   static const String routeName = '/tournament';
 
-  static Route<void> buildRoute(BuildContext context, TournamentId id) {
+  static Route<void> buildRoute(TournamentId id) {
     return buildScreenRoute(
-      context,
       screen: TournamentScreen(id: id),
       settings: const RouteSettings(name: routeName),
     );
@@ -108,7 +107,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, source: ExistingGameSource(currentGameId)));
+          ).push(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
         }
       },
     );
@@ -489,9 +488,7 @@ class _TeamStanding extends ConsumerWidget {
                 style: TextStyle(color: context.lichessColors.primary),
               ),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(_AllTeamsScreen.buildRoute(context, state.id, teamBattle));
+                Navigator.of(context).push(_AllTeamsScreen.buildRoute(state.id, teamBattle));
               },
             ),
         ],
@@ -568,7 +565,7 @@ class _TeamStandingTile extends ConsumerWidget {
         style: const TextStyle(fontWeight: .bold, fontSize: 14),
       ),
       onTap: () {
-        _showTeamDetails(context, ref, tournamentId, team.id);
+        _showTeamDetails(context, tournamentId, team.id);
       },
     );
   }
@@ -639,7 +636,7 @@ class _StandingPlayer extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+        _showPlayerDetails(context, tournamentId, player.user.id);
       },
     );
   }
@@ -1223,12 +1220,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 }
 
-void _showPlayerDetails(
-  BuildContext context,
-  WidgetRef ref,
-  TournamentId tournamentId,
-  UserId userId,
-) {
+void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -1299,7 +1291,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                         onTap: tournamentState.value?.isSpectator == true
                             ? () => Navigator.of(
                                 context,
-                              ).push(UserOrProfileScreen.buildRoute(context, player.user))
+                              ).push(UserOrProfileScreen.buildRoute(player.user))
                             : null,
                       ),
                     ),
@@ -1468,7 +1460,6 @@ class _PairingTile extends ConsumerWidget {
               if (pairing.status != GameStatus.started && pairing.status != GameStatus.created) {
                 Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.archivedGame(
                       orientation: pairing.color,
                       gameId: pairing.gameId,
@@ -1479,7 +1470,6 @@ class _PairingTile extends ConsumerWidget {
                 // If game is still in progress, go to TV view
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(
-                    context,
                     gameId: pairing.gameId,
                     orientation: pairing.color,
                     user: player,
@@ -1526,12 +1516,7 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
   return (totalRating / player.pairings.length).round();
 }
 
-void _showTeamDetails(
-  BuildContext context,
-  WidgetRef ref,
-  TournamentId tournamentId,
-  TeamId teamId,
-) {
+void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -1719,7 +1704,7 @@ class _TeamPlayerTile extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+        _showPlayerDetails(context, tournamentId, player.user.id);
       },
     );
   }
@@ -1793,13 +1778,8 @@ class _AllTeamsScreen extends ConsumerWidget {
   final TournamentId tournamentId;
   final TeamBattleData teamBattle;
 
-  static Route<void> buildRoute(
-    BuildContext context,
-    TournamentId tournamentId,
-    TeamBattleData teamBattle,
-  ) {
+  static Route<void> buildRoute(TournamentId tournamentId, TeamBattleData teamBattle) {
     return buildScreenRoute(
-      context,
       screen: _AllTeamsScreen(tournamentId: tournamentId, teamBattle: teamBattle),
     );
   }

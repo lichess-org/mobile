@@ -17,8 +17,8 @@ class GameBookmarksScreen extends ConsumerWidget {
 
   final int nbBookmarks;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required int nbBookmarks}) {
-    return buildScreenRoute(context, screen: GameBookmarksScreen(nbBookmarks: nbBookmarks));
+  static Route<dynamic> buildRoute({required int nbBookmarks}) {
+    return buildScreenRoute(screen: GameBookmarksScreen(nbBookmarks: nbBookmarks));
   }
 
   @override
@@ -136,7 +136,6 @@ class _BodyState extends ConsumerState<_Body> {
                               ? (_) {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
-                                      context,
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,
                                         gameId: game.id,

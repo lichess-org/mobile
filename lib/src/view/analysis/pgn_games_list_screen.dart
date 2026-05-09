@@ -26,8 +26,8 @@ class PgnGamesListScreen extends StatefulWidget {
 
   final IList<PgnGame> games;
 
-  static Route<dynamic> buildRoute(BuildContext context, IList<PgnGame> games) {
-    return buildScreenRoute(context, screen: PgnGamesListScreen(games: games));
+  static Route<dynamic> buildRoute(IList<PgnGame> games) {
+    return buildScreenRoute(screen: PgnGamesListScreen(games: games));
   }
 
   @override
@@ -121,7 +121,6 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
-                  context,
                   AnalysisOptions.pgn(
                     // TODO generate unique id for each game, maybe based on the PGN headers?
                     id: const StringId('pgn_import_game'),

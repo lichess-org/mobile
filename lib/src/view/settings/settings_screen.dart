@@ -33,8 +33,8 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const SettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const SettingsScreen());
   }
 
   @override
@@ -62,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: Text(context.l10n.mobileAccountPreferences),
                   enabled: isOnline,
                   onTap: () {
-                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
+                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute());
                   },
                 ),
               ],
@@ -76,7 +76,7 @@ class SettingsScreen extends ConsumerWidget {
                 settingsValue:
                     '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
                 onTap: () {
-                  Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(SoundSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
@@ -105,7 +105,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute());
                 },
               ),
               ListTile(
@@ -115,9 +115,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+                  Navigator.of(context).push(HomeTabScreen.buildRoute(editModeEnabled: true));
                 },
               ),
               ListTile(
@@ -127,7 +125,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(BoardSettingsScreen.buildRoute());
                 },
               ),
               ListTile(
@@ -137,7 +135,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(EngineSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
@@ -174,7 +172,7 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
-                onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
+                onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
@@ -183,7 +181,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(AppLogSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(AppLogSettingsScreen.buildRoute());
                 },
               ),
               ListTile(

@@ -381,14 +381,9 @@ class BroadcastPlayerRow extends StatelessWidget {
       tileColor: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
       onTap: () {
         if (player.id != null) {
-          Navigator.of(context).push(
-            BroadcastPlayerResultsScreen.buildRoute(
-              context,
-              tournament.data.id,
-              player,
-              player.id!,
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(BroadcastPlayerResultsScreen.buildRoute(tournament.data.id, player, player.id!));
         }
       },
       onLongPress: hasTieBreaks ? () => _showTieBreaksBottomSheet(context) : null,
