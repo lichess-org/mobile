@@ -69,6 +69,7 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(options))) {
       case AsyncData(:final value):
         return _StudyScreen(options: options, studyState: value);
@@ -90,6 +91,7 @@ class _StudyScreenLoader extends ConsumerWidget {
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
+              smallBoard: studyPrefs.smallBoard,
               children: const [Center(child: Text('Failed to load study.'))],
             ),
           ),
@@ -127,6 +129,7 @@ class _StudyScreenLoader extends ConsumerWidget {
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
+              smallBoard: studyPrefs.smallBoard,
               children: const [Center(child: CircularProgressIndicator.adaptive())],
             ),
           ),
@@ -439,6 +442,7 @@ class _Body extends ConsumerWidget {
             dimension: boardSize,
             child: Center(child: Text('${variant.label} is not supported yet.')),
           ),
+          smallBoard: studyPrefs.smallBoard,
           children: const [SizedBox.shrink()],
         ),
       );
@@ -463,6 +467,7 @@ class _Body extends ConsumerWidget {
       sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+      smallBoard: studyPrefs.smallBoard,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {

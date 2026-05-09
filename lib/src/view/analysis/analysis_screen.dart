@@ -303,6 +303,7 @@ class _Body extends ConsumerWidget {
         sideToMove: analysisState.currentPosition.turn,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+        smallBoard: analysisPrefs.smallBoard,
         boardHeader: boardHeader,
         boardFooter: boardFooter,
         engineGaugeBuilder: showEvaluationGauge && analysisState.hasAvailableEval(enginePrefs)

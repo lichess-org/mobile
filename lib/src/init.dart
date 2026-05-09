@@ -9,13 +9,10 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -50,8 +47,6 @@ Future<void> initializeApp() async {
         final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
         await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
       }
-
-      _screenSizeBasedInitialization();
 
       _logger.info('First run initialization completed.');
     }
@@ -161,20 +156,4 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
-}
-
-// Adjusts some settings for small screens based on the MediaQuery data.
-Future<void> _screenSizeBasedInitialization() async {
-  final prefs = LichessBinding.instance.sharedPreferences;
-  final mediaQueryData = MediaQueryData.fromView(
-    WidgetsBinding.instance.platformDispatcher.views.first,
-  );
-  final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
-
-  final analysisPrefs = AnalysisPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.analysis.storageKey, jsonEncode(analysisPrefs.toJson()));
-  final studyPrefs = StudyPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.study.storageKey, jsonEncode(studyPrefs.toJson()));
-  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.broadcast.storageKey, jsonEncode(broadcastPrefs.toJson()));
 }

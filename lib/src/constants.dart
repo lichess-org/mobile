@@ -69,7 +69,7 @@ const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
 
 /// The threshold to detect screens with a small remaining height minus board.
-const kSmallHeightMinusBoard = 170;
+const kSmallHeightMinusBoard = 200;
 
 // annotations
 class _AllowedWidgetReturn {
