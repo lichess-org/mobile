@@ -51,7 +51,7 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => innacuracyColor,
+    .inaccuracy => inaccuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,
   };

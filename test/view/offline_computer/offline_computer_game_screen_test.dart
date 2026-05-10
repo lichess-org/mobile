@@ -1408,10 +1408,10 @@ void main() {
       expect((card.decoration! as BoxDecoration).color, Colors.lightGreen.withValues(alpha: 0.1));
     });
 
-    testWidgets('inaccuracy card background is innacuracyColor with low alpha', (tester) async {
+    testWidgets('inaccuracy card background is inaccuracyColor with low alpha', (tester) async {
       await pumpWithComment(tester, makeComment(.inaccuracy));
       final card = _findCommentCardContainer(tester, Icons.help);
-      expect((card.decoration! as BoxDecoration).color, innacuracyColor.withValues(alpha: 0.1));
+      expect((card.decoration! as BoxDecoration).color, inaccuracyColor.withValues(alpha: 0.1));
     });
 
     testWidgets('mistake card background is mistakeColor with low alpha', (tester) async {

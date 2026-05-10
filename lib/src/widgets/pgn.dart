@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-const innacuracyColor = LichessColors.cyan;
+const inaccuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
 const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);

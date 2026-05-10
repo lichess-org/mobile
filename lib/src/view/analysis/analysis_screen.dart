@@ -314,7 +314,7 @@ class _Body extends ConsumerWidget {
             ? EngineLines(
                 filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                analyisState: analysisState,
+                analysisState: analysisState,
               )
             : null,
         bottomBar: _BottomBar(options: options, tabController: controller),

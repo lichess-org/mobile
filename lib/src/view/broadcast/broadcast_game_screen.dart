@@ -309,7 +309,7 @@ class _Body extends ConsumerWidget {
                 isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
                 ? EngineLines(
                     filters: (id: state.evaluationContext.id, path: state.currentPath),
-                    analyisState: state,
+                    analysisState: state,
                     onTapMove: ref
                         .read(
                           broadcastAnalysisControllerProvider((

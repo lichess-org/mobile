@@ -476,7 +476,7 @@ class _Body extends ConsumerWidget {
               numEvalLines > 0
           ? EngineLines(
               filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
-              analyisState: studyState,
+              analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
           : null,
