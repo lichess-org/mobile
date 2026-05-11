@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -14,6 +17,7 @@ import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -54,14 +58,16 @@ class TvScreen extends ConsumerStatefulWidget {
 }
 
 class _TvScreenState extends ConsumerState<TvScreen> {
-  AsyncNotifierProvider<TvController, TvState> get _tvGameCtrl => tvControllerProvider((
-    channel: widget.channel,
-    initialGame: widget.initialGame,
-    userId: widget.user?.id,
-  ));
+  TvControllerParams get _tvControllerParams =>
+      (channel: widget.channel, initialGame: widget.initialGame, userId: widget.user?.id);
+
+  AsyncNotifierProvider<TvController, TvState> get _tvGameCtrl =>
+      tvControllerProvider(_tvControllerParams);
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
+
+  bool _openedChat = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +75,15 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(_tvGameCtrl.notifier).startWatching();
+        if (!_openedChat) {
+          ref.read(_tvGameCtrl.notifier).startWatching();
+        }
+        setState(() {
+          _openedChat = false;
+        });
       },
       onFocusLost: () {
-        if (context.mounted) {
+        if (context.mounted && !_openedChat) {
           ref.read(_tvGameCtrl.notifier).stopWatching();
         }
       },
@@ -105,6 +116,10 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       final clockTenths = ref.watch(
                         accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
                       );
+
+                      final kidModeAsync = ref.watch(kidModeProvider);
+                      final canShowChat = widget.channel == null && kidModeAsync.value == false;
+                      final authUser = ref.watch(authControllerProvider);
 
                       // If Stockfish is playing, user is null
                       final crosstable = game.white.user != null && game.black.user != null
@@ -208,6 +223,22 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               onTap: () => _flipBoard(ref),
                               icon: CupertinoIcons.arrow_2_squarepath,
                             ),
+                            if (canShowChat)
+                              ChatBottomBarButton(
+                                options: TvChatOptions(
+                                  _tvControllerParams,
+                                  id: game.id,
+                                  writeable: authUser != null,
+                                ),
+                                onTap: (options) {
+                                  setState(() {
+                                    _openedChat = true;
+                                  });
+                                  Navigator.of(
+                                    context,
+                                  ).push(ChatScreen.buildRoute(context, options: options));
+                                },
+                              ),
                             RepeatButton(
                               onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
                                   ? () => _moveBackward(ref)
