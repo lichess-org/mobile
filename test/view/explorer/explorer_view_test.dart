@@ -242,6 +242,33 @@ void main() {
       expect(find.text('Kh4'), findsOneWidget);
     });
 
+    testWidgets('shows tablebase without login', (WidgetTester tester) async {
+      final position = Chess.fromSetup(Setup.parseFen('4k3/8/4q3/4PR2/5P2/6NK/8/8 w - - 3 131'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Scaffold(
+          body: ExplorerView(
+            pov: Side.white,
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
+        ),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(find.byType(TablebaseView), findsOneWidget);
+      expect(find.text('You need an account to do that.'), findsNothing);
+    });
+
     testWidgets('shows checkmate message for checkmate position', (WidgetTester tester) async {
       // Fool's mate position
       final position = Chess.fromSetup(
