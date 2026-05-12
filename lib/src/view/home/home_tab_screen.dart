@@ -1162,20 +1162,7 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lightbulb_circle_outlined,
-                      size: 25.0,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Flexible(child: Text(context.l10n.mobileCustomizeHomeTip)),
-                  ],
-                ),
-              ),
+              ListTile(title: Text(context.l10n.mobileCustomizeHomeTip)),
               Row(
                 children: [
                   TextButton(
@@ -1189,6 +1176,7 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
                     },
                     child: Text(context.l10n.mobileCustomizeButton),
                   ),
+                  const SizedBox(width: 8.0),
                   TextButton(
                     onPressed: () {
                       _setHideHomeWidgetCustomizationTip();
