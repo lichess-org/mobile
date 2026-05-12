@@ -373,7 +373,7 @@ final class _StandaloneTitleVariant extends _GameTitleVariant {
 
 /// Single title widget for all GameScreen AppBar configurations.
 ///
-/// When [monitorSocket] is true, shows "Reconnecting..." if the socket is
+/// When [monitorSocket] is true, shows "Reconnecting" if the socket is
 /// disconnected (ping rating == 0). [socketUri] scopes the ping check to a
 /// specific socket; null monitors the currently active route.
 class _GameTitle extends ConsumerWidget {
@@ -386,7 +386,7 @@ class _GameTitle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (monitorSocket && ref.watch(socketPingProvider(socketUri)).rating == 0) {
-      return AppBarTitleText('${context.l10n.reconnecting}...');
+      return AppBarTitleText(context.l10n.reconnecting);
     }
 
     return switch (variant) {

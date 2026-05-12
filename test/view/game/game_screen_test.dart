@@ -296,7 +296,7 @@ void main() {
       await tester.pump();
 
       // averageLag stays at Duration.zero (no pong ever received), so rating == 0.
-      expect(find.text('Reconnecting...'), findsOneWidget);
+      expect(find.text('Reconnecting'), findsOneWidget);
     });
 
     testWidgets('shows normal game title when socket ping is established', (
@@ -308,7 +308,7 @@ void main() {
 
       // createTestGame pumps 10ms, during which the immediate pong is received
       // (connectionLag = 5ms), so averageLag > 0 and rating > 0.
-      expect(find.text('Reconnecting...'), findsNothing);
+      expect(find.text('Reconnecting'), findsNothing);
     });
   });
 

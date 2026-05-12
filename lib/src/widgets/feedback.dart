@@ -10,8 +10,6 @@ import 'package:popover/popover.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const threeBounceLoadingIndicator = SpinKitThreeBounce(color: Colors.grey, size: 15);
-
 /// A icon that shows the lag rating of the current socket connection.
 ///
 /// If [socketUri] is provided, it will be used to get the lag rating from that socket route only,
@@ -146,7 +144,10 @@ class LagIndicator extends StatelessWidget {
             inactiveColor: inactiveColor,
             levels: materialLevels,
           ),
-          if (lagRating == 0) threeBounceLoadingIndicator,
+          if (lagRating == 0)
+            Center(
+              child: SpinKitThreeBounce(color: Colors.grey, size: size / 2),
+            ),
         ],
       ),
     );
