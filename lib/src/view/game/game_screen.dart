@@ -206,6 +206,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
+            centerTitle: true,
             title: _StandaloneGameTitle(id: createdGameId, lastMoveAt: widget.lastMoveAt),
             actions: [
               _WatcherButton(gameId: createdGameId),
