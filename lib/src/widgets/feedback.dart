@@ -121,7 +121,15 @@ class LagIndicator extends StatelessWidget {
   /// Visual size of the indicator.
   final double size;
 
-  static const materialLevels = {0: Colors.red, 1: Colors.yellow, 2: Colors.green, 3: Colors.green};
+  static const inactiveColor = Color(0x339E9E9E);
+
+  static const materialLevels = {
+    0: inactiveColor,
+    1: Colors.red,
+    2: Colors.yellow,
+    3: Colors.green,
+    4: Colors.green,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -131,13 +139,14 @@ class LagIndicator extends StatelessWidget {
         children: [
           SignalStrengthIndicator.bars(
             barCount: 4,
-            minValue: 1,
+            minValue: 0,
             maxValue: 4,
             value: lagRating,
             size: size,
-            inactiveColor: Colors.grey.withValues(alpha: 0.2),
+            inactiveColor: inactiveColor,
             levels: materialLevels,
           ),
+          if (lagRating == 0) threeBounceLoadingIndicator,
         ],
       ),
     );
