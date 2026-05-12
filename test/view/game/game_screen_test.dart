@@ -259,6 +259,37 @@ void main() {
     }
   });
 
+  group('Reconnecting title', () {
+    testWidgets('shows Reconnecting when socket has no ping response during a real-time game', (
+      WidgetTester tester,
+    ) async {
+      final noPongFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final channel = createDefaultFakeWebSocketChannel(route);
+        channel.shouldSendPong = false;
+        return channel;
+      });
+
+      await createTestGame(tester, socketFactory: noPongFactory);
+      // Wait for _isRealTimePlayableGameProvider to resolve so monitorSocket becomes true.
+      await tester.pump();
+
+      // averageLag stays at Duration.zero (no pong ever received), so rating == 0.
+      expect(find.text('Reconnecting...'), findsOneWidget);
+    });
+
+    testWidgets('shows normal game title when socket ping is established', (
+      WidgetTester tester,
+    ) async {
+      await createTestGame(tester);
+      // Wait for _isRealTimePlayableGameProvider to resolve.
+      await tester.pump();
+
+      // createTestGame pumps 10ms, during which the immediate pong is received
+      // (connectionLag = 5ms), so averageLag > 0 and rating > 0.
+      expect(find.text('Reconnecting...'), findsNothing);
+    });
+  });
+
   group('Plays sound for', () {
     testWidgets('move', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
