@@ -365,7 +365,7 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
     final client = ref.watch(defaultClientProvider);
 
     void openMenu() {
-      Navigator.of(context, rootNavigator: true).push(AccountMenuScreen.buildRoute(context));
+      Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
     }
 
     return switch (account) {
