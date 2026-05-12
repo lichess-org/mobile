@@ -44,7 +44,8 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
 }
 
 class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
-  final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
+  final Map<({String fen, Variant variant, OpeningExplorerPrefs prefs}), OpeningExplorerEntry>
+  cache = {};
 
   /// Last explorer content that was successfully loaded. This is used to
   /// display a loading indicator while the new content is being fetched.
@@ -62,6 +63,16 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
+    final variant = Variant.fromRule(widget.position.rule);
+
+    if (prefs.db == OpeningDatabase.master && !_isMasterDatabaseAvailableFor(variant)) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('Masters database is only available for standard chess.'),
+        ),
+      );
+    }
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
       return const Center(
@@ -70,14 +81,15 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       );
     }
 
-    final cacheKey = OpeningExplorerCacheKey(fen: widget.position.fen, prefs: prefs);
+    final request = (fen: widget.position.fen, variant: variant);
+    final cacheKey = (fen: widget.position.fen, variant: variant, prefs: prefs);
     final cacheOpeningExplorer = cache[cacheKey];
     final openingExplorerAsync = cacheOpeningExplorer != null
         ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
-        : ref.watch(openingExplorerProvider(widget.position.fen));
+        : ref.watch(openingExplorerProvider(request));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(widget.position.fen), (_, curAsync) {
+      ref.listen(openingExplorerProvider(request), (_, curAsync) {
         curAsync.whenData((cur) {
           if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;
@@ -184,6 +196,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     }
   }
 }
+
+bool _isMasterDatabaseAvailableFor(Variant variant) =>
+    variant == Variant.standard || variant == Variant.fromPosition;
 
 class _ExplorerListView extends StatelessWidget {
   const _ExplorerListView({

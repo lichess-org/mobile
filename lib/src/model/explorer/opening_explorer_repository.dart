@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart' show Variant;
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
@@ -12,14 +13,17 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 final openingExplorerProvider = AsyncNotifierProvider.autoDispose
-    .family<OpeningExplorer, ({OpeningExplorerEntry entry, bool isIndexing})?, String>(
-      OpeningExplorer.new,
-      name: 'OpeningExplorerProvider',
-    );
+    .family<
+      OpeningExplorer,
+      ({OpeningExplorerEntry entry, bool isIndexing})?,
+      ({String fen, Variant variant})
+    >((request) => OpeningExplorer(request.fen, request.variant), name: 'OpeningExplorerProvider');
 
 class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool isIndexing})?> {
-  OpeningExplorer(this.fen);
+  OpeningExplorer(this.fen, this.variant);
+
   final String fen;
+  final Variant variant;
 
   StreamSubscription<OpeningExplorerEntry>? _openingExplorerSubscription;
 
@@ -43,6 +47,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
       case OpeningDatabase.lichess:
         final openingExplorer = await repository.getLichessDatabase(
           fen,
+          variant: variant,
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
@@ -51,6 +56,7 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
       case OpeningDatabase.player:
         final openingExplorerStream = await repository.getPlayerDatabase(
           fen,
+          variant: variant,
           // null check handled by widget
           usernameOrId: prefs.playerDb.username!,
           color: prefs.playerDb.side,
@@ -103,6 +109,7 @@ class OpeningExplorerRepository {
 
   Future<OpeningExplorerEntry> getLichessDatabase(
     String fen, {
+    required Variant variant,
     required ISet<Speed> speeds,
     required ISet<int> ratings,
     DateTime? since,
@@ -110,6 +117,7 @@ class OpeningExplorerRepository {
     return client.readJson(
       _explorerUri('/lichess', {
         'source': 'mobile',
+        'variant': _openingExplorerVariantKey(variant),
         'fen': fen,
         if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
         if (ratings.isNotEmpty) 'ratings': ratings.join(','),
@@ -121,6 +129,7 @@ class OpeningExplorerRepository {
 
   Future<Stream<OpeningExplorerEntry>> getPlayerDatabase(
     String fen, {
+    required Variant variant,
     required String usernameOrId,
     required Side color,
     required ISet<Speed> speeds,
@@ -130,6 +139,7 @@ class OpeningExplorerRepository {
     return client.readNdJsonStream(
       _explorerUri('/player', {
         'source': 'mobile',
+        'variant': _openingExplorerVariantKey(variant),
         'fen': fen,
         'player': usernameOrId,
         'color': color.name,
@@ -141,3 +151,6 @@ class OpeningExplorerRepository {
     );
   }
 }
+
+String _openingExplorerVariantKey(Variant variant) =>
+    variant == Variant.fromPosition ? Variant.standard.name : variant.name;
