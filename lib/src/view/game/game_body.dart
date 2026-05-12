@@ -129,6 +129,7 @@ class GameBody extends ConsumerWidget {
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.black.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -180,6 +181,7 @@ class GameBody extends ConsumerWidget {
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.white.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
