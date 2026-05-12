@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:chessground/chessground.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -404,6 +406,129 @@ void main() {
         expect(isCloudEvalDisplayed(), isTrue);
         expect(find.widgetWithText(EngineButton, '36'), findsOne);
       });
+    });
+  });
+
+  group('User-added moves', () {
+    testWidgets('extending the mainline marks move as user-added', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Game ends at 11... Qc8, white to move.
+      // Play Ne5-c6 to extend the mainline beyond the broadcast game.
+      await playMove(tester, 'e5', 'c6');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: _roundId,
+        gameId: _gameId,
+      ));
+      final state = container.read(ctrlProvider).requireValue;
+      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
+
+      expect(lastBranch?.isUserAdded, isTrue);
+    });
+
+    testWidgets('promoting a sideline to mainline does not change isUserAdded', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Go back one move to after 11. Kxg2 (black to move).
+      await tester.tap(find.byKey(const ValueKey('goto-previous')));
+      await tester.pump();
+
+      // Play e7-e6 as a sideline (isUserAdded=false because it is not on mainline).
+      await playMove(tester, 'e7', 'e6');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: _roundId,
+        gameId: _gameId,
+      ));
+
+      // Capture the sideline path, then promote it to mainline.
+      final sidelinePath = container.read(ctrlProvider).requireValue.currentPath;
+      container.read(ctrlProvider.notifier).promoteVariation(sidelinePath, true);
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
+
+      // promoteAt only reorders children — isUserAdded stays false after promotion.
+      expect(lastBranch?.isUserAdded, isFalse);
+    });
+
+    testWidgets('adding a sideline does not mark move as user-added', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Go back one move to after 11. Kxg2 (black to move).
+      await tester.tap(find.byKey(const ValueKey('goto-previous')));
+      await tester.pump();
+
+      // Play e7-e6 instead of the mainline 11... Qc8, creating a sideline.
+      await playMove(tester, 'e7', 'e6');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: _roundId,
+        gameId: _gameId,
+      ));
+      final state = container.read(ctrlProvider).requireValue;
+      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
+
+      expect(lastBranch?.isUserAdded, isFalse);
     });
   });
 }
