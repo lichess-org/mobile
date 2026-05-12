@@ -671,8 +671,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.playable) {
         _applyMove(move!);
         // After engine move, precompute hints for player's turn (in casual or practice mode)
+        // Wait for the engine move animation to complete before computing hints to avoid stuttering.
         if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
-          _computeHints();
+          await _waitForPlayerMoveAnimation();
+          if (ref.mounted && state.game.playable) _computeHints();
         }
       }
     } on MoveRequestCancelledException {
