@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/firebase_stubs.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -79,9 +79,6 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
-  /// Whether the device has been registered for push notifications.
-  bool _registeredDevice = false;
-
   AppLocalizations get _l10n => _ref.read(localizationsProvider).strings;
 
   FlutterLocalNotificationsPlugin get _notificationDisplay =>
@@ -106,8 +103,6 @@ class NotificationService {
 
     final isRegistered = await UnifiedPush.initialize(
       onNewEndpoint: onNewEndpoint,
-      onRegistrationFailed: onRegistrationFailed,
-      onUnregistered: onUnregistered,
       onMessage: onMessage,
     );
     if (isRegistered) {
@@ -167,6 +162,75 @@ class NotificationService {
     _responseStreamController.add((response, notification));
   }
 
+  /// Process a message received from the Firebase Cloud Messaging service.
+  ///
+  /// If the message contains a [RemoteMessage.notification] field and if it is
+  /// received while the app was in foreground, the notification is by default not
+  /// shown to the user.
+  /// Depending on the message type, we may as well show a local notification.
+  ///
+  /// Some messages (whether or not they have an associated notification), have
+  /// a [RemoteMessage.data] field used to update the application state according
+  /// to the message type.
+  ///
+  /// A special data field, 'lichess.iosBadge', is used to update the iOS app's
+  /// badge count according to the value held by the server.
+  Future<void> _processFcmMessage(
+    RemoteMessage message, {
+
+    /// Whether the message was received while the app was in the background.
+    required bool fromBackground,
+  }) async {
+    _logger.fine(
+      'Processing a FCM message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',
+    );
+
+    final parsedMessage = FcmMessage.fromRemoteMessage(message);
+
+    _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
+
+    switch (parsedMessage) {
+      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
+        if (notification != null) {
+          await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
+        }
+
+      case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
+        if (notification != null) {
+          await show(NewMessageNotification(userId, notification.title!, notification.body!));
+        }
+
+      case ChallengeCreateFcmMessage(id: final id, notification: final notification):
+        // nothing to do here in foreground as it should be handled by the socket
+        if (fromBackground == true && notification != null) {
+          await show(ChallengeCreatedNotification(id, notification.title!, notification.body!));
+        }
+
+      case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
+        if (notification != null) {
+          await show(
+            ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
+      case UnhandledFcmMessage(data: final data):
+        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+
+      case MalformedFcmMessage(data: final data):
+        _logger.severe('Received malformed FCM message: $data');
+    }
+
+    // update badge
+    final badge = message.data['lichess.iosBadge'] as String?;
+    if (badge != null) {
+      try {
+        await BadgeService.instance.setBadge(int.parse(badge));
+      } catch (e) {
+        _logger.severe('Could not parse badge: $badge');
+      }
+    }
+  }
+
   /// Register the device for push notifications.
   ///
   /// Returns true if the device was successfully registered, false otherwise.
@@ -220,24 +284,17 @@ class NotificationService {
         });
   }
 
-  void onRegistrationFailed(FailedReason reason, String instance) {
-    _logger.warning('registration failed for reason: $reason');
-  }
-
-  void onUnregistered(String instance) {
-    _logger.info('device unregistered');
-  }
-
   void onMessage(PushMessage message, String instance) {
+    _logger.info('received a push message');
     final content = jsonDecode(utf8.decode(message.content)) as Map<String, dynamic>;
-    final channel = content['tag'] as String;
-    _notificationDisplay.show(
-      id: DateTime.now().microsecondsSinceEpoch % 100000000,
-      title: content['title'] as String,
-      body: content['body'] as String,
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(channel, channel),
-      ),
-    );
+    final remoteMessage = RemoteMessage.fromJson(content);
+
+    final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;
+    if (appState == null) {
+      _logger.warning('could not detect app lifecycle state');
+    }
+    final inForeground = appState == AppLifecycleState.resumed;
+
+    _processFcmMessage(remoteMessage, fromBackground: !inForeground);
   }
 }

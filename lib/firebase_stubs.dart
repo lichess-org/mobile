@@ -1,14 +1,28 @@
-// File used to remove Firebase dependencies.
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:flutter/foundation.dart';
 
 class RemoteMessage {
-  Map<String, dynamic> data = const <String, dynamic>{};
-  RemoteNotification? notification;
+  final Map<String, dynamic> data;
+  final RemoteNotification? notification;
+
+  RemoteMessage(this.data, this.notification);
+
+  factory RemoteMessage.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>;
+    final notification = json['notification'] as Map<String, dynamic>?;
+    final remoteNotification = notification != null
+        ? RemoteNotification(notification['title'] as String, notification['body'] as String)
+        : null;
+    return RemoteMessage(data, remoteNotification);
+  }
 }
 
 class RemoteNotification {
-  String? title;
-  String? body;
+  final String? title;
+  final String? body;
+
+  RemoteNotification(this.title, this.body);
 }
 
 class Firebase {
