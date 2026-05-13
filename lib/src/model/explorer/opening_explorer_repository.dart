@@ -36,8 +36,9 @@ class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool i
     await ref.debounce(const Duration(milliseconds: 300));
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
+    final db = _openingExplorerDatabaseFor(prefs.db, variant);
     final repository = ref.read(openingExplorerRepositoryProvider);
-    switch (prefs.db) {
+    switch (db) {
       case OpeningDatabase.master:
         final openingExplorer = await repository.getMasterDatabase(
           fen,
@@ -156,3 +157,14 @@ class OpeningExplorerRepository {
 // Other variants must be explicit or the API falls back to standard data.
 String _openingExplorerVariantKey(Variant variant) =>
     variant == Variant.fromPosition ? Variant.standard.name : variant.name;
+
+OpeningDatabase _openingExplorerDatabaseFor(OpeningDatabase db, Variant variant) {
+  // The masters endpoint has no variant parameter. For variants, fall back to
+  // Lichess DB instead of asking users to change their persisted setting.
+  if (db == OpeningDatabase.master &&
+      variant != Variant.standard &&
+      variant != Variant.fromPosition) {
+    return OpeningDatabase.lichess;
+  }
+  return db;
+}

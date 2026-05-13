@@ -67,17 +67,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
     final variant = Variant.fromRule(widget.position.rule);
 
-    // The masters endpoint has no variant parameter, so avoid silently showing
-    // standard master games for variant positions.
-    if (prefs.db == OpeningDatabase.master && !_isMasterDatabaseAvailableFor(variant)) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Masters database is only available for standard chess.'),
-        ),
-      );
-    }
-
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
       return const Center(
         // TODO: l10n
@@ -200,9 +189,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     }
   }
 }
-
-bool _isMasterDatabaseAvailableFor(Variant variant) =>
-    variant == Variant.standard || variant == Variant.fromPosition;
 
 class _ExplorerListView extends StatelessWidget {
   const _ExplorerListView({

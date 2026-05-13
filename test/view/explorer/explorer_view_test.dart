@@ -100,13 +100,16 @@ void main() {
       expect(find.byType(TablebaseView), findsNothing);
     });
 
-    testWidgets('shows unavailable message for crazyhouse master database', (
+    testWidgets('uses lichess database for crazyhouse when masters is selected', (
       WidgetTester tester,
     ) async {
-      var openingExplorerRequests = 0;
+      Uri? openingExplorerUrl;
       final mockClient = MockClient((request) {
         if (request.url.host == kLichessOpeningExplorerHost) {
-          openingExplorerRequests++;
+          openingExplorerUrl = request.url;
+          if (request.url.path == '/lichess') {
+            return mockResponse(mastersOpeningExplorerResponse, 200);
+          }
         }
         return mockResponse('', 404);
       });
@@ -131,8 +134,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump(const Duration(milliseconds: 350));
 
-      expect(find.text('Masters database is only available for standard chess.'), findsOneWidget);
-      expect(openingExplorerRequests, 0);
+      expect(openingExplorerUrl?.path, '/lichess');
+      expect(openingExplorerUrl?.queryParameters['variant'], 'crazyhouse');
     });
 
     testWidgets('sends variant for crazyhouse lichess database', (WidgetTester tester) async {
@@ -163,8 +166,8 @@ void main() {
             return FakeHttpClientFactory(() => mockClient);
           }),
         },
-        // The default is the masters database, which is intentionally blocked
-        // for variants; seed Lichess DB prefs to exercise the variant request.
+        // Seed Lichess DB prefs to exercise the direct variant request path;
+        // the default Masters setting is covered by the fallback test above.
         defaultPreferences: {
           SessionPreferencesStorage.key(
             PrefCategory.openingExplorer.storageKey,
