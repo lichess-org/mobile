@@ -70,4 +70,4 @@ jobs:
           aws-region: eu-west-3
 
       - name: Upload APKs
-        run: aws s3 cp build/app/outputs/flutter-apk "s3://lichess-fdroid-releases/${GITHUB_REF_NAME%.fdroid}" --recursive
+        run: aws s3 cp build/app/outputs/flutter-apk "s3://lichess-fdroid-releases/${GITHUB_REF_NAME%.fdroid}" --recursive --exclude "*.sha1"
