@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 
 class StudyTreeView extends ConsumerWidget {
   const StudyTreeView(this.options, {required this.showTopDivider});
@@ -25,28 +26,41 @@ class StudyTreeView extends ConsumerWidget {
 
     final studyPrefs = ref.watch(studyPreferencesProvider);
 
-    return CustomScrollView(
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: DebouncedPgnTreeView(
-                  root: root,
-                  currentPath: studyState.currentPath,
-                  pgnRootComments: studyState.pgnRootComments,
-                  notifier: ref.read(studyControllerProvider(options).notifier),
-                  showTopDivider: showTopDivider,
-                  shouldShowAnnotations: studyPrefs.showAnnotations,
-                  displayMode: studyPrefs.inlineNotation
-                      ? PgnTreeDisplayMode.inlineNotation
-                      : PgnTreeDisplayMode.twoColumn,
+    final currentNode = root.branchesOn(studyState.currentPath).lastOrNull ?? root;
+
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Expanded(
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Expanded(
+                      child: DebouncedPgnTreeView(
+                        root: root,
+                        currentPath: studyState.currentPath,
+                        pgnRootComments: studyState.pgnRootComments,
+                        notifier: ref.read(studyControllerProvider(options).notifier),
+                        showTopDivider: showTopDivider,
+                        shouldShowAnnotations: studyPrefs.showAnnotations,
+                        displayMode: studyPrefs.inlineNotation ? .inlineNotation : .twoColumn,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
+        ),
+        VariationsBar(
+          currentNode: currentNode,
+          currentPath: studyState.currentPath,
+          showAnnotations: studyPrefs.showAnnotations,
+          onJump: (path) => ref.read(studyControllerProvider(options).notifier).userJump(path),
         ),
       ],
     );
