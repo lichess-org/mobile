@@ -286,6 +286,7 @@ class _Body extends ConsumerWidget {
               boardSize: boardSize,
               boardRadius: borderRadius,
             ),
+            smallBoard: broadcastPrefs.smallBoard,
             boardHeader: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
