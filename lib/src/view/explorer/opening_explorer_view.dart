@@ -44,6 +44,8 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
 }
 
 class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
+  // Variant is part of the key because the same FEN string can be queried
+  // against different explorer datasets.
   final Map<({String fen, Variant variant, OpeningExplorerPrefs prefs}), OpeningExplorerEntry>
   cache = {};
 
@@ -65,6 +67,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
     final variant = Variant.fromRule(widget.position.rule);
 
+    // The masters endpoint has no variant parameter, so avoid silently showing
+    // standard master games for variant positions.
     if (prefs.db == OpeningDatabase.master && !_isMasterDatabaseAvailableFor(variant)) {
       return const Center(
         child: Padding(

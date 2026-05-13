@@ -38,6 +38,8 @@ class TablebaseRepository {
 }
 
 String _tablebasePath(Variant variant) {
+  // Standard, imported positions, and Chess960 all use the standard tablebase
+  // endpoint; only variants with dedicated tablebases get their own path.
   return switch (variant) {
     Variant.standard || Variant.fromPosition || Variant.chess960 => '/standard',
     Variant.atomic => '/atomic',

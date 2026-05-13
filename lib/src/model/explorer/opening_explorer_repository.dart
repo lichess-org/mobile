@@ -152,5 +152,7 @@ class OpeningExplorerRepository {
   }
 }
 
+// Opening explorer treats imported/custom positions as standard chess.
+// Other variants must be explicit or the API falls back to standard data.
 String _openingExplorerVariantKey(Variant variant) =>
     variant == Variant.fromPosition ? Variant.standard.name : variant.name;
