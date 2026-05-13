@@ -56,13 +56,13 @@ class ExplorerView extends ConsumerWidget {
       return Center(child: Text(context.l10n.insufficientMaterial));
     }
 
-    if (tablebaseRelevant && isComputerAnalysisAllowed) {
-      return TablebaseView(position: position, onMoveSelected: onMoveSelected);
-    }
-
     final isLoggedIn = ref.watch(isLoggedInProvider);
     if (!isLoggedIn) {
       return Center(child: Text(context.l10n.youNeedAnAccountToDoThat));
+    }
+
+    if (tablebaseRelevant && isComputerAnalysisAllowed) {
+      return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }
 
     return OpeningExplorerView(
