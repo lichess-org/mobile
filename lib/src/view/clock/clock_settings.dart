@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_settings_modal.dart';
 
 const _iconSize = 38.0;
 const _kIconPadding = EdgeInsets.all(10.0);
@@ -67,13 +67,16 @@ class ClockSettings extends ConsumerWidget {
                           final options = ref.watch(
                             clockToolControllerProvider.select((value) => value.options),
                           );
-                          return TimeControlModal(
-                            excludeUltraBullet: true,
+                          return ClockToolSettingsModal(
+                            clockType: options.type,
                             timeIncrement: TimeIncrement(
                               options.bottomTime.inSeconds,
                               options.bottomIncrement.inSeconds,
                             ),
-                            onSelected: (choice) {
+                            onClockTypeSelected: (type) {
+                              ref.read(clockToolControllerProvider.notifier).updateClockType(type);
+                            },
+                            onTimeSelected: (choice) {
                               ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
                             },
                           );

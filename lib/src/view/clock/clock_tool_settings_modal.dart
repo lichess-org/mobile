@@ -5,52 +5,64 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({
+class ClockToolSettingsModal extends StatefulWidget {
+  const ClockToolSettingsModal({
     required this.clockType,
-    required this.clock,
+    required this.timeIncrement,
+    required this.onClockTypeSelected,
     required this.onTimeSelected,
+    super.key,
   });
 
   final ClockTimeControlType clockType;
-  final TimeIncrement clock;
+  final TimeIncrement timeIncrement;
+  final ValueSetter<ClockTimeControlType> onClockTypeSelected;
   final ValueSetter<TimeIncrement> onTimeSelected;
 
   @override
-  State<CustomClockSettings> createState() => _CustomClockSettingsState();
+  State<ClockToolSettingsModal> createState() => _ClockToolSettingsModalState();
 }
 
-class _CustomClockSettingsState extends State<CustomClockSettings> {
-  late TimeIncrement _clock;
+class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
+  late ClockTimeControlType _clockType;
+  late TimeIncrement _timeIncrement;
 
   @override
   void initState() {
     super.initState();
-    _clock = widget.clock;
+    _clockType = widget.clockType;
+    _timeIncrement = widget.timeIncrement;
+  }
+
+  void _setClockType(ClockTimeControlType type) {
+    setState(() => _clockType = type);
   }
 
   void _setTotalTime(num seconds) {
     setState(() {
-      _clock = TimeIncrement(seconds.toInt(), _clock.increment);
+      _timeIncrement = TimeIncrement(seconds.toInt(), _timeIncrement.increment);
     });
   }
 
   void _setIncrement(num seconds) {
     setState(() {
-      _clock = TimeIncrement(_clock.time, seconds.toInt());
+      _timeIncrement = TimeIncrement(_timeIncrement.time, seconds.toInt());
     });
   }
 
   void _submit(BuildContext context) {
-    widget.onTimeSelected(_clock);
+    widget.onClockTypeSelected(_clockType);
+    widget.onTimeSelected(_timeIncrement);
     Navigator.of(context).pop();
   }
 
   String _clockValueInSecondsLabel(BuildContext context) {
-    return switch (widget.clockType) {
+    return switch (_clockType) {
       ClockTimeControlType.increment => context.l10n.incrementInSeconds,
       ClockTimeControlType.simpleDelay || ClockTimeControlType.bronsteinDelay => 'Delay in seconds',
     };
@@ -63,20 +75,34 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
         ListSection(
           materialFilledCard: true,
           children: [
+            SettingsListTile(
+              settingsLabel: const Text('Clock type'),
+              settingsValue: _clockType.label,
+              onTap: () {
+                showChoicePicker<ClockTimeControlType>(
+                  context,
+                  title: const Text('Clock type'),
+                  choices: ClockTimeControlType.values,
+                  selectedItem: _clockType,
+                  labelBuilder: (type) => Text(type.label),
+                  onSelectedItemChanged: _setClockType,
+                );
+              },
+            ),
             ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: 'Minutes: ',
+                  text: '${context.l10n.minutesPerSide}: ',
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: clockLabelInMinutes(_clock.time),
+                      text: clockLabelInMinutes(_timeIncrement.time),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: _clock.time,
+                value: _timeIncrement.time,
                 values: kAvailableTimesInSeconds,
                 labelBuilder: clockLabelInMinutes,
                 onChange: _setTotalTime,
@@ -90,13 +116,13 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: _clock.increment.toString(),
+                      text: _timeIncrement.increment.toString(),
                     ),
                   ],
                 ),
               ),
               subtitle: NonLinearSlider(
-                value: _clock.increment,
+                value: _timeIncrement.increment,
                 values: kAvailableIncrementsInSeconds,
                 onChange: _setIncrement,
                 onChangeEnd: _setIncrement,
