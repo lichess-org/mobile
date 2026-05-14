@@ -30,8 +30,8 @@ import 'package:share_plus/share_plus.dart';
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ProfileScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ProfileScreen());
   }
 
   @override
@@ -70,7 +70,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           SemanticIconButton(
             icon: const Icon(Icons.edit),
             semanticsLabel: context.l10n.editProfile,
-            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
           ),
           account.when(
             data: (user) => user == null
@@ -118,12 +118,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {
-                          Navigator.of(context).push(
-                            GameBookmarksScreen.buildRoute(
-                              context,
-                              nbBookmarks: user.count!.bookmark,
-                            ),
-                          );
+                          Navigator.of(
+                            context,
+                          ).push(GameBookmarksScreen.buildRoute(nbBookmarks: user.count!.bookmark));
                         },
                       ),
                     ],

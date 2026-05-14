@@ -129,6 +129,7 @@ class GameBody extends ConsumerWidget {
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.black.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -180,6 +181,7 @@ class GameBody extends ConsumerWidget {
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.white.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
@@ -542,9 +544,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.biotech,
                 badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                  Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
                 },
               ),
             ] else if (gameState.game.finished)
@@ -633,9 +633,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
         if (gameState.game.abortable)
@@ -741,9 +739,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(TournamentScreen.buildRoute(context, gameState.tournament!.id));
+              Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
             },
           ),
       ],

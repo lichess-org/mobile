@@ -37,8 +37,8 @@ class RetroScreen extends ConsumerWidget {
 
   final RetroOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, RetroOptions options) {
-    return buildScreenRoute(context, screen: RetroScreen(options: options));
+  static Route<dynamic> buildRoute(RetroOptions options) {
+    return buildScreenRoute(screen: RetroScreen(options: options));
   }
 
   @override
@@ -385,7 +385,7 @@ class _RetroMenu extends ConsumerWidget {
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () =>
-              Navigator.of(context).push(RetroSettingsScreen.buildRoute(context, options: options)),
+              Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
         ),
         ToggleSoundContextMenuAction(
           isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),

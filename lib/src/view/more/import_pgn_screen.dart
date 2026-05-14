@@ -25,8 +25,8 @@ final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref)
 class ImportPgnScreen extends StatelessWidget {
   const ImportPgnScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ImportPgnScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ImportPgnScreen());
   }
 
   static void handlePgnText(BuildContext context, String text) {
@@ -44,7 +44,6 @@ class ImportPgnScreen extends StatelessWidget {
 
         Navigator.of(context, rootNavigator: true).push(
           AnalysisScreen.buildRoute(
-            context,
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
               orientation: .white,
@@ -56,10 +55,7 @@ class ImportPgnScreen extends StatelessWidget {
           ),
         );
       } else {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PgnGamesListScreen.buildRoute(context, games.lock));
+        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);

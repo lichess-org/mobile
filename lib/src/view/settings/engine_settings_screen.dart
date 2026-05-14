@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 class EngineSettingsScreen extends ConsumerStatefulWidget {
   const EngineSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const EngineSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const EngineSettingsScreen());
   }
 
   @override
@@ -161,6 +161,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       );
                       if (isOk == true) {
                         await ref.read(nnueServiceProvider).deleteNNUEFiles();
+                        if (!mounted) return;
                         setState(() {
                           _hasVerifiedNNUEFiles = false;
                         });

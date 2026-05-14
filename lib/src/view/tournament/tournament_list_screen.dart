@@ -21,8 +21,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const TournamentListScreen());
+  static Route<void> buildRoute() {
+    return buildScreenRoute(screen: const TournamentListScreen());
   }
 
   @override
@@ -85,7 +85,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
             IconButton(
               icon: const Icon(Icons.help_outline),
               tooltip: context.l10n.tournamentFAQ,
-              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute(context)),
+              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
             ),
           ],
           bottom: TabBar(
@@ -130,7 +130,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
           hasLeading: true,
           header: Text(context.l10n.openTournaments),
           onHeaderTap: () {
-            Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+            Navigator.of(context).push(TournamentListScreen.buildRoute());
           },
           children: [
             for (final tournament in value)
@@ -292,7 +292,7 @@ class _TournamentListItem extends StatelessWidget {
       onTap: () => Navigator.of(
         context,
         rootNavigator: true,
-      ).push(TournamentScreen.buildRoute(context, tournament.id)),
+      ).push(TournamentScreen.buildRoute(tournament.id)),
     );
   }
 }

@@ -160,10 +160,7 @@ class BroadcastListTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(context, broadcast));
+        Navigator.of(context, rootNavigator: true).push(BroadcastRoundScreen.buildRoute(broadcast));
       },
       child: Padding(
         padding: _kPadding,

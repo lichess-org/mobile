@@ -64,8 +64,8 @@ class AnalysisScreen extends StatelessWidget {
 
   final AnalysisOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
-    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  static Route<dynamic> buildRoute(AnalysisOptions options) {
+    return buildScreenRoute(screen: AnalysisScreen(options: options));
   }
 
   @override
@@ -169,9 +169,8 @@ class _AnalysisMenu extends ConsumerWidget {
         ContextMenuAction(
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
-          onPressed: () => Navigator.of(
-            context,
-          ).push(AnalysisSettingsScreen.buildRoute(context, options: options)),
+          onPressed: () =>
+              Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
         ),
         ContextMenuAction(
           icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
@@ -314,7 +313,7 @@ class _Body extends ConsumerWidget {
             ? EngineLines(
                 filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                analyisState: analysisState,
+                analysisState: analysisState,
               )
             : null,
         bottomBar: _BottomBar(options: options, tabController: controller),
@@ -335,7 +334,24 @@ class _Body extends ConsumerWidget {
           ),
           AnalysisTreeView(options),
           if (options case ArchivedGame())
-            ServerAnalysisSummary(options)
+            ServerAnalysisSummary(
+              serverAnalysisSource: analysisState.serverAnalysisSource,
+              playersAnalysis: analysisState.playersAnalysis,
+              pgnHeaders: analysisState.pgnHeaders,
+              acplChartParams: analysisState.acplChartData != null
+                  ? (
+                      acplChartData: analysisState.acplChartData!,
+                      division: analysisState.division,
+                      rootPly: analysisState.root.position.ply,
+                      currentNodePly: analysisState.currentPosition.ply,
+                      isOnMainline: analysisState.isOnMainline,
+                      onJumpToNode: ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .jumpToNthNodeOnMainline,
+                    )
+                  : null,
+              onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
+            )
           else if (options case ActiveCorrespondenceGame())
             ConditionalPremoves(options),
         ],
@@ -381,9 +397,8 @@ class _PlayerWidget extends StatelessWidget {
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                onTap: () => Navigator.of(
-                  context,
-                ).push(UserOrProfileScreen.buildRoute(context, player.user!)),
+                onTap: () =>
+                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user!)),
               ),
             )
           else
@@ -540,7 +555,6 @@ class _BottomBar extends ConsumerWidget {
                         .clearSavedStandaloneAnalysis();
                     Navigator.of(context, rootNavigator: true).pushReplacement(
                       buildScreenRoute<dynamic>(
-                        context,
                         screen: AnalysisScreen(
                           options: (options as Standalone).copyWith(variant: variant),
                         ),
@@ -591,24 +605,21 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
                 onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (
-                    id: options.gameId!,
-                    initialSide: analysisState.pov,
-                  )),
+                  RetroScreen.buildRoute((id: options.gameId!, initialSide: analysisState.pov)),
                 ),
               )
             else ...[
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
-                onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.white)),
-                ),
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
               ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
-                onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.black)),
-                ),
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
               ),
             ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
@@ -618,7 +629,7 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () {
               final boardFen = analysisState.currentPosition.fen;
               Navigator.of(context).push(
-                BoardEditorScreen.buildRoute(context, (
+                BoardEditorScreen.buildRoute((
                   initialVariant: analysisState.variant,
                   initialFen: boardFen,
                 )),
@@ -649,7 +660,7 @@ class _BottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
             onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },
           ),
         // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
@@ -675,7 +686,6 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
           onPressed: () => Navigator.of(context).push(
             OfflineComputerGameScreen.buildRoute(
-              context,
               initialVariant: analysisState.variant,
               initialFen: boardFen,
             ),
@@ -685,7 +695,6 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
           onPressed: () => Navigator.of(context).push(
             OverTheBoardScreen.buildRoute(
-              context,
               initialVariant: analysisState.variant,
               initialFen: boardFen,
             ),

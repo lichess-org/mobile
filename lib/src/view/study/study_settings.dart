@@ -14,8 +14,8 @@ class StudySettingsScreen extends ConsumerWidget {
 
   final StudyOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, StudyOptions options) {
-    return buildScreenRoute(context, screen: StudySettingsScreen(options));
+  static Route<dynamic> buildRoute(StudyOptions options) {
+    return buildScreenRoute(screen: StudySettingsScreen(options));
   }
 
   @override

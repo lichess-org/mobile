@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const HttpLogScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const HttpLogScreen());
   }
 
   @override

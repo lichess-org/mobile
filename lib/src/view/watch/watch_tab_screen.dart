@@ -210,7 +210,7 @@ class _BroadcastWidget extends ConsumerWidget {
             child: ListSectionHeader(
               title: Text(context.l10n.broadcastBroadcasts),
               onTap: () {
-                Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
+                Navigator.of(context).push(BroadcastListScreen.buildRoute());
               },
             ),
           ),
@@ -258,7 +258,7 @@ class _WatchTvWidget extends ConsumerWidget {
           header: const Text('Lichess TV'),
           hasLeading: true,
           onHeaderTap: () =>
-              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()).then((_) {
                 if (context.mounted) {
                   _doRefreshDataForRef(ref);
                 }
@@ -283,7 +283,6 @@ class _WatchTvWidget extends ConsumerWidget {
                   onTap: () => Navigator.of(context, rootNavigator: true)
                       .push(
                         TvScreen.buildRoute(
-                          context,
                           channel: snapshot.channel,
                           gameId: snapshot.id,
                           orientation: snapshot.player.side,
@@ -334,7 +333,7 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           leadingIndent: kThumbnailImageSize + 16,
-          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
+          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(data)),
           children: [
             ...data
                 .take(numberOfItems)

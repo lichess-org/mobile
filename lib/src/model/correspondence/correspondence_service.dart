@@ -85,7 +85,7 @@ class CorrespondenceService {
     Navigator.of(
       context,
       rootNavigator: true,
-    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
+    ).push(GameScreen.buildRoute(source: ExistingGameSource(fullId)));
   }
 
   /// Syncs offline correspondence games with the server.

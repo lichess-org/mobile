@@ -70,6 +70,28 @@ void main() {
   setUpAll(() {
     registerFallbackValue(Variant.standard);
     registerFallbackValue(Sound.error);
+    registerFallbackValue(
+      const GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: false),
+    );
+    registerFallbackValue(
+      const ChallengeRequest(
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: false,
+        sideChoice: SideChoice.random,
+      ),
+    );
+    registerFallbackValue(
+      const Challenge(
+        id: ChallengeId('challeng'),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: false,
+        sideChoice: SideChoice.random,
+      ),
+    );
   });
 
   group('Loading', () {
@@ -257,6 +279,277 @@ void main() {
         );
       });
     }
+  });
+
+  group('Reconnecting title', () {
+    testWidgets('shows Reconnecting when socket has no ping response during a real-time game', (
+      WidgetTester tester,
+    ) async {
+      final noPongFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final channel = createDefaultFakeWebSocketChannel(route);
+        channel.shouldSendPong = false;
+        return channel;
+      });
+
+      await createTestGame(tester, socketFactory: noPongFactory);
+      // Wait for _isRealTimePlayableGameProvider to resolve so monitorSocket becomes true.
+      await tester.pump();
+
+      // averageLag stays at Duration.zero (no pong ever received), so rating == 0.
+      expect(find.text('Reconnecting'), findsOneWidget);
+    });
+
+    testWidgets('shows normal game title when socket ping is established', (
+      WidgetTester tester,
+    ) async {
+      await createTestGame(tester);
+      // Wait for _isRealTimePlayableGameProvider to resolve.
+      await tester.pump();
+
+      // createTestGame pumps 10ms, during which the immediate pong is received
+      // (connectionLag = 5ms), so averageLag > 0 and rating > 0.
+      expect(find.text('Reconnecting'), findsNothing);
+    });
+  });
+
+  group('AppBar title', () {
+    testWidgets('active real-time game shows time control and mode', (WidgetTester tester) async {
+      await createTestGame(tester);
+      // Wait for _isRealTimePlayableGameProvider to resolve.
+      await tester.pump();
+
+      expect(find.text('3+2 • Casual'), findsOneWidget);
+    });
+
+    testWidgets('lobby loading shows seek time control and mode', (WidgetTester tester) async {
+      const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newLobbyGame(any()),
+      ).thenAnswer((_) => Completer<GameSeekResponse>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: LobbySource(seek)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(kFakeWebSocketConnectionLag);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('seek cancelled shows seek time control and mode', (WidgetTester tester) async {
+      const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newLobbyGame(any()),
+      ).thenAnswer((_) async => const GameSeekCancelled());
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: LobbySource(seek)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge loading with destUser shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) => Completer<Challenge>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(kFakeWebSocketConnectionLag);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge cancelled shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final challenge = Challenge(
+        id: const ChallengeId('challeng'),
+        status: ChallengeStatus.canceled,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+        destUser: (
+          user: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+          rating: null,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(
+        () => createGameService.waitForChallengeResponse(any()),
+      ).thenAnswer((_) async => const ChallengeResponseCancelled());
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge declined shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final challenge = Challenge(
+        id: const ChallengeId('challeng'),
+        status: ChallengeStatus.declined,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+        destUser: (
+          user: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+          rating: null,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any())).thenAnswer(
+        (_) async => ChallengeResponseDeclined(challenge: challenge, declineReason: null),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('open challenge shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      const challengeRequest = ChallengeRequest(
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(minutes: 3), increment: Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      const challenge = Challenge(
+        id: ChallengeId('challeng'),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(minutes: 3), increment: Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(
+        () => createGameService.waitForChallengeResponse(any()),
+      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(); // challenge created, state = OpenChallengeCreatedState
+      await tester.pump(kFakeWebSocketConnectionLag); // wait for socket pong
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('finished game shows time control and mode', (WidgetTester tester) async {
+      await loadFinishedTestGame(tester);
+      // Pump 500ms to let the game-over popup timer fire and resolve _gameMetaProvider.
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('2+1 • Rated'), findsOneWidget);
+    });
   });
 
   group('Plays sound for', () {

@@ -106,17 +106,15 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(CoordinateTrainingScreen.buildRoute(context)),
+                ).push(CoordinateTrainingScreen.buildRoute()),
               ),
             ],
           ),
           if (isOnline) ...[
             ListSection(
               header: Text(context.l10n.studyMenu),
-              onHeaderTap: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(StudyListScreen.buildRoute(context)),
+              onHeaderTap: () =>
+                  Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
               hasLeading: true,
               children: [
                 ...(switch (ref.watch(_hotStudiesProvider)) {
@@ -142,12 +140,9 @@ class _Body extends ConsumerWidget {
                           : null,
                       title: Text(context.l10n.studyMyStudies),
                       onTap: isOnline
-                          ? () => Navigator.of(context).push(
-                              StudyListScreen.buildRoute(
-                                context,
-                                initialCategory: StudyCategory.mine,
-                              ),
-                            )
+                          ? () => Navigator.of(
+                              context,
+                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.mine))
                           : null,
                     ),
                   if (haveIFavoriteStudies)
@@ -158,12 +153,9 @@ class _Body extends ConsumerWidget {
                           : null,
                       title: Text(context.l10n.studyMyFavoriteStudies),
                       onTap: isOnline
-                          ? () => Navigator.of(context).push(
-                              StudyListScreen.buildRoute(
-                                context,
-                                initialCategory: StudyCategory.likes,
-                              ),
-                            )
+                          ? () => Navigator.of(
+                              context,
+                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.likes))
                           : null,
                     ),
                 ],

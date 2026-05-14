@@ -309,6 +309,25 @@ void main() {
       );
     });
 
+    testWidgets('Clear board removes all pieces', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Clear board'));
+      await tester.pumpAndSettle();
+
+      final editor = tester.widget<ChessboardEditor>(find.byType(ChessboardEditor));
+      expect(editor.pieces, isEmpty);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+      final controllerProvider = boardEditorControllerProvider(null);
+      // Verify the FEN reflects an empty board
+      expect(container.read(controllerProvider).fen, '8/8/8/8/8/8/8/8 w - - 0 1');
+    });
+
     testWidgets('Delete pieces with tapping square again', (tester) async {
       final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
       await tester.pumpWidget(app);

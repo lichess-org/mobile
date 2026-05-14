@@ -31,14 +31,8 @@ class OfflineCorrespondenceGameScreen extends StatefulWidget {
 
   final (DateTime, OfflineCorrespondenceGame) initialGame;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required (DateTime, OfflineCorrespondenceGame) initialGame,
-  }) {
-    return buildScreenRoute(
-      context,
-      screen: OfflineCorrespondenceGameScreen(initialGame: initialGame),
-    );
+  static Route<dynamic> buildRoute({required (DateTime, OfflineCorrespondenceGame) initialGame}) {
+    return buildScreenRoute(screen: OfflineCorrespondenceGameScreen(initialGame: initialGame));
   }
 
   @override
@@ -242,7 +236,6 @@ class _BodyState extends ConsumerState<_Body> {
                     onTap: () {
                       Navigator.of(context).push(
                         AnalysisScreen.buildRoute(
-                          context,
                           AnalysisOptions.pgn(
                             id: game.id,
                             orientation: game.youAre!,

@@ -53,14 +53,12 @@ class GameHistoryScreen extends ConsumerWidget {
   final bool isOnline;
   final GameFilterState gameFilter;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     LightUser? user,
     bool isOnline = false,
     GameFilterState gameFilter = const GameFilterState(),
   }) {
     return buildScreenRoute(
-      context,
       screen: GameHistoryScreen(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -279,7 +277,6 @@ class _BodyState extends ConsumerState<_Body> {
                               ? (_) {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
-                                      context,
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,
                                         gameId: game.id,
@@ -336,9 +333,10 @@ class _BodyState extends ConsumerState<_Body> {
                                               );
                                               final source = UserChallengeSource(request);
                                               ref.invalidate(gameScreenLoaderProvider(source));
-                                              Navigator.of(context, rootNavigator: true).push(
-                                                GameScreen.buildRoute(context, source: source),
-                                              );
+                                              Navigator.of(
+                                                context,
+                                                rootNavigator: true,
+                                              ).push(GameScreen.buildRoute(source: source));
                                             }
                                           : null,
                                       icon: Icons.sync,

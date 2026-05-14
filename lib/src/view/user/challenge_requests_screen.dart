@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ChallengeRequestsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ChallengeRequestsScreen());
   }
 
   @override
@@ -86,7 +86,7 @@ class _ChallengeListItem extends ConsumerWidget {
       onAccept:
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported
           ? null
-          : () async => await challengeService.acceptChallenge(challenge.id),
+          : () => challengeService.acceptChallenge(challenge.id),
       onCancel: challenge.direction == ChallengeDirection.outward
           ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)
           : null,
