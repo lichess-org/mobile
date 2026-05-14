@@ -31,7 +31,7 @@ class ImportPgnScreen extends StatelessWidget {
 
   static void handlePgnText(BuildContext context, String text) {
     try {
-      final games = PgnGame.parseMultiGamePgn(text);
+      final games = PgnGame.parseMultiGameLazy(text);
 
       if (games.isEmpty) {
         showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -39,7 +39,7 @@ class ImportPgnScreen extends StatelessWidget {
       }
 
       if (games.length == 1) {
-        final game = games.first;
+        final game = games.first.toPgnGame();
         final rule = Rule.fromPgn(game.headers['Variant']);
 
         Navigator.of(context, rootNavigator: true).push(
