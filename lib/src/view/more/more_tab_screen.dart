@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -68,6 +69,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final authUser = ref.watch(authControllerProvider);
+    final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
@@ -169,6 +171,24 @@ class _Body extends ConsumerWidget {
                     Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute());
                   },
                 ),
+              if (!isKidMode) ...[
+                ListTile(
+                  leading: const Icon(Icons.forum_outlined),
+                  title: Text(context.l10n.forum),
+                  enabled: isOnline,
+                  onTap: () {
+                    launchUrl(lichessUri('/forum'), mode: LaunchMode.inAppBrowserView);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.newspaper_outlined),
+                  title: Text(context.l10n.blog),
+                  enabled: isOnline,
+                  onTap: () {
+                    launchUrl(lichessUri('/blog'), mode: LaunchMode.inAppBrowserView);
+                  },
+                ),
+              ],
             ],
           ),
           const _AccountSection(),
