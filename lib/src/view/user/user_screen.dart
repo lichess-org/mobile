@@ -48,7 +48,11 @@ class UserScreen extends ConsumerStatefulWidget {
     return buildScreenRoute(screen: UserScreen(user: user));
   }
 
-  static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
+  static void challengeUser(
+    LightUser user, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     final authUser = ref.read(authControllerProvider);
     if (authUser == null) {
       showSnackBar(
@@ -58,16 +62,16 @@ class UserScreen extends ConsumerStatefulWidget {
       );
       return;
     }
-    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
+    final isOddBot = oddBots.contains(user.name.toLowerCase());
     if (isOddBot) {
-      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user.lightUser));
+      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user));
     } else {
       showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
-          return CreateChallengeBottomSheet(user: user.lightUser);
+          return CreateChallengeBottomSheet(user: user);
         },
       );
     }
@@ -240,7 +244,8 @@ class _UserProfileListView extends ConsumerWidget {
                   ListTile(
                     title: Text(context.l10n.challengeChallengeToPlay),
                     leading: const Icon(LichessIcons.crossed_swords),
-                    onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
+                    onTap: () =>
+                        UserScreen.challengeUser(user.lightUser, context: context, ref: ref),
                   ),
 
                 if (user.blocking != true && !user.isBot && kidMode.value == false)
