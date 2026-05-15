@@ -410,7 +410,7 @@ void main() {
   });
 
   group('User-added moves', () {
-    testWidgets('extending the mainline marks move as user-added', (tester) async {
+    testWidgets('extending the mainline renders the move in italic', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastGameScreen(
@@ -435,18 +435,12 @@ void main() {
       // Play Ne5-c6 to extend the mainline beyond the broadcast game.
       await playMove(tester, 'e5', 'c6');
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
-      final ctrlProvider = broadcastAnalysisControllerProvider((
-        roundId: _roundId,
-        gameId: _gameId,
-      ));
-      final state = container.read(ctrlProvider).requireValue;
-      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
-
-      expect(lastBranch?.isUserAdded, isTrue);
+      expect(_hasMoveWithItalic(tester, 'Nc6'), isTrue);
     });
 
-    testWidgets('promoting a sideline to mainline does not change isUserAdded', (tester) async {
+    testWidgets('promoting a sideline to mainline does not render the move in italic', (
+      tester,
+    ) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastGameScreen(
@@ -471,7 +465,7 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('goto-previous')));
       await tester.pump();
 
-      // Play e7-e6 as a sideline (isUserAdded=false because it is not on mainline).
+      // Play e7-e6 as a sideline (not italic because it is not on the mainline).
       await playMove(tester, 'e7', 'e6');
 
       final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
@@ -485,14 +479,11 @@ void main() {
       container.read(ctrlProvider.notifier).promoteVariation(sidelinePath, true);
       await tester.pump();
 
-      final state = container.read(ctrlProvider).requireValue;
-      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
-
-      // promoteAt only reorders children — isUserAdded stays false after promotion.
-      expect(lastBranch?.isUserAdded, isFalse);
+      // promoteAt only reorders children — italic style stays false after promotion.
+      expect(_hasMoveWithItalic(tester, 'e6'), isFalse);
     });
 
-    testWidgets('adding a sideline does not mark move as user-added', (tester) async {
+    testWidgets('adding a sideline does not render the move in italic', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastGameScreen(
@@ -520,15 +511,7 @@ void main() {
       // Play e7-e6 instead of the mainline 11... Qc8, creating a sideline.
       await playMove(tester, 'e7', 'e6');
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
-      final ctrlProvider = broadcastAnalysisControllerProvider((
-        roundId: _roundId,
-        gameId: _gameId,
-      ));
-      final state = container.read(ctrlProvider).requireValue;
-      final lastBranch = state.root.branchesOn(state.currentPath).lastOrNull;
-
-      expect(lastBranch?.isUserAdded, isFalse);
+      expect(_hasMoveWithItalic(tester, 'e6'), isFalse);
     });
   });
 }
@@ -536,4 +519,22 @@ void main() {
 /// Checks if the cloud eval label is displayed in the EngineButton widget
 bool isCloudEvalDisplayed() {
   return find.widgetWithText(EngineButton, 'CLOUD').evaluate().isNotEmpty;
+}
+
+/// Returns true if any [RichText] in the widget tree contains a [TextSpan]
+/// with [text] rendered in italic.
+bool _hasMoveWithItalic(WidgetTester tester, String text) {
+  return tester
+      .widgetList<RichText>(find.byType(RichText))
+      .any((richText) => _spanHasItalicText(richText.text, text));
+}
+
+bool _spanHasItalicText(InlineSpan span, String text) {
+  if (span is TextSpan) {
+    if (span.text == text && span.style?.fontStyle == FontStyle.italic) return true;
+    for (final child in span.children ?? <InlineSpan>[]) {
+      if (_spanHasItalicText(child, text)) return true;
+    }
+  }
+  return false;
 }
