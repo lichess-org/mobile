@@ -185,7 +185,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
 
     if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move, promotionMove: null));
       return;
     }
 
@@ -731,6 +731,7 @@ class GameController extends AsyncNotifier<GameState> {
             newState = newState.copyWith.game.correspondenceClock!(
               white: data.clock!.white,
               black: data.clock!.black,
+              resetId: DateTime.now().millisecondsSinceEpoch,
             );
           }
         }

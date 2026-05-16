@@ -9,7 +9,7 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontoindstillinger';
@@ -2612,6 +2612,16 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating på $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maksimal rating på $param';
+  }
+
+  @override
   String get recentGames => 'Seneste partier';
 
   @override
@@ -2695,9 +2705,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Vis variantpile';
-
-  @override
-  String get evaluationGauge => 'Evalueringsindikator';
 
   @override
   String get visualMotifs => 'Visuelle motiver';
@@ -2977,15 +2984,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get checkSpamFolder => 'Tjek også din spam-mappe, det kan være, at den havner der. Hvis det er tilfældet, skal du markere den som ikke-spam.';
 
   @override
-  String get emailForSignupHelp => 'Hvis alt andet mislykkes, så send os denne e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og indsæt ovenstående tekst og send det til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Hvis du ikke kan finde din bekræftelsesmail, kan du sende en e-mail til $param, så bekræfter vi din konto for dig.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi vil snart vende tilbage til dig for at hjælpe dig med at fuldføre din tilmelding.';
 
   @override
   String accountConfirmed(String param) {

@@ -2664,6 +2664,16 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Нядаўнія гульні';
 
   @override
@@ -2747,9 +2757,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Шкала ацэнкі';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3029,15 +3036,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get checkSpamFolder => 'Таксама праверце папку са спамам, ён можа апынуцца там. Калі так, адзначце гэта як не спам.';
 
   @override
-  String get emailForSignupHelp => 'Калі ўсё астатняе не дапамагае, адпраўце нам гэты ліст:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Скапіруйце і ўстаўце прыведзены вышэй тэкст і адпраўце яго $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Мы звяжамся з вамі ў бліжэйшы час, каб дапамагчы вам завяршыць рэгістрацыю.';
 
   @override
   String accountConfirmed(String param) {

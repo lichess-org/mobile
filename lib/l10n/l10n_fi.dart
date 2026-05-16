@@ -2612,6 +2612,16 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Viimeaikaiset pelit';
 
   @override
@@ -2695,9 +2705,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Näytä muunnelman nuolet';
-
-  @override
-  String get evaluationGauge => 'Arviomittari';
 
   @override
   String get visualMotifs => 'Visuaaliset motiivit';
@@ -2977,15 +2984,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get checkSpamFolder => 'Tarkistathan myös roskapostikansiosi, koska se saattaa joutua sinne. Jos niin käy, merkitse, että viesti ei ole roskaposti.';
 
   @override
-  String get emailForSignupHelp => 'Jos mikään muu ei auta, lähetä meille tällainen sähköposti:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopioi ja liitä yllä oleva teksti ja lähetä se osoitteeseen $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Jos et löydä vahvistussähköpostia, lähetä meille sähköposti osoitteeseen $param, niin me vahvistamme käyttäjätunnuksesi.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Saat pian sähköpostitse ohjeet siihen, miten voit saattaa rekisteröitymisesi loppuun.';
 
   @override
   String accountConfirmed(String param) {

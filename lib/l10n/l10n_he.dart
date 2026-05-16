@@ -2664,6 +2664,16 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'משחקים אחרונים';
 
   @override
@@ -2747,9 +2757,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'הצגת חצי ההמשכים האלטרנטיביים';
-
-  @override
-  String get evaluationGauge => 'מד הערכה';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3029,15 +3036,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get checkSpamFolder => 'בדקו גם את תיבת דואר הזבל (״ספאם״). יתכן שההודעה הגיעה לשם בטעות. אם זה מה שקרה, סמנו אותה כלא־ספאם.';
 
   @override
-  String get emailForSignupHelp => 'אם עדיין לא הצלחתם לפתור את הבעיה, שלחו לנו את המייל הבא:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'הדביקו את הטקסט הנ״ל ושלחו אותו ל־$param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'אנו נחזור אליכם בהקדם כדי לסייע לכם להשלים את ההרשמה.';
 
   @override
   String accountConfirmed(String param) {

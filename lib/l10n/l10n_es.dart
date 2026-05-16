@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Cuenta';
 
   @override
   String get mobileAccountPreferences => 'Preferencias de la cuenta';
@@ -2612,6 +2612,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Valoración mínima de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Valoración máxima de $param';
+  }
+
+  @override
   String get recentGames => 'Partidas recientes';
 
   @override
@@ -2695,9 +2705,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Mostrar flechas de variantes';
-
-  @override
-  String get evaluationGauge => 'Indicador de evaluación';
 
   @override
   String get visualMotifs => 'Complementos visuales';
@@ -2977,15 +2984,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get checkSpamFolder => 'También comprueba tu carpeta de spam, por si ha ido ahí. En ese caso, márcalo como no spam.';
 
   @override
-  String get emailForSignupHelp => 'Si nada de lo anterior funciona, envíanos este texto por correo:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copia y pega el texto anterior y envíalo a $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Si no puedes encontrar tu correo electrónico de confirmación, escribe a $param y confirmaremos tu cuenta.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Nos pondremos en contacto contigo dentro de poco para ayudarte a completar el registro.';
 
   @override
   String accountConfirmed(String param) {

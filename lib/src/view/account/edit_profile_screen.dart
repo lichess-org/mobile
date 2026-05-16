@@ -20,8 +20,8 @@ final _countries = countries.values.toList();
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const EditProfileScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const EditProfileScreen());
   }
 
   @override

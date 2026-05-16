@@ -2638,6 +2638,16 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedavne partije';
 
   @override
@@ -2721,9 +2731,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Pokaži strelice varijacija';
-
-  @override
-  String get evaluationGauge => 'Mjerilo evaluacije';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3003,15 +3010,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get checkSpamFolder => 'Također provjerite svoju mapu neželjene pošte jer bi mogla i tamo završiti. Ako je tako, označite ju da nije neželjena.';
 
   @override
-  String get emailForSignupHelp => 'Ako ništa drugo ne uspije, pošaljite nam ovu e-poruku:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopirajte i zalijepite gornji tekst te ga pošaljite na $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Javit ćemo Vam se uskoro kako bismo Vam pomogli dovršiti Vašu registraciju.';
 
   @override
   String accountConfirmed(String param) {

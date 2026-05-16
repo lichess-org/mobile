@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'アカウント';
 
   @override
   String get mobileAccountPreferences => 'アカウント設定';
@@ -2584,6 +2584,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'レーティング下限 $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'レーティング上限 $param';
+  }
+
+  @override
   String get recentGames => '最近の対局';
 
   @override
@@ -2667,9 +2677,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get showVariationArrows => '変化手順の矢印を表示';
-
-  @override
-  String get evaluationGauge => '評価値を表示';
 
   @override
   String get visualMotifs => '形のパターン';
@@ -2949,15 +2956,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkSpamFolder => 'またスパムフォルダに入ってしまう場合もあります。もしそうならスパムではないとマークしてください。';
 
   @override
-  String get emailForSignupHelp => 'どの手段もうまくいかない場合は、次のメールをこちらまで送信してください：';
-
-  @override
-  String copyTextToEmail(String param) {
-    return '上のテキストをコピー＆ペーストして $param に送信します';
+  String sendEmailForAccountVerification(String param) {
+    return '確認メールが見つからない場合は $param にメールを送信してください。当方でアカウントを確認します。';
   }
-
-  @override
-  String get waitForSignupHelp => 'またこちらから連絡してサインアップ完了までお手伝いします。';
 
   @override
   String accountConfirmed(String param) {

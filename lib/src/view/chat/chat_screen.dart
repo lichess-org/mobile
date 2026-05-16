@@ -31,7 +31,7 @@ class ChatBottomBarButton extends ConsumerWidget {
       label: context.l10n.chatRoom,
       showLabel: showLabel,
       onTap: () {
-        Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
+        Navigator.of(context).push(ChatScreen.buildRoute(options: options));
       },
       icon: Icons.chat_bubble_outline,
       badgeLabel: switch (chatUnread) {
@@ -52,8 +52,8 @@ class ChatScreen extends ConsumerStatefulWidget {
 
   const ChatScreen({required this.options});
 
-  static Route<dynamic> buildRoute(BuildContext context, {required ChatOptions options}) {
-    return buildScreenRoute(context, screen: ChatScreen(options: options));
+  static Route<dynamic> buildRoute({required ChatOptions options}) {
+    return buildScreenRoute(screen: ChatScreen(options: options));
   }
 
   @override
@@ -148,16 +148,14 @@ class _MessageBubble extends ConsumerWidget {
   final ChatMessage message;
   final bool showUsername;
 
-  Color _bubbleColor(BuildContext context, Brightness brightness) =>
+  Color _bubbleColor(BuildContext context) =>
       you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
 
-  Color _textColor(BuildContext context, Brightness brightness) =>
+  Color _textColor(BuildContext context) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final brightness = Theme.of(context).brightness;
-
     return ChatBubbleContextMenu(
       message: message.message,
       actions: [
@@ -192,7 +190,7 @@ class _MessageBubble extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: _bubbleColor(context, brightness),
+              color: _bubbleColor(context),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -201,20 +199,16 @@ class _MessageBubble extends ConsumerWidget {
                 if (showUsername && message.user != null)
                   UserFullNameWidget(
                     user: message.user,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: _textColor(context, brightness),
-                    ),
-                    onTap: () => Navigator.of(
-                      context,
-                    ).push(UserOrProfileScreen.buildRoute(context, message.user!)),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: _textColor(context)),
+                    onTap: () =>
+                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(message.user!)),
                   ),
                 Linkify(
                   onOpen: (link) async =>
                       await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                   linkifiers: AppLinksService.kLichessLinkifiers,
                   text: message.message,
-                  style: TextStyle(color: _textColor(context, brightness)),
+                  style: TextStyle(color: _textColor(context)),
                   linkStyle: Styles.linkStyle,
                 ),
               ],

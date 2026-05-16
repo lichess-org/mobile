@@ -2584,6 +2584,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Các ván cờ gần đây';
 
   @override
@@ -2667,9 +2677,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Hiển thị mũi tên biến';
-
-  @override
-  String get evaluationGauge => 'Thang đo lợi thế';
 
   @override
   String get visualMotifs => 'Họa tiết thị giác';
@@ -2949,15 +2956,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkSpamFolder => 'Ngoài ra hãy kiểm tra hộp thư rác, nó có thể ở trong đó. Nếu có, hãy đánh dấu nó không phải là rác.';
 
   @override
-  String get emailForSignupHelp => 'Nếu vẫn không nhận được, hãy gửi cho chúng tôi email này:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Sao chép và dán đoạn văn bản phía trên và gửi nó tới $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Nếu bạn không tìm thấy email xác minh, hãy gửi email đến $param và chúng tôi sẽ xác minh tài khoản cho bạn.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Chúng tôi sẽ sớm liên lạc lại với bạn để giúp bạn hoàn tất việc đăng ký.';
 
   @override
   String accountConfirmed(String param) {

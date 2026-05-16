@@ -9,7 +9,7 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Профил';
 
   @override
   String get mobileAccountPreferences => 'Предпочитания за акаунта';
@@ -70,7 +70,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Влезте в профила си, за да видите страницата.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Нова партия';
 
   @override
   String get mobileNoSearchResults => 'Няма резултати';
@@ -260,31 +260,31 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileCustomizeButton => 'Настройки';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Скрий заплахата';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Приключили';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Към моята страница';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Компактен';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Подробен';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Дебютният справочник не е достъпен офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Предизвикателството е създадено: Ще получите известие, когато партията започне.\nМожете да го отворите от началния раздел.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Предишна';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Или зареди PGN файл';
 
   @override
   String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
@@ -942,7 +942,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastScore => 'Резултат';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Класирането се изчислява на базата на предаваните партии и може да се различава от официалните резултати.';
 
   @override
   String get broadcastAllTeams => 'Всички отбори';
@@ -989,23 +989,23 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Точки от мачове';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Точки от партии';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Мачове';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'История на мачовете';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Отборни резултати';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'Следните термини ще бъдат преведени автоматично: $param.';
   }
 
   @override
@@ -1017,63 +1017,63 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastDefaultRoundNameHelp => 'Запазването на името по подразбиране ще позволи автоматичния му превод на всички останали езици.';
 
   @override
-  String get broadcastOpenTournament => 'Open';
+  String get broadcastOpenTournament => 'Опен';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Жени';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Мъже';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Девойки';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Юноши';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
-    return 'Open U$param';
+    return 'Опен до $param';
   }
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'Girls U$param';
+    return 'Девойки до $param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Boys U$param';
+    return 'Юноши до $param';
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Четвъртфинали';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Полуфинали';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Финал';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Допълнителни показатели';
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Партия $param';
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'Елиминации';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'U$param';
+    return 'До $param г';
   }
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return 'Под $param';
   }
 
   @override
@@ -1935,10 +1935,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Премахване на главната защита на фигура, което позволява на вече незащитената фигура да бъде взета на следващия ход.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Колинеарен ход';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Две противникови фигури са разположени една срещу друга и едната се плъзга по линията на атаката, без да взема вражеската фигура.';
 
   @override
   String get puzzleThemeCornerMate => 'Мат в ъгъла';
@@ -2022,10 +2022,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика включваща вземане \"ан пасан\", където пешка може да вземе противникова пешка, която я е подминала правейки двоен ход.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Еполетен мат';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Две съседни полета за отстъпление на царя под шах са заети от негови собствени фигури.';
 
   @override
   String get puzzleThemeExposedKing => 'Незащитен цар';
@@ -2082,10 +2082,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Oфицерът нанася мат, докато топът блокира царя по вертикала.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Мат „Лястовича опашка“';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Матова картина, която визуално наподобява опашка на лястовица, подобно на V-образна форма.';
 
   @override
   String get puzzleThemeTriangleMate => 'Мат „Триъгълник“';
@@ -2612,6 +2612,16 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Минимален рейтинг от $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Максимален рейтинг от $param';
+  }
+
+  @override
   String get recentGames => 'Скорошни игри';
 
   @override
@@ -2697,9 +2707,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get showVariationArrows => 'Показване на стрелки за вариациите';
 
   @override
-  String get evaluationGauge => 'Показване на оценка';
-
-  @override
   String get visualMotifs => 'Визуални мотиви';
 
   @override
@@ -2715,22 +2722,22 @@ class AppLocalizationsBg extends AppLocalizations {
   String get multipleLines => 'Множество ходове';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Задайте броя на линиите за анализ и стрелките за ходове на дъската';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Време за търсене';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Задайте времето за анализ на нови позиции';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Нишки';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Задайте стойност под броя на нишките на вашия процесор; отметките показват безопасен избор';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Повече нишки хабят батерията по-бързо, но подобряват анализа';
 
   @override
   String get cpus => 'Процесори';
@@ -2739,7 +2746,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get memory => 'Памет';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'По-високите стойности могат да подобрят производителността';
 
   @override
   String get infiniteAnalysis => 'Неограничен анализ';
@@ -2899,7 +2906,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get signupUsernameHint => 'Изберете прилично потребителско име. Няма да можете да го смените по-късно и всички регистрации с нецензурни имена биват затворени!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Ще ви изпращаме имейли само относно вашия профил и никога няма да споделяме адреса ви с трети страни.';
 
   @override
   String get password => 'Парола';
@@ -2977,15 +2984,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get checkSpamFolder => 'Проверете и папката спам, може да попадне там. Ако е така, моля отбележете го като \"не спам\".';
 
   @override
-  String get emailForSignupHelp => 'Ако всичко останало се провали, изпратете ни този имейл:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Копирайте и поставете горния текст и го изпратете на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Ако не можете да откриете имейла за потвърждение, изпратете съобщение до $param и ние ще потвърдим профила ви вместо вас.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Скоро ще се свържем с вас, за да ви помогнем да завършите регистрацията си.';
 
   @override
   String accountConfirmed(String param) {
@@ -3557,7 +3558,7 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Случайна Chess960 позиция';
 
   @override
   String get startPosition => 'Начална позиция';
@@ -3786,13 +3787,13 @@ class AppLocalizationsBg extends AppLocalizations {
   String get invalidAuthenticationCode => 'Невалиден код за удостоверяване';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Изчисти полето';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Или';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Вход с имейл';
 
   @override
   String get emailMeALink => 'Изпрати ми препратка на имейла';
@@ -5077,7 +5078,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Няма резултати за \"$param\"';
   }
 
   @override
@@ -6378,8 +6379,8 @@ class AppLocalizationsBg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Battle of $count teams',
-      one: 'Battle of $count teams',
+      other: 'Битка между $count отбора',
+      one: 'Битка между $count отбор',
     );
     return '$_temp0';
   }
@@ -6389,8 +6390,8 @@ class AppLocalizationsBg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count leaders per team',
-      one: 'One leader per team',
+      other: '$count лидери на отбор',
+      one: 'Един лидер на отбор',
     );
     return '$_temp0';
   }

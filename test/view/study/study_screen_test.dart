@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -50,6 +51,7 @@ Study makeStudy({
   IList<StudyChapterMeta>? chapters,
   IList<String?> hints = const IList.empty(),
   IList<String?> deviationComments = const IList.empty(),
+  IMap<UserId, StudyMember>? members,
 }) {
   final effectiveChapter = chapter ?? makeChapter(id: const StudyChapterId('1'));
   return Study(
@@ -62,12 +64,14 @@ Study makeStudy({
     topics: const IList.empty(),
     chapters: chapters ?? IList([StudyChapterMeta(id: effectiveChapter.id, name: '', fen: null)]),
     chapter: effectiveChapter,
-    members: IMap(const {
-      UserId(''): StudyMember(
-        user: LightUser(id: UserId(''), name: ''),
-        role: '',
-      ),
-    }),
+    members:
+        members ??
+        IMap(const {
+          UserId(''): StudyMember(
+            user: LightUser(id: UserId(''), name: ''),
+            role: '',
+          ),
+        }),
     hints: hints,
     deviationComments: deviationComments,
   );
@@ -80,7 +84,7 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (makeStudy(), '{root comment} 1. e4 {wow} e5 {such chess}'));
+      ).thenAnswer((_) async => (makeStudy(), null, '{root comment} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -132,13 +136,13 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -194,18 +198,18 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.text('1 Chapter 1', findRichText: true));
+      await tester.tap(find.text('2 Chapter 2', findRichText: true));
       // Wait for chapter to load
       await tester.pumpAndSettle();
 
       // Second chapter allows opening explorer, so tab should be displayed now.
       expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsOneWidget);
 
-      expect(find.text('1. Chapter 1'), findsOneWidget);
-      expect(find.text('2. Chapter 2'), findsNothing);
+      expect(find.text('1. Chapter 1'), findsNothing);
+      expect(find.text('2. Chapter 2'), findsOneWidget);
 
-      expect(find.text('pgn 1'), findsOneWidget);
-      expect(find.text('pgn 2'), findsNothing);
+      expect(find.text('pgn 1'), findsNothing);
+      expect(find.text('pgn 2'), findsOneWidget);
     });
 
     testWidgets('Loads initial chapter if given', (WidgetTester tester) async {
@@ -225,7 +229,7 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -252,6 +256,7 @@ void main() {
           makeStudy(
             chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.black),
           ),
+          null,
           '',
         ),
       );
@@ -296,6 +301,7 @@ void main() {
           makeStudy(
             chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.white),
           ),
+          null,
           '',
         ),
       );
@@ -333,6 +339,7 @@ void main() {
               gamebook: true,
             ),
           ),
+          null,
           '''
 [Event "Improve Your Chess Calculation: Candidates| Ex 1: Hard"]
 [Site "https://lichess.org/study/xgZOEizT/OfF4eLmN"]
@@ -467,6 +474,7 @@ void main() {
             hints: ['Hint 1', null, null, null, 'Hint 2'].lock,
             deviationComments: [null, 'Shown if any move other than d4 is played', null, null].lock,
           ),
+          null,
           '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
         ),
       );
@@ -482,6 +490,7 @@ void main() {
             ),
             hints: ['Hint 1'].lock,
           ),
+          null,
           '1. e4 e5',
         ),
       );
@@ -578,11 +587,11 @@ void main() {
       // First chapter has a valid position
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       // Second chapter has an illegal position (no pieces on Board)
       when(
@@ -590,6 +599,7 @@ void main() {
       ).thenAnswer(
         (_) async => (
           studyChapter2,
+          null,
           '''
 [FEN "8/8/8/8/8/8/8/8 w - - 0 1"]
 { Random comment } { [%csl Gd5,Ge5,Ge4,Gd4] }
@@ -648,6 +658,7 @@ void main() {
             gamebook: false,
           ),
         ),
+        null,
         '''
 [Event "annotation bug test: Chapter 2"]
 [Date "2025.09.28"]
@@ -742,6 +753,7 @@ void main() {
             gamebook: false,
           ),
         ),
+        null,
         '''
 [Event "Test castling annotations"]
 [Date "2025.09.28"]
@@ -777,5 +789,171 @@ void main() {
       board.annotations,
       containsPair(Square.c1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
     );
+  });
+
+  group('Server Analysis', () {
+    testWidgets('Does not display server analysis tab if chapter does not allow it', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              features: (computer: false, explorer: false),
+            ),
+          ),
+          null,
+          '',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      // Server analysis tab should not be displayed since chapter does not allow it
+      expect(find.bySemanticsLabel(RegExp('Computer analysis')), findsNothing);
+    });
+
+    testWidgets('Cannot request server analysis if study has less than 4 moves', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              features: (computer: true, explorer: false),
+            ),
+          ),
+          null,
+          '',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
+      await tester.pumpAndSettle(); // wait for switch to server analysis tab
+
+      expect(find.textContaining('The chapter is too short'), findsOneWidget);
+    });
+
+    testWidgets('Cannot request server analysis without write permissions', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      final user = AuthUser(
+        user: LightUser(id: UserId.fromUserName('John'), name: 'John'),
+        token: 'test-token',
+      );
+
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              features: (computer: true, explorer: false),
+            ),
+            members: IMap<UserId, StudyMember>(
+              const {},
+            ).add(user.user.id, StudyMember(user: user.user, role: '')),
+          ),
+          null,
+          'e4 e5 Nf3 Nc6',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+        authUser: user,
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
+      await tester.pumpAndSettle(); // wait for switch to server analysis tab
+
+      expect(find.textContaining('Only the study contributors'), findsOneWidget);
+    });
+
+    testWidgets('Can request server analysis if chapter is long enough and has write permissions', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      final user = AuthUser(
+        user: LightUser(id: UserId.fromUserName('John'), name: 'John'),
+        token: 'test-token',
+      );
+
+      when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+        (_) async => (
+          makeStudy(
+            chapter: makeChapter(
+              id: const StudyChapterId('1'),
+              orientation: Side.white,
+              features: (computer: true, explorer: false),
+            ),
+            members: IMap<UserId, StudyMember>(
+              const {},
+            ).add(user.user.id, StudyMember(user: user.user, role: 'w')),
+          ),
+          null,
+          'e4 e5 Nf3 Nc6',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+        authUser: user,
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for study to load
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
+      await tester.pumpAndSettle(); // wait for switch to server analysis tab
+
+      expect(find.textContaining('Request a computer analysis'), findsOneWidget);
+    });
   });
 }

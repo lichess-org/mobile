@@ -9,7 +9,7 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Обліковий запис';
 
   @override
   String get mobileAccountPreferences => 'Налаштування облікового запису';
@@ -2668,6 +2668,16 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Мінімальний рейтинг $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Максимальний рейтинг $param';
+  }
+
+  @override
   String get recentGames => 'Останні ігри';
 
   @override
@@ -2751,9 +2761,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Показати стрілки для варіантів';
-
-  @override
-  String get evaluationGauge => 'Шкала оцінки';
 
   @override
   String get visualMotifs => 'Візуальні підказки';
@@ -3033,15 +3040,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get checkSpamFolder => 'Також перевірте папку \"Спам\", лист міг потрапити туди. Якщо так, то позначте його як не спам.';
 
   @override
-  String get emailForSignupHelp => 'Якщо все інше не спрацювало, то надішліть нам цей електронний лист:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Скопіюйте та вставте текст зверху й відправте на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Якщо ви не можете знайти лист підтвердження, відправте лист на $param, і ми підтвердимо ваш обліковий запис.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Незабаром ми повернемося до вас, щоб допомогти вам завершити реєстрацію.';
 
   @override
   String accountConfirmed(String param) {

@@ -9,7 +9,7 @@ class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Cont';
 
   @override
   String get mobileAccountPreferences => 'Preferințe cont';
@@ -2640,6 +2640,16 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Rating minim $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Rating maxim $param';
+  }
+
+  @override
   String get recentGames => 'Jocuri recente';
 
   @override
@@ -2723,9 +2733,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Afișează săgețile variației';
-
-  @override
-  String get evaluationGauge => 'Indicator de evaluare';
 
   @override
   String get visualMotifs => 'Motive vizuale';
@@ -3005,15 +3012,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get checkSpamFolder => 'De asemenea, verificați folderul de spam, ar putea ajunge acolo. În acel caz, marcați-l ca nefiind spam.';
 
   @override
-  String get emailForSignupHelp => 'Dacă niciuna dintre variantele anterioare nu funcționează, trimiteți-ne acest email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Dați copy-paste la textul de mai sus și trimiteți-l la $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Dacă nu găsești e-mailul de confirmare, trimite un e-mail la $param și îți vom confirma contul.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vom reveni în curând cu un răspuns pentru a vă ajuta să finalizați înregistrarea.';
 
   @override
   String accountConfirmed(String param) {

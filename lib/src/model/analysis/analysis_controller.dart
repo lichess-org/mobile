@@ -224,6 +224,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
 
     UciPath path = UciPath.empty;
+    UciPath mainlinePath = UciPath.empty;
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
@@ -270,8 +271,11 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
             path = path + branch.id;
             lastMove = branch.sanMove.move;
           }
-          if (isMainline && opening == null && branch.position.ply <= 10) {
-            openingFutures.add(_fetchOpening(branch.position.fen, path));
+          if (isMainline) {
+            mainlinePath = mainlinePath + branch.id;
+            if (branch.position.ply <= 30) {
+              openingFutures.add(_fetchOpening(branch.position.fen, mainlinePath));
+            }
           }
         },
       ),
@@ -796,6 +800,11 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final curState = state.requireValue;
     if (curState.currentPath == path) {
       _refreshCurrentNode();
+    } else {
+      final (_, newOpening) = _nodeOpeningAt(_root, curState.currentPath);
+      if (newOpening != null && newOpening != curState.currentBranchOpening) {
+        state = AsyncData(curState.copyWith(currentBranchOpening: newOpening));
+      }
     }
   }
 

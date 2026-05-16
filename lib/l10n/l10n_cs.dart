@@ -2666,6 +2666,16 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedávné hry';
 
   @override
@@ -2749,9 +2759,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Zobrazit šipky variant';
-
-  @override
-  String get evaluationGauge => 'Měřítko hodnocení';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3031,15 +3038,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get checkSpamFolder => 'Také zkontrolujte složku nevyžádané pošty. Pokud ano, označte mail jako vyžádaný.';
 
   @override
-  String get emailForSignupHelp => 'Pokud všechno ostatní selže, pošlete nám tento e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Zkopírujte a vložte výše uvedený text a pošlete jej na $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Brzy se k vám ozveme, abychom vám pomohli dokončit registraci.';
 
   @override
   String accountConfirmed(String param) {

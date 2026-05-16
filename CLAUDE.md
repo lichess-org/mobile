@@ -95,7 +95,7 @@ Direct provider overrides are acceptable for **non-network providers** (reposito
 
 Two rules the analyzer enforces that are easy to miss:
 
-- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files.
+- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files. When the enclosing expression is not `const` (e.g. a non-const record or class), constructor calls inside it still need their own explicit `const` — e.g. `(time: const Duration(minutes: 3), increment: const Duration(seconds: 2))`.
 - **No leading underscores for local identifiers**: local variables and functions must not start with `_`. Reserve `_` for library-private top-level or class members.
 
 ### Code Quality Checks

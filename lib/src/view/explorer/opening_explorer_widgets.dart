@@ -35,7 +35,7 @@ class OpeningNameHeader extends StatelessWidget {
             ],
             Expanded(
               child: Text(
-                opening.name,
+                opening.eco.isNotEmpty ? '${opening.eco} ${opening.name}' : opening.name,
                 style: TextStyle(
                   color: ColorScheme.of(context).onSurface,
                   fontWeight: FontWeight.bold,
@@ -341,7 +341,6 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
           if (!context.mounted) return;
           Navigator.of(context).push(
             AnalysisScreen.buildRoute(
-              context,
               AnalysisOptions.archivedGame(
                 orientation: widget.pov,
                 gameId: widget.game.id,

@@ -41,13 +41,11 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastRoundId roundId,
     String playerId, {
     BroadcastPlayer? player,
   }) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreenLoading(
         roundId: roundId,
         player: player,
@@ -90,13 +88,11 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
     String playerId,
   ) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreen(
         tournamentId: tournamentId,
         player: player,
@@ -506,7 +502,6 @@ class _GameResultListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           BroadcastGameScreen.buildRoute(
-            context,
             tournamentId: tournament.data.id,
             roundId: roundId,
             gameId: gameId,

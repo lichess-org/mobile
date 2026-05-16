@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const LeaderboardScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const LeaderboardScreen());
   }
 
   @override
@@ -100,7 +100,7 @@ class LeaderboardListTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user.lightUser));
+    Navigator.of(context).push(UserOrProfileScreen.buildRoute(user.lightUser));
   }
 }
 

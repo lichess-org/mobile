@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const LiveTvChannelsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const LiveTvChannelsScreen());
   }
 
   @override
@@ -57,7 +57,6 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(
-                    context,
                     channel: game.channel,
                     gameId: game.id,
                     orientation: game.orientation,

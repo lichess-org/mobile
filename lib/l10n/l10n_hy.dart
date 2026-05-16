@@ -2612,6 +2612,16 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Վերջին խաղեր';
 
   @override
@@ -2695,9 +2705,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Ցուցադրել տարբերակների սլաքները';
-
-  @override
-  String get evaluationGauge => 'Գնահատման սանդղակ';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2977,15 +2984,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get checkSpamFolder => 'Ստուգեք նաև սպամի պանակը, նամակը կարող է հայտնվել այնտեղ: Եթե ​​այդպես է, այն նշեք որպես ոչ սպամ:';
 
   @override
-  String get emailForSignupHelp => 'Եթե ​​մնացած ամեն ինչը ձախողվի, ապա գրեք մեզ այս էլեկտրոնային հասցեով.';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Պատճենեք և տեղադրեք վերը նշված տեքստը և այն ուղարկեք $param-ին';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Մենք շուտով կվերադառնանք Ձեզ, որպեսզի օգնենք լրացնել Ձեր գրանցումը:';
 
   @override
   String accountConfirmed(String param) {

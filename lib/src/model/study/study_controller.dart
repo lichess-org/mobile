@@ -4,9 +4,13 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -18,6 +22,8 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -35,8 +41,10 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'StudyControllerProvider',
     );
 
+enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
+
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin
+    with EngineEvaluationMixin, ServerAnalysisMixin
     implements PgnTreeNotifier {
   StudyController(this.options);
 
@@ -107,12 +115,13 @@ class StudyController extends AsyncNotifier<StudyState>
   }
 
   Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
-    final (study, pgn) = await ref
+    final (study, analysisSummary, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
 
     final game = PgnGame.parsePgn(pgn);
 
+    final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
     final variant = study.chapter.setup.variant;
@@ -141,6 +150,7 @@ class StudyController extends AsyncNotifier<StudyState>
           initialPosition: Variant.standard.initialPosition,
         ),
         pgnRootComments: rootComments,
+        pgnHeaders: pgnHeaders,
         pov: orientation,
         isComputerAnalysisAllowed: false,
         gamebookActive: false,
@@ -148,6 +158,19 @@ class StudyController extends AsyncNotifier<StudyState>
       );
       state = AsyncData(illegalPositionState);
       return illegalPositionState;
+    }
+
+    // If server analysis has already been requested for this chapter,
+    // assume that any comment that has an eval is actually a lichess analysis comment.
+    // (Note that regular comments by the study author might also exist.)
+    if (analysisSummary != null) {
+      for (final node in _root.mainline) {
+        final lichessCommentIndex = (node.comments ?? []).indexWhere((c) => c.eval != null);
+        if (lichessCommentIndex != -1) {
+          node.lichessAnalysisComments = [node.comments![lichessCommentIndex]];
+          node.comments!.removeAt(lichessCommentIndex);
+        }
+      }
     }
 
     const currentPath = UciPath.empty;
@@ -167,11 +190,14 @@ class StudyController extends AsyncNotifier<StudyState>
         initialPosition: _root.position,
       ),
       pgnRootComments: rootComments,
+      pgnHeaders: pgnHeaders,
       lastMove: lastMove,
       pov: orientation,
       isComputerAnalysisAllowed: study.chapter.features.computer && !study.chapter.gamebook,
       gamebookActive: study.chapter.gamebook,
       pgn: pgn,
+      analysisSummary: analysisSummary,
+      acplChartData: analysisSummary != null ? makeAcplChartData() : null,
     );
 
     // We need to define the state value in the build method because `requestEval` require the state
@@ -493,13 +519,36 @@ class StudyController extends AsyncNotifier<StudyState>
       requestEval();
     }
   }
+
+  @override
+  Future<void> onServerAnalysisEvent(ServerEvalEvent event) async {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        acplChartData: makeAcplChartData(),
+        analysisSummary: event.analysis != null
+            ? (
+                division: event.division != null
+                    ? Division(middlegame: event.division!.middle, endgame: event.division!.end)
+                    : state.requireValue.analysisSummary?.division,
+                white: event.analysis!.white,
+                black: event.analysis!.black,
+              )
+            : null,
+        root: _root.view,
+      ),
+    );
+  }
 }
 
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
 sealed class StudyState
-    with _$StudyState, AnalysisExplosionMixin, EvaluationMixinState<StudyState>
+    with
+        _$StudyState,
+        AnalysisExplosionMixin,
+        EvaluationMixinState<StudyState>,
+        ServerAnalysisMixinState
     implements CommonAnalysisState {
   const StudyState._();
 
@@ -547,6 +596,9 @@ sealed class StudyState
     /// Whether we're currently in gamebook mode, where the user has to find the right moves.
     required bool gamebookActive,
 
+    /// The PGN headers of the study chapter.
+    required IMap<String, String> pgnHeaders,
+
     /// The last move played.
     Move? lastMove,
 
@@ -557,6 +609,12 @@ sealed class StudyState
     IList<PgnComment>? pgnRootComments,
 
     @Default(false) bool engineInThreatMode,
+
+    /// Server analysis summary if a server analysis has been triggered on this chapter.
+    AnalysisSummary? analysisSummary,
+
+    /// Optional ACPL chart data of the game, coming from lichess server analysis.
+    IList<ExternalEval>? acplChartData,
   }) = _StudyState;
 
   /// Whether the current user is the owner of the study.
@@ -580,6 +638,26 @@ sealed class StudyState
       isComputerAnalysisAllowed && prefs.isEnabled;
 
   bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
+
+  bool get isServerAnalysisAllowed => !gamebookActive && study.chapter.features.computer;
+
+  ChapterServerAnalysisStatus get chapterServerAnalysisStatus {
+    if (analysisSummary != null) {
+      return ChapterServerAnalysisStatus.available;
+    }
+
+    if (root == null || root!.mainline.length < 4) {
+      return ChapterServerAnalysisStatus.notEnoughMoves;
+    }
+    if (!isWriteable) {
+      return ChapterServerAnalysisStatus.notWriteable;
+    }
+    return ChapterServerAnalysisStatus.canRequest;
+  }
+
+  @override
+  ServerAnalysisSource? get serverAnalysisSource =>
+      ServerAnalysisSource.studyChapter(studyId: study.id, chapterId: study.chapter.id);
 
   EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) => isEngineAvailable(prefs)
       ? (
@@ -649,6 +727,10 @@ sealed class StudyState
 
   PlayerSide get playerSide =>
       gamebookActive ? (pov == Side.white ? PlayerSide.white : PlayerSide.black) : PlayerSide.both;
+
+  PlayersAnalysis? get playersAnalysis => analysisSummary != null
+      ? (white: analysisSummary!.white, black: analysisSummary!.black)
+      : null;
 }
 
 @freezed

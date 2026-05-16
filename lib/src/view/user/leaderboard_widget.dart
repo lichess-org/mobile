@@ -23,7 +23,7 @@ class LeaderboardWidget extends ConsumerWidget {
           hasLeading: true,
           header: Text(context.l10n.leaderboard),
           onHeaderTap: () {
-            Navigator.of(context).push(LeaderboardScreen.buildRoute(context));
+            Navigator.of(context).push(LeaderboardScreen.buildRoute());
           },
           children: [
             for (final entry in value.entries)

@@ -78,9 +78,7 @@ class GameSettings extends ConsumerWidget {
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+                Navigator.of(context).push(BoardSettingsScreen.buildRoute(fullscreenDialog: true));
               },
             ),
           ],

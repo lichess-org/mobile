@@ -2610,6 +2610,16 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Son oyunlar';
 
   @override
@@ -2693,9 +2703,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Variasiya oxlarını göstərin';
-
-  @override
-  String get evaluationGauge => 'Dəyərləndirmə çubuğu';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2975,15 +2982,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get checkSpamFolder => 'Spam qutusunu da yoxlayın, məktub oradada ola bilər. Elədirsə, zəhmət olmasa qeyri-spam kimi qeyd edin.';
 
   @override
-  String get emailForSignupHelp => 'Əgər heç nə alınmırsa, bizə email yollayın:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Yuxarıdakı mətni kopyalayıb yapışdırıb $param ünvanına göndərin';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Qeydiyyatınızı tamamlamağınıza kömək etmək üçün tezliklə sizinlə əlaqə saxlayacağıq.';
 
   @override
   String accountConfirmed(String param) {

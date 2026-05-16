@@ -16,8 +16,11 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:logging/logging.dart';
 
 part 'server_analysis_service.freezed.dart';
+
+final _logger = Logger('ServerAnalysisService');
 
 @freezed
 sealed class ServerAnalysisSource with _$ServerAnalysisSource {
@@ -25,7 +28,10 @@ sealed class ServerAnalysisSource with _$ServerAnalysisSource {
 
   const factory ServerAnalysisSource.game({required GameId gameId}) = _GameServerAnalysisSource;
 
-  // TODO add study chapter source
+  const factory ServerAnalysisSource.studyChapter({
+    required StudyId studyId,
+    required StudyChapterId chapterId,
+  }) = _StudyChapterServerAnalysisSource;
 }
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
@@ -75,6 +81,7 @@ class ServerAnalysisService {
     final uri = Uri(
       path: switch (source) {
         _GameServerAnalysisSource(:final gameId) => '/watch/$gameId/${side?.name ?? Side.white}/v6',
+        _StudyChapterServerAnalysisSource(:final studyId) => '/study/$studyId/socket/v6',
       },
     );
 
@@ -113,24 +120,36 @@ class ServerAnalysisService {
         try {
           await ref.read(gameRepositoryProvider).requestServerAnalysis(gameId);
           _currentAnalysis.value = source;
-        } on ServerException catch (e) {
+        } on ServerException catch (e, st) {
           // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
           // for updates.
           // TODO: should disambiguate this better. Server will also return an error when max number
           // of analyses is reached.
           if (e.statusCode == 400) {
-            debugPrint('Analysis already requested for game $gameId');
+            _logger.info('Analysis already requested for game $gameId');
             _currentAnalysis.value = source;
           } else {
-            debugPrint('ServerException requesting server analysis: $e');
+            _logger.severe('ServerException requesting server analysis', e, st);
             _cancelAnalysis();
             rethrow;
           }
-        } catch (e) {
-          debugPrint('Error requesting server analysis: $e');
+        } catch (e, st) {
+          _logger.severe('Error requesting server analysis', e, st);
           _cancelAnalysis();
           rethrow;
         }
+
+      case _StudyChapterServerAnalysisSource(:final chapterId):
+        _currentAnalysis.value = source;
+        _socketClient!.firstConnection
+            .timeout(const Duration(seconds: 3))
+            .onError((err, st) {
+              _logger.severe('Error connecting to analysis socket', err, st);
+              _cancelAnalysis();
+            })
+            .whenComplete(() {
+              _socketClient!.send('requestAnalysis', chapterId);
+            });
     }
 
     _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {

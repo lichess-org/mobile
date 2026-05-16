@@ -16,8 +16,8 @@ import 'package:url_launcher/url_launcher.dart';
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const AccountPreferencesScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const AccountPreferencesScreen());
   }
 
   @override
@@ -56,9 +56,11 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
     try {
       await f();
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

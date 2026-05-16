@@ -2612,6 +2612,16 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nylige partier';
 
   @override
@@ -2695,9 +2705,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Vis variantpiler';
-
-  @override
-  String get evaluationGauge => 'Evalueringsmåler';
 
   @override
   String get visualMotifs => 'Visuelle motiver';
@@ -2977,15 +2984,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get checkSpamFolder => 'Sjekk om meldingen havnet i søppelpostmappen. Merk i tilfelle meldingen som ikke søppelpost.';
 
   @override
-  String get emailForSignupHelp => 'Send denne meldingen til oss som siste utvei:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og lim inn teksten ovenfor og send den til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi tar snart kontakt og hjelper deg med registreringen.';
 
   @override
   String accountConfirmed(String param) {

@@ -137,7 +137,6 @@ class ListSection extends StatelessWidget {
                       children: [
                         if (Theme.of(context).platform == TargetPlatform.iOS)
                           ..._divideTiles(
-                            context: context,
                             tiles: children,
                             cupertinoHasLeading: hasLeading,
                             cupertinoLeadingIndent: leadingIndent,
@@ -155,7 +154,6 @@ class ListSection extends StatelessWidget {
   }
 
   static Iterable<Widget> _divideTiles({
-    required BuildContext context,
     required Iterable<Widget> tiles,
     bool cupertinoHasLeading = false,
     double? cupertinoLeadingIndent,

@@ -32,15 +32,13 @@ class TvScreen extends ConsumerStatefulWidget {
   final (GameId id, Side orientation)? initialGame;
   final LightUser? user;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     TvChannel? channel,
     GameId? gameId,
     LightUser? user,
     Side? orientation,
   }) {
     return buildScreenRoute(
-      context,
       screen: TvScreen(
         channel: channel,
         initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,

@@ -24,8 +24,8 @@ import 'package:path/path.dart';
 class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BackgroundChoiceScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BackgroundChoiceScreen());
   }
 
   @override

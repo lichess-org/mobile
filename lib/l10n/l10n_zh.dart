@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => '账户';
 
   @override
   String get mobileAccountPreferences => '账户设置';
@@ -1275,7 +1275,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get perfStatBerserkedGames => '狂暴对局数';
 
   @override
-  String get perfStatTimeSpentPlaying => '对弈总时长';
+  String get perfStatTimeSpentPlaying => '对局总时长';
 
   @override
   String get perfStatAverageOpponent => '对手平均等级分';
@@ -2584,6 +2584,16 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param 的最低等级分';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param 的最高等级分';
+  }
+
+  @override
   String get recentGames => '最近对局';
 
   @override
@@ -2667,9 +2677,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showVariationArrows => '显示变着指示';
-
-  @override
-  String get evaluationGauge => '显示局面评估';
 
   @override
   String get visualMotifs => '可视化模式';
@@ -2949,15 +2956,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get checkSpamFolder => '同时请检查您的垃圾邮件文件夹，邮件可能在那里。如果在，请将其标记为非垃圾邮件。';
 
   @override
-  String get emailForSignupHelp => '如果以上方法均失败，请向我们发送此邮件：';
-
-  @override
-  String copyTextToEmail(String param) {
-    return '复制上面的文本并将其发送至 $param';
+  String sendEmailForAccountVerification(String param) {
+    return '若您无法找到确认邮件，那么请发送邮件至 $param，我们将协助您完成账户确认。';
   }
-
-  @override
-  String get waitForSignupHelp => '我们将尽快回复您，帮助您完成注册。';
 
   @override
   String accountConfirmed(String param) {
@@ -8886,9 +8887,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showVariationArrows => '顯示變體箭頭';
 
   @override
-  String get evaluationGauge => '評估條';
-
-  @override
   String get multipleLines => '路線分析線';
 
   @override
@@ -9122,17 +9120,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get checkSpamFolder => '嘗試檢查你的垃圾郵件收件匣，它可能在那裡。 如果在，請將其標記為非垃圾郵件。';
-
-  @override
-  String get emailForSignupHelp => '如果其他所有的方法都失敗了，給我們發這條短信：';
-
-  @override
-  String copyTextToEmail(String param) {
-    return '複製並貼上上面的文字然後把它發給$param';
-  }
-
-  @override
-  String get waitForSignupHelp => '我們很快就會給你回覆，説明你完成註冊。';
 
   @override
   String accountConfirmed(String param) {

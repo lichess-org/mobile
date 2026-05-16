@@ -326,6 +326,7 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   return CorrespondenceClockData(
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
+    resetId: DateTime.now().millisecondsSinceEpoch,
   );
 }
 

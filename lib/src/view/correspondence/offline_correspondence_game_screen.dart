@@ -31,14 +31,8 @@ class OfflineCorrespondenceGameScreen extends StatefulWidget {
 
   final (DateTime, OfflineCorrespondenceGame) initialGame;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required (DateTime, OfflineCorrespondenceGame) initialGame,
-  }) {
-    return buildScreenRoute(
-      context,
-      screen: OfflineCorrespondenceGameScreen(initialGame: initialGame),
-    );
+  static Route<dynamic> buildRoute({required (DateTime, OfflineCorrespondenceGame) initialGame}) {
+    return buildScreenRoute(screen: OfflineCorrespondenceGameScreen(initialGame: initialGame));
   }
 
   @override
@@ -152,10 +146,15 @@ class _BodyState extends ConsumerState<_Body> {
       confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
           ? (confirm: confirmMove, cancel: cancelMove)
           : null,
-      clock: youAre == Side.black && game.estimatedTimeLeft(Side.black, widget.lastModified) != null
+      clock: youAre == Side.black && game.clock != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft(Side.black, widget.lastModified)!,
+              duration: activeClockSide == Side.black
+                  ? game.estimatedTimeLeft(Side.black, widget.lastModified)!
+                  : game.clock!.forSide(Side.black),
               active: activeClockSide == Side.black,
+              // lastModified changes on every move write, so it serves as a
+              // reliable signal that the server sent a new authoritative clock reading.
+              resetId: widget.lastModified.millisecondsSinceEpoch,
             )
           : null,
     );
@@ -169,10 +168,15 @@ class _BodyState extends ConsumerState<_Body> {
       confirmMoveCallbacks: youAre == Side.white && moveToConfirm != null
           ? (confirm: confirmMove, cancel: cancelMove)
           : null,
-      clock: game.estimatedTimeLeft(Side.white, widget.lastModified) != null
+      clock: game.clock != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft(Side.white, widget.lastModified)!,
+              duration: activeClockSide == Side.white
+                  ? game.estimatedTimeLeft(Side.white, widget.lastModified)!
+                  : game.clock!.forSide(Side.white),
               active: activeClockSide == Side.white,
+              // lastModified changes on every move write, so it serves as a
+              // reliable signal that the server sent a new authoritative clock reading.
+              resetId: widget.lastModified.millisecondsSinceEpoch,
             )
           : null,
     );
@@ -232,7 +236,6 @@ class _BodyState extends ConsumerState<_Body> {
                     onTap: () {
                       Navigator.of(context).push(
                         AnalysisScreen.buildRoute(
-                          context,
                           AnalysisOptions.pgn(
                             id: game.id,
                             orientation: game.youAre!,
@@ -288,15 +291,13 @@ class _BodyState extends ConsumerState<_Body> {
                       showTooltip: false,
                     ),
                   ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoForward ? () => moveForward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoForward ? () => moveForward() : null,
-                        label: context.l10n.next,
-                        icon: CupertinoIcons.chevron_forward,
-                        showTooltip: false,
-                      ),
+                  RepeatButton(
+                    onLongPress: canGoForward ? () => moveForward() : null,
+                    child: BottomBarButton(
+                      onTap: canGoForward ? () => moveForward() : null,
+                      label: context.l10n.next,
+                      icon: CupertinoIcons.chevron_forward,
+                      showTooltip: false,
                     ),
                   ),
                 ],

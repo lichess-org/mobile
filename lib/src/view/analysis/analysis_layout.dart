@@ -72,6 +72,7 @@ class AnalysisLayout extends ConsumerWidget {
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
+    this.smallBoard = false,
     this.pockets,
     super.key,
   });
@@ -117,6 +118,11 @@ class AnalysisLayout extends ConsumerWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
+
+  /// If true, the board is displayed in a small size on portrait orientation.
+  ///
+  /// This is `false` by default.
+  final bool smallBoard;
 
   /// Current state of the pockets, in variants like crazyhouse.
   ///
@@ -278,18 +284,22 @@ class AnalysisLayout extends ConsumerWidget {
                     ),
                   );
                 } else {
-                  final evalGaugeWidth = getEvalGaugeWidth(context);
-                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final evalGaugeSize = engineGaugeBuilder != null
+                      ? getEvalGaugeWidth(context)
+                      : 0.0;
+
+                  final defaultBoardSize =
+                      (smallBoard ? kSmallBoardScale : 1.0) *
+                      (constraints.biggest.shortestSide - evalGaugeSize);
+
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                  final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
                   final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
-                  final boardSize = isTablet || isSmallScreen || pockets != null
-                      ? defaultBoardSize -
-                            evalGaugeSize -
-                            kTabletBoardTableSidePadding * 2 -
-                            (pockets != null ? additionalBoardSidePaddingForPockets : 0.0)
-                      : defaultBoardSize - evalGaugeSize;
+
+                  final boardSize =
+                      defaultBoardSize -
+                      (isTablet ? kTabletBoardTableSidePadding * 2 : 0) -
+                      (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,

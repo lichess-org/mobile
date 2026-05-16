@@ -12,8 +12,8 @@ const kMasterVolumeValues = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
 class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const SoundSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const SoundSettingsScreen());
   }
 
   @override
