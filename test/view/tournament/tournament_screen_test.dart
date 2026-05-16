@@ -148,6 +148,7 @@ String makeTournamentJson({
   "minRatedGames": {
     "nb": 20
   },
+  "description": "This is a test tournament. Have fun playing!",
   "chat": {
     "lines": [],
     "writeable": true
@@ -377,6 +378,15 @@ void main() {
 
       expect(find.text('>= 20 Blitz rated games'), findsOneWidget);
       expect(find.text('Rated <= 1300 in Blitz for the last week'), findsOneWidget);
+      // Description should be hidden by default, but expandable
+      expect(find.text('Description'), findsOneWidget);
+      expect(find.text('This is a test tournament. Have fun playing!'), findsNothing);
+      await tester.tap(find.text('Description'));
+      await tester.pump();
+      expect(find.text('This is a test tournament. Have fun playing!'), findsOneWidget);
+      await tester.tap(find.text('Description'));
+      await tester.pump();
+      expect(find.text('This is a test tournament. Have fun playing!'), findsNothing);
 
       for (var i = 0; i < 10; i++) {
         expect(find.text('player$i'), findsOneWidget);
