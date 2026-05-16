@@ -171,6 +171,7 @@ class _Body extends ConsumerWidget {
                     Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute());
                   },
                 ),
+              // Match the home blog carousel behavior by hiding community web content in kid mode.
               if (!isKidMode) ...[
                 ListTile(
                   leading: const Icon(Icons.forum_outlined),
