@@ -138,7 +138,7 @@ class MainTabScaffold extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
 
-    final isServerReachable = ref.watch(serverStatusProvider).value ?? true;
+    final isServerReachable = ref.watch(serverStatusProvider);
 
     final extendBody = Theme.of(context).platform == TargetPlatform.iOS;
 
