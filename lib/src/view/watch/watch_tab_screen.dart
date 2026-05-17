@@ -65,8 +65,6 @@ class WatchTabScreen extends ConsumerStatefulWidget {
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
-  static const offlineWidget = ServerOutage();
-
   @override
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
@@ -79,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -96,20 +94,24 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               : null,
           actions: const [AccountMenuButton()],
         ),
-        body: isOnline
-            ? OrientationBuilder(
-                builder: (context, orientation) {
-                  return HapticRefreshIndicator(
-                    edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                        ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                        : 0.0,
-                    key: _androidRefreshKey,
-                    onRefresh: _refreshData,
-                    child: _Body(orientation),
-                  );
-                },
-              )
-            : offlineWidget,
+        body: switch (connectionStatus) {
+          ConnectionStatus.online => OrientationBuilder(
+            builder: (context, orientation) {
+              return HapticRefreshIndicator(
+                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                    : 0.0,
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: _Body(orientation),
+              );
+            },
+          ),
+          ConnectionStatus.networkDown => const Center(
+            child: Text('No internet connection.', style: Styles.noResultTextStyle),
+          ),
+          ConnectionStatus.serverDown => const ServerOutage(),
+        },
       ),
     );
   }

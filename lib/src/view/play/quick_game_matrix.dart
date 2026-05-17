@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/network/lichess_online.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -94,7 +94,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(lichessOnlineProvider);
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -107,7 +107,7 @@ class _SectionChoices extends ConsumerWidget {
                 ),
                 subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
                 speed: choice.speed,
-                onTap: isOnline
+                onTap: connectionStatus == ConnectionStatus.online
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
@@ -134,7 +134,7 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
-                onTap: isOnline
+                onTap: connectionStatus == ConnectionStatus.online
                     ? () {
                         showModalBottomSheet<void>(
                           context: context,

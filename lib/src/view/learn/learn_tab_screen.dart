@@ -83,7 +83,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
     final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
@@ -110,7 +110,7 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
-          if (isOnline) ...[
+          if (connectionStatus == ConnectionStatus.online) ...[
             ListSection(
               header: Text(context.l10n.studyMenu),
               onHeaderTap: () =>
@@ -139,7 +139,7 @@ class _Body extends ConsumerWidget {
                           ? const CupertinoListTileChevron()
                           : null,
                       title: Text(context.l10n.studyMyStudies),
-                      onTap: isOnline
+                      onTap: connectionStatus == ConnectionStatus.online
                           ? () => Navigator.of(
                               context,
                             ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.mine))
@@ -152,7 +152,7 @@ class _Body extends ConsumerWidget {
                           ? const CupertinoListTileChevron()
                           : null,
                       title: Text(context.l10n.studyMyFavoriteStudies),
-                      onTap: isOnline
+                      onTap: connectionStatus == ConnectionStatus.online
                           ? () => Navigator.of(
                               context,
                             ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.likes))

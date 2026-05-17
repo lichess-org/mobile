@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/network/lichess_online.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
@@ -17,7 +17,7 @@ class PlayMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(lichessOnlineProvider);
+    final connectionStatus = ref.watch(connectionStatusProvider);
 
     return Column(
       children: [
@@ -28,7 +28,7 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -45,7 +45,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.challengeAFriend),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -58,7 +58,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.correspondence),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);

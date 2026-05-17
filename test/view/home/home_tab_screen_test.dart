@@ -530,7 +530,7 @@ void main() {
       expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
-    testWidgets('Watch tab shows outage screen when offline', (tester) async {
+    testWidgets('Watch tab shows no internet message when network is down', (tester) async {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
@@ -542,6 +542,24 @@ void main() {
       await tester.pumpWidget(app);
       // Wait for connectivity state to resolve.
       await tester.pump();
+      await tester.pumpAndSettle();
+
+      // Navigate to the Watch tab.
+      await tester.tap(find.text('Watch'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No internet connection.'), findsOneWidget);
+      expect(find.byType(ServerOutage), findsNothing);
+    });
+
+    testWidgets('Watch tab shows outage screen when server is down', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOffline.new)},
+      );
+
+      await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
       // Navigate to the Watch tab.

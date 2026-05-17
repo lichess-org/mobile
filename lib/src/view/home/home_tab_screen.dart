@@ -25,7 +25,6 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -405,7 +404,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                         AccountMenuButton(),
                       ],
                     ),
-              body: !ref.watch(serverStatusProvider)
+              body: ref.watch(connectionStatusProvider) == ConnectionStatus.serverDown
                   ? const ServerOutage()
                   : widget.editModeEnabled
                   ? content
