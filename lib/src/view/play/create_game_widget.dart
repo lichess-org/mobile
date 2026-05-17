@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/lichess_online.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -23,7 +23,7 @@ class CreateGameWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(lichessOnlineProvider);
     final account = ref.watch(accountProvider).value;
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -515,7 +516,7 @@ void main() {
     });
   });
   group('Server offline', () {
-    testWidgets('outage page shown', (tester) async {
+    testWidgets('outage page shown and Play button still accessible', (tester) async {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
@@ -526,7 +527,28 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ServerOutage), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+    });
+
+    testWidgets('Watch tab shows outage screen when offline', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {
+          onlineStatusProvider: onlineStatusProvider.overrideWith((ref) => Future.value(false)),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Wait for connectivity state to resolve.
       await tester.pump();
+      await tester.pumpAndSettle();
+
+      // Navigate to the Watch tab.
+      await tester.tap(find.text('Watch'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ServerOutage), findsOneWidget);
     });
   });
 }

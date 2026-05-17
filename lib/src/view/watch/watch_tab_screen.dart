@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -64,9 +65,7 @@ class WatchTabScreen extends ConsumerStatefulWidget {
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
-  static const offlineWidget = Center(
-    child: Text('No internet connection.', style: Styles.noResultTextStyle),
-  );
+  static const offlineWidget = ServerOutage();
 
   @override
   Widget build(BuildContext context) {

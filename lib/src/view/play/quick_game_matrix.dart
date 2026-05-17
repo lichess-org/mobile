@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/lichess_online.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -94,7 +94,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(lichessOnlineProvider);
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [

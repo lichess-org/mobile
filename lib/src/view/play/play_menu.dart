@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/lichess_online.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
@@ -17,7 +17,7 @@ class PlayMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(lichessOnlineProvider);
 
     return Column(
       children: [
