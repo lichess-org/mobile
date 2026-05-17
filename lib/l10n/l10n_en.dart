@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1594,13 +1607,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
@@ -2594,6 +2604,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Recent games';
 
   @override
@@ -2677,9 +2697,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Evaluation gauge';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2959,15 +2976,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
-  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'We will respond shortly to help you complete your registration.';
 
   @override
   String accountConfirmed(String param) {
@@ -3537,6 +3548,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 start position: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Starting position';
@@ -5022,7 +5036,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  ';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6550,11 +6564,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }
 
 /// The translations for English, as used in the United States (`en_US`).
 class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs(): super('en_US');
+
+  @override
+  String get mobileAccount => 'Account';
 
   @override
   String get mobileAccountPreferences => 'Account settings';
@@ -7606,6 +7631,16 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -8140,9 +8175,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
 
   @override
   String get puzzleUpVote => 'Rate puzzle positively';
@@ -9229,9 +9261,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get showVariationArrows => 'Show variation arrows';
 
   @override
-  String get evaluationGauge => 'Evaluation gauge';
-
-  @override
   String get visualMotifs => 'Visual motifs';
 
   @override
@@ -9509,15 +9538,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
-  String get emailForSignupHelp => 'If you still have questions, please send us an email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param, and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'We will respond shortly to help you complete your registration.';
 
   @override
   String accountConfirmed(String param) {
@@ -10087,6 +10110,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String chess960StartPosition(String param) {
     return 'Chess960 start position: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Starting position';
@@ -11929,7 +11955,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       count,
       locale: localeName,
       other: '≥ $count rated $param2 games',
-      one: '≥ $count $param2 rated game',
+      one: '≥ $count rated $param2 game',
     );
     return '$_temp0';
   }
@@ -13100,4 +13126,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

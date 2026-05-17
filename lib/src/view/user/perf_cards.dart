@@ -145,8 +145,8 @@ class PerfCards extends StatelessWidget {
 
   void _handlePerfCardTap(BuildContext context, Perf perf) {
     Navigator.of(context).push(switch (perf) {
-      Perf.storm => StormDashboardModal.buildRoute(context, user.lightUser),
-      _ => PerfStatsScreen.buildRoute(context, user: user, perf: perf),
+      Perf.storm => StormDashboardModal.buildRoute(user.lightUser),
+      _ => PerfStatsScreen.buildRoute(user: user, perf: perf),
     });
   }
 }

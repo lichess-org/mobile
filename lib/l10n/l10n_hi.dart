@@ -9,6 +9,9 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'खाता प्राथमिकताएं';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'क्या आपको यह पहेली पसंद आई?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'अगले एक को लोड करने के लिए वोट दें!';
 
   @override
   String get puzzleUpVote => 'पहेली को उपवोट करिये';
@@ -2594,6 +2604,16 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'हाल के खेल';
 
   @override
@@ -2677,9 +2697,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'विविधता वाले तीर दिखाएँ';
-
-  @override
-  String get evaluationGauge => 'मूल्यांकन गेज';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2959,15 +2976,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get checkSpamFolder => 'अपना स्पैम फ़ोल्डर भी जांचें, हो सकता है कि वह वहां हो। यदि हां, तो इसे स्पैम नहीं के रूप में चिह्नित करें।';
 
   @override
-  String get emailForSignupHelp => 'यदि बाकी सब विफल हो जाए तो हमें यह ईमेल भेजें';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'उपरोक्त टेक्स्ट को कॉपी और पेस्ट करें और $param पर भेजें';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'आपका साइनअप पूरा करने में मदद करने के लिए हम जल्द ही आपके पास वापस आएंगे।';
 
   @override
   String accountConfirmed(String param) {
@@ -3537,6 +3548,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'चेस960 खेल की प्रारम्भिक स्थिति: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'शुरू करने की स्थिति:';
@@ -6550,4 +6564,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'दो-चरण प्रमाणीकरण';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param का ब्लॉग';
+  }
 }

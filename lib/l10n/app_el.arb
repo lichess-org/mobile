@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Λογαριασμός",
   "mobileAccountPreferences": "Ρυθμίσεις",
   "mobileAccountPreferencesHelp": "Αυτές οι ρυθμίσεις αποθηκεύονται στον λογαριασμό σας στο Lichess και θα ισχύουν σε όλες τις συσκευές σας.",
   "mobileAllGames": "Όλες οι παρτίδες",
@@ -278,6 +279,8 @@
   "broadcastTiebreaks": "Μπαράζ",
   "broadcastGameX": "Παρτίδα {param}",
   "broadcastKnockouts": "Νοκ άουτ",
+  "broadcastUnderXAgeTournament": "Κ{param}",
+  "broadcastUnderXEloTournament": "Κ{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} μετάδοση} other{{count} μεταδόσεις}}",
   "broadcastNbViewers": "{count, plural, =1{{count} θεατής } other{{count} θεατές}}",
   "challengeChallengesX": "Προκλήσεις: {param1}",
@@ -440,7 +443,6 @@
   "puzzleOrigin": "Πηγή",
   "puzzleSpecialMoves": "Ειδικές κινήσεις",
   "puzzleDidYouLikeThisPuzzle": "Σας άρεσε αυτό το τακτικό;",
-  "puzzleVoteToLoadNextOne": "Ψηφίστε για να προχωρήσετε στο επόμενο!",
   "puzzleUpVote": "Μου άρεσε το τακτικό",
   "puzzleDownVote": "Δε μου άρεσε το τακτικό",
   "puzzleYourPuzzleRatingWillNotChange": "Η βαθμολογία τακτικών σας δε θα αλλάξει. Σημειώνουμε πως η επίλυση τακτικών δεν είναι διαγωνιστική διαδικασία — η βαθμολογία σας, άλλωστε, χρησιμοποιείται ως μέτρο για την επιλογή τακτικών δυσκολίας αντίστοιχης με το επίπεδο στο οποίο βρίσκεστε.",
@@ -774,7 +776,6 @@
   "enable": "Ενεργοποίηση",
   "bestMoveArrow": "Βέλτιστη κίνηση βέλους",
   "showVariationArrows": "Εμφάνιση βελών για βαριάντες",
-  "evaluationGauge": "Δείκτης αξιολόγησης",
   "visualMotifs": "Οπτικά μοτίβα",
   "undefendedPieces": "Ανυπεράσπιστα κομμάτια",
   "pinnedPieces": "Καρφωμένα κομμάτια",
@@ -857,9 +858,7 @@
   "emailCanTakeSomeTime": "Η αποστολή ενδέχεται να διαρκέσει λίγη ώρα.",
   "refreshInboxAfterFiveMinutes": "Περιμένετε 5 λεπτά και ανανεώστε τα εισερχόμενα email σας.",
   "checkSpamFolder": "Επίσης, ελέγξτε τον φάκελο με τα ανεπιθύμητα email. Αν το email που στείλαμε βρίσκεται εκεί, αναφέρετέ το ως μη ανεπιθύμητο.",
-  "emailForSignupHelp": "Αν όλα τα παραπάνω αποτύχουν, στείλτε μας το εξής email:",
-  "copyTextToEmail": "Αντιγράψτε και επικολλήστε το παραπάνω κείμενο και στείλτε το στη διεύθυνση {param}",
-  "waitForSignupHelp": "Θα επανέλθουμε σύντομα σε σας για να σας βοηθήσουμε να ολοκληρώσετε την εγγραφή σας.",
+  "sendEmailForAccountVerification": "Αν δεν μπορείτε να βρείτε το email επιβεβαίωσης, στείλτε ένα email στο {param} και θα επιβεβαιώσουμε τον λογαριασμό σας για εσάς.",
   "accountConfirmed": "Ο λογαριασμός του χρήστη {param} επαληθεύτηκε με επιτυχία.",
   "accountCanLogin": "Μπορείτε τώρα να συνδεθείτε ως {param}.",
   "accountConfirmationEmailNotNeeded": "Δεν χρειάζεστε ένα email επιβεβαίωσης.",
@@ -1035,6 +1034,7 @@
   "popularOpenings": "Δημοφιλή ανοίγματα",
   "endgamePositions": "Θέσεις φινάλε",
   "chess960StartPosition": "Αρχική θέση Chess960: {param}",
+  "randomChess960Position": "Τυχαία θέση Chess960",
   "startPosition": "Αρχική διάταξη",
   "clearBoard": "Εκκαθάριση σκακιέρας",
   "loadPosition": "Φορτώστε θέση",
@@ -1809,5 +1809,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} χρόνο πριν} other{{count} χρόνια πριν}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{απομένει {count} λεπτό} other{απομένουν {count} λεπτά}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{απομένει {count} ώρα} other{απομένουν {count} ώρες}}",
-  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων"
+  "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων",
+  "ublogCommunity": "Κοινότητα",
+  "ublogXBlog": "Ιστολόγιο του χρήστη {param}"
 }

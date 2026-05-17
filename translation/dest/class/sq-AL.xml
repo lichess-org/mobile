@@ -115,7 +115,7 @@ Do të shfaqë një vijë horizontale.</string>
   <string name="xisNowAStudentOfTheClass">%s tani është një nxënës i klasës</string>
   <string name="anInvitationHasBeenSentToX">Për %s u dërgua një ftesë</string>
   <string name="xAlreadyHasAPendingInvitation">%s ka tashmë një ftesë pezull</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s është llogari fëmijësh dhe s’mund të marrë mesazhin tuaj. Duhet t’u jepni dorazin URL-në e ftesës: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s është llogari fëmijësh dhe s’mund të marrë mesazhin tuaj. Duhet t’u jepni dorazin URL-në e ftesës: %2$s</string>
   <string name="moveToClass">Kalo te %s</string>
   <string name="moveToAnotherClass">Kalo te një klasë tjetër</string>
   <string name="allowMessagingBetweenStudents">Lejo mesazhe mes nxënësish</string>

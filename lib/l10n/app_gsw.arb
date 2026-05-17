@@ -444,7 +444,6 @@
   "puzzleOrigin": "Herkunft",
   "puzzleSpecialMoves": "Spezielli Züg",
   "puzzleDidYouLikeThisPuzzle": "Hät dir d'Ufgab g'falle?",
-  "puzzleVoteToLoadNextOne": "Stimm ab, um die Nächscht z'lade!",
   "puzzleUpVote": "Die Ufgab positiv bewerte",
   "puzzleDownVote": "Die Ufgab negativ bewerte",
   "puzzleYourPuzzleRatingWillNotChange": "Dini Ufgabe-Wertig veränderet sich nöd. Eusi Ufgabe sind kein Wettbewerb. Dini Wertig hilft nur Ufgabe z'wähle, wo zu dinere aktuelle Schpielstärchi passed.",
@@ -783,7 +782,6 @@
   "enable": "Ischalte",
   "bestMoveArrow": "Pfil für de bescht Zug",
   "showVariationArrows": "Pfil für Variante azeige",
-  "evaluationGauge": "Bewertigs-Massschtab",
   "visualMotifs": "Visuelli Motiv",
   "undefendedPieces": "Ung'schützti Figure",
   "pinnedPieces": "G'fessleti Figure",
@@ -873,9 +871,6 @@
   "emailCanTakeSomeTime": "Es brucht ochli Zit, bis es achunnt.",
   "refreshInboxAfterFiveMinutes": "Wart 5 Minute und check dini E-Mail-Inbox.",
   "checkSpamFolder": "Lueg au im Spam-Ordner, es chönnt det glandet si. Wänn ja, lösch d'Spam-Markierig.",
-  "emailForSignupHelp": "Wänn alles nöd gaht, schick eus die E-Mail:",
-  "copyTextToEmail": "Kopier de oberi Text, füeg en i und schick en an {param}",
-  "waitForSignupHelp": "Mir mälded eus in Chürzi, dass du dini Amäldig abschlüsse chasch.",
   "accountConfirmed": "De Benutzer {param} isch erfolgrich beschtätigt.",
   "accountCanLogin": "Du chasch jetzt als {param} ilogge.",
   "accountConfirmationEmailNotNeeded": "Du muesch kei Beschtätigungs-E-Mail übercho.",
@@ -1825,5 +1820,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{vor {count} Jahr} other{vor {count} Jahr}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} Minute blibt} other{{count} Minute blibed}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} Schtund blibt} other{{count} Schtunde blibed}}",
-  "tfaTwoFactorAuth": "Zwei-Faktor-Autentifizierig"
+  "tfaTwoFactorAuth": "Zwei-Faktor-Autentifizierig",
+  "ublogCommunity": "G'meinschaft",
+  "ublogXBlog": "{param}'s Blog"
 }

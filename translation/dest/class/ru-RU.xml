@@ -120,7 +120,7 @@
   <string name="xisNowAStudentOfTheClass">%s теперь ученик этого класса</string>
   <string name="anInvitationHasBeenSentToX">Приглашение пользователю %s было отправлено</string>
   <string name="xAlreadyHasAPendingInvitation">Вы уже отправили приглашение %s</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s детский аккаунт и не может получить ваше сообщение. Вам нужно передать им ссылку на приглашение вручную: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s детский аккаунт и не может получить ваше сообщение. Вам нужно передать им ссылку на приглашение вручную: %2$s</string>
   <string name="moveToClass">Перейти к %s</string>
   <string name="moveToAnotherClass">Переместить в другой класс</string>
   <string name="allowMessagingBetweenStudents">Разрешить ученикам переписываться</string>

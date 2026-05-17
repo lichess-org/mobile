@@ -7,12 +7,12 @@ import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
-const kNextChapterButtonHeight = 32.0;
-
 class StudyTreeView extends ConsumerWidget {
-  const StudyTreeView(this.options);
+  const StudyTreeView(this.options, {required this.showTopDivider});
 
   final StudyOptions options;
+
+  final bool showTopDivider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,6 +38,7 @@ class StudyTreeView extends ConsumerWidget {
                   currentPath: studyState.currentPath,
                   pgnRootComments: studyState.pgnRootComments,
                   notifier: ref.read(studyControllerProvider(options).notifier),
+                  showTopDivider: showTopDivider,
                   shouldShowAnnotations: studyPrefs.showAnnotations,
                   displayMode: studyPrefs.inlineNotation
                       ? PgnTreeDisplayMode.inlineNotation

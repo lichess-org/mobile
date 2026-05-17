@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "LaunchImage.png",
+      "filename" : "LichessLogo.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,12 +12,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "LaunchImageDark.png",
+      "filename" : "LichessLogoDark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "LaunchImage@2x.png",
+      "filename" : "LichessLogo@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -28,12 +28,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "LaunchImageDark@2x.png",
+      "filename" : "LichessLogoDark@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "LaunchImage@3x.png",
+      "filename" : "LichessLogo@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     },
@@ -44,7 +44,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "LaunchImageDark@3x.png",
+      "filename" : "LichessLogoDark@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

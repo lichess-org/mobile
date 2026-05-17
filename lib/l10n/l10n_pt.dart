@@ -9,6 +9,9 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Preferências da conta';
 
   @override
@@ -67,7 +70,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tem de iniciar sessão para visualizar esta página.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Novo jogo';
 
   @override
   String get mobileNoSearchResults => 'Sem resultados';
@@ -245,7 +248,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ver Jogo';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -1058,6 +1061,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatórias';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Gostaste deste problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vota para carregares o próximo!';
 
   @override
   String get puzzleUpVote => 'Aprove o puzzle';
@@ -2596,6 +2606,16 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Partidas recentes';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Ver setas de variação';
-
-  @override
-  String get evaluationGauge => 'Medidor da avaliação';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2961,15 +2978,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkSpamFolder => 'Verifique também a sua pasta de “spam”, pode estar lá. Se sim, assinale como não “spam”.';
 
   @override
-  String get emailForSignupHelp => 'Se tudo falhar, então envie-nos este correio eletrónico:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copie e cole o texto acima e envie-o para $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Nós entraremos brevemente em contacto para ajudá-lo a completar a inscrição.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Posição inicial do Xadrez960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Posição inicial';
@@ -6552,11 +6566,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
 class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr(): super('pt_BR');
+
+  @override
+  String get mobileAccount => 'Conta';
 
   @override
   String get mobileAccountPreferences => 'Preferências de conta';
@@ -7608,6 +7633,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastKnockouts => 'Mata-matas';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub $param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub $param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -8142,9 +8177,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Você gostou deste problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vote para carregar o próximo!';
 
   @override
   String get puzzleUpVote => 'Aprovar problema';
@@ -9146,6 +9178,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Rating mínimo de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Rating máximo de $param';
+  }
+
+  @override
   String get recentGames => 'Partidas recentes';
 
   @override
@@ -9229,9 +9271,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get showVariationArrows => 'Mostrar setas das variantes';
-
-  @override
-  String get evaluationGauge => 'Escala de avaliação';
 
   @override
   String get visualMotifs => 'Temas visuais';
@@ -9511,15 +9550,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get checkSpamFolder => 'Verifique também a sua caixa de spam. Caso esteja lá, marque como não é spam.';
 
   @override
-  String get emailForSignupHelp => 'Se todo o resto falhar, envie-nos este e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copie e cole o texto acima e envie-o para $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Se você não encontrou seu email de confirmação, envie um email para $param e nós confirmaremos sua conta.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Entraremos em contato em breve para ajudá-lo a completar seu registro.';
 
   @override
   String accountConfirmed(String param) {
@@ -10089,6 +10122,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String chess960StartPosition(String param) {
     return 'Posição inicial do Xadrez960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Posição aleatória de Xadrez960';
 
   @override
   String get startPosition => 'Posição inicial';
@@ -13102,4 +13138,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog do(a) $param';
+  }
 }

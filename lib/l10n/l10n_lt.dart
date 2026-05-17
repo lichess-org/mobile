@@ -9,6 +9,9 @@ class AppLocalizationsLt extends AppLocalizations {
   AppLocalizationsLt([String locale = 'lt']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1098,6 +1101,16 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1636,9 +1649,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ar jums patiko ši užduotis?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Nubalsuokite norėdami pakrauti kitą!';
 
   @override
   String get puzzleUpVote => 'Prabalsuoti už';
@@ -2650,6 +2660,16 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Paskiausios partijos';
 
   @override
@@ -2733,9 +2753,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Rodyti variacijų rodykles';
-
-  @override
-  String get evaluationGauge => 'Vertinimo matuoklis';
 
   @override
   String get visualMotifs => 'Vizualiniai motyvai';
@@ -3015,15 +3032,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get checkSpamFolder => 'Pasitikrinkite šlamtšo aplanką, laiškas galėjo atsirasti ir ten. Jei taip įvyko - pažymėkite kaip ne šlamštą.';
 
   @override
-  String get emailForSignupHelp => 'Jei niekas nepavyko, atsiųskite mums tokį laišką:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Nukopijuokite tekstą viršuje ir atsiųskite į $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ne už ilgo susisieksime su jumis ir padėsime užbaigti prisijungimo procesą.';
 
   @override
   String accountConfirmed(String param) {
@@ -3593,6 +3604,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 pradinė pozicija: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Pradinė pozicija';
@@ -6740,4 +6754,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dviejų lygių tapatumo nustatymas';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param Tinklaraštis';
+  }
 }

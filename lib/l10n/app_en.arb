@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Account",
   "mobileAccountPreferences": "Account preferences",
   "mobileAccountPreferencesHelp": "These preferences are applied to your Lichess account and will be used across all devices.",
   "mobileAllGames": "All games",
@@ -592,6 +593,22 @@
     }
   },
   "broadcastKnockouts": "Knockouts",
+  "broadcastUnderXAgeTournament": "U{param}",
+  "@broadcastUnderXAgeTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "broadcastUnderXEloTournament": "U{param}",
+  "@broadcastUnderXEloTournament": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -899,9 +916,8 @@
   "puzzleOrigin": "Origin",
   "puzzleSpecialMoves": "Special moves",
   "puzzleDidYouLikeThisPuzzle": "Did you like this puzzle?",
-  "puzzleVoteToLoadNextOne": "Vote to load the next one!",
-  "puzzleUpVote": "Rate puzzle positively",
-  "puzzleDownVote": "Rate puzzle negatively",
+  "puzzleUpVote": "Great puzzle!",
+  "puzzleDownVote": "Bad puzzle!",
   "puzzleYourPuzzleRatingWillNotChange": "Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.",
   "puzzleFindTheBestMoveForWhite": "Find the best move for white.",
   "puzzleFindTheBestMoveForBlack": "Find the best move for black.",
@@ -1322,6 +1338,22 @@
       }
     }
   },
+  "minRatingX": "Minimum rating of {param}",
+  "@minRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "maxRatingX": "Maximum rating of {param}",
+  "@maxRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "recentGames": "Recent games",
   "topGames": "Top games",
   "masterDbExplanation": "OTB games of {param1}+ FIDE-rated players from {param2} to {param3}",
@@ -1369,7 +1401,6 @@
   "enable": "Enable",
   "bestMoveArrow": "Best move arrow",
   "showVariationArrows": "Show variation arrows",
-  "evaluationGauge": "Evaluation gauge",
   "visualMotifs": "Visual motifs",
   "undefendedPieces": "Undefended pieces",
   "pinnedPieces": "Pinned pieces",
@@ -1497,16 +1528,14 @@
   "emailCanTakeSomeTime": "It can take some time to arrive.",
   "refreshInboxAfterFiveMinutes": "Wait 5 minutes and refresh your email inbox.",
   "checkSpamFolder": "Also check your spam folder, it might end up there. If so, mark it as not spam.",
-  "emailForSignupHelp": "If everything else fails, then send us this email:",
-  "copyTextToEmail": "Copy and paste the above text and send it to {param}",
-  "@copyTextToEmail": {
+  "sendEmailForAccountVerification": "If you can't find your confirmation email, send an email to {param} and we'll confirm your account for you.",
+  "@sendEmailForAccountVerification": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "waitForSignupHelp": "We will respond shortly to help you complete your registration.",
   "accountConfirmed": "The user {param} is successfully confirmed.",
   "@accountConfirmed": {
     "placeholders": {
@@ -1860,6 +1889,7 @@
       }
     }
   },
+  "randomChess960Position": "Random Chess960 position",
   "startPosition": "Starting position",
   "clearBoard": "Clear board",
   "loadPosition": "Load position",
@@ -2807,7 +2837,7 @@
   "ourEventTips": "Our tips for organising events",
   "instructions": "Instructions",
   "showMeEverything": "Show me everything",
-  "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.",
+  "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  ",
   "nothingToSeeHere": "Nothing to see here at the moment.",
   "stats": "Stats",
   "accessibility": "Accessibility",
@@ -3716,5 +3746,14 @@
       }
     }
   },
-  "tfaTwoFactorAuth": "Two-factor authentication"
+  "tfaTwoFactorAuth": "Two-factor authentication",
+  "ublogCommunity": "Community",
+  "ublogXBlog": "{param}'s Blog",
+  "@ublogXBlog": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  }
 }

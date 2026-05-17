@@ -9,6 +9,9 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastKnockouts => 'Utslagsrunder';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Likte du denne sjakknøtten?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for å laste den neste!';
 
   @override
   String get puzzleUpVote => 'Bra sjakknøtt';
@@ -2596,6 +2606,16 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nylige partier';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Vis variantpiler';
-
-  @override
-  String get evaluationGauge => 'Evalueringsmåler';
 
   @override
   String get visualMotifs => 'Visuelle motiver';
@@ -2961,15 +2978,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get checkSpamFolder => 'Sjekk om meldingen havnet i søppelpostmappen. Merk i tilfelle meldingen som ikke søppelpost.';
 
   @override
-  String get emailForSignupHelp => 'Send denne meldingen til oss som siste utvei:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og lim inn teksten ovenfor og send den til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi tar snart kontakt og hjelper deg med registreringen.';
 
   @override
   String accountConfirmed(String param) {
@@ -3537,8 +3548,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String chess960StartPosition(String param) {
-    return 'Fischersjakkutgangsstilling: $param';
+    return 'Sjakk-960-utgangsstilling: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tilfeldig sjakk-960 stilling';
 
   @override
   String get startPosition => 'Utgangsstilling';
@@ -6552,4 +6566,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tofaktorautentisering';
+
+  @override
+  String get ublogCommunity => 'Fellesskap';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Bloggen til $param';
+  }
 }

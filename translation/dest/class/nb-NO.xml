@@ -114,7 +114,7 @@ Her er lenken som gir tilgang til klassen.</string>
   <string name="xisNowAStudentOfTheClass">%s er nå elev i klassen</string>
   <string name="anInvitationHasBeenSentToX">En innbydelse er sendt til %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s har allerede en utestående innbydelse</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s er en barnekonto og kan ikke motta meldingen din. Du må sende innbydelseslenken på et annet vis: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s er en barnekonto og kan ikke motta meldingen din. Du må sende innbydelseslenken på et annet vis: %2$s</string>
   <string name="moveToClass">Flytt til %s</string>
   <string name="moveToAnotherClass">Flytt til en annen klasse</string>
   <string name="allowMessagingBetweenStudents">Tillat meldinger mellom elever</string>

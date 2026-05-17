@@ -21,8 +21,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const TournamentListScreen());
+  static Route<void> buildRoute() {
+    return buildScreenRoute(screen: const TournamentListScreen());
   }
 
   @override
@@ -85,7 +85,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
             IconButton(
               icon: const Icon(Icons.help_outline),
               tooltip: context.l10n.tournamentFAQ,
-              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute(context)),
+              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
             ),
           ],
           bottom: TabBar(
@@ -101,9 +101,9 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
           AsyncData(:final value) => TabBarView(
             controller: _tabController,
             children: <Widget>[
-              _TournamentListBody(tournaments: value.finished),
-              _TournamentListBody(tournaments: value.started),
-              _TournamentListBody(tournaments: value.created),
+              _TournamentListBody(tournaments: value.finished, viewMode: _ViewMode.completed),
+              _TournamentListBody(tournaments: value.started, viewMode: _ViewMode.ongoing),
+              _TournamentListBody(tournaments: value.created, viewMode: _ViewMode.upcoming),
             ],
           ),
           AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
@@ -130,7 +130,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
           hasLeading: true,
           header: Text(context.l10n.openTournaments),
           onHeaderTap: () {
-            Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+            Navigator.of(context).push(TournamentListScreen.buildRoute());
           },
           children: [
             for (final tournament in value)
@@ -156,9 +156,11 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
 }
 
 class _TournamentListBody extends ConsumerStatefulWidget {
-  const _TournamentListBody({required this.tournaments});
+  const _TournamentListBody({required this.tournaments, required this.viewMode});
 
   final IList<LightTournament> tournaments;
+
+  final _ViewMode viewMode;
 
   @override
   ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
@@ -180,34 +182,41 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
       }
     });
 
-    final sortedSystemTours = systemTours
-        .sorted((a, b) {
-          final aVariant = a.meta.variant;
-          final bVariant = b.meta.variant;
-          if (aVariant == Variant.standard && bVariant != Variant.standard) {
-            return -1;
-          } else if (aVariant != Variant.standard && bVariant == Variant.standard) {
-            return 1;
-          }
+    Comparator<LightTournament> makeComparator<T extends Comparable<T>>(
+      T Function(LightTournament) p,
+    ) =>
+        (LightTournament a, LightTournament b) => p(a).compareTo(p(b));
 
-          final aMaxRating = a.meta.maxRating;
-          final bMaxRating = b.meta.maxRating;
-          if (aMaxRating == null && bMaxRating != null) {
-            return -1;
-          } else if (aMaxRating != null && bMaxRating == null) {
-            return 1;
-          } else if (aMaxRating != null && bMaxRating != null) {
-            return aMaxRating.compareTo(bMaxRating);
-          }
+    final sortByFrequency = makeComparator((t) => t.meta.freq ?? TournamentFreq.values.first);
+    final sortByStartTime = makeComparator((t) => t.startsAt);
+    final sortByPosition = makeComparator((t) => t.position);
 
-          final position = a.position.compareTo(b.position);
-          if (position != 0) {
-            return position;
-          } else {
-            return a.startsAt.compareTo(b.startsAt);
-          }
-        })
-        .sortedBy((tournament) => tournament.meta.freq ?? TournamentFreq.hourly);
+    // Moves standard variant tournaments to the top.
+    final sortStandardBeforeOtherVariants = makeComparator(
+      (t) => t.meta.variant == Variant.standard ? 0 : 1,
+    );
+
+    // Moves tournaments without a max rating requirement to the top
+    final sortByMaxRating = makeComparator((t) => t.meta.maxRating ?? 0);
+
+    final sortedSystemTours = widget.viewMode == _ViewMode.upcoming
+        ?
+          // For upcoming tournaments, the user is probably looking for the ones starting soon, so put those at the top.
+          systemTours.sorted(
+            sortByStartTime
+                .then(sortByFrequency)
+                .then(sortByPosition)
+                .then(sortStandardBeforeOtherVariants)
+                .then(sortByMaxRating),
+          )
+        : systemTours
+              .sorted(
+                sortStandardBeforeOtherVariants
+                    .then(sortByMaxRating)
+                    .then(sortByPosition)
+                    .then(sortByStartTime),
+              )
+              .sortedBy((t) => t.meta.freq ?? TournamentFreq.values.first);
 
     final tournamentListItems = [
       ...sortedSystemTours.map((tournament) => _TournamentListItem(tournament: tournament)),
@@ -283,7 +292,7 @@ class _TournamentListItem extends StatelessWidget {
       onTap: () => Navigator.of(
         context,
         rootNavigator: true,
-      ).push(TournamentScreen.buildRoute(context, tournament.id)),
+      ).push(TournamentScreen.buildRoute(tournament.id)),
     );
   }
 }

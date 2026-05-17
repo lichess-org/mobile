@@ -15,13 +15,8 @@ class GifExport extends ConsumerStatefulWidget {
   final GameId gameId;
   final Side orientation;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required GameId gameId,
-    required Side orientation,
-  }) {
+  static Route<dynamic> buildRoute({required GameId gameId, required Side orientation}) {
     return buildScreenRoute(
-      context,
       screen: GifExport(gameId: gameId, orientation: orientation),
     );
   }

@@ -17,8 +17,8 @@ class StormDashboardModal extends StatelessWidget {
 
   final LightUser user;
 
-  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(context, screen: StormDashboardModal(user: user));
+  static Route<dynamic> buildRoute(LightUser user) {
+    return buildScreenRoute(screen: StormDashboardModal(user: user));
   }
 
   @override

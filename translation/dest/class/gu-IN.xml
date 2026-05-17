@@ -115,7 +115,7 @@
   <string name="xisNowAStudentOfTheClass">%s હવે વર્ગનો વિદ્યાર્થી છે.</string>
   <string name="anInvitationHasBeenSentToX">%s ને આમંત્રણ મોકલવામાં આવ્યું છે.</string>
   <string name="xAlreadyHasAPendingInvitation">%s પાસે પહેલેથી જ એક આમંત્રણ બાકી છે.</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s એક બાળકનું એકાઉન્ટ છે અને તમારો સંદેશ પ્રાપ્ત કરી શકતું નથી. તમારે તેમને આમંત્રણ URL મેન્યુઅલી આપવું પડશે: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s એક બાળકનું એકાઉન્ટ છે અને તમારો સંદેશ પ્રાપ્ત કરી શકતું નથી. તમારે તેમને આમંત્રણ URL મેન્યુઅલી આપવું પડશે: %2$s</string>
   <string name="moveToClass">%s પર ખસેડો</string>
   <string name="moveToAnotherClass">બીજા વર્ગમાં ખસેડો</string>
   <string name="allowMessagingBetweenStudents">વિદ્યાર્થીઓ વચ્ચે સંદેશાઓની મંજૂરી આપો</string>

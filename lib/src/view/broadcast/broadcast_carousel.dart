@@ -252,7 +252,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(context, widget.broadcast));
+        ).push(BroadcastRoundScreen.buildRoute(widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
@@ -428,7 +428,6 @@ class _BroadcastCardContent extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
-                          context,
                           broadcast,
                           initialTab: BroadcastRoundTab.overview,
                         ),
@@ -441,7 +440,6 @@ class _BroadcastCardContent extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
-                          context,
                           broadcast,
                           initialTab: BroadcastRoundTab.boards,
                         ),
@@ -454,7 +452,6 @@ class _BroadcastCardContent extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
                         BroadcastRoundScreen.buildRoute(
-                          context,
                           broadcast,
                           initialTab: BroadcastRoundTab.players,
                         ),

@@ -9,6 +9,9 @@ class AppLocalizationsHr extends AppLocalizations {
   AppLocalizationsHr([String locale = 'hr']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1078,6 +1081,16 @@ class AppLocalizationsHr extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1613,9 +1626,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Sviđa li ti se ovaj zadatak?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ocijeni i prijeđi na sljedeći zadatak!';
 
   @override
   String get puzzleUpVote => 'Glasaj za zagonetku';
@@ -2622,6 +2632,16 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedavne partije';
 
   @override
@@ -2705,9 +2725,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Pokaži strelice varijacija';
-
-  @override
-  String get evaluationGauge => 'Mjerilo evaluacije';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2987,15 +3004,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get checkSpamFolder => 'Također provjerite svoju mapu neželjene pošte jer bi mogla i tamo završiti. Ako je tako, označite ju da nije neželjena.';
 
   @override
-  String get emailForSignupHelp => 'Ako ništa drugo ne uspije, pošaljite nam ovu e-poruku:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopirajte i zalijepite gornji tekst te ga pošaljite na $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Javit ćemo Vam se uskoro kako bismo Vam pomogli dovršiti Vašu registraciju.';
 
   @override
   String accountConfirmed(String param) {
@@ -3565,6 +3576,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Početna pozicija Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Početna pozicija';
@@ -4421,7 +4435,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Svi jezici';
 
   @override
   String get background => 'Pozadina';
@@ -6644,4 +6658,12 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvofaktorska provjera autentičnosti';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog korisnika $param';
+  }
 }

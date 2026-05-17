@@ -9,6 +9,9 @@ class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
+  String get mobileAccount => 'Cont';
+
+  @override
   String get mobileAccountPreferences => 'Preferințe cont';
 
   @override
@@ -1078,6 +1081,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatorii';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1614,9 +1627,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ți-a plăcut această problemă?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
 
   @override
   String get puzzleUpVote => 'Vot pozitiv';
@@ -2624,6 +2634,16 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Rating minim $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Rating maxim $param';
+  }
+
+  @override
   String get recentGames => 'Jocuri recente';
 
   @override
@@ -2707,9 +2727,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Afișează săgețile variației';
-
-  @override
-  String get evaluationGauge => 'Indicator de evaluare';
 
   @override
   String get visualMotifs => 'Motive vizuale';
@@ -2989,15 +3006,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get checkSpamFolder => 'De asemenea, verificați folderul de spam, ar putea ajunge acolo. În acel caz, marcați-l ca nefiind spam.';
 
   @override
-  String get emailForSignupHelp => 'Dacă niciuna dintre variantele anterioare nu funcționează, trimiteți-ne acest email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Dați copy-paste la textul de mai sus și trimiteți-l la $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Dacă nu găsești e-mailul de confirmare, trimite un e-mail la $param și îți vom confirma contul.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vom reveni în curând cu un răspuns pentru a vă ajuta să finalizați înregistrarea.';
 
   @override
   String accountConfirmed(String param) {
@@ -3567,6 +3578,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Poziție de start Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Poziție aleatoare Chess960';
 
   @override
   String get startPosition => 'Poziția de start';
@@ -6647,4 +6661,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentificare în doi pași';
+
+  @override
+  String get ublogCommunity => 'Comunitate';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog-ul lui $param';
+  }
 }

@@ -33,14 +33,11 @@ class MaterialScreenRoute<T extends Object?> extends MaterialPageRoute<T>
   Duration get transitionDuration => overrideTransitionDuration ?? super.transitionDuration;
 }
 
-/// Builds a new route for the [screen] based on the platform.
+/// Builds a new route for the [screen].
 ///
 /// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
 /// is always filled with the configured app's background color or image.
-///
-/// It will return a [MaterialScreenRoute] on Android and a [CupertinoScreenRoute] on iOS.
-Route<T> buildScreenRoute<T>(
-  BuildContext context, {
+Route<T> buildScreenRoute<T>({
   required Widget screen,
   bool fullscreenDialog = false,
   RouteSettings? settings,

@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
+import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -14,9 +16,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class BoardSettingsScreen extends StatelessWidget {
   const BoardSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context, {bool fullscreenDialog = false}) {
+  static Route<dynamic> buildRoute({bool fullscreenDialog = false}) {
     return buildScreenRoute(
-      context,
       fullscreenDialog: fullscreenDialog,
       screen: const BoardSettingsScreen(),
     );
@@ -46,6 +47,27 @@ class _Body extends ConsumerWidget {
           header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           hasLeading: false,
           children: [
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.board),
+              settingsValue: boardPrefs.boardTheme.label,
+              onTap: () {
+                Navigator.of(context).push(BoardChoiceScreen.buildRoute());
+              },
+            ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.pieceSet),
+              settingsValue: boardPrefs.pieceSet.label,
+              onTap: () {
+                Navigator.of(context).push(PieceSetScreen.buildRoute());
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesBoardCoordinates),
+              value: boardPrefs.coordinates,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
+              },
+            ),
             SwitchSettingTile(
               title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
               value: boardPrefs.magnifyDraggedPiece,
@@ -150,6 +172,22 @@ class _Body extends ConsumerWidget {
                 );
               },
             ),
+            if (isTabletOrLarger(context))
+              SettingsListTile(
+                settingsLabel: const Text('Board position in landscape mode'), // TODO l10n
+                settingsValue: boardPrefs.landscapeBoardPosition.label(context.l10n),
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: LandscapeBoardPosition.values,
+                    selectedItem: boardPrefs.landscapeBoardPosition,
+                    labelBuilder: (t) => Text(t.label(context.l10n)),
+                    onSelectedItemChanged: (LandscapeBoardPosition? value) => ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setLandscapeBoardPosition(value ?? LandscapeBoardPosition.left),
+                  );
+                },
+              ),
           ],
         ),
         ListSection(

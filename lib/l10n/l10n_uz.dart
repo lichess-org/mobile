@@ -9,7 +9,10 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Hisob sozlamalari';
+  String get mobileAccount => 'Akkaunt';
+
+  @override
+  String get mobileAccountPreferences => 'Akkaunt sozlamalari';
 
   @override
   String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
@@ -1058,6 +1061,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastKnockouts => 'Nokaut';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ushbu masala yoqdimi?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Keyingisini yuklash uchun ovoz bering!';
 
   @override
   String get puzzleUpVote => 'Masala yoqdi';
@@ -2596,6 +2606,16 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param maksimal reytingi';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param maksimal reytingi';
+  }
+
+  @override
   String get recentGames => 'Soʻnggi oʻyinlar';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Variantlar strelkalarini koʻrsatish';
-
-  @override
-  String get evaluationGauge => 'Baholash shkalasi';
 
   @override
   String get visualMotifs => 'Vizual motivlar';
@@ -2961,15 +2978,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get checkSpamFolder => 'Shuningdek, spam jildini ham tekshiring, xat u yerga tushib qolgan boʻlishi mumkin. Agar shunday boʻlsa, uni “Spam emas” deb belgilang.';
 
   @override
-  String get emailForSignupHelp => 'Agar bularning hech biri yordam bermasa, u holda bizni e‑pochtamizga ushbu xatni yuboring:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Yuqoridagi matndan nusxa oling va $param manziliga yuboring';
+  String sendEmailForAccountVerification(String param) {
+    return 'Agar tasdiqlash xatini topa olmasangiz, $param manziliga xat yuboring va biz hisobingizni tasdiqlab beramiz.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Roʻyxatdan oʻtishga yordam berish uchun siz bilan tez orada bogʻlanamiz.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Fisher shaxmati boshlangʻich pozitsiya: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tasodifiy Fisher shaxmati pozitsiyasi';
 
   @override
   String get startPosition => 'Boshlangʻich pozitsiya';
@@ -6552,4 +6566,12 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
+
+  @override
+  String get ublogCommunity => 'Hamjamiyat';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param blogi';
+  }
 }

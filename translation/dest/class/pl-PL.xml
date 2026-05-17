@@ -120,7 +120,7 @@ Oto link do klasy.</string>
   <string name="xisNowAStudentOfTheClass">%s jest teraz uczniem klasy</string>
   <string name="anInvitationHasBeenSentToX">Wysłano zaproszenie do %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s ma już oczekujące zaproszenie</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s jest kontem dziecka i dlatego nie może otrzymać Twojej wiadomości. Musisz podać mu adres URL zaproszenia w inny sposób: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s jest kontem dziecka i dlatego nie może otrzymać Twojej wiadomości. Musisz podać mu adres URL zaproszenia w inny sposób: %2$s</string>
   <string name="moveToClass">Przenieś do %s</string>
   <string name="moveToAnotherClass">Przenieś do innej klasy</string>
   <string name="allowMessagingBetweenStudents">Zezwól na wiadomości między uczniami</string>

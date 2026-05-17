@@ -16,12 +16,11 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
   }) {
-    return buildScreenRoute(context, screen: BroadcastGameSettingsScreen(roundId, gameId));
+    return buildScreenRoute(screen: BroadcastGameSettingsScreen(roundId, gameId));
   }
 
   @override
@@ -41,6 +40,12 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 value: broadcastPrefs.inlineNotation,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                title: const Text('Small board'), // TODO l10n
+                value: broadcastPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
@@ -65,7 +70,8 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
-                title: Text(context.l10n.evaluationGauge),
+                // TODO: l10n
+                title: const Text('Show evaluation gauge'),
                 value: broadcastPrefs.showEvaluationGauge,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),

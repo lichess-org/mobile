@@ -111,7 +111,7 @@ Mật khẩu: %3$s</string>
   <string name="xisNowAStudentOfTheClass">%s bây giờ là một học viên của lớp</string>
   <string name="anInvitationHasBeenSentToX">Một lời mời đã được gửi tới %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s đang có một lời mời chưa trả lời</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s là một tài khoản trẻ em và không thể nhận tin nhắn từ bạn. Bạn phải gửi lời mời thông qua URL: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s là một tài khoản trẻ em và không thể nhận tin nhắn từ bạn. Bạn phải gửi lời mời thông qua URL: %2$s</string>
   <string name="moveToClass">Chuyển sang %s</string>
   <string name="moveToAnotherClass">Chuyển sang một lớp học khác</string>
   <string name="allowMessagingBetweenStudents">Cho phép nhắn tin giữa các học viên</string>

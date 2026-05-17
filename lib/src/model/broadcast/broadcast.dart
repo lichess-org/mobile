@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -209,24 +209,7 @@ sealed class BroadcastGame with _$BroadcastGame {
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
 
-typedef BroadcastGamePgnWithAnalysisSummary = ({
-  String pgn,
-  BroadcastAnalysisSummary? analysisSummary,
-});
-
-typedef BroadcastAnalysisSummary = ({
-  Division? division,
-  BroadcastPlayerAnalysisSummary white,
-  BroadcastPlayerAnalysisSummary black,
-});
-
-typedef BroadcastPlayerAnalysisSummary = ({
-  int inaccuracies,
-  int mistakes,
-  int blunders,
-  int acpl,
-  int accuracy,
-});
+typedef BroadcastGamePgnWithAnalysisSummary = ({String pgn, AnalysisSummary? analysisSummary});
 
 @freezed
 sealed class BroadcastPlayer with _$BroadcastPlayer {
@@ -303,6 +286,12 @@ enum BroadcastPoints {
   half,
   zero;
 
+  double get value => switch (this) {
+    BroadcastPoints.one => 1.0,
+    BroadcastPoints.half => 0.5,
+    BroadcastPoints.zero => 0.0,
+  };
+
   BroadcastResult resultFor(Side side) => switch (this) {
     BroadcastPoints.one =>
       side == Side.white ? BroadcastResult.whiteWins : BroadcastResult.blackWins,
@@ -323,6 +312,7 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
     required double? customPoints,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
+    required bool ongoing,
   }) = _BroadcastPlayerGameResult;
 }
 

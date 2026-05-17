@@ -9,6 +9,9 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get mobileAccount => 'Hesap';
+
+  @override
   String get mobileAccountPreferences => 'Hesap tercihleri';
 
   @override
@@ -796,7 +799,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN Kaynak URL\'si';
 
   @override
-  String get broadcastSourceUrlHelp => 'Lichess, sağladığınız URL yardımıyla PGN\'yi güncelleyecektir. İnternet üzerinden herkese açık bir URL yazmalısınız.';
+  String get broadcastSourceUrlHelp => 'Lichess, URL\'i PGN\'den güncel hamle almak için kullanıcak. İnternet\'den herken tarafından bulunabilir olmak zorunda.';
 
   @override
   String get broadcastSourceGameIds => 'Boşluklarla ayrılmış 64 adede kadar Lichess oyun ID\'si.';
@@ -1056,6 +1059,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eleme';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1592,9 +1605,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Bulmacayı beğendiniz mi?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Sıradakine geçmek için oy verin!';
 
   @override
   String get puzzleUpVote => 'Bulmacayı beğen';
@@ -2596,6 +2606,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'En az $param puan';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'En çok $param puan';
+  }
+
+  @override
   String get recentGames => 'Son oyunlar';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Varyasyon oklarını göster';
-
-  @override
-  String get evaluationGauge => 'Değerlendirme çubuğu';
 
   @override
   String get visualMotifs => 'Görsel motifler';
@@ -2961,15 +2978,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get checkSpamFolder => 'Ayrıca spam klasörünü kontrol edin, orada olabilir. Eğer öyleyse spam değil olarak işaretleyin.';
 
   @override
-  String get emailForSignupHelp => 'Hiçbiri işe yaramazsa, bize şu e-postayı gönderin:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Yukarıdaki metni kopyalayıp $param adresine gönderin';
+  String sendEmailForAccountVerification(String param) {
+    return 'Doğrulama e-postanızı bulamıyorsanız, $param adresine e-posta gönderin, hesabınızı sizin için onaylayalım.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Kaydınızı tamamlamanıza yardımcı olmak için kısa bir süre içinde size geri döneceğiz.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 başlangıç pozisyonu: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Rastgele Satranç960 pozisyonu';
 
   @override
   String get startPosition => 'Başlangıç konumu';
@@ -6552,4 +6566,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
+
+  @override
+  String get ublogCommunity => 'Topluluk';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param Bloğu';
+  }
 }

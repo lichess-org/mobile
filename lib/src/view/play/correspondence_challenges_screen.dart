@@ -24,8 +24,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   const CorrespondenceChallengesScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const CorrespondenceChallengesScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const CorrespondenceChallengesScreen());
   }
 
   @override
@@ -54,7 +54,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
             Navigator.of(
               context,
               rootNavigator: true,
-            ).push(GameScreen.buildRoute(context, source: ExistingGameSource(gameFullId)));
+            ).push(GameScreen.buildRoute(source: ExistingGameSource(gameFullId)));
           }
 
         case 'reload_seeks':

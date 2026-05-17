@@ -11,12 +11,8 @@ class BoardEditorPositionsScreen extends StatelessWidget {
 
   final void Function(Position position) onPositionSelected;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required void Function(Position position) onPositionSelected,
-  }) {
+  static Route<dynamic> buildRoute({required void Function(Position position) onPositionSelected}) {
     return buildScreenRoute(
-      context,
       screen: BoardEditorPositionsScreen(onPositionSelected: onPositionSelected),
     );
   }

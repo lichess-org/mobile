@@ -9,6 +9,9 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get mobileAccount => 'Konto';
+
+  @override
   String get mobileAccountPreferences => 'Kontoindstillinger';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastKnockouts => 'Elimineringsrunder';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Kunne du lide denne opgave?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for at indlæse den næste!';
 
   @override
   String get puzzleUpVote => 'Stem opgave op';
@@ -2596,6 +2606,16 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating på $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maksimal rating på $param';
+  }
+
+  @override
   String get recentGames => 'Seneste partier';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Vis variantpile';
-
-  @override
-  String get evaluationGauge => 'Evalueringsindikator';
 
   @override
   String get visualMotifs => 'Visuelle motiver';
@@ -2961,15 +2978,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get checkSpamFolder => 'Tjek også din spam-mappe, det kan være, at den havner der. Hvis det er tilfældet, skal du markere den som ikke-spam.';
 
   @override
-  String get emailForSignupHelp => 'Hvis alt andet mislykkes, så send os denne e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og indsæt ovenstående tekst og send det til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Hvis du ikke kan finde din bekræftelsesmail, kan du sende en e-mail til $param, så bekræfter vi din konto for dig.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi vil snart vende tilbage til dig for at hjælpe dig med at fuldføre din tilmelding.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 startposition: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tilfældig Chess960-position';
 
   @override
   String get startPosition => 'Startopstilling';
@@ -6552,4 +6566,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'To-faktor-godkendelse';
+
+  @override
+  String get ublogCommunity => 'Fællesskab';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog - $param';
+  }
 }

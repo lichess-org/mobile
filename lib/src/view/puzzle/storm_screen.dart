@@ -37,8 +37,8 @@ import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 class StormScreen extends ConsumerStatefulWidget {
   const StormScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const StormScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const StormScreen());
   }
 
   @override
@@ -436,7 +436,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
 }
 
 void _showStats(BuildContext context, StormRunStats stats) {
-  Navigator.of(context, rootNavigator: true).push(_RunStats.buildRoute(context, stats));
+  Navigator.of(context, rootNavigator: true).push(_RunStats.buildRoute(stats));
 }
 
 class _TopTable extends ConsumerWidget {
@@ -727,8 +727,8 @@ class _RunStats extends StatelessWidget {
   const _RunStats(this.stats);
   final StormRunStats stats;
 
-  static Route<dynamic> buildRoute(BuildContext context, StormRunStats stats) {
-    return buildScreenRoute(context, screen: _RunStats(stats), fullscreenDialog: true);
+  static Route<dynamic> buildRoute(StormRunStats stats) {
+    return buildScreenRoute(screen: _RunStats(stats), fullscreenDialog: true);
   }
 
   @override
@@ -921,5 +921,5 @@ class _StormDashboardButton extends ConsumerWidget {
   void _showDashboard(BuildContext context, AuthUser authUser) => Navigator.of(
     context,
     rootNavigator: true,
-  ).push(StormDashboardModal.buildRoute(context, authUser.user));
+  ).push(StormDashboardModal.buildRoute(authUser.user));
 }

@@ -74,8 +74,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   /// If set, load puzzles to replay from the given number of days.
   final int? replayDays;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
     Puzzle? puzzle,
@@ -83,7 +82,6 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     int? replayDays,
   }) {
     return buildScreenRoute(
-      context,
       screen: PuzzleScreen(
         angle: angle,
         puzzleId: puzzleId,
@@ -414,7 +412,10 @@ class _BodyState extends ConsumerState<_Body> {
     final gameData = boardPreferences.toGameData(
       variant: Variant.standard,
       position: puzzleState.currentPosition,
-      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+      playerSide:
+          puzzleState.mode == PuzzleMode.load ||
+              puzzleState.currentPosition.isGameOver ||
+              (puzzleState.mode == PuzzleMode.play && puzzleState.canGoNext)
           ? PlayerSide.none
           : puzzleState.mode == PuzzleMode.view
           ? PlayerSide.both
@@ -733,11 +734,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
               return BottomBarButton(
-                icon: Icons.info,
+                icon: Icons.lightbulb_outline,
                 label: context.l10n.getAHint,
-                showLabel: true,
                 highlighted: puzzleState.hintSquare != null,
-                onTap: snapshot.connectionState == ConnectionState.done
+                onTap: snapshot.connectionState == ConnectionState.done && !puzzleState.canGoNext
                     ? () => ref.read(ctrlProvider.notifier).toggleHint()
                     : null,
               );
@@ -748,10 +748,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
               return BottomBarButton(
-                icon: Icons.help,
+                icon: Icons.flag_outlined,
                 label: context.l10n.viewTheSolution,
-                showLabel: true,
-                onTap: snapshot.connectionState == ConnectionState.done
+                onTap: snapshot.connectionState == ConnectionState.done && !puzzleState.canGoNext
                     ? () => ref.read(ctrlProvider.notifier).viewSolution()
                     : null,
               );
@@ -770,7 +769,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             onTap: () {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(
-                  context,
                   puzzleState.makeAnalysisOptions(
                     ref
                         .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
@@ -783,29 +781,29 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             label: context.l10n.analysis,
             icon: Icons.biotech,
           ),
-        if (puzzleState.mode == PuzzleMode.view)
-          RepeatButton(
-            triggerDelays: _BottomBar._repeatTriggerDelays,
-            onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-            child: BottomBarButton(
-              onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-              label: 'Previous',
-              icon: CupertinoIcons.chevron_back,
-              showTooltip: false,
-            ),
+
+        RepeatButton(
+          triggerDelays: _BottomBar._repeatTriggerDelays,
+          onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
-        if (puzzleState.mode == PuzzleMode.view)
-          RepeatButton(
-            triggerDelays: _BottomBar._repeatTriggerDelays,
-            onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-            child: BottomBarButton(
-              onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-              label: context.l10n.next,
-              icon: CupertinoIcons.chevron_forward,
-              showTooltip: false,
-              blink: puzzleState.shouldBlinkNextArrow,
-            ),
+        ),
+
+        RepeatButton(
+          triggerDelays: _BottomBar._repeatTriggerDelays,
+          onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+            label: context.l10n.next,
+            icon: CupertinoIcons.chevron_forward,
+            showTooltip: false,
+            blink: puzzleState.shouldBlinkNextArrow,
           ),
+        ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
             onTap: puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
@@ -843,7 +841,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               if (context.mounted) {
                 Navigator.of(context).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.archivedGame(
                       orientation: puzzleState.pov,
                       gameId: game.id,
@@ -906,7 +903,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -976,9 +973,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+                Navigator.of(context).push(BoardSettingsScreen.buildRoute(fullscreenDialog: true));
               },
             ),
           ],

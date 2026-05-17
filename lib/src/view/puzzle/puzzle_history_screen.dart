@@ -47,7 +47,6 @@ class PuzzleHistoryPreview extends ConsumerWidget {
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
                 PuzzleScreen.buildRoute(
-                  context,
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
                   openCasual: shouldOpenCasualPuzzleRun ?? false,
@@ -72,8 +71,8 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen();
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PuzzleHistoryScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const PuzzleHistoryScreen());
   }
 
   @override
@@ -207,7 +206,6 @@ class PuzzleHistoryBoard extends ConsumerWidget {
         onTap: () {
           Navigator.of(context, rootNavigator: true).push(
             PuzzleScreen.buildRoute(
-              context,
               angle: const PuzzleTheme(PuzzleThemeKey.mix),
               puzzleId: puzzle.id,
             ),

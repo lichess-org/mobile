@@ -9,6 +9,9 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
+  String get mobileAccount => 'Llogari';
+
+  @override
   String get mobileAccountPreferences => 'Parapëlqime llogarie';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
 
   @override
   String get puzzleUpVote => 'Jepini një votë ushtrimit';
@@ -2596,6 +2606,16 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Vlerësim minimum prej $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Vlerësim maksimum prej $param';
+  }
+
+  @override
   String get recentGames => 'Lojëra së fundi';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Shfaq shigjeta variacionesh';
-
-  @override
-  String get evaluationGauge => 'Matësi i vlerësimit';
 
   @override
   String get visualMotifs => 'Motive pamore';
@@ -2961,15 +2978,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get checkSpamFolder => 'Shihni gjithashtu edhe te dosja juaj e të padëshiruarve, mund të përfundojë atje. Në ndodhtë kështu, i hiqni shenjën si i padëshiruar.';
 
   @override
-  String get emailForSignupHelp => 'Nëse gjithçka tjetër dështon, atëherë dërgonani këtë email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopjoni dhe ngjitni tekstin më poshtë dhe dërgojeni te $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Nëse s’gjeni dot email-in e ripohimit, dërgoni një email te $param dhe do të miratojmë llogarinë tuaj për ju.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Do të lidhemi me ju së shpejti, për t’ju ndihmuar të plotësoni regjistrimin tuaj.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Pozicion nisjeje Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Pozicion Chess960 kuturu';
 
   @override
   String get startPosition => 'Pozicioni fillestar';
@@ -6552,4 +6566,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Mirëfilltësim dyfaktorësh';
+
+  @override
+  String get ublogCommunity => 'Bashkësi';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogu i $param';
+  }
 }

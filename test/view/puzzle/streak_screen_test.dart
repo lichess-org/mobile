@@ -42,7 +42,7 @@ void main() {
               onPressed: () => Navigator.of(
                 context,
                 rootNavigator: true,
-              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
+              ).push(buildScreenRoute<void>(screen: const StreakScreen())),
             ),
           ),
         ),
@@ -131,7 +131,7 @@ void main() {
               onPressed: () => Navigator.of(
                 context,
                 rootNavigator: true,
-              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
+              ).push(buildScreenRoute<void>(screen: const StreakScreen())),
             ),
           ),
         ),

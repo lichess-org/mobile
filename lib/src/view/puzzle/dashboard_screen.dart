@@ -27,8 +27,8 @@ final daysProvider = StateProvider<Days>((ref) => Days.month);
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PuzzleDashboardScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const PuzzleDashboardScreen());
   }
 
   @override
@@ -195,7 +195,6 @@ class _ChartSection extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).push(
                   PuzzleScreen.buildRoute(
-                    context,
                     angle: const PuzzleTheme(PuzzleThemeKey.mix),
                     replayDays: days,
                   ),
@@ -407,7 +406,7 @@ class PuzzleThemeRow extends ConsumerWidget {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(data.theme)));
+        ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(data.theme)));
         ref.invalidate(puzzleDashboardProvider);
       },
       child: Container(

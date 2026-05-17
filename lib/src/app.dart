@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,10 +9,14 @@ import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -20,6 +25,7 @@ import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/quick_actions.dart';
@@ -29,7 +35,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-const String _kIosAppGroupId = 'group.org.lichess.mobileV2';
+const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
   'OfficialBlogWidget',
   'CommunityBlogWidget',
@@ -79,8 +85,59 @@ class _AppState extends ConsumerState<Application> {
 
   StreamSubscription<List<SharedMediaFile>>? _intentSub;
 
+  // Adjusts some settings for small screens based on the MediaQuery data.
+  Future<void> _screenSizeBasedInitialization(WidgetRef ref) async {
+    // Bump version here in case we adjust the thresholds for screen size based initialization
+    // and want it to run again for users who already launched the app with a previous version.
+    const kDoneScreenSizeInitKey = 'done_screen_size_init_v1';
+
+    final prefs = LichessBinding.instance.sharedPreferences;
+    if (prefs.getBool(kDoneScreenSizeInitKey) == true) {
+      return;
+    }
+
+    final mediaQueryData = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.first,
+    );
+    final isTablet = mediaQueryData.size.shortestSide > FormFactor.tablet;
+    final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
+    final showEngineLines =
+        isTablet || estimateHeightMinusBoard(mediaQueryData) > kSmallHeightMinusBoard - 30;
+
+    // For tablets in portrait mode using the full board size makes the bottom analysis tabs tiny,
+    // see https://github.com/lichess-org/mobile/issues/3150,
+    // so use a small board there by default as well.
+    final smallBoard = isTablet || isSmallScreen;
+
+    await ref
+        .read(analysisPreferencesProvider.notifier)
+        .save(
+          ref
+              .read(analysisPreferencesProvider)
+              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
+        );
+    await ref
+        .read(studyPreferencesProvider.notifier)
+        .save(
+          ref
+              .read(studyPreferencesProvider)
+              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
+        );
+    await ref
+        .read(broadcastPreferencesProvider.notifier)
+        .save(
+          ref
+              .read(broadcastPreferencesProvider)
+              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
+        );
+
+    await prefs.setBool(kDoneScreenSizeInitKey, true);
+  }
+
   @override
   void initState() {
+    _screenSizeBasedInitialization(ref);
+
     // Start services
     ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
@@ -94,12 +151,25 @@ class _AppState extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+      HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
             Future.wait([
               for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
             ]);
+          });
+        }
+      }, fireImmediately: true);
+      ref.listenManual(boardPreferencesProvider, (prev, state) {
+        if (prev == null ||
+            prev.boardTheme != state.boardTheme ||
+            prev.pieceSet != state.pieceSet) {
+          Future.wait([
+            HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name),
+            HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name),
+          ]).then((_) {
+            HomeWidget.updateWidget(iOSName: 'DailyPuzzleLargeWidget');
           });
         }
       }, fireImmediately: true);
@@ -192,12 +262,17 @@ class _AppState extends ConsumerState<Application> {
   Future<void> _processSharedFiles(List<SharedMediaFile> files) async {
     if (files.isEmpty) return;
     final filePath = files.first.path;
+    if (filePath.startsWith('http')) {
+      debugPrint('Ignored shared URL in file processor: $filePath');
+      return;
+    }
     try {
       final context = _navigatorKey.currentContext;
       if (context == null || !context.mounted) return;
 
       final file = File(filePath);
-      final pgnText = await file.readAsString();
+      final bytes = await file.readAsBytes();
+      final pgnText = utf8.decode(bytes, allowMalformed: true);
 
       if (context.mounted) {
         ImportPgnScreen.handlePgnText(context, pgnText);

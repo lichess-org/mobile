@@ -9,6 +9,9 @@ class AppLocalizationsGl extends AppLocalizations {
   AppLocalizationsGl([String locale = 'gl']) : super(locale);
 
   @override
+  String get mobileAccount => 'Conta';
+
+  @override
   String get mobileAccountPreferences => 'Preferencias da conta';
 
   @override
@@ -1044,7 +1047,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastSemifinals => 'Semifinais';
 
   @override
-  String get broadcastFinals => 'Finais';
+  String get broadcastFinals => 'Final';
 
   @override
   String get broadcastTiebreaks => 'Desempates';
@@ -1056,6 +1059,16 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eliminatorias';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1594,13 +1607,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Gustouche este crebacabezas?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vota para cargar o seguinte!';
+  String get puzzleUpVote => 'Excelente crebacabezas!';
 
   @override
-  String get puzzleUpVote => 'Vota a favor do crebacabezas';
-
-  @override
-  String get puzzleDownVote => 'Vota en contra do crebacabezas';
+  String get puzzleDownVote => 'Crebacabezas ruín!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'A túa puntuación en crebacabezas non cambiará. Ten en conta que os crebacabezas non son unha competición. A túa puntuación axuda a escollerche os crebacabezas máis axeitados ó teu nivel.';
@@ -2596,6 +2606,16 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Puntuación mínima de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Puntuación máxima de $param';
+  }
+
+  @override
   String get recentGames => 'Partidas recentes';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Amosar as frechas das variantes';
-
-  @override
-  String get evaluationGauge => 'Indicador de avaliación';
 
   @override
   String get visualMotifs => 'Motivos visuais';
@@ -2961,15 +2978,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get checkSpamFolder => 'Comproba tamén o teu cartafol de correos non solicitados, puido rematar aí. Se foi así, quítalle a marca de correo non desexado.';
 
   @override
-  String get emailForSignupHelp => 'Se todo falla, entón envíanos un correo:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copia e pega o seguinte texto e envíao a $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Se non atopas o correo electrónico de confirmación, envía un email a $param e nós confirmaremos a túa conta por ti.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Responderemos dentro de pouco para axudarche a completar o teu rexistro.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Posición inicial de Chess960: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Posición aleatoria de Xadrez 960';
 
   @override
   String get startPosition => 'Posición inicial';
@@ -4364,12 +4378,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String xHostsY(String param1, String param2) {
-    return '$param1 crea $param2';
+    return '$param1 creou $param2';
   }
 
   @override
   String xJoinsY(String param1, String param2) {
-    return '$param1 únese a $param2';
+    return '$param1 uniuse a $param2';
   }
 
   @override
@@ -5024,7 +5038,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get showMeEverything => 'Amósamo todo';
 
   @override
-  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto.\nTodos os custos de funcionamento, desenvolvemento e contidos fináncianse unicamente mediante as doazóns dos usuarios.';
+  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto. Dependemos das doazóns dos usuarios para sufragar os custos de funcionamento, desenvolvemento e de contidos. Sen a nosa xenerosa comunidade non seriamos quen de manter o sitio funcionando. Grazas por unirte a nós!  ';
 
   @override
   String get nothingToSeeHere => 'Nada que ver aquí polo de agora.';
@@ -6552,4 +6566,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dous pasos';
+
+  @override
+  String get ublogCommunity => 'Comunidade';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'O Blog de $param';
+  }
 }

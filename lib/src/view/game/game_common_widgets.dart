@@ -34,7 +34,6 @@ void openGameScreen(
     Navigator.of(context, rootNavigator: true).push(
       game.fullId != null
           ? GameScreen.buildRoute(
-              context,
               source: ExistingGameSource(game.fullId!),
               loadingPosition: (
                 fen: loadingFen,
@@ -44,7 +43,6 @@ void openGameScreen(
               lastMoveAt: lastMoveAt,
             )
           : AnalysisScreen.buildRoute(
-              context,
               AnalysisOptions.archivedGame(
                 orientation: orientation,
                 gameId: game.id,

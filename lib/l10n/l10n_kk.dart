@@ -9,6 +9,9 @@ class AppLocalizationsKk extends AppLocalizations {
   AppLocalizationsKk([String locale = 'kk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Тіркелгіні баптау';
 
   @override
@@ -120,7 +123,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobilePuzzlesTab => 'Жұмбақ';
 
   @override
-  String get mobileRecentSearches => 'Кейінгі іздеулер';
+  String get mobileRecentSearches => 'Соңғы іздеулер';
 
   @override
   String get mobileRemoveBookmark => 'Бетбелгіні алып тастау';
@@ -186,7 +189,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Шетін көрсету';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -668,7 +671,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaCreated => 'Құрылды';
 
   @override
-  String get arenaRecentlyPlayed => 'Кейінгі ойындар';
+  String get arenaRecentlyPlayed => 'Соңғы ойындар';
 
   @override
   String get arenaBestResults => 'Үздік нәтиже';
@@ -1058,6 +1061,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1252,7 +1265,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String perfStatProgressOverLastXGames(String param) {
-    return 'Кейінгі $param ойынның қорытындысы:';
+    return 'Соңғы $param ойынның қорытындысы:';
   }
 
   @override
@@ -1592,9 +1605,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Бұл жұмбақ ұнай ма?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Келесін ашу үшін дауыс беріңіз!';
 
   @override
   String get puzzleUpVote => 'Дәрежесін көтеру';
@@ -2596,7 +2606,17 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get recentGames => 'Кейінгі ойындар';
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
+  String get recentGames => 'Соңғы ойындар';
 
   @override
   String get topGames => 'Үздік ойындар';
@@ -2679,9 +2699,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Тармақта нұсқағышты көрсету';
-
-  @override
-  String get evaluationGauge => 'Бағалауышты көрсету';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2961,15 +2978,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get checkSpamFolder => 'Сонымен қатар, Спам қалтасында қарап көріңіз. Хат сонда болса, \"Спам емес\" деп белгілеу жөн болар.';
 
   @override
-  String get emailForSignupHelp => 'Егер де осы амалдардың бәрі жарамаса, бізге осындай хат жіберіңіз:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Осы мәтінді көшіріп, $param жіберіңіз';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Тіркелуді аяқтау үшін біз тез арада жауап береміз.';
 
   @override
   String accountConfirmed(String param) {
@@ -3541,6 +3552,9 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Бастапқы күй';
 
   @override
@@ -3676,7 +3690,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get posts => 'Жазба';
 
   @override
-  String get lastPost => 'Кейінгі хабар';
+  String get lastPost => 'Соңғы хабар';
 
   @override
   String get views => 'Қаралған';
@@ -6552,4 +6566,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Екісатылы өкіл-растау';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param блогі';
+  }
 }

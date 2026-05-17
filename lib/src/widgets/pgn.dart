@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-const innacuracyColor = LichessColors.cyan;
+const inaccuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
 const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);
@@ -155,6 +155,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.premovePaths,
     required this.pgnRootComments,
     this.notifier,
+    this.showTopDivider = true,
     this.shouldShowComputerAnalysis = true,
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
@@ -179,6 +180,9 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
   final PgnTreeNotifier? notifier;
+
+  /// Whether to show a divider line above the first mainline part.
+  final bool showTopDivider;
 
   /// Whether to show computer analysis informations.
   ///
@@ -290,6 +294,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         pathToCurrentMove: pathToCurrentMove,
         pathToLiveMove: pathToLiveMove,
         premovePaths: widget.premovePaths,
+        showTopDivider: widget.showTopDivider,
         displayMode: widget.displayMode,
         notifier: widget.notifier,
       ),
@@ -310,6 +315,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Paths relative to [_PgnTreeViewParams.pathToLiveMove] that are currently saved as premoves in an ongoing correspondence game.
   IList<UciPath>? premovePaths,
+
+  /// Whether to show a divider line above the first mainline part.
+  bool showTopDivider,
 
   /// Whether to show analysis variations.
   bool shouldShowComputerAnalysis,
@@ -536,7 +544,6 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
 List<InlineSpan> _buildInlineSideLine({
   required ViewBranch firstNode,
-  required ViewNode parent,
   required UciPath initialPath,
   required TextStyle textStyle,
   required bool followsComment,
@@ -683,7 +690,6 @@ class _SideLinePart extends ConsumerWidget {
             ..._buildInlineSideLine(
               followsComment: node.children.first.hasTextComment,
               firstNode: node.children[1],
-              parent: node,
               initialPath: path,
               textStyle: textStyle,
               params: params,
@@ -769,6 +775,8 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
 
     final initialFullmoves = nodes.first.position.fullmoves;
 
+    final isFirstPart = initialPath.isEmpty;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -779,7 +787,9 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
                 ? const Color(0x0BFFFFFF)
                 : const Color(0x05000000),
             border: Border(
-              top: BorderSide(color: dividerColor),
+              top: isFirstPart && !params.showTopDivider
+                  ? BorderSide.none
+                  : BorderSide(color: dividerColor),
               bottom: BorderSide(color: dividerColor),
             ),
           ),
@@ -900,7 +910,6 @@ class _InlineNotationMainlinePart extends ConsumerWidget {
                     _buildInlineSideLine(
                       followsComment: mainlineNode.hasTextComment,
                       firstNode: children[1],
-                      parent: node,
                       initialPath: path,
                       textStyle: textStyle,
                       params: params,
@@ -1265,6 +1274,7 @@ class InlineMove extends ConsumerWidget {
     final moveTextStyle = textStyle.copyWith(
       fontFamily: moveFontFamily,
       fontWeight: lineInfo.type == _LineType.inlineSideline ? FontWeight.normal : FontWeight.w600,
+      fontStyle: branch.isUserAdded ? FontStyle.italic : FontStyle.normal,
     );
 
     final indexTextStyle = textStyle.copyWith(color: _textColor(context, kIndexOpacity));

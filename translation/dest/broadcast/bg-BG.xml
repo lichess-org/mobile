@@ -21,10 +21,10 @@
   <string name="ongoing">Текущи</string>
   <string name="upcoming">Предстоящи</string>
   <string name="roundName">Име на кръга</string>
-  <string name="tournamentName" comment="This used to say &quot;Tournament name&quot;. It is okay to continue using &quot;Tournament&quot;, as long as you stay consistent throughout.">Име на турнира</string>
+  <string name="tournamentName">Име на турнира</string>
   <string name="tournamentDescription">Кратко описание на турнира</string>
-  <string name="fullDescription" comment="This text used to say &quot;Full tournament description&quot;. It can be changed to &quot;tournament&quot; since all broadcast events are tournaments.">Пълно описание на турнира</string>
-  <string name="fullDescriptionHelp" comment="This text used to start with &quot;Optional long description of the broadcast.&quot;.&#10;The word should be changed to &quot;event&quot; or &quot;tournament&quot; since all broadcast events are tournaments, and it is a more user-friendly term.&#10;&#10;%1$s says &quot;Markdown&quot; (a proper noun) and gives a link to a description of Markdown.&#10;%2$s is the character limit (e.g. 160)">Незадължително дълго описание на турнира. %1$s е на разположение. Дължината трябва да бъде по-малка от %2$s знака.</string>
+  <string name="fullDescription">Пълно описание на турнира</string>
+  <string name="fullDescriptionHelp">Незадължително дълго описание на турнира. %1$s е на разположение. Дължината трябва да бъде по-малка от %2$s знака.</string>
   <string name="sourceSingleUrl">URL на PGN източника</string>
   <string name="sourceUrlHelp">Уебадресът, който Lichess ще проверява за опресняване на PGN данните. Той трябва да е публично достъпен в интернет.</string>
   <string name="sourceGameIds">До 64 идентификатора на партии в Lichess, разделени с интервали.</string>
@@ -63,15 +63,16 @@
   <string name="notYetStarted">Излъчването още не е започнало.</string>
   <string name="officialWebsite">Официален уебсайт</string>
   <string name="officialStandings">Официално класиране</string>
-  <string name="iframeHelp" comment="%s is 'webmasters page', which is available for translation separately.&#10;&#10;Appears on broadcast pages for the person who set up the tournament broadcast.&#10;&#10;This used to say &quot;More options on the %s&quot;. It has been updated to add the leading word and a full stop.&#10;">Още опции на страницата за %s</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page'">Още опции на страницата за %s</string>
   <string name="webmastersPage">уебмастърите</string>
   <string name="embedThisBroadcast">Вграждане на това излъчване във вашия уебсайт</string>
   <string name="ratingDiff">Разлика в рейтинга</string>
   <string name="gamesThisTournament">Партии в този турнир</string>
   <string name="score">Резултат</string>
+  <string name="standingsDisclaimer">Класирането се изчислява на базата на предаваните партии и може да се различава от официалните резултати.</string>
   <string name="allTeams">Всички отбори</string>
   <string name="tournamentFormat">Формат на турнира</string>
-  <string name="tournamentLocation" comment="This used to say &quot;Tournament location&quot;, which would still be valid, but please remain consistent with other strings.&#10;&#10;Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Място на турнира</string>
+  <string name="tournamentLocation">Място на турнира</string>
   <string name="topPlayers">Най-добрите играчи</string>
   <string name="timezone">Часова зона</string>
   <string name="fideRatingCategory">Рейтингова категория на ФИДЕ</string>
@@ -83,6 +84,28 @@
   <string name="liveboard">Дъска на живо</string>
   <string name="communityBroadcast">Излъчване от общността</string>
   <string name="createdAndManagedBy">Създадено и управлявано от %s.</string>
+  <string name="matchPoints">Точки от мачове</string>
+  <string name="gamePoints">Точки от партии</string>
+  <string name="matches">Мачове</string>
+  <string name="matchHistory">История на мачовете</string>
+  <string name="teamResults">Отборни резултати</string>
+  <string name="termsAutomaticallyTranslated">Следните термини ще бъдат преведени автоматично: %s.</string>
   <string name="roundX">Кръг %s</string>
   <string name="defaultRoundNameHelp">Запазването на името по подразбиране ще позволи автоматичния му превод на всички останали езици.</string>
+  <string name="openTournament">Опен</string>
+  <string name="womenTournament">Жени</string>
+  <string name="menTournament">Мъже</string>
+  <string name="girlsTournament">Девойки</string>
+  <string name="boysTournament">Юноши</string>
+  <string name="openUnderXAgeTournament">Опен до %s</string>
+  <string name="girlsUnderXAgeTournament">Девойки до %s</string>
+  <string name="boysUnderXAgeTournament">Юноши до %s</string>
+  <string name="quarterfinals">Четвъртфинали</string>
+  <string name="semifinals">Полуфинали</string>
+  <string name="finals">Финал</string>
+  <string name="tiebreaks">Допълнителни показатели</string>
+  <string name="gameX">Партия %s</string>
+  <string name="knockouts">Елиминации</string>
+  <string name="underXAgeTournament" comment="%s is the maximum age set by the organiser for a tournament. e.g.    'U18' will mean it is an tournament for under-18 year olds.&#10;&#10;Please use your language's conventions in sporting activities for how the 'U' should be translated and keep it short.">До %s г</string>
+  <string name="underXEloTournament" comment="%s is the maximum Elo rating set by the organiser for a tournament.     e.g. 'U2000' will mean it is an tournament for players with Elo under 2000.&#10;&#10;Please use your language's conventions in sporting activities for how the 'U' should be translated and keep it short.">Под %s</string>
 </resources>

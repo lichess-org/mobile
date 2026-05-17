@@ -23,8 +23,8 @@ final _logDateFormatter = DateFormat.yMd().add_Hms();
 class AppLogSettingsScreen extends ConsumerStatefulWidget {
   const AppLogSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const AppLogSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const AppLogSettingsScreen());
   }
 
   @override

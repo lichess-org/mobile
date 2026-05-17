@@ -9,6 +9,9 @@ class AppLocalizationsSv extends AppLocalizations {
   AppLocalizationsSv([String locale = 'sv']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontoinställningar';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Gillade du det här problemet?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Rösta för att ladda nästa!';
 
   @override
   String get puzzleUpVote => 'Rösta upp pussel';
@@ -2596,6 +2606,16 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Senaste partier';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Visa variantpilar';
-
-  @override
-  String get evaluationGauge => 'Evalueringsmätare';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2961,15 +2978,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get checkSpamFolder => 'Kontrollera även din skräppost, det kan hamna där. I så fall, markera det som ej skräppost.';
 
   @override
-  String get emailForSignupHelp => 'Om allt annat misslyckas, skicka oss denna mejl:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiera och klistra in den ovanstående texten och skicka den till $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi återkopplar snart och hjälper dig slutföra din registrering.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Chess960 startposition: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Startposition';
@@ -6552,4 +6566,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tvåfaktorsautentisering';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '${param}s blogg';
+  }
 }

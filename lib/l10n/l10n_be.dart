@@ -9,6 +9,9 @@ class AppLocalizationsBe extends AppLocalizations {
   AppLocalizationsBe([String locale = 'be']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Налады ўліковага запісу';
 
   @override
@@ -1098,6 +1101,16 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1632,9 +1645,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ці спадабалася задача?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Прагаласуйце, каб перайсці да наступнай!';
 
   @override
   String get puzzleUpVote => 'Задача спадабалася';
@@ -2648,6 +2658,16 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Нядаўнія гульні';
 
   @override
@@ -2731,9 +2751,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Шкала ацэнкі';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3013,15 +3030,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get checkSpamFolder => 'Таксама праверце папку са спамам, ён можа апынуцца там. Калі так, адзначце гэта як не спам.';
 
   @override
-  String get emailForSignupHelp => 'Калі ўсё астатняе не дапамагае, адпраўце нам гэты ліст:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Скапіруйце і ўстаўце прыведзены вышэй тэкст і адпраўце яго $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Мы звяжамся з вамі ў бліжэйшы час, каб дапамагчы вам завяршыць рэгістрацыю.';
 
   @override
   String accountConfirmed(String param) {
@@ -3591,6 +3602,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Пачатковая пазіцыя ў шахматах Фішэра: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Пачатковая пазіцыя';
@@ -6730,4 +6744,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфактарная аўтэнтыфікацыя';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

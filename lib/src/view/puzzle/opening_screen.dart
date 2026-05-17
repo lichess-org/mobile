@@ -37,8 +37,8 @@ final _openingsProvider = FutureProvider.autoDispose
 class OpeningThemeScreen extends ConsumerWidget {
   const OpeningThemeScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OpeningThemeScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const OpeningThemeScreen());
   }
 
   @override
@@ -167,7 +167,7 @@ class _OpeningFamily extends ConsumerWidget {
                 Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingFamily.key)));
+                ).push(PuzzleScreen.buildRoute(angle: PuzzleOpening(openingFamily.key)));
               },
             ),
     );
@@ -196,7 +196,7 @@ class _OpeningTile extends StatelessWidget {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingKey)));
+        ).push(PuzzleScreen.buildRoute(angle: PuzzleOpening(openingKey)));
       },
     );
   }

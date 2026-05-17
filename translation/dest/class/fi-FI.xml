@@ -115,7 +115,7 @@ Se luo vaakasuoran erotinviivan.</string>
   <string name="xisNowAStudentOfTheClass">%s on nyt luokan oppilas</string>
   <string name="anInvitationHasBeenSentToX">Käyttäjälle %s lähetettiin kutsu</string>
   <string name="xAlreadyHasAPendingInvitation">%s on jo saanut kutsun, joka odottaa vastausta</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s on lapsitunnus eikä voi vastaanottaa viestiäsi. Sinun on annettava kutsun URL-osoite oppilaalle käsin: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s on lapsitunnus eikä voi vastaanottaa viestiäsi. Sinun on annettava kutsun URL-osoite oppilaalle käsin: %2$s</string>
   <string name="moveToClass">Siirrä luokalle %s</string>
   <string name="moveToAnotherClass">Siirrä toiselle luokalle</string>
   <string name="allowMessagingBetweenStudents">Salli oppilaiden väliset viestit</string>

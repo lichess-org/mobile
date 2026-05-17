@@ -121,7 +121,7 @@
   <string name="xisNowAStudentOfTheClass">%s тепер новий учень класу</string>
   <string name="anInvitationHasBeenSentToX">Запрошення було надіслано %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s уже отримав запрошення</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s є обліковим записом дитини та не може отримати ваше повідомлення. Ви повинні дати їм URL-адресу запрошення вручну: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s є обліковим записом дитини та не може отримати ваше повідомлення. Ви повинні дати їм URL-адресу запрошення вручну: %2$s</string>
   <string name="moveToClass">Перевести в %s</string>
   <string name="moveToAnotherClass">Перевести в інший клас</string>
   <string name="allowMessagingBetweenStudents">Дозволити учням обмінюватися повідомленнями</string>

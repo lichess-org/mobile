@@ -121,9 +121,9 @@ class UserActivityEntry extends ConsumerWidget {
                 draw: gameEntry.value.draw,
                 loss: gameEntry.value.loss,
               ),
-              onTap: () => Navigator.of(context).push(
-                GameHistoryScreen.buildRoute(context, user: user, isOnline: user.isOnline == true),
-              ),
+              onTap: () => Navigator.of(
+                context,
+              ).push(GameHistoryScreen.buildRoute(user: user, isOnline: user.isOnline == true)),
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
@@ -162,7 +162,7 @@ class UserActivityEntry extends ConsumerWidget {
               draw: 0,
               loss: entry.puzzles!.loss,
             ),
-            onTap: () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context)),
+            onTap: () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute()),
           ),
         if (entry.streak != null)
           _UserActivityListTile(

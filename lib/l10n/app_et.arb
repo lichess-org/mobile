@@ -239,7 +239,6 @@
   "puzzleOrigin": "Allikas",
   "puzzleSpecialMoves": "Erilised käigud",
   "puzzleDidYouLikeThisPuzzle": "Kas sulle meeldis see pusle?",
-  "puzzleVoteToLoadNextOne": "Hääleta, nii saad edasi!",
   "puzzleUpVote": "Hääleta poolt",
   "puzzleDownVote": "Hääleta vastu",
   "puzzleYourPuzzleRatingWillNotChange": "Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.",
@@ -497,7 +496,6 @@
   "byCPL": "CPL järgi",
   "enable": "Luba",
   "bestMoveArrow": "Parima käigu nool",
-  "evaluationGauge": "Hinnangunäidik",
   "undefendedPieces": "Kaitsmata nupud",
   "pinnedPieces": "Seotud nupud",
   "checkableKing": "Tules kuningas",
@@ -579,9 +577,6 @@
   "emailCanTakeSomeTime": "Sellega võib minna mõni hetk aega.",
   "refreshInboxAfterFiveMinutes": "Oodake 5 minutit ja värskendage postkasti.",
   "checkSpamFolder": "Kiri võib sattuda ka rämpsposti kausta. Sel juhul palun märkige see mitte rämpspostina.",
-  "emailForSignupHelp": "Kui kõik muu ei õnnestu, saatke meile see e-kiri:",
-  "copyTextToEmail": "Kopeerige ülaltoodud tekst ja saatke see aadressile {param}",
-  "waitForSignupHelp": "Me võtame teiega peagi ühendust, et aidata teil registreerimist lõpule viia.",
   "accountConfirmed": "Kasutaja {param} on edukalt kinnitatud.",
   "accountCanLogin": "Saate praegu sisse logida kui {param}.",
   "accountConfirmationEmailNotNeeded": "Te ei vaja kinnitusmeili.",
@@ -1390,5 +1385,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} aasta tagasi} other{{count} aastat tagasi}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minut jäänud} other{{count} minutit jäänud}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} tund jäänud} other{{count} tundi jäänud}}",
-  "tfaTwoFactorAuth": "Kaheastmeline autentimine"
+  "tfaTwoFactorAuth": "Kaheastmeline autentimine",
+  "ublogXBlog": "Kasutaja {param} blogi"
 }

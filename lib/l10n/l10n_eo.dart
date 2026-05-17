@@ -9,6 +9,9 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontaj Preferoj';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ĉu vi ŝatis la puzlon?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Voĉdonu por iri al la venonta puzlo!';
 
   @override
   String get puzzleUpVote => 'Supren voĉdoni puzlo';
@@ -2596,6 +2606,16 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Lastaj ludoj';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Montri variaĵojn sagojn';
-
-  @override
-  String get evaluationGauge => 'Gaŭĝo de rangado';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2961,15 +2978,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get checkSpamFolder => 'Ankaŭ kontrolu vian trudmesaĝujon, ĝi povus alveni tie. Se estas tiel, marku ĝin kiel ne truda.';
 
   @override
-  String get emailForSignupHelp => 'Se ĉio antaŭdirita ne funkcias, sendu al ni ĉi tiun retleteron:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiu kaj algluu la supran tekston kaj sendu ĝin al $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ni estos kun vi baldaŭ por helpi vin plenigi vian registriĝon.';
 
   @override
   String accountConfirmed(String param) {
@@ -3048,7 +3059,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get playingRightNow => 'Ludate nun';
 
   @override
-  String get eventInProgress => 'Ludanta';
+  String get eventInProgress => 'Ludata';
 
   @override
   String get finished => 'Finita';
@@ -3539,6 +3550,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Ŝako960 komenca pozicio: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Komenca aranĝo';
@@ -4731,7 +4745,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get rapidDesc => 'Rapidaj ludoj: 8 ĝis 25 minutoj';
 
   @override
-  String get classicalDesc => 'Klasikaj ludoj: 25 minutoj kaj plu';
+  String get classicalDesc => 'Klasikaj ludoj: 25 minutoj kaj pli';
 
   @override
   String get correspondenceDesc => 'Korespondaj ludoj: unu aŭ kelkaj tagoj po movo';
@@ -5237,8 +5251,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Posicio aktualiĝas en ĉiu $count minutoj',
-      one: 'Posicio aktualiĝas en ĉiu minuto',
+      other: 'Posicio aktualiĝas ĉiujn $count minutojn',
+      one: 'Posicio aktualiĝas ĉiuminute',
     );
     return '$_temp0';
   }
@@ -5861,7 +5875,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyShareChanges => 'Diskonigi ŝanĝojn al spektantoj kaj konservi tiujn ĉe la servilo';
 
   @override
-  String get studyPlaying => 'Ludanta';
+  String get studyPlaying => 'Ludata';
 
   @override
   String get studyShowResults => 'Rezultoj';
@@ -6401,7 +6415,7 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'en $count minutoj',
+      other: 'post $count minutoj',
       one: 'en $count minuto',
     );
     return '$_temp0';
@@ -6533,8 +6547,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count minutoj restas',
-      one: '$count minuto restas',
+      other: 'restas $count minutoj',
+      one: 'restas $count minuto',
     );
     return '$_temp0';
   }
@@ -6552,4 +6566,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dufaza aŭtentigo';
+
+  @override
+  String get ublogCommunity => 'Komunumo';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blogo de $param';
+  }
 }

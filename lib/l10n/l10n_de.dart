@@ -9,10 +9,13 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
+  String get mobileAccount => 'Konto';
+
+  @override
   String get mobileAccountPreferences => 'Kontoeinstellungen';
 
   @override
-  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess - Konto angewendet und werden auf allen Geräten verwendet.';
+  String get mobileAccountPreferencesHelp => 'Diese Einstellungen werden auf dein Lichess-Konto angewendet und werden auf allen Geräten verwendet.';
 
   @override
   String get mobileAllGames => 'Alle Partien';
@@ -1058,6 +1061,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastKnockouts => 'K.O.-Runde';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1594,9 +1607,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Hat dir diese Aufgabe gefallen?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stimme ab, um die nächste zu laden!';
-
-  @override
   String get puzzleUpVote => 'Die Aufgabe gut bewerten';
 
   @override
@@ -1922,7 +1932,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeCollinearMove => 'Kollinearer Zug';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Zwei gegnerische Figuren stehen sich gegenüber und eine zieht vorbei auf der Angriffslinie vorbei, ohne die gegnerische Figur zu schlagen.';
 
   @override
   String get puzzleThemeCornerMate => 'Eck-Matt';
@@ -2596,6 +2606,16 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimale Wertungszahl von $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximale Wertungszahl von $param';
+  }
+
+  @override
   String get recentGames => 'Neueste Partien';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Varianten-Pfeile anzeigen';
-
-  @override
-  String get evaluationGauge => 'Bewertungsanzeige';
 
   @override
   String get visualMotifs => 'Visuelle Motive';
@@ -2961,15 +2978,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get checkSpamFolder => 'Überprüfe auch dein Spam-Verzeichnis, sie könnte darin gelandet sein. Falls dem so ist, markiere sie als kein Spam.';
 
   @override
-  String get emailForSignupHelp => 'Falls alles andere fehlschlägt, dann sende uns folgende E-Mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiere den obigen Text, füge ihn hier ein und sende alles an $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Wenn du deine Bestätigungs-Mail nicht finden kannst, sende eine E-Mail an $param und wir bestätigen deinen Account.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Wir werden uns bald mit dir in Verbindung setzen, um deine Registrierung abzuschließen.';
 
   @override
   String accountConfirmed(String param) {
@@ -3537,8 +3548,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String chess960StartPosition(String param) {
-    return 'Schach960 Anfangsstellung: $param';
+    return 'Chess960-Anfangsstellung: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Zufällige Chess960-Stellung';
 
   @override
   String get startPosition => 'Anfangsposition';
@@ -6552,4 +6566,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Authentifizierung';
+
+  @override
+  String get ublogCommunity => 'Gemeinschaft';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog von $param';
+  }
 }

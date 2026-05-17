@@ -196,6 +196,12 @@ abstract class AppLocalizations {
     Locale('zh', 'TW')
   ];
 
+  /// No description provided for @mobileAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get mobileAccount;
+
   /// No description provided for @mobileAccountPreferences.
   ///
   /// In en, this message translates to:
@@ -1894,6 +1900,18 @@ abstract class AppLocalizations {
   /// **'Knockouts'**
   String get broadcastKnockouts;
 
+  /// No description provided for @broadcastUnderXAgeTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXAgeTournament(String param);
+
+  /// No description provided for @broadcastUnderXEloTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'U{param}'**
+  String broadcastUnderXEloTournament(String param);
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:
@@ -2866,22 +2884,16 @@ abstract class AppLocalizations {
   /// **'Did you like this puzzle?'**
   String get puzzleDidYouLikeThisPuzzle;
 
-  /// No description provided for @puzzleVoteToLoadNextOne.
-  ///
-  /// In en, this message translates to:
-  /// **'Vote to load the next one!'**
-  String get puzzleVoteToLoadNextOne;
-
   /// No description provided for @puzzleUpVote.
   ///
   /// In en, this message translates to:
-  /// **'Rate puzzle positively'**
+  /// **'Great puzzle!'**
   String get puzzleUpVote;
 
   /// No description provided for @puzzleDownVote.
   ///
   /// In en, this message translates to:
-  /// **'Rate puzzle negatively'**
+  /// **'Bad puzzle!'**
   String get puzzleDownVote;
 
   /// No description provided for @puzzleYourPuzzleRatingWillNotChange.
@@ -4738,6 +4750,18 @@ abstract class AppLocalizations {
   /// **'Average rating: {param}'**
   String averageRatingX(String param);
 
+  /// No description provided for @minRatingX.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum rating of {param}'**
+  String minRatingX(String param);
+
+  /// No description provided for @maxRatingX.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum rating of {param}'**
+  String maxRatingX(String param);
+
   /// No description provided for @recentGames.
   ///
   /// In en, this message translates to:
@@ -4899,12 +4923,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show variation arrows'**
   String get showVariationArrows;
-
-  /// No description provided for @evaluationGauge.
-  ///
-  /// In en, this message translates to:
-  /// **'Evaluation gauge'**
-  String get evaluationGauge;
 
   /// No description provided for @visualMotifs.
   ///
@@ -5440,23 +5458,11 @@ abstract class AppLocalizations {
   /// **'Also check your spam folder, it might end up there. If so, mark it as not spam.'**
   String get checkSpamFolder;
 
-  /// No description provided for @emailForSignupHelp.
+  /// No description provided for @sendEmailForAccountVerification.
   ///
   /// In en, this message translates to:
-  /// **'If everything else fails, then send us this email:'**
-  String get emailForSignupHelp;
-
-  /// No description provided for @copyTextToEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy and paste the above text and send it to {param}'**
-  String copyTextToEmail(String param);
-
-  /// No description provided for @waitForSignupHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'We will respond shortly to help you complete your registration.'**
-  String get waitForSignupHelp;
+  /// **'If you can\'t find your confirmation email, send an email to {param} and we\'ll confirm your account for you.'**
+  String sendEmailForAccountVerification(String param);
 
   /// No description provided for @accountConfirmed.
   ///
@@ -6507,6 +6513,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chess960 start position: {param}'**
   String chess960StartPosition(String param);
+
+  /// No description provided for @randomChess960Position.
+  ///
+  /// In en, this message translates to:
+  /// **'Random Chess960 position'**
+  String get randomChess960Position;
 
   /// No description provided for @startPosition.
   ///
@@ -9229,7 +9241,7 @@ abstract class AppLocalizations {
   /// No description provided for @lichessPatronInfo.
   ///
   /// In en, this message translates to:
-  /// **'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.'**
+  /// **'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  '**
   String get lichessPatronInfo;
 
   /// No description provided for @nothingToSeeHere.
@@ -11157,6 +11169,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Two-factor authentication'**
   String get tfaTwoFactorAuth;
+
+  /// No description provided for @ublogCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get ublogCommunity;
+
+  /// No description provided for @ublogXBlog.
+  ///
+  /// In en, this message translates to:
+  /// **'{param}\'s Blog'**
+  String ublogXBlog(String param);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

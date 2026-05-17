@@ -294,7 +294,6 @@
   "puzzleOrigin": "Oorsprong",
   "puzzleSpecialMoves": "Spesiale bewegings",
   "puzzleDidYouLikeThisPuzzle": "Hou jy van hierdie raaisel?",
-  "puzzleVoteToLoadNextOne": "Stem om die volgende een te laai!",
   "puzzleUpVote": "Stem vir raaisel",
   "puzzleDownVote": "Stem teen raaisel",
   "puzzleYourPuzzleRatingWillNotChange": "Jou raaisel gradeering sal nie verander nie. Neem kennis dat raaisels is nie 'n kompetisie nie. Jou gradeering help om die mees geskikte raaisels vir jou vermoë te kies.",
@@ -599,7 +598,6 @@
   "enable": "Aktief",
   "bestMoveArrow": "Beste skuif pyl",
   "showVariationArrows": "Wys variasiepyle",
-  "evaluationGauge": "Evaluering meter",
   "multipleLines": "Aantal lyne",
   "cpus": "CPU",
   "memory": "Geheue",
@@ -675,9 +673,6 @@
   "emailCanTakeSomeTime": "Dit mag 'n rukkie neem om te ontvang.",
   "refreshInboxAfterFiveMinutes": "Wag 5 minute en verfris jou e-pos.",
   "checkSpamFolder": "Kyk ook in jou strooipos lêer, dit mag dalk daarin opeinding. In dien dit die geval is, merk dit as nie strooipos nie.",
-  "emailForSignupHelp": "Indien niks werk nie, stuur die volgende boodskap:",
-  "copyTextToEmail": "Kopieer en plak die teks hierbo en stuur dit na {param}",
-  "waitForSignupHelp": "Ons sal spoedig na jou terugkom en jou help met die intekenproses.",
   "accountConfirmed": "Die gebruiker {param} is bevestig.",
   "accountCanLogin": "Jy kan nou inteken as {param}.",
   "accountConfirmationEmailNotNeeded": "Jy benodig nie 'n bevestigingsboodskap nie.",
@@ -1562,5 +1557,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} jaar gelede} other{{count} jare gelede}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{nog {count} minuut oor} other{nog {count} minute oor}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{nog {count} uur oor} other{nog {count} ure oor}}",
-  "tfaTwoFactorAuth": "Tweeledige verifikasie"
+  "tfaTwoFactorAuth": "Tweeledige verifikasie",
+  "ublogXBlog": "{param} se webjoernaal"
 }

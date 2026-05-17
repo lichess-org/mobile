@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -42,13 +42,8 @@ class OverTheBoardScreen extends StatelessWidget {
   /// Initial variant to be preselected in the "New Game" dialog.
   final Variant? initialVariant;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -418,7 +413,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,

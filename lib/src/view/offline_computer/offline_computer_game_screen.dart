@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -31,7 +30,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
@@ -53,7 +51,7 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => innacuracyColor,
+    .inaccuracy => inaccuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,
   };
@@ -75,13 +73,8 @@ class OfflineComputerGameScreen extends ConsumerWidget {
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -360,16 +353,16 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.menu,
         ),
         BottomBarButton(
+          label: context.l10n.resign,
+          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
+          icon: CupertinoIcons.flag,
+        ),
+        BottomBarButton(
           label: context.l10n.takeback,
           onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
-        ),
-        BottomBarButton(
-          label: context.l10n.resign,
-          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
-          icon: CupertinoIcons.flag,
         ),
         BottomBarButton(
           label: context.l10n.getAHint,
@@ -399,7 +392,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
@@ -898,7 +890,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                           ),
                           controller: _fenController,
                           readOnly: true,
-                          onTap: _getClipboardData,
+                          onTap: () => pasteFenFromClipboard(context, _fenController),
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -964,20 +956,6 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
       _selectedVariant != Variant.fromPosition ||
       widget.initialFen != null ||
       (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
-
-  Future<void> _getClipboardData() async {
-    final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data != null) {
-      try {
-        Chess.fromSetup(Setup.parseFen(data.text!.trim()));
-        _fenController.text = data.text!.trim();
-      } catch (_) {
-        if (mounted) {
-          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-        }
-      }
-    }
-  }
 }
 
 class _PracticeSettingsSheet extends ConsumerWidget {
@@ -1054,7 +1032,6 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.pop(context);
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: game.id,
                   orientation: game.playerSide,

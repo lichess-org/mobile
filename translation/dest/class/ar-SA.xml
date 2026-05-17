@@ -127,9 +127,14 @@
   <string name="xisNowAStudentOfTheClass">%s هو طالب في الصف الدراسي</string>
   <string name="anInvitationHasBeenSentToX">تم إرسال الدعوة الى %s</string>
   <string name="xAlreadyHasAPendingInvitation">%s لديه دعوة معلقة بالفعل</string>
-  <string name="xIsAKidAccountWarning" comment="%1$s is the username&#10;%2$s is a link.&#10;&#10;This string used to say &quot;is a kid account&quot;, which has since been changed to &quot;is in kid mode&quot;. The second sentence was also rephrased slightly.">%1$s حساب طفل ولا يمكنه استلام رسالتك. يجب أن تعطيهم عنوان URL للدعوة يدوياً: %2$s</string>
+  <string name="xIsAKidAccountWarning">%1$s حساب طفل ولا يمكنه استلام رسالتك. يجب أن تعطيهم عنوان URL للدعوة يدوياً: %2$s</string>
   <string name="moveToClass">نقل إلى %s</string>
   <string name="moveToAnotherClass">نقل إلى صف آخر</string>
   <string name="allowMessagingBetweenStudents">السماح بالرسائل بين التلاميذ</string>
   <string name="allowMessagingBetweenStudentsDesc">هذا ينطبق على الحسابات التي أنشأنها من أجل الدراسة فقط</string>
+  <string name="quickLoginCode">رمز تسجيل الدخول السريع</string>
+  <string name="quickLoginCodes">رموز تسجيل الدخول السريع</string>
+  <string name="quickLoginCodesDesc1" comment="String is a URL">استخدم هذه الرموز على %s لتسجيل طلابك في Lichess.</string>
+  <string name="quickLoginCodesDesc2">عند انتهاء صَلاحِيَة الرموز، سيبقى طلابك مسجلين الدخول، حتى يسجلوا الخروج يدويا.</string>
+  <string name="expirationInMomentFromNow" comment="String is the translation of, for example, 'in 2 hours'">انتهاء الصَّلاحِيَة %s</string>
 </resources>

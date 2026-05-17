@@ -9,6 +9,9 @@ class AppLocalizationsAz extends AppLocalizations {
   AppLocalizationsAz([String locale = 'az']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1594,13 +1607,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Bu tapmacanı bəyəndiniz?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Sıradakına keçmək üçün səs verin!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
@@ -2594,6 +2604,16 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Son oyunlar';
 
   @override
@@ -2677,9 +2697,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Variasiya oxlarını göstərin';
-
-  @override
-  String get evaluationGauge => 'Dəyərləndirmə çubuğu';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2959,15 +2976,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get checkSpamFolder => 'Spam qutusunu da yoxlayın, məktub oradada ola bilər. Elədirsə, zəhmət olmasa qeyri-spam kimi qeyd edin.';
 
   @override
-  String get emailForSignupHelp => 'Əgər heç nə alınmırsa, bizə email yollayın:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Yuxarıdakı mətni kopyalayıb yapışdırıb $param ünvanına göndərin';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Qeydiyyatınızı tamamlamağınıza kömək etmək üçün tezliklə sizinlə əlaqə saxlayacağıq.';
 
   @override
   String accountConfirmed(String param) {
@@ -3537,6 +3548,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Şahmat960 başlanğıc vəziyət: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Başlanğıc pozisiyası';
@@ -5022,7 +5036,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  ';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6550,4 +6564,12 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2 mərhələli təsdiqləmə';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }

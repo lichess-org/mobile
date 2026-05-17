@@ -9,6 +9,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   AppLocalizationsGsw([String locale = 'gsw']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Konto Ischtellige';
 
   @override
@@ -1058,6 +1061,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastKnockouts => 'Usscheidigskämpf';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1592,9 +1605,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Hät dir d\'Ufgab g\'falle?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stimm ab, um die Nächscht z\'lade!';
 
   @override
   String get puzzleUpVote => 'Die Ufgab positiv bewerte';
@@ -2596,6 +2606,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Aktuelli Schpiel';
 
   @override
@@ -2679,9 +2699,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Pfil für Variante azeige';
-
-  @override
-  String get evaluationGauge => 'Bewertigs-Massschtab';
 
   @override
   String get visualMotifs => 'Visuelli Motiv';
@@ -2961,15 +2978,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get checkSpamFolder => 'Lueg au im Spam-Ordner, es chönnt det glandet si. Wänn ja, lösch d\'Spam-Markierig.';
 
   @override
-  String get emailForSignupHelp => 'Wänn alles nöd gaht, schick eus die E-Mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier de oberi Text, füeg en i und schick en an $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Mir mälded eus in Chürzi, dass du dini Amäldig abschlüsse chasch.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3550,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String chess960StartPosition(String param) {
     return 'Schach960 Afangsschtellig: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Random Chess960 position';
 
   @override
   String get startPosition => 'Afangsposition';
@@ -6552,4 +6566,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Autentifizierig';
+
+  @override
+  String get ublogCommunity => 'G\'meinschaft';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param\'s Blog';
+  }
 }
