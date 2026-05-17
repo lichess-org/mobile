@@ -66,7 +66,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
@@ -104,7 +104,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.openingExplorer),
-                enabled: isOnline,
+                enabled: connectionStatus == ConnectionStatus.online,
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   OpeningExplorerScreen.buildRoute(
                     const AnalysisOptions.pgn(
@@ -149,7 +149,7 @@ class _Body extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.groups_3_outlined),
                 title: Text(context.l10n.players),
-                enabled: isOnline,
+                enabled: connectionStatus == ConnectionStatus.online,
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -161,7 +161,7 @@ class _Body extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.people_outline),
                   title: Text(context.l10n.friends),
-                  enabled: isOnline,
+                  enabled: connectionStatus == ConnectionStatus.online,
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
@@ -180,7 +180,7 @@ class _Body extends ConsumerWidget {
                   leading: PatronIcon(color: 10, size: IconTheme.of(context).size),
                   title: Text(context.l10n.patronDonate),
                   subtitle: Text(context.l10n.patronBecomePatron),
-                  enabled: isOnline,
+                  enabled: connectionStatus == ConnectionStatus.online,
                   onTap: () {
                     launchUrl(Uri.parse('https://lichess.org/patron'));
                   },
@@ -209,7 +209,7 @@ class _AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
@@ -227,7 +227,7 @@ class _AccountSection extends ConsumerWidget {
             leading: const Icon(Icons.person_outlined),
             title: Text(context.l10n.profile),
             trailing: isIOS ? const CupertinoListTileChevron() : null,
-            enabled: isOnline,
+            enabled: connectionStatus == ConnectionStatus.online,
             onTap: () {
               ref.invalidate(accountProvider);
               Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
@@ -242,7 +242,7 @@ class _AccountSection extends ConsumerWidget {
               ),
               title: Text(context.l10n.inbox),
               trailing: isIOS ? const CupertinoListTileChevron() : null,
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
               },

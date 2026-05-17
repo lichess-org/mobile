@@ -287,6 +287,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandardTitle => 'Standard sakk szabályok (FIDE)';
 
   @override

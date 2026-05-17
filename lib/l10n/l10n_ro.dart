@@ -287,6 +287,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandardTitle => 'Reguli de șah standard (FIDE)';
 
   @override

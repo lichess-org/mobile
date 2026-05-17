@@ -169,7 +169,7 @@ class _UserProfileListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final UserScreenData(:user, :recentGames, :activity, :isPlayingLive, :crosstable) = data;
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final nbOfGames = user.count?.all ?? 0;
     final authUser = ref.watch(authControllerProvider);
     final kidMode = ref.watch(kidModeProvider);
@@ -216,7 +216,7 @@ class _UserProfileListView extends ConsumerWidget {
                       Navigator.of(context).push(
                         GameHistoryScreen.buildRoute(
                           user: authUser.user,
-                          isOnline: isOnline,
+                          isOnline: connectionStatus == ConnectionStatus.online,
                           gameFilter: GameFilterState(opponent: user),
                         ),
                       );

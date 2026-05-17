@@ -287,6 +287,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
 
   @override

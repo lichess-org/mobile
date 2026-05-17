@@ -81,7 +81,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final client = ref.read(defaultClientProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
     final account = ref.watch(accountProvider);
@@ -141,7 +141,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                           maxFontSize: 18,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        enabled: isOnline,
+                        enabled: connectionStatus == ConnectionStatus.online,
                         onTap: () {
                           ref.invalidate(accountProvider);
                           _navigate(context, ProfileScreen.buildRoute());
@@ -166,7 +166,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                 else ...[
                   Center(
                     child: FilledButton(
-                      onPressed: isOnline
+                      onPressed: connectionStatus == ConnectionStatus.online
                           ? switch (signInState) {
                               MutationPending() => null,
                               _ => () {
@@ -193,7 +193,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                             ? const CupertinoListTileChevron()
                             : null,
                         title: Text(context.l10n.inbox),
-                        enabled: isOnline,
+                        enabled: connectionStatus == ConnectionStatus.online,
                         onTap: () {
                           _navigate(context, ContactsScreen.buildRoute());
                         },
@@ -218,7 +218,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                         _ => ListTile(
                           leading: const Icon(Icons.logout_outlined),
                           title: Text(context.l10n.logOut),
-                          enabled: isOnline,
+                          enabled: connectionStatus == ConnectionStatus.online,
                           onTap: () => _showSignOutConfirmDialog(context, ref),
                         ),
                       },
@@ -233,7 +233,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                           semanticLabel: context.l10n.patronLichessPatron,
                         ),
                         title: Text(context.l10n.patronDonate),
-                        enabled: isOnline,
+                        enabled: connectionStatus == ConnectionStatus.online,
                         onTap: () => launchUrl(Uri.parse('https://lichess.org/patron')),
                       ),
                     ListTile(

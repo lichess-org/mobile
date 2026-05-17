@@ -94,7 +94,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -107,7 +107,7 @@ class _SectionChoices extends ConsumerWidget {
                 ),
                 subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
                 speed: choice.speed,
-                onTap: isOnline
+                onTap: connectionStatus == ConnectionStatus.online
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
@@ -134,7 +134,7 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
-                onTap: isOnline
+                onTap: connectionStatus == ConnectionStatus.online
                     ? () {
                         showModalBottomSheet<void>(
                           context: context,

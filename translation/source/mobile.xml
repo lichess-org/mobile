@@ -90,4 +90,6 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Previous</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Or import a PGN file</string>
+  <string name="serverOutageMessage" comment="Shown on the home screen when the Lichess server is unreachable.">Lichess is undergoing technical difficulties. We&apos;re doing everything we can, and expect to be back up very soon.</string>
+  <string name="serverOutageKeepInformed" comment="Shown on the home screen below the outage message, with links to social media for updates.">To get updates on the maintenance, checkout our social media channels.</string>
 </resources>

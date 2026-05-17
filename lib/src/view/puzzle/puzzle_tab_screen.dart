@@ -245,7 +245,7 @@ class _PuzzleMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListSection(
@@ -260,7 +260,7 @@ class _PuzzleMenu extends ConsumerWidget {
           },
         ),
         _PuzzleMenuListTile(
-          enabled: isOnline,
+          enabled: connectionStatus == ConnectionStatus.online,
           icon: LichessIcons.streak,
           title: 'Puzzle Streak',
           badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
@@ -272,18 +272,18 @@ class _PuzzleMenu extends ConsumerWidget {
                   .takeWhile((c) => c != '.')
                   .toString() +
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          onTap: isOnline
+          onTap: connectionStatus == ConnectionStatus.online
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }
               : null,
         ),
         _PuzzleMenuListTile(
-          enabled: isOnline,
+          enabled: connectionStatus == ConnectionStatus.online,
           icon: LichessIcons.storm,
           title: 'Puzzle Storm',
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
-          onTap: isOnline
+          onTap: connectionStatus == ConnectionStatus.online
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
                 }
@@ -294,8 +294,8 @@ class _PuzzleMenu extends ConsumerWidget {
             icon: Icons.assessment_outlined,
             title: context.l10n.puzzlePuzzleDashboard,
             subtitle: context.l10n.puzzlePuzzleDashboardDescription,
-            enabled: isOnline,
-            onTap: isOnline
+            enabled: connectionStatus == ConnectionStatus.online,
+            onTap: connectionStatus == ConnectionStatus.online
                 ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute())
                 : null,
           ),
@@ -303,8 +303,8 @@ class _PuzzleMenu extends ConsumerWidget {
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
             subtitle: 'Review your past puzzle attempts.',
-            enabled: isOnline,
-            onTap: isOnline
+            enabled: connectionStatus == ConnectionStatus.online,
+            onTap: connectionStatus == ConnectionStatus.online
                 ? () => Navigator.of(
                     context,
                     rootNavigator: true,
@@ -389,7 +389,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -442,13 +442,13 @@ class DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => isOnline
+      loading: () => connectionStatus == ConnectionStatus.online
           ? const Shimmer(
               child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
             )
           : const SizedBox.shrink(),
       error: (error, _) {
-        return isOnline
+        return connectionStatus == ConnectionStatus.online
             ? const Padding(
                 padding: Styles.bodySectionPadding,
                 child: Text('Could not load the daily puzzle.'),

@@ -117,6 +117,8 @@
   "mobileChallengeCreated": "Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.",
   "mobilePreviousPage": "Previous",
   "mobileOrImportPgnFile": "Or import a PGN file",
+  "mobileServerOutageMessage": "Lichess is undergoing technical difficulties. We're doing everything we can, and expect to be back up very soon.",
+  "mobileServerOutageKeepInformed": "To get updates on the maintenance, checkout our social media channels.",
   "variantStandardTitle": "Standard rules of chess (FIDE)",
   "variantChess960Title": "The starting position of the home rank pieces is randomised.",
   "variantKingOfTheHillTitle": "Bring your King to the centre to win the game.",

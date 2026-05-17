@@ -42,6 +42,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
@@ -403,7 +404,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                         AccountMenuButton(),
                       ],
                     ),
-              body: widget.editModeEnabled
+              body: ref.watch(connectionStatusProvider) == ConnectionStatus.serverDown
+                  ? const ServerOutage()
+                  : widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(
                       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
