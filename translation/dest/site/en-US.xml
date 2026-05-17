@@ -132,9 +132,9 @@
   <string name="checkableKing">Checkable king</string>
   <string name="multipleLines">Multiple lines</string>
   <string name="multipleLinesDescription">Set number of evaluation lines and move arrows on the board</string>
-  <string name="searchTime">Search time</string>
-  <string name="searchTimeDescription">Set time to evaluate fresh positions</string>
-  <string name="threads">Threads</string>
+  <string name="searchTime" comment="A setting for game analysis using a chess engine.&#10;&#10;Description (translateable separately): Set time to evaluate fresh positions">Search time</string>
+  <string name="searchTimeDescription" comment="Description for the &quot;Search time&quot; setting, for analysing a game using a chess engine.">Set time to evaluate fresh positions</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">Threads</string>
   <string name="threadsDescription">Set this below your CPU\'s thread count, the ticks mark a good safe choice</string>
   <string name="threadsDescriptionMobile">More threads will use more battery for better analysis</string>
   <string name="cpus">CPUs</string>
@@ -940,6 +940,7 @@
   <string name="tryTheContactPage">try the contact page</string>
   <string name="makeSureToRead">Make sure to read %1$s</string>
   <string name="theForumEtiquette">the forum etiquette</string>
+  <string name="pleaseBeNiceInTheForum" comment="Placeholder text that appears before starting to compose a topic or reply in the forum.">Please be nice in the forum.</string>
   <string name="thisTopicIsArchived">This topic has been archived and can no longer be replied to.</string>
   <string name="joinTheTeamXToPost">Join the %1$s, to post in this forum</string>
   <string name="teamNamedX">%1$s team</string>

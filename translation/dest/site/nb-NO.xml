@@ -95,6 +95,8 @@
   <string name="database">Database</string>
   <string name="whiteDrawBlack">Hvit / Remis / Svart</string>
   <string name="averageRatingX">Gjennomsnittsrating: %s</string>
+  <string name="minRatingX">Minimumrating på %s</string>
+  <string name="maxRatingX">Maksimumrating på %s</string>
   <string name="recentGames">Nylige partier</string>
   <string name="topGames">Topp-partier</string>
   <string name="masterDbExplanation">Brettsjakkpartier med spillere som har FIDE-rating %1$s+ fra %2$s til %3$s</string>
@@ -132,9 +134,9 @@
   <string name="checkableKing">Sjakkbar konge</string>
   <string name="multipleLines">Flere varianter</string>
   <string name="multipleLinesDescription">Angi antall evalueringslinjer og trekkpiler på brettet</string>
-  <string name="searchTime">Søketid</string>
-  <string name="searchTimeDescription">Angi tid for å evaluere nye stillinger</string>
-  <string name="threads">Tråder</string>
+  <string name="searchTime" comment="A setting for game analysis using a chess engine.&#10;&#10;Description (translateable separately): Set time to evaluate fresh positions">Søketid</string>
+  <string name="searchTimeDescription" comment="Description for the &quot;Search time&quot; setting, for analysing a game using a chess engine.">Angi tid for å evaluere nye stillinger</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">Tråder</string>
   <string name="threadsDescription">Sett denne lavere enn antall tråder på CPU-en din; merkene viser et trygt og godt valg</string>
   <string name="threadsDescriptionMobile">Flere tråder vil bruke mer batteri for bedre analyse</string>
   <string name="cpus">Prosessorer</string>
@@ -267,6 +269,7 @@
   <string name="emailCanTakeSomeTime">Det kan ta litt tid.</string>
   <string name="refreshInboxAfterFiveMinutes">Vent fem minutter før du oppdaterer innboksen.</string>
   <string name="checkSpamFolder">Sjekk om meldingen havnet i søppelpostmappen. Merk i tilfelle meldingen som ikke søppelpost.</string>
+  <string name="sendEmailForAccountVerification">Finner du ikke bekreftelsen som ble sendt som e-post? Send e-post til %s, så bekrefter vi kontoen din.</string>
   <string name="accountConfirmed">Brukeren %s er bekreftet.</string>
   <string name="accountCanLogin">Du kan nå logge inn som %s.</string>
   <string name="accountConfirmationEmailNotNeeded">Du trenger ikke bekreftelsesmelding.</string>
@@ -939,6 +942,7 @@
   <string name="tryTheContactPage">prøv kontaktsiden</string>
   <string name="makeSureToRead">Pass på å lese %1$s</string>
   <string name="theForumEtiquette">forumetiketten</string>
+  <string name="pleaseBeNiceInTheForum" comment="Placeholder text that appears before starting to compose a topic or reply in the forum.">Hold en god tone i forumet.</string>
   <string name="thisTopicIsArchived">Dette emnet er arkivert og kan ikke lenger besvares.</string>
   <string name="joinTheTeamXToPost">Bli med i %1$s for å skrive innlegg i dette forumet</string>
   <string name="teamNamedX">laget %1$s</string>

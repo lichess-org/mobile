@@ -84,8 +84,8 @@
   <string name="liveboard">Tablero en directo</string>
   <string name="communityBroadcast">Transmisión de la comunidad</string>
   <string name="createdAndManagedBy">Creada y administrada por %s.</string>
-  <string name="matchPoints">Puntos de enfrentamientos</string>
-  <string name="gamePoints">Puntos de partidas</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">Puntos de enfrentamientos</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">Puntos de partidas</string>
   <string name="matches">Enfrentamientos</string>
   <string name="matchHistory">Historial de enfrentamientos</string>
   <string name="teamResults">Resultados de equipo</string>
@@ -96,10 +96,10 @@
   <string name="womenTournament">Femenino</string>
   <string name="menTournament">Hombres</string>
   <string name="girlsTournament">Femenino</string>
-  <string name="boysTournament">Chicos</string>
+  <string name="boysTournament">Masculino</string>
   <string name="openUnderXAgeTournament">Abierto Sub%s</string>
   <string name="girlsUnderXAgeTournament">Femenino Sub%s</string>
-  <string name="boysUnderXAgeTournament">Masculino sub%s</string>
+  <string name="boysUnderXAgeTournament">Masculino Sub%s</string>
   <string name="quarterfinals">Cuartos de final</string>
   <string name="semifinals">Semifinales</string>
   <string name="finals">Finales</string>

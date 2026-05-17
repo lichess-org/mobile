@@ -134,9 +134,9 @@
   <string name="checkableKing">König, dem Schach geboten werden kann</string>
   <string name="multipleLines">Mehrere Varianten</string>
   <string name="multipleLinesDescription">Anzahl der besten Züge und Zug-Pfeile auf dem Brett festlegen</string>
-  <string name="searchTime">Suchzeit</string>
-  <string name="searchTimeDescription">Zeit für die Bewertung neuer Positionen</string>
-  <string name="threads">Threads</string>
+  <string name="searchTime" comment="A setting for game analysis using a chess engine.&#10;&#10;Description (translateable separately): Set time to evaluate fresh positions">Suchzeit</string>
+  <string name="searchTimeDescription" comment="Description for the &quot;Search time&quot; setting, for analysing a game using a chess engine.">Zeit für die Bewertung neuer Positionen</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">Threads</string>
   <string name="threadsDescription">Setze sie unterhalb deiner CPU-Kernanzahl fest, die Ticks markieren eine gute und sichere Wahl</string>
   <string name="threadsDescriptionMobile">Mehr Threads verbrauchen mehr Akku für eine bessere Analyse</string>
   <string name="cpus">CPUs</string>
@@ -942,6 +942,7 @@
   <string name="tryTheContactPage">probiere die Kontaktseite aus</string>
   <string name="makeSureToRead">Bitte lies unbedingt: %1$s</string>
   <string name="theForumEtiquette">Die Forums-Etikette</string>
+  <string name="pleaseBeNiceInTheForum" comment="Placeholder text that appears before starting to compose a topic or reply in the forum.">Bitte sei freundlich im Forum.</string>
   <string name="thisTopicIsArchived">Dieses Thema wurde archiviert und kann nicht mehr beantwortet werden.</string>
   <string name="joinTheTeamXToPost">Tritt %1$s bei, um in diesem Forum schreiben zu können</string>
   <string name="teamNamedX">%1$s Team</string>

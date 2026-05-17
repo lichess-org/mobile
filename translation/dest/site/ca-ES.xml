@@ -4,7 +4,7 @@
   <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Repta un amic</string>
   <string name="playAgainstComputer">Juga contra l\'ordinador</string>
   <string name="gameMode">Tipus de partida</string>
-  <string name="createLobbyGame">Crea una sala de joc</string>
+  <string name="createLobbyGame">Crea una partida</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Per convidar algú a jugar, envia-li aquest enllaç</string>
   <string name="gameOver">Partida finalitzada</string>
   <string name="waitingForOpponent">Esperant a l\'oponent</string>
@@ -134,9 +134,9 @@
   <string name="checkableKing">Rei exposat a escac</string>
   <string name="multipleLines">Múltiples línies</string>
   <string name="multipleLinesDescription">Estableix el nombre de línies i moviments avaluar al tauler</string>
-  <string name="searchTime">Temps de cerca</string>
-  <string name="searchTimeDescription">Estableix un temps per avaluar les posicions fresques</string>
-  <string name="threads">Fils</string>
+  <string name="searchTime" comment="A setting for game analysis using a chess engine.&#10;&#10;Description (translateable separately): Set time to evaluate fresh positions">Temps de cerca</string>
+  <string name="searchTimeDescription" comment="Description for the &quot;Search time&quot; setting, for analysing a game using a chess engine.">Estableix un temps per avaluar les posicions fresques</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">Fils</string>
   <string name="threadsDescription">Establiu el valor per sota del vostre nombre de fils del CPUs. La marca és un bon valor segur</string>
   <string name="threadsDescriptionMobile">Més fils utilitzarà més bateria per millors anàlisis</string>
   <string name="cpus">CPUs</string>
@@ -942,6 +942,7 @@
   <string name="tryTheContactPage">prova la plana de contacte</string>
   <string name="makeSureToRead">Assegureu-vos de llegir %1$s</string>
   <string name="theForumEtiquette">l\'etiqueta del fòrum</string>
+  <string name="pleaseBeNiceInTheForum" comment="Placeholder text that appears before starting to compose a topic or reply in the forum.">Si us plau sigues amable al fòrum.</string>
   <string name="thisTopicIsArchived">Aquest tema ha estat arxivat i no es pot respondre.</string>
   <string name="joinTheTeamXToPost">Uneix-te a %1$s, per poder publicar</string>
   <string name="teamNamedX">%1$s equip</string>
