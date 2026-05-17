@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -142,11 +143,18 @@ class _TeamMatchCard extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      match.team1.name,
-                      maxLines: _kTeamNameMaxLines,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          BroadcastTeamScreen.buildRoute(context, tournamentId, match.team1.name),
+                        );
+                      },
+                      child: Text(
+                        match.team1.name,
+                        maxLines: _kTeamNameMaxLines,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   Container(
@@ -174,11 +182,18 @@ class _TeamMatchCard extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Text(
-                      match.team2.name,
-                      maxLines: _kTeamNameMaxLines,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          BroadcastTeamScreen.buildRoute(context, tournamentId, match.team2.name),
+                        );
+                      },
+                      child: Text(
+                        match.team2.name,
+                        maxLines: _kTeamNameMaxLines,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],

@@ -337,3 +337,26 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
     required IList<BroadcastTeamGame> games,
   }) = _BroadcastTeamMatch;
 }
+
+@freezed
+sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
+  const factory BroadcastTeamStandingMatch({
+    required BroadcastRoundId roundId,
+    required String opponent,
+    required String points,
+    required double mp,
+    required double gp,
+  }) = _BroadcastTeamStandingMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
+  const factory BroadcastTeamStanding({
+    required String name,
+    required double mp,
+    required double gp,
+    required IList<BroadcastTeamStandingMatch> matches,
+    required IList<BroadcastPlayerWithOverallResult> players,
+    required int? averageRating,
+  }) = _BroadcastTeamStanding;
+}

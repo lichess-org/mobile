@@ -104,3 +104,11 @@ final broadcastTeamMatchesProvider = FutureProvider.autoDispose
     .family<IList<BroadcastTeamMatch>, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
       return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
     }, name: 'BroadcastTeamMatchesProvider');
+
+final broadcastTeamStandingsProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastTeamStanding>, BroadcastTournamentId>((
+      Ref ref,
+      BroadcastTournamentId tournamentId,
+    ) {
+      return ref.read(broadcastRepositoryProvider).getTeamStandings(tournamentId);
+    }, name: 'BroadcastTeamStandingsProvider');
