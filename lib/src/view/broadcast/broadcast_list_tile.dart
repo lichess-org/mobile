@@ -233,7 +233,7 @@ class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: null,
+      future: nextPageFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (kDebugMode) {
