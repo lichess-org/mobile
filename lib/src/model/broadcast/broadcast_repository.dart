@@ -137,6 +137,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
   imageUrl: pick('image').asStringOrNull(),
   description: pick('description').asStringOrNull(),
   teamTable: pick('teamTable').asBoolOrFalse(),
+  showTeamScores: pick('showTeamScores').asBoolOrFalse(),
   information: (
     format: pick('info', 'format').asStringOrNull(),
     timeControl: pick('info', 'tc').asStringOrNull(),

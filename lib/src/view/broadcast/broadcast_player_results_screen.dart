@@ -311,9 +311,11 @@ class _OverallStatPlayer extends StatelessWidget {
                     if (team != null) ...[
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(
-                            context,
-                          ).push(BroadcastTeamScreen.buildRoute(context, tournament.data.id, team));
+                          if (tournament.data.showTeamScores == true) {
+                            Navigator.of(context).push(
+                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
+                            );
+                          }
                         },
                         child: Row(
                           children: [

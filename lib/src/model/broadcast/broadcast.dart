@@ -107,6 +107,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
     bool? teamTable,
+    bool? showTeamScores,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
