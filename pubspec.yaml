@@ -96,7 +96,7 @@ dev_dependencies:
   lint: ^2.8.0
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
-  wakelock_plus_platform_interface: ^1.5.0
+  wakelock_plus_platform_interface: ^1.5.1
 
 dependency_overrides:
   flutter_secure_storage_linux:
