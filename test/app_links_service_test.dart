@@ -294,7 +294,23 @@ void main() {
       await tester.pumpAndSettle(); // Wait tournament screen to load
       expect(
         tester.widget(find.byType(TournamentScreen)),
-        isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
+        isA<TournamentScreen>()
+            .having((s) => s.id, 'id', '61044')
+            .having((s) => s.initialPlayerId, 'initialPlayerId', isNull),
+      );
+    });
+
+    testWidgets('resolves /tournament/{id}?player={name} to TournamentScreen with initialPlayerId', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/tournament/spring26?player=realcyberbird');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(TournamentScreen)),
+        isA<TournamentScreen>()
+            .having((s) => s.id, 'id', 'spring26')
+            .having((s) => s.initialPlayerId, 'initialPlayerId', const UserId('realcyberbird')),
       );
     });
 
