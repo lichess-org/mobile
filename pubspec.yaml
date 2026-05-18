@@ -24,13 +24,13 @@ dependencies:
   cupertino_icons: ^1.0.9
   dartchess: ^0.12.3
   deep_pick: ^1.1.0
-  device_info_plus: ^12.4.0
+  device_info_plus: ^13.1.0
   dynamic_system_colors:
     git:
       url: https://github.com/veloce/flutter_dynamic_system_colors.git
       ref: main
   fast_immutable_collections: ^11.2.0
-  file_picker: ^11.0.2
+  file_picker: ^12.0.0-beta.3
   firebase_core: ^4.8.0
   firebase_crashlytics: ^5.2.1
   firebase_messaging: ^16.2.1
@@ -62,7 +62,7 @@ dependencies:
   material_symbols_icons: 4.2906.0   # Check tree shaking during the production build when updating.
   meta: ^1.17.0
   multistockfish: ^0.5.0
-  package_info_plus: ^9.0.1
+  package_info_plus: ^10.1.0
   path: ^1.9.1
   path_provider: ^2.1.5
   popover: ^0.4.0
@@ -74,7 +74,7 @@ dependencies:
       url: https://github.com/KasemJaffer/receive_sharing_intent
       ref: 2cea396843cd3ab1b5ec4334be4233864637874e
   result_extensions: ^0.2.0
-  share_plus: ^12.0.2
+  share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.1.3
@@ -83,7 +83,7 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
-  wakelock_plus: ^1.5.2
+  wakelock_plus: ^1.6.0
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
