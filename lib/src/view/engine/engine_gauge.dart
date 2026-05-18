@@ -169,7 +169,12 @@ class _EvalGaugeState extends State<_EvalGauge> {
                           padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 3.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [Text(evalDisplay, style: evalStyle)],
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(evalDisplay, style: evalStyle),
+                              ),
+                            ],
                           ),
                         ),
                       )
