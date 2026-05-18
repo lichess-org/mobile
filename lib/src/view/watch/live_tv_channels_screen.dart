@@ -50,7 +50,7 @@ class _Body extends ConsumerWidget {
             if (games[channel] != null) games[channel]!,
         ];
         return ListView.builder(
-          itemCount: games.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
