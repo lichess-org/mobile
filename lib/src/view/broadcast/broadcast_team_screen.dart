@@ -224,6 +224,7 @@ class _PlayerListTile extends StatelessWidget {
         ],
       ),
       onTap: () {
+        if (playerResult.player.id == null) return;
         Navigator.of(context).push(
           BroadcastPlayerResultsScreen.buildRoute(
             tournament.data.id,
@@ -336,7 +337,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
-                    match.mp.toString(),
+                    NumberFormat('#.#').format(match.mp),
                     textAlign: .center,
                     style: TextStyle(fontWeight: .bold, color: pointsColor),
                   ),
