@@ -84,8 +84,8 @@
   <string name="liveboard">Tauler en directe</string>
   <string name="communityBroadcast">Retransmissió comunitària</string>
   <string name="createdAndManagedBy">Creada i gestionada per %s.</string>
-  <string name="matchPoints">Punts d\'enfentraments</string>
-  <string name="gamePoints">Punts de partides</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">Punts d\'enfentraments</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">Punts de partides</string>
   <string name="matches">Enfrentaments</string>
   <string name="matchHistory">Historial d\'enfrentaments</string>
   <string name="teamResults">Resultats per equip</string>

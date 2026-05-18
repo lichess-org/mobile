@@ -84,8 +84,8 @@
   <string name="liveboard">Live board</string>
   <string name="communityBroadcast">Community broadcast</string>
   <string name="createdAndManagedBy">Created and managed by %s.</string>
-  <string name="matchPoints">Match Points</string>
-  <string name="gamePoints">Game Points</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">Match Points</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">Game Points</string>
   <string name="matches">Matches</string>
   <string name="matchHistory">Match History</string>
   <string name="teamResults">Team Results</string>

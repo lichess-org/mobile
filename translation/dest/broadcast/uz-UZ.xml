@@ -84,8 +84,8 @@
   <string name="liveboard">Jonli efirdagi taxta</string>
   <string name="communityBroadcast">Jamoatchilik translyatsiyasi</string>
   <string name="createdAndManagedBy">%s tomonidan yaratilgan va boshqariladi.</string>
-  <string name="matchPoints">Match ochkolari</string>
-  <string name="gamePoints">Oʻyin ochkolari</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">Match ochkolari</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">Oʻyin ochkolari</string>
   <string name="matches">Matchlar</string>
   <string name="matchHistory">Match tarixi</string>
   <string name="teamResults">Jamoa natijalari</string>

@@ -84,8 +84,8 @@
   <string name="liveboard">Échiquier en direct</string>
   <string name="communityBroadcast">Diffusion communautaire</string>
   <string name="createdAndManagedBy">Créée et gérée par %s.</string>
-  <string name="matchPoints">Points de matchs</string>
-  <string name="gamePoints">Points de parties</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">Points de matchs</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">Points de parties</string>
   <string name="matches">Matchs</string>
   <string name="matchHistory">Historique des matchs</string>
   <string name="teamResults">Résultats des équipes</string>
@@ -103,7 +103,7 @@
   <string name="quarterfinals">Quarts de finale</string>
   <string name="semifinals">Demi-finales</string>
   <string name="finals">Finales</string>
-  <string name="tiebreaks">Bris d\'égalité</string>
+  <string name="tiebreaks">Départage</string>
   <string name="gameX">Partie %s</string>
   <string name="knockouts">Éliminatoires</string>
   <string name="underXAgeTournament" comment="%s is the maximum age set by the organiser for a tournament. e.g.    'U18' will mean it is an tournament for under-18 year olds.&#10;&#10;Please use your language's conventions in sporting activities for how the 'U' should be translated and keep it short.">Moins de %s</string>

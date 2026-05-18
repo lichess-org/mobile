@@ -132,9 +132,9 @@
   <string name="checkableKing">체크할 수 있는 킹</string>
   <string name="multipleLines">다중 라인 수</string>
   <string name="multipleLinesDescription">평가 라인과 보드에 그릴 화살표의 개수 설정</string>
-  <string name="searchTime">검색 시간</string>
-  <string name="searchTimeDescription">새로운 포지션을 평가할 시간 설정</string>
-  <string name="threads">스레드</string>
+  <string name="searchTime" comment="A setting for game analysis using a chess engine.&#10;&#10;Description (translateable separately): Set time to evaluate fresh positions">검색 시간</string>
+  <string name="searchTimeDescription" comment="Description for the &quot;Search time&quot; setting, for analysing a game using a chess engine.">새로운 포지션을 평가할 시간 설정</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">스레드</string>
   <string name="threadsDescription">이 값을 CPU 스레드 수보다 낮게 설정하세요. 안전하고 적절한 값을 표시해 두었습니다</string>
   <string name="threadsDescriptionMobile">스레드가 많을수록 더 나은 분석을 위해 배터리를 많이 소모합니다</string>
   <string name="cpus">CPU 수</string>
@@ -898,6 +898,7 @@
   <string name="tryTheContactPage">연락처</string>
   <string name="makeSureToRead">%1$s를 꼭 읽으세요</string>
   <string name="theForumEtiquette">포럼 에티켓</string>
+  <string name="pleaseBeNiceInTheForum" comment="Placeholder text that appears before starting to compose a topic or reply in the forum.">포럼을 건전히 이용해 주세요.</string>
   <string name="thisTopicIsArchived">이 주제는 보존되어서 댓글을 남기실 수 없습니다.</string>
   <string name="joinTheTeamXToPost">이 포럼에 글을 올리시려면 %1$s에 가입하셔야 합니다.</string>
   <string name="teamNamedX">팀 %1$s</string>

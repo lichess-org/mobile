@@ -82,8 +82,8 @@
   <string name="liveboard">실시간 체스판</string>
   <string name="communityBroadcast">커뮤니티 방송</string>
   <string name="createdAndManagedBy">%s로부터 생성되고 관리됨.</string>
-  <string name="matchPoints">시합 점수</string>
-  <string name="gamePoints">게임 점수</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">시합 점수</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">게임 점수</string>
   <string name="matches">경기</string>
   <string name="matchHistory">경기 기록</string>
   <string name="teamResults">팀 결과</string>

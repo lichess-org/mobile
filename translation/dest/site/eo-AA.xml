@@ -128,7 +128,7 @@
   <string name="pinnedPieces">Fiksitaj pecoj</string>
   <string name="checkableKing">Ŝakigebla reĝo</string>
   <string name="multipleLines">Pluraj linioj</string>
-  <string name="threads">Fadenoj</string>
+  <string name="threads" comment="As in CPU threads, used for chess engine analysis.">Fadenoj</string>
   <string name="threadsDescription">Elektu malsupre la nombron de fadenoj de via procesoro. La markoj indikas sekurajn elektojn</string>
   <string name="cpus">Ĉefprocesoroj</string>
   <string name="memory">Memoro</string>

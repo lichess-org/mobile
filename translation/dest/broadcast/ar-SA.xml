@@ -92,8 +92,8 @@
   <string name="liveboard">اللوحة الآن</string>
   <string name="communityBroadcast">بث المجتمع</string>
   <string name="createdAndManagedBy">تم إنشاؤها وإدارتها بواسطة %s.</string>
-  <string name="matchPoints">نقاط المبارة</string>
-  <string name="gamePoints">نقاط اللعبة</string>
+  <string name="matchPoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Match points are points awarded to a team based on the overall outcome of their games against another team.">نقاط المبارة</string>
+  <string name="gamePoints" comment="Appears in broadcasts of team tournaments, under the 'Team results' tab.&#10;&#10;Game points are the sum of points earned by individual players on their specific boards during a single team match. We normally display them on a round-by-round basis.">نقاط اللعبة</string>
   <string name="matches">المباريات</string>
   <string name="matchHistory">سجل المباراة</string>
   <string name="teamResults">نتائج الفريق</string>
