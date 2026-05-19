@@ -458,6 +458,16 @@ class StudyController extends AsyncNotifier<StudyState>
     final pathChange = state.currentPath != path;
     final currentNode = _root.nodeAt(path);
 
+    bool pathWasExpanded = false;
+    if (pathChange) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
+
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
@@ -468,7 +478,9 @@ class StudyController extends AsyncNotifier<StudyState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
+        ? _root.view
+        : state.root;
 
     final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {

@@ -704,6 +704,16 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final pathChange = curState.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
+    bool pathWasExpanded = false;
+    if (pathChange) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
+
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
@@ -714,7 +724,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
         ? _root.view
         : curState.root;
 
