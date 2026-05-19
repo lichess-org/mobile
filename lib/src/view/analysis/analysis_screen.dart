@@ -119,14 +119,19 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
+        Widget appBarTitle;
+        if (value.archivedGame != null) {
+          final title =
+              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.label} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
+          appBarTitle = VariantAppBarTitle(variant: value.variant, title: title);
+        } else {
+          appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
+        }
+
         return WakelockWidget(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              centerTitle: false,
-              title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
-              actions: appBarActions,
-            ),
+            appBar: AppBar(centerTitle: false, title: appBarTitle, actions: appBarActions),
             body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
