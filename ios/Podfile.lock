@@ -44,61 +44,61 @@ PODS:
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/CoreOnly (12.12.0):
-    - FirebaseCore (~> 12.12.0)
-  - Firebase/Crashlytics (12.12.0):
+  - Firebase/CoreOnly (12.13.0):
+    - FirebaseCore (~> 12.13.0)
+  - Firebase/Crashlytics (12.13.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 12.12.0)
-  - Firebase/Messaging (12.12.0):
+    - FirebaseCrashlytics (~> 12.13.0)
+  - Firebase/Messaging (12.13.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (~> 12.12.0)
-  - firebase_core (4.8.0):
-    - Firebase/CoreOnly (= 12.12.0)
+    - FirebaseMessaging (~> 12.13.0)
+  - firebase_core (4.9.0):
+    - Firebase/CoreOnly (= 12.13.0)
     - Flutter
-  - firebase_crashlytics (5.2.1):
-    - Firebase/Crashlytics (= 12.12.0)
+  - firebase_crashlytics (5.2.2):
+    - Firebase/Crashlytics (= 12.13.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (16.2.1):
-    - Firebase/Messaging (= 12.12.0)
+  - firebase_messaging (16.2.2):
+    - Firebase/Messaging (= 12.13.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (12.12.0):
-    - FirebaseCoreInternal (~> 12.12.0)
+  - FirebaseCore (12.13.0):
+    - FirebaseCoreInternal (~> 12.13.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Logger (~> 8.1)
-  - FirebaseCoreExtension (12.12.0):
-    - FirebaseCore (~> 12.12.0)
-  - FirebaseCoreInternal (12.12.0):
+  - FirebaseCoreExtension (12.13.0):
+    - FirebaseCore (~> 12.13.0)
+  - FirebaseCoreInternal (12.13.0):
     - "GoogleUtilities/NSData+zlib (~> 8.1)"
-  - FirebaseCrashlytics (12.12.0):
-    - FirebaseCore (~> 12.12.0)
-    - FirebaseInstallations (~> 12.12.0)
-    - FirebaseRemoteConfigInterop (~> 12.12.0)
-    - FirebaseSessions (~> 12.12.0)
+  - FirebaseCrashlytics (12.13.0):
+    - FirebaseCore (~> 12.13.0)
+    - FirebaseInstallations (~> 12.13.0)
+    - FirebaseRemoteConfigInterop (~> 12.13.0)
+    - FirebaseSessions (~> 12.13.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/Environment (~> 8.1)
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - FirebaseInstallations (12.12.0):
-    - FirebaseCore (~> 12.12.0)
+  - FirebaseInstallations (12.13.0):
+    - FirebaseCore (~> 12.13.0)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - PromisesObjC (~> 2.4)
-  - FirebaseMessaging (12.12.0):
-    - FirebaseCore (~> 12.12.0)
-    - FirebaseInstallations (~> 12.12.0)
+  - FirebaseMessaging (12.13.0):
+    - FirebaseCore (~> 12.13.0)
+    - FirebaseInstallations (~> 12.13.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/AppDelegateSwizzler (~> 8.1)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/Reachability (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - nanopb (~> 3.30910.0)
-  - FirebaseRemoteConfigInterop (12.12.0)
-  - FirebaseSessions (12.12.0):
-    - FirebaseCore (~> 12.12.0)
-    - FirebaseCoreExtension (~> 12.12.0)
-    - FirebaseInstallations (~> 12.12.0)
+  - FirebaseRemoteConfigInterop (12.13.0)
+  - FirebaseSessions (12.13.0):
+    - FirebaseCore (~> 12.13.0)
+    - FirebaseCoreExtension (~> 12.13.0)
+    - FirebaseInstallations (~> 12.13.0)
     - GoogleDataTransport (~> 10.1)
     - GoogleUtilities/Environment (~> 8.1)
     - GoogleUtilities/UserDefaults (~> 8.1)
@@ -297,18 +297,18 @@ SPEC CHECKSUMS:
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
-  Firebase: aa154fee4e9b8eac17aa42344988865b3e857d33
-  firebase_core: 552ed6765e96441f2af83b46ec42fa30126f3c88
-  firebase_crashlytics: 95e8d8dbbb109bd002d423d250b95088204365f8
-  firebase_messaging: 15a0e132bcef6c0e19052222d9401174903bed42
-  FirebaseCore: f28af0427998cd53f8d4826bce17260e33224053
-  FirebaseCoreExtension: ff6fd42eb5287e71d3e160450de6509733d9ead7
-  FirebaseCoreInternal: 7c12fc3011d889085e765e317d7b9fd1cef97af9
-  FirebaseCrashlytics: 2a38be892de8417a06e929a13fec0971afcb4dfc
-  FirebaseInstallations: 4e6e162aa4abaaeeeb01dd00179dfc5ad9c2194e
-  FirebaseMessaging: 341004946fa7ffc741344b20f1b667514fc93e31
-  FirebaseRemoteConfigInterop: 23996ab7397494722df4fdd1fd398024389d5da8
-  FirebaseSessions: 804bd321f2d2f2ddafe74ef7856062aa19f179c2
+  Firebase: 7d62445aeabdaea36f7d372f33052fed9a72514f
+  firebase_core: 0013f886fbd0b4950865551eaab47784424bfdb5
+  firebase_crashlytics: fae0a58bac6eaaef4cdacc72f9e55fef1e0be0a1
+  firebase_messaging: b875e4088ddd9ecd1834f6c89f6e0a1ffc7d98f0
+  FirebaseCore: 58905958aa00a061397a0fd759ae4b55bddb3576
+  FirebaseCoreExtension: 5b94169f1ee96ecc2dbde40bc53690e4d65eb652
+  FirebaseCoreInternal: 37bee58388fc6d183f0ab1b32d69ae44f2cf8aad
+  FirebaseCrashlytics: 8bb2d41cb47e8f3ea34200d99361499a59995e0d
+  FirebaseInstallations: 134bde50e477628ded76070efdb12d515d53f948
+  FirebaseMessaging: 30564b85d2f81a96f9d312bd23acf8186ff092ae
+  FirebaseRemoteConfigInterop: 4801ab93a543ef8fedfb40ae2f66d03e3fdcb864
+  FirebaseSessions: 0e5f64cd99400275798fcb5e2b773dd000ca02c1
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_local_notifications: 643a3eda1ce1c0599413ca31672536d423dee214
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
