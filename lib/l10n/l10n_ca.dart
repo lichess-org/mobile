@@ -9,6 +9,9 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
+  String get mobileAccount => 'Compte';
+
+  @override
   String get mobileAccountPreferences => 'Preferències del compte';
 
   @override
@@ -192,7 +195,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Resposta tàctil';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produïra una petita vibració quan es mou o es captura una peça.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Quan s\'activa, el dispositiu produirà una petita vibració quan es mou o es captura una peça.';
 
   @override
   String get mobileSettingsTab => 'Configuració';
@@ -210,7 +213,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSharePuzzle => 'Comparteix aquest problema';
 
   @override
-  String get mobileShowComments => 'Mostra comentaris';
+  String get mobileShowComments => 'Mostra els comentaris';
 
   @override
   String get mobileShowResult => 'Mostra el resultat';
@@ -275,13 +278,43 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorador d\'obertures no està disponible sense connexió.';
 
   @override
-  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\\nPodeu accedir-hi des de la pantalla d\'inici.';
+  String get mobileChallengeCreated => 'Repte creat: Sereu notificats quan comenci la partida.\nPodeu accedir-hi des de la pantalla d\'inici.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobileOrImportPgnFile => 'O importa un arxiu PGN';
+
+  @override
+  String get variantStandardTitle => 'Regles d\'escacs estàndard (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La posició inicial de les peces a la primera fila és aleatòria.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Porta el teu rei al centre per guanyar la partida.';
+
+  @override
+  String get variantThreeCheckTitle => 'Fes escac 3 vegades al teu oponent per guanyar la partida.';
+
+  @override
+  String get variantAntichessTitle => 'Perds tot les teves peces (o aconsegueix l\'ofegat) per guanyar la partida.';
+
+  @override
+  String get variantAtomicTitle => 'Explota el rei del teu oponent per guanyar la partida.';
+
+  @override
+  String get variantHordeTitle => 'Un jugador té un gran nombre de peons, l\'altre té un exèrcit normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Fes arribar el teu rei a l\'altre costat del tauler per guanyar.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Les peces capturades es poden tornar a ficar al tauler en comptes de moure una peça.';
+
+  @override
+  String get variantFromPositionTitle => 'Escacs estàndard des d\'una posició personalitzada';
 
   @override
   String get activityActivity => 'Activitat';
@@ -1028,6 +1061,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatòria';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'S$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'S$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'T\'ha agradat aquest problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vota per passar al següent!';
 
   @override
   String get puzzleUpVote => 'Vota positivament el problema';
@@ -2566,6 +2606,16 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Puntuació mínima de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Puntuació màxima de $param';
+  }
+
+  @override
   String get recentGames => 'Partides recents';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Mostrar fletxes de les variants';
-
-  @override
-  String get evaluationGauge => 'Indicador d\'avaluació';
 
   @override
   String get visualMotifs => 'Motius visuals';
@@ -2931,15 +2978,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get checkSpamFolder => 'Comprova també la carpeta de correu brossa, pot acabar allà. Si hi és, marca\'l com no brossa.';
 
   @override
-  String get emailForSignupHelp => 'Si tot això falla, envia\'ns un correu a aquesta adreça:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copia i enganxa el text a continuació i envia\'l a $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Si no pots trobar el teu correu electrònic de confirmació, envia\'ns un correu a $param i confirmarem el compte per tu.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Et contestarem el més breument posible per ajudar-te a completar el registre.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Posició d\'escacs960 Aleatòria';
+
+  @override
   String get startPosition => 'Posició inicial';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Codi d\'autenticació invàlid';
+
+  @override
+  String get clearField => 'Neteja el camp';
+
+  @override
+  String get orSeparator => 'O';
+
+  @override
+  String get logInByEmail => 'Identificat amb el correu electrònic';
 
   @override
   String get emailMeALink => 'Envieu-me un enllaç per correu electrònic';
@@ -4659,9 +4712,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Estic d’acord que seguiré totes les polítiques de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Cerca o inicia una nova discusió';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Neteja la cerca';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No hi ha resultats per \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetes';
@@ -6511,4 +6566,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticació de dos factors';
+
+  @override
+  String get ublogCommunity => 'Comunitat';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -36,6 +37,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 extension _MoveVerdictDisplay on MoveVerdict {
@@ -49,7 +51,7 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => innacuracyColor,
+    .inaccuracy => inaccuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,
   };
@@ -71,13 +73,8 @@ class OfflineComputerGameScreen extends ConsumerWidget {
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -356,16 +353,16 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.menu,
         ),
         BottomBarButton(
+          label: context.l10n.resign,
+          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
+          icon: CupertinoIcons.flag,
+        ),
+        BottomBarButton(
           label: context.l10n.takeback,
           onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
               ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
               : null,
           icon: CupertinoIcons.arrow_uturn_left,
-        ),
-        BottomBarButton(
-          label: context.l10n.resign,
-          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
-          icon: CupertinoIcons.flag,
         ),
         BottomBarButton(
           label: context.l10n.getAHint,
@@ -390,12 +387,11 @@ class _BottomBar extends ConsumerWidget {
             ref.read(_isBoardFlippedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.finished)
+        if (gameState.game.finished || gameState.game.casual || gameState.game.practiceMode)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
@@ -733,11 +729,15 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   late Variant _selectedVariant;
   late bool _casual;
   late bool _practiceMode;
+  String? _fromPositionFen;
+  final _fenController = TextEditingController();
 
   String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
     SideChoice.white => context.l10n.white,
     SideChoice.random => context.l10n.randomColor,
     SideChoice.black => context.l10n.black,
+    // TODO: replace with a translated string once the feature is stable
+    SideChoice.nextToPlay => 'Next to play',
   };
 
   @override
@@ -745,10 +745,22 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     super.initState();
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
     _selectedLevel = prefs.stockfishLevel;
-    _selectedSideChoice = prefs.sideChoice;
-    _selectedVariant = widget.initialVariant ?? prefs.variant;
+    _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
+    final preferredVariant = widget.initialVariant ?? prefs.variant;
+    _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
+        ? Variant.standard
+        : preferredVariant;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
+    _fenController.addListener(() {
+      setState(() => _fromPositionFen = _fenController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _fenController.dispose();
+    super.dispose();
   }
 
   @override
@@ -761,20 +773,31 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: Center(
-              child: SizedBox(
-                width: 150,
-                height: 150,
-                child: StaticChessboard(
-                  size: 150,
-                  fen: widget.initialFen!,
-                  orientation: _selectedSideChoice.toSide() ?? Side.white,
-                  pieceAssets: boardPrefs.pieceSet.assets,
-                  colorScheme: boardPrefs.boardTheme.colors,
-                  brightness: boardPrefs.brightness,
-                  hue: boardPrefs.hue,
-                  enableCoordinates: false,
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: StaticChessboard(
+                      size: 150,
+                      fen: widget.initialFen!,
+                      orientation: _selectedSideChoice.toSide(fen: widget.initialFen) ?? Side.white,
+                      pieceAssets: boardPrefs.pieceSet.assets,
+                      colorScheme: boardPrefs.boardTheme.colors,
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      enableCoordinates: false,
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    Setup.parseFen(widget.initialFen!).turn == Side.white
+                        ? context.l10n.whitePlays
+                        : context.l10n.blackPlays,
+                    style: TextStyle(fontStyle: FontStyle.italic, color: textShade(context, 0.7)),
+                  ),
+                ],
               ),
             ),
           ),
@@ -817,7 +840,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               onTap: () {
                 showChoicePicker(
                   context,
-                  choices: SideChoice.values,
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
                   selectedItem: _selectedSideChoice,
                   labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
                   onSelectedItemChanged: (SideChoice choice) {
@@ -833,9 +858,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               onTap: () {
                 showChoicePicker(
                   context,
-                  choices: playSupportedVariants.where((v) => v != Variant.fromPosition).toList(),
+                  choices: playSupportedVariants.toList(),
                   selectedItem: _selectedVariant,
-                  labelBuilder: (Variant variant) => Text(variant.label),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) {
                     setState(() {
                       _selectedVariant = variant;
@@ -848,6 +873,28 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                 );
               },
             ),
+            if (widget.initialFen == null)
+              AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.fastOutSlowIn,
+                child: _selectedVariant == Variant.fromPosition
+                    ? SmallBoardPreview(
+                        orientation:
+                            _selectedSideChoice.toSide(fen: _fromPositionFen) ?? Side.white,
+                        fen: _fromPositionFen ?? kEmptyFEN,
+                        description: TextField(
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            labelText: context.l10n.pasteTheFenStringHere,
+                            suffixIcon: const Icon(Icons.paste),
+                          ),
+                          controller: _fenController,
+                          readOnly: true,
+                          onTap: () => pasteFenFromClipboard(context, _fenController),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),
@@ -877,26 +924,38 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
-            onPressed: () {
-              final side = _selectedSideChoice.toSide() ?? Side.values[Random().nextInt(2)];
-              ref
-                  .read(offlineComputerGameControllerProvider.notifier)
-                  .startNewGame(
-                    stockfishLevel: _selectedLevel,
-                    playerSide: side,
-                    casual: _practiceMode || _casual,
-                    practiceMode: _practiceMode,
-                    variant: _selectedVariant,
-                    initialFen: widget.initialFen,
-                  );
-              Navigator.pop(context);
-            },
+            onPressed: _isPlayEnabled
+                ? () {
+                    final effectiveFen =
+                        widget.initialFen ??
+                        (_selectedVariant == Variant.fromPosition ? _fromPositionFen : null);
+                    final side =
+                        _selectedSideChoice.toSide(fen: effectiveFen) ??
+                        Side.values[Random().nextInt(2)];
+                    ref
+                        .read(offlineComputerGameControllerProvider.notifier)
+                        .startNewGame(
+                          stockfishLevel: _selectedLevel,
+                          playerSide: side,
+                          casual: _practiceMode || _casual,
+                          practiceMode: _practiceMode,
+                          variant: _selectedVariant,
+                          initialFen: effectiveFen,
+                        );
+                    Navigator.pop(context);
+                  }
+                : null,
             child: Text(context.l10n.play, style: Styles.bold),
           ),
         ),
       ],
     );
   }
+
+  bool get _isPlayEnabled =>
+      _selectedVariant != Variant.fromPosition ||
+      widget.initialFen != null ||
+      (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
 }
 
 class _PracticeSettingsSheet extends ConsumerWidget {
@@ -973,7 +1032,6 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.pop(context);
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: game.id,
                   orientation: game.playerSide,

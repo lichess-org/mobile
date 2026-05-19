@@ -65,12 +65,18 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
 enum SideChoice {
   white,
   random,
-  black;
+  black,
+  nextToPlay;
 
-  Side? toSide() => switch (this) {
+  /// Resolves the side choice to a [Side].
+  ///
+  /// When [fen] is provided and this is [nextToPlay], returns the side to move
+  /// from the FEN. Returns `null` for [random] (caller should pick randomly).
+  Side? toSide({String? fen}) => switch (this) {
     SideChoice.white => Side.white,
     SideChoice.random => null,
     SideChoice.black => Side.black,
+    SideChoice.nextToPlay => fen != null ? Setup.parseFen(fen).turn : null,
   };
 
   static SideChoice fromSide(Side? side) => switch (side) {

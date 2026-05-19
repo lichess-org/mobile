@@ -22,7 +22,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   late SocketClient _socketClient;
 
   @override
-  Future<IList<OnlineFriend>> build() async {
+  FutureOr<IList<OnlineFriend>> build() {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _socketOpenSubscription?.cancel();
@@ -30,25 +30,22 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
 
     _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
-    final state = _socketClient.stream
-        .firstWhere((e) => e.topic == 'following_onlines')
-        .then((event) => _parseFriendsList(event));
-
-    await _socketClient.firstConnection;
-
-    // Request the list of online friends once the socket is connected.
-    _socketClient.send('following_onlines', null);
-
-    // Start watching for online friends.
+    _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
 
     _socketOpenSubscription?.cancel();
-    // Request again the list of online friends every time the socket is reconnected.
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (!ref.mounted) return;
       _socketClient.send('following_onlines', null);
     });
 
-    return state;
+    if (_socketClient.isActive) {
+      _socketClient.send('following_onlines', null);
+    } else {
+      _socketClient.connect();
+    }
+
+    return const IListConst([]);
   }
 
   void startWatchingFriends() {
@@ -56,6 +53,7 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
     _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
     _socketOpenSubscription?.cancel();
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (!ref.mounted) return;
       _socketClient.send('following_onlines', null);
     });
     if (!_socketClient.isActive) {
@@ -71,7 +69,8 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
   }
 
   void _handleSocketTopic(SocketEvent event) {
-    if (!state.hasValue) return;
+    if (!ref.mounted) return;
+    final currentList = state.value ?? const IListConst([]);
 
     switch (event.topic) {
       case 'following_onlines':
@@ -81,32 +80,26 @@ class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
         final patronColor = event.json?['patronColor'] as int?;
         final user = _parseFriend(event.data.toString(), patronColor);
         final playing = event.json?['playing'] as bool? ?? false;
-        state = AsyncValue.data(state.requireValue.add((user: user, playing: playing)));
+        state = AsyncValue.data(currentList.add((user: user, playing: playing)));
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.user.id == data.id));
+        state = AsyncValue.data(currentList.removeWhere((v) => v.user.id == data.id));
 
       case 'following_playing':
         final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
-          state.requireValue.map((v) {
-            if (v.user.id == data.id) {
-              return (user: v.user, playing: true);
-            }
-            return v;
-          }).toIList(),
+          currentList
+              .map((v) => v.user.id == data.id ? (user: v.user, playing: true) : v)
+              .toIList(),
         );
 
       case 'following_stopped_playing':
         final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
-          state.requireValue.map((v) {
-            if (v.user.id == data.id) {
-              return (user: v.user, playing: false);
-            }
-            return v;
-          }).toIList(),
+          currentList
+              .map((v) => v.user.id == data.id ? (user: v.user, playing: false) : v)
+              .toIList(),
         );
     }
   }

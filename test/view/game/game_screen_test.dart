@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
@@ -5,29 +6,41 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart' hide Challenge;
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
+import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
 import '../../model/game/game_socket_example_data.dart';
@@ -48,6 +61,8 @@ final client = MockClient((request) {
 
 class MockSoundService extends Mock implements SoundService {}
 
+class MockCreateGameService extends Mock implements CreateGameService {}
+
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
   final testGameSocketUri = GameController.socketUri(testGameFullId);
@@ -55,6 +70,28 @@ void main() {
   setUpAll(() {
     registerFallbackValue(Variant.standard);
     registerFallbackValue(Sound.error);
+    registerFallbackValue(
+      const GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: false),
+    );
+    registerFallbackValue(
+      const ChallengeRequest(
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: false,
+        sideChoice: SideChoice.random,
+      ),
+    );
+    registerFallbackValue(
+      const Challenge(
+        id: ChallengeId('challeng'),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: false,
+        sideChoice: SideChoice.random,
+      ),
+    );
   });
 
   group('Loading', () {
@@ -180,6 +217,339 @@ void main() {
         reason: 'board position should not change',
       );
     });
+
+    for (final authUser in [
+      null,
+      AuthUser(
+        user: LightUser(id: UserId.fromUserName('John'), name: 'John'),
+        token: 'test-token',
+      ),
+    ]) {
+      testWidgets('displays game link for open challenge, logged in: ${authUser != null}', (
+        WidgetTester tester,
+      ) async {
+        const challengeRequest = ChallengeRequest(
+          destUser: null,
+          variant: Variant.standard,
+          timeControl: ChallengeTimeControlType.clock,
+          rated: true,
+          sideChoice: SideChoice.white,
+        );
+        final challenge = Challenge(
+          sideChoice: challengeRequest.sideChoice,
+          id: const ChallengeId('challengeId'),
+          variant: challengeRequest.variant,
+          timeControl: challengeRequest.timeControl,
+          rated: challengeRequest.rated,
+          speed: Speed.blitz,
+          status: ChallengeStatus.created,
+        );
+
+        final createGameService = MockCreateGameService();
+        when(
+          () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
+        ).thenAnswer((_) async => challenge);
+        when(
+          () => createGameService.waitForChallengeResponse(challenge),
+        ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+          authUser: authUser,
+          overrides: {
+            createGameServiceProvider: createGameServiceProvider.overrideWith(
+              (_) => createGameService,
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(find.byType(PieceWidget), findsNothing);
+        expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
+        expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
+        expect(find.byType(QrImageView), findsOneWidget);
+        expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
+        expect(
+          find.text('Or invite a Lichess user'),
+          authUser == null ? findsNothing : findsOneWidget,
+        );
+      });
+    }
+  });
+
+  group('Reconnecting title', () {
+    testWidgets('shows Reconnecting when socket has no ping response during a real-time game', (
+      WidgetTester tester,
+    ) async {
+      final noPongFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final channel = createDefaultFakeWebSocketChannel(route);
+        channel.shouldSendPong = false;
+        return channel;
+      });
+
+      await createTestGame(tester, socketFactory: noPongFactory);
+      // Wait for _isRealTimePlayableGameProvider to resolve so monitorSocket becomes true.
+      await tester.pump();
+
+      // averageLag stays at Duration.zero (no pong ever received), so rating == 0.
+      expect(find.text('Reconnecting'), findsOneWidget);
+    });
+
+    testWidgets('shows normal game title when socket ping is established', (
+      WidgetTester tester,
+    ) async {
+      await createTestGame(tester);
+      // Wait for _isRealTimePlayableGameProvider to resolve.
+      await tester.pump();
+
+      // createTestGame pumps 10ms, during which the immediate pong is received
+      // (connectionLag = 5ms), so averageLag > 0 and rating > 0.
+      expect(find.text('Reconnecting'), findsNothing);
+    });
+  });
+
+  group('AppBar title', () {
+    testWidgets('active real-time game shows time control and mode', (WidgetTester tester) async {
+      await createTestGame(tester);
+      // Wait for _isRealTimePlayableGameProvider to resolve.
+      await tester.pump();
+
+      expect(find.text('3+2 • Casual'), findsOneWidget);
+    });
+
+    testWidgets('lobby loading shows seek time control and mode', (WidgetTester tester) async {
+      const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newLobbyGame(any()),
+      ).thenAnswer((_) => Completer<GameSeekResponse>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: LobbySource(seek)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(kFakeWebSocketConnectionLag);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('seek cancelled shows seek time control and mode', (WidgetTester tester) async {
+      const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newLobbyGame(any()),
+      ).thenAnswer((_) async => const GameSeekCancelled());
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: LobbySource(seek)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge loading with destUser shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) => Completer<Challenge>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(kFakeWebSocketConnectionLag);
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge cancelled shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final challenge = Challenge(
+        id: const ChallengeId('challeng'),
+        status: ChallengeStatus.canceled,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+        destUser: (
+          user: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+          rating: null,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(
+        () => createGameService.waitForChallengeResponse(any()),
+      ).thenAnswer((_) async => const ChallengeResponseCancelled());
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('challenge declined shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final challenge = Challenge(
+        id: const ChallengeId('challeng'),
+        status: ChallengeStatus.declined,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+        destUser: (
+          user: LightUser(id: UserId.fromUserName('bob'), name: 'Bob'),
+          rating: null,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any())).thenAnswer(
+        (_) async => ChallengeResponseDeclined(challenge: challenge, declineReason: null),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('open challenge shows challenge time control and mode', (
+      WidgetTester tester,
+    ) async {
+      const challengeRequest = ChallengeRequest(
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(minutes: 3), increment: Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      const challenge = Challenge(
+        id: ChallengeId('challeng'),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(minutes: 3), increment: Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final createGameService = MockCreateGameService();
+      when(
+        () => createGameService.newOpenOrRealTimeChallenge(any()),
+      ).thenAnswer((_) async => challenge);
+      when(
+        () => createGameService.waitForChallengeResponse(any()),
+      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(); // challenge created, state = OpenChallengeCreatedState
+      await tester.pump(kFakeWebSocketConnectionLag); // wait for socket pong
+      await tester.pump();
+
+      expect(find.text('3+2 • Rated'), findsOneWidget);
+    });
+
+    testWidgets('finished game shows time control and mode', (WidgetTester tester) async {
+      await loadFinishedTestGame(tester);
+      // Pump 500ms to let the game-over popup timer fire and resolve _gameMetaProvider.
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('2+1 • Rated'), findsOneWidget);
+    });
   });
 
   group('Plays sound for', () {
@@ -220,6 +590,42 @@ void main() {
   });
 
   group('Game actions', () {
+    testWidgets('promotion with move confirmation closes promotion picker after piece selection', (
+      WidgetTester tester,
+    ) async {
+      // White pawn on e7 ready to promote (king on g8 avoids pawn attack on d8/f8)
+      await createTestGame(
+        tester,
+        variant: Variant.fromPosition,
+        initialFen: '6k1/4P3/8/8/8/8/8/4K3 w - - 0 1',
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.never,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      await playMove(tester, 'e7', 'e8');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(const GameFullId('qVChCOTcHSeW'));
+
+      expect(container.read(ctrlProvider).requireValue.promotionMove, isNotNull);
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNull);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.tapAt(squareOffset(Square.fromName('e8'), boardRect));
+      await tester.pump();
+
+      expect(container.read(ctrlProvider).requireValue.promotionMove, isNull);
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+    });
+
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
         tester,
@@ -336,6 +742,51 @@ void main() {
       expect(find.byKey(const Key('d5-blackpawn')), findsOneWidget);
       // d4 should still have white's pawn
       expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
+    });
+
+    testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 d5 exd5',
+        variant: Variant.crazyhouse,
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: .always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: .no,
+        ),
+      );
+
+      await playDropMove(tester, Side.white, Role.pawn, 'a4');
+
+      // premove indicator should be visible
+      expect(find.byKey(const ValueKey('a4-premove')), findsOneWidget);
+
+      // opponent plays Qxd5
+      sendServerSocketMessages(gameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 57, "black": 52}}}',
+      ]);
+      await tester.pump();
+
+      // let the premove microtask run
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // premove should have been played
+      expect(find.byKey(const ValueKey('a4-premove')), findsNothing);
+      expect(find.byKey(const Key('a4-whitepawn')), findsOneWidget);
     });
 
     testWidgets('takeback', (WidgetTester tester) async {
@@ -834,6 +1285,115 @@ void main() {
     });
   });
 
+  group('Correspondence Clock', () {
+    // Retrieves the CorrespondenceClock widget that contains the given displayed time.
+    CorrespondenceClock correspondenceClockWithTime(WidgetTester tester, String time) {
+      return tester.widget<CorrespondenceClock>(
+        find.ancestor(
+          of: find.text(time, findRichText: true),
+          matching: find.byType(CorrespondenceClock),
+        ),
+      );
+    }
+
+    testWidgets('shows correspondence clocks, not regular clocks', (tester) async {
+      await createTestGame(
+        tester,
+        clock: null,
+        pgn: 'e4 e5',
+        correspondenceClock: (
+          white: const Duration(hours: 20, minutes: 5),
+          black: const Duration(days: 1),
+          daysPerTurn: 1,
+        ),
+      );
+
+      expect(find.byType(Clock), findsNothing);
+      expect(find.byType(CorrespondenceClock), findsNWidgets(2));
+      expect(find.text('One day', findRichText: true), findsOneWidget);
+      expect(find.text('20:05', findRichText: true), findsOneWidget);
+    });
+
+    testWidgets("active clock is white's when it is white's turn", (tester) async {
+      // pgn 'e4 e5': fullmoves = 2, white to move → white active
+      await createTestGame(
+        tester,
+        clock: null,
+        pgn: 'e4 e5',
+        correspondenceClock: (
+          white: const Duration(hours: 20, minutes: 5),
+          black: const Duration(days: 1),
+          daysPerTurn: 1,
+        ),
+      );
+
+      expect(correspondenceClockWithTime(tester, '20:05').active, isTrue);
+      expect(correspondenceClockWithTime(tester, 'One day').active, isFalse);
+
+      await tester.pump(const Duration(minutes: 2));
+
+      expect(find.text('20:05', findRichText: true), findsNothing);
+      expect(find.text('20:03', findRichText: true), findsOneWidget);
+      expect(find.text('One day', findRichText: true), findsOneWidget);
+    });
+
+    testWidgets("active clock is black's when it is black's turn", (tester) async {
+      // pgn 'e4 e5 Nf3': black to move → black active
+      await createTestGame(
+        tester,
+        clock: null,
+        pgn: 'e4 e5 Nf3',
+        correspondenceClock: (
+          white: const Duration(days: 1),
+          black: const Duration(hours: 19, minutes: 59),
+          daysPerTurn: 1,
+        ),
+      );
+
+      expect(correspondenceClockWithTime(tester, '19:59').active, isTrue);
+      expect(correspondenceClockWithTime(tester, 'One day').active, isFalse);
+
+      await tester.pump(const Duration(minutes: 5));
+
+      expect(find.text('19:59', findRichText: true), findsNothing);
+      expect(find.text('19:54', findRichText: true), findsOneWidget);
+      expect(find.text('One day', findRichText: true), findsOneWidget);
+    });
+
+    testWidgets('clock values and active side update after opponent move', (tester) async {
+      await createTestGame(
+        tester,
+        clock: null,
+        pgn: 'e4 e5 Nf3', // black to move → black active
+        correspondenceClock: (
+          white: const Duration(days: 1),
+          black: const Duration(hours: 10, minutes: 3),
+          daysPerTurn: 1,
+        ),
+      );
+
+      expect(correspondenceClockWithTime(tester, '10:03').active, isTrue);
+
+      await tester.pump(const Duration(minutes: 3));
+      expect(find.text('10:00', findRichText: true), findsOneWidget);
+
+      // server sends black's move with updated clock values
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "g8f6", "san": "Nf6", "clock": {"white": 86400, "black": 86400}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 10));
+
+      // both clocks reset to server's authoritative values
+      expect(find.text('One day', findRichText: true), findsNWidgets(2));
+
+      await tester.pump(const Duration(seconds: 2));
+
+      // white is now active
+      expect(correspondenceClockWithTime(tester, '23:59').active, isTrue);
+      expect(correspondenceClockWithTime(tester, 'One day').active, isFalse);
+    });
+  });
+
   group('Opening analysis', () {
     testWidgets('is not possible for an unfinished real time game', (WidgetTester tester) async {
       await createTestGame(
@@ -909,11 +1469,9 @@ void main() {
       expect(find.byKey(const Key('d3-whitebishop')), findsOneWidget);
       expect(find.byKey(const Key('b5-lastMove')), findsOneWidget);
       expect(find.byKey(const Key('d3-lastMove')), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle(); // wait for the moves tab menu to open
-      expect(find.text('Moves played'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
       // computer analysis is not available when game is not finished
-      expect(find.text('Computer analysis'), findsNothing);
+      expect(find.bySemanticsLabel(RegExp('Computer analysis')), findsNothing);
     });
 
     testWidgets('for a finished game', (WidgetTester tester) async {
@@ -926,17 +1484,18 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.widgetWithText(AppBar, 'Analysis board'),
+        find.descendant(of: find.byType(AppBar), matching: find.textContaining('Rated')),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
       expect(find.byKey(const Key('d5-lastMove')), findsOneWidget);
       expect(find.byKey(const Key('e6-lastMove')), findsOneWidget);
-      await tester.tap(find.byIcon(LichessIcons.flow_cascade));
-      await tester.pumpAndSettle(); // wait for the moves tab menu to open
-      expect(find.text('Moves played'), findsOneWidget);
-      expect(find.text('Computer analysis'), findsOneWidget); // computer analysis is available
+      expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp('Computer analysis')),
+        findsOneWidget,
+      ); // computer analysis is available
     });
   });
 
@@ -962,6 +1521,25 @@ void main() {
           () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
         ).called(1);
       });
+
+      testWidgets('chat messages do not disappear when game state changes', (
+        WidgetTester tester,
+      ) async {
+        await createTestGame(tester, pgn: 'e4 e5');
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
+        ]);
+        await tester.pump();
+
+        // Play a move to update the GameController's state.
+        // There used to be a bug where this would make chat messages disappear.
+        await playMove(tester, 'g1', 'f3');
+
+        await tester.tap(find.byType(ChatBottomBarButton));
+        await tester.pumpAndSettle(); // wait for chat to open
+
+        expect(find.text('Hello!'), findsOneWidget);
+      });
     });
 
     group('Disabled', () {
@@ -982,6 +1560,84 @@ void main() {
         await tester.pump();
         verifyNever(() => mockSoundService.play(Sound.confirmation));
       });
+    });
+  });
+
+  group('Crazyhouse', () {
+    testWidgets('displays pockets and handles player drop moves', (tester) async {
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.white,
+        socketFactory: socketFactory,
+      );
+
+      final dropExpectation = expectLater(
+        socketFactory.outgoingMessages(testGameSocketUri),
+        emitsThrough('{"t":"drop","d":{"role":"pawn","pos":"c4","s":"0","a":1}}'),
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // White drops a pawn to c4
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pumpAndSettle();
+
+      // Pawn should appear on c4 (transient move before server ack)
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+
+      await dropExpectation;
+    });
+
+    testWidgets("Cannot interact with the opponent's pockets", (tester) async {
+      // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5 Nf3',
+        youAre: Side.white,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // Regression test: it used to be possible to interact with the opponent's pockets and play a DropMove for them
+      await playDropMove(tester, Side.black, Role.pawn, 'd6');
+      await tester.pumpAndSettle();
+
+      // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
+      expect(find.byKey(const ValueKey('d6-blackpawn')), findsNothing);
+    });
+
+    testWidgets('correctly handles opponent drop move received from server', (tester) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.black,
+      );
+
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      // Server sends white's drop move P@c4 (ply 5 after the 4 pgn moves)
+      sendServerSocketMessages(gameSocketUri, [
+        '{"t": "drop", "v": 1, "d": {"role": "pawn", "ply": 5, "uci": "P@c4", "san": "P@c4", "clock": {"white": 176, "black": 180}}}',
+      ]);
+      await tester.pump();
+
+      // White pawn should appear on c4
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
     });
   });
 

@@ -32,6 +32,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">חידות</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">חיפושים אחרונים</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">מיקום השעון</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">רבוע</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">מצב ריכוז</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">הסתרת לוח</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">הצגת לוח</string>
@@ -50,4 +51,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s לא נתמך בגרסה זו.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ממתין שיריב יצטרף...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">צפייה</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">התאימו אישית</string>
 </resources>

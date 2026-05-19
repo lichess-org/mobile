@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_s
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -132,6 +133,22 @@ void main() {
 
       // Engine should have responded - at least 2 moves now
       expect(find.byType(InlineMoveItem), findsAtLeast(2));
+    });
+
+    testWidgets('Can play drop moves in crazyhouse', (tester) async {
+      await initOfflineComputerGame(
+        tester,
+        variant: Variant.crazyhouse,
+        fen: 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3',
+      );
+
+      expect(find.byType(PocketsMenu), findsNWidgets(2));
+
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
     });
 
     testWidgets('Engine responds after player move', (tester) async {
@@ -497,7 +514,7 @@ void main() {
               child: const Text('Go to game'),
               onPressed: () => Navigator.of(
                 context,
-              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -546,7 +563,7 @@ void main() {
               child: const Text('Go to game'),
               onPressed: () => Navigator.of(
                 context,
-              ).push(buildScreenRoute<void>(context, screen: const OfflineComputerGameScreen())),
+              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -1164,6 +1181,123 @@ void main() {
       expect(gameState.game.meta.variant, Variant.atomic);
       expect(gameState.game.initialFen, null);
     });
+
+    testWidgets('Side defaults to "Next to play" when initialFen is provided', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(initialFen: customFen),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Verify the side selection defaults to "Next to play"
+      expect(find.text('Next to play'), findsOneWidget);
+    });
+
+    testWidgets('"Next to play" resolves to white when FEN has white to move', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // White to move
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default is "Next to play", just tap Play
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.white);
+      expect(gameState.turn, Side.white);
+    });
+
+    testWidgets('"Next to play" resolves to black when FEN has black to move', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      late WidgetRef ref;
+      // Black to move
+      const customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen(initialFen: customFen);
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default is "Next to play", just tap Play
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.game.playerSide, Side.black);
+    });
+
+    testWidgets('"Next to play" is not shown in side picker without initialFen', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Default should be "Random side", not "Next to play"
+      expect(find.text('Random side'), findsOneWidget);
+      expect(find.text('Next to play'), findsNothing);
+
+      // Open side picker
+      await tester.tap(find.byType(SettingsListTile).first);
+      await tester.pumpAndSettle();
+
+      // "Next to play" should not be in the picker
+      expect(find.text('Next to play'), findsNothing);
+    });
   });
 
   group('Practice comment card', () {
@@ -1274,10 +1408,10 @@ void main() {
       expect((card.decoration! as BoxDecoration).color, Colors.lightGreen.withValues(alpha: 0.1));
     });
 
-    testWidgets('inaccuracy card background is innacuracyColor with low alpha', (tester) async {
+    testWidgets('inaccuracy card background is inaccuracyColor with low alpha', (tester) async {
       await pumpWithComment(tester, makeComment(.inaccuracy));
       final card = _findCommentCardContainer(tester, Icons.help);
-      expect((card.decoration! as BoxDecoration).color, innacuracyColor.withValues(alpha: 0.1));
+      expect((card.decoration! as BoxDecoration).color, inaccuracyColor.withValues(alpha: 0.1));
     });
 
     testWidgets('mistake card background is mistakeColor with low alpha', (tester) async {
@@ -1822,13 +1956,18 @@ Future<void> selectSide(WidgetTester tester, Side side) async {
 }
 
 /// Initialize an offline computer game and return the board rect.
-Future<Rect> initOfflineComputerGame(WidgetTester tester, {Side side = Side.white}) async {
+Future<Rect> initOfflineComputerGame(
+  WidgetTester tester, {
+  Variant? variant,
+  String? fen,
+  Side side = Side.white,
+}) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const OfflineComputerGameScreen(),
+    home: OfflineComputerGameScreen(initialVariant: variant, initialFen: fen),
     overrides: {
       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
         (_) => gameStorage,

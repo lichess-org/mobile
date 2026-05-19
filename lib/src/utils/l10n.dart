@@ -187,7 +187,7 @@ String localeToLocalizedName(Locale locale) => switch (locale) {
   Locale(languageCode: 'vi') => 'Tiếng Việt',
   Locale(languageCode: 'yo') => 'Yorùbá',
   Locale(languageCode: 'zh', countryCode: 'TW') => '繁體中文',
-  Locale(languageCode: 'zh') => '中文',
+  Locale(languageCode: 'zh') => '简体中文',
   Locale(languageCode: 'zu') => 'isiZulu',
   _ => locale.toString(),
 };

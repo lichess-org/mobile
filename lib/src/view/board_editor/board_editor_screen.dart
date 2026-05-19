@@ -22,7 +22,7 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
-import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -37,8 +37,8 @@ class BoardEditorScreen extends ConsumerWidget {
 
   final BoardEditorControllerParams? params;
 
-  static Route<dynamic> buildRoute(BuildContext context, BoardEditorControllerParams? params) {
-    return buildScreenRoute(context, screen: BoardEditorScreen(params: params));
+  static Route<dynamic> buildRoute(BoardEditorControllerParams? params) {
+    return buildScreenRoute(screen: BoardEditorScreen(params: params));
   }
 
   @override
@@ -259,9 +259,8 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                     ? context.lichessColors.error
                     : Colors.transparent,
                 child: GestureDetector(
-                  onTap: () => {
-                    ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
-                  },
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
                   child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
                 ),
               ),
@@ -308,7 +307,6 @@ class _BottomBar extends ConsumerWidget {
                   final notifier = ref.read(editorController.notifier);
                   Navigator.of(context).push(
                     BoardEditorPositionsScreen.buildRoute(
-                      context,
                       onPositionSelected: (position) => {
                         notifier.loadFen(position.fen),
                         Navigator.of(context).pop(),
@@ -332,8 +330,7 @@ class _BottomBar extends ConsumerWidget {
                       return;
                     }
                     Navigator.of(context).push(
-                      SearchScreen.buildRoute(
-                        context,
+                      PickPlayerScreen.buildRoute(
                         onUserTap: (user) {
                           if (user.id == authUser.user.id) {
                             showSnackBar(
@@ -347,7 +344,10 @@ class _BottomBar extends ConsumerWidget {
                             isScrollControlled: true,
                             useRootNavigator: true,
                             builder: (context) {
-                              return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
+                              return CreateChallengeBottomSheet(
+                                user: user,
+                                positionFen: editorState.fen,
+                              );
                             },
                           );
                         },
@@ -368,18 +368,7 @@ class _BottomBar extends ConsumerWidget {
                       )
                       .toList(),
                   selectedItem: editorState.variant,
-                  labelBuilder: (Variant variant) => Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(variant.icon),
-                          alignment: PlaceholderAlignment.middle,
-                        ),
-                        const WidgetSpan(child: SizedBox(width: 8)),
-                        TextSpan(text: variant.label),
-                      ],
-                    ),
-                  ),
+                  labelBuilder: (variant) => VariantLabel(variant),
                   onSelectedItemChanged: (Variant variant) {
                     if (variant != editorState.variant) {
                       ref.read(editorController.notifier).setVariant(variant);
@@ -396,7 +385,7 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
+                  ref.read(editorController.notifier).clearBoard();
                 },
               ),
             ],
@@ -418,7 +407,6 @@ class _BottomBar extends ConsumerWidget {
               ? () {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
-                      context,
                       AnalysisOptions.pgn(
                         id: const StringId('board_editor_position'),
                         orientation: editorState.orientation,
@@ -454,15 +442,15 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(context, initialVariant: variant, initialFen: fen),
-          ),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
           onPressed: () => Navigator.of(
             context,
-          ).push(OverTheBoardScreen.buildRoute(context, initialVariant: variant, initialFen: fen)),
+          ).push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
       ],
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -11,17 +10,17 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class StudySettingsScreen extends ConsumerWidget {
-  const StudySettingsScreen(this.id);
+  const StudySettingsScreen(this.options);
 
-  final StudyId id;
+  final StudyOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, StudyId id) {
-    return buildScreenRoute(context, screen: StudySettingsScreen(id));
+  static Route<dynamic> buildRoute(StudyOptions options) {
+    return buildScreenRoute(screen: StudySettingsScreen(options));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final studyController = studyControllerProvider(id);
+    final studyController = studyControllerProvider(options);
 
     final isComputerAnalysisAllowed = ref.watch(
       studyController.select((s) => s.requireValue.isComputerAnalysisAllowed),
@@ -40,6 +39,12 @@ class StudySettingsScreen extends ConsumerWidget {
                 value: studyPrefs.inlineNotation,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                title: const Text('Small board'), // TODO l10n
+                value: studyPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),

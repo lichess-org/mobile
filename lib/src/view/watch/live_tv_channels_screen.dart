@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const LiveTvChannelsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const LiveTvChannelsScreen());
   }
 
   @override
@@ -50,14 +50,13 @@ class _Body extends ConsumerWidget {
             if (games[channel] != null) games[channel]!,
         ];
         return ListView.builder(
-          itemCount: games.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(
-                    context,
                     channel: game.channel,
                     gameId: game.id,
                     orientation: game.orientation,

@@ -26,8 +26,8 @@
   <string name="castlingDescription">Assegura el rei, i prepara la torre per l\'atac.</string>
   <string name="capturingDefender">Captura el defensor</string>
   <string name="capturingDefenderDescription">Menjar una peça que és vital per defensar una altra, fent que es pugui menjar la peça que ara ja no està defensada.</string>
-  <string name="collinearMove" comment="Description for this theme (translateable separately):&#10;Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.&#10;&#10;Collinear is a term that comes from the field of geometry: https://en.wiktionary.org/wiki/collinear">Moviment col·lineal</string>
-  <string name="collinearMoveDescription" comment="Description for the puzzle theme 'Collinear move' (translateable separately).">Dues peces oposades es miren l\'una a l\'altra i una de les dues s\'aparta de la línia d\'atac sense captura la peça enemiga.</string>
+  <string name="collinearMove">Moviment col·lineal</string>
+  <string name="collinearMoveDescription">Dues peces oposades es miren l\'una a l\'altra i una de les dues s\'aparta de la línia d\'atac sense captura la peça enemiga.</string>
   <string name="cornerMate">Mat de la cantonada</string>
   <string name="cornerMateDescription">Confina el rei a una cantonada utilitzant una torre o una dama i donar li mat amb un cavall.</string>
   <string name="crushing">Fort avantatge</string>
@@ -79,7 +79,7 @@
   <string name="swallowstailMateDescription">Un mat que visualment ens recorda la forma de la cua d\'una oreneta, similar a una forma de V.</string>
   <string name="triangleMate">Mat del triangle</string>
   <string name="triangleMateDescription">La dama i la torre, a una distància del rei enemic, estan a la mateixa fila o columna separats per una casella formant un triangle.</string>
-  <string name="vukovicMate">Mat de Vukovic</string>
+  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">Mat de Vukovic</string>
   <string name="vukovicMateDescription">Una torre i un cavall col·laboren per fer mat al rei. La torre dona el mat mentre està defensada per una altra peça. El cavall s\'utilitza per bloquejar les caselles de sortida del rei.</string>
   <string name="knightEndgame">Final de cavalls</string>
   <string name="knightEndgameDescription">Un final amb només cavalls i peons.</string>

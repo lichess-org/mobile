@@ -9,6 +9,9 @@ class AppLocalizationsBs extends AppLocalizations {
   AppLocalizationsBs([String locale = 'bs']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Postavke računa';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Početna pozicija figura domaćeg reda je nasumično odabrana.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Dovedite svog kralja u centar da biste pobijedili u igri.';
+
+  @override
+  String get variantThreeCheckTitle => 'Provjerite protivnika 3 puta da biste pobijedili u igri.';
+
+  @override
+  String get variantAntichessTitle => 'Izgubite sve svoje figure (ili dospijte u pat poziciju) da biste pobijedili u igri.';
+
+  @override
+  String get variantAtomicTitle => 'Nuklearno uništite protivničkog kralja da biste pobijedili.';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana ima veliki broj pijuna, druga ima normalnu vojsku.';
+
+  @override
+  String get variantRacingKingsTitle => 'Dovedite svog kralja na drugu stranu ploče da biste pobijedili.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Osvojene figure mogu se vratiti na tablu umjesto pomjeranja figure.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard chess from a custom position';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -1048,6 +1081,16 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1584,9 +1627,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Je li Vam se svidio ovaj problem?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Glasajte da učitate sljedeći!';
 
   @override
   String get puzzleUpVote => 'Pozitivno ocijenite problem';
@@ -2594,6 +2634,16 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedavne partije';
 
   @override
@@ -2677,9 +2727,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Prikaži strelice za varijante';
-
-  @override
-  String get evaluationGauge => 'Mjerilo evaluacije';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2959,15 +3006,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get checkSpamFolder => 'Također provjerite neželjenu poštu, možda je poruka završila tamo. Ako jest, označite da nije neželjena.';
 
   @override
-  String get emailForSignupHelp => 'Ako ništa drugo ne uspije, pošaljite nam ovu poruku:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopirajte i zalijepite gornji tekst i pošaljite ga $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ubrzo ćemo Vam se javiti i pomoći Vam da završite Vašu registraciju.';
 
   @override
   String accountConfirmed(String param) {
@@ -3539,6 +3580,9 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Početna pozicija';
 
   @override
@@ -3763,6 +3807,15 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Nevažeći kod pri provjeri autentičnosti';
+
+  @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
 
   @override
   String get emailMeALink => 'Pošaljite mi link e-mail porukom';
@@ -4687,9 +4740,6 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Slažem se da ću se pridržavati svih Lichess pravila.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Traži ili pokrenite novu diskusiju';
 
   @override
@@ -5047,6 +5097,11 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get clearSearch => 'Obriši pretragu';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Oznake';
@@ -6606,4 +6661,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvofaktorska provjera autentičnosti';
+
+  @override
+  String get ublogCommunity => 'Zajednica';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog korisnika $param';
+  }
 }

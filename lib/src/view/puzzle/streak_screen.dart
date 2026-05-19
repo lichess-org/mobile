@@ -37,8 +37,8 @@ import 'package:share_plus/share_plus.dart';
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const StreakScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const StreakScreen());
   }
 
   @override
@@ -501,7 +501,6 @@ class _BottomBar extends ConsumerWidget {
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
-                  context,
                   AnalysisOptions.pgn(
                     id: puzzleState.puzzle.puzzle.id,
                     orientation: puzzleState.pov,

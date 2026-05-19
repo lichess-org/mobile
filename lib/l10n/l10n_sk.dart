@@ -9,6 +9,9 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Preferencie účtu';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
+
+  @override
+  String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
+
+  @override
+  String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
+
+  @override
+  String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
+
+  @override
+  String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
+
+  @override
+  String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -1068,6 +1101,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastKnockouts => 'Knockouts';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1606,9 +1649,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Páčila sa vám táto úloha?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Hlasujte a prejdite k ďalšej úlohe!';
 
   @override
   String get puzzleUpVote => 'Posunúť úlohu vyššie';
@@ -2622,6 +2662,16 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedávne partie';
 
   @override
@@ -2705,9 +2755,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Zobraziť šípky variantov';
-
-  @override
-  String get evaluationGauge => 'Ukazovateľ hodnotenia';
 
   @override
   String get visualMotifs => 'Vizuálne motívy';
@@ -2987,15 +3034,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get checkSpamFolder => 'Skontrolujte si aj priečinok s nevyžiadanou poštou, je možné, že sa dostal tam. Ak sa tak stalo, zrušte označenie emailu ako nevyžiadanej pošty.';
 
   @override
-  String get emailForSignupHelp => 'Ak všetko ostatné zlyhá, pošlite nám tento email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Skopírujte a vložte uvedený text a pošlite ho na adresu $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Čoskoro sa Vám ozveme, aby sme Vám pomohli dokončiť registráciu.';
 
   @override
   String accountConfirmed(String param) {
@@ -3567,6 +3608,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Štartovacia pozícia';
 
   @override
@@ -3791,6 +3835,15 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Neplatný overovací kód';
+
+  @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
 
   @override
   String get emailMeALink => 'Pošlite link emailom';
@@ -4715,9 +4768,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Súhlasím, že budem dodržiavať všetky pravidlá Lichessu.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Prehľadávať alebo začať novú konverzáciu';
 
   @override
@@ -5075,6 +5125,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Vymazať vyhľadávanie';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Značky';
@@ -6701,4 +6756,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvojstupňové overenie';
+
+  @override
+  String get ublogCommunity => 'Komunita';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog užívateľa $param';
+  }
 }

@@ -9,6 +9,9 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Ustawienia konta';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
 
   @override
-  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\\nMożesz zobaczyć je w głównej zakładce.';
+  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.';
 
   @override
   String get mobilePreviousPage => 'Wróć';
 
   @override
   String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
+
+  @override
+  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
+
+  @override
+  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
+
+  @override
+  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
+
+  @override
+  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
+
+  @override
+  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
+
+  @override
+  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
+
+  @override
+  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
 
   @override
   String get activityActivity => 'Aktywność';
@@ -1068,6 +1101,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminacje';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1606,9 +1649,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Czy podobało Ci się to zadanie?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Zagłosuj, by wczytać następny!';
 
   @override
   String get puzzleUpVote => 'Daj plusa zadaniu';
@@ -2622,6 +2662,16 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Ostatnie partie';
 
   @override
@@ -2705,9 +2755,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Pokaż strzałki wariantów';
-
-  @override
-  String get evaluationGauge => 'Wskaźnik oceny pozycji';
 
   @override
   String get visualMotifs => 'Motywy taktyczne';
@@ -2987,15 +3034,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get checkSpamFolder => 'Sprawdź również folder spamu, gdzie mógł trafić nasz e-mail. Jeśli tak, oznacz go jako nie spam.';
 
   @override
-  String get emailForSignupHelp => 'Jeśli wszystko inne zawiedzie, wyślij nam ten e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Skopiuj i wklej powyższy tekst i wyślij go do $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Jeśli nie możesz znaleźć wiadomości e-mail z potwierdzeniem, wyślij wiadomość do $param, a potwierdzimy Twoje konto.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Wkrótce wrócimy do Ciebie, aby pomóc Ci w dokończeniu rejestracji.';
 
   @override
   String accountConfirmed(String param) {
@@ -3567,6 +3608,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Losowa pozycja Chess960';
+
+  @override
   String get startPosition => 'Ustawienie początkowe';
 
   @override
@@ -3791,6 +3835,15 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Nieprawidłowy kod uwierzytelniający';
+
+  @override
+  String get clearField => 'Wyczyść pole';
+
+  @override
+  String get orSeparator => 'lub';
+
+  @override
+  String get logInByEmail => 'Zaloguj się przez e-mail';
 
   @override
   String get emailMeALink => 'Wyślij mi link';
@@ -4715,9 +4768,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Zgadzam się przestrzegać wszystkich zasad Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Szukaj lub rozpocznij nową rozmowę';
 
   @override
@@ -5075,6 +5125,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Wyczyść wyszukiwanie';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Brak wyników dla \"$param\"';
+  }
 
   @override
   String get tags => 'Tagi';
@@ -6701,4 +6756,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
+
+  @override
+  String get ublogCommunity => 'Społeczność';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog gracza $param';
+  }
 }

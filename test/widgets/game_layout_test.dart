@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:chessground/chessground.dart';
@@ -7,7 +8,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
 import '../test_helpers.dart';
@@ -61,6 +65,54 @@ void main() {
         boardSize,
         backgroundSize,
         reason: 'Board size should match background size on $surface',
+      );
+    }
+  }, variant: kPlatformVariant);
+
+  testWidgets('Landscape board position', (WidgetTester tester) async {
+    for (final boardPosition in LandscapeBoardPosition.values) {
+      const tabletSurface = Size(1280, 800);
+      final app = await makeTestProviderScope(
+        key: ValueKey(boardPosition),
+        tester,
+        child: const MaterialApp(
+          home: GameLayout(
+            orientation: Side.white,
+            boardParams: GameBoardParams.readonly(
+              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+              variant: Variant.standard,
+              pockets: null,
+            ),
+            moves: ['e4', 'e5'],
+            topTable: Row(
+              mainAxisSize: MainAxisSize.max,
+              key: ValueKey('top_table'),
+              children: [Text('Top table')],
+            ),
+            bottomTable: Row(
+              mainAxisSize: MainAxisSize.max,
+              key: ValueKey('bottom_table'),
+              children: [Text('Bottom table')],
+            ),
+          ),
+        ),
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults.copyWith(landscapeBoardPosition: boardPosition).toJson(),
+          ),
+        },
+        surfaceSize: tabletSurface,
+      );
+      await tester.pumpWidget(app);
+
+      final boardTopLeft = tester.getTopLeft(find.byType(Chessboard));
+      final moveListTopLeft = tester.getTopLeft(find.byType(MoveList));
+
+      expect(
+        moveListTopLeft.dx,
+        boardPosition == LandscapeBoardPosition.left
+            ? greaterThan(boardTopLeft.dx)
+            : lessThan(boardTopLeft.dx),
       );
     }
   }, variant: kPlatformVariant);

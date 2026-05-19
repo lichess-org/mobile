@@ -90,14 +90,15 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
       ? variant != Variant.fromPosition
       : timeControl == ChallengeTimeControlType.correspondence && variant == Variant.standard;
 
-  ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
+  ChallengeRequest makeRequest(User? challengingUser, LightUser? destUser, [String? initialFen]) {
     return ChallengeRequest(
       destUser: destUser,
       variant: variant,
       timeControl: timeControl,
       clock: timeControl == ChallengeTimeControlType.clock ? clock : null,
       days: timeControl == ChallengeTimeControlType.correspondence ? days : null,
-      rated: isRatedAllowed && rated,
+      // Anonymous users cannot create rated challenges.
+      rated: challengingUser != null && isRatedAllowed && rated,
       sideChoice: sideChoice,
       initialFen: initialFen,
     );

@@ -9,6 +9,9 @@ class AppLocalizationsEu extends AppLocalizations {
   AppLocalizationsEu([String locale = 'eu']) : super(locale);
 
   @override
+  String get mobileAccount => 'Kontua';
+
+  @override
   String get mobileAccountPreferences => 'Kontuaren ezarpenak';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Irekieren esploratzaila ezin da konexio gabe erabili.';
 
   @override
-  String get mobileChallengeCreated => 'Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\\nHasiera fitxatik sar zaitezke.';
+  String get mobileChallengeCreated => 'Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\nHasiera fitxatik sar zaitezke.';
 
   @override
   String get mobilePreviousPage => 'Aurrekoa';
 
   @override
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
+
+  @override
+  String get variantStandardTitle => 'Xakearen Lege arruntak (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Lehenengo lerroko piezen kokalekua ausaz erabakitzen da.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Eraman zure erregea taularen erdira partida irabazteko.';
+
+  @override
+  String get variantThreeCheckTitle => 'Egin xake hiru aldiz aurkariari partida irabazteko.';
+
+  @override
+  String get variantAntichessTitle => 'Galdu zure pieza guztiak (edo zure erregea ito) partida irabazteko.';
+
+  @override
+  String get variantAtomicTitle => 'Aurkariaren erregea akabatu partida irabazteko.';
+
+  @override
+  String get variantHordeTitle => 'Jokalari baten peoi asko ditu eta besteak ohiko piezak.';
+
+  @override
+  String get variantRacingKingsTitle => 'Ereman zure erregea taularen beste aldera partida irabazteko.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Harrapatutako piezak berriz ere xake-taulak jarri ditzakezu jokaldi bat egin beharrean.';
+
+  @override
+  String get variantFromPositionTitle => 'Xake estandarra posizio jakin batetik abiatuta';
 
   @override
   String get activityActivity => 'Jarduera';
@@ -1028,6 +1061,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastKnockouts => 'Kanporaketak';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return '<$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return '<$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1474,7 +1517,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesScrollOnTheBoardToReplayMoves => 'Mugitu taula gainean jokaldiak ikusteko';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'Jaso posta elektronikoz zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
+  String get preferencesCorrespondenceEmailNotification => 'Jaso emailez zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
 
   @override
   String get preferencesNotifyStreamStart => 'Esataria zuzenean dago';
@@ -1562,9 +1605,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Ariketa gustukoa izan da?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Eman bozka hurrengoa kargatzeko!';
 
   @override
   String get puzzleUpVote => 'Ariketari +1 botoa';
@@ -2566,6 +2606,16 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Azken partidak';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Erakutsi aldaeren geziak';
-
-  @override
-  String get evaluationGauge => 'Ebaluazio langa';
 
   @override
   String get visualMotifs => 'Ikurrak';
@@ -2838,7 +2885,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get username => 'Erabitzaile-izena';
 
   @override
-  String get usernameOrEmail => 'Erabiltzaile izena edo posta elektronikoa';
+  String get usernameOrEmail => 'Erabiltzaile izena edo emaila';
 
   @override
   String get changeUsername => 'Erabiltzaile-izena aldatu';
@@ -2853,7 +2900,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get signupUsernameHint => 'Edonorentzako bezalako erabiltzaile-izena aukeratu. Ezingo duzu aldatu. Desegokiak diren erabiltzaile-izenak dituzten kontuak itxi egingo ditugu!';
 
   @override
-  String get signupEmailPromise => 'Zure kontuari buruzko e-mailak bidaliko dizkizugu bakarrik eta ez dugu zure helbidea inorekin partekatuko.';
+  String get signupEmailPromise => 'Zure kontuari buruzko emailak bidaliko dizkizugu bakarrik eta ez dugu zure helbidea inorekin partekatuko.';
 
   @override
   String get password => 'Pasahitza';
@@ -2862,7 +2909,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get changePassword => 'Pasahitza aldatu';
 
   @override
-  String get changeEmail => 'Posta elektronikoa aldatu';
+  String get changeEmail => 'Aldatu emaila';
 
   @override
   String get email => 'Posta elektronikoa';
@@ -2897,13 +2944,13 @@ class AppLocalizationsEu extends AppLocalizations {
   String get passwordSuggestion => 'Ez erabili beste norbaitek esandako pasahitzak. Zure kontua lapurtzeko erabiliko dute.';
 
   @override
-  String get emailSuggestion => 'Ez erabili beste norbaitek esandako posta elektronikoa. Zure kontua lapurtzeko erabiliko dute.';
+  String get emailSuggestion => 'Ez erabili beste norbaitek esandako emaila. Zure kontua lapurtzeko erabiliko dute.';
 
   @override
-  String get emailConfirmHelp => 'Laguntza eposta baieztapenarekin';
+  String get emailConfirmHelp => 'Laguntza emailaren baieztapenarekin';
 
   @override
-  String get emailConfirmNotReceived => 'Izena eman ostean ez duzu baieztapen eposta jaso?';
+  String get emailConfirmNotReceived => 'Izena eman ostean ez duzu baieztapen emaila jaso?';
 
   @override
   String get whatSignupUsername => 'Zein erabiltzaile-izen erabili duzu izena emateko?';
@@ -2918,28 +2965,22 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String emailSent(String param) {
-    return '$param helbidera mezu bat bidali dugu.';
+    return '$param helbidera email bat bidali dugu.';
   }
 
   @override
-  String get emailCanTakeSomeTime => 'Itxaron pixkatean mezua jaso arte.';
+  String get emailCanTakeSomeTime => 'Itxaron pixkatean emaila jaso arte.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => 'Itxaron 5 minutu eta freskatu zure epostaren sarrera-ontzia.';
+  String get refreshInboxAfterFiveMinutes => 'Itxaron 5 minutu eta freskatu zure emailaren sarrera-ontzia.';
 
   @override
-  String get checkSpamFolder => 'Zabor mezuen karpetan begiratu, batzuetan horra joaten dira-eta mezuak. Horrela bada, esan zaborra ez dela.';
+  String get checkSpamFolder => 'Zabor mezuen karpetan begiratu, batzuetan horra joaten dira-eta emailak. Horrela bada, esan zaborra ez dela.';
 
   @override
-  String get emailForSignupHelp => 'Beste guztiak huts egin badu, bidali guri mezu hau:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopiatu eta itsatsi goiko mezua eta bidali $param helbidera';
+  String sendEmailForAccountVerification(String param) {
+    return 'Zure baieztapen emaila ezin baduzu aurkitu, idatzi $param helbidera eta kontua baieztatu egingo dugu.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Laster jarriko gara zurekin harremanetan zure izen-ematea osatzeko.';
 
   @override
   String accountConfirmed(String param) {
@@ -2952,7 +2993,7 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded => 'Ez duzu baieztapen eposta behar.';
+  String get accountConfirmationEmailNotNeeded => 'Ez duzu baieztapen emaila behar.';
 
   @override
   String accountClosed(String param) {
@@ -2961,7 +3002,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return '$param kontua eposta helbide gabe erregistatu da.';
+    return '$param kontua email helbide gabe erregistatu da.';
   }
 
   @override
@@ -3511,6 +3552,9 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => '960 xakeko ausazko posizioa';
+
+  @override
   String get startPosition => 'Hasierako posizioa';
 
   @override
@@ -3737,7 +3781,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get invalidAuthenticationCode => 'Autentikazio kodea ez da zuzena';
 
   @override
-  String get emailMeALink => 'Esteka postaz bidali';
+  String get clearField => 'Garbitu eremua';
+
+  @override
+  String get orSeparator => 'Edo';
+
+  @override
+  String get logInByEmail => 'Sartu emaila erabiliz';
+
+  @override
+  String get emailMeALink => 'Bidali esteka emailez';
 
   @override
   String get currentPassword => 'Oraingo pasahitza';
@@ -3889,16 +3942,16 @@ class AppLocalizationsEu extends AppLocalizations {
   String get error_required => 'Koadro hau betetzea nahitaezkoa da';
 
   @override
-  String get error_email => 'Posta elektronikoa ez da zuzena';
+  String get error_email => 'Emaila ez da zuzena';
 
   @override
-  String get error_email_acceptable => 'Posta elektroniko hau ezin dugu onartu. Egiaztatu ezazu eta saiatu berriz.';
+  String get error_email_acceptable => 'Email hau ezin dugu onartu. Egiaztatu ezazu eta saiatu berriz.';
 
   @override
-  String get error_email_unique => 'Posta elektronikoa ez da zuzena edo norbaitek hartua du';
+  String get error_email_unique => 'Emaila ez da zuzena edo norbaitek hartua du';
 
   @override
-  String get error_email_different => 'Hau zure posta elektronikoa da';
+  String get error_email_different => 'Hau zure emaila da';
 
   @override
   String error_minLength(String param) {
@@ -4197,25 +4250,25 @@ class AppLocalizationsEu extends AppLocalizations {
   String get checkYourEmail => 'Zure emailean begiratu';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'Email mezua  bidali dizugu. Zure kontua aktibatzeko, egizu klik mezuan.';
+  String get weHaveSentYouAnEmailClickTheLink => 'Emaila bidali dizugu. Zure kontua aktibatzeko, egizu klik mezuan.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ez baduzu mezua aurkitzen, begiratu beste tokietan: zaborrontzian, spam karpetan, ...';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ez baduzu emaila aurkitzen, begiratu beste tokietan: zaborrontzian, spam karpetan, ...';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'Mezua ez baduzu 5 minutuan jasotzen:';
+  String get ifYouDoNotGetTheEmail => 'Emaila ez baduzu 5 minutuan jasotzen:';
 
   @override
   String get checkAllEmailFolders => 'Begiratu spam karpetan';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Egiaztatu $param zure eposta helbidea dela';
+    return 'Egiaztatu $param zure emaila dela';
   }
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Mezu bat bidali dugu $param helbidera. Egizu klik mezuan zure pasahitza berrizteko.';
+    return 'Email bat bidali dugu $param helbidera. Egizu klik mezuan zure pasahitza berrizteko.';
   }
 
   @override
@@ -4659,9 +4712,6 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Lichessek ezarritako politikak beteko ditut.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hizketaldia bilatu edo berria hasi';
 
   @override
@@ -4816,7 +4866,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get timeAlmostUp => 'Denbora ia agortu da!';
 
   @override
-  String get clickToRevealEmailAddress => '[Egin klik eposta helbidea erakusteko]';
+  String get clickToRevealEmailAddress => '[Egin klik emaila erakusteko]';
 
   @override
   String get download => 'Deskargatu';
@@ -4938,10 +4988,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get reopenYourAccountDescription => 'Zure kontua itxi bazenuen baina berreskuratu nahi baduzu, hori egiteko aukera duzu.';
 
   @override
-  String get emailAssociatedToaccount => 'Posta elektronikoa ondo lotu da zure kontura';
+  String get emailAssociatedToaccount => 'Emaila ondo lotu da zure kontura';
 
   @override
-  String get sentEmailWithLink => 'Posta elektroniko bat bidali dizugu lotura batekin.';
+  String get sentEmailWithLink => 'Email bat bidali dizugu lotura batekin.';
 
   @override
   String get tournamentEntryCode => 'Txapelketara sartzeko kodea';
@@ -5019,6 +5069,11 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get clearSearch => 'Garbitu bilaketa';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ez dago emaitzarik honetarako: \"$param\"';
+  }
 
   @override
   String get tags => 'Etiketak';
@@ -6511,4 +6566,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Bi faktoreko autentifikazioa';
+
+  @override
+  String get ublogCommunity => 'Komunitatea';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param erabiltzailearen Bloga';
+  }
 }

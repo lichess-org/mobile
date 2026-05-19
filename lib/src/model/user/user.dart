@@ -345,6 +345,7 @@ sealed class UserActivity with _$UserActivity {
       bestTournament == null &&
       puzzles == null &&
       streak == null &&
+      storm == null &&
       correspondenceEnds == null &&
       correspondenceMovesNb == null &&
       correspondenceGamesNb == null;

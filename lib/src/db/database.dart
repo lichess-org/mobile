@@ -14,6 +14,7 @@ const corresGameTTL = Duration(days: 60);
 const gameTTL = Duration(days: 90);
 const chatReadMessagesTTL = Duration(days: 180);
 const httpLogTTL = Duration(days: 7);
+const appLogTTL = Duration(days: 7);
 
 const kStorageAnonId = '**anonymous**';
 
@@ -49,7 +50,8 @@ Future<int?> _getDatabaseVersion(Database db) async {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
     final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
-  } catch (_) {
+  } catch (e) {
+    _logger.warning('Error occurred while fetching SQLite version: $e');
     return null;
   }
 }
@@ -67,19 +69,26 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 4,
+      version: 5,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
+        if (version != null && version >= 307000) {
+          _logger.info('Enabling WAL journal mode');
+          await db.rawQuery('PRAGMA journal_mode=WAL');
+        }
       },
       onOpen: (db) async {
-        await Future.wait([
-          _deleteOldEntries(db, 'puzzle', puzzleTTL),
-          _deleteOldEntries(db, 'correspondence_game', corresGameTTL),
-          _deleteOldEntries(db, 'game', gameTTL),
-          _deleteOldEntries(db, 'chat_read_messages', chatReadMessagesTTL),
-          _deleteOldEntries(db, 'http_log', httpLogTTL),
-        ]);
+        await db.transaction((txn) async {
+          await Future.wait([
+            _deleteOldEntries(txn, 'puzzle', puzzleTTL),
+            _deleteOldEntries(txn, 'correspondence_game', corresGameTTL),
+            _deleteOldEntries(txn, 'game', gameTTL),
+            _deleteOldEntries(txn, 'chat_read_messages', chatReadMessagesTTL),
+            _deleteOldEntries(txn, 'http_log', httpLogTTL),
+            _deleteOldEntries(txn, 'app_log', appLogTTL),
+          ]);
+        });
       },
       onCreate: (db, version) async {
         final batch = db.batch();
@@ -89,6 +98,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
         _createHttpLogTableV4(batch);
+        _createAppLogTableV5(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -101,6 +111,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 4) {
           _createHttpLogTableV4(batch);
+        }
+        if (oldVersion < 5) {
+          _createAppLogTableV5(batch);
         }
         await batch.commit();
       },
@@ -207,7 +220,24 @@ void _createHttpLogTableV4(Batch batch) {
     ''');
 }
 
-Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
+void _createAppLogTableV5(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS app_log');
+  batch.execute('''
+    CREATE TABLE app_log(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    logTime TEXT NOT NULL,
+    loggerName TEXT NOT NULL,
+    levelValue INTEGER NOT NULL,
+    levelName TEXT NOT NULL,
+    message TEXT NOT NULL,
+    error TEXT,
+    stackTrace TEXT,
+    lastModified TEXT NOT NULL
+  )
+    ''');
+}
+
+Future<void> _deleteOldEntries(DatabaseExecutor db, String table, Duration ttl) async {
   final date = DateTime.now().subtract(ttl);
 
   if (!await _doesTableExist(db, table)) {
@@ -217,7 +247,7 @@ Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
   await db.delete(table, where: 'lastModified < ?', whereArgs: [date.toIso8601String()]);
 }
 
-Future<bool> _doesTableExist(Database db, String table) async {
+Future<bool> _doesTableExist(DatabaseExecutor db, String table) async {
   final tableExists = await db.rawQuery(
     "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
   );

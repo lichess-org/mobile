@@ -9,6 +9,9 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Pengaturan akun';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
 
   @override
   String get mobilePreviousPage => 'Previous';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get variantStandardTitle => 'Aturan catur standar (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Posisi awal buah-buah di baris belakang diacak.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Bawa raja Anda ke tengah papan untuk memenangkan permainan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Skak lawan 3 kali untuk memenangkan permainan.';
+
+  @override
+  String get variantAntichessTitle => 'Kehilangan semua buah Anda (atau mengalami langkah buntu) untuk memenangkan permainan.';
+
+  @override
+  String get variantAtomicTitle => 'Ledakkan raja lawan untuk menang.';
+
+  @override
+  String get variantHordeTitle => 'Satu sisi memiliki banyak pion, sisi lainnya memiliki pasukan normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Bawa raja Anda ke sisi seberang papan untuk menang.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Buah yang ditangkap dapat diletakkan kembali ke papan alih-alih menggerakkan buah.';
+
+  @override
+  String get variantFromPositionTitle => 'Catur standar dari posisi kustom';
 
   @override
   String get activityActivity => 'Aktivitas';
@@ -788,7 +821,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Show player scores based on game results';
 
   @override
   String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
@@ -861,15 +894,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Official standings';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Find more options on the $param.';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'Webmasters page';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
@@ -893,7 +926,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastTournamentFormat => 'Tournament format';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Event location';
 
   @override
   String get broadcastTopPlayers => 'Top players';
@@ -1007,6 +1040,16 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1545,16 +1588,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Apakah anda menyukai teka-teki ini?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Isi untuk memanggil yang satunya lagi!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Up vote puzzle';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Temukan langkah terbaik putih.';
@@ -2542,6 +2582,16 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Permainan terkini';
 
   @override
@@ -2625,9 +2675,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Tampilkan variasi panah';
-
-  @override
-  String get evaluationGauge => 'Mengukur evaluasi';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2907,15 +2954,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkSpamFolder => 'Cek juga folder spam Anda, mungkin ada disana. Jika ada, tandai sebagai bukan spam.';
 
   @override
-  String get emailForSignupHelp => 'Jika semuanya gagal, kirim kami email ini:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Salin dan tempel teks diatas dan kirimkan ke $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Kami akan kembali sejenak untuk membantu penyelesaian signup anda.';
 
   @override
   String accountConfirmed(String param) {
@@ -3487,6 +3528,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Random Chess960 position';
+
+  @override
   String get startPosition => 'Posisi Awal';
 
   @override
@@ -3713,6 +3757,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get invalidAuthenticationCode => 'Kode autentikasi salah';
 
   @override
+  String get clearField => 'Clear field';
+
+  @override
+  String get orSeparator => 'Or';
+
+  @override
+  String get logInByEmail => 'Log in by email';
+
+  @override
   String get emailMeALink => 'Emailkan ke saya sebuah link';
 
   @override
@@ -3773,7 +3826,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get outsideTheBoard => 'Di luar papan';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'All squares';
 
   @override
   String get onSlowGames => 'Pada catur klasik';
@@ -4635,9 +4688,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Saya menyetujui bahwa saya akan mengikuti semua kebijakan yang ada di Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Cari atau mulai diskusi baru';
 
   @override
@@ -4995,6 +5045,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get clearSearch => 'Bersihkan pencarian';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'No results for \"$param\"';
+  }
 
   @override
   String get tags => 'Label';
@@ -6095,7 +6150,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
@@ -6113,7 +6168,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Select $param.<br>Then decide who will be allowed to contribute.';
   }
 
   @override
@@ -6127,38 +6182,38 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Click the $param button, or right-click on the move list.<br>Comments are shared and saved.';
   }
 
   @override
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Click the !? button, or right-click on the move list.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'A board set up for a new game.<br>Useful for exploring openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
@@ -6176,7 +6231,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';
@@ -6422,4 +6477,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentikasi dua-langkah';
+
+  @override
+  String get ublogCommunity => 'Community';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog dari $param';
+  }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_links.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
@@ -13,7 +13,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 sealed class DisplayItem {}
 
@@ -44,8 +46,8 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
   const ConversationScreen({super.key, required this.user});
 
-  static Route<dynamic> buildRoute(BuildContext context, {required LightUser user}) {
-    return buildScreenRoute(context, screen: ConversationScreen(user: user));
+  static Route<dynamic> buildRoute({required LightUser user}) {
+    return buildScreenRoute(screen: ConversationScreen(user: user));
   }
 
   @override
@@ -76,17 +78,54 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: UserFullNameWidget(
-          user: widget.user,
-          showFlair: true,
-          showPatron: true,
-          shouldShowOnline: true,
+    final state = ref.watch(conversationControllerProvider(widget.user.id)).value;
+    final canInteract =
+        state != null && !state.isBot && state.convo.postable && state.convo.messages.isNotEmpty;
+
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        titleSpacing: 0,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: UserAvatar(widget.user, radius: 16),
+          title: UserFullNameWidget(user: widget.user, showFlair: false),
+          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () {
-            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
+            Navigator.push(context, UserOrProfileScreen.buildRoute(widget.user))
+            // invalidate to refresh potential blocking status change
+            .then((_) {
+              if (context.mounted) {
+                ref.invalidate(conversationControllerProvider(widget.user.id));
+              }
+            });
           },
         ),
+        actions: [
+          if (canInteract)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: 'Delete conversation',
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => YesNoDialog(
+                    title: Text(context.l10n.mobileAreYouSure),
+                    content: const Text('Are you sure you want to delete this conversation?'),
+                    onYes: () => Navigator.of(context).pop(true),
+                    onNo: () => Navigator.of(context).pop(false),
+                  ),
+                );
+                if (confirmed == true && context.mounted) {
+                  await ref
+                      .read(conversationControllerProvider(widget.user.id).notifier)
+                      .deleteThread();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
+            ),
+        ],
       ),
       body: _Body(user: widget.user),
     );
@@ -289,7 +328,7 @@ class _DateBubble extends StatelessWidget {
   }
 }
 
-class _MessageBubble extends StatelessWidget {
+class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({
     required this.message,
     required this.isMe,
@@ -320,7 +359,7 @@ class _MessageBubble extends StatelessWidget {
   static const _inGroupRadius = Radius.circular(4);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final time = DateFormat.Hm().format(message.date);
 
     return ChatBubbleContextMenu(
@@ -365,8 +404,9 @@ class _MessageBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
-                linkifiers: kLichessLinkifiers,
+                onOpen: (link) async =>
+                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                linkifiers: AppLinksService.kLichessLinkifiers,
                 text: message.text,
                 style: TextStyle(color: _textColor(context)),
                 linkStyle: Styles.linkStyle,
@@ -397,8 +437,7 @@ class _MessageInput extends ConsumerStatefulWidget {
 class _MessageInputState extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
-  bool get isBlocked =>
-      widget.state.convo.relations.inward == false || widget.state.convo.relations.outward == false;
+  bool get isBlocked => widget.state.isBlocked ?? false;
 
   bool get isBot => widget.state.isBot;
 
@@ -409,11 +448,20 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
   @override
   void initState() {
     super.initState();
-    controller.addListener(() {
-      if (controller.text.isNotEmpty) {
-        ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
-      }
-    });
+    controller.addListener(_handleTypingStatus);
+  }
+
+  void _handleTypingStatus() {
+    if (controller.text.isNotEmpty && mounted) {
+      ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_handleTypingStatus);
+    controller.dispose();
+    super.dispose();
   }
 
   @override

@@ -9,6 +9,9 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Tùy chỉnh tài khoản';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
 
   @override
-  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\\nBạn có thể truy cập trận đấu từ trang chủ.';
+  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\nBạn có thể truy cập trận đấu từ trang chủ.';
 
   @override
   String get mobilePreviousPage => 'Trang trước';
 
   @override
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
+
+  @override
+  String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Vị trí bắt đầu của các quân cờ hàng 1 và  8 được sắp xếp ngẫu nhiên.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Mang quân Vua của bạn vào các ô trung tâm để chiến thắng.';
+
+  @override
+  String get variantThreeCheckTitle => 'Chiếu vua đối thủ 3 lần để giành chiến thắng.';
+
+  @override
+  String get variantAntichessTitle => 'Để mất toàn bộ quân cờ của bạn (bao gồm cả vua hoặc làm bị hết nước đi) để chiến thắng.';
+
+  @override
+  String get variantAtomicTitle => 'Cho nổ vua đối phương để giành chiến thắng.';
+
+  @override
+  String get variantHordeTitle => 'Một bên có số lượng quân tốt lớn, bên kia chỉ có đội quân bình thường.';
+
+  @override
+  String get variantRacingKingsTitle => 'Đưa vua của bạn sang phía bên kia của bàn cờ để giành chiến thắng.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Các quân cờ bắt được có thể được thả lại vào bàn cờ thay vì chỉ di chuyển một quân cờ.';
+
+  @override
+  String get variantFromPositionTitle => 'Cờ tiêu chuẩn từ một thế trận tùy chỉnh';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -1008,6 +1041,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastKnockouts => 'Loại trực tiếp';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1449,7 +1492,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesYourPreferencesHaveBeenSaved => 'Tùy chọn của bạn đã được lưu';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Cuộn con chuột trên bàn cờ để xem lại nước đi';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Lăn chuột trên bàn cờ để xem lại nước đi';
 
   @override
   String get preferencesCorrespondenceEmailNotification => 'Email thông báo hàng ngày sẽ bao gồm cả các ván cờ qua thư';
@@ -1515,7 +1558,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzlePhases => 'Giai đoạn';
 
   @override
-  String get puzzleMotifs => 'Các mô-típ';
+  String get puzzleMotifs => 'Các đòn chiến thuật';
 
   @override
   String get puzzleAdvanced => 'Nâng cao';
@@ -1540,9 +1583,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Bạn thích câu đố này chứ?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Bình chọn để đến câu đố tiếp theo!';
 
   @override
   String get puzzleUpVote => 'Thích câu đố';
@@ -2538,6 +2578,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Các ván cờ gần đây';
 
   @override
@@ -2621,9 +2671,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Hiển thị mũi tên biến';
-
-  @override
-  String get evaluationGauge => 'Thang đo lợi thế';
 
   @override
   String get visualMotifs => 'Họa tiết thị giác';
@@ -2816,7 +2863,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get changeUsername => 'Thay đổi tên đăng nhập';
 
   @override
-  String get changeUsernameNotSame => 'Bạn chỉ có thể thay đổi cách viết hoa/thường. Ví dụ \"dotrongkhanh04032012\" thành \"DoTrongKhanh04032012\".';
+  String get changeUsernameNotSame => 'Bạn chỉ có thể thay đổi cách viết hoa/thường. Ví dụ \"johndoe\" thành \"JohnDoe\".';
 
   @override
   String get changeUsernameDescription => 'Thay đổi tên người dùng của bạn. Điều này chỉ có thể thực hiện một lần và bạn chỉ được thay đổi cách viết hoa/viết thường các chữ trong tên người dùng của bạn.';
@@ -2903,15 +2950,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkSpamFolder => 'Ngoài ra hãy kiểm tra hộp thư rác, nó có thể ở trong đó. Nếu có, hãy đánh dấu nó không phải là rác.';
 
   @override
-  String get emailForSignupHelp => 'Nếu vẫn không nhận được, hãy gửi cho chúng tôi email này:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Sao chép và dán đoạn văn bản phía trên và gửi nó tới $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Nếu bạn không tìm thấy email xác minh, hãy gửi email đến $param và chúng tôi sẽ xác minh tài khoản cho bạn.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Chúng tôi sẽ sớm liên lạc lại với bạn để giúp bạn hoàn tất việc đăng ký.';
 
   @override
   String accountConfirmed(String param) {
@@ -2933,7 +2974,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return 'Tài khoản $param đã đăng ký mà không cần có email.';
+    return 'Tài khoản $param đã đăng ký mà không cần email.';
   }
 
   @override
@@ -3483,6 +3524,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Thế trận Chess960 ngẫu nhiên';
+
+  @override
   String get startPosition => 'Thế cờ ban đầu';
 
   @override
@@ -3612,7 +3656,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createANewTopic => 'Tạo một chủ đề mới';
 
   @override
-  String get topics => 'Các chủ đề';
+  String get topics => 'Số chủ đề';
 
   @override
   String get posts => 'Số bài đăng';
@@ -3707,6 +3751,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Mã xác thực không hợp lệ';
+
+  @override
+  String get clearField => 'Dọn sạch trường';
+
+  @override
+  String get orSeparator => 'Hoặc';
+
+  @override
+  String get logInByEmail => 'Đăng nhập bằng email';
 
   @override
   String get emailMeALink => 'Gửi cho tôi một liên kết trong Email';
@@ -4631,9 +4684,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Tôi đồng ý rằng, tôi sẽ luôn tuân thủ các chính sách của Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Tìm hoặc bắt đầu một cuộc trò chuyện';
 
   @override
@@ -4991,6 +5041,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Xóa nội dung tìm kiếm';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Không có kết quả nào cho \"$param\"';
+  }
 
   @override
   String get tags => 'Thẻ';
@@ -6416,4 +6471,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Xác thực 2 bước';
+
+  @override
+  String get ublogCommunity => 'Cộng đồng';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Bài viết của $param';
+  }
 }

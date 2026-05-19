@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -118,13 +117,13 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
-          centerTitle: true,
-          actions: const [_DashboardButton(), _HistoryButton()],
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-
-        drawer: const AccountDrawer(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +173,7 @@ Widget _buildMainListItem(
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+          ).push(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
         },
       );
     default:
@@ -182,10 +181,7 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: angle,
         onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: angle));
+          Navigator.of(context, rootNavigator: true).push(PuzzleScreen.buildRoute(angle: angle));
         },
       );
   }
@@ -249,8 +245,8 @@ class _PuzzleMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final bool isOnline = connectivity.value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final authUser = ref.watch(authControllerProvider);
 
     return ListSection(
       hasLeading: true,
@@ -260,7 +256,7 @@ class _PuzzleMenu extends ConsumerWidget {
           title: context.l10n.puzzlePuzzleThemes,
           subtitle: context.l10n.mobilePuzzleThemesSubtitle,
           onTap: () {
-            Navigator.of(context).push(PuzzleThemesScreen.buildRoute(context));
+            Navigator.of(context).push(PuzzleThemesScreen.buildRoute());
           },
         ),
         _PuzzleMenuListTile(
@@ -278,7 +274,7 @@ class _PuzzleMenu extends ConsumerWidget {
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }
               : null,
         ),
@@ -289,10 +285,33 @@ class _PuzzleMenu extends ConsumerWidget {
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
                 }
               : null,
         ),
+        if (authUser != null) ...[
+          _PuzzleMenuListTile(
+            icon: Icons.assessment_outlined,
+            title: context.l10n.puzzlePuzzleDashboard,
+            subtitle: context.l10n.puzzlePuzzleDashboardDescription,
+            enabled: isOnline,
+            onTap: isOnline
+                ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute())
+                : null,
+          ),
+          _PuzzleMenuListTile(
+            icon: Icons.history_outlined,
+            title: context.l10n.puzzleHistory,
+            subtitle: 'Review your past puzzle attempts.',
+            enabled: isOnline,
+            onTap: isOnline
+                ? () => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(PuzzleHistoryScreen.buildRoute())
+                : null,
+          ),
+        ],
       ],
     );
   }
@@ -335,7 +354,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           clipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           onHeaderTap: showHeader
-              ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context))
+              ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute())
               : null,
           children: [PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5)],
         );
@@ -357,60 +376,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
   }
 }
 
-class _DashboardButton extends ConsumerWidget {
-  const _DashboardButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    if (authUser == null) {
-      return const SizedBox.shrink();
-    }
-    final onPressed = ref
-        .watch(connectivityChangesProvider)
-        .whenIs(
-          online: () => () {
-            Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context));
-          },
-          offline: () => null,
-        );
-
-    return SemanticIconButton(
-      icon: const Icon(Icons.assessment_outlined),
-      semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-      onPressed: onPressed,
-    );
-  }
-}
-
-class _HistoryButton extends ConsumerWidget {
-  const _HistoryButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    if (authUser == null) {
-      return const SizedBox.shrink();
-    }
-    final onPressed = ref
-        .watch(connectivityChangesProvider)
-        .whenIs(
-          online: () => () {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(PuzzleHistoryScreen.buildRoute(context));
-          },
-          offline: () => null,
-        );
-    return SemanticIconButton(
-      icon: const Icon(Icons.history_outlined),
-      semanticsLabel: context.l10n.puzzleHistory,
-      onPressed: onPressed,
-    );
-  }
-}
-
 TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
   return TextStyle(
     fontSize: 14.0,
@@ -424,7 +389,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -448,22 +413,31 @@ class DailyPuzzle extends ConsumerWidget {
                   ),
                 ],
               ),
-              Icon(Icons.today, size: 32, color: context.lichessColors.brag.withValues(alpha: 0.7)),
-              Text(
-                data.puzzle.sideToMove == Side.white
-                    ? context.l10n.whitePlays
-                    : context.l10n.blackPlays,
+              Row(
+                children: [
+                  Icon(
+                    Icons.today,
+                    size: 32,
+                    color: context.lichessColors.brag.withValues(alpha: 0.7),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      data.puzzle.sideToMove == Side.white
+                          ? context.l10n.whitePlays
+                          : context.l10n.blackPlays,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: textShade(context, 0.8)),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           onTap: () {
             if (!context.mounted) return;
             Navigator.of(context, rootNavigator: true).push(
-              PuzzleScreen.buildRoute(
-                context,
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzle: data,
-              ),
+              PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzle: data),
             );
           },
         );
@@ -581,22 +555,33 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ],
                       },
                     ),
-                    Icon(
-                      switch (angle) {
-                        PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
-                        PuzzleOpening() => PuzzleIcons.opening,
-                      },
-                      size: 32,
-                      color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                    Row(
+                      children: [
+                        Icon(
+                          switch (angle) {
+                            PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
+                            PuzzleOpening() => PuzzleIcons.opening,
+                          },
+                          size: 32,
+                          color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                        ),
+                        const SizedBox(width: 8),
+                        if (puzzle != null)
+                          Flexible(
+                            child: Text(
+                              puzzle.puzzle.sideToMove == Side.white
+                                  ? context.l10n.whitePlays
+                                  : context.l10n.blackPlays,
+                              style: TextStyle(color: textShade(context, 0.8)),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        else
+                          const Flexible(
+                            child: Text('No puzzles available, please go online to fetch them.'),
+                          ),
+                      ],
                     ),
-                    if (puzzle != null)
-                      Text(
-                        puzzle.puzzle.sideToMove == Side.white
-                            ? context.l10n.whitePlays
-                            : context.l10n.blackPlays,
-                      )
-                    else
-                      const Text('No puzzles available, please go online to fetch them.'),
                   ],
                 ),
                 onTap: puzzle != null ? onTap : null,

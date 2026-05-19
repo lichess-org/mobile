@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -15,11 +16,17 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
+/// A provider for picking PGN files. Can be overridden in tests.
+final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref) {
+  return () =>
+      FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn'], withData: true);
+});
+
 class ImportPgnScreen extends StatelessWidget {
   const ImportPgnScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ImportPgnScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ImportPgnScreen());
   }
 
   static void handlePgnText(BuildContext context, String text) {
@@ -37,7 +44,6 @@ class ImportPgnScreen extends StatelessWidget {
 
         Navigator.of(context, rootNavigator: true).push(
           AnalysisScreen.buildRoute(
-            context,
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
               orientation: .white,
@@ -49,10 +55,7 @@ class ImportPgnScreen extends StatelessWidget {
           ),
         );
       } else {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PgnGamesListScreen.buildRoute(context, games.lock));
+        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -68,14 +71,14 @@ class ImportPgnScreen extends StatelessWidget {
   }
 }
 
-class _Body extends StatefulWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body();
 
   @override
-  State<_Body> createState() => _BodyState();
+  ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends State<_Body> {
+class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -126,14 +129,10 @@ class _BodyState extends State<_Body> {
 
   Future<void> _pickPgnFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pgn'],
-        withData: true,
-      );
+      final result = await ref.read(pickPgnFileProvider)();
 
       if (result != null && result.files.single.bytes != null) {
-        final content = utf8.decode(result.files.single.bytes!);
+        final content = utf8.decode(result.files.single.bytes!, allowMalformed: true);
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

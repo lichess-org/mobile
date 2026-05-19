@@ -9,6 +9,9 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get mobileAccount => 'Cuenta';
+
+  @override
   String get mobileAccountPreferences => 'Preferencias de la cuenta';
 
   @override
@@ -67,7 +70,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta página.';
 
   @override
-  String get mobileNewGame => 'Partida nueva';
+  String get mobileNewGame => 'Nueva Partida';
 
   @override
   String get mobileNoSearchResults => 'Sin resultados';
@@ -275,13 +278,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'El explorador de aperturas no está disponible sin conexión.';
 
   @override
-  String get mobileChallengeCreated => 'Desafío creado: Se te notificará cuando comience la partida.\\nPuedes acceder a ella desde la pestaña de inicio.';
+  String get mobileChallengeCreated => 'Desafío creado: Se te notificará cuando comience la partida.\nPuedes acceder a ella desde la pestaña de inicio.';
 
   @override
   String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobileOrImportPgnFile => 'O importa un archivo PGN';
+
+  @override
+  String get variantStandardTitle => 'Reglas de ajedrez estándar (FIDE)';
+
+  @override
+  String get variantChess960Title => 'La posición inicial de las piezas es aleatoria.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Lleva a tu rey al centro para ganar la partida.';
+
+  @override
+  String get variantThreeCheckTitle => 'Poner en jaque a tu oponente 3 veces para ganar la partida.';
+
+  @override
+  String get variantAntichessTitle => 'Pierde todas tus piezas (o una posición de ahogado) para ganar la partida.';
+
+  @override
+  String get variantAtomicTitle => 'Haz explotar al rey de tu oponente para ganar.';
+
+  @override
+  String get variantHordeTitle => 'Un jugador tiene un gran número de peones, el otro posee un ejército normal.';
+
+  @override
+  String get variantRacingKingsTitle => 'Lleva a tu rey al otro lado del tablero para ganar.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Las piezas capturadas pueden volver a colocarse en el tablero en lugar de hacer un movimiento.';
+
+  @override
+  String get variantFromPositionTitle => 'Ajedrez estándar desde una posición personalizada';
 
   @override
   String get activityActivity => 'Actividad';
@@ -1028,6 +1061,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminatorias';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Sub$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => '¿Te ha gustado este ejercicio?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '¡Vota para pasar al siguiente!';
 
   @override
   String get puzzleUpVote => 'Votar positivamente el ejercicio';
@@ -2566,6 +2606,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Valoración mínima de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Valoración máxima de $param';
+  }
+
+  @override
   String get recentGames => 'Partidas recientes';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Mostrar flechas de variantes';
-
-  @override
-  String get evaluationGauge => 'Indicador de evaluación';
 
   @override
   String get visualMotifs => 'Complementos visuales';
@@ -2931,15 +2978,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get checkSpamFolder => 'También comprueba tu carpeta de spam, por si ha ido ahí. En ese caso, márcalo como no spam.';
 
   @override
-  String get emailForSignupHelp => 'Si nada de lo anterior funciona, envíanos este texto por correo:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copia y pega el texto anterior y envíalo a $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Si no puedes encontrar tu correo electrónico de confirmación, escribe a $param y confirmaremos tu cuenta.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Nos pondremos en contacto contigo dentro de poco para ayudarte a completar el registro.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Posición aleatoria de Ajedrez960';
+
+  @override
   String get startPosition => 'Posición inicial';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Código de autenticación inválido';
+
+  @override
+  String get clearField => 'Borrar campo';
+
+  @override
+  String get orSeparator => 'o';
+
+  @override
+  String get logInByEmail => 'Iniciar sesión con el correo electrónico';
 
   @override
   String get emailMeALink => 'Envíame un enlace por correo electrónico';
@@ -4659,9 +4712,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Me comprometo a seguir las normas de Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Buscar o empezar una nueva conversación';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get clearSearch => 'Borrar búsqueda';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Sin resultados para \"$param\"';
+  }
 
   @override
   String get tags => 'Etiquetas';
@@ -6511,4 +6566,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
+
+  @override
+  String get ublogCommunity => 'Comunidad';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog de $param';
+  }
 }

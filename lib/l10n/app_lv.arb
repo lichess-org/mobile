@@ -249,7 +249,6 @@
   "puzzleOrigin": "Izcelsme",
   "puzzleSpecialMoves": "Īpaši gājieni",
   "puzzleDidYouLikeThisPuzzle": "Vai patika šis uzdevums?",
-  "puzzleVoteToLoadNextOne": "Balsojiet, lai ielādētu nākamo!",
   "puzzleUpVote": "Patīk puzle",
   "puzzleDownVote": "Nepatīk puzle",
   "puzzleYourPuzzleRatingWillNotChange": "Jūsu uzdevumu reitings nemainīsies. Ievērojiet, ka uzdevumu risināšana nav sacensības. Reitings mums palīdz atlasīt labākos uzdevumus jūsu prasmju līmenim.",
@@ -550,7 +549,6 @@
   "enable": "Iespējot",
   "bestMoveArrow": "Labākā gājiena bulta",
   "showVariationArrows": "Rādīt varianta bultiņas",
-  "evaluationGauge": "Novērtējuma rādītājs",
   "multipleLines": "Vairāki varianti",
   "cpus": "Procesori",
   "memory": "Atmiņa",
@@ -625,9 +623,6 @@
   "emailCanTakeSomeTime": "Iespējams, paies kāds laiks, līdz to saņemsiet.",
   "refreshInboxAfterFiveMinutes": "Pagaidiet 5 minūtes, un atsvaidziniet savu epasta iesūtni.",
   "checkSpamFolder": "Pārbaudiet arī mēstuļu nodalījumu – iespējams, mūsu ziņa tur nonākusi. Tādā gadījumā, lūdzu atzīmējiet, ka tā nav mēstule.",
-  "emailForSignupHelp": "Ja nekas cits neizdodas, nosūtiet mums šo epastu:",
-  "copyTextToEmail": "Kopējiet augšup esošo tekstu un sūtiet to {param}",
-  "waitForSignupHelp": "Drīz mēs jums pievērsīsimies un palīdzēsim pabeigt reģistrāciju.",
   "accountConfirmed": "Lietotājs {param} ir veiksmīgi apstiprināts.",
   "accountCanLogin": "Tagad varat ierakstīties kā {param}.",
   "accountConfirmationEmailNotNeeded": "Jums nav nepieciešams apstiprinājuma epasts.",
@@ -1125,7 +1120,6 @@
   "agreementAssistance": "Piekrītu spēlējot nevienā brīdī nesaņemt palīdzību (no šaha programmas, grāmatas, datubāzes vai cita cilvēka).",
   "agreementNice": "Piekrītu vienmēr izturēties pieklājīgi pret citiem spēlētājiem.",
   "agreementMultipleAccounts": "Piekrītu neizveidot vairākus kontus (izņemot gadījumos, kad to attaisno {param}).",
-  "agreementPolicy": "Piekrītu ievērot visus Lichess noteikumus.",
   "searchOrStartNewDiscussion": "Meklēt vai uzsākt sarunu",
   "edit": "Rediģēt",
   "bullet": "Bullet",
@@ -1485,5 +1479,6 @@
   "timeagoNbWeeksAgo": "{count, plural, =0{pirms {count} nedēļām} =1{pirms {count} nedēļas} other{pirms {count} nedēļām}}",
   "timeagoNbMonthsAgo": "{count, plural, =0{pirms {count} mēnešiem} =1{pirms {count} mēneša} other{pirms {count} mēnešiem}}",
   "timeagoNbYearsAgo": "{count, plural, =0{pirms {count} gadiem} =1{pirms {count} gada} other{pirms {count} gadiem}}",
-  "tfaTwoFactorAuth": "Divfaktoru autentifikācija"
+  "tfaTwoFactorAuth": "Divfaktoru autentifikācija",
+  "ublogXBlog": "Lietotāja {param} blogs"
 }

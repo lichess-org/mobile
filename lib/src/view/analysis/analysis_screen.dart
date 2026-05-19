@@ -2,7 +2,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -47,97 +46,31 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+extension _AnalysisGameResultColor on AnalysisGameResult {
+  Color? colorFor(Side side, BuildContext context) => switch (this) {
+    AnalysisGameResult.whiteWins =>
+      side == Side.white ? context.lichessColors.good : context.lichessColors.error,
+    AnalysisGameResult.blackWins =>
+      side == Side.white ? context.lichessColors.error : context.lichessColors.good,
+    _ => null,
+  };
+}
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends ConsumerWidget {
+class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
-    return buildScreenRoute(context, screen: AnalysisScreen(options: options));
+  static Route<dynamic> buildRoute(AnalysisOptions options) {
+    return buildScreenRoute(screen: AnalysisScreen(options: options));
   }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(analysisControllerProvider(options));
-
-    return analysisState.when(
-      data: (state) => _AnalysisScreen(options: options),
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
-      error: (error, _) {
-        debugPrint('Error loading analysis: $error');
-        if (error is UnsupportedVariantException) {
-          return _UnsupportedVariantErrorScreen(error: error);
-        }
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.analysis)),
-          body: FullScreenRetryRequest(
-            onRetry: () {
-              ref.invalidate(analysisControllerProvider(options));
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _UnsupportedVariantErrorScreen extends StatelessWidget {
-  const _UnsupportedVariantErrorScreen({required this.error});
-
-  final UnsupportedVariantException error;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.analysis)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.l10n.mobileSomethingWentWrong,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              context.l10n.mobileUnsupportedVariant(error.variant.name),
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                Flexible(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final gameUrl = 'https://$kLichessHost/${error.gameId.value}';
-                      await launchUrl(Uri.parse(gameUrl), mode: LaunchMode.externalApplication);
-                    },
-                    icon: const Icon(Icons.open_in_browser),
-                    label: const Text('Open game in your browser'),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+    return _AnalysisScreen(options: options);
   }
 }
 
@@ -182,22 +115,24 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     final ctrlProvider = analysisControllerProvider(widget.options);
     final asyncState = ref.watch(ctrlProvider);
 
-    final appBarActions = [
-      AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      _AnalysisMenu(options: widget.options, state: asyncState),
-    ];
+    final appBarActions = [_AnalysisMenu(options: widget.options, state: asyncState)];
 
     switch (asyncState) {
       case AsyncData(:final value):
+        Widget appBarTitle;
+        if (value.archivedGame != null) {
+          final title =
+              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.label} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
+          appBarTitle = VariantAppBarTitle(variant: value.variant, title: title);
+        } else {
+          appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
+        }
+
         return WakelockWidget(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              centerTitle: false,
-              title: VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis),
-              actions: appBarActions,
-            ),
-            body: _Body(options: widget.options, controller: _tabController),
+            appBar: AppBar(centerTitle: false, title: appBarTitle, actions: appBarActions),
+            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
@@ -239,9 +174,8 @@ class _AnalysisMenu extends ConsumerWidget {
         ContextMenuAction(
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
-          onPressed: () => Navigator.of(
-            context,
-          ).push(AnalysisSettingsScreen.buildRoute(context, options: options)),
+          onPressed: () =>
+              Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
         ),
         ContextMenuAction(
           icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
@@ -277,10 +211,11 @@ class _AnalysisMenu extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller});
+  const _Body({required this.options, required this.controller, required this.tabs});
 
   final TabController controller;
   final AnalysisOptions options;
+  final List<AnalysisTab> tabs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -322,12 +257,14 @@ class _Body extends ConsumerWidget {
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
         result: result?.resultToString(pov),
+        resultColor: result?.colorFor(pov, context),
       );
       boardHeader = _PlayerWidget(
         player: headerPlayer,
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
         result: result?.resultToString(pov.opposite),
+        resultColor: result?.colorFor(pov.opposite, context),
       );
     } else if (options case Pgn()) {
       // PGN analysis - try to get player info from PGN headers
@@ -341,12 +278,17 @@ class _Body extends ConsumerWidget {
             : null;
 
         boardFooter = footerPlayer != null
-            ? _AnalysisPlayerWidget(player: footerPlayer, result: result?.resultToString(pov))
+            ? _AnalysisPlayerWidget(
+                player: footerPlayer,
+                result: result?.resultToString(pov),
+                resultColor: result?.colorFor(pov, context),
+              )
             : null;
         boardHeader = headerPlayer != null
             ? _AnalysisPlayerWidget(
                 player: headerPlayer,
                 result: result?.resultToString(pov.opposite),
+                resultColor: result?.colorFor(pov.opposite, context),
               )
             : null;
       }
@@ -359,11 +301,13 @@ class _Body extends ConsumerWidget {
         }
       },
       child: AnalysisLayout(
+        tabs: tabs,
         tabController: controller,
         pov: pov,
         sideToMove: analysisState.currentPosition.turn,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+        smallBoard: analysisPrefs.smallBoard,
         boardHeader: boardHeader,
         boardFooter: boardFooter,
         engineGaugeBuilder: showEvaluationGauge && analysisState.hasAvailableEval(enginePrefs)
@@ -375,10 +319,10 @@ class _Body extends ConsumerWidget {
             ? EngineLines(
                 filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                analyisState: analysisState,
+                analysisState: analysisState,
               )
             : null,
-        bottomBar: _BottomBar(options: options),
+        bottomBar: _BottomBar(options: options, tabController: controller),
         pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
@@ -396,7 +340,24 @@ class _Body extends ConsumerWidget {
           ),
           AnalysisTreeView(options),
           if (options case ArchivedGame())
-            ServerAnalysisSummary(options)
+            ServerAnalysisSummary(
+              serverAnalysisSource: analysisState.serverAnalysisSource,
+              playersAnalysis: analysisState.playersAnalysis,
+              pgnHeaders: analysisState.pgnHeaders,
+              acplChartParams: analysisState.acplChartData != null
+                  ? (
+                      acplChartData: analysisState.acplChartData!,
+                      division: analysisState.division,
+                      rootPly: analysisState.root.position.ply,
+                      currentNodePly: analysisState.currentPosition.ply,
+                      isOnMainline: analysisState.isOnMainline,
+                      onJumpToNode: ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .jumpToNthNodeOnMainline,
+                    )
+                  : null,
+              onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
+            )
           else if (options case ActiveCorrespondenceGame())
             ConditionalPremoves(options),
         ],
@@ -411,11 +372,13 @@ class _PlayerWidget extends StatelessWidget {
     required this.clock,
     required this.isSideToMove,
     this.result,
+    this.resultColor,
   });
 
   final Player player;
   final Duration? clock;
   final String? result;
+  final Color? resultColor;
   final bool isSideToMove;
 
   @override
@@ -426,7 +389,10 @@ class _PlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: FontWeight.bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.user != null)
@@ -437,9 +403,8 @@ class _PlayerWidget extends StatelessWidget {
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                onTap: () => Navigator.of(
-                  context,
-                ).push(UserOrProfileScreen.buildRoute(context, player.user!)),
+                onTap: () =>
+                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user!)),
               ),
             )
           else
@@ -478,9 +443,10 @@ class _Clock extends StatelessWidget {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.options});
+  const _BottomBar({required this.options, required this.tabController});
 
   final AnalysisOptions options;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -587,15 +553,7 @@ class _BottomBar extends ConsumerWidget {
                   )
                   .toList(),
               selectedItem: analysisState.variant,
-              labelBuilder: (Variant variant) => Text.rich(
-                TextSpan(
-                  children: [
-                    WidgetSpan(child: Icon(variant.icon), alignment: PlaceholderAlignment.middle),
-                    const WidgetSpan(child: SizedBox(width: 8)),
-                    TextSpan(text: variant.label),
-                  ],
-                ),
-              ),
+              labelBuilder: (variant) => VariantLabel(variant),
               onSelectedItemChanged: (Variant variant) =>
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ref
@@ -603,7 +561,6 @@ class _BottomBar extends ConsumerWidget {
                         .clearSavedStandaloneAnalysis();
                     Navigator.of(context, rootNavigator: true).pushReplacement(
                       buildScreenRoute<dynamic>(
-                        context,
                         screen: AnalysisScreen(
                           options: (options as Standalone).copyWith(variant: variant),
                         ),
@@ -629,29 +586,46 @@ class _BottomBar extends ConsumerWidget {
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
         if (options case ArchivedGame())
+          if (analysisState.canRequestServerAnalysis)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.requestAComputerAnalysis),
+              onPressed: () {
+                if (authUser == null) {
+                  showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                  return;
+                }
+                ref
+                    .read(analysisControllerProvider(options).notifier)
+                    .requestServerAnalysis()
+                    .catchError((Object e) {
+                      if (context.mounted) {
+                        showSnackBar(context, e.toString(), type: SnackBarType.error);
+                      }
+                    });
+                tabController.animateTo(2);
+              },
+            ),
+        if (options case ArchivedGame())
           if (analysisState.isComputerAnalysisAllowed)
             if (mySide != null)
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
                 onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (
-                    id: options.gameId!,
-                    initialSide: analysisState.pov,
-                  )),
+                  RetroScreen.buildRoute((id: options.gameId!, initialSide: analysisState.pov)),
                 ),
               )
             else ...[
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
-                onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.white)),
-                ),
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
               ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
-                onPressed: () => Navigator.of(context).push(
-                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.black)),
-                ),
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
               ),
             ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
@@ -661,7 +635,7 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () {
               final boardFen = analysisState.currentPosition.fen;
               Navigator.of(context).push(
-                BoardEditorScreen.buildRoute(context, (
+                BoardEditorScreen.buildRoute((
                   initialVariant: analysisState.variant,
                   initialFen: boardFen,
                 )),
@@ -692,7 +666,7 @@ class _BottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
             onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },
           ),
         // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
@@ -718,7 +692,6 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
           onPressed: () => Navigator.of(context).push(
             OfflineComputerGameScreen.buildRoute(
-              context,
               initialVariant: analysisState.variant,
               initialFen: boardFen,
             ),
@@ -728,7 +701,6 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
           onPressed: () => Navigator.of(context).push(
             OverTheBoardScreen.buildRoute(
-              context,
               initialVariant: analysisState.variant,
               initialFen: boardFen,
             ),
@@ -741,10 +713,11 @@ class _BottomBar extends ConsumerWidget {
 
 /// Player widget for PGN imports, displaying analysis player info
 class _AnalysisPlayerWidget extends StatelessWidget {
-  const _AnalysisPlayerWidget({required this.player, this.result});
+  const _AnalysisPlayerWidget({required this.player, this.result, this.resultColor});
 
   final AnalysisPlayer player;
   final String? result;
+  final Color? resultColor;
 
   @override
   Widget build(BuildContext context) {
@@ -754,7 +727,10 @@ class _AnalysisPlayerWidget extends StatelessWidget {
       child: Row(
         children: [
           if (result != null) ...[
-            Text(result!, style: const TextStyle(fontWeight: .bold)),
+            Text(
+              result!,
+              style: TextStyle(fontWeight: .bold, color: resultColor),
+            ),
             const SizedBox(width: 16.0),
           ],
           if (player.title != null) ...[

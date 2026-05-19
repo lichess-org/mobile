@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   const OfflineCorrespondenceGamesScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OfflineCorrespondenceGamesScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const OfflineCorrespondenceGamesScreen());
   }
 
   @override
@@ -27,12 +27,13 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
           orElse: () => const SizedBox.shrink(),
         ),
       ),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
+  const _Body();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
@@ -75,9 +76,10 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (lastModified, game)),
-        );
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (lastModified, game)));
       },
     );
   }

@@ -17,8 +17,8 @@ class StreamerScreen extends StatelessWidget {
 
   final IList<Streamer> streamers;
 
-  static Route<dynamic> buildRoute(BuildContext context, IList<Streamer> streamers) {
-    return buildScreenRoute(context, screen: StreamerScreen(streamers: streamers));
+  static Route<dynamic> buildRoute(IList<Streamer> streamers) {
+    return buildScreenRoute(screen: StreamerScreen(streamers: streamers));
   }
 
   @override

@@ -32,7 +32,7 @@ class RecentGamesWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
     return recentGames.when(
       data: (data) {
@@ -45,20 +45,16 @@ class RecentGamesWidget extends ConsumerWidget {
           hasLeading: true,
           onHeaderTap: nbOfGames > list.length
               ? () {
-                  Navigator.of(context).push(
-                    GameHistoryScreen.buildRoute(
-                      context,
-                      user: user,
-                      isOnline: connectivity.value?.isOnline == true,
-                    ),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(GameHistoryScreen.buildRoute(user: user, isOnline: isOnline));
                 }
               : null,
           children: [for (final item in list) GameListTile(item: item)],
         );
       },
       error: (error, stackTrace) {
-        debugPrint('SEVERE: [RecentGames] could not recent games; $error\n$stackTrace');
+        debugPrint('SEVERE: [RecentGames] could not load recent games: $error\n$stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load recent games.'),

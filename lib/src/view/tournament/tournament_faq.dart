@@ -7,8 +7,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 class TournamentFAQScreen extends StatelessWidget {
   const TournamentFAQScreen({super.key});
 
-  static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const TournamentFAQScreen());
+  static Route<void> buildRoute() {
+    return buildScreenRoute(screen: const TournamentFAQScreen());
   }
 
   @override

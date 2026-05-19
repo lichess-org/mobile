@@ -53,9 +53,6 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
 
     _socketClient = ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
 
-    await _socketClient.firstConnection;
-    _socketWatch(repoGames);
-
     _socketReadySubscription?.cancel();
     _socketReadySubscription = _socketClient.connectedStream.listen((_) async {
       final repoGames = await ref.read(tvRepositoryProvider).channels();
@@ -64,6 +61,9 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    await _socketClient.firstConnection;
+    _socketWatch(repoGames);
 
     return repoGames.map((channel, game) {
       return MapEntry(

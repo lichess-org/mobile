@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,8 +30,8 @@ import 'package:share_plus/share_plus.dart';
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ProfileScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ProfileScreen());
   }
 
   @override
@@ -49,11 +50,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final online = ref.watch(onlineStatusProvider).value ?? false;
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        titleSpacing: 0,
         title: account.when(
-          data: (user) =>
-              user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+          data: (user) => user == null
+              ? const SizedBox.shrink()
+              : ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: UserAvatar(user.lightUser, radius: 16),
+                  title: UserFullNameWidget(user: user.lightUser, showFlair: false),
+                  subtitle: Text(online == true ? context.l10n.online : context.l10n.offline),
+                ),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -61,7 +70,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           SemanticIconButton(
             icon: const Icon(Icons.edit),
             semanticsLabel: context.l10n.editProfile,
-            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
           ),
           account.when(
             data: (user) => user == null
@@ -109,12 +118,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {
-                          Navigator.of(context).push(
-                            GameBookmarksScreen.buildRoute(
-                              context,
-                              nbBookmarks: user.count!.bookmark,
-                            ),
-                          );
+                          Navigator.of(
+                            context,
+                          ).push(GameBookmarksScreen.buildRoute(nbBookmarks: user.count!.bookmark));
                         },
                       ),
                     ],

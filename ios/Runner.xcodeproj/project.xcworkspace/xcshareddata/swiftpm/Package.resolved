@@ -1,0 +1,24 @@
+{
+  "originHash" : "a5b9b5d2caf4f0d5fca77f5bae5cd533e4df22d2375aecab75a0f4506a9e6f35",
+  "pins" : [
+    {
+      "identity" : "feedkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nmdias/FeedKit",
+      "state" : {
+        "revision" : "e55b2cafaf67370092c91193cfb8a8b008e05888",
+        "version" : "10.4.0"
+      }
+    },
+    {
+      "identity" : "flutter-chessground",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lichess-org/flutter-chessground",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8f986f7107ceb9900ad6af1b981313fc6741be5b"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -33,6 +33,7 @@ platform :ios do
     sync_code_signing(
       type: "appstore",
       readonly: is_ci,
+      app_identifier: ["org.lichess.mobileV2", "org.lichess.mobileV2.LichessWidgets"],
       api_key: ENV['APP_STORE_KEY_JSON'],
       keychain_name: ENV['MATCH_KEYCHAIN_NAME'],
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],

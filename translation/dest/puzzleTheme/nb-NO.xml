@@ -26,6 +26,8 @@
   <string name="castlingDescription">Få kongen i sikkerhet og gjør tårnet klart for angrep.</string>
   <string name="capturingDefender">Slå forsvareren</string>
   <string name="capturingDefenderDescription">Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.</string>
+  <string name="collinearMove">Kollineært trekk</string>
+  <string name="collinearMoveDescription">To brikker truer hverandre, og én av dem flytter langs angrepslinjen uten å slå.</string>
   <string name="cornerMate">Hjørnematt</string>
   <string name="cornerMateDescription">Press kongen inn i hjørnet ved hjelp av tårn eller dronning, og la springer sette matt.</string>
   <string name="crushing">Knusende</string>
@@ -77,7 +79,7 @@
   <string name="swallowstailMateDescription">Et mattmønster som visuelt ligner halen til en svale, med en form som minner om en V.</string>
   <string name="triangleMate">Trekantmatt</string>
   <string name="triangleMateDescription">Dronning og tårn, på tilstøtende felt til motstanderens konge, står på samme rad eller linje med ett felt mellom seg, slik at de tre brikkene danner en trekant.</string>
-  <string name="vukovicMate">Vuković-matt</string>
+  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">Vuković-matt</string>
   <string name="vukovicMateDescription">Tårn og springer samarbeider for å sette kongen matt. Tårnet gir matt med støtte fra en tredje brikke, mens springeren brukes til å blokkere kongens fluktfelter.</string>
   <string name="knightEndgame">Springersluttspill</string>
   <string name="knightEndgameDescription">Et sluttspill med kun springere og bønder.</string>

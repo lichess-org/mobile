@@ -49,24 +49,27 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   final sri = storedSri ?? genRandomString(12);
 
   AuthUser? authUser = await authStorage.read();
+  final token = authUser?.token;
 
-  if (authUser != null) {
+  if (token != null) {
     final userAgent = makeUserAgent(pInfo, deviceInfo, sri, null);
     final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
-    try {
-      final data = await client
-          .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
-          .timeout(const Duration(seconds: 5));
-      final isValid = data[authUser.token] != null;
-      if (!isValid) {
-        await ref.read(authStorageProvider).delete();
-        authUser = null;
-      }
-    } catch (_) {
-      // in case of network error, assume the authUser is still valid
-    } finally {
-      client.close();
-    }
+    client
+        .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: token)
+        .timeout(const Duration(seconds: 5))
+        .then((data) {
+          final isValid = data[token] != null;
+          if (!isValid) {
+            authStorage.delete();
+            authUser = null;
+          }
+        })
+        .catchError((_) {
+          // in case of network error, assume the authUser is still valid
+        })
+        .whenComplete(() {
+          client.close();
+        });
   }
 
   final physicalMemory = await System.instance.getTotalRam() ?? 256.0;

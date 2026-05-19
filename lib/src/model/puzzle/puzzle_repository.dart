@@ -170,11 +170,20 @@ class PuzzleRepository {
     );
   }
 
-  Future<IList<PuzzleOpeningFamily>> puzzleOpenings() {
-    return client.readJson(
+  Future<IList<PuzzleOpeningFamily>> puzzleOpenings({bool alphabetical = false}) async {
+    final result = await client.readJson(
       Uri(path: '/training/openings'),
       headers: {'Accept': 'application/json'},
       mapper: _puzzleOpeningFromJson,
+    );
+    if (!alphabetical) return result;
+    return result.sort((a, b) => a.name.compareTo(b.name));
+  }
+
+  Future<IList<PuzzleId>> puzzleReplay(int days, String theme) {
+    return client.readJson(
+      Uri(path: '/api/puzzle/replay/$days/$theme'),
+      mapper: _puzzleReplayFromJson,
     );
   }
 
@@ -241,6 +250,14 @@ sealed class PuzzleStormResponse with _$PuzzleStormResponse {
 }
 
 // --
+
+IList<PuzzleId> _puzzleReplayFromJson(Map<String, dynamic> json) {
+  return pick(
+    json,
+    'replay',
+    'remaining',
+  ).asListOrThrow((p) => PuzzleId(p.asStringOrThrow())).toIList();
+}
 
 PuzzleHistoryEntry _puzzleActivityFromJson(Map<String, dynamic> json) =>
     _historyPuzzleFromPick(pick(json).required());

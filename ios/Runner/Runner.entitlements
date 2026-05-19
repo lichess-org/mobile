@@ -4,5 +4,13 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:lichess.org</string>
+	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.org.lichess.mobileV2.LichessWidgets</string>
+	</array>
 </dict>
 </plist>

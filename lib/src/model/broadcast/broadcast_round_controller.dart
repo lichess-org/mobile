@@ -62,8 +62,6 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    await _socketClient.firstConnection;
-
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       if (ref.mounted && state.value?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
@@ -71,6 +69,8 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
         });
       }
     });
+
+    await _socketClient.firstConnection;
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
@@ -123,7 +123,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
         _handleAddNodeEvent(event);
       // Sent when a new board is added
       case 'addChapter':
-        _handleAddBoardEvent(event);
+        _handleAddBoardEvent();
       // Sent when the state of games changes
       case 'chapters':
         _handleGamesChangeEvent(event);
@@ -176,7 +176,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
     }
   }
 
-  void _handleAddBoardEvent(SocketEvent event) {
+  void _handleAddBoardEvent() {
     _syncRound();
   }
 

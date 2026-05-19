@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -65,11 +65,13 @@ class LearnTabScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.learnMenu),
-          centerTitle: true,
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: const AccountDrawer(),
         body: const _Body(),
       ),
     );
@@ -81,7 +83,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final authUser = ref.watch(authControllerProvider);
     final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
@@ -104,17 +106,15 @@ class _Body extends ConsumerWidget {
                 onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(CoordinateTrainingScreen.buildRoute(context)),
+                ).push(CoordinateTrainingScreen.buildRoute()),
               ),
             ],
           ),
           if (isOnline) ...[
             ListSection(
               header: Text(context.l10n.studyMenu),
-              onHeaderTap: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(StudyListScreen.buildRoute(context)),
+              onHeaderTap: () =>
+                  Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
               hasLeading: true,
               children: [
                 ...(switch (ref.watch(_hotStudiesProvider)) {
@@ -140,12 +140,9 @@ class _Body extends ConsumerWidget {
                           : null,
                       title: Text(context.l10n.studyMyStudies),
                       onTap: isOnline
-                          ? () => Navigator.of(context).push(
-                              StudyListScreen.buildRoute(
-                                context,
-                                initialCategory: StudyCategory.mine,
-                              ),
-                            )
+                          ? () => Navigator.of(
+                              context,
+                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.mine))
                           : null,
                     ),
                   if (haveIFavoriteStudies)
@@ -156,12 +153,9 @@ class _Body extends ConsumerWidget {
                           : null,
                       title: Text(context.l10n.studyMyFavoriteStudies),
                       onTap: isOnline
-                          ? () => Navigator.of(context).push(
-                              StudyListScreen.buildRoute(
-                                context,
-                                initialCategory: StudyCategory.likes,
-                              ),
-                            )
+                          ? () => Navigator.of(
+                              context,
+                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.likes))
                           : null,
                     ),
                 ],

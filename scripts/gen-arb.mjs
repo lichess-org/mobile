@@ -19,6 +19,7 @@ const modules = [
   // mobile is the only module managed by this project (of which we can edit the source)
   'mobile',
   // below are modules from lichess/lila
+  'variant',
   'activity',
   'arena',
   'broadcast',
@@ -39,17 +40,31 @@ const modules = [
   'team',
   'timeago',
   'tfa',
+  'ublog',
 ]
 
 // list of keys (per module) to include in the ARB file
 // If a module is not listed here, all keys will be included
 const whiteLists = {
+  'ublog': ['community', 'xBlog'],
   'patron': ['donate', 'lichessPatron', 'becomePatron'],
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
   'team': ['nbLeadersPerTeam','battleOfNbTeams','incorrectEntryCode'],
-  'tfa': ['twoFactorAuth']
+  'tfa': ['twoFactorAuth'],
+  'variant': [
+    'standardTitle',
+    'chess960Title',
+    'kingOfTheHillTitle',
+    'threeCheckTitle',
+    'antichessTitle',
+    'atomicTitle',
+    'hordeTitle',
+    'racingKingsTitle',
+    'crazyhouseTitle',
+    'fromPositionTitle',
+  ],
 }
 
 // Order of locales with variants matters: the fallback must always be first
@@ -198,7 +213,7 @@ function loadTranslations(module, locale) {
 
 // in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
-  return str.replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
+  return str.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\'/g, '\'').replace(/%%/g, '%')
 }
 
 function fixKey(str, module) {

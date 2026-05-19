@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -102,6 +102,9 @@ class GameBody extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
@@ -126,6 +129,7 @@ class GameBody extends ConsumerWidget {
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.black.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
@@ -159,14 +163,17 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.black
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),
                 )
-              : gameState.game.correspondenceClock != null
+              : gameState.game.correspondenceClock != null &&
+                    gameState.game.lastPosition.fullmoves > 1
               ? CorrespondenceClock(
                   duration: gameState.game.correspondenceClock!.black,
                   active: gameState.activeClockSide == Side.black,
+                  resetId: gameState.game.correspondenceClock!.resetId,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
@@ -174,6 +181,7 @@ class GameBody extends ConsumerWidget {
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
+          socketUri: GameController.socketUri(gameState.gameFullId),
           matchupScore: matchupData?.users[gameState.game.white.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
@@ -207,14 +215,17 @@ class GameBody extends ConsumerWidget {
                         emergencyThreshold: youAre == Side.white
                             ? gameState.game.meta.clock?.emergency
                             : null,
+                        clockTenths: clockTenths,
                       );
                     },
                   ),
                 )
-              : gameState.game.correspondenceClock != null
+              : gameState.game.correspondenceClock != null &&
+                    gameState.game.lastPosition.fullmoves > 1
               ? CorrespondenceClock(
                   duration: gameState.game.correspondenceClock!.white,
                   active: gameState.activeClockSide == Side.white,
+                  resetId: gameState.game.correspondenceClock!.resetId,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : null,
@@ -517,10 +528,13 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.skip_next,
                 onTap: ongoingGames.maybeWhen(
                   data: (games) {
-                    final nextTurn = games
-                        .whereNot((g) => g.fullId == id)
-                        .firstWhereOrNull((g) => g.isMyTurn);
-                    return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
+                    final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
+                    if (gamesWithMyTurn.isEmpty) return null;
+                    final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
+                    // If the current game is the only one where it's my turn, disable.
+                    if (currentIndex != -1 && gamesWithMyTurn.length == 1) return null;
+                    final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
+                    return () => onLoadGameCallback(gamesWithMyTurn[nextIndex].fullId);
                   },
                   orElse: () => null,
                 ),
@@ -530,9 +544,7 @@ class _GameBottomBar extends ConsumerWidget {
                 icon: Icons.biotech,
                 badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                  Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
                 },
               ),
             ] else if (gameState.game.finished)
@@ -621,9 +633,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
         if (gameState.game.abortable)
@@ -729,9 +739,7 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(TournamentScreen.buildRoute(context, gameState.tournament!.id));
+              Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
             },
           ),
       ],

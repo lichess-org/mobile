@@ -30,6 +30,26 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   return puzzleService.nextPuzzle(userId: authUser?.user.id, angle: angle);
 }, name: 'NextPuzzleProvider');
 
+/// Fetches the list of puzzles to replay for the given number of [days] and [theme].
+final puzzleReplayProvider = FutureProvider.autoDispose
+    .family<PuzzleContext?, ({int days, String theme})>((
+      Ref ref,
+      ({int days, String theme}) params,
+    ) async {
+      final authUser = ref.watch(authControllerProvider);
+      if (authUser == null) return null;
+      final repo = ref.read(puzzleRepositoryProvider);
+      final remaining = await repo.puzzleReplay(params.days, params.theme);
+      if (remaining.isEmpty) return null;
+      final puzzle = await repo.fetch(remaining.first);
+      return PuzzleContext(
+        puzzle: puzzle,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        userId: authUser.user.id,
+        replayRemaining: remaining.removeAt(0),
+      );
+    }, name: 'PuzzleReplayProvider');
+
 /// Fetches a storm of puzzles.
 final stormProvider = FutureProvider.autoDispose<PuzzleStormResponse>((Ref ref) {
   return ref.read(puzzleRepositoryProvider).storm();
@@ -115,9 +135,12 @@ final puzzleThemesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey, Puz
 }, name: 'PuzzleThemesProvider');
 
 /// Fetches available puzzle openings.
-final puzzleOpeningsProvider = FutureProvider.autoDispose<IList<PuzzleOpeningFamily>>((Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleOpenings(),
-    const Duration(days: 1),
-  );
-}, name: 'PuzzleOpeningsProvider');
+final puzzleOpeningsProvider = FutureProvider.autoDispose
+    .family<IList<PuzzleOpeningFamily>, PuzzleOpeningSort>((Ref ref, PuzzleOpeningSort sort) {
+      return ref.withClientCacheFor(
+        (client) => PuzzleRepository(
+          client,
+        ).puzzleOpenings(alphabetical: sort == PuzzleOpeningSort.alphabetical),
+        const Duration(days: 1),
+      );
+    }, name: 'PuzzleOpeningsProvider');

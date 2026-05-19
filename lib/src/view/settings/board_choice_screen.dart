@@ -9,8 +9,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 class BoardChoiceScreen extends StatelessWidget {
   const BoardChoiceScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BoardChoiceScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BoardChoiceScreen());
   }
 
   @override

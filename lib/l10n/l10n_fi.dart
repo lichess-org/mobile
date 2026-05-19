@@ -9,6 +9,9 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Käyttäjätunnuksen asetukset';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\\nNäet sen etusivulla.';
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
   String get mobilePreviousPage => 'Edellinen';
 
   @override
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
+
+  @override
+  String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
+
+  @override
+  String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
+
+  @override
+  String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -1028,6 +1061,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastKnockouts => 'Pudotuspelit';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Alle $param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Piditkö tästä tehtävästä?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Anna arviosi, niin seuraava latautuu!';
 
   @override
   String get puzzleUpVote => 'Arvioi tehtävä hyväksi';
@@ -2566,6 +2606,16 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Viimeaikaiset pelit';
 
   @override
@@ -2651,9 +2701,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showVariationArrows => 'Näytä muunnelman nuolet';
 
   @override
-  String get evaluationGauge => 'Arviomittari';
-
-  @override
   String get visualMotifs => 'Visuaaliset motiivit';
 
   @override
@@ -2678,13 +2725,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get searchTimeDescription => 'Aseta uusien asemien arvioimisaika';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Säikeitä';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Aseta tähän prosessorisi säikeiden määrää pienempi luku, rastit osoittavat hyvän ja turvallisen valinnan';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Mitä enemmän säikeitä, sitä enemmän akku kuluu analyysin parantamiseksi';
 
   @override
   String get cpus => 'Suorittimia';
@@ -2693,7 +2740,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get memory => 'Muistia';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Korkeammat arvot saattavat parantaa suorituskykyä';
 
   @override
   String get infiniteAnalysis => 'Loputon analyysi';
@@ -2931,15 +2978,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get checkSpamFolder => 'Tarkistathan myös roskapostikansiosi, koska se saattaa joutua sinne. Jos niin käy, merkitse, että viesti ei ole roskaposti.';
 
   @override
-  String get emailForSignupHelp => 'Jos mikään muu ei auta, lähetä meille tällainen sähköposti:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopioi ja liitä yllä oleva teksti ja lähetä se osoitteeseen $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Jos et löydä vahvistussähköpostia, lähetä meille sähköposti osoitteeseen $param, niin me vahvistamme käyttäjätunnuksesi.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Saat pian sähköpostitse ohjeet siihen, miten voit saattaa rekisteröitymisesi loppuun.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Satunnainen shakki960-asema';
+
+  @override
   String get startPosition => 'Alkuasema';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Tunnistautumiskoodi ei kelpaa';
+
+  @override
+  String get clearField => 'Tyhjennä kenttä';
+
+  @override
+  String get orSeparator => 'Tai';
+
+  @override
+  String get logInByEmail => 'Kirjaudu sisään sähköpostilla';
 
   @override
   String get emailMeALink => 'Lähetä minulle linkki';
@@ -4659,9 +4712,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Vakuutan että noudatan Lichessin sääntöjä.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Hae tai aloita uusi keskustelu';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ei tuloksia haulla \"$param\"';
+  }
 
   @override
   String get tags => 'Tunnisteet';
@@ -6511,4 +6566,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaksivaiheinen tunnistautuminen';
+
+  @override
+  String get ublogCommunity => 'Yhteisön blogit';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Käyttäjän $param blogi';
+  }
 }

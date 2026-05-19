@@ -9,6 +9,9 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Обліковий запис';
+
+  @override
   String get mobileAccountPreferences => 'Налаштування облікового запису';
 
   @override
@@ -165,7 +168,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Сховати дошку';
+  String get mobileSettingsPickAnImageHideBoard => 'Заховати дошку';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Показати дошку';
@@ -275,13 +278,43 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Довідник дебютів недоступний в режимі офлайн.';
 
   @override
-  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\\nВи можете перейти до неї з головної сторінки.';
+  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.';
 
   @override
   String get mobilePreviousPage => 'Попередня';
 
   @override
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
+
+  @override
+  String get variantStandardTitle => 'Стандартні правила шахів (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Початкова позиція фігур задається випадково.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Перемістіть свого короля до центру, щоб перемогти.';
+
+  @override
+  String get variantThreeCheckTitle => 'Поставте шах супернику 3 рази, щоб перемогти.';
+
+  @override
+  String get variantAntichessTitle => 'Утратьте всі свої фігури (або хай вам поставлять пат), щоб перемогти.';
+
+  @override
+  String get variantAtomicTitle => 'Підірвіть короля суперника, щоб перемогти.';
+
+  @override
+  String get variantHordeTitle => 'Одна сторона має багато пішаків, а інша — звичайну армію.';
+
+  @override
+  String get variantRacingKingsTitle => 'Перемістіть короля на інший бік дошки, щоб перемогти.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Замість звичайного ходу можна поставити захоплену ворожу фігуру.';
+
+  @override
+  String get variantFromPositionTitle => 'Звичайні шахи із власної позиції';
 
   @override
   String get activityActivity => 'Активність';
@@ -1068,6 +1101,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastKnockouts => 'Нокаути';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'До$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'До$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1584,7 +1627,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleMotifs => 'Мотиви';
 
   @override
-  String get puzzleAdvanced => 'Просунутий';
+  String get puzzleAdvanced => 'Просунуті Мотиви';
 
   @override
   String get puzzleLengths => 'Довжина';
@@ -1606,9 +1649,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Вам сподобалась ця задача?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Голосуйте, щоб перейти далі!';
 
   @override
   String get puzzleUpVote => 'Вподобати задачу';
@@ -2074,7 +2114,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замість очікуваного ходу, спочатку робиться інший хід з безпосередньою атакою, на яку суперник має відповісти. Також відомий як \"Zwischenzug\" або \"In between\".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Мат: Смертельна коробка';
+  String get puzzleThemeKillBoxMate => 'Мат \"Смертельна коробка\"';
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
@@ -2086,7 +2126,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Тура ставить мат королю, поки слон закриває поля для втечі.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Мат Мерфі';
+  String get puzzleThemeMorphysMate => 'Мат Морфі';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Слон ставить шах королю, а тура закриває поля для втечі.';
@@ -2325,10 +2365,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsSettings => 'Налаштування';
 
   @override
-  String get settingsCloseAccount => 'Закрити обліковий запис';
+  String get settingsCloseAccount => 'Видалити обліковий запис';
 
   @override
-  String get settingsManagedAccountCannotBeClosed => 'Ваш обліковий запис керований і не може бути закритим.';
+  String get settingsManagedAccountCannotBeClosed => 'Вашим обліковим записом керує інший користувач, тож його не можна видалити.';
 
   @override
   String get settingsCantOpenSimilarAccount => 'Ви не зможете створити новий обліковий запис з такою ж назвою, навіть зі зміною регістру.';
@@ -2337,7 +2377,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Скасувати та зберегти мій обліковий запис';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Ви впевнені, що хочете закрити свій обліковий запис?';
+  String get settingsCloseAccountAreYouSure => 'Ви впевнені, що хочете видалити свій обліковий запис?';
 
   @override
   String get settingsThisAccountIsClosed => 'Цей обліковий запис видалено.';
@@ -2622,6 +2662,16 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Мінімальний рейтинг $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Максимальний рейтинг $param';
+  }
+
+  @override
   String get recentGames => 'Останні ігри';
 
   @override
@@ -2705,9 +2755,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Показати стрілки для варіантів';
-
-  @override
-  String get evaluationGauge => 'Шкала оцінки';
 
   @override
   String get visualMotifs => 'Візуальні підказки';
@@ -2987,15 +3034,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get checkSpamFolder => 'Також перевірте папку \"Спам\", лист міг потрапити туди. Якщо так, то позначте його як не спам.';
 
   @override
-  String get emailForSignupHelp => 'Якщо все інше не спрацювало, то надішліть нам цей електронний лист:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Скопіюйте та вставте текст зверху й відправте на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Якщо ви не можете знайти лист підтвердження, відправте лист на $param, і ми підтвердимо ваш обліковий запис.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Незабаром ми повернемося до вас, щоб допомогти вам завершити реєстрацію.';
 
   @override
   String accountConfirmed(String param) {
@@ -3567,6 +3608,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Випадкова позиція в шахи-960';
+
+  @override
   String get startPosition => 'Початкова позиція';
 
   @override
@@ -3791,6 +3835,15 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Недійсний код автентифікації';
+
+  @override
+  String get clearField => 'Очистити поле';
+
+  @override
+  String get orSeparator => 'або';
+
+  @override
+  String get logInByEmail => 'Увійти через електронну пошту';
 
   @override
   String get emailMeALink => 'Надішліть мені посилання';
@@ -4196,7 +4249,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tournamentHomeTitle => 'Шаховий турнір із різними контролем часу та варіантами';
 
   @override
-  String get tournamentHomeDescription => 'Грайте у швидкі шахи на турнірі! Приєднуйтеся до запланованих офіційних турнірів або створіть власний. Куля, бліц, класичні шахи, шахи Фішера, \"Цар гори\", \"Три шахи\" та інші варіанти забезпечать нескінченне задоволення.';
+  String get tournamentHomeDescription => 'Грайте на швидких турнірах із шахів! Приєднуйтеся до запланованих офіційних турнірів або створіть власний. Куля, бліц, класичні шахи, шахи-960, цар гори, три шахи та інші варіанти нададуть нескінченне задоволення.';
 
   @override
   String get tournamentNotFound => 'Турнір не знайдено';
@@ -4715,9 +4768,6 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Я погоджуюся, що я буду слідувати усім правилам Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Шукати або розпочати бесіду';
 
   @override
@@ -5075,6 +5125,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистити пошук';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Нічого не знайдено для «$param»';
+  }
 
   @override
   String get tags => 'Теги';
@@ -6403,7 +6458,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyVariantsAreSupportedText => 'Так, Ви можете вивчати Crazyhouse<br>та усі інші режими Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Розділі зберігаються назавжди.<br>Насолоджуйтесь організацією власного шахового контенту!';
+  String get studyChapterConclusionText => 'Розділи зберігаються назавжди.<br>Насолоджуйтесь організацією власного шахового контенту!';
 
   @override
   String get studyDoubleDefeat => 'Подвійна поразка';
@@ -6701,4 +6756,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двофакторна автентифікація';
+
+  @override
+  String get ublogCommunity => 'Спільнота';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Блог $param';
+  }
 }

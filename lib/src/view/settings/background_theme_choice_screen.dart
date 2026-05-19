@@ -24,8 +24,8 @@ import 'package:path/path.dart';
 class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BackgroundChoiceScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BackgroundChoiceScreen());
   }
 
   @override
@@ -492,11 +492,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                           ? context.l10n.mobileSettingsPickAnImageHideBoard
                           : context.l10n.mobileSettingsPickAnImageShowBoard,
                     ),
-                    onPressed: () => {
-                      setState(() {
-                        showBoard = !showBoard;
-                      }),
-                    },
+                    onPressed: () => setState(() {
+                      showBoard = !showBoard;
+                    }),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,

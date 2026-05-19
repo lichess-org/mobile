@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -21,7 +22,8 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:logging/logging.dart';
@@ -79,7 +81,8 @@ final retroControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'RetroControllerProvider',
     );
 
-class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMixin {
+class RetroController extends AsyncNotifier<RetroState>
+    with EngineEvaluationMixin, ServerAnalysisMixin {
   RetroController(this.options);
 
   final RetroOptions options;
@@ -90,45 +93,34 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
+  Timer? _incorrectMoveTimer;
+
   @override
   @protected
   late SocketClient socketClient;
 
   @override
   @protected
-  Node get positionTree => _root;
+  Root get positionTree => _root;
 
   @override
   Future<RetroState> build() async {
-    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
-
     ref.onDispose(() {
-      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
+      _incorrectMoveTimer?.cancel();
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
-    _game = await ref.watch(archivedGameProvider(options.id).future);
+    // Don't use archivedGameProvider, as its value gets cached when we watch it in AnalysisController,
+    // so when a server analysis is already running, _game.serverAnalysis would still be null.
+    // Request directly from the API instead to get the latest value.
+    _game = await ref.read(gameRepositoryProvider).getGame(options.id);
 
     _root = _game.makeTree();
 
-    if (_game.serverAnalysis == null) {
-      await serverAnalysisService.requestAnalysis(options.id);
-
-      _serverAnalysisCompleter.future.timeout(
-        kMaxWaitForServerAnalysis,
-        onTimeout: () {
-          _logger.warning(
-            'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-          );
-          state = AsyncError(
-            Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-            StackTrace.current,
-          );
-        },
-      );
-
+    if (_game.playersAnalysis == null) {
       final retroState = RetroState(
+        gameId: options.id,
         serverAnalysisAvailable: false,
         mistakes: const IList.empty(),
         currentMistakeIndex: 0,
@@ -148,9 +140,29 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
 
       state = AsyncValue.data(retroState);
 
-      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+      if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
+        requestServerAnalysis().catchError((Object e, StackTrace s) {
+          _logger.warning('Failed to request server analysis', e, s);
+          state = AsyncError(e, s);
+        });
+      }
 
-      return retroState;
+      unawaited(
+        _serverAnalysisCompleter.future.timeout(
+          kMaxWaitForServerAnalysis,
+          onTimeout: () {
+            _logger.warning(
+              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+            );
+            state = AsyncError(
+              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+              StackTrace.current,
+            );
+          },
+        ),
+      );
+
+      return state.requireValue;
     }
 
     state = AsyncData(await _computeMistakes(options.initialSide));
@@ -221,8 +233,9 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     )).nonNulls.toIList();
 
     return RetroState(
+      gameId: options.id,
       serverAnalysisAvailable: true,
-      mistakes: mistakes.toIList(),
+      mistakes: mistakes,
       currentMistakeIndex: 0,
       feedback: mistakes.isNotEmpty ? RetroFeedback.findMove : RetroFeedback.done,
       mainlinePath: _root.mainlinePath,
@@ -428,6 +441,7 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
+        root: recomputeRootView ? _root.view : state.requireValue.root,
         currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
@@ -442,7 +456,8 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
           if (state.currentMistake!.isSolution(state.currentNode)) {
             _onCorrectMove();
           } else if (state.currentPosition == state.currentMistake!.userBranch.position) {
-            Timer(const Duration(milliseconds: 500), () {
+            _incorrectMoveTimer?.cancel();
+            _incorrectMoveTimer = Timer(const Duration(milliseconds: 500), () {
               _onIncorrectMove();
             });
           } else {
@@ -457,22 +472,19 @@ class RetroController extends AsyncNotifier<RetroState> with EngineEvaluationMix
     }
   }
 
-  Future<void> _listenToServerAnalysisEvents() async {
+  @override
+  Future<void> onServerAnalysisEvent(ServerEvalEvent event) async {
     if (!state.hasValue) return;
 
-    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
-    if (event != null && event.$1 == options.id) {
-      ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
-      final progress = event.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
-      state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
+    final progress = event.evals.where((e) => e.hasEval).length / _root.mainline.length;
+    state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
-      if (event.$2.isAnalysisComplete) {
-        if (_serverAnalysisCompleter.isCompleted == false) {
-          _serverAnalysisCompleter.complete();
-        }
-        state = AsyncData(await _computeMistakes(options.initialSide));
-        requestEval();
+    if (event.isAnalysisComplete) {
+      if (_serverAnalysisCompleter.isCompleted == false) {
+        _serverAnalysisCompleter.complete();
       }
+      state = AsyncData(await _computeMistakes(options.initialSide));
+      requestEval();
     }
   }
 }
@@ -481,7 +493,11 @@ enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, do
 
 @freezed
 sealed class RetroState
-    with _$RetroState, AnalysisExplosionMixin, EvaluationMixinState<RetroState>
+    with
+        _$RetroState,
+        AnalysisExplosionMixin,
+        EvaluationMixinState<RetroState>,
+        ServerAnalysisMixinState
     implements CommonAnalysisState {
   const RetroState._();
 
@@ -490,6 +506,7 @@ sealed class RetroState
       copyWith(engineInThreatMode: engineInThreatMode);
 
   const factory RetroState({
+    required GameId gameId,
     required bool serverAnalysisAvailable,
 
     /// Progress of server analysis for the whole game, from 0.0 to 1.0.
@@ -509,6 +526,9 @@ sealed class RetroState
     NormalMove? promotionMove,
     @Default(false) bool engineInThreatMode,
   }) = _RetroState;
+
+  @override
+  ServerAnalysisSource get serverAnalysisSource => ServerAnalysisSource.game(gameId: gameId);
 
   @override
   bool get alwaysRequestCloudEval => false;
@@ -570,7 +590,7 @@ sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrent
       return RetroCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
-        isRoot: node is Root,
+        isRoot: false,
         eval: node.eval,
         serverEval: node.externalEval,
         nags: IList(node.nags),

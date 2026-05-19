@@ -9,6 +9,9 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileAccount => 'Λογαριασμός';
+
+  @override
   String get mobileAccountPreferences => 'Ρυθμίσεις';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.';
 
   @override
-  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
+  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
 
   @override
   String get mobilePreviousPage => 'Προηγούμενη';
 
   @override
   String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
+
+  @override
+  String get variantStandardTitle => 'Πρότυποι κανόνες του σκακιού (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Η αρχική θέση των κομματιών της πρώτης και τελευταίας γραμμής είναι τυχαία.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Φέρτε τον βασιλιά στο κέντρο της σκακιέρας για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantThreeCheckTitle => 'Κάντε σαχ 3 φορές για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantAntichessTitle => 'Η πλευρά που χάνει πρώτη όλα τα κομμάτια της ή δεν μπορεί να παίξει καμία κίνηση (πατ) κερδίζει την παρτίδα.';
+
+  @override
+  String get variantAtomicTitle => 'Ανατινάξτε τον αντίπαλο βασιλιά για να κερδίσετε.';
+
+  @override
+  String get variantHordeTitle => 'Η μία πλευρά έχει πολλά πιόνια, ενώ η άλλη έχει κανονική διάταξη σκακιού.';
+
+  @override
+  String get variantRacingKingsTitle => 'Κερδίζει ο βασιλιάς που φτάνει μέχρι την άλλη άκρη της σκακιέρας.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Τα αιχμαλωτισμένα κομμάτια μπορούν να «φυτευτούν» πάλι στη σκακιέρα.';
+
+  @override
+  String get variantFromPositionTitle => 'Κανονικό σκάκι από καθορισμένη θέση';
 
   @override
   String get activityActivity => 'Δραστηριότητα';
@@ -1028,6 +1061,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastKnockouts => 'Νοκ άουτ';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Κ$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Κ$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτό το τακτικό;';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
 
   @override
   String get puzzleUpVote => 'Μου άρεσε το τακτικό';
@@ -2566,6 +2606,16 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Πρόσφατα παιχνίδια';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Εμφάνιση βελών για βαριάντες';
-
-  @override
-  String get evaluationGauge => 'Δείκτης αξιολόγησης';
 
   @override
   String get visualMotifs => 'Οπτικά μοτίβα';
@@ -2931,15 +2978,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get checkSpamFolder => 'Επίσης, ελέγξτε τον φάκελο με τα ανεπιθύμητα email. Αν το email που στείλαμε βρίσκεται εκεί, αναφέρετέ το ως μη ανεπιθύμητο.';
 
   @override
-  String get emailForSignupHelp => 'Αν όλα τα παραπάνω αποτύχουν, στείλτε μας το εξής email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Αντιγράψτε και επικολλήστε το παραπάνω κείμενο και στείλτε το στη διεύθυνση $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Αν δεν μπορείτε να βρείτε το email επιβεβαίωσης, στείλτε ένα email στο $param και θα επιβεβαιώσουμε τον λογαριασμό σας για εσάς.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Θα επανέλθουμε σύντομα σε σας για να σας βοηθήσουμε να ολοκληρώσετε την εγγραφή σας.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Τυχαία θέση Chess960';
+
+  @override
   String get startPosition => 'Αρχική διάταξη';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Μη έγκυρος κωδικός επαλήθευσης';
+
+  @override
+  String get clearField => 'Καθαρισμός πεδίου';
+
+  @override
+  String get orSeparator => 'Ή';
+
+  @override
+  String get logInByEmail => 'Συνδεθείτε μέσω email';
 
   @override
   String get emailMeALink => 'Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου';
@@ -4659,9 +4712,6 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Δηλώνω ότι θα συμμορφωθώ με όλες τις πολιτικές του Lichess.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Αναζήτηση ή έναρξη νέας συνομιλίας';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Εκκαθάριση πεδίου αναζήτησης';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Δε βρέθηκαν αποτελέσματα για το «$param»';
+  }
 
   @override
   String get tags => 'Ετικέτες';
@@ -6511,4 +6566,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
+
+  @override
+  String get ublogCommunity => 'Κοινότητα';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Ιστολόγιο του χρήστη $param';
+  }
 }

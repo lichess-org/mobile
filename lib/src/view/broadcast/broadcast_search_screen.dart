@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 class BroadcastSearchScreen extends StatefulWidget {
   const BroadcastSearchScreen();
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BroadcastSearchScreen(), fullscreenDialog: true);
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BroadcastSearchScreen(), fullscreenDialog: true);
   }
 
   @override

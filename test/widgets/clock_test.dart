@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart' as clock;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 
 void main() {
@@ -20,6 +21,42 @@ void main() {
       );
 
       expect(find.text('0:00.98', findRichText: true), findsOneWidget);
+    });
+
+    testWidgets('Show tenths according to pref', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Clock(timeLeft: Duration(seconds: 11))));
+      expect(find.text('0:11', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(const MaterialApp(home: Clock(timeLeft: Duration(seconds: 1))));
+      expect(find.text('0:01.0', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(timeLeft: Duration(seconds: 11), clockTenths: ClockTenths.never),
+        ),
+      );
+      expect(find.text('0:11', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(timeLeft: Duration(seconds: 1), clockTenths: ClockTenths.never),
+        ),
+      );
+      expect(find.text('0:01', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(timeLeft: Duration(seconds: 11), clockTenths: ClockTenths.always),
+        ),
+      );
+      expect(find.text('0:11.0', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(timeLeft: Duration(seconds: 1), clockTenths: ClockTenths.always),
+        ),
+      );
+      expect(find.text('0:01.0', findRichText: true), findsOneWidget);
     });
   });
 

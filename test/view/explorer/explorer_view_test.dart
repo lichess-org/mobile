@@ -1,14 +1,17 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/explorer/opening_explorer_widgets.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -208,6 +211,39 @@ void main() {
       expect(find.text('Stalemate'), findsOneWidget);
       expect(find.byType(OpeningExplorerView), findsNothing);
       expect(find.byType(TablebaseView), findsNothing);
+    });
+  });
+
+  group('OpeningExplorerMoveTable', () {
+    testWidgets('calls onMoveSelected with a DropMove when tapping a drop move row', (
+      tester,
+    ) async {
+      Move? selectedMove;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Scaffold(
+          body: OpeningExplorerMoveTable(
+            moves: IList(const [
+              OpeningMove(uci: 'P@c4', san: 'P@c4', white: 50, draws: 10, black: 40),
+            ]),
+            whiteWins: 50,
+            draws: 10,
+            blackWins: 40,
+            onMoveSelected: (move) => selectedMove = move,
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      // Tap the move SAN cell to trigger onMoveSelected
+      await tester.tap(find.text('P@c4'));
+      await tester.pump();
+
+      expect(selectedMove, isNotNull);
+      expect(selectedMove, isA<DropMove>());
+      expect((selectedMove as DropMove?)?.role, Role.pawn);
+      expect(selectedMove?.to, Square.c4);
     });
   });
 }

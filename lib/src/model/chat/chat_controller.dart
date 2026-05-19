@@ -66,7 +66,7 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
 @freezed
 abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
   const StudyChatOptions._();
-  const factory StudyChatOptions({required StudyId id, required bool writeable}) =
+  const factory StudyChatOptions({required StudyOptions options, required bool writeable}) =
       _StudyChatOptions;
 
   @override
@@ -74,6 +74,9 @@ abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
 
   @override
   bool get isPublic => true;
+
+  @override
+  StringId get id => options.id;
 }
 
 /// A provider that gets the chat unread messages
@@ -111,15 +114,21 @@ class ChatController extends AsyncNotifier<ChatState> {
       _subscription?.cancel();
     });
 
+    // Do NOT use ref.watch() here, since we just need to get the initial messages.
+    // The game/tournament/study controllers do NOT update their `chat` fields when a new
+    // chat message is received, instead the ChatController itself listens to this socket event.
+    // This means that with ref.watch(), whenever the game/tournament/study controller updates,
+    // (e.g. when a new move has been made), the `ChatController` would rebuild and we'd lose
+    // any chat messages that have been received since the last build.
     final initialMessages = switch (options) {
-      GameChatOptions(:final id) => (await ref.watch(
+      GameChatOptions(:final id) => (await ref.read(
         gameControllerProvider(id).future,
       )).game.chat?.lines,
-      TournamentChatOptions(:final id) => (await ref.watch(
+      TournamentChatOptions(:final id) => (await ref.read(
         tournamentControllerProvider(id).future,
       )).tournament.chat?.lines,
-      StudyChatOptions(:final id) => (await ref.watch(
-        studyControllerProvider(id).future,
+      StudyChatOptions(:final options) => (await ref.read(
+        studyControllerProvider(options).future,
       )).study.chat?.lines,
     };
 
@@ -219,12 +228,19 @@ class ChatController extends AsyncNotifier<ChatState> {
       });
     }
   }
+
+  void setInputText(String text) {
+    state = state.whenData((s) => s.copyWith(inputText: text));
+  }
 }
 
 @freezed
 sealed class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
-      _ChatState;
+  const factory ChatState({
+    required IList<ChatMessage> messages,
+    required int unreadMessages,
+    @Default('') String inputText,
+  }) = _ChatState;
 }

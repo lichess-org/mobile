@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 const _kClockFontSize = 26.0;
 const _kClockTenthFontSize = 20.0;
 const _kClockHundredsFontSize = 18.0;
-
-const _showTenthsThreshold = Duration(seconds: 10);
 
 /// A stateless widget that displays the time left on the clock.
 ///
@@ -21,6 +20,7 @@ class Clock extends StatelessWidget {
     this.active = false,
     this.clockStyle,
     this.emergencyThreshold,
+    this.clockTenths,
     this.padLeft = false,
     this.padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
     super.key,
@@ -39,6 +39,8 @@ class Clock extends StatelessWidget {
   /// Clock style to use.
   final ClockStyle? clockStyle;
 
+  final ClockTenths? clockTenths;
+
   /// Whether to pad with a leading zero (default is `false`).
   final bool padLeft;
 
@@ -50,8 +52,13 @@ class Clock extends StatelessWidget {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final showTenths = timeLeft < _showTenthsThreshold;
     final isEmergency = emergencyThreshold != null && timeLeft <= emergencyThreshold!;
+
+    final showTenths = switch (clockTenths) {
+      ClockTenths.never => false,
+      ClockTenths.lessThan10s || null => timeLeft < const Duration(seconds: 10),
+      ClockTenths.always => true,
+    };
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();

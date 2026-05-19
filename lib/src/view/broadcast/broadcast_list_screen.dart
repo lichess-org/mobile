@@ -31,8 +31,8 @@ enum _BroadcastFilter {
 class BroadcastListScreen extends StatefulWidget {
   const BroadcastListScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BroadcastListScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BroadcastListScreen());
   }
 
   @override
@@ -48,7 +48,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
     final searchButton = SemanticIconButton(
       icon: const Icon(Icons.search),
       onPressed: () {
-        Navigator.of(context).push(BroadcastSearchScreen.buildRoute(context));
+        Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
       semanticsLabel: context.l10n.searchSearch,
     );

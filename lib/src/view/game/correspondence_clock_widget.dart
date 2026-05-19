@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -14,10 +15,20 @@ class CorrespondenceClock extends StatefulWidget {
   /// If [active] is `true`, the clock starts counting down.
   final bool active;
 
+  /// Opaque token that identifies the server-authoritative clock reading.
+  /// [timeLeft] is reset to [duration] whenever this value changes.
+  final int resetId;
+
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
-  const CorrespondenceClock({required this.duration, required this.active, this.onFlag, super.key});
+  const CorrespondenceClock({
+    required this.duration,
+    required this.active,
+    required this.resetId,
+    this.onFlag,
+    super.key,
+  });
 
   @override
   State<CorrespondenceClock> createState() => _CorrespondenceClockState();
@@ -29,7 +40,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
 
-  final _stopwatch = Stopwatch();
+  final _stopwatch = clock.stopwatch();
 
   void startClock() {
     _timer?.cancel();
@@ -65,7 +76,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
   @override
   void didUpdateWidget(CorrespondenceClock oldClock) {
     super.didUpdateWidget(oldClock);
-    if (widget.duration != oldClock.duration) {
+    if (widget.resetId != oldClock.resetId) {
       timeLeft = widget.duration;
     }
     if (widget.active) {

@@ -8,16 +8,22 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
+import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
     .family<BroadcastTournamentId, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
@@ -26,23 +32,21 @@ final broadcastTournamentIdProvider = FutureProvider.autoDispose
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreenLoading({
     required this.roundId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastRoundId roundId,
-    BroadcastPlayer player,
-    String playerId,
-  ) {
+    String playerId, {
+    BroadcastPlayer? player,
+  }) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreenLoading(
         roundId: roundId,
         player: player,
@@ -73,25 +77,23 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastPlayerResultsScreen extends StatelessWidget {
+class BroadcastPlayerResultsScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer player;
+  final BroadcastPlayer? player;
   final String playerId;
 
   const BroadcastPlayerResultsScreen({
     required this.tournamentId,
-    required this.player,
+    this.player,
     required this.playerId,
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
     String playerId,
   ) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreen(
         tournamentId: tournamentId,
         player: player,
@@ -101,10 +103,42 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncData = ref.watch(_playerAndTournamentProvider((tournamentId, playerId)));
+
+    final displayPlayer =
+        player ??
+        switch (asyncData) {
+          AsyncData(value: final data) => data.$1.playerWithOverallResult.player,
+          _ => null,
+        };
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+        title: displayPlayer != null
+            ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
+            : const SizedBox.shrink(),
+        actions: [
+          if (asyncData case AsyncData(value: final data))
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: context.l10n.studyShareAndExport,
+              onPressed: () {
+                final (playerData, tournament) = data;
+                final playerId = playerData.playerWithOverallResult.player.id;
+
+                final baseUri = lichessUri(
+                  '/broadcast/${tournament.data.slug}/${tournament.data.id}',
+                );
+
+                final shareUri = playerId != null
+                    ? baseUri.replace(fragment: 'players/$playerId')
+                    : baseUri;
+
+                launchShareDialog(context, ShareParams(uri: shareUri));
+              },
+            ),
+        ],
       ),
       body: _Body(tournamentId, playerId),
     );
@@ -275,13 +309,22 @@ class _OverallStatPlayer extends StatelessWidget {
                       ),
                     const SizedBox(height: 16),
                     if (team != null) ...[
-                      Row(
-                        children: [
-                          const SizedBox(width: 100, child: Text('Team')),
-                          Expanded(
-                            child: Text(team.trim(), style: Theme.of(context).textTheme.bodyLarge),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          if (tournament.data.showTeamScores == true) {
+                            Navigator.of(context).push(
+                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
+                            );
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 100, child: Text('Team')),
+                            Expanded(
+                              child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -459,6 +502,7 @@ class _GameResultListTile extends StatelessWidget {
       :ratingDiff,
       :opponent,
       :fideTC,
+      :ongoing,
     ) = playerGameResult;
     final BroadcastPlayer(:federation, :rating) = opponent;
     final pic = opponent.fideId != null ? tournament.photos?.get(opponent.fideId!) : null;
@@ -468,7 +512,6 @@ class _GameResultListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           BroadcastGameScreen.buildRoute(
-            context,
             tournamentId: tournament.data.id,
             roundId: roundId,
             gameId: gameId,
@@ -495,33 +538,16 @@ class _GameResultListTile extends StatelessWidget {
             )
           : null,
       trailing: SizedBox(
-        width: showTCIcon ? 72 : 60,
+        width: showTCIcon ? 75 : 60,
         child: Row(
           mainAxisSize: .min,
           mainAxisAlignment: .center,
           children: [
             SizedBox(
               width: 30,
-              child: Center(
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    border:
-                        (Theme.of(context).brightness == .light && color == .white ||
-                            Theme.of(context).brightness == .dark && color == .black)
-                        ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
-                        : null,
-                    shape: .circle,
-                    color: switch (color) {
-                      .white => Colors.white.withValues(alpha: 0.9),
-                      .black => Colors.black.withValues(alpha: 0.9),
-                    },
-                  ),
-                ),
-              ),
+              child: Center(child: SideIndicator(side: color, size: 15)),
             ),
-            if (showTCIcon) SizedBox(width: 12, child: Icon(fideTC.icon, size: 15)),
+            if (showTCIcon) Icon(fideTC.icon, size: 15),
             SizedBox(
               width: 30,
               child: Column(
@@ -532,9 +558,10 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.5
+                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
-                            : points?.resultFor(color).resultToString(color) ?? '*',
+                            : points?.resultFor(color).resultToString(color) ??
+                                  (ongoing ? '*' : ''),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: .bold,
                           color: points?.resultFor(color).colorFor(color, context),

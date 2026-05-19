@@ -26,8 +26,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class CoordinateTrainingScreen extends StatelessWidget {
   const CoordinateTrainingScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const CoordinateTrainingScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const CoordinateTrainingScreen());
   }
 
   @override

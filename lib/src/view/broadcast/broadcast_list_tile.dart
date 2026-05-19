@@ -160,10 +160,7 @@ class BroadcastListTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(context, broadcast));
+        Navigator.of(context, rootNavigator: true).push(BroadcastRoundScreen.buildRoute(broadcast));
       },
       child: Padding(
         padding: _kPadding,
@@ -236,7 +233,7 @@ class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: null,
+      future: nextPageFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (kDebugMode) {

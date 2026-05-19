@@ -135,6 +135,82 @@ class FakeStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish for crazyhouse that emits a drop move in its principal variation.
+/// Used to test that engine lines correctly handle drop moves.
+class FakeCrazyhouseDropMoveStockfish implements Stockfish {
+  FakeCrazyhouseDropMoveStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  StockfishFlavor _flavor = StockfishFlavor.variant;
+  String? _variant;
+
+  void _emitCrazyhouse(String line) {
+    if (!_stdoutController.isClosed) {
+      _stdoutController.add(line);
+    }
+  }
+
+  @override
+  StockfishFlavor get flavor => _flavor;
+
+  @override
+  String? get variant => _variant;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.variant,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _flavor = flavor;
+    _variant = variant;
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+    _emitCrazyhouse('id name Fairy-Stockfish\n');
+    _emitCrazyhouse('uciok\n');
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'isready':
+        _emitCrazyhouse('readyok\n');
+      case 'go':
+        // Emit two info lines with a drop move as the first PV move, then bestmove.
+        _emitCrazyhouse(
+          'info depth 15 seldepth 8 multipv 1 score cp 50 nodes 5000 nps 359000 hashfull 0 tbhits 0 time 1500 pv P@c4 d5c4 d2d4\n',
+        );
+        _emitCrazyhouse(
+          'info depth 16 seldepth 8 multipv 1 score cp 50 nodes 5359 nps 359000 hashfull 0 tbhits 0 time 1600 pv P@c4 d5c4 d2d4\n',
+        );
+        _emitCrazyhouse('bestmove P@c4 ponder d5c4\n');
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish with configurable delays for testing race conditions.
 class DelayedFakeStockfish implements Stockfish {
   DelayedFakeStockfish({
@@ -557,6 +633,7 @@ class LegalMoveFakeStockfish implements Stockfish {
 
   StockfishFlavor _flavor = StockfishFlavor.sf16;
   Position? _position;
+  String? _variant;
 
   void _emit(String line) {
     if (!_stdoutController.isClosed) {
@@ -568,7 +645,7 @@ class LegalMoveFakeStockfish implements Stockfish {
   StockfishFlavor get flavor => _flavor;
 
   @override
-  String? get variant => null;
+  String? get variant => _variant;
 
   @override
   String? get bigNetPath => null;
@@ -584,6 +661,7 @@ class LegalMoveFakeStockfish implements Stockfish {
     String? bigNetPath,
   }) async {
     _flavor = flavor;
+    _variant = variant;
     _state.value = StockfishState.starting;
     await Future.microtask(() {});
     _state.value = StockfishState.ready;
@@ -609,7 +687,7 @@ class LegalMoveFakeStockfish implements Stockfish {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
           if (parts.length > 2) {
             _position = Position.setupPosition(
-              Rule.chess,
+              _variant != null ? ruleFromUciVariant(_variant!) : Rule.chess,
               Setup.parseFen(
                 parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
               ),

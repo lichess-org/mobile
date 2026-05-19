@@ -14,6 +14,9 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
+/// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
+const _kAdditionalBoardSidePaddingForPockets = 70.0;
+
 Side variantBoardOrientation({
   required Variant variant,
   required Side youAre,
@@ -172,7 +175,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             onClearShapes: _onClearShapes,
             newShapeColor: boardPrefs.shapeColor.color,
           ),
-          enableDropMoves: widget.boardParams.variant.hasDropMoves == true,
         );
 
         final settings = widget.boardSettingsOverrides != null
@@ -203,6 +205,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         };
 
         final pockets = widget.boardParams.pockets;
+        final premoveDropRole = switch (gameData?.premovable?.premove) {
+          DropMove(:final role) => role,
+          _ => null,
+        };
 
         Widget topTable({required double boardSize}) => RotatedBox(
           quarterTurns: widget.topTableUpsideDown ? 2 : 0,
@@ -216,9 +222,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation.opposite,
                   sideToMove: sideToMove,
+                  playerSide: widget.boardParams.playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.topTableUpsideDown,
+                  premoveDropRole: premoveDropRole,
                 ),
               widget.topTable,
             ],
@@ -238,9 +246,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation,
                   sideToMove: sideToMove,
+                  playerSide: widget.boardParams.playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.bottomTableUpsideDown,
+                  premoveDropRole: premoveDropRole,
                 ),
             ],
           ),
@@ -257,6 +267,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
+              textDirection: switch (boardPrefs.landscapeBoardPosition) {
+                .left => TextDirection.ltr,
+                .right => TextDirection.rtl,
+              },
               mainAxisSize: MainAxisSize.max,
               children: [
                 BoardWidget(
@@ -313,7 +327,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           final isShortScreen = isShortVerticalScreen(context);
 
           final pocketsPadding = (pockets != null && (isTablet || isShortScreen))
-              ? kAdditionalBoardSidePaddingForPockets
+              ? _kAdditionalBoardSidePaddingForPockets
               : 0;
 
           double effectiveBoardSize =

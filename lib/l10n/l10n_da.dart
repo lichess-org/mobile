@@ -9,6 +9,9 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get mobileAccount => 'Konto';
+
+  @override
   String get mobileAccountPreferences => 'Kontoindstillinger';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åbningsudforsker er ikke tilgængelig offline.';
 
   @override
-  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\\nDu kan få adgang til det fra hjemfanen.';
+  String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';
 
   @override
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
+
+  @override
+  String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
+
+  @override
+  String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
+
+  @override
+  String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -1028,6 +1061,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastKnockouts => 'Elimineringsrunder';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Kunne du lide denne opgave?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for at indlæse den næste!';
 
   @override
   String get puzzleUpVote => 'Stem opgave op';
@@ -2566,6 +2606,16 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating på $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maksimal rating på $param';
+  }
+
+  @override
   String get recentGames => 'Seneste partier';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Vis variantpile';
-
-  @override
-  String get evaluationGauge => 'Evalueringsindikator';
 
   @override
   String get visualMotifs => 'Visuelle motiver';
@@ -2931,15 +2978,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get checkSpamFolder => 'Tjek også din spam-mappe, det kan være, at den havner der. Hvis det er tilfældet, skal du markere den som ikke-spam.';
 
   @override
-  String get emailForSignupHelp => 'Hvis alt andet mislykkes, så send os denne e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og indsæt ovenstående tekst og send det til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Hvis du ikke kan finde din bekræftelsesmail, kan du sende en e-mail til $param, så bekræfter vi din konto for dig.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi vil snart vende tilbage til dig for at hjælpe dig med at fuldføre din tilmelding.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Tilfældig Chess960-position';
+
+  @override
   String get startPosition => 'Startopstilling';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Ugyldig godkendelseskode';
+
+  @override
+  String get clearField => 'Ryd felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Log ind via e-mail';
 
   @override
   String get emailMeALink => 'E-mail mig et link';
@@ -4659,9 +4712,6 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover, at jeg vil overholde alle Lichess-politikker.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søg eller start ny diskussion';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ryd søgning';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for \"$param\"';
+  }
 
   @override
   String get tags => 'Etiketter';
@@ -6511,4 +6566,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'To-faktor-godkendelse';
+
+  @override
+  String get ublogCommunity => 'Fællesskab';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog - $param';
+  }
 }

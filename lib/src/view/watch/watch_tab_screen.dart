@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
@@ -17,7 +18,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -73,11 +74,13 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
         ref.invalidate(broadcastsPaginatorProvider);
         ref.invalidate(featuredChannelsProvider);
-        ref.invalidate(liveStreamersProvider);
+        if (!(ref.read(kidModeProvider).value ?? false)) {
+          ref.invalidate(liveStreamersProvider);
+        }
       }
     });
 
-    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? true;
+    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -87,11 +90,13 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
-          centerTitle: true,
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: const AccountDrawer(),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
@@ -153,7 +158,10 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
     final featuredChannels = ref.watch(featuredChannelsProvider);
-    final streamers = ref.watch(liveStreamersProvider);
+    final isKidMode = ref.watch(kidModeProvider).value ?? false;
+    final streamers = isKidMode
+        ? const AsyncValue.data(IListConst<Streamer>([]))
+        : ref.watch(liveStreamersProvider);
     final isTablet = isTabletOrLarger(context);
 
     final content = [
@@ -163,12 +171,12 @@ class _BodyState extends ConsumerState<_Body> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(child: _WatchTvWidget(featuredChannels)),
-            Expanded(child: _StreamerWidget(streamers)),
+            if (!isKidMode) Expanded(child: _StreamerWidget(streamers)),
           ],
         )
       else ...[
         _WatchTvWidget(featuredChannels),
-        _StreamerWidget(streamers),
+        if (!isKidMode) _StreamerWidget(streamers),
       ],
     ];
 
@@ -180,7 +188,7 @@ Future<void> _doRefreshDataForRef(WidgetRef ref) {
   return Future.wait([
     ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
-    ref.refresh(liveStreamersProvider.future),
+    if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
   ]);
 }
 
@@ -202,7 +210,7 @@ class _BroadcastWidget extends ConsumerWidget {
             child: ListSectionHeader(
               title: Text(context.l10n.broadcastBroadcasts),
               onTap: () {
-                Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
+                Navigator.of(context).push(BroadcastListScreen.buildRoute());
               },
             ),
           ),
@@ -250,7 +258,7 @@ class _WatchTvWidget extends ConsumerWidget {
           header: const Text('Lichess TV'),
           hasLeading: true,
           onHeaderTap: () =>
-              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()).then((_) {
                 if (context.mounted) {
                   _doRefreshDataForRef(ref);
                 }
@@ -275,7 +283,6 @@ class _WatchTvWidget extends ConsumerWidget {
                   onTap: () => Navigator.of(context, rootNavigator: true)
                       .push(
                         TvScreen.buildRoute(
-                          context,
                           channel: snapshot.channel,
                           gameId: snapshot.id,
                           orientation: snapshot.player.side,
@@ -292,7 +299,7 @@ class _WatchTvWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace');
+        debugPrint('SEVERE: [WatchTvWidget] could not load TV channels data; $error\n $stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load TV channels'),
@@ -326,7 +333,7 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           leadingIndent: kThumbnailImageSize + 16,
-          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
+          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(data)),
           children: [
             ...data
                 .take(numberOfItems)

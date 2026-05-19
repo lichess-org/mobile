@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -34,7 +35,7 @@ class OpeningNameHeader extends StatelessWidget {
             ],
             Expanded(
               child: Text(
-                opening.name,
+                opening.eco.isNotEmpty ? '${opening.eco} ${opening.name}' : opening.name,
                 style: TextStyle(
                   color: ColorScheme.of(context).onSurface,
                   fontWeight: FontWeight.bold,
@@ -73,7 +74,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final void Function(NormalMove)? onMoveSelected;
+  final void Function(Move)? onMoveSelected;
   final bool isIndexing;
 
   final bool _isLoading;
@@ -136,18 +137,18 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
             children: [
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(padding: kExplorerTableRowPadding, child: Text(move.san)),
               ),
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(
                   padding: kExplorerTableRowPadding,
                   child: Text('${formatNum(move.games)} ($percentGames%)'),
                 ),
               ),
               TableRowInkWell(
-                onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
+                onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
                 child: Padding(
                   padding: kExplorerTableRowPadding,
                   child: _WinPercentageChart(
@@ -334,10 +335,12 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
       padding: kExplorerTableRowPadding,
       color: widget.color,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          final client = ref.read(defaultClientProvider);
+          await client.get(lichessUri('/import/master/${widget.game.id}/${widget.pov.name}'));
+          if (!context.mounted) return;
           Navigator.of(context).push(
             AnalysisScreen.buildRoute(
-              context,
               AnalysisOptions.archivedGame(
                 orientation: widget.pov,
                 gameId: widget.game.id,

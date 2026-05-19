@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -13,8 +14,8 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -41,13 +42,8 @@ class OverTheBoardScreen extends StatelessWidget {
   /// Initial variant to be preselected in the "New Game" dialog.
   final Variant? initialVariant;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -269,14 +265,24 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: ref
-                          .read(overTheBoardGameControllerProvider.notifier)
-                          .onPromotionSelection,
+                      onPromotionSelection: (role) {
+                        ref
+                            .read(overTheBoardGameControllerProvider.notifier)
+                            .onPromotionSelection(role);
+                        if (role != null) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
+                      },
                       promotionMove: gameState.promotionMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        ref
-                            .read(overTheBoardClockProvider.notifier)
-                            .onMove(newSideToMove: gameState.turn.opposite);
+                        if (move is! NormalMove ||
+                            !isPromotionPawnMove(gameState.currentPosition, move)) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                       },
                       premovable: null,
@@ -407,7 +413,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,
@@ -476,6 +481,9 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
 
     return GamePlayer(
       game: gameState.game,
@@ -494,6 +502,7 @@ class _Player extends ConsumerWidget {
               emergencyThreshold: Duration(
                 seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
               ),
+              clockTenths: clockTenths,
             ),
     );
   }

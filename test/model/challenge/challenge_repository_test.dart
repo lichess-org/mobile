@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
 import '../../test_container.dart';
@@ -41,6 +43,38 @@ void main() {
       final result = await repo.show(const ChallengeId('H9fIRZUk'));
 
       expect(result, isA<Challenge>());
+    });
+
+    test('create open challenge', () async {
+      var acceptCalled = false;
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/challenge/open') {
+          return mockResponse(challenge, 200);
+        }
+
+        // When creating an open challenge, request should be immediately accepted with the chosen color.
+        if (request.url.path == '/api/challenge/H9fIRZUk/accept') {
+          expect(request.url.queryParameters['color'], equals('black'));
+          acceptCalled = true;
+          return mockResponse('', 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(challengeRepositoryProvider);
+      final result = await repo.create(
+        const ChallengeRequest(
+          destUser: null,
+          variant: Variant.standard,
+          timeControl: ChallengeTimeControlType.clock,
+          rated: false,
+          sideChoice: SideChoice.black,
+        ),
+      );
+
+      expect(result, isA<Challenge>());
+      expect(acceptCalled, isTrue);
     });
   });
 }

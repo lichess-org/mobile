@@ -9,6 +9,9 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Åpningsutforskeren krever nett.';
 
   @override
-  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\\nDu kan åpne det fra Hjem-fanen.';
+  String get mobileChallengeCreated => 'Utfordring opprettet: Du blir varslet når partiet starter.\nDu kan åpne det fra Hjem-fanen.';
 
   @override
   String get mobilePreviousPage => 'Forrige';
 
   @override
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
+
+  @override
+  String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
+
+  @override
+  String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
+
+  @override
+  String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
+
+  @override
+  String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
+
+  @override
+  String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
+
+  @override
+  String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
+
+  @override
+  String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -903,7 +936,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastScore => 'Poengsum';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Stillingen beregnes basert på overførte partier og kan avvike fra de offisielle resultatene.';
 
   @override
   String get broadcastAllTeams => 'Alle lag';
@@ -950,23 +983,23 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Kamppoeng';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Partipoeng';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Kamper';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Kamphistorikk';
 
   @override
   String get broadcastTeamResults => 'Lagresultater';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'Følgende begrep(er) vil bli oversatt automatisk: $param.';
   }
 
   @override
@@ -1026,6 +1059,16 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Utslagsrunder';
+
+  @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U$param';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1564,9 +1607,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Likte du denne sjakknøtten?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stem for å laste den neste!';
-
-  @override
   String get puzzleUpVote => 'Bra sjakknøtt';
 
   @override
@@ -1889,10 +1929,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Kollineært trekk';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'To brikker truer hverandre, og én av dem flytter langs angrepslinjen uten å slå.';
 
   @override
   String get puzzleThemeCornerMate => 'Hjørnematt';
@@ -2566,6 +2606,16 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nylige partier';
 
   @override
@@ -2651,9 +2701,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get showVariationArrows => 'Vis variantpiler';
 
   @override
-  String get evaluationGauge => 'Evalueringsmåler';
-
-  @override
   String get visualMotifs => 'Visuelle motiver';
 
   @override
@@ -2669,22 +2716,22 @@ class AppLocalizationsNb extends AppLocalizations {
   String get multipleLines => 'Flere varianter';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Angi antall evalueringslinjer og trekkpiler på brettet';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Søketid';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Angi tid for å evaluere nye stillinger';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Tråder';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Sett denne lavere enn antall tråder på CPU-en din; merkene viser et trygt og godt valg';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Flere tråder vil bruke mer batteri for bedre analyse';
 
   @override
   String get cpus => 'Prosessorer';
@@ -2693,7 +2740,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get memory => 'Minne';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Høyere verdier kan forbedre ytelsen';
 
   @override
   String get infiniteAnalysis => 'Uendelig analyse';
@@ -2931,15 +2978,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get checkSpamFolder => 'Sjekk om meldingen havnet i søppelpostmappen. Merk i tilfelle meldingen som ikke søppelpost.';
 
   @override
-  String get emailForSignupHelp => 'Send denne meldingen til oss som siste utvei:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopier og lim inn teksten ovenfor og send den til $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Vi tar snart kontakt og hjelper deg med registreringen.';
 
   @override
   String accountConfirmed(String param) {
@@ -3507,8 +3548,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String chess960StartPosition(String param) {
-    return 'Fischersjakkutgangsstilling: $param';
+    return 'Sjakk-960-utgangsstilling: $param';
   }
+
+  @override
+  String get randomChess960Position => 'Tilfeldig sjakk-960 stilling';
 
   @override
   String get startPosition => 'Utgangsstilling';
@@ -3735,6 +3779,15 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Ugyldig autentiseringskode';
+
+  @override
+  String get clearField => 'Tøm felt';
+
+  @override
+  String get orSeparator => 'Eller';
+
+  @override
+  String get logInByEmail => 'Logg inn via e-post';
 
   @override
   String get emailMeALink => 'Send meg en lenke';
@@ -4125,7 +4178,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get togglePositionAnnotations => 'Skru kommentarer for stillinger av eller på';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Skru kommentarer for observasjoner av eller på';
 
   @override
   String get variationArrowsInfo => 'Variantpiler lar deg navigere uten å bruke notasjonslisten.';
@@ -4659,9 +4712,6 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Jeg lover å respektere alle Lichess\' retningslinjer.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Søk eller start en ny diskusjon';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tøm søk';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Ingen resultater for «$param»';
+  }
 
   @override
   String get tags => 'Merkelapper';
@@ -6511,4 +6566,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tofaktorautentisering';
+
+  @override
+  String get ublogCommunity => 'Fellesskap';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Bloggen til $param';
+  }
 }

@@ -11,11 +11,23 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('Connectivity');
 
+const kConnectivityThrottleDelay = Duration(seconds: 5);
+
 /// A provider that exposes a [Connectivity] instance.
 final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivity());
 
+/// A provider that listens to connectivity changes and exposes a boolean indicating whether the device is online or not.
+///
+/// This provider is derived from [connectivityChangesProvider] and only exposes the `isOnline` field of the connectivity status.
+final onlineStatusProvider = FutureProvider.autoDispose<bool>((ref) {
+  return ref.watch(connectivityChangesProvider.selectAsync((status) => status.isOnline));
+}, name: 'OnlineStatusProvider');
+
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
+///
+/// **Note**: do not use this provider directly to check if the device is online,
+/// use [onlineStatusProvider] instead, which only exposes the `isOnline` field of the connectivity status.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
@@ -29,7 +41,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
-  final _connectivityChangesDebouncer = Debouncer(const Duration(seconds: 5));
+  final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay);
 
   Client get _defaultClient => ref.read(defaultClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
@@ -39,12 +51,12 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     ref.onDispose(() {
       _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
-      _connectivityChangesDebouncer.cancel();
+      _connectivityChangesThrottler.cancel();
     });
 
     _connectivitySubscription?.cancel();
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((result) {
-      _connectivityChangesDebouncer(() => _onConnectivityChange(result));
+      _connectivityChangesThrottler(() => _onConnectivityChange(result));
     });
 
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;

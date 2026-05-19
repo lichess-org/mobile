@@ -130,7 +130,6 @@
   <string name="enable">Включить</string>
   <string name="bestMoveArrow">Показывать лучшие ходы стрелками</string>
   <string name="showVariationArrows">Показать стрелки вариантов</string>
-  <string name="evaluationGauge">Шкала оценки</string>
   <string name="visualMotifs">Шахматные мотивы</string>
   <string name="undefendedPieces">Незащищённые фигуры</string>
   <string name="pinnedPieces">Связанные фигуры</string>
@@ -298,9 +297,7 @@
   <string name="emailCanTakeSomeTime">Получение письма может занять некоторое время.</string>
   <string name="refreshInboxAfterFiveMinutes">Подождите 5 минут и обновите ваш почтовый ящик.</string>
   <string name="checkSpamFolder">Также проверьте папку со спамом, письмо может оказаться там. Если это так, пометьте его как не спам.</string>
-  <string name="emailForSignupHelp">Если ничего не получилось, отправьте нам это письмо:</string>
-  <string name="copyTextToEmail">Скопируйте и вставьте текст выше и отправьте его по адресу %s</string>
-  <string name="waitForSignupHelp">Мы скоро вернёмся к вам чтобы помочь завершить регистрацию.</string>
+  <string name="sendEmailForAccountVerification">Если вы не можете найти подтверждение в электронной почте, отправьте письмо на адрес %s и мы подтвердим вашу учётную запись для вас.</string>
   <string name="accountConfirmed">Пользователь %s успешно подтверждён.</string>
   <string name="accountCanLogin">Вы можете войти прямо сейчас как %s.</string>
   <string name="accountConfirmationEmailNotNeeded">Вам не требуется подтверждение по электронной почте.</string>
@@ -596,6 +593,7 @@
   <string name="popularOpenings">Популярные дебюты</string>
   <string name="endgamePositions">Эндшпильные позиции</string>
   <string name="chess960StartPosition">Начальная позиция в шахматах Фишера: %s</string>
+  <string name="randomChess960Position">Случайная позиция в шахматах Фишера</string>
   <string name="startPosition">Начальная позиция</string>
   <string name="clearBoard">Очистить доску</string>
   <string name="loadPosition">Загрузить позицию</string>
@@ -674,6 +672,9 @@
   <string name="invalidUsernameOrPassword">Неверное имя пользователя или пароль</string>
   <string name="incorrectPassword">Неверный пароль</string>
   <string name="invalidAuthenticationCode">Неверный код аутентификации</string>
+  <string name="clearField">Очистить поле</string>
+  <string name="orSeparator">Или</string>
+  <string name="logInByEmail">Авторизация через электронную почту</string>
   <string name="emailMeALink">Прислать ссылку мне на почту</string>
   <string name="currentPassword">Текущий пароль</string>
   <string name="newPassword">Новый пароль</string>
@@ -1004,7 +1005,6 @@
   <string name="agreementAssistance">Подтверждаю, что я никогда не воспользуюсь посторонней помощью в своих играх (из шахматных программ, книг, баз данных и от других игроков).</string>
   <string name="agreementNice">Подтверждаю, что я буду с уважением относиться к другим игрокам.</string>
   <string name="agreementMultipleAccounts" comment="%s will be replaced with the translation of 'termsOfService'">Я согласен с тем, что не должен создавать множество учётных записей (за исключением причин, указанных в %s).</string>
-  <string name="agreementPolicy">Подтверждаю, что я буду следовать всем правилам Lichess.</string>
   <string name="searchOrStartNewDiscussion">Найти обсуждение или начать новое</string>
   <string name="edit">Изменить</string>
   <string name="ultraBullet" comment="Probably best left untranslated. Leave it as 'UltraBullet' unless your language has a better word for it.">Ультра-пуля</string>
@@ -1117,6 +1117,7 @@
   <string name="offline" comment="status of a user">офлайн</string>
   <string name="search">Поиск</string>
   <string name="clearSearch">Очистить поиск</string>
+  <string name="thereAreNoResultsForX">Нет результатов для «%s»</string>
   <string name="tags">Теги</string>
   <string name="enPassant">Взятие на проходе</string>
 </resources>

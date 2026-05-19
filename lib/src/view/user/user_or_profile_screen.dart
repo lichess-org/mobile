@@ -10,8 +10,8 @@ class UserOrProfileScreen extends ConsumerWidget {
   const UserOrProfileScreen({required this.user, super.key});
   final LightUser user;
 
-  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(context, screen: UserOrProfileScreen(user: user));
+  static Route<dynamic> buildRoute(LightUser user) {
+    return buildScreenRoute(screen: UserOrProfileScreen(user: user));
   }
 
   @override

@@ -6,7 +6,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,25 +20,15 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
-  ref,
-) async {
-  final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
-  if (following.isEmpty) {
-    return (IList<User>(), IList<UserStatus>());
-  }
-
-  final statuses = await ref
-      .read(userRepositoryProvider)
-      .getUsersStatuses(following.map((user) => user.id).toISet());
-  return (following, statuses);
+final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
+  return ref.withClient((client) => RelationRepository(client).getFollowing());
 });
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const FriendScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const FriendScreen());
   }
 
   @override
@@ -63,33 +52,22 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final followingAndOnlines = ref.watch(followingStatusesProvider);
+    final onlineFriendsCount = ref.watch(onlineFriendsProvider.select((v) => v.value?.length ?? 0));
+    final followingCount = ref.watch(followingProvider.select((v) => v.value?.length ?? 0));
 
-    switch (followingAndOnlines) {
-      case AsyncData(:final value):
-        return PlatformScaffold(
-          appBar: PlatformAppBar(
-            title: Text(context.l10n.friends),
-            bottom: TabBar(
-              controller: _tabController,
-              tabs: <Widget>[
-                Tab(
-                  text: context.l10n.nbFriendsOnline(
-                    value.$2.where((status) => status.online ?? false).length,
-                  ),
-                ),
-                Tab(text: context.l10n.nbFollowing(value.$1.length)),
-              ],
-            ),
-          ),
-          body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
-        );
-      case _:
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
-          body: const CenterLoadingIndicator(),
-        );
-    }
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.friends),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.nbFriendsOnline(onlineFriendsCount)),
+            Tab(text: context.l10n.nbFollowing(followingCount)),
+          ],
+        ),
+      ),
+      body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
+    );
   }
 }
 
@@ -105,7 +83,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
         data: (data) {
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            onHeaderTap: () => _handleTap(context, data),
+            onHeaderTap: () => _handleTap(context),
             children: [
               for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
@@ -125,8 +103,8 @@ class OnlineFriendsWidget extends ConsumerWidget {
     );
   }
 
-  void _handleTap(BuildContext context, IList<OnlineFriend> followingOnlines) {
-    Navigator.of(context).push(FriendScreen.buildRoute(context));
+  void _handleTap(BuildContext context) {
+    Navigator.of(context).push(FriendScreen.buildRoute());
   }
 }
 
@@ -145,15 +123,12 @@ class _OnlineFriendListTile extends ConsumerWidget {
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(TvScreen.buildRoute(context, user: user));
+                Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
           : null,
-      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user)),
+      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
@@ -199,11 +174,11 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(followingStatusesProvider);
+    final following = ref.watch(followingProvider);
 
-    switch (followingAndOnlines) {
+    switch (following) {
       case AsyncData(:final value):
-        IList<User> following = value.$1;
+        IList<User> following = value;
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
@@ -247,12 +222,8 @@ class _Following extends ConsumerWidget {
                   ),
                   child: UserListTile.fromUser(
                     user,
-                    _isOnline(user, value.$2),
-                    onTap: () => {
-                      Navigator.of(
-                        context,
-                      ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
-                    },
+                    onTap: () =>
+                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(user.lightUser)),
                   ),
                 );
               },
@@ -261,13 +232,9 @@ class _Following extends ConsumerWidget {
         );
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
       case _:
         return const CenterLoadingIndicator();
     }
-  }
-
-  bool _isOnline(User user, IList<UserStatus> statuses) {
-    return statuses.firstWhere((status) => status.id == user.id).online ?? false;
   }
 }

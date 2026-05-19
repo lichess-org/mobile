@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -35,6 +36,7 @@ import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
@@ -69,6 +71,9 @@ const _kMoveEvalMinSearchTime = Duration(milliseconds: 1000);
 ///
 /// We want a fast feedback here, and since multipv=1 the search should be fast.
 const _kMoveEvalMaxSearchTime = Duration(milliseconds: 2000);
+
+/// Extra breathing room after the configured piece animation before starting local engine work.
+const _kEngineMoveAnimationBuffer = Duration(milliseconds: 50);
 
 /// Depth threshold for using an engine evaluation for move evaluation in practice mode.
 ///
@@ -157,7 +162,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     } else {
       _applyMove(move);
       if (state.game.playable) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
     }
   }
@@ -177,7 +182,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       } else {
         _applyMove(move);
         if (state.game.playable) {
-          _playEngineMove();
+          _playEngineMoveAfterPlayerAnimation();
         }
       }
     }
@@ -209,10 +214,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(
         game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
-    } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
-    } else if (state.currentPosition.isInsufficientMaterial) {
-      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     } else if (state.currentPosition.isVariantEnd) {
       state = state.copyWith(
         game: state.game.copyWith(
@@ -220,6 +221,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           winner: state.currentPosition.variantOutcome?.winner,
         ),
       );
+    } else if (state.currentPosition.isStalemate) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.isInsufficientMaterial) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
     _moveFeedback(sanMove);
@@ -295,7 +300,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (preMoveEval == null || preMoveEval.pvs.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
       if (state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
       return;
     }
@@ -307,7 +312,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     // Makes or updates the comment verdict to goodMove if the move is a known book move.
-    if (state.game.meta.variant == Variant.standard && plyBeforeMove < _kOpeningPlyThreshold) {
+    // The server will reject us unless we are logged in. Only ask then.
+    if (ref.read(isLoggedInProvider) &&
+        state.game.meta.variant == Variant.standard &&
+        plyBeforeMove < _kOpeningPlyThreshold) {
       _makeCommentFromOpeningDb(
         sanMove,
         stepCursor: stepCursorAfterMove,
@@ -330,7 +338,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
       return;
     }
@@ -376,14 +384,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
-        _playEngineMove();
+        _playEngineMoveAfterPlayerAnimation();
       }
     } catch (e) {
       _logger.warning('Error evaluating move: $e');
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
         if (state.game.playable && state.turn != state.game.playerSide) {
-          _playEngineMove();
+          _playEngineMoveAfterPlayerAnimation();
         }
       }
     }
@@ -658,22 +666,43 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       );
 
       final uciMove = await evaluationService.findMove(work);
-      final move = NormalMove.fromUci(uciMove);
+      final move = Move.parse(uciMove);
 
       if (state.game.playable) {
-        _applyMove(move);
+        _applyMove(move!);
         // After engine move, precompute hints for player's turn (in casual or practice mode)
+        // Wait for the engine move animation to complete before computing hints to avoid stuttering.
         if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
-          _computeHints();
+          await _waitForPlayerMoveAnimation();
+          if (ref.mounted && state.game.playable) _computeHints();
         }
       }
-    } catch (e) {
-      // Engine was stopped or error occurred, ignore
+    } on MoveRequestCancelledException {
+      // Expected cancellation when evaluationService.stop() is called; ignore.
+      return;
+    } catch (e, s) {
+      // Unexpected engine error occurred.
+      _logger.warning('Failed to play engine move!', e, s);
     } finally {
       if (state.game.playable || state.game.finished) {
         state = state.copyWith(isEngineThinking: false);
       }
     }
+  }
+
+  Future<void> _playEngineMoveAfterPlayerAnimation() async {
+    await _waitForPlayerMoveAnimation();
+    if (!ref.mounted) return;
+    if (!state.game.playable || state.turn == state.game.playerSide) return;
+    await _playEngineMove();
+  }
+
+  Future<void> _waitForPlayerMoveAnimation() {
+    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
+    if (animationDuration <= Duration.zero) {
+      return Future<void>.value();
+    }
+    return Future<void>.delayed(animationDuration + _kEngineMoveAnimationBuffer);
   }
 
   void resign() {
@@ -888,8 +917,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     final String? effectiveInitialFen;
 
     if (initialFen != null) {
-      position = Chess.fromSetup(Setup.parseFen(initialFen));
-      effectiveVariant = Variant.fromPosition;
+      effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
+      position = Position.setupPosition(effectiveVariant.rule, Setup.parseFen(initialFen));
       effectiveInitialFen = initialFen;
     } else if (variant == Variant.chess960) {
       position = randomChess960Position();
@@ -942,8 +971,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
 
-  NormalMove? get lastMove =>
-      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
+  Move? get lastMove =>
+      stepCursor > 0 ? Move.parse(game.steps[stepCursor].sanMove!.move.uci) : null;
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);

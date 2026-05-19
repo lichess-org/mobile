@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
+import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:logging/logging.dart';
@@ -332,6 +332,8 @@ class _RegisterCallbackClient extends BaseClient {
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
+  static const defaultRequestTimeout = Duration(seconds: 15);
+
   final Ref _ref;
   final Client _inner;
 
@@ -353,7 +355,7 @@ class LichessClient implements Client {
     _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
 
     try {
-      final response = await _inner.send(request);
+      final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
       _logIfError(response);
 
@@ -636,6 +638,15 @@ extension ClientExtension on Client {
     final response = await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
     return response.body;
+  }
+
+  /// Sends an HTTP GET request with the given headers to the given URL and returns a [Future<Response>] that completes to the response.
+  ///
+  /// Throws a [ServerException] if the response doesn't have a success status code.
+  Future<Response> readResponse(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response;
   }
 
   /// Sends an HTTP DELETE request with the given headers and body to the given URL and read response body.

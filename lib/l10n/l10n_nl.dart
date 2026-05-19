@@ -9,6 +9,9 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Accountvoorkeuren';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Openingsverkenner is niet offline beschikbaar.';
 
   @override
-  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\\nJe kunt de partij vanaf je home-tabblad openen.';
+  String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
   String get mobilePreviousPage => 'Vorige';
 
   @override
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
+
+  @override
+  String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
+
+  @override
+  String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
+
+  @override
+  String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
+
+  @override
+  String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
+
+  @override
+  String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
+
+  @override
+  String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
+
+  @override
+  String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
+
+  @override
+  String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
+
+  @override
+  String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -1028,6 +1061,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastKnockouts => 'Afvalrondes';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'Onder$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'Onder$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1562,9 +1605,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => 'Vond je deze puzzel leuk?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem om de volgende te laden!';
 
   @override
   String get puzzleUpVote => 'Puzzel leuk vinden';
@@ -2566,6 +2606,16 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimumrating van $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximumrating van $param';
+  }
+
+  @override
   String get recentGames => 'Recente partijen';
 
   @override
@@ -2649,9 +2699,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Toon variantpijlen';
-
-  @override
-  String get evaluationGauge => 'Evaluatiemeter';
 
   @override
   String get visualMotifs => 'Visuele motieven';
@@ -2931,15 +2978,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get checkSpamFolder => 'Controleer ook uw spammap, het kan daar terechtkomen. Als dat zo is, markeer het als geen spam.';
 
   @override
-  String get emailForSignupHelp => 'Als niks anders lukt, stuur ons dan deze e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopieer en plak de bovenstaande tekst en stuur het naar $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Als u uw bevestigingsmail niet kunt vinden, stuur dan een e-mail naar $param en we zullen uw account voor u bevestigen.';
   }
-
-  @override
-  String get waitForSignupHelp => 'We nemen binnenkort contact op om te helpen bij het afronden van de inschrijving.';
 
   @override
   String accountConfirmed(String param) {
@@ -3511,6 +3552,9 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => 'Willekeurige Schaak960-positie';
+
+  @override
   String get startPosition => 'Beginstelling';
 
   @override
@@ -3735,6 +3779,15 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => 'Ongeldige authenticatiecode';
+
+  @override
+  String get clearField => 'Veld leegmaken';
+
+  @override
+  String get orSeparator => 'of';
+
+  @override
+  String get logInByEmail => 'Log in via e-mail';
 
   @override
   String get emailMeALink => 'Email me een link';
@@ -4659,9 +4712,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Ik ga ermee akkoord dat ik de Lichess-regels zal volgen.';
-
-  @override
   String get searchOrStartNewDiscussion => 'Zoek of start een nieuwe discussie';
 
   @override
@@ -5019,6 +5069,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Zoekopdracht wissen';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return 'Geen resultaten voor \"$param\"';
+  }
 
   @override
   String get tags => 'Labels';
@@ -6511,4 +6566,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tweestapsverificatie';
+
+  @override
+  String get ublogCommunity => 'Gemeenschap';
+
+  @override
+  String ublogXBlog(String param) {
+    return 'Blog van $param';
+  }
 }

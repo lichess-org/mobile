@@ -26,7 +26,7 @@
   <string name="castlingDescription">Ασφαλίστε τον βασιλιά και αναπτύξτε τον πύργο για επίθεση.</string>
   <string name="capturingDefender">Αιχμαλώτιση αμυνόμενου κομματιού</string>
   <string name="capturingDefenderDescription">Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.</string>
-  <string name="collinearMove" comment="Description for this theme (translateable separately):&#10;Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.&#10;&#10;Collinear is a term that comes from the field of geometry: https://en.wiktionary.org/wiki/collinear">Συγγραμμική κίνηση</string>
+  <string name="collinearMove">Συγγραμμική κίνηση</string>
   <string name="cornerMate">Ματ στη γωνία</string>
   <string name="cornerMateDescription">Ο πύργος ή η βασίλισσα περιορίζουν τον αντίπαλο βασιλιά στη γωνία, με τον ίππο να δίνει ματ.</string>
   <string name="crushing">Σαρωτική επίθεση</string>
@@ -74,7 +74,7 @@
   <string name="morphysMateDescription">Ένας αξιωματικός κάνει σαχ στον αντίπαλο βασιλιά, περιορίζοντάς τον με τη βοήθεια ενός πύργου.</string>
   <string name="triangleMate">Τριγωνικό ματ</string>
   <string name="triangleMateDescription">Η βασίλισσα και ο πύργος βρίσκονται ένα τετράγωνο μακριά από στον αντίπαλο βασιλιά και είναι στην ίδια γραμμή ή στην ίδια στήλη, ενώ χωρίζονται μεταξύ τους από ένα τετράγωνο, σχηματίζοντας κατά τον τρόπο αυτό ένα τρίγωνο.</string>
-  <string name="vukovicMate">Ματ του Vukovic</string>
+  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">Ματ του Vukovic</string>
   <string name="vukovicMateDescription">Ένας πύργος και ένας ίππος συνεργάζονται για να κάνουν ματ στην άκρη της σκακιέρας. Ο πύργος κάνει ματ υποστηριζόμενος από κάποιο άλλο κομμάτι, ενώ ο ίππος ελέγχει όλα τα υπόλοιπα πιθανά τετράγωνα διαφυγής του αντίπαλου βασιλιά.</string>
   <string name="knightEndgame">Φινάλε ίππων</string>
   <string name="knightEndgameDescription">Φινάλε μόνο με ίππους και πιόνια.</string>

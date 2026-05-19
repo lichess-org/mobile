@@ -9,6 +9,9 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
+  String get mobileAccount => '계정';
+
+  @override
   String get mobileAccountPreferences => '계정 환경 설정';
 
   @override
@@ -275,13 +278,43 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
 
   @override
-  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\\n홈 탭에서 들어갈 수 있습니다.';
+  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
 
   @override
   String get mobilePreviousPage => '이전';
 
   @override
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
+
+  @override
+  String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
+
+  @override
+  String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
+
+  @override
+  String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
+
+  @override
+  String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
+
+  @override
+  String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
 
   @override
   String get activityActivity => '활동';
@@ -1008,6 +1041,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastKnockouts => '녹아웃';
 
   @override
+  String broadcastUnderXAgeTournament(String param) {
+    return 'U-$param';
+  }
+
+  @override
+  String broadcastUnderXEloTournament(String param) {
+    return 'U-$param';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1540,9 +1583,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
 
   @override
   String get puzzleUpVote => '퍼즐 추천';
@@ -2538,6 +2578,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param의 최소 레이팅';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param의 최대 레이팅';
+  }
+
+  @override
   String get recentGames => '최근 대국';
 
   @override
@@ -2621,9 +2671,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get showVariationArrows => '라인을 화살표로 표시하기';
-
-  @override
-  String get evaluationGauge => '평가 게이지';
 
   @override
   String get visualMotifs => '전술 시각화';
@@ -2903,15 +2950,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkSpamFolder => '또한 스팸 메일함에 들어가 있을 수 있습니다. 만약 그런 경우, 스팸이 아님으로 표시해 두세요.';
 
   @override
-  String get emailForSignupHelp => '모두 실패했다면, 이곳으로 메일을 보내주세요:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return '위의 텍스트를 복사해서 $param(으)로 보내주세요';
+  String sendEmailForAccountVerification(String param) {
+    return '확인 이메일을 찾을 수 없는 경우 $param에 이메일을 보내주시면 계정을 확인해 드리겠습니다.';
   }
-
-  @override
-  String get waitForSignupHelp => '가입을 완료할 수 있도록 빠르게 연락드리겠습니다.';
 
   @override
   String accountConfirmed(String param) {
@@ -3483,6 +3524,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get randomChess960Position => '랜덤 체스960 포지션';
+
+  @override
   String get startPosition => '시작 포지션';
 
   @override
@@ -3707,6 +3751,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get invalidAuthenticationCode => '잘못된 인증코드';
+
+  @override
+  String get clearField => '필드 지우기';
+
+  @override
+  String get orSeparator => '또는';
+
+  @override
+  String get logInByEmail => '이메일로 로그인';
 
   @override
   String get emailMeALink => '메일로 링크를 보내주세요';
@@ -4631,9 +4684,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => '나는 모든 Lichess 정책을 따르겠습니다.';
-
-  @override
   String get searchOrStartNewDiscussion => '대화 찾기 또는 새 대화 시작하기';
 
   @override
@@ -4991,6 +5041,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get clearSearch => '검색 초기화';
+
+  @override
+  String thereAreNoResultsForX(String param) {
+    return '\"$param\"에 대한 결과 없음';
+  }
 
   @override
   String get tags => '태그';
@@ -6416,4 +6471,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2단계 인증';
+
+  @override
+  String get ublogCommunity => '커뮤니티';
+
+  @override
+  String ublogXBlog(String param) {
+    return '$param의 블로그';
+  }
 }

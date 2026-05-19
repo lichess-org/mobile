@@ -68,7 +68,7 @@ class MessageService {
     Navigator.of(
       context,
       rootNavigator: true,
-    ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
+    ).push(ConversationScreen.buildRoute(user: user.lightUser));
   }
 
   void dispose() {

@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 
+enum PuzzleOpeningSort { popular, alphabetical }
+
 typedef PuzzleOpeningFamily = ({
   String key,
   String name,
@@ -15,7 +17,7 @@ typedef PuzzleOpeningData = ({String key, String name, int count});
 final flatOpeningsListProvider = FutureProvider.autoDispose<IList<PuzzleOpeningData>>((
   Ref ref,
 ) async {
-  final families = await ref.watch(puzzleOpeningsProvider.future);
+  final families = await ref.watch(puzzleOpeningsProvider(PuzzleOpeningSort.popular).future);
   return families
       .map(
         (f) => [
