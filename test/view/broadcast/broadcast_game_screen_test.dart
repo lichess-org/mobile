@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 
 import '../../model/broadcast/example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -154,6 +155,69 @@ void main() {
       expect(find.text('6300014', findRichText: true), findsOne);
       expect(find.text('BlackFideId: '), findsOne);
       expect(find.text('6336760', findRichText: true), findsOne);
+    });
+    testWidgets('Variations bar displays variations and can be tapped', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      const gameIdVariations = BroadcastGameId('VarTest1');
+      final customClient = MockClient((request) {
+        if (request.url.path == '/api/broadcast/-/-/$_roundId') {
+          return mockResponse(
+            broadcastRoundMockResponses[(_tournamentId, _roundId)]!,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        if (request.url.path == '/api/study/$_roundId/$gameIdVariations.pgn') {
+          return mockResponse(
+            '1. d4 d5 (1... Nf6)',
+            200,
+            headers: {'content-type': 'application/x-chess-pgn'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: gameIdVariations,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(customClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(); // Loads the broadcast PGN
+
+      // Jump to 1. d4
+      await tester.tap(find.text('d4'));
+      await tester.pump();
+
+      // The variations bar should now display both d5 and Nf6
+      expect(find.byType(VariationsBar), findsOneWidget);
+
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('d5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('Nf6')),
+        findsOneWidget,
+      );
+
+      // Tap the 'Nf6' variation inside the VariationsBar widget
+      await tester.tap(find.descendant(of: find.byType(VariationsBar), matching: find.text('Nf6')));
+
+      await tester.pump();
+
+      // Verify the board advanced properly (a black knight is placed on f6)
+      expect(find.byKey(const Key('f6-blackknight')), findsOneWidget);
     });
 
     testWidgets('PGN tags tab shows dash for empty FIDE ID', variant: kPlatformVariant, (
