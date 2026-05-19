@@ -635,7 +635,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// Returns null if the network request fails or the entry is not conclusive.
   Future<ClientEval?> _fetchTablebaseEval(Position position) async {
     try {
-      final entry = await ref.read(tablebaseRepositoryProvider).getTablebaseEntry(position.fen);
+      final entry = await ref
+          .read(tablebaseRepositoryProvider)
+          .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
       return tablebaseEntryToCloudEval(entry, position);
     } catch (e) {
       _logger.fine('Could not get tablebase eval: $e');
