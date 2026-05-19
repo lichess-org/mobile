@@ -34,8 +34,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     'flag': null,
     'location': null,
     'bio': null,
+    'flair': null,
     'realName': null,
-    'lastName': null,
     'fideRating': null,
     'uscfRating': null,
     'ecfRating': null,
@@ -154,9 +154,16 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   final FocusNode _countryFocusNode = FocusNode();
 
+  late final TextEditingController _countryController = TextEditingController(
+    text: widget.user.profile?.country != null
+        ? (countries[widget.user.profile!.country] ?? '')
+        : '',
+  );
+
   @override
   void dispose() {
     _countryFocusNode.dispose();
+    _countryController.dispose();
     super.dispose();
   }
 
@@ -315,9 +322,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                     const SizedBox(height: 6.0),
                     Autocomplete<String>(
                       focusNode: _countryFocusNode,
-                      initialValue: field.value != null
-                          ? TextEditingValue(text: countries[field.value]!)
-                          : null,
+                      textEditingController: _countryController,
                       optionsBuilder: (TextEditingValue value) {
                         if (value.text.isEmpty) {
                           return const Iterable<String>.empty();
