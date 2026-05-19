@@ -176,6 +176,7 @@ class _Body extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.forum_outlined),
                   title: Text(context.l10n.forum),
+                  trailing: const Icon(Icons.open_in_new, size: 18),
                   enabled: isOnline,
                   onTap: () {
                     launchUrl(lichessUri('/forum'), mode: LaunchMode.inAppBrowserView);
@@ -184,6 +185,7 @@ class _Body extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.newspaper_outlined),
                   title: Text(context.l10n.blog),
+                  trailing: const Icon(Icons.open_in_new, size: 18),
                   enabled: isOnline,
                   onTap: () {
                     launchUrl(lichessUri('/blog'), mode: LaunchMode.inAppBrowserView);
