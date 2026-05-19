@@ -56,9 +56,18 @@ class _PlatformSearchBarState extends State<PlatformSearchBar> {
   }
 
   @override
+  void didUpdateWidget(covariant PlatformSearchBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller?.removeListener(_onTextChanged);
+      widget.controller?.addListener(_onTextChanged);
+    }
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     widget.controller?.removeListener(_onTextChanged);
+    super.dispose();
   }
 
   void _onTextChanged() {
