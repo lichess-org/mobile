@@ -249,6 +249,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
                   tournamentSlug: value.data.slug,
+                  showTeamScores: value.data.showTeamScores == true,
                 ),
                 _ => const SizedBox.shrink(),
               },
