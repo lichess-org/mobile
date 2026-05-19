@@ -52,15 +52,16 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({required this.id});
+  const TournamentScreen({required this.id, this.initialPlayerId});
 
   final TournamentId id;
+  final UserId? initialPlayerId;
 
   static const String routeName = '/tournament';
 
-  static Route<void> buildRoute(TournamentId id) {
+  static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
-      screen: TournamentScreen(id: id),
+      screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -70,6 +71,18 @@ class TournamentScreen extends ConsumerStatefulWidget {
 }
 
 class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPlayerId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showPlayerDetails(context, widget.id, widget.initialPlayerId!);
+        }
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
