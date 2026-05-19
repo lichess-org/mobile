@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -48,6 +49,7 @@ import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
   const TournamentScreen({required this.id});
@@ -214,6 +216,11 @@ class _Body extends ConsumerWidget {
                             ],
                           ),
                         ),
+                      ],
+                      if (state.tournament.description != null &&
+                          state.tournament.description!.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        _ExpandableDescription(description: state.tournament.description!),
                       ],
                     ],
                   ),
@@ -441,6 +448,37 @@ class _TournamentHelp extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ExpandableDescription extends ConsumerWidget {
+  const _ExpandableDescription({required this.description});
+
+  final String description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ExpansionTile(
+      leading: const Icon(Icons.info_outline),
+      title: Text(context.l10n.description),
+      tilePadding: EdgeInsets.zero,
+      splashColor: Colors.transparent,
+      shape: LinearBorder.none,
+      collapsedShape: LinearBorder.none,
+      expandedCrossAxisAlignment: .start,
+      expandedAlignment: .centerLeft,
+      children: [
+        MarkdownBody(
+          data: description,
+          softLineBreak: true,
+          onTapLink: (text, url, title) {
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          },
+        ),
+      ],
     );
   }
 }
