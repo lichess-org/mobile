@@ -266,9 +266,6 @@ void main() {
             onMove: (move, {viaDragAndDrop}) {
               playedMoves.add(move);
             },
-            onPromotionSelection: (_) {},
-            premovable: null,
-            promotionMove: null,
           ),
         ),
       ),

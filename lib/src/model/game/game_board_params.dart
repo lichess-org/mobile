@@ -19,10 +19,8 @@ sealed class GameBoardParams with _$GameBoardParams {
     required Variant variant,
     required Position position,
     required PlayerSide playerSide,
-    required NormalMove? promotionMove,
     required void Function(Move, {bool? viaDragAndDrop}) onMove,
-    required void Function(Role? role) onPromotionSelection,
-    required Premovable? premovable,
+    Move? lastMove,
   }) = InteractiveBoardParams;
 
   static const emptyBoard = ReadonlyBoardParams(

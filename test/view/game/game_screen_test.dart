@@ -615,14 +615,12 @@ void main() {
       final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
       final ctrlProvider = gameControllerProvider(const GameFullId('qVChCOTcHSeW'));
 
-      expect(container.read(ctrlProvider).requireValue.promotionMove, isNotNull);
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNull);
 
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.tapAt(squareOffset(Square.fromName('e8'), boardRect));
       await tester.pump();
 
-      expect(container.read(ctrlProvider).requireValue.promotionMove, isNull);
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
     });
 

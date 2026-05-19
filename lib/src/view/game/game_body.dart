@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -264,19 +265,25 @@ class GameBody extends ConsumerWidget {
                 autoQueenPromotion: gameState.canAutoQueen,
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
                 blindfoldMode: blindfoldMode,
+                enablePremoves: gameState.canPremove && boardPreferences.premoves,
+                enableDrops: gameState.game.meta.variant == Variant.crazyhouse,
+                canPromoteToKing: gameState.game.meta.variant == Variant.antichess,
               ),
               orientation: variantBoardOrientation(
                 variant: gameState.game.meta.variant,
                 youAre: youAre,
                 isBoardTurned: isBoardTurned,
               ),
-              lastMove: gameState.game.moveAt(gameState.stepCursor),
               explosionSquares: gameState.stepCursor > 0
                   ? atomicExplosionSquares(
                       gameState.game.positionAt(gameState.stepCursor - 1),
                       gameState.game.moveAt(gameState.stepCursor),
                     )
                   : null,
+              isReplaying: gameState.isReplaying,
+              onPremove: (move) {
+                ref.read(ctrlProvider.notifier).userMove(move, isPremove: true);
+              },
               boardParams: GameBoardParams.interactive(
                 variant: gameState.game.meta.variant,
                 position: gameState.currentPosition,
@@ -285,21 +292,10 @@ class GameBody extends ConsumerWidget {
                           ? PlayerSide.white
                           : PlayerSide.black
                     : PlayerSide.none,
-                promotionMove: gameState.promotionMove,
+                lastMove: gameState.game.moveAt(gameState.stepCursor),
                 onMove: (move, {viaDragAndDrop}) {
                   ref.read(ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
                 },
-                onPromotionSelection: (role) {
-                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                },
-                premovable: gameState.canPremove && boardPreferences.premoves
-                    ? (
-                        onSetPremove: (move) {
-                          ref.read(ctrlProvider.notifier).setPremove(move);
-                        },
-                        premove: gameState.premove,
-                      )
-                    : null,
               ),
               topTable: topPlayer,
               bottomTable:

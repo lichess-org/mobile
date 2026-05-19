@@ -192,11 +192,6 @@ class _RetroAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(retroControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
   String get fen => analysisState.currentPosition.board.fen;
 
   @override

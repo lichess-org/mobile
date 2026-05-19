@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 /// An abstract widget that provides the common interface for three types of analysis boards:
@@ -51,8 +52,6 @@ abstract class AnalysisBoardState<
 
   void onUserMove(Move move);
 
-  void onPromotionSelection(Role? role);
-
   /// For the study board to set a different fen if the position is `null`.
   String get fen => analysisState.currentPosition!.fen;
 
@@ -65,10 +64,21 @@ abstract class AnalysisBoardState<
   /// Filters to identify the correct engine evaluation provider instance.
   EngineEvaluationFilters get engineEvaluationFilters;
 
-  /// Set of shapes drawn by the user on the board (arrows, circle).
-  ISet<Shape> userShapes = ISet();
+  ChessboardController? _controller;
 
-  ISet<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
+  /// FEN from the last build, used to detect position changes.
+  String? _lastBuiltFen;
+
+  /// Clears all user-drawn shapes from the board.
+  void clearDrawnShapes() => _controller?.clearDrawnShapes();
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  Set<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final currentPosition = analysisState.currentPosition;
 
@@ -78,7 +88,7 @@ abstract class AnalysisBoardState<
         analysisPrefs.showBestMoveArrow;
 
     if (!showBestMoveArrow || currentPosition == null) {
-      return ISet();
+      return {};
     }
 
     final localEval = ref.watch(
@@ -90,13 +100,13 @@ abstract class AnalysisBoardState<
         : pickBestClientEval(localEval: localEval, savedEval: analysisState.currentNode.eval);
 
     if (eval == null) {
-      return ISet();
+      return {};
     }
 
     if (eval.position.fen != currentPosition.fen) {
       // Eval is out of sync, this usually happens after making a move on the board.
       // While waiting for the updated eval we don't want to show the best moves from the previous position.
-      return ISet();
+      return {};
     }
 
     final bestMoveShapes = computeBestMoveShapes(
@@ -118,10 +128,10 @@ abstract class AnalysisBoardState<
         bestMoveColor: LichessColors.red.withValues(alpha: 0.6),
         nextBestMovesColor: LichessColors.red.withValues(alpha: 0.4),
       );
-      return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first}.toISet();
+      return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first};
     }
 
-    return bestMoveShapes;
+    return bestMoveShapes.toSet();
   }
 
   @override
@@ -134,60 +144,103 @@ abstract class AnalysisBoardState<
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
-    return Chessboard(
-      size: widget.boardSize,
-      orientation: analysisState.pov,
-      fen: fen,
-      lastMove: analysisState.lastMove,
-      explosionSquares: analysisState.explosionSquares,
-      game: (interactive && currentPosition != null)
-          ? boardPrefs.toGameData(
+    final playerSide = (interactive && currentPosition != null)
+        ? currentPosition.isGameOver
+              ? PlayerSide.none
+              : currentPosition.turn == Side.white
+              ? PlayerSide.white
+              : PlayerSide.black
+        : PlayerSide.none;
+
+    final newFen = fen;
+
+    if (_controller == null) {
+      if (interactive && currentPosition != null) {
+        _controller = ChessboardController(
+          fen: newFen,
+          game: boardPrefs.buildGameData(
+            variant: analysisState.variant,
+            position: currentPosition,
+            playerSide: playerSide,
+            lastMove: analysisState.lastMove,
+          ),
+        );
+      }
+    } else if (newFen != _lastBuiltFen) {
+      final ctrl = _controller!;
+      final gameData = (interactive && currentPosition != null)
+          ? boardPrefs.buildGameData(
               variant: analysisState.variant,
               position: currentPosition,
-              playerSide: analysisState.currentPosition!.isGameOver
-                  ? PlayerSide.none
-                  : analysisState.currentPosition!.turn == Side.white
-                  ? PlayerSide.white
-                  : PlayerSide.black,
-              promotionMove: analysisState.promotionMove,
-              onMove: (move, {viaDragAndDrop}) => onUserMove(move),
-              onPromotionSelection: onPromotionSelection,
+              playerSide: playerSide,
+              lastMove: analysisState.lastMove,
             )
-          : null,
-      shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
-      annotations: sanMove != null && annotation != null
-          ? sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
-                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                : IMap({sanMove.move.to: annotation})
-          : null,
+          : null;
+      final explosionSquares = analysisState.explosionSquares;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.jumpToPosition(newFen, game: gameData, lastMove: analysisState.lastMove);
+        if (explosionSquares != null) {
+          ctrl.triggerExplosion(explosionSquares.toSet());
+        }
+      });
+    } else if (_controller != null && currentPosition != null) {
+      // Same FEN but game data may have changed (e.g. playerSide changed)
+      final ctrl = _controller!;
+      final gameData = interactive
+          ? boardPrefs.buildGameData(
+              variant: analysisState.variant,
+              position: currentPosition,
+              playerSide: playerSide,
+              lastMove: analysisState.lastMove,
+            )
+          : null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData);
+      });
+    }
+
+    _lastBuiltFen = newFen;
+
+    final externalShapes = {..._bestMoveShapes(boardPrefs.pieceSet.assets), ...extraShapes.unlock};
+
+    final boardAnnotations = sanMove != null && annotation != null
+        ? (sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
+              ? {Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation}
+              : {sanMove.move.to: annotation})
+        : const <Square, Annotation>{};
+
+    final ctrl = _controller;
+
+    if (ctrl == null) {
+      return BoardWidget(
+        size: widget.boardSize,
+        orientation: analysisState.pov,
+        fen: newFen,
+        lastMove: analysisState.lastMove,
+        shapes: externalShapes,
+        settings: boardPrefs.toBoardSettings().copyWith(
+          borderRadius: widget.boardRadius,
+          boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+        ),
+        annotations: boardAnnotations,
+      );
+    }
+
+    return BoardWidget(
+      size: widget.boardSize,
+      orientation: analysisState.pov,
+      controller: ctrl,
+      onMove: (move, {viaDragAndDrop}) => onUserMove(move),
+      shapes: externalShapes,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.boardRadius,
         boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
         drawShape: DrawShapeOptions(
           enable: boardPrefs.enableShapeDrawings,
-          onCompleteShape: _onCompleteShape,
-          onClearShapes: _onClearShapes,
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
+      annotations: boardAnnotations,
     );
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }

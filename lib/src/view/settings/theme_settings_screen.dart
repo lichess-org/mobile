@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -305,14 +304,14 @@ class _BoardPreview extends StatelessWidget {
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes: <Shape>{
+        shapes: {
           Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
           Arrow(
             color: boardPrefs.shapeColor.color,
             orig: Square.fromName('b8'),
             dest: Square.fromName('c6'),
           ),
-        }.lock,
+        },
         settings: boardPrefs.toBoardSettings().copyWith(
           brightness: brightness,
           hue: hue,

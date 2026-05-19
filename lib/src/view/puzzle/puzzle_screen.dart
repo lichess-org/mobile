@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -380,7 +379,14 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  ISet<Shape> userShapes = ISet();
+  ChessboardController? _controller;
+  String? _lastFen;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -388,49 +394,55 @@ class _BodyState extends ConsumerState<_Body> {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
-    // Clear user shapes when puzzle or position changes.
+    final playerSide =
+        puzzleState.mode == PuzzleMode.load ||
+            puzzleState.currentPosition.isGameOver ||
+            (puzzleState.mode == PuzzleMode.play && puzzleState.canGoNext)
+        ? PlayerSide.none
+        : puzzleState.mode == PuzzleMode.view
+        ? PlayerSide.both
+        : puzzleState.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+
+    final newFen = puzzleState.currentPosition.fen;
+    final gameData = boardPreferences.buildGameData(
+      variant: Variant.standard,
+      position: puzzleState.currentPosition,
+      playerSide: playerSide,
+      lastMove: puzzleState.lastMove,
+    );
+
+    if (_controller == null) {
+      _controller = ChessboardController(fen: newFen, game: gameData);
+    } else if (newFen != _lastFen) {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData, lastMove: puzzleState.lastMove);
+      });
+    } else {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData);
+      });
+    }
+    _lastFen = newFen;
+
+    // Clear drawn shapes when puzzle or position changes.
     ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
-      if (previous != null && previous != next && mounted) {
-        setState(() {
-          userShapes = ISet();
-        });
+      if (previous != null && previous != next) {
+        _controller?.clearDrawnShapes();
       }
     });
     ref.listen(ctrlProvider.select((state) => state.currentPath), (previous, next) {
-      if (previous != null && previous != next && mounted) {
-        setState(() {
-          userShapes = ISet();
-        });
+      if (previous != null && previous != next) {
+        _controller?.clearDrawnShapes();
       }
     });
 
-    final generatedShapes = puzzleState.hintSquare != null
-        ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
-        : null;
-    final shapes = userShapes.union(generatedShapes ?? ISet());
-
-    final gameData = boardPreferences.toGameData(
-      variant: Variant.standard,
-      position: puzzleState.currentPosition,
-      playerSide:
-          puzzleState.mode == PuzzleMode.load ||
-              puzzleState.currentPosition.isGameOver ||
-              (puzzleState.mode == PuzzleMode.play && puzzleState.canGoNext)
-          ? PlayerSide.none
-          : puzzleState.mode == PuzzleMode.view
-          ? PlayerSide.both
-          : puzzleState.pov == Side.white
-          ? PlayerSide.white
-          : PlayerSide.black,
-      promotionMove: puzzleState.promotionMove,
-      onMove: (move, {viaDragAndDrop}) {
-        ref.read(ctrlProvider.notifier).onUserMove(move);
-      },
-      onPromotionSelection: (role) {
-        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-      },
-      premovable: null,
-    );
+    final shapes = puzzleState.hintSquare != null
+        ? <Shape>{Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)}
+        : const <Shape>{};
 
     final content = PopScope(
       canPop:
@@ -451,8 +463,6 @@ class _BodyState extends ConsumerState<_Body> {
               boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
               drawShape: DrawShapeOptions(
                 enable: boardPreferences.enableShapeDrawings,
-                onCompleteShape: _onCompleteShape,
-                onClearShapes: _onClearShapes,
                 newShapeColor: boardPreferences.shapeColor.color,
               ),
             );
@@ -473,10 +483,11 @@ class _BodyState extends ConsumerState<_Body> {
                     BoardWidget(
                       boardKey: widget.boardKey,
                       size: boardSize,
-                      fen: puzzleState.currentPosition.fen,
+                      controller: _controller,
+                      onMove: (move, {viaDragAndDrop}) {
+                        ref.read(ctrlProvider.notifier).onUserMove(move);
+                      },
                       orientation: puzzleState.pov,
-                      gameData: gameData,
-                      lastMove: puzzleState.lastMove,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -564,10 +575,11 @@ class _BodyState extends ConsumerState<_Body> {
                     child: BoardWidget(
                       boardKey: widget.boardKey,
                       size: boardSize,
-                      fen: puzzleState.currentPosition.fen,
+                      controller: _controller,
+                      onMove: (move, {viaDragAndDrop}) {
+                        ref.read(ctrlProvider.notifier).onUserMove(move);
+                      },
                       orientation: puzzleState.pov,
-                      gameData: gameData,
-                      lastMove: puzzleState.lastMove,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -600,29 +612,6 @@ class _BodyState extends ConsumerState<_Body> {
             child: content,
           )
         : content;
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }
 

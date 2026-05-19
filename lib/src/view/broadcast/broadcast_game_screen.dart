@@ -529,16 +529,6 @@ class _BroadcastAnalysisBoardState
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
-
-  @override
-  void onPromotionSelection(Role? role) => ref
-      .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
-      )
-      .onPromotionSelection(role);
 }
 
 enum _PlayerWidgetPosition { bottom, top }

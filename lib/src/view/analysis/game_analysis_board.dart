@@ -49,10 +49,6 @@ class _GameAnalysisBoardState
       .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove);
 
   @override
-  void onPromotionSelection(Role? role) =>
-      ref.read(analysisControllerProvider(widget.options).notifier).onPromotionSelection(role);
-
-  @override
   ISet<Shape> get extraShapes {
     final analysisState = ref.watch(analysisControllerProvider(widget.options)).requireValue;
     final pgnShapes = ISet(analysisState.pgnShapes.map((shape) => shape.chessground));

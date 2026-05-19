@@ -473,11 +473,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
   void onUserMove(Move move, {bool shouldReplace = false}) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
-      state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     final (newPath, isNewNode) = _root.addMoveAt(
       state.requireValue.currentPath,
       move,
@@ -486,18 +481,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     );
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = AsyncData(state.requireValue.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.requireValue.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
     }
   }
 
@@ -755,7 +738,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -767,7 +749,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
           lastMove: null,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -887,9 +868,6 @@ sealed class AnalysisState
 
     /// The last move played.
     Move? lastMove,
-
-    /// Possible promotion move to be played.
-    NormalMove? promotionMove,
 
     /// Opening of the analysis context (from lichess archived games).
     Opening? contextOpening,

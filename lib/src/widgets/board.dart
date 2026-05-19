@@ -1,48 +1,73 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 
 class BoardWidget extends StatelessWidget {
   const BoardWidget({
     required this.size,
-    required this.fen,
     required this.orientation,
-    required this.gameData,
-    this.lastMove,
-    this.shapes,
     required this.settings,
+    this.controller,
+    this.onMove,
+    this.fen,
+    this.lastMove,
+    this.shapes = const {},
+    this.annotations = const {},
     this.boardOverlay,
     this.error,
     this.boardKey,
-    this.explosionSquares,
-  });
+  }) : assert(controller != null || fen != null);
 
   final double size;
-  final String fen;
   final Side orientation;
-  final GameData? gameData;
-  final Move? lastMove;
-  final ISet<Shape>? shapes;
   final ChessboardSettings settings;
+
+  /// Controller for the interactive board. Mutually exclusive with [fen].
+  final ChessboardController? controller;
+
+  /// Called when the user completes a move on the interactive board.
+  final void Function(Move, {bool? viaDragAndDrop})? onMove;
+
+  /// FEN string for the fixed (non-interactive) board. Mutually exclusive with [controller].
+  final String? fen;
+
+  /// Last move highlight for the fixed board. Ignored when [controller] is set.
+  final Move? lastMove;
+
+  /// External shapes to draw on the board (engine arrows, analysis annotations, etc.).
+  final Set<Shape> shapes;
+
+  /// Move annotations to display on the board.
+  final Map<Square, Annotation> annotations;
+
   final String? error;
   final Widget? boardOverlay;
   final GlobalKey? boardKey;
-  final ISet<Square>? explosionSquares;
 
   @override
   Widget build(BuildContext context) {
-    final board = Chessboard(
-      key: boardKey,
-      size: size,
-      fen: fen,
-      orientation: orientation,
-      game: gameData,
-      lastMove: lastMove,
-      shapes: shapes,
-      settings: settings,
-      explosionSquares: explosionSquares,
-    );
+    final ctrl = controller;
+    final board = ctrl != null
+        ? Chessboard(
+            key: boardKey,
+            controller: ctrl,
+            size: size,
+            orientation: orientation,
+            onMove: onMove,
+            shapes: shapes,
+            annotations: annotations,
+            settings: settings,
+          )
+        : Chessboard.fixed(
+            key: boardKey,
+            size: size,
+            orientation: orientation,
+            fen: fen!,
+            lastMove: lastMove,
+            shapes: shapes,
+            annotations: annotations,
+            settings: settings,
+          );
 
     final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
 

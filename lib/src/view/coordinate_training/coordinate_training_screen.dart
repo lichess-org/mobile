@@ -434,7 +434,7 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
             Chessboard.fixed(
               size: widget.boardSize,
               fen: trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN,
-              squareHighlights: widget.squareHighlights,
+              squareHighlights: widget.squareHighlights.unlock,
               orientation: widget.orientation,
               settings: boardPrefs.toBoardSettings().copyWith(
                 enableCoordinates: trainingPrefs.showCoordinates,

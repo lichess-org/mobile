@@ -64,6 +64,8 @@ class GameLayout extends ConsumerStatefulWidget {
     this.zenMode = false,
     this.userActionsBar,
     this.explosionSquares,
+    this.isReplaying = false,
+    this.onPremove,
     super.key,
   });
 
@@ -86,12 +88,15 @@ class GameLayout extends ConsumerStatefulWidget {
       boardKey = null,
       zenMode = false,
       userActionsBar = null,
-      explosionSquares = null;
+      explosionSquares = null,
+      isReplaying = false,
+      onPremove = null;
 
   final GameBoardParams boardParams;
 
   final Side orientation;
 
+  /// Last move highlight for readonly boards. For interactive boards, use [InteractiveBoardParams.lastMove].
   final Move? lastMove;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
@@ -144,16 +149,134 @@ class GameLayout extends ConsumerStatefulWidget {
   final Widget? userActionsBar;
 
   /// Squares on which an atomic chess explosion should be shown.
+  final Set<Square>? explosionSquares;
+
+  /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
-  /// See [Chessboard.explosionSquares] for details.
-  final ISet<Square>? explosionSquares;
+  /// When true, position changes use [ChessboardController.jumpToPosition] instead of
+  /// [ChessboardController.updatePosition], skipping animation and clearing the premove.
+  final bool isReplaying;
+
+  /// Called when a premove is ready to be executed after the opponent moves.
+  final void Function(Move)? onPremove;
 
   @override
   ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
 class _GameLayoutState extends ConsumerState<GameLayout> {
-  ISet<Shape> userShapes = ISet();
+  ChessboardController? _controller;
+
+  /// Tracks the last move that was made via drag-and-drop so we can pass it as
+  /// [lastDrop] to [ChessboardController.updatePosition], which suppresses the
+  /// redundant translation animation for the already-dragged piece.
+  Move? _lastDragMove;
+
+  @override
+  void initState() {
+    super.initState();
+    _initController();
+  }
+
+  @override
+  void dispose() {
+    _controller?.premoveNotifier.removeListener(_onPremoveChanged);
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(GameLayout old) {
+    super.didUpdateWidget(old);
+    final ctrl = _controller;
+    if (ctrl == null) return;
+
+    final oldParams = old.boardParams;
+    final newParams = widget.boardParams;
+    if (newParams is! InteractiveBoardParams) return;
+
+    final newGameData = _buildGameData(newParams);
+
+    if (oldParams is InteractiveBoardParams) {
+      final fenChanged = oldParams.position.fen != newParams.position.fen;
+      if (fenChanged) {
+        final lastDrop = _lastDragMove;
+        _lastDragMove = null;
+        if (widget.isReplaying) {
+          ctrl.jumpToPosition(
+            newParams.position.fen,
+            game: newGameData,
+            lastMove: newParams.lastMove,
+          );
+        } else {
+          ctrl.updatePosition(
+            newParams.position.fen,
+            game: newGameData,
+            lastMove: newParams.lastMove,
+            lastDrop: lastDrop,
+          );
+          if (widget.explosionSquares != null) {
+            ctrl.triggerExplosion(widget.explosionSquares!);
+          }
+          _tryExecutePremove(newParams);
+        }
+      } else {
+        // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
+        ctrl.updatePosition(newParams.position.fen, game: newGameData);
+      }
+    }
+  }
+
+  void _initController() {
+    final params = widget.boardParams;
+    if (params is InteractiveBoardParams) {
+      final boardPrefs = ref.read(boardPreferencesProvider);
+      _controller = ChessboardController(
+        fen: params.position.fen,
+        game: boardPrefs.buildGameData(
+          variant: params.variant,
+          position: params.position,
+          playerSide: params.playerSide,
+          lastMove: params.lastMove,
+        ),
+      );
+      _controller!.premoveNotifier.addListener(_onPremoveChanged);
+    }
+  }
+
+  void _onPremoveChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _tryExecutePremove(InteractiveBoardParams params) {
+    final ctrl = _controller;
+    final onPremove = widget.onPremove;
+    if (ctrl == null || onPremove == null) return;
+    final premove = ctrl.premove;
+    if (premove == null) return;
+    if (params.position.isLegal(premove)) {
+      if (premove is NormalMove && isPromotionPawnMove(params.position, premove)) {
+        ctrl.premove = null;
+        ctrl.pendingPromotion = premove;
+      } else {
+        ctrl.premove = null;
+        onPremove(premove);
+      }
+    } else {
+      // Premove became illegal (e.g. after a takeback) — clear it.
+      ctrl.premove = null;
+    }
+  }
+
+  GameData _buildGameData(InteractiveBoardParams params) {
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    return boardPrefs.buildGameData(
+      variant: params.variant,
+      position: params.position,
+      playerSide: params.playerSide,
+      lastMove: params.lastMove,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,34 +292,14 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         final defaultSettings = boardPrefs.toBoardSettings().copyWith(
           borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-          drawShape: DrawShapeOptions(
-            enable: boardPrefs.enableShapeDrawings,
-            onCompleteShape: _onCompleteShape,
-            onClearShapes: _onClearShapes,
-            newShapeColor: boardPrefs.shapeColor.color,
-          ),
         );
 
         final settings = widget.boardSettingsOverrides != null
             ? widget.boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
-        final shapes = userShapes.union(widget.shapes ?? ISet());
+        final shapes = widget.shapes?.unlock ?? const <Shape>{};
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
-
-        final fen = widget.boardParams.fen;
-        final gameData = switch (widget.boardParams) {
-          ReadonlyBoardParams() => null,
-          final InteractiveBoardParams board => boardPrefs.toGameData(
-            variant: board.variant,
-            position: board.position,
-            playerSide: board.playerSide,
-            promotionMove: board.promotionMove,
-            onMove: board.onMove,
-            onPromotionSelection: board.onPromotionSelection,
-            premovable: board.premovable,
-          ),
-        };
 
         final sideToMove = switch (widget.boardParams) {
           ReadonlyBoardParams() => null,
@@ -205,10 +308,22 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         };
 
         final pockets = widget.boardParams.pockets;
-        final premoveDropRole = switch (gameData?.premovable?.premove) {
+        final premoveDropRole = switch (_controller?.premove) {
           DropMove(:final role) => role,
           _ => null,
         };
+
+        // Wrap onMove to capture drag moves for animation suppression via lastDrop.
+        final void Function(Move, {bool? viaDragAndDrop})? wrappedOnMove =
+            switch (widget.boardParams) {
+              final InteractiveBoardParams params => (Move move, {bool? viaDragAndDrop}) {
+                if (viaDragAndDrop == true) {
+                  _lastDragMove = move;
+                }
+                params.onMove(move, viaDragAndDrop: viaDragAndDrop);
+              },
+              _ => null,
+            };
 
         Widget topTable({required double boardSize}) => RotatedBox(
           quarterTurns: widget.topTableUpsideDown ? 2 : 0,
@@ -275,16 +390,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               children: [
                 BoardWidget(
                   size: boardSize,
-                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: gameData,
-                  lastMove: widget.lastMove,
+                  controller: _controller,
+                  onMove: wrappedOnMove,
+                  fen: _controller == null ? widget.boardParams.fen : null,
+                  lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
-                  explosionSquares: widget.explosionSquares,
                 ),
                 const SizedBox(width: 16.0),
                 Expanded(
@@ -371,16 +486,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     : EdgeInsets.zero,
                 child: BoardWidget(
                   size: effectiveBoardSize,
-                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: gameData,
-                  lastMove: widget.lastMove,
+                  controller: _controller,
+                  onMove: wrappedOnMove,
+                  fen: _controller == null ? widget.boardParams.fen : null,
+                  lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
-                  explosionSquares: widget.explosionSquares,
                 ),
               ),
               Expanded(
@@ -399,29 +514,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       },
     );
   }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
-  }
 }
 
 class BoardSettingsOverrides {
@@ -433,6 +525,9 @@ class BoardSettingsOverrides {
     this.drawShape,
     this.pieceOrientationBehavior,
     this.pieceAssets,
+    this.enablePremoves,
+    this.enableDrops,
+    this.canPromoteToKing,
   });
 
   final Duration? animationDuration;
@@ -442,6 +537,9 @@ class BoardSettingsOverrides {
   final DrawShapeOptions? drawShape;
   final PieceOrientationBehavior? pieceOrientationBehavior;
   final PieceAssets? pieceAssets;
+  final bool? enablePremoves;
+  final bool? enableDrops;
+  final bool? canPromoteToKing;
 
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
@@ -452,6 +550,9 @@ class BoardSettingsOverrides {
       drawShape: drawShape,
       pieceOrientationBehavior: pieceOrientationBehavior,
       pieceAssets: pieceAssets,
+      enablePremoves: enablePremoves,
+      enableDrops: enableDrops,
+      canPromoteToKing: canPromoteToKing,
     );
   }
 }

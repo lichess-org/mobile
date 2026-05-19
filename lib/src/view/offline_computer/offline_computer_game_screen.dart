@@ -269,14 +269,9 @@ class _BodyState extends ConsumerState<_Body> {
                           : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
-                      onPromotionSelection: ref
-                          .read(offlineComputerGameControllerProvider.notifier)
-                          .onPromotionSelection,
-                      promotionMove: gameState.promotionMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,

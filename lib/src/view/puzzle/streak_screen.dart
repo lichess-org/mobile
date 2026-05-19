@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,8 +90,15 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  ISet<Shape> userShapes = ISet();
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
+  ChessboardController? _controller;
+  String? _lastFen;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +112,7 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.hasValue == true && next.hasValue) {
         if (next.requireValue.streak.finished == false &&
             previous!.requireValue.streak.finished == true) {
-          _onClearShapes();
+          _controller?.clearDrawnShapes();
           final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
@@ -129,25 +135,36 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final gameData = boardPreferences.toGameData(
+    final playerSide = puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+        ? PlayerSide.none
+        : puzzleState.mode == PuzzleMode.view
+        ? PlayerSide.both
+        : puzzleState.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+
+    final newFen = puzzleState.currentPosition.fen;
+    final gameData = boardPreferences.buildGameData(
       variant: Variant.standard,
       position: puzzleState.currentPosition,
-      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-          ? PlayerSide.none
-          : puzzleState.mode == PuzzleMode.view
-          ? PlayerSide.both
-          : puzzleState.pov == Side.white
-          ? PlayerSide.white
-          : PlayerSide.black,
-      promotionMove: puzzleState.promotionMove,
-      onMove: (move, {viaDragAndDrop}) {
-        ref.read(ctrlProvider.notifier).onUserMove(move);
-      },
-      onPromotionSelection: (role) {
-        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-      },
-      premovable: null,
+      playerSide: playerSide,
+      lastMove: puzzleState.lastMove,
     );
+
+    if (_controller == null) {
+      _controller = ChessboardController(fen: newFen, game: gameData);
+    } else if (newFen != _lastFen) {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData, lastMove: puzzleState.lastMove);
+      });
+    } else {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData);
+      });
+    }
+    _lastFen = newFen;
 
     final content = PopScope(
       canPop: widget.streak.index == 0 || widget.streak.finished,
@@ -190,8 +207,6 @@ class _BodyState extends ConsumerState<_Body> {
                         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
                         drawShape: DrawShapeOptions(
                           enable: boardPreferences.enableShapeDrawings,
-                          onCompleteShape: _onCompleteShape,
-                          onClearShapes: _onClearShapes,
                           newShapeColor: boardPreferences.shapeColor.color,
                         ),
                       );
@@ -212,11 +227,11 @@ class _BodyState extends ConsumerState<_Body> {
                               BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: puzzleState.currentPosition.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) {
+                                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                                },
                                 orientation: puzzleState.pov,
-                                gameData: gameData,
-                                lastMove: puzzleState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                               const SizedBox(width: 16.0),
@@ -345,11 +360,11 @@ class _BodyState extends ConsumerState<_Body> {
                               child: BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: puzzleState.currentPosition.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) {
+                                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                                },
                                 orientation: puzzleState.pov,
-                                gameData: gameData,
-                                lastMove: puzzleState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                             ),
@@ -425,29 +440,6 @@ class _BodyState extends ConsumerState<_Body> {
             child: content,
           )
         : content;
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }
 

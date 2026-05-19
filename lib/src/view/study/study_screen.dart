@@ -587,11 +587,6 @@ class _StudyAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(studyControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
   String get fen =>
       analysisState.currentPosition?.board.fen ??
       analysisState.study.currentChapterMeta.fen ??
@@ -635,9 +630,7 @@ class _StudyAnalysisBoardState
       next,
     ) {
       if (prev != next) {
-        setState(() {
-          userShapes = ISet();
-        });
+        clearDrawnShapes();
       }
     });
 

@@ -50,7 +50,7 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
                             size: boardSize,
                             fen: kEmptyBoardFEN,
                             orientation: Side.white,
-                            gameData: null,
+
                             settings: defaultSettings,
                             error: errorMessage,
                           ),
@@ -75,7 +75,7 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
                             size: boardSize,
                             fen: kEmptyBoardFEN,
                             orientation: Side.white,
-                            gameData: null,
+
                             settings: defaultSettings,
                             error: errorMessage,
                           ),

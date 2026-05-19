@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -230,28 +229,21 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     );
   }
 
-  GameData toGameData({
+  GameData buildGameData({
     required Variant variant,
     required Position position,
     required PlayerSide playerSide,
-    required NormalMove? promotionMove,
-    required void Function(Move, {bool? viaDragAndDrop}) onMove,
-    required void Function(Role? role) onPromotionSelection,
-    Premovable? premovable,
+    Move? lastMove,
   }) {
     return GameData(
       playerSide: playerSide,
-      onMove: onMove,
-      onPromotionSelection: onPromotionSelection,
-      premovable: premoves ? premovable : null,
-      promotionMove: promotionMove,
       sideToMove: position.turn,
-      validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
-      droppable: variant == Variant.crazyhouse
-          ? (validDropSquares: position.legalDrops.squares.toISet())
+      validMoves: makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
+      lastMove: lastMove,
+      kingSquareInCheck: boardHighlights && position.isCheck
+          ? position.board.kingOf(position.turn)
           : null,
-      isCheck: boardHighlights && position.isCheck,
-      canPromoteToKing: variant == Variant.antichess,
+      validDropSquares: variant == Variant.crazyhouse ? position.legalDrops.squares.toSet() : null,
     );
   }
 
@@ -263,12 +255,12 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
 }
 
-IMap<Square, ISet<Square>> _makeLegalMoves(
+Map<Square, Set<Square>> makeLegalMoves(
   Position pos, {
   required CastlingMethod castlingMethod,
   required Variant variant,
 }) {
-  final Map<Square, ISet<Square>> result = {};
+  final result = <Square, Set<Square>>{};
   for (final entry in pos.legalMoves.entries) {
     final dests = entry.value.squares;
     if (dests.isNotEmpty) {
@@ -291,10 +283,10 @@ IMap<Square, ISet<Square>> _makeLegalMoves(
           destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
         }
       }
-      result[from] = ISet(destSet);
+      result[from] = destSet;
     }
   }
-  return IMap(result);
+  return result;
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178

@@ -101,7 +101,6 @@ class _BodyState extends ConsumerState<_Body> {
   int stepCursor = 0;
   (String, Move)? moveToConfirm;
   bool isBoardTurned = false;
-  NormalMove? promotionMove;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
@@ -206,12 +205,9 @@ class _BodyState extends ConsumerState<_Body> {
                           ? PlayerSide.white
                           : PlayerSide.black
                     : PlayerSide.none,
-                promotionMove: promotionMove,
                 onMove: (move, {viaDragAndDrop}) {
                   onUserMove(move);
                 },
-                onPromotionSelection: onPromotionSelection,
-                premovable: null,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
@@ -313,7 +309,6 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor > 0) {
       setState(() {
         stepCursor = stepCursor - 1;
-        promotionMove = null;
       });
       _playReplayMoveSound();
     }
@@ -323,20 +318,12 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor < game.steps.length - 1) {
       setState(() {
         stepCursor = stepCursor + 1;
-        promotionMove = null;
       });
       _playReplayMoveSound();
     }
   }
 
   void onUserMove(Move move) {
-    if (move case NormalMove() when isPromotionPawnMove(game.lastPosition, move)) {
-      setState(() {
-        promotionMove = move;
-      });
-      return;
-    }
-
     final (newPos, newSan) = game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -348,24 +335,10 @@ class _BodyState extends ConsumerState<_Body> {
     setState(() {
       moveToConfirm = (game.sanMoves, move);
       game = game.copyWith(steps: game.steps.add(newStep));
-      promotionMove = null;
       stepCursor = stepCursor + 1;
     });
 
     _moveFeedback(sanMove);
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      setState(() {
-        promotionMove = null;
-      });
-      return;
-    }
-    if (promotionMove != null) {
-      final move = promotionMove!.withPromotion(role);
-      onUserMove(move);
-    }
   }
 
   Future<void> confirmMove() async {

@@ -695,9 +695,9 @@ void main() {
       final board = tester.widget<Chessboard>(find.byType(Chessboard));
 
       if (annotations.isEmpty) {
-        expect(board.annotations, isNull);
+        expect(board.annotations, isEmpty);
       } else {
-        expect(board.annotations!.length, annotations.length);
+        expect(board.annotations.length, annotations.length);
         expect(board.annotations, allOf(annotations));
       }
     }
@@ -784,7 +784,7 @@ void main() {
     await tester.pumpAndSettle(); // Wait for O-O-O move to be played
 
     final board = tester.widget<Chessboard>(find.byType(Chessboard));
-    expect(board.annotations!.length, 1);
+    expect(board.annotations.length, 1);
     expect(
       board.annotations,
       containsPair(Square.c1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),

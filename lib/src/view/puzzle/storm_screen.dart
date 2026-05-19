@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,8 +88,15 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  ISet<Shape> userShapes = ISet();
   final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
+  ChessboardController? _controller;
+  String? _lastFen;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,22 +118,37 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final gameData = boardPreferences.toGameData(
+    final playerSide =
+        !stormState.firstMovePlayed ||
+            stormState.mode == StormMode.ended ||
+            stormState.position.isGameOver
+        ? PlayerSide.none
+        : stormState.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+
+    final newFen = stormState.position.fen;
+    final gameData = boardPreferences.buildGameData(
       variant: Variant.standard,
       position: stormState.position,
-      playerSide:
-          !stormState.firstMovePlayed ||
-              stormState.mode == StormMode.ended ||
-              stormState.position.isGameOver
-          ? PlayerSide.none
-          : stormState.pov == Side.white
-          ? PlayerSide.white
-          : PlayerSide.black,
-      promotionMove: stormState.promotionMove,
-      onMove: (move, {viaDragAndDrop}) => ref.read(ctrlProvider.notifier).onUserMove(move),
-      onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-      premovable: null,
+      playerSide: playerSide,
+      lastMove: stormState.lastMove,
     );
+
+    if (_controller == null) {
+      _controller = ChessboardController(fen: newFen, game: gameData);
+    } else if (newFen != _lastFen) {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData, lastMove: stormState.lastMove);
+      });
+    } else {
+      final ctrl = _controller!;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ctrl.updatePosition(newFen, game: gameData);
+      });
+    }
+    _lastFen = newFen;
 
     final content = PopScope(
       canPop: stormState.mode != StormMode.running,
@@ -172,8 +193,6 @@ class _BodyState extends ConsumerState<_Body> {
                         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
                         drawShape: DrawShapeOptions(
                           enable: boardPreferences.enableShapeDrawings,
-                          onCompleteShape: _onCompleteShape,
-                          onClearShapes: _onClearShapes,
                           newShapeColor: boardPreferences.shapeColor.color,
                         ),
                       );
@@ -194,11 +213,10 @@ class _BodyState extends ConsumerState<_Body> {
                               BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: stormState.position.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) =>
+                                    ref.read(ctrlProvider.notifier).onUserMove(move),
                                 orientation: stormState.pov,
-                                gameData: gameData,
-                                lastMove: stormState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                               const SizedBox(width: 16.0),
@@ -313,11 +331,10 @@ class _BodyState extends ConsumerState<_Body> {
                               child: BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: stormState.position.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) =>
+                                    ref.read(ctrlProvider.notifier).onUserMove(move),
                                 orientation: stormState.pov,
-                                gameData: gameData,
-                                lastMove: stormState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                             ),
@@ -352,29 +369,6 @@ class _BodyState extends ConsumerState<_Body> {
             child: content,
           )
         : content;
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }
 
