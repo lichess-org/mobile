@@ -79,7 +79,8 @@ class UserContextMenu extends ConsumerWidget {
                 ),
                 if (authUser != null && value.canChallenge == true)
                   BottomSheetContextMenuAction(
-                    onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
+                    onPressed: () =>
+                        UserScreen.challengeUser(value.lightUser, context: context, ref: ref),
                     icon: LichessIcons.crossed_swords,
                     child: Text(context.l10n.challengeChallengeToPlay),
                   ),

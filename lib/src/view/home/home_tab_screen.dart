@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -41,6 +42,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
+import 'package:lichess_mobile/src/view/home/following_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
@@ -268,6 +270,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 shouldShow: authUser != null,
                 child: const AccountPerfCards(padding: Styles.bodySectionPadding),
               ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null,
+              child: const FollowingWidget(),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -328,6 +335,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
+            ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null && isOnline,
+              child: const FollowingWidget(),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,
@@ -449,6 +461,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
       if (isOnline) ref.refresh(featuredTournamentsProvider.future),
+      if (isOnline) ref.refresh(followingCarouselProvider.future),
     ]);
   }
 }
