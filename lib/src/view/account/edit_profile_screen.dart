@@ -152,6 +152,14 @@ class _EditProfileForm extends ConsumerStatefulWidget {
 class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   Future<void>? _pendingSaveProfile;
 
+  final FocusNode _countryFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _countryFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
@@ -306,6 +314,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                     Text(context.l10n.countryRegion, style: Styles.formLabel),
                     const SizedBox(height: 6.0),
                     Autocomplete<String>(
+                      focusNode: _countryFocusNode,
                       initialValue: field.value != null
                           ? TextEditingValue(text: countries[field.value]!)
                           : null,

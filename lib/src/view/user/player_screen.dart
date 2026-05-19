@@ -52,6 +52,8 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void dispose() {
     _focusNode.dispose();
+    // Avoid leaks. If context.mounted was false onFocusLost, we didn't stop watching friends.
+    ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
     super.dispose();
   }
 

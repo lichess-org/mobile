@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
+const _kSaveHistoryDebounceTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
@@ -39,7 +39,7 @@ class SearchScreen extends ConsumerStatefulWidget {
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
-  final saveHistoryDebouncer = Debouncer(_kSaveHistoryDebouncTimer);
+  final _saveHistoryDebouncer = Debouncer(_kSaveHistoryDebounceTimer);
   String? _term;
 
   @override
@@ -50,8 +50,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   void dispose() {
-    super.dispose();
+    _saveHistoryDebouncer.cancel();
     _searchController.dispose();
+    super.dispose();
   }
 
   void _onSearchChanged() {
@@ -59,11 +60,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     final term = _searchController.text;
     if (term.length >= 3) {
-      ref.read(autoCompleteUserProvider(term));
       setState(() {
         _term = term;
       });
-      saveHistoryDebouncer.call(() {
+      _saveHistoryDebouncer.call(() {
         if (!mounted) return;
         ref.read(searchHistoryProvider.notifier).saveTerm(term);
       });

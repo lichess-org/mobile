@@ -114,6 +114,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
 
   @override
   void dispose() {
+    _debouncer.cancel();
     tabController.dispose();
     mostVisibleIndex.removeListener(scrollToMostVisibleSectionIndex);
     mostVisibleIndex.dispose();
