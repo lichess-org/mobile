@@ -107,6 +107,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
     bool? teamTable,
+    bool? showTeamScores,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
@@ -336,4 +337,27 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
   }) = _BroadcastTeamMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
+  const factory BroadcastTeamStandingMatch({
+    required BroadcastRoundId roundId,
+    required String opponent,
+    required String points,
+    required double mp,
+    required double gp,
+  }) = _BroadcastTeamStandingMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
+  const factory BroadcastTeamStanding({
+    required String name,
+    required double mp,
+    required double gp,
+    required IList<BroadcastTeamStandingMatch> matches,
+    required IList<BroadcastPlayerWithOverallResult> players,
+    required int? averageRating,
+  }) = _BroadcastTeamStanding;
 }
