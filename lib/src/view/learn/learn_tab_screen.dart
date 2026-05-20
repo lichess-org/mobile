@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
+import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -18,11 +19,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
+final _studiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
+  final order = ref.watch(studyPreferencesProvider).listOrder;
   return ref.withClientCacheFor(
-    (client) => StudyRepository(ref, client)
-        .getStudies(category: StudyCategory.all, order: StudyListOrder.hot)
-        .then((value) => value.studies),
+    (client) => StudyRepository(
+      ref,
+      client,
+    ).getStudies(category: StudyCategory.all, order: order).then((value) => value.studies),
     const Duration(hours: 6),
   );
 });
@@ -117,7 +120,7 @@ class _Body extends ConsumerWidget {
                   Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
               hasLeading: true,
               children: [
-                ...(switch (ref.watch(_hotStudiesProvider)) {
+                ...(switch (ref.watch(_studiesProvider)) {
                   AsyncData(:final value) =>
                     value
                         .take(5)
