@@ -122,7 +122,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
-    final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
+    final lastMove = _root.branchAt(currentPath)?.sanMove.move;
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
@@ -176,7 +176,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = wasOnLivePath
-          ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move
+          ? newRoot.branchAt(broadcastPath)?.sanMove.move
           : curState.lastMove;
 
       newRoot.merge(_root);

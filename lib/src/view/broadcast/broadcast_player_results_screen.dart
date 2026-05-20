@@ -312,9 +312,9 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(context).push(
-                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
-                            );
+                            Navigator.of(
+                              context,
+                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(
