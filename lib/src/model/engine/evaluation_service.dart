@@ -86,6 +86,14 @@ class EvaluationService {
 
   final UCIProtocol _protocol = UCIProtocol();
 
+  // serialize engine start/quit operations to avoid races
+  Future<void> _engineOpQueue = Future<void>.value();
+
+  Future<void> _runStockfishOperation(Future<void> Function() op) {
+    // discard errors to keep the queue running
+    return _engineOpQueue = _engineOpQueue.then((_) => op()).catchError((_, _) {});
+  }
+
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
@@ -326,14 +334,17 @@ class EvaluationService {
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
-
+    // Update work and flag other type of work to be discarded
     switch (work) {
       case final EvalWork evalWork:
         _setEvalWork(evalWork);
         _discardEvalResults = false;
+        _discardMoveResults = true;
+        _cancelPendingMoveRequest();
       case final MoveWork moveWork:
         _setMoveWork(moveWork);
         _discardMoveResults = false;
+        _discardEvalResults = true;
     }
 
     if (_initInProgress) {
@@ -348,6 +359,7 @@ class EvaluationService {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
       _initEngine(flavor, work.variant).then((_) {
+        _initInProgress = false;
         // Compute the current work (might be different from original if another request came in)
         final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {
@@ -363,7 +375,7 @@ class EvaluationService {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
-      await _stockfish.quit();
+      await _runStockfishOperation(() => _stockfish.quit());
 
       _protocol.reset();
 
@@ -382,12 +394,14 @@ class EvaluationService {
         }
       }
 
-      await _stockfish.start(
-        flavor: actualFlavor,
-        // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
-        variant: variant.fairy,
-        smallNetPath: smallNetPath,
-        bigNetPath: bigNetPath,
+      await _runStockfishOperation(
+        () => _stockfish.start(
+          flavor: actualFlavor,
+          // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+          variant: variant.fairy,
+          smallNetPath: smallNetPath,
+          bigNetPath: bigNetPath,
+        ),
       );
 
       if (_stockfish.state.value == StockfishState.error) {
@@ -506,7 +520,7 @@ class EvaluationService {
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentMoveWork = null;
-    _stockfish.quit();
+    _runStockfishOperation(() => _stockfish.quit());
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
@@ -532,7 +546,7 @@ class EvaluationService {
     _protocol.isComputing.removeListener(_onComputingChange);
     _protocol.engineName.removeListener(_onEngineNameChange);
     _protocol.dispose();
-    _stockfish.quit();
+    _runStockfishOperation(() => _stockfish.quit());
     _evalController.close();
     _moveController.close();
     _evaluationState.dispose();
