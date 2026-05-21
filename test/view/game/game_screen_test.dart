@@ -1648,6 +1648,35 @@ void main() {
       await dropExpectation;
     });
 
+    testWidgets('pocket count display updates after a player drop move', (tester) async {
+      // Regression test: the pocket counts are rendered by the GameLayout from
+      // the board params. With the high-performance board, a move no longer
+      // rebuilds the layout shell, so the displayed pocket count could go stale
+      // (the dropped pawn would still show in the pocket after being played).
+
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn.
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.white,
+      );
+
+      final whitePawnPocket = find.byKey(const ValueKey('pocket-whitepawn'));
+      expect(whitePawnPocket, findsOneWidget);
+
+      // The white pawn pocket initially shows a count badge of 1.
+      expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsOneWidget);
+
+      // White drops the pawn to c4.
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pumpAndSettle();
+
+      // The pawn is on the board and the pocket count badge is gone (count 0).
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+      expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsNothing);
+    });
+
     testWidgets("Cannot interact with the opponent's pockets", (tester) async {
       // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
       await createTestGame(

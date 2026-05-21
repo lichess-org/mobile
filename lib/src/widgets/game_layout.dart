@@ -48,6 +48,7 @@ class GameLayout extends ConsumerStatefulWidget {
   const GameLayout({
     required this.orientation,
     required this.boardParams,
+    this.controller,
     this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
@@ -60,6 +61,7 @@ class GameLayout extends ConsumerStatefulWidget {
     this.moves,
     this.currentMoveIndex = 0,
     this.onSelectMove,
+    this.moveListBuilder,
     this.boardOverlay,
     this.errorMessage,
     this.boardKey,
@@ -75,6 +77,7 @@ class GameLayout extends ConsumerStatefulWidget {
   const GameLayout.empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
+      controller = null,
       lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
@@ -86,6 +89,7 @@ class GameLayout extends ConsumerStatefulWidget {
       shapes = null,
       currentMoveIndex = 0,
       onSelectMove = null,
+      moveListBuilder = null,
       boardOverlay = null,
       boardKey = null,
       zenMode = false,
@@ -95,6 +99,20 @@ class GameLayout extends ConsumerStatefulWidget {
       onPremove = null;
 
   final GameBoardParams boardParams;
+
+  /// An externally owned [ChessboardController] for the high-performance path.
+  ///
+  /// When provided, [GameLayout] renders the board with this controller but does
+  /// NOT create, dispose, or drive it: the owner is responsible for calling
+  /// [ChessboardController.updatePosition]/[ChessboardController.jumpToPosition]
+  /// and for premove/explosion/replay handling. In this mode [boardParams] is
+  /// only read for static layout info (variant, pockets, [InteractiveBoardParams.onMove])
+  /// and position changes are expected NOT to flow through [didUpdateWidget].
+  ///
+  /// When null, [GameLayout] owns the controller itself (the simpler path used by
+  /// non performance-critical screens) and updates it from [boardParams] in
+  /// [didUpdateWidget].
+  final ChessboardController? controller;
 
   final Side orientation;
 
@@ -137,6 +155,14 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Callback that will be called when a move is selected from the [moves] list.
   final void Function(int moveIndex)? onSelectMove;
 
+  /// Optional builder for a self-watching move list (high-performance path).
+  ///
+  /// When provided, it takes precedence over [moves]/[currentMoveIndex]/[onSelectMove]
+  /// and is responsible for rendering a [MoveList] of the requested [MoveListType].
+  /// This lets the caller drive the move list from its own provider so that move
+  /// updates do not force [GameLayout] to rebuild.
+  final Widget Function(MoveListType type)? moveListBuilder;
+
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
 
@@ -167,7 +193,13 @@ class GameLayout extends ConsumerStatefulWidget {
 }
 
 class _GameLayoutState extends ConsumerState<GameLayout> {
-  ChessboardController? _controller;
+  /// The controller created and owned by this state, used only when no external
+  /// [GameLayout.controller] is provided. Null in the external-controller path.
+  ChessboardController? _ownController;
+
+  /// The controller actually rendered by the board: the externally owned one if
+  /// provided, otherwise the one we created.
+  ChessboardController? get _controller => widget.controller ?? _ownController;
 
   /// Tracks the last move that was made via drag-and-drop so we can pass it as
   /// [lastDrop] to [ChessboardController.updatePosition], which suppresses the
@@ -177,20 +209,26 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   @override
   void initState() {
     super.initState();
-    _initController();
+    if (widget.controller == null) {
+      _initController();
+    }
+    _controller?.premoveNotifier.addListener(_onPremoveChanged);
   }
 
   @override
   void dispose() {
     _controller?.premoveNotifier.removeListener(_onPremoveChanged);
-    _controller?.dispose();
+    _ownController?.dispose();
     super.dispose();
   }
 
   @override
   void didUpdateWidget(GameLayout old) {
     super.didUpdateWidget(old);
-    final ctrl = _controller;
+    // In the external-controller path the owner drives position updates; nothing
+    // for us to do here.
+    if (widget.controller != null) return;
+    final ctrl = _ownController;
     if (ctrl == null) return;
 
     final oldParams = old.boardParams;
@@ -233,7 +271,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     final params = widget.boardParams;
     if (params is InteractiveBoardParams) {
       final boardPrefs = ref.read(boardPreferencesProvider);
-      _controller = ChessboardController(
+      _ownController = ChessboardController(
         fen: params.position.fen,
         game: buildGameData(
           variant: params.variant,
@@ -244,7 +282,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           boardHighlights: boardPrefs.boardHighlights,
         ),
       );
-      _controller!.premoveNotifier.addListener(_onPremoveChanged);
     }
   }
 
@@ -271,6 +308,23 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       // Premove became illegal (e.g. after a takeback) — clear it.
       ctrl.premove = null;
     }
+  }
+
+  /// Whether a move list can be rendered (either inline moves or a builder).
+  bool get _hasMoveList => widget.moves != null || widget.moveListBuilder != null;
+
+  /// Builds the move list content for [type], using the [GameLayout.moveListBuilder]
+  /// when provided, otherwise the inline [GameLayout.moves]. Must only be called
+  /// when [_hasMoveList] is true. Does not apply zen-mode handling — callers do.
+  Widget _moveListContent(MoveListType type) {
+    final builder = widget.moveListBuilder;
+    if (builder != null) return builder(type);
+    return MoveList(
+      type: type,
+      slicedMoves: widget.moves!.asMap().entries.slices(2),
+      currentMoveIndex: widget.currentMoveIndex,
+      onSelectMove: widget.onSelectMove,
+    );
   }
 
   GameData _buildGameData(InteractiveBoardParams params) {
@@ -308,7 +362,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             : defaultSettings;
 
         final shapes = widget.shapes?.unlock ?? const <Shape>{};
-        final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
         final sideToMove = switch (widget.boardParams) {
           ReadonlyBoardParams() => null,
@@ -417,16 +470,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       topTable(boardSize: boardSize),
-                      if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
+                      if (boardPrefs.moveListDisplay && !widget.zenMode && _hasMoveList)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 16.0),
-                            child: MoveList(
-                              type: MoveListType.stacked,
-                              slicedMoves: slicedMoves,
-                              currentMoveIndex: widget.currentMoveIndex,
-                              onSelectMove: widget.onSelectMove,
-                            ),
+                            child: _moveListContent(MoveListType.stacked),
                           ),
                         )
                       else
@@ -467,19 +515,14 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (boardPrefs.moveListDisplay &&
-                  slicedMoves != null &&
+                  _hasMoveList &&
                   !isShortScreen &&
                   !(isTablet && pockets != null))
                 if (widget.zenMode)
                   // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
                 else
-                  MoveList(
-                    type: MoveListType.inline,
-                    slicedMoves: slicedMoves,
-                    currentMoveIndex: widget.currentMoveIndex,
-                    onSelectMove: widget.onSelectMove,
-                  ),
+                  _moveListContent(MoveListType.inline),
               Expanded(
                 flex: widget.topTableFlex,
                 child: Padding(

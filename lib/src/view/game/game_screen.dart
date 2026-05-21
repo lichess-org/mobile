@@ -158,8 +158,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           ),
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
-        final isRealTimePlayingGame =
-            ref.watch(_isRealTimePlayableGameProvider(createdGameId)).value ?? false;
+        final isRealTimePlayingGame = ref.watch(
+          _isRealTimePlayableGameProvider(createdGameId).select((s) => s.value ?? false),
+        );
 
         final socketUri = GameController.socketUri(createdGameId);
 

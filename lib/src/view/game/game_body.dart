@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -31,10 +33,12 @@ import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -99,225 +103,28 @@ class GameBody extends ConsumerWidget {
       (prev, state) => _stateListener(prev, state, context: context, ref: ref),
     );
 
-    final boardPreferences = ref.watch(boardPreferencesProvider);
-    final gamePrefs = ref.watch(gamePreferencesProvider);
-    final blindfoldMode = gamePrefs.blindfoldMode ?? false;
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
-
-    switch (ref.watch(ctrlProvider)) {
-      case AsyncError(error: final e, stackTrace: final s):
-        debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
+    // Only watch the coarse async phase here so a move (which changes the
+    // GameState value but not the phase) does NOT rebuild the whole body. The
+    // playable shell, board, players and move list are driven by [_PlayableGameBoard]
+    // and its self-watching children instead.
+    switch (ref.watch(ctrlProvider.select(_gamePhaseOf))) {
+      case _GamePhase.error:
+        final state = ref.read(ctrlProvider);
+        debugPrint(
+          'SEVERE: [GameBody] could not load game data; ${state.error}\n${state.stackTrace}',
+        );
         return const LoadGameError('Sorry, we could not load the game. Please try again later.');
-      case AsyncData(value: final gameState, isRefreshing: false):
-        final youAre = gameState.game.youAre ?? Side.white;
-
-        // If playing against Stockfish, user is null
-        final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
-            ? ref.watch(
-                crosstableProvider((
-                  userId1: gameState.game.white.user!.id,
-                  userId2: gameState.game.black.user!.id,
-                  matchup: true,
-                )),
-              )
-            : null;
-        final crosstableData = crosstable?.value;
-        final matchupData = crosstableData?.matchup;
-
-        final black = GamePlayer(
-          game: gameState.game,
-          side: Side.black,
-          socketUri: GameController.socketUri(gameState.gameFullId),
-          matchupScore: matchupData?.users[gameState.game.black.user!.id],
-          materialDiff: boardPreferences.materialDifferenceFormat.visible
-              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
-              : null,
-          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-          timeToMove: gameState.game.sideToMove == Side.black ? gameState.timeToMove : null,
-          mePlaying: youAre == Side.black,
-          canGoForward: gameState.canGoForward,
-          zenMode: gameState.isZenModeActive,
-          clockPosition: boardPreferences.clockPosition,
-          confirmMoveCallbacks: youAre == Side.black && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
-              : null,
-          clock: gameState.liveClock != null
-              ? RepaintBoundary(
-                  child: ValueListenableBuilder(
-                    key: blackClockKey,
-                    valueListenable: gameState.liveClock!.black,
-                    builder: (context, value, _) {
-                      return Clock(
-                        key: const ValueKey('black-clock'),
-                        timeLeft: value,
-                        active: gameState.activeClockSide == Side.black,
-                        emergencyThreshold: youAre == Side.black
-                            ? gameState.game.meta.clock?.emergency
-                            : null,
-                        clockTenths: clockTenths,
-                      );
-                    },
-                  ),
-                )
-              : gameState.game.correspondenceClock != null &&
-                    gameState.game.lastPosition.fullmoves > 1
-              ? CorrespondenceClock(
-                  duration: gameState.game.correspondenceClock!.black,
-                  active: gameState.activeClockSide == Side.black,
-                  resetId: gameState.game.correspondenceClock!.resetId,
-                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
-                )
-              : null,
+      case _GamePhase.data:
+        return _PlayableGameBoard(
+          gameId: gameId,
+          whiteClockKey: whiteClockKey,
+          blackClockKey: blackClockKey,
+          boardKey: boardKey,
+          onLoadGameCallback: onLoadGameCallback,
+          onNewOpponentCallback: onNewOpponentCallback,
         );
-        final white = GamePlayer(
-          game: gameState.game,
-          side: Side.white,
-          socketUri: GameController.socketUri(gameState.gameFullId),
-          matchupScore: matchupData?.users[gameState.game.white.user!.id],
-          materialDiff: boardPreferences.materialDifferenceFormat.visible
-              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
-              : null,
-          materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
-          timeToMove: gameState.game.sideToMove == Side.white ? gameState.timeToMove : null,
-          mePlaying: youAre == Side.white,
-          canGoForward: gameState.canGoForward,
-          zenMode: gameState.isZenModeActive,
-          clockPosition: boardPreferences.clockPosition,
-          confirmMoveCallbacks: youAre == Side.white && gameState.moveToConfirm != null
-              ? (
-                  confirm: () {
-                    ref.read(ctrlProvider.notifier).confirmMove();
-                  },
-                  cancel: () {
-                    ref.read(ctrlProvider.notifier).cancelMove();
-                  },
-                )
-              : null,
-          clock: gameState.liveClock != null
-              ? RepaintBoundary(
-                  child: ValueListenableBuilder(
-                    key: whiteClockKey,
-                    valueListenable: gameState.liveClock!.white,
-                    builder: (context, value, _) {
-                      return Clock(
-                        key: const ValueKey('white-clock'),
-                        timeLeft: value,
-                        active: gameState.activeClockSide == Side.white,
-                        emergencyThreshold: youAre == Side.white
-                            ? gameState.game.meta.clock?.emergency
-                            : null,
-                        clockTenths: clockTenths,
-                      );
-                    },
-                  ),
-                )
-              : gameState.game.correspondenceClock != null &&
-                    gameState.game.lastPosition.fullmoves > 1
-              ? CorrespondenceClock(
-                  duration: gameState.game.correspondenceClock!.white,
-                  active: gameState.activeClockSide == Side.white,
-                  resetId: gameState.game.correspondenceClock!.resetId,
-                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
-                )
-              : null,
-        );
-
-        final isBoardTurned = ref.watch(isBoardTurnedProvider);
-
-        final topPlayerIsBlack =
-            youAre == Side.white && !isBoardTurned || youAre == Side.black && isBoardTurned;
-        final topPlayer = topPlayerIsBlack ? black : white;
-        final bottomPlayer = topPlayerIsBlack ? white : black;
-
-        final animationDuration =
-            gameState.game.meta.speed == Speed.ultraBullet ||
-                gameState.game.meta.speed == Speed.bullet
-            ? Duration.zero
-            : boardPreferences.pieceAnimationDuration;
-
-        return FocusDetector(
-          onFocusRegained: () {
-            if (context.mounted) {
-              ref.read(ctrlProvider.notifier).onFocusRegained();
-            }
-          },
-          onForegroundLost: () {
-            if (context.mounted) {
-              ref.read(ctrlProvider.notifier).onForegroundLost();
-            }
-          },
-          child: WakelockWidget(
-            shouldEnableOnFocusGained: () => gameState.game.playable,
-            child: GameLayout(
-              boardKey: boardKey,
-              boardSettingsOverrides: BoardSettingsOverrides(
-                animationDuration: animationDuration,
-                autoQueenPromotion: gameState.canAutoQueen,
-                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                blindfoldMode: blindfoldMode,
-                enablePremoves: gameState.canPremove && boardPreferences.premoves,
-              ),
-              orientation: variantBoardOrientation(
-                variant: gameState.game.meta.variant,
-                youAre: youAre,
-                isBoardTurned: isBoardTurned,
-              ),
-              explosionSquares: gameState.stepCursor > 0
-                  ? atomicExplosionSquares(
-                      gameState.game.positionAt(gameState.stepCursor - 1),
-                      gameState.game.moveAt(gameState.stepCursor),
-                    )
-                  : null,
-              isReplaying: gameState.isReplaying,
-              onPremove: (move) {
-                ref.read(ctrlProvider.notifier).userMove(move, isPremove: true);
-              },
-              boardParams: GameBoardParams.interactive(
-                variant: gameState.game.meta.variant,
-                position: gameState.currentPosition,
-                playerSide: gameState.game.playable && !gameState.isReplaying
-                    ? youAre == Side.white
-                          ? PlayerSide.white
-                          : PlayerSide.black
-                    : PlayerSide.none,
-                lastMove: gameState.game.moveAt(gameState.stepCursor),
-                onMove: (move, {viaDragAndDrop}) {
-                  ref.read(ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
-                },
-              ),
-              topTable: topPlayer,
-              bottomTable:
-                  gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                  ? _ClaimWinCountdown(gameState, countdown: gameState.opponentLeftCountdown!)
-                  : bottomPlayer,
-              moves: gameState.game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
-              currentMoveIndex: gameState.stepCursor,
-              onSelectMove: (moveIndex) {
-                ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-              },
-              zenMode: gameState.isZenModeActive,
-              userActionsBar: _GameBottomBar(
-                id: gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ),
-          ),
-        );
-
-      case AsyncData(:final value, isRefreshing: true):
+      case _GamePhase.refreshing:
+        final value = ref.read(ctrlProvider).requireValue;
         return StandaloneGameLoadingContent(
           position: (
             fen: value.game.lastPosition.fen,
@@ -330,7 +137,7 @@ class GameBody extends ConsumerWidget {
             onNewOpponentCallback: onNewOpponentCallback,
           ),
         );
-      case final _:
+      case _GamePhase.loading:
         return StandaloneGameLoadingContent(
           position: loadingPosition,
           userActionsBar: _GameBottomBar(
@@ -413,6 +220,419 @@ class GameBody extends ConsumerWidget {
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
     }
+  }
+}
+
+/// Coarse rendering phase for the [GameBody], derived from the controller's
+/// [AsyncValue]. Used so that per-move state changes (which stay in the [data]
+/// phase) do not rebuild the whole body.
+enum _GamePhase { loading, data, refreshing, error }
+
+_GamePhase _gamePhaseOf(AsyncValue<GameState> state) => switch (state) {
+  AsyncError() => _GamePhase.error,
+  AsyncData(isRefreshing: true) => _GamePhase.refreshing,
+  AsyncData() => _GamePhase.data,
+  _ => _GamePhase.loading,
+};
+
+/// The playable game shell for the high-performance path.
+///
+/// Owns the [ChessboardController] and drives it directly via [ref.listen] on a
+/// narrow position selector, so a move repaints the board's [CustomPainter]
+/// without rebuilding this widget. The shell itself (orientation, board settings,
+/// player table slots) only rebuilds on rare changes (board flip, zen toggle,
+/// game-end). Player tables, the move list and the bottom bar are self-watching
+/// children that rebuild independently.
+class _PlayableGameBoard extends ConsumerStatefulWidget {
+  const _PlayableGameBoard({
+    required this.gameId,
+    required this.whiteClockKey,
+    required this.blackClockKey,
+    required this.boardKey,
+    required this.onLoadGameCallback,
+    required this.onNewOpponentCallback,
+  });
+
+  final GameFullId gameId;
+  final GlobalKey whiteClockKey;
+  final GlobalKey blackClockKey;
+  final GlobalKey boardKey;
+  final void Function(GameFullId id) onLoadGameCallback;
+  final void Function(PlayableGame game) onNewOpponentCallback;
+
+  @override
+  ConsumerState<_PlayableGameBoard> createState() => _PlayableGameBoardState();
+}
+
+class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
+  late final ChessboardController _controller;
+
+  /// Tracks the last move made via drag-and-drop, so it can be passed as
+  /// [ChessboardController.updatePosition]'s `lastDrop` to suppress the
+  /// redundant translation animation of the already-dragged piece.
+  Move? _lastDragMove;
+
+  late final _ctrlProvider = gameControllerProvider(widget.gameId);
+
+  @override
+  void initState() {
+    super.initState();
+    final state = ref.read(_ctrlProvider).requireValue;
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    _controller = ChessboardController(
+      fen: state.currentPosition.fen,
+      game: buildGameData(
+        variant: state.game.meta.variant,
+        position: state.currentPosition,
+        playerSide: _playerSide(state),
+        lastMove: state.game.moveAt(state.stepCursor),
+        castlingMethod: boardPrefs.castlingMethod,
+        boardHighlights: boardPrefs.boardHighlights,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  PlayerSide _playerSide(GameState state) {
+    if (!state.game.playable || state.isReplaying) return PlayerSide.none;
+    return (state.game.youAre ?? Side.white) == Side.white ? PlayerSide.white : PlayerSide.black;
+  }
+
+  /// Pushes the current controller position from the latest [GameState], without
+  /// rebuilding this widget. Called from [ref.listen] whenever the position-relevant
+  /// slice of the state changes.
+  void _applyBoardUpdate() {
+    final state = ref.read(_ctrlProvider).value;
+    if (state == null) return;
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    final fen = state.currentPosition.fen;
+    final lastMove = state.game.moveAt(state.stepCursor);
+    final gameData = buildGameData(
+      variant: state.game.meta.variant,
+      position: state.currentPosition,
+      playerSide: _playerSide(state),
+      lastMove: lastMove,
+      castlingMethod: boardPrefs.castlingMethod,
+      boardHighlights: boardPrefs.boardHighlights,
+    );
+
+    if (state.isReplaying) {
+      // History navigation — no animation, premove cleared by jumpToPosition.
+      if (fen != _controller.fen) {
+        _controller.jumpToPosition(fen, game: gameData, lastMove: lastMove);
+      } else {
+        _controller.updatePosition(fen, game: gameData);
+      }
+      return;
+    }
+
+    if (fen != _controller.fen) {
+      final lastDrop = _lastDragMove;
+      _lastDragMove = null;
+      _controller.updatePosition(fen, game: gameData, lastMove: lastMove, lastDrop: lastDrop);
+      final explosion = state.stepCursor > 0
+          ? atomicExplosionSquares(
+              state.game.positionAt(state.stepCursor - 1),
+              state.game.moveAt(state.stepCursor),
+            )
+          : null;
+      if (explosion != null) _controller.triggerExplosion(explosion);
+      _tryExecutePremove(state.currentPosition);
+    } else {
+      // Only game metadata changed (e.g. playable went false) — update without animation.
+      _controller.updatePosition(fen, game: gameData);
+    }
+  }
+
+  void _tryExecutePremove(Position position) {
+    final premove = _controller.premove;
+    if (premove == null) return;
+    if (position.isLegal(premove)) {
+      if (premove is NormalMove && isPromotionPawnMove(position, premove)) {
+        _controller.premove = null;
+        _controller.pendingPromotion = premove;
+      } else {
+        _controller.premove = null;
+        // Defer to avoid modifying a Riverpod provider inside a listener callback.
+        scheduleMicrotask(
+          () => ref.read(_ctrlProvider.notifier).userMove(premove, isPremove: true),
+        );
+      }
+    } else {
+      // Premove became illegal (e.g. after a takeback) — clear it.
+      _controller.premove = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Drive the board controller on position changes without rebuilding.
+    ref.listen(
+      _ctrlProvider.select((s) {
+        final state = s.value;
+        if (state == null) return null;
+        return (
+          fen: state.currentPosition.fen,
+          lastMoveUci: state.game.moveAt(state.stepCursor)?.uci,
+          isReplaying: state.isReplaying,
+          playable: state.game.playable,
+        );
+      }),
+      (prev, next) {
+        if (next != null) _applyBoardUpdate();
+      },
+    );
+
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final blindfoldMode = ref.watch(
+      gamePreferencesProvider.select((p) => p.blindfoldMode ?? false),
+    );
+    final isBoardTurned = ref.watch(isBoardTurnedProvider);
+
+    // Shell-affecting slice: only rebuilds the layout on rare changes.
+    final shell = ref.watch(_ctrlProvider.select(_shellOf));
+    if (shell == null) return const SizedBox.shrink();
+
+    final orientation = variantBoardOrientation(
+      variant: shell.variant,
+      youAre: shell.youAre,
+      isBoardTurned: isBoardTurned,
+    );
+
+    final topPlayerIsBlack =
+        shell.youAre == Side.white && !isBoardTurned || shell.youAre == Side.black && isBoardTurned;
+    final topSide = topPlayerIsBlack ? Side.black : Side.white;
+    final bottomSide = topPlayerIsBlack ? Side.white : Side.black;
+
+    final animationDuration = shell.speed == Speed.ultraBullet || shell.speed == Speed.bullet
+        ? Duration.zero
+        : boardPrefs.pieceAnimationDuration;
+
+    // Static info read once per shell build; the controller (not this) drives
+    // per-move position changes, so reading the current value here is fine.
+    final state = ref.read(_ctrlProvider).requireValue;
+
+    return FocusDetector(
+      onFocusRegained: () {
+        if (context.mounted) {
+          ref.read(_ctrlProvider.notifier).onFocusRegained();
+        }
+      },
+      onForegroundLost: () {
+        if (context.mounted) {
+          ref.read(_ctrlProvider.notifier).onForegroundLost();
+        }
+      },
+      child: WakelockWidget(
+        shouldEnableOnFocusGained: () => ref.read(_ctrlProvider).value?.game.playable ?? false,
+        child: GameLayout(
+          boardKey: widget.boardKey,
+          controller: _controller,
+          boardSettingsOverrides: BoardSettingsOverrides(
+            animationDuration: animationDuration,
+            autoQueenPromotion: shell.canAutoQueen,
+            autoQueenPromotionOnPremove: shell.canAutoQueenOnPremove,
+            blindfoldMode: blindfoldMode,
+            enablePremoves: shell.canPremove && boardPrefs.premoves,
+          ),
+          orientation: orientation,
+          boardParams: GameBoardParams.interactive(
+            variant: shell.variant,
+            position: state.currentPosition,
+            playerSide: _playerSide(state),
+            lastMove: state.game.moveAt(state.stepCursor),
+            onMove: (move, {viaDragAndDrop}) {
+              if (viaDragAndDrop == true) _lastDragMove = move;
+              ref.read(_ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
+            },
+          ),
+          topTable: _GamePlayerTable(
+            gameId: widget.gameId,
+            side: topSide,
+            clockKey: topSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
+          ),
+          bottomTable: shell.showClaimWinCountdown
+              ? _ClaimWinCountdown(state, countdown: state.opponentLeftCountdown!)
+              : _GamePlayerTable(
+                  gameId: widget.gameId,
+                  side: bottomSide,
+                  clockKey: bottomSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
+                ),
+          moveListBuilder: (type) => _GameMoveList(gameId: widget.gameId, type: type),
+          zenMode: shell.zen,
+          userActionsBar: _GameBottomBar(
+            id: widget.gameId,
+            onLoadGameCallback: widget.onLoadGameCallback,
+            onNewOpponentCallback: widget.onNewOpponentCallback,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Rare-changing fields that affect the [_PlayableGameBoard] shell layout.
+typedef _ShellData = ({
+  Variant variant,
+  Side youAre,
+  Speed speed,
+  bool zen,
+  bool canPremove,
+  bool canAutoQueen,
+  bool canAutoQueenOnPremove,
+  bool showClaimWinCountdown,
+  // For Crazyhouse, the current FEN so the shell (which renders the pocket
+  // counts from boardParams) rebuilds on each move. Null for other variants so
+  // they keep the build-once shell.
+  String? pocketsFen,
+});
+
+_ShellData? _shellOf(AsyncValue<GameState> state) {
+  final s = state.value;
+  if (s == null) return null;
+  return (
+    variant: s.game.meta.variant,
+    youAre: s.game.youAre ?? Side.white,
+    speed: s.game.meta.speed,
+    zen: s.isZenModeActive,
+    canPremove: s.canPremove,
+    canAutoQueen: s.canAutoQueen,
+    canAutoQueenOnPremove: s.canAutoQueenOnPremove,
+    showClaimWinCountdown: s.canShowClaimWinCountdown && s.opponentLeftCountdown != null,
+    pocketsFen: s.game.meta.variant == Variant.crazyhouse ? s.currentPosition.fen : null,
+  );
+}
+
+/// A self-watching player table (clock, name, material diff) for one [side].
+///
+/// Lives inside the [_PlayableGameBoard] shell and rebuilds independently on the
+/// state it actually needs, so it does not force the shell or board to rebuild.
+class _GamePlayerTable extends ConsumerWidget {
+  const _GamePlayerTable({required this.gameId, required this.side, required this.clockKey});
+
+  final GameFullId gameId;
+  final Side side;
+  final GlobalKey clockKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = gameControllerProvider(gameId);
+    final gameState = ref.watch(ctrlProvider).requireValue;
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final clockTenths = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
+    );
+
+    final youAre = gameState.game.youAre ?? Side.white;
+    final mePlaying = youAre == side;
+
+    final matchupData = gameState.game.white.user != null && gameState.game.black.user != null
+        ? ref
+              .watch(
+                crosstableProvider((
+                  userId1: gameState.game.white.user!.id,
+                  userId2: gameState.game.black.user!.id,
+                  matchup: true,
+                )),
+              )
+              .value
+              ?.matchup
+        : null;
+
+    final sideUser = side == Side.white ? gameState.game.white.user : gameState.game.black.user;
+
+    return GamePlayer(
+      game: gameState.game,
+      side: side,
+      socketUri: GameController.socketUri(gameState.gameFullId),
+      matchupScore: matchupData?.users[sideUser!.id],
+      materialDiff: boardPrefs.materialDifferenceFormat.visible
+          ? gameState.game.materialDiffAt(gameState.stepCursor, side)
+          : null,
+      materialDifferenceFormat: boardPrefs.materialDifferenceFormat,
+      timeToMove: gameState.game.sideToMove == side ? gameState.timeToMove : null,
+      mePlaying: mePlaying,
+      canGoForward: gameState.canGoForward,
+      zenMode: gameState.isZenModeActive,
+      clockPosition: boardPrefs.clockPosition,
+      confirmMoveCallbacks: mePlaying && gameState.moveToConfirm != null
+          ? (
+              confirm: () {
+                ref.read(ctrlProvider.notifier).confirmMove();
+              },
+              cancel: () {
+                ref.read(ctrlProvider.notifier).cancelMove();
+              },
+            )
+          : null,
+      clock: gameState.liveClock != null
+          ? RepaintBoundary(
+              child: ValueListenableBuilder(
+                key: clockKey,
+                valueListenable: side == Side.white
+                    ? gameState.liveClock!.white
+                    : gameState.liveClock!.black,
+                builder: (context, value, _) {
+                  return Clock(
+                    key: ValueKey('${side.name}-clock'),
+                    timeLeft: value,
+                    active: gameState.activeClockSide == side,
+                    emergencyThreshold: youAre == side
+                        ? gameState.game.meta.clock?.emergency
+                        : null,
+                    clockTenths: clockTenths,
+                  );
+                },
+              ),
+            )
+          : gameState.game.correspondenceClock != null && gameState.game.lastPosition.fullmoves > 1
+          ? CorrespondenceClock(
+              duration: side == Side.white
+                  ? gameState.game.correspondenceClock!.white
+                  : gameState.game.correspondenceClock!.black,
+              active: gameState.activeClockSide == side,
+              resetId: gameState.game.correspondenceClock!.resetId,
+              onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+            )
+          : null,
+    );
+  }
+}
+
+/// A self-watching move list, driven by the game controller so move updates do
+/// not force the [GameLayout] shell to rebuild.
+class _GameMoveList extends ConsumerWidget {
+  const _GameMoveList({required this.gameId, required this.type});
+
+  final GameFullId gameId;
+  final MoveListType type;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = gameControllerProvider(gameId);
+    final data = ref.watch(
+      ctrlProvider.select((s) {
+        final state = s.value;
+        return state == null ? null : (steps: state.game.steps, cursor: state.stepCursor);
+      }),
+    );
+    if (data == null) return const SizedBox.shrink();
+
+    final moves = data.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
+
+    return MoveList(
+      type: type,
+      slicedMoves: moves.asMap().entries.slices(2),
+      currentMoveIndex: data.cursor,
+      onSelectMove: (moveIndex) {
+        ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+      },
+    );
   }
 }
 
