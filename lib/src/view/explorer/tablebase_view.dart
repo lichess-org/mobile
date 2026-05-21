@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart' show Variant;
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -17,7 +18,9 @@ class TablebaseView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tablebaseAsync = ref.watch(tablebaseProvider(position.fen));
+    final tablebaseAsync = ref.watch(
+      tablebaseProvider((fen: position.fen, variant: Variant.fromRule(position.rule))),
+    );
 
     switch (tablebaseAsync) {
       case AsyncData(:final value):
