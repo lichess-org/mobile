@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -28,10 +29,12 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
                       : Orientation.portrait;
                   final isTablet = isTabletOrLarger(context);
 
-                  final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                    borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                    boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                  );
+                  final defaultSettings = boardPreferences
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                      );
 
                   if (orientation == Orientation.landscape) {
                     final defaultBoardSize =

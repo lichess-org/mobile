@@ -282,6 +282,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pieceAssets: overTheBoardPrefs.symmetricPieces
                           ? PieceSet.symmetric.assets
                           : null,
+                      enablePremoves: false,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {

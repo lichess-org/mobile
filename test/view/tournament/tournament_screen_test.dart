@@ -451,7 +451,7 @@ void main() {
 
       expect(find.text('BlackFeatured'), findsOneWidget);
       expect(find.text('WhiteFeatured'), findsOneWidget);
-      expect(find.byType(PieceWidget), findsAny);
+      expect(tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen, isNot(kEmptyBoardFEN));
       expect(find.byType(BoardThumbnail), findsOneWidget);
 
       // Pretend all the pieces are gone to check that the board is updated
@@ -463,7 +463,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(BoardThumbnail), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen, kEmptyBoardFEN);
     });
 
     testWidgets('Can join tournament', (WidgetTester tester) async {

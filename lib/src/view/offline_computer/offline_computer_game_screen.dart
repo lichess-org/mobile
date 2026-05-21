@@ -261,6 +261,7 @@ class _BodyState extends ConsumerState<_Body> {
                           )
                         : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
+                    boardSettingsOverrides: const BoardSettingsOverrides(enablePremoves: false),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,

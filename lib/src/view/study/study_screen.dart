@@ -84,10 +84,12 @@ class _StudyScreenLoader extends ConsumerWidget {
               sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                ),
+                settings: boardPrefs
+                    .toBoardSettings(Variant.standard)
+                    .copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                    ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
@@ -122,10 +124,12 @@ class _StudyScreenLoader extends ConsumerWidget {
               sideToMove: null,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                ),
+                settings: boardPrefs
+                    .toBoardSettings(Variant.standard)
+                    .copyWith(
+                      borderRadius: borderRadius,
+                      boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                    ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),

@@ -62,7 +62,7 @@ void main() {
 
       await tester.pumpWidget(app);
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNWidgets(25));
+      expect(getBoardPieces(tester).length, 25);
       final currentMove = find.textContaining('Qe1#');
       expect(currentMove, findsOneWidget);
       expect(
@@ -149,7 +149,7 @@ void main() {
       expect(find.byType(PocketsMenu), findsNothing);
 
       // Horde starting position should be loaded:
-      expect(find.byKey(const ValueKey('b5-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.b5, Piece.whitePawn), isTrue);
 
       // Change to crazhouse, pockets should be displayed:
       await tester.tap(find.bySemanticsLabel('Menu'));
@@ -212,14 +212,14 @@ void main() {
       expect(find.byType(PocketsMenu), findsNWidgets(2));
 
       await playDropMove(tester, Side.white, Role.pawn, 'a4');
-      expect(find.byKey(const ValueKey('a4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.a4, Piece.whitePawn), isTrue);
 
       // Illegal drop move for black, should not be played
       await playDropMove(tester, Side.black, Role.queen, 'h5');
-      expect(find.byKey(const ValueKey('h5-blackqueen')), findsNothing);
+      expect(boardHasPiece(tester, Square.h5, Piece.blackQueen), isFalse);
 
       await playDropMove(tester, Side.black, Role.pawn, 'h5');
-      expect(find.byKey(const ValueKey('h5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h5, Piece.blackPawn), isTrue);
     });
 
     testWidgets('Continue against computer', (tester) async {
@@ -994,7 +994,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // White pawn should appear on c4 after the drop move
-        expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
       });
     });
 
@@ -1195,27 +1195,29 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.e1, Piece.whiteKing), isTrue);
 
-        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        final boardRect = tester.getRect(find.byType(Chessboard));
+        await tester.tapAt(squareOffset(Square.e1, boardRect));
         await tester.pump();
 
+        final validMoves = getBoardValidMoves(tester);
         switch (castlingMethod) {
           case CastlingMethod.kingOverRook:
             // kingOverRook acts as either kingTwoSquares or kingOverRook
-            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+            expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.g1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.h1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.c1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.a1), isTrue);
           case CastlingMethod.kingTwoSquares:
-            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('h1-dest')), findsNothing);
-            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('a1-dest')), findsNothing);
+            expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.g1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.h1), isFalse);
+            expect(validMoves?[Square.e1]?.contains(Square.c1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
+            expect(validMoves?[Square.e1]?.contains(Square.a1), isFalse);
         }
       });
     }
@@ -1244,17 +1246,19 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        final boardRect = tester.getRect(find.byType(Chessboard));
+        await tester.tapAt(squareOffset(Square.e1, boardRect));
 
         await tester.pump();
 
         // in chess960, castling is only king over rook, no matter the preference
-        expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('g1-dest')), findsNothing);
-        expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('c1-dest')), findsNothing);
-        expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+        final validMoves = getBoardValidMoves(tester);
+        expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
+        expect(validMoves?[Square.e1]?.contains(Square.g1), isFalse);
+        expect(validMoves?[Square.e1]?.contains(Square.h1), isTrue);
+        expect(validMoves?[Square.e1]?.contains(Square.c1), isFalse);
+        expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
+        expect(validMoves?[Square.e1]?.contains(Square.a1), isTrue);
       });
     }
   });
@@ -1300,9 +1304,9 @@ void main() {
     await tester.tap(find.byKey(const Key('goto-previous')));
     await tester.pump();
 
-    expect(find.byKey(const ValueKey('d4-whiteknight')), findsOneWidget);
-    expect(find.byKey(const ValueKey('a3-blackking')), findsOneWidget);
-    expect(find.byKey(const ValueKey('g3-whiteking')), findsNothing);
+    expect(boardHasPiece(tester, Square.d4, Piece.whiteKnight), isTrue);
+    expect(boardHasPiece(tester, Square.a3, Piece.blackKing), isTrue);
+    expect(boardHasPiece(tester, Square.g3, Piece.whiteKing), isFalse);
 
     // Navigate back to More tab
     await tester.pageBack();
@@ -1321,9 +1325,9 @@ void main() {
     expect(find.textContaining('Kg3'), findsOneWidget);
 
     // Verify board state is correct
-    expect(find.byKey(const ValueKey('d4-whiteknight')), findsOneWidget);
-    expect(find.byKey(const ValueKey('a3-blackking')), findsOneWidget);
-    expect(find.byKey(const ValueKey('g3-whiteking')), findsNothing);
+    expect(boardHasPiece(tester, Square.d4, Piece.whiteKnight), isTrue);
+    expect(boardHasPiece(tester, Square.a3, Piece.blackKing), isTrue);
+    expect(boardHasPiece(tester, Square.g3, Piece.whiteKing), isFalse);
   });
   testWidgets('Clear moves clears standalone analysis', (tester) async {
     // Open from More tab and navigate to board analysis
@@ -1350,7 +1354,7 @@ void main() {
 
     // Verify we made the moves
     expect(find.textContaining('f4'), findsOneWidget);
-    expect(find.byKey(const ValueKey('f4-whitepawn')), findsOneWidget);
+    expect(boardHasPiece(tester, Square.f4, Piece.whitePawn), isTrue);
 
     //open menu
     await tester.tap(find.byIcon(Icons.menu));
@@ -1363,7 +1367,7 @@ void main() {
 
     //verify moves are cleared
     expect(find.textContaining('e4'), findsNothing);
-    expect(find.byKey(const ValueKey('e4-whitepawn')), findsNothing);
+    expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isFalse);
 
     // Navigate back to More tab
     await tester.pageBack();
@@ -1378,7 +1382,7 @@ void main() {
 
     // Verify moves are no longer present and analysis was cleared
     expect(find.textContaining('e4'), findsNothing);
-    expect(find.byKey(const ValueKey('e4-whitepawn')), findsNothing);
+    expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isFalse);
   });
 
   testWidgets('Opening a position from board editor overwrites saved standalone analysis', (
@@ -1408,7 +1412,7 @@ void main() {
 
     // Verify we made the moves
     expect(find.textContaining('f4'), findsOneWidget);
-    expect(find.byKey(const ValueKey('f4-whitepawn')), findsOneWidget);
+    expect(boardHasPiece(tester, Square.f4, Piece.whitePawn), isTrue);
 
     // Navigate back to More tab
     await tester.pageBack();
@@ -1431,9 +1435,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify board state is correct and previous analysis was overwritten
-    expect(find.byKey(const ValueKey('d4-whitepawn')), findsOneWidget);
-    expect(find.byKey(const ValueKey('d5-blackpawn')), findsOneWidget);
-    expect(find.byKey(const ValueKey('f4-whitepawn')), findsNothing);
+    expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+    expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
+    expect(boardHasPiece(tester, Square.f4, Piece.whitePawn), isFalse);
   });
 
   group('conditional premoves', () {
@@ -1794,8 +1798,8 @@ void main() {
       await switchToPremoveTab(tester);
 
       // Should be in starting position
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       await tester.tap(find.text('1. e4 e5'));
 
@@ -1803,10 +1807,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should switch to the final position of the premove line (1. e4 e5)
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
 
     testWidgets('New move by opponent updates premove lines', (tester) async {
@@ -1872,8 +1876,8 @@ void main() {
       // Wait for socket message to arrive and board to update
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       // We've premoved e5, so the server will play this move for us
       sendServerSocketMessages(AnalysisController.socketUri, [
@@ -1882,8 +1886,8 @@ void main() {
       // Wait for socket message to arrive and board to update
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       // Only lines that started with 1. e4 e5 should be kept
       expect(find.text('2. Nf3 Nc6'), findsOneWidget);
@@ -1978,12 +1982,12 @@ String makeCorrespondenceGameJsonWithForecast({
 }
 
 Future<void> dragFromTo(WidgetTester tester, String from, String to) async {
-  final fromOffset = squareOffset(tester, Square.fromName(from));
-  await tester.dragFrom(fromOffset, squareOffset(tester, Square.fromName(to)) - fromOffset);
+  final fromOffset = editorSquareOffset(tester, Square.fromName(from));
+  await tester.dragFrom(fromOffset, editorSquareOffset(tester, Square.fromName(to)) - fromOffset);
   await tester.pumpAndSettle();
 }
 
-Offset squareOffset(WidgetTester tester, Square square) {
+Offset editorSquareOffset(WidgetTester tester, Square square) {
   final editor = find.byType(ChessboardEditor);
   final squareSize = tester.getSize(editor).width / 8;
 

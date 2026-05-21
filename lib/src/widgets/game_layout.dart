@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -233,11 +235,13 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       final boardPrefs = ref.read(boardPreferencesProvider);
       _controller = ChessboardController(
         fen: params.position.fen,
-        game: boardPrefs.buildGameData(
+        game: buildGameData(
           variant: params.variant,
           position: params.position,
           playerSide: params.playerSide,
           lastMove: params.lastMove,
+          castlingMethod: boardPrefs.castlingMethod,
+          boardHighlights: boardPrefs.boardHighlights,
         ),
       );
       _controller!.premoveNotifier.addListener(_onPremoveChanged);
@@ -260,7 +264,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         ctrl.pendingPromotion = premove;
       } else {
         ctrl.premove = null;
-        onPremove(premove);
+        // Defer to avoid modifying a Riverpod provider inside didUpdateWidget.
+        scheduleMicrotask(() => onPremove(premove));
       }
     } else {
       // Premove became illegal (e.g. after a takeback) — clear it.
@@ -270,11 +275,13 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
   GameData _buildGameData(InteractiveBoardParams params) {
     final boardPrefs = ref.read(boardPreferencesProvider);
-    return boardPrefs.buildGameData(
+    return buildGameData(
       variant: params.variant,
       position: params.position,
       playerSide: params.playerSide,
       lastMove: params.lastMove,
+      castlingMethod: boardPrefs.castlingMethod,
+      boardHighlights: boardPrefs.boardHighlights,
     );
   }
 
@@ -289,10 +296,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             : Orientation.portrait;
         final isTablet = isTabletOrLarger(context);
 
-        final defaultSettings = boardPrefs.toBoardSettings().copyWith(
-          borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-        );
+        final defaultSettings = boardPrefs
+            .toBoardSettings(widget.boardParams.variant)
+            .copyWith(
+              borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+            );
 
         final settings = widget.boardSettingsOverrides != null
             ? widget.boardSettingsOverrides!.merge(defaultSettings)
@@ -526,8 +535,6 @@ class BoardSettingsOverrides {
     this.pieceOrientationBehavior,
     this.pieceAssets,
     this.enablePremoves,
-    this.enableDrops,
-    this.canPromoteToKing,
   });
 
   final Duration? animationDuration;
@@ -538,8 +545,6 @@ class BoardSettingsOverrides {
   final PieceOrientationBehavior? pieceOrientationBehavior;
   final PieceAssets? pieceAssets;
   final bool? enablePremoves;
-  final bool? enableDrops;
-  final bool? canPromoteToKing;
 
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
@@ -551,8 +556,6 @@ class BoardSettingsOverrides {
       pieceOrientationBehavior: pieceOrientationBehavior,
       pieceAssets: pieceAssets,
       enablePremoves: enablePremoves,
-      enableDrops: enableDrops,
-      canPromoteToKing: canPromoteToKing,
     );
   }
 }

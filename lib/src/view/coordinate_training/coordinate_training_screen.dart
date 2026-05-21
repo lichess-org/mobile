@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
@@ -436,13 +437,15 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
               fen: trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN,
               squareHighlights: widget.squareHighlights.unlock,
               orientation: widget.orientation,
-              settings: boardPrefs.toBoardSettings().copyWith(
-                enableCoordinates: trainingPrefs.showCoordinates,
-                borderRadius: widget.isTablet
-                    ? const BorderRadius.all(Radius.circular(4.0))
-                    : BorderRadius.zero,
-                boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-              ),
+              settings: boardPrefs
+                  .toBoardSettings(Variant.standard)
+                  .copyWith(
+                    enableCoordinates: trainingPrefs.showCoordinates,
+                    borderRadius: widget.isTablet
+                        ? const BorderRadius.all(Radius.circular(4.0))
+                        : BorderRadius.zero,
+                    boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+                  ),
               onTouchedSquare: (square) {
                 if (trainingState.trainingActive && trainingPrefs.mode == TrainingMode.findSquare) {
                   widget.onGuess(square);

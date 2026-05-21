@@ -56,13 +56,10 @@ void main() {
 
   group('Playing over the board (offline)', () {
     testWidgets('Checkmate and Rematch', (tester) async {
-      final boardRect = await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 
       // Default orientation is white at the bottom
-      expect(
-        tester.getBottomLeft(find.byKey(const ValueKey('a1-whiterook'))),
-        boardRect.bottomLeft,
-      );
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
 
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'f7', 'f6');
@@ -82,7 +79,7 @@ void main() {
       expect(gameState.game.steps.first.position, Chess.initial);
 
       // Rematch should flip orientation
-      expect(tester.getTopRight(find.byKey(const ValueKey('a1-whiterook'))), boardRect.topRight);
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
 
       expect(activeClock(tester), null);
     });
@@ -148,13 +145,13 @@ void main() {
 
       await tester.tap(find.byTooltip('Previous'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.black);
 
       await tester.tap(find.byTooltip('Next'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
@@ -165,13 +162,13 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Previous'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
       await playMove(tester, 'e2', 'e4');
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       expect(activeClock(tester), Side.black);
     });
@@ -293,11 +290,11 @@ void main() {
       expect(find.text('Play'), findsNothing);
 
       // Should load the game's current position, i.e. e4 and e5 were played
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), null);
       expect(findWhiteClock(tester).timeLeft, const Duration(minutes: 2));
@@ -452,10 +449,10 @@ void main() {
         expect(gameState.game.meta.variant, Variant.fromPosition);
         expect(gameState.game.initialFen, _customFen);
         // Board should show the custom position (e4 pawn on e4, black pawn on e5)
-        expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-        expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-        expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-        expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
       },
     );
 
@@ -643,8 +640,8 @@ void main() {
       expect(gameState.game.initialFen, _customFen);
       expect(gameState.game.meta.variant, Variant.atomic);
       expect(gameState.game.steps.length, 1);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
   });
 }

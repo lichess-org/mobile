@@ -180,11 +180,9 @@ packages:
   chessground:
     dependency: "direct main"
     description:
-      path: "."
-      ref: custom_painter
-      resolved-ref: "4047a7e0ced2d21b5fd70bb315485c99a95d8491"
-      url: "https://github.com/lichess-org/flutter-chessground.git"
-    source: git
+      path: "../flutter-chessground"
+      relative: true
+    source: path
     version: "10.0.0"
   cli_config:
     dependency: transitive

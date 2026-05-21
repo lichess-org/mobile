@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -208,7 +207,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   bool get hasColorAdjustments =>
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
-  ChessboardSettings toBoardSettings() {
+  ChessboardSettings toBoardSettings(Variant variant) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
@@ -226,24 +225,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
-    );
-  }
-
-  GameData buildGameData({
-    required Variant variant,
-    required Position position,
-    required PlayerSide playerSide,
-    Move? lastMove,
-  }) {
-    return GameData(
-      playerSide: playerSide,
-      sideToMove: position.turn,
-      validMoves: makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
-      lastMove: lastMove,
-      kingSquareInCheck: boardHighlights && position.isCheck
-          ? position.board.kingOf(position.turn)
-          : null,
-      validDropSquares: variant == Variant.crazyhouse ? position.legalDrops.squares.toSet() : null,
+      enableDrops: variant == Variant.crazyhouse,
+      canPromoteToKing: variant == Variant.antichess,
     );
   }
 
@@ -253,40 +236,6 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
-}
-
-Map<Square, Set<Square>> makeLegalMoves(
-  Position pos, {
-  required CastlingMethod castlingMethod,
-  required Variant variant,
-}) {
-  final result = <Square, Set<Square>>{};
-  for (final entry in pos.legalMoves.entries) {
-    final dests = entry.value.squares;
-    if (dests.isNotEmpty) {
-      final from = entry.key;
-      final destSet = dests.toSet();
-      if (variant != Variant.chess960 &&
-          from == pos.board.kingOf(pos.turn) &&
-          entry.key.file == 4) {
-        if (dests.contains(Square.a1)) {
-          destSet.add(Square.c1);
-        } else if (dests.contains(Square.a8)) {
-          destSet.add(Square.c8);
-        }
-        if (dests.contains(Square.h1)) {
-          destSet.add(Square.g1);
-        } else if (dests.contains(Square.h8)) {
-          destSet.add(Square.g8);
-        }
-        if (castlingMethod == CastlingMethod.kingTwoSquares) {
-          destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
-        }
-      }
-      result[from] = destSet;
-    }
-  }
-  return result;
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178

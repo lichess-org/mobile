@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
@@ -266,8 +265,6 @@ class GameBody extends ConsumerWidget {
                 autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
                 blindfoldMode: blindfoldMode,
                 enablePremoves: gameState.canPremove && boardPreferences.premoves,
-                enableDrops: gameState.game.meta.variant == Variant.crazyhouse,
-                canPromoteToKing: gameState.game.meta.variant == Variant.antichess,
               ),
               orientation: variantBoardOrientation(
                 variant: gameState.game.meta.variant,

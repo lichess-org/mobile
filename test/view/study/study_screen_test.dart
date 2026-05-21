@@ -282,13 +282,13 @@ void main() {
 
       await playMove(tester, 'e2', 'e4', orientation: Side.black);
 
-      expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       await playMove(tester, 'e7', 'e5', orientation: Side.black);
 
-      expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
-      expect(find.byKey(const Key('e7-blackpawn')), findsNothing);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
 
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);

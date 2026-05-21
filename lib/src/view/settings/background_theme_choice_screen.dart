@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -262,7 +263,7 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                               : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(),
+                          settings: widget.boardPrefs.toBoardSettings(Variant.standard),
                         ),
                       ),
                     ),
@@ -437,7 +438,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                             : widget.viewport.height - landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(),
+                        settings: widget.boardPrefs.toBoardSettings(Variant.standard),
                       ),
                     ),
                   ),

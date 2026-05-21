@@ -64,10 +64,10 @@ void main() {
       expect(container.read(controllerProvider).nextCoord, nextCoord);
       expect(container.read(controllerProvider).trainingActive, true);
 
-      expect(find.byKey(ValueKey('${wrongCoord.name}-highlight')), findsOneWidget);
+      expect(boardHasHighlight(tester, wrongCoord), isTrue);
 
       await tester.pump(const Duration(milliseconds: 300));
-      expect(find.byKey(ValueKey('${wrongCoord.name}-highlight')), findsNothing);
+      expect(boardHasHighlight(tester, wrongCoord), isFalse);
     });
 
     testWidgets('Tap correct square', (tester) async {
@@ -91,14 +91,14 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byKey(ValueKey('${currentCoord.name}-highlight')), findsOneWidget);
+      expect(boardHasHighlight(tester, currentCoord), isTrue);
 
       expect(container.read(controllerProvider).score, 1);
       expect(container.read(controllerProvider).currentCoord, nextCoord);
       expect(container.read(controllerProvider).trainingActive, true);
 
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
-      expect(find.byKey(ValueKey('${currentCoord.name}-highlight')), findsNothing);
+      expect(boardHasHighlight(tester, currentCoord), isFalse);
 
       expect(find.text(container.read(controllerProvider).currentCoord!.name), findsOneWidget);
       expect(find.text(container.read(controllerProvider).nextCoord!.name), findsOneWidget);

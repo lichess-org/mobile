@@ -89,6 +89,32 @@ overrides: {
 
 Direct provider overrides are acceptable for **non-network providers** (repositories backed by mocks, services with no HTTP, etc.) where the provider has no `keepAlive` dependency and the override doesn't skip meaningful logic.
 
+### Chessboard Testing Patterns
+
+Since chessground v10, pieces and highlights are rendered by `CustomPainter`s, not as individual widgets. **Do not use `find.byKey(Key('e2-whitepawn'))` or `find.byKey(ValueKey('${sq}-highlight'))` — those keys no longer exist.**
+
+Use the helpers in `test/test_helpers.dart` instead:
+
+```dart
+// Check pieces on any Chessboard (interactive or Chessboard.fixed)
+getBoardPieces(tester)                             // Map<Square, Piece>
+boardHasPiece(tester, Square.f3, Piece.whiteKnight) // bool
+
+// Check square highlights (squareHighlights prop on Chessboard.fixed)
+boardHasHighlight(tester, square)                  // bool
+
+// Check premove highlight
+boardHasPremove(tester, move)                      // bool
+
+// Tap/move at a board square
+squareOffset(square, tester.getRect(find.byType(Chessboard)))
+```
+
+For `ChessboardEditor` (board editor screen), read pieces directly from the widget:
+```dart
+tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces
+```
+
 ### Analysis Rules (CRITICAL)
 
 **Always run `flutter analyze` on every file you edit, including test files, before finishing.**

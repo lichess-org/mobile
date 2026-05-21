@@ -1,7 +1,11 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
+/// A widget that displays a chessboard, either interactive (with a [ChessboardController]) or fixed
+/// (with a FEN string).
 class BoardWidget extends StatelessWidget {
   const BoardWidget({
     required this.size,
@@ -108,4 +112,59 @@ class _ErrorWidget extends StatelessWidget {
       child: Text(errorMessage),
     );
   }
+}
+
+/// Builds a [GameData] object for the given position and variant, including legal moves, check status, and crazyhouse drops.
+GameData buildGameData({
+  required Variant variant,
+  required Position position,
+  required PlayerSide playerSide,
+  required CastlingMethod castlingMethod,
+  required bool boardHighlights,
+  Move? lastMove,
+}) {
+  return GameData(
+    playerSide: playerSide,
+    sideToMove: position.turn,
+    validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
+    lastMove: lastMove,
+    kingSquareInCheck: boardHighlights && position.isCheck
+        ? position.board.kingOf(position.turn)
+        : null,
+    validDropSquares: variant == Variant.crazyhouse ? position.legalDrops.squares.toSet() : null,
+  );
+}
+
+Map<Square, Set<Square>> _makeLegalMoves(
+  Position pos, {
+  required CastlingMethod castlingMethod,
+  required Variant variant,
+}) {
+  final result = <Square, Set<Square>>{};
+  for (final entry in pos.legalMoves.entries) {
+    final dests = entry.value.squares;
+    if (dests.isNotEmpty) {
+      final from = entry.key;
+      final destSet = dests.toSet();
+      if (variant != Variant.chess960 &&
+          from == pos.board.kingOf(pos.turn) &&
+          entry.key.file == 4) {
+        if (dests.contains(Square.a1)) {
+          destSet.add(Square.c1);
+        } else if (dests.contains(Square.a8)) {
+          destSet.add(Square.c8);
+        }
+        if (dests.contains(Square.h1)) {
+          destSet.add(Square.g1);
+        } else if (dests.contains(Square.h8)) {
+          destSet.add(Square.g8);
+        }
+        if (castlingMethod == CastlingMethod.kingTwoSquares) {
+          destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
+        }
+      }
+      result[from] = destSet;
+    }
+  }
+  return result;
 }

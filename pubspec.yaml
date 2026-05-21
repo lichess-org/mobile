@@ -15,9 +15,7 @@ dependencies:
   async: ^2.13.1
   auto_size_text: ^3.0.0
   chessground:
-    git:
-      url: https://github.com/lichess-org/flutter-chessground.git
-      ref: custom_painter
+    path: ../flutter-chessground/
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.1.1

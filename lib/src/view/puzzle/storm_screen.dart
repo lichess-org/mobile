@@ -128,11 +128,13 @@ class _BodyState extends ConsumerState<_Body> {
         : PlayerSide.black;
 
     final newFen = stormState.position.fen;
-    final gameData = boardPreferences.buildGameData(
+    final gameData = buildGameData(
       variant: Variant.standard,
       position: stormState.position,
       playerSide: playerSide,
       lastMove: stormState.lastMove,
+      castlingMethod: boardPreferences.castlingMethod,
+      boardHighlights: boardPreferences.boardHighlights,
     );
 
     if (_controller == null) {
@@ -188,14 +190,16 @@ class _BodyState extends ConsumerState<_Body> {
                           : Orientation.portrait;
                       final isTablet = isTabletOrLarger(context);
 
-                      final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                        drawShape: DrawShapeOptions(
-                          enable: boardPreferences.enableShapeDrawings,
-                          newShapeColor: boardPreferences.shapeColor.color,
-                        ),
-                      );
+                      final defaultSettings = boardPreferences
+                          .toBoardSettings(Variant.standard)
+                          .copyWith(
+                            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                            drawShape: DrawShapeOptions(
+                              enable: boardPreferences.enableShapeDrawings,
+                              newShapeColor: boardPreferences.shapeColor.color,
+                            ),
+                          );
 
                       if (orientation == Orientation.landscape) {
                         final defaultBoardSize =

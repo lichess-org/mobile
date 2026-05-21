@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -312,12 +313,14 @@ class _BoardPreview extends StatelessWidget {
             dest: Square.fromName('c6'),
           ),
         },
-        settings: boardPrefs.toBoardSettings().copyWith(
-          brightness: brightness,
-          hue: hue,
-          borderRadius: Styles.boardBorderRadius,
-          boxShadow: boardShadows,
-        ),
+        settings: boardPrefs
+            .toBoardSettings(Variant.standard)
+            .copyWith(
+              brightness: brightness,
+              hue: hue,
+              borderRadius: Styles.boardBorderRadius,
+              boxShadow: boardShadows,
+            ),
       ),
     );
   }

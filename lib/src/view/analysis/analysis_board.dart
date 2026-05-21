@@ -154,28 +154,23 @@ abstract class AnalysisBoardState<
 
     final newFen = fen;
 
-    if (_controller == null) {
-      if (interactive && currentPosition != null) {
-        _controller = ChessboardController(
-          fen: newFen,
-          game: boardPrefs.buildGameData(
+    final gameData = (interactive && currentPosition != null)
+        ? buildGameData(
             variant: analysisState.variant,
             position: currentPosition,
             playerSide: playerSide,
             lastMove: analysisState.lastMove,
-          ),
-        );
+            castlingMethod: boardPrefs.castlingMethod,
+            boardHighlights: boardPrefs.boardHighlights,
+          )
+        : null;
+
+    if (_controller == null) {
+      if (gameData != null) {
+        _controller = ChessboardController(fen: newFen, game: gameData);
       }
     } else if (newFen != _lastBuiltFen) {
       final ctrl = _controller!;
-      final gameData = (interactive && currentPosition != null)
-          ? boardPrefs.buildGameData(
-              variant: analysisState.variant,
-              position: currentPosition,
-              playerSide: playerSide,
-              lastMove: analysisState.lastMove,
-            )
-          : null;
       final explosionSquares = analysisState.explosionSquares;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ctrl.jumpToPosition(newFen, game: gameData, lastMove: analysisState.lastMove);
@@ -186,14 +181,6 @@ abstract class AnalysisBoardState<
     } else if (_controller != null && currentPosition != null) {
       // Same FEN but game data may have changed (e.g. playerSide changed)
       final ctrl = _controller!;
-      final gameData = interactive
-          ? boardPrefs.buildGameData(
-              variant: analysisState.variant,
-              position: currentPosition,
-              playerSide: playerSide,
-              lastMove: analysisState.lastMove,
-            )
-          : null;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ctrl.updatePosition(newFen, game: gameData);
       });
@@ -218,10 +205,12 @@ abstract class AnalysisBoardState<
         fen: newFen,
         lastMove: analysisState.lastMove,
         shapes: externalShapes,
-        settings: boardPrefs.toBoardSettings().copyWith(
-          borderRadius: widget.boardRadius,
-          boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
-        ),
+        settings: boardPrefs
+            .toBoardSettings(analysisState.variant)
+            .copyWith(
+              borderRadius: widget.boardRadius,
+              boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+            ),
         annotations: boardAnnotations,
       );
     }
@@ -232,14 +221,16 @@ abstract class AnalysisBoardState<
       controller: ctrl,
       onMove: (move, {viaDragAndDrop}) => onUserMove(move),
       shapes: externalShapes,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: widget.boardRadius,
-        boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
-        drawShape: DrawShapeOptions(
-          enable: boardPrefs.enableShapeDrawings,
-          newShapeColor: boardPrefs.shapeColor.color,
-        ),
-      ),
+      settings: boardPrefs
+          .toBoardSettings(analysisState.variant)
+          .copyWith(
+            borderRadius: widget.boardRadius,
+            boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+            drawShape: DrawShapeOptions(
+              enable: boardPrefs.enableShapeDrawings,
+              newShapeColor: boardPrefs.shapeColor.color,
+            ),
+          ),
       annotations: boardAnnotations,
     );
   }

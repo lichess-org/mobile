@@ -197,7 +197,7 @@ void main() {
       await playMove(tester, 'g1', 'f3');
       // Wait for failure message to appear and move to be taken back
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byKey(const ValueKey('g1-whiteknight')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
 
       expect(find.text('You can do better'), findsOneWidget);
       expect(find.text('Try another move for white'), findsOneWidget);
@@ -209,7 +209,7 @@ void main() {
       // Should not be able to interact with the board while waiting for eval
       await playMove(tester, 'a7', 'a6');
       await tester.pump();
-      expect(find.byKey(const ValueKey('a7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.a7, Piece.blackPawn), isTrue);
 
       // Pretend d4 isn't a good move either
       sendServerSocketMessages(AnalysisController.socketUri, [
@@ -219,7 +219,7 @@ void main() {
       await tester.pump(); // Wait for eval to be processed
 
       // Move should be taken back
-      expect(find.byKey(const ValueKey('d2-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
 
       expect(find.text('You can do better'), findsOneWidget);
       expect(find.text('Try another move for white'), findsOneWidget);
@@ -248,7 +248,7 @@ void main() {
 
       expect(find.text('Best was 1... c5'), findsOneWidget);
       // Correct move should be on the board
-      expect(find.byKey(const ValueKey('c5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c5, Piece.blackPawn), isTrue);
 
       expect(find.text('Next mistake'), findsOneWidget);
       await tester.tap(find.text('Next mistake'));
@@ -301,7 +301,7 @@ void main() {
 
       // Wait for failure message to appear and move to be taken back
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
-      expect(find.byKey(const ValueKey('a2-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.a2, Piece.whitePawn), isTrue);
 
       // This one has been played multiple times, so it should be accepted as a solution (without consulting the engine)
       await playMove(tester, 'd2', 'd4');
