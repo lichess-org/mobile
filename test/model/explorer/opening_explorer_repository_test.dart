@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
@@ -75,6 +76,7 @@ void main() {
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/masters') {
+          expect(request.url.queryParameters.containsKey('variant'), isFalse);
           return mockResponse(response, 200);
         }
         return mockResponse('', 404);
@@ -136,6 +138,7 @@ void main() {
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/lichess') {
+          expect(request.url.queryParameters['variant'], 'crazyhouse');
           return mockResponse(response, 200);
         }
         return mockResponse('', 404);
@@ -147,6 +150,7 @@ void main() {
 
       final result = await repo.getLichessDatabase(
         'fen',
+        variant: Variant.crazyhouse,
         speeds: const ISetConst({Speed.rapid}),
         ratings: const ISetConst({1000, 1200}),
       );
@@ -204,6 +208,7 @@ void main() {
 
       final mockClient = MockClient((request) {
         if (request.url.path == '/player') {
+          expect(request.url.queryParameters['variant'], 'crazyhouse');
           return mockResponse(response, 200);
         }
         return mockResponse('', 404);
@@ -215,6 +220,7 @@ void main() {
 
       final results = await repo.getPlayerDatabase(
         'fen',
+        variant: Variant.crazyhouse,
         usernameOrId: 'baz',
         color: Side.white,
         speeds: const ISetConst({Speed.bullet}),
