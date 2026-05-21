@@ -44,3 +44,32 @@ sealed class GameBoardParams with _$GameBoardParams {
     InteractiveBoardParams(:final playerSide) => playerSide,
   };
 }
+
+/// Board parameters for the high-performance path, where the caller owns a
+/// [ChessboardController] and drives it directly.
+///
+/// Mutually exclusive with [GameBoardParams]: the [controller] carries the live
+/// position and game state (including `playerSide` and `sideToMove`), so this
+/// only needs to provide what isn't part of the controller — the [variant] (for
+/// board settings), the [onMove] callback, and the crazyhouse [pockets] (which
+/// the owner must refresh on each move).
+class ControllerBoardParams {
+  const ControllerBoardParams({
+    required this.controller,
+    required this.variant,
+    this.onMove,
+    this.pockets,
+  });
+
+  /// The externally owned controller. [GameLayout] renders the board with it but
+  /// never creates, disposes, or drives it.
+  final ChessboardController controller;
+
+  final Variant variant;
+
+  /// Called when the user completes a move on the board.
+  final void Function(Move, {bool? viaDragAndDrop})? onMove;
+
+  /// Crazyhouse pockets, or null for variants without pockets.
+  final Pockets? pockets;
+}

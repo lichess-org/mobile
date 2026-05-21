@@ -45,10 +45,14 @@ Side variantBoardOrientation({
 /// An optional overlay or error message can be displayed on top of the board.
 class GameLayout extends ConsumerStatefulWidget {
   /// Creates a game layout with the given values.
+  ///
+  /// Exactly one of [boardParams] (the screen lets [GameLayout] own the board
+  /// controller) or [controllerParams] (the screen owns the controller, for the
+  /// high-performance path) must be provided.
   const GameLayout({
     required this.orientation,
-    required this.boardParams,
-    this.controller,
+    this.boardParams,
+    this.controllerParams,
     this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
@@ -71,13 +75,16 @@ class GameLayout extends ConsumerStatefulWidget {
     this.isReplaying = false,
     this.onPremove,
     super.key,
-  });
+  }) : assert(
+         (boardParams == null) != (controllerParams == null),
+         'Provide exactly one of boardParams or controllerParams',
+       );
 
   /// Creates an empty game layout (useful for loading).
   const GameLayout.empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
-      controller = null,
+      controllerParams = null,
       lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
@@ -98,21 +105,19 @@ class GameLayout extends ConsumerStatefulWidget {
       isReplaying = false,
       onPremove = null;
 
-  final GameBoardParams boardParams;
+  /// Board parameters for the owned-controller path: [GameLayout] creates and
+  /// drives the controller from these, updating it in [didUpdateWidget].
+  ///
+  /// Null in the [controllerParams] (high-performance) path.
+  final GameBoardParams? boardParams;
 
-  /// An externally owned [ChessboardController] for the high-performance path.
+  /// Board parameters for the high-performance path: the caller owns the
+  /// [ChessboardController] and drives it directly. [GameLayout] renders the
+  /// board with it but never creates, disposes, or drives it, and does no
+  /// position work in [didUpdateWidget].
   ///
-  /// When provided, [GameLayout] renders the board with this controller but does
-  /// NOT create, dispose, or drive it: the owner is responsible for calling
-  /// [ChessboardController.updatePosition]/[ChessboardController.jumpToPosition]
-  /// and for premove/explosion/replay handling. In this mode [boardParams] is
-  /// only read for static layout info (variant, pockets, [InteractiveBoardParams.onMove])
-  /// and position changes are expected NOT to flow through [didUpdateWidget].
-  ///
-  /// When null, [GameLayout] owns the controller itself (the simpler path used by
-  /// non performance-critical screens) and updates it from [boardParams] in
-  /// [didUpdateWidget].
-  final ChessboardController? controller;
+  /// Null in the [boardParams] (owned-controller) path.
+  final ControllerBoardParams? controllerParams;
 
   final Side orientation;
 
@@ -193,13 +198,13 @@ class GameLayout extends ConsumerStatefulWidget {
 }
 
 class _GameLayoutState extends ConsumerState<GameLayout> {
-  /// The controller created and owned by this state, used only when no external
-  /// [GameLayout.controller] is provided. Null in the external-controller path.
+  /// The controller created and owned by this state, used only in the
+  /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
   ChessboardController? _ownController;
 
   /// The controller actually rendered by the board: the externally owned one if
   /// provided, otherwise the one we created.
-  ChessboardController? get _controller => widget.controller ?? _ownController;
+  ChessboardController? get _controller => widget.controllerParams?.controller ?? _ownController;
 
   /// Tracks the last move that was made via drag-and-drop so we can pass it as
   /// [lastDrop] to [ChessboardController.updatePosition], which suppresses the
@@ -209,7 +214,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   @override
   void initState() {
     super.initState();
-    if (widget.controller == null) {
+    if (widget.controllerParams == null) {
       _initController();
     }
     _controller?.premoveNotifier.addListener(_onPremoveChanged);
@@ -227,7 +232,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     super.didUpdateWidget(old);
     // In the external-controller path the owner drives position updates; nothing
     // for us to do here.
-    if (widget.controller != null) return;
+    if (widget.controllerParams != null) return;
     final ctrl = _ownController;
     if (ctrl == null) return;
 
@@ -343,6 +348,29 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    // Board info needed for the layout, derived from whichever path is active.
+    // In the controller path, playerSide/sideToMove come from the controller's
+    // game data; in the owned path they come from the board params.
+    final cp = widget.controllerParams;
+    final variant = cp?.variant ?? widget.boardParams!.variant;
+    final pockets = cp != null ? cp.pockets : widget.boardParams!.pockets;
+    final playerSide = cp != null
+        ? (_controller?.game?.playerSide ?? PlayerSide.none)
+        : widget.boardParams!.playerSide;
+    final sideToMove = cp != null
+        ? (playerSide == PlayerSide.none ? null : _controller?.game?.sideToMove)
+        : switch (widget.boardParams!) {
+            ReadonlyBoardParams() => null,
+            InteractiveBoardParams(:final position, :final playerSide) =>
+              playerSide == PlayerSide.none ? null : position.turn,
+          };
+    final void Function(Move, {bool? viaDragAndDrop})? rawOnMove = cp != null
+        ? cp.onMove
+        : switch (widget.boardParams!) {
+            InteractiveBoardParams(:final onMove) => onMove,
+            _ => null,
+          };
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final orientation = constraints.maxWidth > constraints.maxHeight
@@ -351,7 +379,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs
-            .toBoardSettings(widget.boardParams.variant)
+            .toBoardSettings(variant)
             .copyWith(
               borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
               boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
@@ -363,29 +391,20 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
         final shapes = widget.shapes?.unlock ?? const <Shape>{};
 
-        final sideToMove = switch (widget.boardParams) {
-          ReadonlyBoardParams() => null,
-          InteractiveBoardParams(:final position, :final playerSide) =>
-            playerSide == PlayerSide.none ? null : position.turn,
-        };
-
-        final pockets = widget.boardParams.pockets;
         final premoveDropRole = switch (_controller?.premove) {
           DropMove(:final role) => role,
           _ => null,
         };
 
         // Wrap onMove to capture drag moves for animation suppression via lastDrop.
-        final void Function(Move, {bool? viaDragAndDrop})? wrappedOnMove =
-            switch (widget.boardParams) {
-              final InteractiveBoardParams params => (Move move, {bool? viaDragAndDrop}) {
+        final void Function(Move, {bool? viaDragAndDrop})? wrappedOnMove = rawOnMove == null
+            ? null
+            : (Move move, {bool? viaDragAndDrop}) {
                 if (viaDragAndDrop == true) {
                   _lastDragMove = move;
                 }
-                params.onMove(move, viaDragAndDrop: viaDragAndDrop);
-              },
-              _ => null,
-            };
+                rawOnMove(move, viaDragAndDrop: viaDragAndDrop);
+              };
 
         Widget topTable({required double boardSize}) => RotatedBox(
           quarterTurns: widget.topTableUpsideDown ? 2 : 0,
@@ -399,7 +418,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation.opposite,
                   sideToMove: sideToMove,
-                  playerSide: widget.boardParams.playerSide,
+                  playerSide: playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.topTableUpsideDown,
@@ -423,7 +442,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation,
                   sideToMove: sideToMove,
-                  playerSide: widget.boardParams.playerSide,
+                  playerSide: playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.bottomTableUpsideDown,
@@ -455,7 +474,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   controller: _controller,
                   onMove: wrappedOnMove,
-                  fen: _controller == null ? widget.boardParams.fen : null,
+                  fen: _controller == null ? widget.boardParams!.fen : null,
                   lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,
@@ -541,7 +560,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   orientation: widget.orientation,
                   controller: _controller,
                   onMove: wrappedOnMove,
-                  fen: _controller == null ? widget.boardParams.fen : null,
+                  fen: _controller == null ? widget.boardParams!.fen : null,
                   lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,

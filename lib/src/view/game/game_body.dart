@@ -432,7 +432,15 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
         shouldEnableOnFocusGained: () => ref.read(_ctrlProvider).value?.game.playable ?? false,
         child: GameLayout(
           boardKey: widget.boardKey,
-          controller: _controller,
+          controllerParams: ControllerBoardParams(
+            controller: _controller,
+            variant: shell.variant,
+            pockets: state.currentPosition.pockets,
+            onMove: (move, {viaDragAndDrop}) {
+              if (viaDragAndDrop == true) _lastDragMove = move;
+              ref.read(_ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
+            },
+          ),
           boardSettingsOverrides: BoardSettingsOverrides(
             animationDuration: animationDuration,
             autoQueenPromotion: shell.canAutoQueen,
@@ -441,16 +449,6 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             enablePremoves: shell.canPremove && boardPrefs.premoves,
           ),
           orientation: orientation,
-          boardParams: GameBoardParams.interactive(
-            variant: shell.variant,
-            position: state.currentPosition,
-            playerSide: _playerSide(state),
-            lastMove: state.game.moveAt(state.stepCursor),
-            onMove: (move, {viaDragAndDrop}) {
-              if (viaDragAndDrop == true) _lastDragMove = move;
-              ref.read(_ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
-            },
-          ),
           topTable: _GamePlayerTable(
             gameId: widget.gameId,
             side: topSide,
