@@ -230,6 +230,8 @@ void main() {
 
       service.quit();
 
+      await Future<void>.delayed(const Duration(milliseconds: 1));
+
       final stream2 = service.evaluate(work);
       await stream2!.first;
 
