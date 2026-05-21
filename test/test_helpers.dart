@@ -119,14 +119,14 @@ bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
   return getBoardPieces(tester)[square] == piece;
 }
 
-/// Returns the valid moves map from the interactive chessboard's controller.
-Map<Square, Set<Square>>? getBoardValidMoves(WidgetTester tester) {
-  return tester.widget<Chessboard>(find.byType(Chessboard)).controller?.game?.validMoves;
+/// Returns the valid moves set currently highlighted on the interactive chessboard.
+Set<Square> getBoardValidMoves(WidgetTester tester) {
+  return _highlightsPainter(tester).interactionNotifier.moveDests;
 }
 
-/// Returns the last move from the interactive chessboard's controller.
+/// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.
 Move? getBoardLastMove(WidgetTester tester) {
-  return tester.widget<Chessboard>(find.byType(Chessboard)).controller?.lastMove;
+  return _highlightsPainter(tester).interactionNotifier.lastMove;
 }
 
 /// Returns true if the board has a highlight on [square].

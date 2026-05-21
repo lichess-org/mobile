@@ -1205,19 +1205,19 @@ void main() {
         switch (castlingMethod) {
           case CastlingMethod.kingOverRook:
             // kingOverRook acts as either kingTwoSquares or kingOverRook
-            expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.g1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.h1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.c1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.a1), isTrue);
+            expect(validMoves.contains(Square.f1), isTrue);
+            expect(validMoves.contains(Square.g1), isTrue);
+            expect(validMoves.contains(Square.h1), isTrue);
+            expect(validMoves.contains(Square.c1), isTrue);
+            expect(validMoves.contains(Square.d1), isTrue);
+            expect(validMoves.contains(Square.a1), isTrue);
           case CastlingMethod.kingTwoSquares:
-            expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.g1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.h1), isFalse);
-            expect(validMoves?[Square.e1]?.contains(Square.c1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
-            expect(validMoves?[Square.e1]?.contains(Square.a1), isFalse);
+            expect(validMoves.contains(Square.f1), isTrue);
+            expect(validMoves.contains(Square.g1), isTrue);
+            expect(validMoves.contains(Square.h1), isFalse);
+            expect(validMoves.contains(Square.c1), isTrue);
+            expect(validMoves.contains(Square.d1), isTrue);
+            expect(validMoves.contains(Square.a1), isFalse);
         }
       });
     }
@@ -1253,12 +1253,12 @@ void main() {
 
         // in chess960, castling is only king over rook, no matter the preference
         final validMoves = getBoardValidMoves(tester);
-        expect(validMoves?[Square.e1]?.contains(Square.f1), isTrue);
-        expect(validMoves?[Square.e1]?.contains(Square.g1), isFalse);
-        expect(validMoves?[Square.e1]?.contains(Square.h1), isTrue);
-        expect(validMoves?[Square.e1]?.contains(Square.c1), isFalse);
-        expect(validMoves?[Square.e1]?.contains(Square.d1), isTrue);
-        expect(validMoves?[Square.e1]?.contains(Square.a1), isTrue);
+        expect(validMoves.contains(Square.f1), isTrue);
+        expect(validMoves.contains(Square.g1), isFalse);
+        expect(validMoves.contains(Square.h1), isTrue);
+        expect(validMoves.contains(Square.c1), isFalse);
+        expect(validMoves.contains(Square.d1), isTrue);
+        expect(validMoves.contains(Square.a1), isTrue);
       });
     }
   });
