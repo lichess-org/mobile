@@ -187,7 +187,7 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
   /// When true, position changes use [ChessboardController.jumpToPosition] instead of
-  /// [ChessboardController.updatePosition], skipping animation and clearing the premove.
+  /// [ChessboardController.animatePosition], skipping animation and clearing the premove.
   final bool isReplaying;
 
   /// Called when a premove is ready to be executed after the opponent moves.
@@ -207,7 +207,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   ChessboardController? get _controller => widget.controllerParams?.controller ?? _ownController;
 
   /// Tracks the last move that was made via drag-and-drop so we can pass it as
-  /// [lastDrop] to [ChessboardController.updatePosition], which suppresses the
+  /// [lastDrop] to [ChessboardController.animatePosition], which suppresses the
   /// redundant translation animation for the already-dragged piece.
   Move? _lastDragMove;
 
@@ -254,7 +254,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             lastMove: newParams.lastMove,
           );
         } else {
-          ctrl.updatePosition(
+          ctrl.animatePosition(
             newParams.position.fen,
             game: newGameData,
             lastMove: newParams.lastMove,
@@ -267,7 +267,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         }
       } else {
         // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
-        ctrl.updatePosition(newParams.position.fen, game: newGameData);
+        ctrl.animatePosition(newParams.position.fen, game: newGameData);
       }
     }
   }

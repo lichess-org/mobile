@@ -182,7 +182,7 @@ abstract class AnalysisBoardState<
       // Same FEN but game data may have changed (e.g. playerSide changed)
       final ctrl = _controller!;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.updatePosition(newFen, game: gameData);
+        ctrl.animatePosition(newFen, game: gameData);
       });
     }
 

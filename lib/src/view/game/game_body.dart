@@ -268,7 +268,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
   late final ChessboardController _controller;
 
   /// Tracks the last move made via drag-and-drop, so it can be passed as
-  /// [ChessboardController.updatePosition]'s `lastDrop` to suppress the
+  /// [ChessboardController.animatePosition]'s `lastDrop` to suppress the
   /// redundant translation animation of the already-dragged piece.
   Move? _lastDragMove;
 
@@ -326,7 +326,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
       if (fen != _controller.fen) {
         _controller.jumpToPosition(fen, game: gameData, lastMove: lastMove);
       } else {
-        _controller.updatePosition(fen, game: gameData);
+        _controller.animatePosition(fen, game: gameData);
       }
       return;
     }
@@ -334,7 +334,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     if (fen != _controller.fen) {
       final lastDrop = _lastDragMove;
       _lastDragMove = null;
-      _controller.updatePosition(fen, game: gameData, lastMove: lastMove, lastDrop: lastDrop);
+      _controller.animatePosition(fen, game: gameData, lastMove: lastMove, lastDrop: lastDrop);
       final explosion = state.stepCursor > 0
           ? atomicExplosionSquares(
               state.game.positionAt(state.stepCursor - 1),
@@ -345,7 +345,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
       _tryExecutePremove(state.currentPosition);
     } else {
       // Only game metadata changed (e.g. playable went false) — update without animation.
-      _controller.updatePosition(fen, game: gameData);
+      _controller.animatePosition(fen, game: gameData);
     }
   }
 

@@ -142,12 +142,12 @@ class _BodyState extends ConsumerState<_Body> {
     } else if (newFen != _lastFen) {
       final ctrl = _controller!;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.updatePosition(newFen, game: gameData, lastMove: stormState.lastMove);
+        ctrl.animatePosition(newFen, game: gameData, lastMove: stormState.lastMove);
       });
     } else {
       final ctrl = _controller!;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.updatePosition(newFen, game: gameData);
+        ctrl.animatePosition(newFen, game: gameData);
       });
     }
     _lastFen = newFen;
