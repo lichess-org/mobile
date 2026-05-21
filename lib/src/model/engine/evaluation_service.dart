@@ -511,6 +511,10 @@ class EvaluationService {
   /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
   /// The service can be reused after calling this method.
   void quit() {
+    if (_engineState == EngineState.initial && !_initInProgress) {
+      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
+      return;
+    }
     _logger.info('Quitting engine');
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
