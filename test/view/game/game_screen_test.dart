@@ -34,10 +34,13 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -1720,6 +1723,91 @@ void main() {
 
       // White pawn should appear on c4
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+    });
+  });
+
+  group('Widget rebuilds', () {
+    // These tests guard the GameScreen performance optimization: a move must
+    // update the board through the ChessboardController WITHOUT rebuilding the
+    // expensive ancestors (GameScreen/GameBody, the GameLayout shell, the board).
+    // Only the leaf widgets that depend on the move (e.g. the player tables) may
+    // rebuild. The rebuild probe is widget-instance identity: if an ancestor does
+    // not rebuild, the child widget instance found in the tree is unchanged.
+
+    testWidgets('a local move does not rebuild GameBody, GameLayout or the board', (tester) async {
+      await createTestGame(tester, pgn: 'e4 e5'); // white (us) to move
+      // Flush the one-time load rebuilds (e.g. the real-time-playable future resolving).
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+      final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+      final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+      final playerBefore = tester.widgetList<GamePlayer>(find.byType(GamePlayer)).first;
+
+      await playMove(tester, 'g1', 'f3');
+      await tester.pump();
+
+      // The move reached the board (controller-driven repaint)…
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+
+      // …but the expensive ancestors were not rebuilt.
+      expect(
+        identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+        isTrue,
+        reason: 'GameScreen must not rebuild GameBody on a move',
+      );
+      expect(
+        identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+        isTrue,
+        reason: 'the GameLayout shell must not rebuild on a move',
+      );
+      expect(
+        identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+        isTrue,
+        reason: 'the board must not rebuild on a move (the controller drives the repaint)',
+      );
+
+      // The player table (material diff) is a contained, necessary rebuild.
+      expect(
+        identical(tester.widgetList<GamePlayer>(find.byType(GamePlayer)).first, playerBefore),
+        isFalse,
+        reason: 'the player table should rebuild on a move',
+      );
+    });
+
+    testWidgets('an opponent move does not rebuild GameBody, GameLayout or the board', (
+      tester,
+    ) async {
+      await createTestGame(tester, pgn: 'e4 e5 Nf3'); // black (opponent) to move
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+      final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+      final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+
+      // Opponent (black) plays Nf6, received from the server.
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "g8f6", "san": "Nf6", "clock": {"white": 180, "black": 180}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(boardHasPiece(tester, Square.f6, Piece.blackKnight), isTrue);
+
+      expect(
+        identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+        isTrue,
+        reason: 'GameScreen must not rebuild GameBody on an opponent move',
+      );
+      expect(
+        identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+        isTrue,
+        reason: 'the GameLayout shell must not rebuild on an opponent move',
+      );
+      expect(
+        identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+        isTrue,
+        reason: 'the board must not rebuild on an opponent move',
+      );
     });
   });
 
