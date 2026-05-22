@@ -1743,6 +1743,7 @@ void main() {
       final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
       final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
       final playerBefore = tester.widgetList<GamePlayer>(find.byType(GamePlayer)).first;
+      final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
 
       await playMove(tester, 'g1', 'f3');
       await tester.pump();
@@ -1773,6 +1774,14 @@ void main() {
         isFalse,
         reason: 'the player table should rebuild on a move',
       );
+
+      // The bottom bar (minus the isolated prev/next nav buttons) watches only
+      // discrete flags that don't change on a plain move, so it must not rebuild.
+      expect(
+        identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+        isTrue,
+        reason: 'the bottom bar must not rebuild on a move',
+      );
     });
 
     testWidgets('an opponent move does not rebuild GameBody, GameLayout or the board', (
@@ -1784,6 +1793,7 @@ void main() {
       final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
       final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
       final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+      final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
 
       // Opponent (black) plays Nf6, received from the server.
       sendServerSocketMessages(testGameSocketUri, [
@@ -1807,6 +1817,11 @@ void main() {
         identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
         isTrue,
         reason: 'the board must not rebuild on an opponent move',
+      );
+      expect(
+        identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+        isTrue,
+        reason: 'the bottom bar must not rebuild on an opponent move',
       );
     });
   });
