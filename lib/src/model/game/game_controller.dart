@@ -356,9 +356,12 @@ class GameController extends AsyncNotifier<GameState> {
 
   void toggleZenMode() {
     final curState = state.requireValue;
+    final curZen = curState.game.prefs?.zenMode ?? Zen.no;
+    final newZen = curZen != Zen.no ? Zen.no : Zen.gameAuto;
     state = AsyncValue.data(
-      curState.copyWith(zenModeGameSetting: !(curState.zenModeGameSetting ?? false)),
+      curState.copyWith.game(prefs: curState.game.prefs?.copyWith(zenMode: newZen)),
     );
+    ref.read(accountPreferencesProvider.notifier).setZen(newZen);
   }
 
   void toggleAutoQueen() {
@@ -1018,9 +1021,6 @@ sealed class GameState with _$GameState {
     /// Game only setting to override the account preference
     bool? autoQueenSettingOverride,
 
-    /// Zen mode setting if account preference is set to [Zen.gameAuto]
-    bool? zenModeGameSetting,
-
     /// Set if confirm move preference is enabled and player played a move
     Move? moveToConfirm,
 
@@ -1037,12 +1037,22 @@ sealed class GameState with _$GameState {
     return game.positionAt(stepCursor);
   }
 
-  /// Whether the zen mode is active
+  /// Whether the zen mode is active.
+  ///
+  /// For finished games, only [Zen.yes] keeps zen mode active.
+  /// For playable games, zen is active when account pref is [Zen.yes] or [Zen.gameAuto].
   bool get isZenModeActive => game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;
 
-  /// Whether zen mode is enabled by account preference or local game setting
-  bool get isZenModeEnabled =>
-      zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
+  /// Whether zen mode is enabled by account preference
+  bool get isZenModeEnabled {
+    final prefs = game.prefs;
+    if (prefs == null) return false;
+    return switch (prefs.zenMode) {
+      Zen.no => false,
+      Zen.yes => true,
+      Zen.gameAuto => true,
+    };
+  }
 
   bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
