@@ -688,7 +688,7 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
 
   @override
   SocketPingState build({Uri? route}) {
-    final pool = ref.watch(socketPoolProvider);
+    final pool = ref.read(socketPoolProvider);
 
     pool.averageLag.addListener(_listener);
 
