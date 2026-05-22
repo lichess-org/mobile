@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +116,26 @@ class _ErrorWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: Text(errorMessage),
     );
+  }
+}
+
+/// Executes a pending premove on [ctrl] if it is legal in [position], calling [onMove] via
+/// [scheduleMicrotask] to avoid modifying Riverpod providers inside widget lifecycle callbacks.
+/// Clears the premove if it is illegal.
+void tryExecutePremove(ChessboardController ctrl, Position position, void Function(Move) onMove) {
+  final premove = ctrl.premove;
+  if (premove == null) return;
+  if (position.isLegal(premove)) {
+    if (premove is NormalMove && isPromotionPawnMove(position, premove)) {
+      ctrl.premove = null;
+      ctrl.pendingPromotion = premove;
+    } else {
+      ctrl.premove = null;
+      scheduleMicrotask(() => onMove(premove));
+    }
+  } else {
+    // Premove became illegal (e.g. after a takeback) — clear it.
+    ctrl.premove = null;
   }
 }
 

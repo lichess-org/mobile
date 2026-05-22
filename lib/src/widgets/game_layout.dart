@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -255,7 +253,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           if (widget.explosionSquares != null) {
             ctrl.triggerExplosion(widget.explosionSquares!);
           }
-          _tryExecutePremove(newParams);
+          final onPremove = widget.onPremove;
+          if (onPremove != null) {
+            tryExecutePremove(ctrl, newParams.position, onPremove);
+          }
         }
       } else {
         // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
@@ -284,27 +285,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
   void _onPremoveChanged() {
     if (mounted) setState(() {});
-  }
-
-  void _tryExecutePremove(InteractiveBoardParams params) {
-    final ctrl = _controller;
-    final onPremove = widget.onPremove;
-    if (ctrl == null || onPremove == null) return;
-    final premove = ctrl.premove;
-    if (premove == null) return;
-    if (params.position.isLegal(premove)) {
-      if (premove is NormalMove && isPromotionPawnMove(params.position, premove)) {
-        ctrl.premove = null;
-        ctrl.pendingPromotion = premove;
-      } else {
-        ctrl.premove = null;
-        // Defer to avoid modifying a Riverpod provider inside didUpdateWidget.
-        scheduleMicrotask(() => onPremove(premove));
-      }
-    } else {
-      // Premove became illegal (e.g. after a takeback) — clear it.
-      ctrl.premove = null;
-    }
   }
 
   /// Whether a move list can be rendered (either inline moves or a builder).

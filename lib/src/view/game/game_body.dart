@@ -335,30 +335,14 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             )
           : null;
       if (explosion != null) _controller.triggerExplosion(explosion);
-      _tryExecutePremove(state.currentPosition);
+      tryExecutePremove(
+        _controller,
+        state.currentPosition,
+        (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
+      );
     } else {
       // Only game metadata changed (e.g. playable went false) — update without animation.
       _controller.animatePosition(fen, game: gameData);
-    }
-  }
-
-  void _tryExecutePremove(Position position) {
-    final premove = _controller.premove;
-    if (premove == null) return;
-    if (position.isLegal(premove)) {
-      if (premove is NormalMove && isPromotionPawnMove(position, premove)) {
-        _controller.premove = null;
-        _controller.pendingPromotion = premove;
-      } else {
-        _controller.premove = null;
-        // Defer to avoid modifying a Riverpod provider inside a listener callback.
-        scheduleMicrotask(
-          () => ref.read(_ctrlProvider.notifier).userMove(premove, isPremove: true),
-        );
-      }
-    } else {
-      // Premove became illegal (e.g. after a takeback) — clear it.
-      _controller.premove = null;
     }
   }
 
