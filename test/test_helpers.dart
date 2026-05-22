@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
-import 'package:chessground/src/widgets/board_painter.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
