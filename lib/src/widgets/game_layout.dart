@@ -206,11 +206,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   /// provided, otherwise the one we created.
   ChessboardController? get _controller => widget.controllerParams?.controller ?? _ownController;
 
-  /// Tracks the last move that was made via drag-and-drop so we can pass it as
-  /// [lastDrop] to [ChessboardController.animatePosition], which suppresses the
-  /// redundant translation animation for the already-dragged piece.
-  Move? _lastDragMove;
-
   @override
   void initState() {
     super.initState();
@@ -245,8 +240,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     if (oldParams is InteractiveBoardParams) {
       final fenChanged = oldParams.position.fen != newParams.position.fen;
       if (fenChanged) {
-        final lastDrop = _lastDragMove;
-        _lastDragMove = null;
         if (widget.isReplaying) {
           ctrl.jumpToPosition(
             newParams.position.fen,
@@ -258,7 +251,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             newParams.position.fen,
             game: newGameData,
             lastMove: newParams.lastMove,
-            lastDrop: lastDrop,
           );
           if (widget.explosionSquares != null) {
             ctrl.triggerExplosion(widget.explosionSquares!);
@@ -396,16 +388,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           _ => null,
         };
 
-        // Wrap onMove to capture drag moves for animation suppression via lastDrop.
-        final void Function(Move, {bool? viaDragAndDrop})? wrappedOnMove = rawOnMove == null
-            ? null
-            : (Move move, {bool? viaDragAndDrop}) {
-                if (viaDragAndDrop == true) {
-                  _lastDragMove = move;
-                }
-                rawOnMove(move, viaDragAndDrop: viaDragAndDrop);
-              };
-
         Widget topTable({required double boardSize}) => RotatedBox(
           quarterTurns: widget.topTableUpsideDown ? 2 : 0,
           child: Column(
@@ -473,7 +455,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   size: boardSize,
                   orientation: widget.orientation,
                   controller: _controller,
-                  onMove: wrappedOnMove,
+                  onMove: rawOnMove,
                   fen: _controller == null ? widget.boardParams!.fen : null,
                   lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
@@ -559,7 +541,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   size: effectiveBoardSize,
                   orientation: widget.orientation,
                   controller: _controller,
-                  onMove: wrappedOnMove,
+                  onMove: rawOnMove,
                   fen: _controller == null ? widget.boardParams!.fen : null,
                   lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,

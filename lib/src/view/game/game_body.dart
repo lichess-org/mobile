@@ -267,11 +267,6 @@ class _PlayableGameBoard extends ConsumerStatefulWidget {
 class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
   late final ChessboardController _controller;
 
-  /// Tracks the last move made via drag-and-drop, so it can be passed as
-  /// [ChessboardController.animatePosition]'s `lastDrop` to suppress the
-  /// redundant translation animation of the already-dragged piece.
-  Move? _lastDragMove;
-
   late final _ctrlProvider = gameControllerProvider(widget.gameId);
 
   @override
@@ -332,9 +327,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     }
 
     if (fen != _controller.fen) {
-      final lastDrop = _lastDragMove;
-      _lastDragMove = null;
-      _controller.animatePosition(fen, game: gameData, lastMove: lastMove, lastDrop: lastDrop);
+      _controller.animatePosition(fen, game: gameData, lastMove: lastMove);
       final explosion = state.stepCursor > 0
           ? atomicExplosionSquares(
               state.game.positionAt(state.stepCursor - 1),
@@ -437,7 +430,6 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             variant: shell.variant,
             pockets: state.currentPosition.pockets,
             onMove: (move, {viaDragAndDrop}) {
-              if (viaDragAndDrop == true) _lastDragMove = move;
               ref.read(_ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
             },
           ),
