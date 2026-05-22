@@ -573,6 +573,16 @@ class StudyAnalysisBoard extends AnalysisBoard {
 class _StudyAnalysisBoardState
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
+  StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(StudyState? prev, StudyState? next) listener) =>
+      ref.listenManual<StudyState?>(
+        studyControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.options)).requireValue;
 
   @override
@@ -591,10 +601,8 @@ class _StudyAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  String get fen =>
-      analysisState.currentPosition?.board.fen ??
-      analysisState.study.currentChapterMeta.fen ??
-      kInitialFEN;
+  String computeFen(StudyState state) =>
+      state.currentPosition?.board.fen ?? state.study.currentChapterMeta.fen ?? kInitialFEN;
 
   @override
   ISet<Shape> get extraShapes {

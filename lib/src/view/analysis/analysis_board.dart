@@ -52,30 +52,115 @@ abstract class AnalysisBoardState<
 
   void onUserMove(Move move);
 
-  /// For the study board to set a different fen if the position is `null`.
-  String get fen => analysisState.currentPosition!.fen;
+  /// Reads the current analysis state without subscribing.
+  ///
+  /// Called once in [initState] to eagerly create the board controller.
+  /// Implement as: `ref.read(yourControllerProvider(...)).value`
+  AnalysisState? readCurrentState();
+
+  /// Sets up a subscription to analysis state changes.
+  ///
+  /// Called in [initState] to drive controller position updates.
+  /// Implement as: `ref.listenManual(yourControllerProvider(...).select((v) => v.value), listener)`
+  /// The subscription is managed by Riverpod and cancelled automatically on dispose.
+  void listenToStateChanges(void Function(AnalysisState? prev, AnalysisState? next) listener);
+
+  /// Computes the board FEN string from [state].
+  ///
+  /// Each board defines its own FEN semantics and is responsible for handling
+  /// (or asserting the absence of) a null [CommonAnalysisState.currentPosition].
+  String computeFen(AnalysisState state);
+
+  String get fen => computeFen(analysisState);
+
+  /// Whether the board should be interactive for [state].
+  ///
+  /// Override to conditionally disable user interaction.
+  bool computeInteractive(AnalysisState state) => true;
+
+  bool get interactive => computeInteractive(analysisState);
 
   /// E.g. for the study board to add pgn shapes and variations arrows.
   ISet<Shape> get extraShapes => ISet();
-
-  /// Can be used to disable interaction with the board in certain states
-  bool get interactive => true;
 
   /// Filters to identify the correct engine evaluation provider instance.
   EngineEvaluationFilters get engineEvaluationFilters;
 
   ChessboardController? _controller;
 
-  /// FEN from the last build, used to detect position changes.
-  String? _lastBuiltFen;
-
   /// Clears all user-drawn shapes from the board.
   void clearDrawnShapes() => _controller?.clearDrawnShapes();
+
+  @override
+  void initState() {
+    super.initState();
+    final initialState = readCurrentState();
+    if (initialState != null) {
+      _controller = _createController(initialState, ref.read(boardPreferencesProvider));
+    }
+    listenToStateChanges(_onAnalysisStateChanged);
+    ref.listenManual<BoardPrefs>(boardPreferencesProvider, _onBoardPrefsChanged);
+  }
 
   @override
   void dispose() {
     _controller?.dispose();
     super.dispose();
+  }
+
+  GameData? _buildGameData(AnalysisState state, BoardPrefs boardPrefs) {
+    final position = state.currentPosition;
+    if (position == null || !computeInteractive(state)) return null;
+    final playerSide = position.isGameOver
+        ? PlayerSide.none
+        : position.turn == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+    return buildGameData(
+      variant: state.variant,
+      position: position,
+      playerSide: playerSide,
+      lastMove: state.lastMove,
+      castlingMethod: boardPrefs.castlingMethod,
+      boardHighlights: boardPrefs.boardHighlights,
+    );
+  }
+
+  ChessboardController? _createController(AnalysisState state, BoardPrefs boardPrefs) {
+    final gameData = _buildGameData(state, boardPrefs);
+    if (gameData == null) return null;
+    return ChessboardController(fen: computeFen(state), game: gameData);
+  }
+
+  void _onAnalysisStateChanged(AnalysisState? prev, AnalysisState? next) {
+    if (!mounted || next == null) return;
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    final controller = _controller;
+    if (controller == null) {
+      final ctrl = _createController(next, boardPrefs);
+      if (ctrl != null) setState(() => _controller = ctrl);
+      return;
+    }
+    final newFen = computeFen(next);
+    final gameData = _buildGameData(next, boardPrefs);
+    final prevFen = prev != null ? computeFen(prev) : null;
+    if (prevFen != newFen) {
+      controller.jumpToPosition(newFen, game: gameData, lastMove: next.lastMove);
+      final explosionSquares = next.explosionSquares;
+      if (explosionSquares != null) {
+        controller.triggerExplosion(explosionSquares.toSet());
+      }
+    } else {
+      controller.animatePosition(newFen, game: gameData);
+    }
+  }
+
+  void _onBoardPrefsChanged(BoardPrefs? prev, BoardPrefs next) {
+    final controller = _controller;
+    if (controller == null) return;
+    final state = readCurrentState();
+    if (state == null) return;
+    controller.animatePosition(computeFen(state), game: _buildGameData(state, next));
   }
 
   Set<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
@@ -139,57 +224,10 @@ abstract class AnalysisBoardState<
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final currentNode = analysisState.currentNode;
-    final currentPosition = analysisState.currentPosition;
-
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
-    final playerSide = (interactive && currentPosition != null)
-        ? currentPosition.isGameOver
-              ? PlayerSide.none
-              : currentPosition.turn == Side.white
-              ? PlayerSide.white
-              : PlayerSide.black
-        : PlayerSide.none;
-
-    final newFen = fen;
-
-    final gameData = (interactive && currentPosition != null)
-        ? buildGameData(
-            variant: analysisState.variant,
-            position: currentPosition,
-            playerSide: playerSide,
-            lastMove: analysisState.lastMove,
-            castlingMethod: boardPrefs.castlingMethod,
-            boardHighlights: boardPrefs.boardHighlights,
-          )
-        : null;
-
-    if (_controller == null) {
-      if (gameData != null) {
-        _controller = ChessboardController(fen: newFen, game: gameData);
-      }
-    } else if (newFen != _lastBuiltFen) {
-      final ctrl = _controller!;
-      final explosionSquares = analysisState.explosionSquares;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.jumpToPosition(newFen, game: gameData, lastMove: analysisState.lastMove);
-        if (explosionSquares != null) {
-          ctrl.triggerExplosion(explosionSquares.toSet());
-        }
-      });
-    } else if (_controller != null && currentPosition != null) {
-      // Same FEN but game data may have changed (e.g. playerSide changed)
-      final ctrl = _controller!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.animatePosition(newFen, game: gameData);
-      });
-    }
-
-    _lastBuiltFen = newFen;
-
     final externalShapes = {..._bestMoveShapes(boardPrefs.pieceSet.assets), ...extraShapes.unlock};
-
     final boardAnnotations = sanMove != null && annotation != null
         ? (sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
               ? {Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation}
@@ -197,12 +235,13 @@ abstract class AnalysisBoardState<
         : const <Square, Annotation>{};
 
     final ctrl = _controller;
+    final currentFen = fen;
 
     if (ctrl == null) {
       return BoardWidget(
         size: widget.boardSize,
         orientation: analysisState.pov,
-        fen: newFen,
+        fen: currentFen,
         lastMove: analysisState.lastMove,
         shapes: externalShapes,
         settings: boardPrefs

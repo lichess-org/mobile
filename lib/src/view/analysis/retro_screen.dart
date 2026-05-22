@@ -167,6 +167,16 @@ class RetroAnalysisBoard extends AnalysisBoard {
 class _RetroAnalysisBoardState
     extends AnalysisBoardState<RetroAnalysisBoard, RetroState, AnalysisPrefs> {
   @override
+  RetroState? readCurrentState() => ref.read(retroControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(RetroState? prev, RetroState? next) listener) =>
+      ref.listenManual<RetroState?>(
+        retroControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   RetroState get analysisState => ref.watch(retroControllerProvider(widget.options)).requireValue;
 
   @override
@@ -178,9 +188,8 @@ class _RetroAnalysisBoardState
   @override
   bool get hideBestMoveArrow => true;
 
-  // Disable interaction while the engine is evaluating the move
   @override
-  bool get interactive => analysisState.feedback != RetroFeedback.evalMove;
+  bool computeInteractive(RetroState state) => state.feedback != RetroFeedback.evalMove;
 
   @override
   void onUserMove(Move move) {
@@ -192,7 +201,7 @@ class _RetroAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  String get fen => analysisState.currentPosition.board.fen;
+  String computeFen(RetroState state) => state.currentPosition.board.fen;
 
   @override
   ISet<Shape> get extraShapes {

@@ -27,12 +27,25 @@ class GameAnalysisBoard extends AnalysisBoard {
 class _GameAnalysisBoardState
     extends AnalysisBoardState<GameAnalysisBoard, AnalysisState, AnalysisPrefs> {
   @override
+  AnalysisState? readCurrentState() => ref.read(analysisControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(AnalysisState? prev, AnalysisState? next) listener) =>
+      ref.listenManual<AnalysisState?>(
+        analysisControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   AnalysisState get analysisState =>
       ref.watch(analysisControllerProvider(widget.options)).requireValue;
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+
+  @override
+  String computeFen(AnalysisState state) => state.currentPosition.fen;
 
   @override
   AnalysisPrefs get analysisPrefs => ref.watch(analysisPreferencesProvider);

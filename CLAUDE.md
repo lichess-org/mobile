@@ -209,6 +209,16 @@ lib/src/
 
 **State Management**: Riverpod providers throughout `lib/src/model/`. Controllers, repositories, and services are implemented as providers. State is immutable and managed with Freezed data classes.
 
+**Riverpod version: 3.x — API differences from 2.x (CRITICAL)**
+
+This project uses `flutter_riverpod 3.x` / `riverpod 3.x`. Several APIs changed from 2.x:
+
+- **`AsyncValue.value`** (not `valueOrNull`): In 3.x, `AsyncValue<T>.value` returns `T?` (null while loading/error). `valueOrNull` no longer exists.
+- **`ProviderListenable` is not exported**: Do not use `ProviderListenable<T>` as a type annotation — it is an internal interface. The return type of `.select()` is also internal (`_ProviderSelector`). `ProviderListenableSelect` is exported but is an *extension* on `ProviderListenable`, not a class — it cannot be used as a type.
+  - When you need to pass a provider or select result to `ref.watch`/`ref.read`/`ref.listenManual`, just pass it directly without naming the type. If a return type annotation is required (e.g. an abstract method), use two concrete methods (`readCurrentState()` + `listenToStateChanges()`) instead of trying to name the provider type.
+- **`ref.listenManual` type inference**: When the selected type is nullable (e.g. `provider.select((v) => v.value)` → `T?`), Dart cannot infer `StateT` because the callback signature is `void Function(StateT?, StateT)`. Always add an explicit type: `ref.listenManual<T?>(provider.select(...), listener)`.
+- **`listenManual` in `ConsumerState`**: Subscriptions set up in `initState()` via `ref.listenManual` are automatically cancelled when the widget is disposed. No need to store or cancel manually.
+
 **Binding Layer**: `LichessBinding` (in `binding.dart`) provides a testable abstraction for plugins and external APIs:
 - SharedPreferences
 - Firebase (messaging, crashlytics)
