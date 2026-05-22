@@ -20,7 +20,10 @@ class BoardWidget extends StatelessWidget {
     this.boardOverlay,
     this.error,
     this.boardKey,
-  }) : assert(controller != null || fen != null);
+  }) : assert(
+         (controller != null) != (fen != null),
+         'Exactly one of controller or fen must be provided',
+       );
 
   final double size;
   final Side orientation;
