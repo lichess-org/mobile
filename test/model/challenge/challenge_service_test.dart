@@ -134,6 +134,10 @@ void main() {
       ),
     ).thenAnswer((_) => Future.value());
 
+    // notifications from socket are only displayed if app is in foreground
+    final binding = TestWidgetsFlutterBinding.ensureInitialized();
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
     final container = await makeContainer(
       authUser: fakeAuthUser,
       overrides: {
@@ -222,6 +226,10 @@ void main() {
     when(
       () => notificationDisplayMock.cancel(id: any(named: 'id')),
     ).thenAnswer((_) => Future.value());
+
+    // notifications from socket are only displayed if app is in foreground
+    final binding = TestWidgetsFlutterBinding.ensureInitialized();
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
     final container = await makeContainer(
       authUser: fakeAuthUser,
