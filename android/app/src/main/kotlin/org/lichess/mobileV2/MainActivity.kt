@@ -20,6 +20,12 @@ class MainActivity: FlutterActivity() {
     super.onCreate(savedInstanceState)
   }
 
+override fun onNewIntent(intent: android.content.Intent) {
+    super.onNewIntent(intent)
+    // Pass the new intent carrying the OAuth token back into the activity context
+    setIntent(intent)
+  }
+
   override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger, GESTURES_CHANNEL).setMethodCallHandler {
