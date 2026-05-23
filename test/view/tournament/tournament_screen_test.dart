@@ -451,7 +451,10 @@ void main() {
 
       expect(find.text('BlackFeatured'), findsOneWidget);
       expect(find.text('WhiteFeatured'), findsOneWidget);
-      expect(tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen, isNot(kEmptyBoardFEN));
+      expect(
+        tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen,
+        isNot(kEmptyBoardFEN),
+      );
       expect(find.byType(BoardThumbnail), findsOneWidget);
 
       // Pretend all the pieces are gone to check that the board is updated
