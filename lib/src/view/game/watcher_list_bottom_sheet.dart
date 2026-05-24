@@ -1,5 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 
 class WatcherListBottomSheet extends StatelessWidget {
   const WatcherListBottomSheet({required this.nbWatchers, required this.watcherNames, super.key});
@@ -63,6 +66,19 @@ class WatcherListBottomSheet extends StatelessWidget {
                   dense: true,
                   leading: const Icon(Icons.person_outline, size: 20),
                   title: Text(shownNames[index]),
+                  onTap: () {
+                    debugPrint('Tapped on: ${shownNames[index]}');
+                    Navigator.of(context, rootNavigator: true).pop();
+                    Navigator.of(context, rootNavigator: true).push(
+                      UserOrProfileScreen.buildRoute(
+                        context,
+                        LightUser(
+                          id: UserId(shownNames[index].toLowerCase()),
+                          name: shownNames[index],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
