@@ -224,6 +224,14 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   void didUpdateWidget(GameLayout old) {
     super.didUpdateWidget(old);
 
+    // If the externally owned controller instance changed, move the premove
+    // listener from the old controller to the new one.
+    final oldController = old.controllerParams?.controller ?? _ownController;
+    if (oldController != _controller) {
+      oldController?.premoveNotifier.removeListener(_onPremoveChanged);
+      _controller?.premoveNotifier.addListener(_onPremoveChanged);
+    }
+
     // External-controller path: the owner drives position updates.
     if (widget.controllerParams != null) return;
 
