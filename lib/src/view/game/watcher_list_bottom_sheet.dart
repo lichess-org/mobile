@@ -67,11 +67,9 @@ class WatcherListBottomSheet extends StatelessWidget {
                   leading: const Icon(Icons.person_outline, size: 20),
                   title: Text(shownNames[index]),
                   onTap: () {
-                    debugPrint('Tapped on: ${shownNames[index]}');
                     Navigator.of(context, rootNavigator: true).pop();
                     Navigator.of(context, rootNavigator: true).push(
                       UserOrProfileScreen.buildRoute(
-                        context,
                         LightUser(
                           id: UserId(shownNames[index].toLowerCase()),
                           name: shownNames[index],
