@@ -6,42 +6,34 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
-/// A widget that displays a chessboard, either interactive (with a [ChessboardController]) or fixed
-/// (with a FEN string).
+/// A widget that displays an interactive chessboard driven by a [ChessboardController].
+///
+/// For a non-interactive board, use [StaticChessboard] instead. To disable user
+/// interaction on this board (e.g. at the end of a game), drive the [controller]
+/// with game data whose `playerSide` is [PlayerSide.none].
 class BoardWidget extends StatelessWidget {
   const BoardWidget({
     required this.size,
     required this.orientation,
     required this.settings,
-    this.controller,
+    required this.controller,
     this.onMove,
-    this.fen,
-    this.lastMove,
     this.shapes = const {},
     this.annotations = const {},
     this.boardOverlay,
     this.error,
     this.boardKey,
-  }) : assert(
-         (controller != null) != (fen != null),
-         'Exactly one of controller or fen must be provided',
-       );
+  });
 
   final double size;
   final Side orientation;
   final ChessboardSettings settings;
 
-  /// Controller for the interactive board. Mutually exclusive with [fen].
-  final ChessboardController? controller;
+  /// Controller that drives the board position and game state.
+  final ChessboardController controller;
 
-  /// Called when the user completes a move on the interactive board.
+  /// Called when the user completes a move on the board.
   final void Function(Move, {bool? viaDragAndDrop})? onMove;
-
-  /// FEN string for the fixed (non-interactive) board. Mutually exclusive with [controller].
-  final String? fen;
-
-  /// Last move highlight for the fixed board. Ignored when [controller] is set.
-  final Move? lastMove;
 
   /// External shapes to draw on the board (engine arrows, analysis annotations, etc.).
   final Set<Shape> shapes;
@@ -55,28 +47,16 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = controller;
-    final board = ctrl != null
-        ? Chessboard(
-            key: boardKey,
-            controller: ctrl,
-            size: size,
-            orientation: orientation,
-            onMove: onMove,
-            shapes: shapes,
-            annotations: annotations,
-            settings: settings,
-          )
-        : Chessboard.fixed(
-            key: boardKey,
-            size: size,
-            orientation: orientation,
-            fen: fen!,
-            lastMove: lastMove,
-            shapes: shapes,
-            annotations: annotations,
-            settings: settings,
-          );
+    final board = Chessboard(
+      key: boardKey,
+      controller: controller,
+      size: size,
+      orientation: orientation,
+      onMove: onMove,
+      shapes: shapes,
+      annotations: annotations,
+      settings: settings,
+    );
 
     final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
 

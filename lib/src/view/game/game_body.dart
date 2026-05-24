@@ -390,10 +390,6 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
         ? Duration.zero
         : boardPrefs.pieceAnimationDuration;
 
-    // Static info read once per shell build; the controller (not this) drives
-    // per-move position changes, so reading the current value here is fine.
-    final state = ref.read(_ctrlProvider).requireValue;
-
     return FocusDetector(
       onFocusRegained: () {
         if (context.mounted) {
@@ -406,13 +402,13 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
         }
       },
       child: WakelockWidget(
-        shouldEnableOnFocusGained: () => ref.read(_ctrlProvider).value?.game.playable ?? false,
+        shouldEnableOnFocusGained: () => shell.playable,
         child: GameLayout(
           boardKey: widget.boardKey,
           controllerParams: ControllerBoardParams(
             controller: _controller,
             variant: shell.variant,
-            pockets: state.currentPosition.pockets,
+            pockets: shell.pockets,
             onMove: (move, {viaDragAndDrop}) {
               ref.read(_ctrlProvider.notifier).userMove(move, viaDragAndDrop: viaDragAndDrop);
             },
@@ -431,7 +427,11 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             clockKey: topSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
           ),
           bottomTable: shell.showClaimWinCountdown
-              ? _ClaimWinCountdown(state, countdown: state.opponentLeftCountdown!)
+              ? _ClaimWinCountdown(
+                  gameId: widget.gameId,
+                  canClaimWin: shell.canClaimWin,
+                  countdown: shell.opponentLeftCountdown!,
+                )
               : _GamePlayerTable(
                   gameId: widget.gameId,
                   side: bottomSide,
@@ -456,14 +456,17 @@ typedef _ShellData = ({
   Side youAre,
   Speed speed,
   bool zen,
+  bool playable,
   bool canPremove,
   bool canAutoQueen,
   bool canAutoQueenOnPremove,
   bool showClaimWinCountdown,
-  // For Crazyhouse, the current FEN so the shell (which renders the pocket
-  // counts from boardParams) rebuilds on each move. Null for other variants so
-  // they keep the build-once shell.
-  String? pocketsFen,
+  bool canClaimWin,
+  (Duration, DateTime)? opponentLeftCountdown,
+  // Crazyhouse pockets (null for other variants). [Pockets] has value equality,
+  // so this both supplies the pocket counts and drives the shell to rebuild on
+  // each move in Crazyhouse, while other variants keep the build-once shell.
+  Pockets? pockets,
 });
 
 _ShellData? _shellOf(AsyncValue<GameState> state) {
@@ -474,11 +477,14 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
     youAre: s.game.youAre ?? Side.white,
     speed: s.game.meta.speed,
     zen: s.isZenModeActive,
+    playable: s.game.playable,
     canPremove: s.canPremove,
     canAutoQueen: s.canAutoQueen,
     canAutoQueenOnPremove: s.canAutoQueenOnPremove,
     showClaimWinCountdown: s.canShowClaimWinCountdown && s.opponentLeftCountdown != null,
-    pocketsFen: s.game.meta.variant == Variant.crazyhouse ? s.currentPosition.fen : null,
+    canClaimWin: s.game.canClaimWin,
+    opponentLeftCountdown: s.opponentLeftCountdown,
+    pockets: s.currentPosition.pockets,
   );
 }
 
@@ -1135,10 +1141,15 @@ class _ClaimWinDialog extends ConsumerWidget {
 }
 
 class _ClaimWinCountdown extends StatelessWidget {
-  const _ClaimWinCountdown(this.gameState, {required this.countdown});
+  const _ClaimWinCountdown({
+    required this.gameId,
+    required this.canClaimWin,
+    required this.countdown,
+  });
 
+  final GameFullId gameId;
+  final bool canClaimWin;
   final (Duration, DateTime) countdown;
-  final GameState gameState;
 
   @override
   Widget build(BuildContext context) {
@@ -1151,11 +1162,11 @@ class _ClaimWinCountdown extends StatelessWidget {
           active: true,
           builder: (context, duration) {
             return InkWell(
-              onTap: gameState.game.canClaimWin
+              onTap: canClaimWin
                   ? () {
                       showAdaptiveDialog<void>(
                         context: context,
-                        builder: (context) => _ClaimWinDialog(id: gameState.gameFullId),
+                        builder: (context) => _ClaimWinDialog(id: gameId),
                         barrierDismissible: true,
                       );
                     }

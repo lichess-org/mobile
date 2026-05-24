@@ -78,6 +78,7 @@ abstract class AnalysisBoardState<
   /// Override to conditionally disable user interaction.
   bool computeInteractive(AnalysisState state) => true;
 
+  /// Whether the board should be interactive for the current [analysisState].
   bool get interactive => computeInteractive(analysisState);
 
   /// E.g. for the study board to add pgn shapes and variations arrows.
@@ -110,8 +111,8 @@ abstract class AnalysisBoardState<
 
   GameData? _buildGameData(AnalysisState state, BoardPrefs boardPrefs) {
     final position = state.currentPosition;
-    if (position == null || !computeInteractive(state)) return null;
-    final playerSide = position.isGameOver
+    if (position == null) return null;
+    final playerSide = !computeInteractive(state) || position.isGameOver
         ? PlayerSide.none
         : position.turn == Side.white
         ? PlayerSide.white
@@ -234,23 +235,24 @@ abstract class AnalysisBoardState<
               : {sanMove.move.to: annotation})
         : const <Square, Annotation>{};
 
+    // The controller is normally created in initState. If it is somehow absent,
+    // fall back to a non-interactive board rather than crashing.
     final ctrl = _controller;
-    final currentFen = fen;
-
     if (ctrl == null) {
-      return BoardWidget(
+      return StaticChessboard(
         size: widget.boardSize,
         orientation: analysisState.pov,
-        fen: currentFen,
+        fen: fen,
         lastMove: analysisState.lastMove,
         shapes: externalShapes,
-        settings: boardPrefs
-            .toBoardSettings(analysisState.variant)
-            .copyWith(
-              borderRadius: widget.boardRadius,
-              boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
-            ),
-        annotations: boardAnnotations,
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(analysisState.variant)
+              .copyWith(
+                borderRadius: widget.boardRadius,
+                boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+              ),
+        ),
       );
     }
 

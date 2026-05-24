@@ -223,64 +223,45 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   @override
   void didUpdateWidget(GameLayout old) {
     super.didUpdateWidget(old);
-    // In the external-controller path the owner drives position updates; nothing
-    // for us to do here.
+
+    // External-controller path: the owner drives position updates.
     if (widget.controllerParams != null) return;
+
     final ctrl = _ownController;
     if (ctrl == null) return;
 
-    final oldParams = old.boardParams;
-    final newParams = widget.boardParams;
-    if (newParams is! InteractiveBoardParams) return;
+    final newParams = widget.boardParams!;
+    final newFen = newParams.fen;
+    final fenChanged = old.boardParams?.fen != newFen;
+    final newGameData = _gameDataFor(newParams);
 
-    final newGameData = _buildGameData(newParams);
+    if (!fenChanged) {
+      // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
+      ctrl.animatePosition(newFen, game: newGameData);
+      return;
+    }
 
-    if (oldParams is InteractiveBoardParams) {
-      final fenChanged = oldParams.position.fen != newParams.position.fen;
-      if (fenChanged) {
-        if (widget.isReplaying) {
-          ctrl.jumpToPosition(
-            newParams.position.fen,
-            game: newGameData,
-            lastMove: newParams.lastMove,
-          );
-        } else {
-          ctrl.animatePosition(
-            newParams.position.fen,
-            game: newGameData,
-            lastMove: newParams.lastMove,
-          );
-          if (widget.explosionSquares != null) {
-            ctrl.triggerExplosion(widget.explosionSquares!);
-          }
-          final onPremove = widget.onPremove;
-          if (onPremove != null) {
-            tryExecutePremove(ctrl, newParams.position, onPremove);
-          }
-        }
-      } else {
-        // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
-        ctrl.animatePosition(newParams.position.fen, game: newGameData);
+    if (widget.isReplaying) {
+      ctrl.jumpToPosition(newFen, game: newGameData, lastMove: _lastMoveOf(newParams));
+      return;
+    }
+
+    ctrl.animatePosition(newFen, game: newGameData, lastMove: _lastMoveOf(newParams));
+    if (widget.explosionSquares != null) {
+      ctrl.triggerExplosion(widget.explosionSquares!);
+    }
+    if (newParams is InteractiveBoardParams) {
+      final onPremove = widget.onPremove;
+      if (onPremove != null) {
+        tryExecutePremove(ctrl, newParams.position, onPremove);
       }
     }
   }
 
   void _initController() {
     final params = widget.boardParams;
-    if (params is InteractiveBoardParams) {
-      final boardPrefs = ref.read(boardPreferencesProvider);
-      _ownController = ChessboardController(
-        fen: params.position.fen,
-        game: buildGameData(
-          variant: params.variant,
-          position: params.position,
-          playerSide: params.playerSide,
-          lastMove: params.lastMove,
-          castlingMethod: boardPrefs.castlingMethod,
-          boardHighlights: boardPrefs.boardHighlights,
-        ),
-      );
-    }
+    if (params == null) return;
+    _ownController = ChessboardController(fen: params.fen, game: _gameDataFor(params));
   }
 
   void _onPremoveChanged() {
@@ -304,16 +285,39 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     );
   }
 
-  GameData _buildGameData(InteractiveBoardParams params) {
+  /// Builds the [GameData] driving the owned controller.
+  ///
+  /// Readonly boards are still controller-backed; they are made non-interactive
+  /// by using [PlayerSide.none] (so the user cannot move) with no valid moves.
+  GameData _gameDataFor(GameBoardParams params) {
     final boardPrefs = ref.read(boardPreferencesProvider);
-    return buildGameData(
-      variant: params.variant,
-      position: params.position,
-      playerSide: params.playerSide,
-      lastMove: params.lastMove,
-      castlingMethod: boardPrefs.castlingMethod,
-      boardHighlights: boardPrefs.boardHighlights,
-    );
+    return switch (params) {
+      InteractiveBoardParams(:final variant, :final position, :final playerSide, :final lastMove) =>
+        buildGameData(
+          variant: variant,
+          position: position,
+          playerSide: playerSide,
+          lastMove: lastMove,
+          castlingMethod: boardPrefs.castlingMethod,
+          boardHighlights: boardPrefs.boardHighlights,
+        ),
+      ReadonlyBoardParams(:final fen) => GameData(
+        playerSide: PlayerSide.none,
+        sideToMove: _sideToMoveFromFen(fen),
+        validMoves: const <Square, Set<Square>>{},
+        lastMove: widget.lastMove,
+      ),
+    };
+  }
+
+  Move? _lastMoveOf(GameBoardParams params) => switch (params) {
+    InteractiveBoardParams(:final lastMove) => lastMove,
+    ReadonlyBoardParams() => widget.lastMove,
+  };
+
+  Side _sideToMoveFromFen(String fen) {
+    final parts = fen.split(' ');
+    return parts.length > 1 && parts[1] == 'b' ? Side.black : Side.white;
   }
 
   @override
@@ -434,10 +438,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 BoardWidget(
                   size: boardSize,
                   orientation: widget.orientation,
-                  controller: _controller,
+                  controller: _controller!,
                   onMove: rawOnMove,
-                  fen: _controller == null ? widget.boardParams!.fen : null,
-                  lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
@@ -520,10 +522,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 child: BoardWidget(
                   size: effectiveBoardSize,
                   orientation: widget.orientation,
-                  controller: _controller,
+                  controller: _controller!,
                   onMove: rawOnMove,
-                  fen: _controller == null ? widget.boardParams!.fen : null,
-                  lastMove: _controller == null ? widget.lastMove : null,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,

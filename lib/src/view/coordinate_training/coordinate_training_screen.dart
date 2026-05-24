@@ -432,20 +432,22 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
         Stack(
           alignment: Alignment.center,
           children: [
-            Chessboard.fixed(
+            StaticChessboard(
               size: widget.boardSize,
               fen: trainingPrefs.showPieces ? kInitialFEN : kEmptyFEN,
               squareHighlights: widget.squareHighlights.unlock,
               orientation: widget.orientation,
-              settings: boardPrefs
-                  .toBoardSettings(Variant.standard)
-                  .copyWith(
-                    enableCoordinates: trainingPrefs.showCoordinates,
-                    borderRadius: widget.isTablet
-                        ? const BorderRadius.all(Radius.circular(4.0))
-                        : BorderRadius.zero,
-                    boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-                  ),
+              settings: StaticChessboardSettings.fromBoardSettings(
+                boardPrefs
+                    .toBoardSettings(Variant.standard)
+                    .copyWith(
+                      enableCoordinates: trainingPrefs.showCoordinates,
+                      borderRadius: widget.isTablet
+                          ? const BorderRadius.all(Radius.circular(4.0))
+                          : BorderRadius.zero,
+                      boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+                    ),
+              ),
               onTouchedSquare: (square) {
                 if (trainingState.trainingActive && trainingPrefs.mode == TrainingMode.findSquare) {
                   widget.onGuess(square);

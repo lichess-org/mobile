@@ -91,13 +91,64 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
-  ChessboardController? _controller;
-  String? _lastFen;
+  late final ChessboardController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ChessboardController(
+      fen: ref.read(puzzleControllerProvider(widget.initialPuzzleContext)).currentPosition.fen,
+      game: _buildGameData(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(_Body oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The streak feeds new puzzles by swapping the puzzle context (and thus the
+    // controller provider), so push the new puzzle onto the board.
+    if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
+      _applyBoardUpdate();
+    }
+  }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  PlayerSide _playerSide(PuzzleState state) {
+    return state.mode == PuzzleMode.load || state.currentPosition.isGameOver
+        ? PlayerSide.none
+        : state.mode == PuzzleMode.view
+        ? PlayerSide.both
+        : state.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+  }
+
+  GameData _buildGameData() {
+    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
+    final boardPreferences = ref.read(boardPreferencesProvider);
+    return buildGameData(
+      variant: Variant.standard,
+      position: state.currentPosition,
+      playerSide: _playerSide(state),
+      lastMove: state.lastMove,
+      castlingMethod: boardPreferences.castlingMethod,
+      boardHighlights: boardPreferences.boardHighlights,
+    );
+  }
+
+  /// Pushes the latest puzzle position to the board controller without rebuilding it.
+  void _applyBoardUpdate() {
+    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
+    _controller.animatePosition(
+      state.currentPosition.fen,
+      game: _buildGameData(),
+      lastMove: state.lastMove,
+    );
   }
 
   @override
@@ -112,7 +163,7 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.hasValue == true && next.hasValue) {
         if (next.requireValue.streak.finished == false &&
             previous!.requireValue.streak.finished == true) {
-          _controller?.clearDrawnShapes();
+          _controller.clearDrawnShapes();
           final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
@@ -135,38 +186,17 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final playerSide = puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-        ? PlayerSide.none
-        : puzzleState.mode == PuzzleMode.view
-        ? PlayerSide.both
-        : puzzleState.pov == Side.white
-        ? PlayerSide.white
-        : PlayerSide.black;
-
-    final newFen = puzzleState.currentPosition.fen;
-    final gameData = buildGameData(
-      variant: Variant.standard,
-      position: puzzleState.currentPosition,
-      playerSide: playerSide,
-      lastMove: puzzleState.lastMove,
-      castlingMethod: boardPreferences.castlingMethod,
-      boardHighlights: boardPreferences.boardHighlights,
+    // Drive the board on position/interactivity changes without rebuilding it.
+    ref.listen(
+      ctrlProvider.select(
+        (s) => (fen: s.currentPosition.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+      ),
+      (_, _) => _applyBoardUpdate(),
     );
-
-    if (_controller == null) {
-      _controller = ChessboardController(fen: newFen, game: gameData);
-    } else if (newFen != _lastFen) {
-      final ctrl = _controller!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.animatePosition(newFen, game: gameData, lastMove: puzzleState.lastMove);
-      });
-    } else {
-      final ctrl = _controller!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.animatePosition(newFen, game: gameData);
-      });
-    }
-    _lastFen = newFen;
+    ref.listen(
+      boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
+      (_, _) => _applyBoardUpdate(),
+    );
 
     final content = PopScope(
       canPop: widget.streak.index == 0 || widget.streak.finished,

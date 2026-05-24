@@ -86,12 +86,13 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   }
 }
 
+/// Finds either an interactive [Chessboard] or a [StaticChessboard].
+Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
+
 /// Returns the pieces on the chessboard.
 Map<Square, Piece> getBoardPieces(WidgetTester tester) {
   for (final element
-      in find
-          .descendant(of: find.byType(Chessboard), matching: find.byType(CustomPaint))
-          .evaluate()) {
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
     final widget = element.widget as CustomPaint;
     if (widget.painter is PiecesPainter) {
       return (widget.painter! as PiecesPainter).pieces;
@@ -102,9 +103,7 @@ Map<Square, Piece> getBoardPieces(WidgetTester tester) {
 
 HighlightsPainter _highlightsPainter(WidgetTester tester) {
   for (final element
-      in find
-          .descendant(of: find.byType(Chessboard), matching: find.byType(CustomPaint))
-          .evaluate()) {
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
     final widget = element.widget as CustomPaint;
     if (widget.painter is HighlightsPainter) {
       return widget.painter! as HighlightsPainter;

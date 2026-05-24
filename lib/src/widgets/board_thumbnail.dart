@@ -89,16 +89,18 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       fen: widget.fen,
       orientation: widget.orientation,
       lastMove: widget.lastMove,
-      enableCoordinates: false,
-      borderRadius: (widget.showEvaluationGauge)
-          ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-          : Styles.boardBorderRadius,
-      boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
-      pieceAssets: boardPrefs.pieceSet.assets,
-      colorScheme: boardPrefs.boardTheme.colors,
-      animationDuration: widget.animationDuration,
-      hue: boardPrefs.hue,
-      brightness: boardPrefs.brightness,
+      settings: StaticChessboardSettings(
+        enableCoordinates: false,
+        borderRadius: (widget.showEvaluationGauge)
+            ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+            : Styles.boardBorderRadius,
+        boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
+        pieceAssets: boardPrefs.pieceSet.assets,
+        colorScheme: boardPrefs.boardTheme.colors,
+        animationDuration: widget.animationDuration,
+        hue: boardPrefs.hue,
+        brightness: boardPrefs.brightness,
+      ),
     );
 
     final boardWithMaybeEvalBar = widget.showEvaluationGauge

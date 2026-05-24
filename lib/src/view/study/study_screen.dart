@@ -82,14 +82,16 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs
-                    .toBoardSettings(Variant.standard)
-                    .copyWith(
-                      borderRadius: borderRadius,
-                      boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                    ),
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
+                ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
@@ -122,14 +124,16 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs
-                    .toBoardSettings(Variant.standard)
-                    .copyWith(
-                      borderRadius: borderRadius,
-                      boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                    ),
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
+                ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),

@@ -257,13 +257,15 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                         padding: EdgeInsets.only(
                           left: orientation == Orientation.portrait ? 0 : 16.0,
                         ),
-                        child: Chessboard.fixed(
+                        child: StaticChessboard(
                           size: orientation == Orientation.portrait
                               ? constraints.maxWidth
                               : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(Variant.standard),
+                          settings: StaticChessboardSettings.fromBoardSettings(
+                            widget.boardPrefs.toBoardSettings(Variant.standard),
+                          ),
                         ),
                       ),
                     ),
@@ -432,13 +434,15 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       padding: EdgeInsets.only(
                         left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
-                      child: Chessboard.fixed(
+                      child: StaticChessboard(
                         size: widget.viewportOrientation == Orientation.portrait
                             ? widget.viewport.width
                             : widget.viewport.height - landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(Variant.standard),
+                        settings: StaticChessboardSettings.fromBoardSettings(
+                          widget.boardPrefs.toBoardSettings(Variant.standard),
+                        ),
                       ),
                     ),
                   ),

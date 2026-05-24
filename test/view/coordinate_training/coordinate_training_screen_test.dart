@@ -19,7 +19,7 @@ void main() {
       await tester.tap(find.text('Start training'));
       await tester.pumpAndSettle();
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final container = ProviderScope.containerOf(tester.element(find.byType(StaticChessboard)));
       final controllerProvider = coordinateTrainingControllerProvider;
 
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
@@ -40,7 +40,7 @@ void main() {
       final app = await makeTestProviderScopeApp(tester, home: const CoordinateTrainingScreen());
       await tester.pumpWidget(app);
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final container = ProviderScope.containerOf(tester.element(find.byType(StaticChessboard)));
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
       trainingPrefsNotifier.setSideChoice(SideChoice.white);
@@ -55,7 +55,7 @@ void main() {
 
       final wrongCoord = Square.values[(currentCoord! + 1) % Square.values.length];
 
-      await tester.tapAt(squareOffset(wrongCoord, tester.getRect(find.byType(Chessboard))));
+      await tester.tapAt(squareOffset(wrongCoord, tester.getRect(find.byType(StaticChessboard))));
       await tester.pump();
 
       expect(container.read(controllerProvider).score, 0);
@@ -73,7 +73,7 @@ void main() {
       final app = await makeTestProviderScopeApp(tester, home: const CoordinateTrainingScreen());
       await tester.pumpWidget(app);
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final container = ProviderScope.containerOf(tester.element(find.byType(StaticChessboard)));
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
       trainingPrefsNotifier.setSideChoice(SideChoice.white);
@@ -86,7 +86,9 @@ void main() {
       final currentCoord = container.read(controllerProvider).currentCoord;
       final nextCoord = container.read(controllerProvider).nextCoord;
 
-      await tester.tapAt(squareOffset(currentCoord!, tester.getRect(find.byType(Chessboard))));
+      await tester.tapAt(
+        squareOffset(currentCoord!, tester.getRect(find.byType(StaticChessboard))),
+      );
 
       await tester.pump();
 

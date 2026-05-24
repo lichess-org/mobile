@@ -89,13 +89,65 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
-  ChessboardController? _controller;
-  String? _lastFen;
+  late final ChessboardController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ChessboardController(
+      fen: ref
+          .read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)))
+          .position
+          .fen,
+      game: _buildGameData(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(_Body oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // A new run swaps the storm data (and thus the controller provider), so push
+    // the new position onto the board.
+    if (oldWidget.data != widget.data) {
+      _applyBoardUpdate();
+    }
+  }
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  PlayerSide _playerSide(StormState state) {
+    return !state.firstMovePlayed || state.mode == StormMode.ended || state.position.isGameOver
+        ? PlayerSide.none
+        : state.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+  }
+
+  GameData _buildGameData() {
+    final state = ref.read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)));
+    final boardPreferences = ref.read(boardPreferencesProvider);
+    return buildGameData(
+      variant: Variant.standard,
+      position: state.position,
+      playerSide: _playerSide(state),
+      lastMove: state.lastMove,
+      castlingMethod: boardPreferences.castlingMethod,
+      boardHighlights: boardPreferences.boardHighlights,
+    );
+  }
+
+  /// Pushes the latest storm position to the board controller without rebuilding it.
+  void _applyBoardUpdate() {
+    final state = ref.read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)));
+    _controller.animatePosition(
+      state.position.fen,
+      game: _buildGameData(),
+      lastMove: state.lastMove,
+    );
   }
 
   @override
@@ -118,39 +170,17 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final playerSide =
-        !stormState.firstMovePlayed ||
-            stormState.mode == StormMode.ended ||
-            stormState.position.isGameOver
-        ? PlayerSide.none
-        : stormState.pov == Side.white
-        ? PlayerSide.white
-        : PlayerSide.black;
-
-    final newFen = stormState.position.fen;
-    final gameData = buildGameData(
-      variant: Variant.standard,
-      position: stormState.position,
-      playerSide: playerSide,
-      lastMove: stormState.lastMove,
-      castlingMethod: boardPreferences.castlingMethod,
-      boardHighlights: boardPreferences.boardHighlights,
+    // Drive the board on position/interactivity changes without rebuilding it.
+    ref.listen(
+      ctrlProvider.select(
+        (s) => (fen: s.position.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+      ),
+      (_, _) => _applyBoardUpdate(),
     );
-
-    if (_controller == null) {
-      _controller = ChessboardController(fen: newFen, game: gameData);
-    } else if (newFen != _lastFen) {
-      final ctrl = _controller!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.animatePosition(newFen, game: gameData, lastMove: stormState.lastMove);
-      });
-    } else {
-      final ctrl = _controller!;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ctrl.animatePosition(newFen, game: gameData);
-      });
-    }
-    _lastFen = newFen;
+    ref.listen(
+      boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
+      (_, _) => _applyBoardUpdate(),
+    );
 
     final content = PopScope(
       canPop: stormState.mode != StormMode.running,

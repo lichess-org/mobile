@@ -300,7 +300,7 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Chessboard.fixed(
+      child: StaticChessboard(
         size: size,
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
@@ -313,14 +313,16 @@ class _BoardPreview extends StatelessWidget {
             dest: Square.fromName('c6'),
           ),
         },
-        settings: boardPrefs
-            .toBoardSettings(Variant.standard)
-            .copyWith(
-              brightness: brightness,
-              hue: hue,
-              borderRadius: Styles.boardBorderRadius,
-              boxShadow: boardShadows,
-            ),
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(Variant.standard)
+              .copyWith(
+                brightness: brightness,
+                hue: hue,
+                borderRadius: Styles.boardBorderRadius,
+                boxShadow: boardShadows,
+              ),
+        ),
       ),
     );
   }

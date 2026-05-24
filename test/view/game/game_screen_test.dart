@@ -1870,6 +1870,70 @@ void main() {
       );
     }
   });
+
+  group('Claim win', () {
+    testWidgets('shows the countdown when the opponent leaves and claims victory', (
+      WidgetTester tester,
+    ) async {
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
+      await createTestGame(
+        tester,
+        socketFactory: socketFactory,
+        // fullmoves >= 2 so the game is resignable (not abortable), and it is the
+        // opponent's turn so the claim-win countdown is allowed to show.
+        pgn: 'e4 e5 Nf3',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 3),
+          increment: Duration(seconds: 2),
+          white: Duration(minutes: 2, seconds: 58),
+          black: Duration(minutes: 2, seconds: 54),
+          emerg: Duration(seconds: 30),
+        ),
+      );
+
+      // No countdown until the opponent leaves.
+      expect(find.byType(CountdownClockBuilder), findsNothing);
+
+      // 'goneIn' announces the opponent left and starts the claim-win countdown.
+      sendServerSocketMessages(testGameSocketUri, ['{"t": "goneIn", "v": 1, "d": 30}']);
+      await tester.pump();
+      expect(find.textContaining('claim victory in 30 seconds'), findsOneWidget);
+
+      final countdownButton = find.ancestor(
+        of: find.textContaining('claim victory in 30 seconds'),
+        matching: find.byType(InkWell),
+      );
+
+      // Victory is not claimable until the 'gone' threshold is reached, so the
+      // countdown is not tappable yet (InkWell.onTap is null).
+      await tester.tap(countdownButton, warnIfMissed: false);
+      await tester.pump();
+      expect(find.text('Claim victory'), findsNothing);
+
+      // 'gone' confirms the opponent has been gone long enough to claim.
+      sendServerSocketMessages(testGameSocketUri, ['{"t": "gone", "v": 2, "d": true}']);
+      await tester.pump();
+
+      // Tapping the countdown now opens the claim-win dialog. (warnIfMissed: the
+      // tap reaches the InkWell's gesture listener, but layered widgets mean the
+      // InkWell RenderBox isn't the topmost hit-test object at its center.)
+      await tester.tap(countdownButton, warnIfMissed: false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Claim victory'), findsOneWidget);
+      expect(find.text('Call draw'), findsOneWidget);
+
+      // Claiming victory sends the force-resign message and closes the dialog.
+      expectLater(socketFactory.outgoingMessages(testGameSocketUri), emits('{"t":"resign-force"}'));
+      await tester.tap(find.text('Claim victory'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Claim victory'), findsNothing);
+    });
+  });
 }
 
 /// Finds the clock on the specified [side].
