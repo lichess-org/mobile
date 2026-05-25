@@ -53,6 +53,10 @@ class GameController extends AsyncNotifier<GameState> {
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
+  /// The zen preference as received from the server when the game was loaded.
+  /// Used to restore the correct "on" state when toggling zen back on.
+  Zen? _initialZenPref;
+
   /// Tracks moves that were played on the board, sent to the server, possibly
   /// acked, but without a move response from the server yet.
   /// After a delay, it will trigger a reload. This might fix bugs where the
@@ -130,6 +134,8 @@ class GameController extends AsyncNotifier<GameState> {
       if (game.finished) {
         _onFinishedGameLoad(fullEvent.game);
       }
+
+      _initialZenPref = game.prefs?.zenMode;
 
       return GameState(
         gameFullId: gameFullId,
@@ -357,7 +363,10 @@ class GameController extends AsyncNotifier<GameState> {
   void toggleZenMode() {
     final curState = state.requireValue;
     final curZen = curState.game.prefs?.zenMode ?? Zen.no;
-    final newZen = curZen != Zen.no ? Zen.no : Zen.gameAuto;
+    final initial = _initialZenPref;
+    final newZen = curZen == Zen.no
+        ? (initial != null && initial != Zen.no ? initial : Zen.gameAuto)
+        : Zen.no;
     state = AsyncValue.data(
       curState.copyWith.game(prefs: curState.game.prefs?.copyWith(zenMode: newZen)),
     );

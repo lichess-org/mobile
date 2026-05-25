@@ -58,6 +58,8 @@ final client = MockClient((request) {
     return mockResponse('''
 {"id":"CCW6EEru","rated":true,"source":"lobby","variant":"standard","speed":"bullet","perf":"bullet","createdAt":1706185945680,"lastMoveAt":1706186170504,"status":"resign","players":{"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9}},"winner":"white","opening":{"eco":"C52","name":"Italian Game: Evans Gambit, Main Line","ply":10},"moves":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6","clocks":[12003,12003,11883,11811,11683,11379,11307,11163,11043,11043,10899,10707,10155,10483,10019,9995,9635,9923,8963,8603,7915,8283,7763,7459,7379,6083,6587,5819,6363,5651,6075,5507,5675,4803,5059,4515,4547,3555,3971,3411,3235,3123,3120,2742],"clock":{"initial":120,"increment":1,"totalTime":160}}
 ''', 200);
+  } else if (request.url.path.startsWith('/api/account/preferences/')) {
+    return mockResponse('ok', 200);
   }
   return mockResponse('', 404);
 });
@@ -1932,6 +1934,157 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.text('Claim victory'), findsNothing);
+    });
+  });
+
+  group('Zen mode', () {
+    testWidgets('Zen.gameAuto activates zen during playable game', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.gameAuto,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
+      expect(state.isZenModeEnabled, isTrue);
+      expect(state.isZenModeActive, isTrue);
+    });
+
+    testWidgets('Zen.no does not activate zen', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.no,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
+      expect(state.isZenModeEnabled, isFalse);
+      expect(state.isZenModeActive, isFalse);
+    });
+
+    testWidgets('Zen.yes activates zen', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.yes,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
+      expect(state.isZenModeEnabled, isTrue);
+      expect(state.isZenModeActive, isTrue);
+    });
+
+    testWidgets('Zen.gameAuto deactivates zen when game finishes', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.gameAuto,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      expect(
+        container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
+        isTrue,
+      );
+
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"endData","d":{"status":"mate","winner":"white","clock":{"wc":17800,"bc":0}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(
+        container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
+        isFalse,
+      );
+    });
+
+    testWidgets('Zen.yes keeps zen active when game finishes', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.yes,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      expect(
+        container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
+        isTrue,
+      );
+
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"endData","d":{"status":"mate","winner":"white","clock":{"wc":17800,"bc":0}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(
+        container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
+        isTrue,
+      );
+    });
+
+    testWidgets('toggleZenMode switches zen off and on', (tester) async {
+      await createTestGame(
+        tester,
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: false,
+          zenMode: Zen.gameAuto,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(testGameFullId);
+
+      expect(container.read(ctrlProvider).requireValue.isZenModeEnabled, isTrue);
+      expect(container.read(ctrlProvider).requireValue.isZenModeActive, isTrue);
+
+      container.read(ctrlProvider.notifier).toggleZenMode();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(container.read(ctrlProvider).requireValue.isZenModeEnabled, isFalse);
+      expect(container.read(ctrlProvider).requireValue.isZenModeActive, isFalse);
+
+      container.read(ctrlProvider.notifier).toggleZenMode();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(container.read(ctrlProvider).requireValue.isZenModeEnabled, isTrue);
+      expect(container.read(ctrlProvider).requireValue.isZenModeActive, isTrue);
     });
   });
 }
