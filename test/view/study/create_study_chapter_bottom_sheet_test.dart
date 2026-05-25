@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:mocktail/mocktail.dart';
@@ -87,6 +88,145 @@ void main() {
       await tester.pumpAndSettle(); // wait for the dialog to open
       await tester.tap(find.text('Chess960'));
       await tester.pumpAndSettle(); // wait for the dialog to close
+
+      await tester.tap(find.text('Create chapter'));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => callback.call(const StudyId('test-id'), [const StudyChapterId('new-chapter')].lock),
+      );
+    });
+
+    testWidgets('Create empty chapter of a new study', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TestBottomSheetOpener(
+          builder: (_) => CreateStudyChapterBottomSheet(
+            params: CreateFirstChapterOfNewStudy(
+              const CreateStudyPayload(
+                name: 'study name',
+                chat: StudyFeatureAccess.member,
+                cloneable: StudyFeatureAccess.everyone,
+                computer: StudyFeatureAccess.everyone,
+                explorer: StudyFeatureAccess.everyone,
+                shareable: StudyFeatureAccess.everyone,
+                visibility: StudyVisibility.unlisted,
+                sticky: true,
+              ),
+            ),
+            chapterNumber: 1,
+            onChaptersCreated: callback.call,
+          ),
+        ),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/api/study' && request.method == 'POST') {
+                  expect(request.bodyFields, containsPair('name', 'study name'));
+                  expect(request.bodyFields, containsPair('chat', 'member'));
+                  expect(request.bodyFields, containsPair('cloneable', 'everyone'));
+                  expect(request.bodyFields, containsPair('computer', 'everyone'));
+                  expect(request.bodyFields, containsPair('explorer', 'everyone'));
+                  expect(request.bodyFields, containsPair('shareable', 'everyone'));
+                  expect(request.bodyFields, containsPair('visibility', 'unlisted'));
+                  expect(request.bodyFields, containsPair('sticky', 'true'));
+
+                  return mockResponse(jsonEncode({'id': 'test-id'}), 200);
+                }
+
+                if (request.url.path == '/study/test-id') {
+                  const studyJson = '''
+{
+  "study": {
+    "id": "study-id",
+    "name": "",
+    "members": {},
+    "position": {
+      "chapterId": "initial-chapter",
+      "path": ""
+    },
+    "visibility": "public",
+    "createdAt": 1729286237789,
+    "secondsSinceUpdate": 4116,
+    "from": "scratch",
+    "likes": 29,
+    "liked": false,
+    "topics": [],
+    "chapter": {
+      "id": "initial-chapter",
+      "setup": {
+        "variant": {
+          "key": "standard",
+          "name": "Standard"
+        },
+        "orientation": "white",
+        "fromFen": true
+      },
+      "tags": [],
+      "features": {
+        "computer": false,
+        "explorer": false
+      },
+      "gamebook": false
+    },
+    "chapters": [
+      {
+        "id": "initial-chapter",
+        "name": "Initial Chapter"
+      }
+    ]
+  },
+  "analysis": {
+    "treeParts": []
+  }
+}
+''';
+                  return mockResponse(studyJson, 200);
+                }
+
+                if (request.url.path == '/api/study/test-id/initial-chapter.pgn') {
+                  return mockResponse('', 200);
+                }
+
+                if (request.url.path == '/api/study/test-id/import-pgn' &&
+                    request.method == 'POST') {
+                  expect(request.bodyFields, containsPair('name', 'Chapter 1'));
+                  expect(request.bodyFields, containsPair('orientation', 'white'));
+                  expect(request.bodyFields, containsPair('variant', 'standard'));
+
+                  final pgn = PgnGame.parsePgn(request.bodyFields['pgn']!);
+                  expect(pgn.moves.children.isEmpty, isTrue);
+
+                  return mockResponse(
+                    jsonEncode({
+                      'chapters': [
+                        {'id': 'new-chapter'},
+                      ],
+                    }),
+                    200,
+                  );
+                }
+
+                if (request.url.path == '/api/study/test-id/initial-chapter' &&
+                    request.method == 'DELETE') {
+                  return mockResponse('', 200);
+                }
+
+                return mockResponse('', 404);
+              }),
+            ),
+          ),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await TestBottomSheetOpener.openBottomSheet(tester);
+
+      expect(find.byType(CreateStudyChapterBottomSheet), findsOneWidget);
 
       await tester.tap(find.text('Create chapter'));
       await tester.pumpAndSettle();
