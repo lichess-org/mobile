@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A screen that displays a paginated list of studies
@@ -239,6 +241,24 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
           ],
         ),
       },
+      floatingActionButton: authUser != null
+          ? FloatingActionButton.extended(
+              onPressed: () => showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (context) => CreateStudyBottomSheet(
+                  user: authUser,
+                  onStudyCreated: (context, studyId) => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
+                ),
+              ),
+              icon: const Icon(Symbols.school_rounded),
+              label: Text(context.l10n.studyCreateStudy),
+            )
+          : null,
     );
   }
 }
