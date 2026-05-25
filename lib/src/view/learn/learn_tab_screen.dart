@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
+import 'package:lichess_mobile/src/view/study/create_study_floating_action_button.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -73,6 +74,7 @@ class const LearnTabScreen({super.key}) extends ConsumerWidget {
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),
+        floatingActionButton: const CreateStudyFloatingActionButton(),
       ),
     );
   }
