@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
@@ -110,6 +111,73 @@ void main() {
             .isCurrentMove,
         isTrue,
       );
+    });
+    testWidgets('Variations bar displays variations and can be tapped', (tester) async {
+      // A PGN where black has two responses to 1. e4 : e5 and c5
+      const pgn = '1. e4 e5 (1... c5)';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('test-id'),
+            pgn: pgn,
+            orientation: Side.white,
+            variant: Variant.standard,
+            isComputerAnalysisAllowed: false,
+            initialMoveCursor: 0,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The bar should not be visible when at the root (the root only has 1 child: 1. e4)
+      // So e5 should only be visible in the notation but not in the variations bar
+      expect(find.text('e5'), findsOneWidget);
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('e4')),
+        findsNothing,
+      );
+
+      // go next to play 1. e4
+      await tester.tap(find.byKey(const Key('goto-next')));
+      await tester.pump();
+
+      // The variations bar should now display both e5 and c5
+      expect(find.byType(VariationsBar), findsOneWidget);
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('e5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('c5')),
+        findsOneWidget,
+      );
+
+      // Tap the 'c5' variation in the VariationsBar
+      await tester.tap(find.descendant(of: find.byType(VariationsBar), matching: find.text('c5')));
+      await tester.pump();
+
+      // Verify that the tree successfully jumped to c5
+      expect(boardHasPiece(tester, Square.c5, Piece.blackPawn), isTrue);
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      await tester.pump();
+      // The variations bar should now display both e5 and c5 again
+      expect(find.byType(VariationsBar), findsOneWidget);
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('e5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('c5')),
+        findsOneWidget,
+      );
+      //pressing next should play the mainline move e5, not c5
+      await tester.tap(find.byKey(const Key('goto-next')));
+      await tester.pump();
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
 
     testWidgets('change variant in standalone analysis', (tester) async {
