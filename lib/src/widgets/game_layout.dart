@@ -245,16 +245,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
     if (!fenChanged) {
       // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
-      ctrl.animatePosition(newFen, game: newGameData);
+      ctrl.animatePosition(newGameData);
       return;
     }
 
     if (widget.isReplaying) {
-      ctrl.jumpToPosition(newFen, game: newGameData, lastMove: _lastMoveOf(newParams));
+      ctrl.jumpToPosition(newGameData);
       return;
     }
 
-    ctrl.animatePosition(newFen, game: newGameData, lastMove: _lastMoveOf(newParams));
+    ctrl.animatePosition(newGameData);
     if (widget.explosionSquares != null) {
       ctrl.triggerExplosion(widget.explosionSquares!);
     }
@@ -269,7 +269,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   void _initController() {
     final params = widget.boardParams;
     if (params == null) return;
-    _ownController = ChessboardController(fen: params.fen, game: _gameDataFor(params));
+    _ownController = ChessboardController(game: _gameDataFor(params));
   }
 
   void _onPremoveChanged() {
@@ -302,6 +302,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     return switch (params) {
       InteractiveBoardParams(:final variant, :final position, :final playerSide, :final lastMove) =>
         buildGameData(
+          fen: position.fen,
           variant: variant,
           position: position,
           playerSide: playerSide,
@@ -310,6 +311,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           boardHighlights: boardPrefs.boardHighlights,
         ),
       ReadonlyBoardParams(:final fen) => GameData(
+        fen: fen,
         playerSide: PlayerSide.none,
         sideToMove: _sideToMoveFromFen(fen),
         validMoves: const <Square, Set<Square>>{},
@@ -317,11 +319,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       ),
     };
   }
-
-  Move? _lastMoveOf(GameBoardParams params) => switch (params) {
-    InteractiveBoardParams(:final lastMove) => lastMove,
-    ReadonlyBoardParams() => widget.lastMove,
-  };
 
   Side _sideToMoveFromFen(String fen) {
     final parts = fen.split(' ');
@@ -339,10 +336,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
     final variant = cp?.variant ?? widget.boardParams!.variant;
     final pockets = cp != null ? cp.pockets : widget.boardParams!.pockets;
     final playerSide = cp != null
-        ? (_controller?.game?.playerSide ?? PlayerSide.none)
+        ? (_controller?.game.playerSide ?? PlayerSide.none)
         : widget.boardParams!.playerSide;
     final sideToMove = cp != null
-        ? (playerSide == PlayerSide.none ? null : _controller?.game?.sideToMove)
+        ? (playerSide == PlayerSide.none ? null : _controller?.game.sideToMove)
         : switch (widget.boardParams!) {
             ReadonlyBoardParams() => null,
             InteractiveBoardParams(:final position, :final playerSide) =>

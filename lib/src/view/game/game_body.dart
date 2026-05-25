@@ -275,8 +275,8 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final state = ref.read(_ctrlProvider).requireValue;
     final boardPrefs = ref.read(boardPreferencesProvider);
     _controller = ChessboardController(
-      fen: state.currentPosition.fen,
       game: buildGameData(
+        fen: state.currentPosition.fen,
         variant: state.game.meta.variant,
         position: state.currentPosition,
         playerSide: _playerSide(state),
@@ -308,6 +308,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final fen = state.currentPosition.fen;
     final lastMove = state.game.moveAt(state.stepCursor);
     final gameData = buildGameData(
+      fen: fen,
       variant: state.game.meta.variant,
       position: state.currentPosition,
       playerSide: _playerSide(state),
@@ -319,15 +320,15 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     if (state.isReplaying) {
       // History navigation — no animation, premove cleared by jumpToPosition.
       if (fen != _controller.fen) {
-        _controller.jumpToPosition(fen, game: gameData, lastMove: lastMove);
+        _controller.jumpToPosition(gameData);
       } else {
-        _controller.animatePosition(fen, game: gameData);
+        _controller.animatePosition(gameData);
       }
       return;
     }
 
     if (fen != _controller.fen) {
-      _controller.animatePosition(fen, game: gameData, lastMove: lastMove);
+      _controller.animatePosition(gameData);
       final explosion = state.stepCursor > 0
           ? atomicExplosionSquares(
               state.game.positionAt(state.stepCursor - 1),
@@ -342,7 +343,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
       );
     } else {
       // Only game metadata changed (e.g. playable went false) — update without animation.
-      _controller.animatePosition(fen, game: gameData);
+      _controller.animatePosition(gameData);
     }
   }
 

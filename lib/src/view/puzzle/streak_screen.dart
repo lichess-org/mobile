@@ -96,10 +96,7 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void initState() {
     super.initState();
-    _controller = ChessboardController(
-      fen: ref.read(puzzleControllerProvider(widget.initialPuzzleContext)).currentPosition.fen,
-      game: _buildGameData(),
-    );
+    _controller = ChessboardController(game: _buildGameData());
   }
 
   @override
@@ -132,6 +129,7 @@ class _BodyState extends ConsumerState<_Body> {
     final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
     final boardPreferences = ref.read(boardPreferencesProvider);
     return buildGameData(
+      fen: state.currentPosition.fen,
       variant: Variant.standard,
       position: state.currentPosition,
       playerSide: _playerSide(state),
@@ -143,12 +141,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   /// Pushes the latest puzzle position to the board controller without rebuilding it.
   void _applyBoardUpdate() {
-    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
-    _controller.animatePosition(
-      state.currentPosition.fen,
-      game: _buildGameData(),
-      lastMove: state.lastMove,
-    );
+    _controller.animatePosition(_buildGameData());
   }
 
   @override

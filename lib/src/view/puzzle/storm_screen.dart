@@ -94,13 +94,7 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void initState() {
     super.initState();
-    _controller = ChessboardController(
-      fen: ref
-          .read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)))
-          .position
-          .fen,
-      game: _buildGameData(),
-    );
+    _controller = ChessboardController(game: _buildGameData());
   }
 
   @override
@@ -131,6 +125,7 @@ class _BodyState extends ConsumerState<_Body> {
     final state = ref.read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)));
     final boardPreferences = ref.read(boardPreferencesProvider);
     return buildGameData(
+      fen: state.position.fen,
       variant: Variant.standard,
       position: state.position,
       playerSide: _playerSide(state),
@@ -142,12 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   /// Pushes the latest storm position to the board controller without rebuilding it.
   void _applyBoardUpdate() {
-    final state = ref.read(stormControllerProvider((widget.data.puzzles, widget.data.timestamp)));
-    _controller.animatePosition(
-      state.position.fen,
-      game: _buildGameData(),
-      lastMove: state.lastMove,
-    );
+    _controller.animatePosition(_buildGameData());
   }
 
   @override

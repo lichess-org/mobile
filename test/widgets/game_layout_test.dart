@@ -414,8 +414,8 @@ void main() {
   ) async {
     final playedMoves = <Move>[];
     final controller = ChessboardController(
-      fen: kInitialFEN,
       game: buildGameData(
+        fen: kInitialFEN,
         variant: Variant.standard,
         position: Chess.initial,
         playerSide: PlayerSide.white,
@@ -456,6 +456,18 @@ void main() {
     // Removing the GameLayout must not dispose the externally-owned controller.
     showBoard.value = false;
     await tester.pumpAndSettle();
-    expect(() => controller.animatePosition(kInitialFEN), returnsNormally);
+    expect(
+      () => controller.animatePosition(
+        buildGameData(
+          fen: kInitialFEN,
+          variant: Variant.standard,
+          position: Chess.initial,
+          playerSide: PlayerSide.white,
+          castlingMethod: CastlingMethod.kingTwoSquares,
+          boardHighlights: true,
+        ),
+      ),
+      returnsNormally,
+    );
   });
 }

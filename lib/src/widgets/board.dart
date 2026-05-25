@@ -121,6 +121,7 @@ void tryExecutePremove(ChessboardController ctrl, Position position, void Functi
 
 /// Builds a [GameData] object for the given position and variant, including legal moves, check status, and crazyhouse drops.
 GameData buildGameData({
+  required String fen,
   required Variant variant,
   required Position position,
   required PlayerSide playerSide,
@@ -129,6 +130,7 @@ GameData buildGameData({
   Move? lastMove,
 }) {
   return GameData(
+    fen: fen,
     playerSide: playerSide,
     sideToMove: position.turn,
     validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),

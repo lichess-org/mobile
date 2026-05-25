@@ -118,6 +118,7 @@ abstract class AnalysisBoardState<
         ? PlayerSide.white
         : PlayerSide.black;
     return buildGameData(
+      fen: computeFen(state),
       variant: state.variant,
       position: position,
       playerSide: playerSide,
@@ -130,7 +131,7 @@ abstract class AnalysisBoardState<
   ChessboardController? _createController(AnalysisState state, BoardPrefs boardPrefs) {
     final gameData = _buildGameData(state, boardPrefs);
     if (gameData == null) return null;
-    return ChessboardController(fen: computeFen(state), game: gameData);
+    return ChessboardController(game: gameData);
   }
 
   void _onAnalysisStateChanged(AnalysisState? prev, AnalysisState? next) {
@@ -146,13 +147,13 @@ abstract class AnalysisBoardState<
     final gameData = _buildGameData(next, boardPrefs);
     final prevFen = prev != null ? computeFen(prev) : null;
     if (prevFen != newFen) {
-      controller.jumpToPosition(newFen, game: gameData, lastMove: next.lastMove);
+      if (gameData != null) controller.jumpToPosition(gameData);
       final explosionSquares = next.explosionSquares;
       if (explosionSquares != null) {
         controller.triggerExplosion(explosionSquares.toSet());
       }
-    } else {
-      controller.animatePosition(newFen, game: gameData);
+    } else if (gameData != null) {
+      controller.animatePosition(gameData);
     }
   }
 
@@ -161,7 +162,8 @@ abstract class AnalysisBoardState<
     if (controller == null) return;
     final state = readCurrentState();
     if (state == null) return;
-    controller.animatePosition(computeFen(state), game: _buildGameData(state, next));
+    final gameData = _buildGameData(state, next);
+    if (gameData != null) controller.animatePosition(gameData);
   }
 
   Set<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
