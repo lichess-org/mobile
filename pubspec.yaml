@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.23.14+002314 # See README.md for details about versioning
+version: 0.24.0+002400 # See README.md for details about versioning
 
 environment:
   sdk: ^3.11.5
@@ -14,7 +14,10 @@ dependencies:
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^9.0.0
+  chessground:
+    git:
+      url: https://github.com/lichess-org/flutter-chessground.git
+      ref: f00bb0921db2dd3140a040d73d9f2df2d6c37a93
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.1.1
@@ -22,7 +25,7 @@ dependencies:
   crypto: ^3.0.7
   cupertino_http: ^2.4.0
   cupertino_icons: ^1.0.9
-  dartchess: ^0.12.3
+  dartchess: ^0.13.0
   deep_pick: ^1.1.0
   device_info_plus: ^13.1.0
   dynamic_system_colors:

@@ -148,7 +148,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
     });
 
     testWidgets('Engine responds after player move', (tester) async {
@@ -537,11 +537,11 @@ void main() {
       expect(find.text('Game setup'), findsNothing);
 
       // Should load the game's current position, i.e. e4 and e5 were played
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       // Move list should show the played moves
       expect(find.text('e4'), findsOneWidget);
@@ -992,12 +992,12 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
 
       // The position should show e4 and e5 pawns
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       // e2 and e7 should be empty
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
     });
 
     testWidgets('Engine plays first when custom position turn differs from player side', (

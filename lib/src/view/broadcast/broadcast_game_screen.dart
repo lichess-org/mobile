@@ -505,6 +505,22 @@ class BroadcastAnalysisBoard extends AnalysisBoard {
 class _BroadcastAnalysisBoardState
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
+  BroadcastAnalysisState? readCurrentState() => ref
+      .read(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .value;
+
+  @override
+  void listenToStateChanges(
+    void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
+  ) => ref.listenManual<BroadcastAnalysisState?>(
+    broadcastAnalysisControllerProvider((
+      roundId: widget.roundId,
+      gameId: widget.gameId,
+    )).select((v) => v.value),
+    listener,
+  );
+
+  @override
   BroadcastAnalysisState get analysisState => ref
       .watch(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
       .requireValue;
@@ -531,14 +547,7 @@ class _BroadcastAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) => ref
-      .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
-      )
-      .onPromotionSelection(role);
+  String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
 enum _PlayerWidgetPosition { bottom, top }

@@ -158,8 +158,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           ),
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
-        final isRealTimePlayingGame =
-            ref.watch(_isRealTimePlayableGameProvider(createdGameId)).value ?? false;
+        final isRealTimePlayingGame = ref.watch(
+          _isRealTimePlayableGameProvider(createdGameId).select((s) => s.value ?? false),
+        );
 
         final socketUri = GameController.socketUri(createdGameId);
 
@@ -529,9 +530,12 @@ class _WatcherButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameControllerProvider(gameId).select((s) => s.value));
-    final nb = state?.nbWatchers ?? 0;
-    final isZenModeActive = state?.isZenModeActive ?? false;
+    final (nb, isZenModeActive) = ref.watch(
+      gameControllerProvider(gameId).select((s) {
+        final state = s.value;
+        return (state?.nbWatchers ?? 0, state?.isZenModeActive ?? false);
+      }),
+    );
     if (nb <= 0 || isZenModeActive) return const SizedBox.shrink();
     return SemanticIconButton(
       semanticsLabel: context.l10n.spectatorRoom,

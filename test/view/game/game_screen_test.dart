@@ -34,10 +34,13 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -109,14 +112,14 @@ void main() {
 
       // while loading, displays an empty board
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(getBoardPieces(tester), isEmpty);
 
       final initialBoardPosition = tester.getTopLeft(find.byType(Chessboard));
 
       // now the game controller is loading and screen doesn't have changed yet
       await tester.pump(const Duration(milliseconds: 10));
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(getBoardPieces(tester), isEmpty);
       expect(
         tester.getTopLeft(find.byType(Chessboard)),
         initialBoardPosition,
@@ -136,7 +139,7 @@ void main() {
       // wait for socket message handling
       await tester.pump();
 
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(getBoardPieces(tester).length, 32);
       expect(find.text('Peter'), findsOneWidget);
       expect(find.text('Steven'), findsOneWidget);
       expect(
@@ -163,7 +166,7 @@ void main() {
       await tester.pumpWidget(app);
 
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(getBoardPieces(tester), isEmpty);
       expect(find.text('Waiting for opponent to join...'), findsOneWidget);
       expect(find.text('3+2'), findsOneWidget);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsOneWidget);
@@ -182,7 +185,7 @@ void main() {
 
       // now the game controller is loading
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(getBoardPieces(tester), isEmpty);
       expect(find.text('Waiting for opponent to join...'), findsNothing);
       expect(find.text('3+2'), findsNothing);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsNothing);
@@ -206,7 +209,7 @@ void main() {
       // wait for socket message handling
       await tester.pump();
 
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(getBoardPieces(tester).length, 32);
       expect(find.text('Peter'), findsOneWidget);
       expect(find.text('Steven'), findsOneWidget);
       expect(find.text('Waiting for opponent to join...'), findsNothing);
@@ -268,7 +271,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(Chessboard), findsOneWidget);
-        expect(find.byType(PieceWidget), findsNothing);
+        expect(getBoardPieces(tester), isEmpty);
         expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
         expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
         expect(find.byType(QrImageView), findsOneWidget);
@@ -615,14 +618,12 @@ void main() {
       final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
       final ctrlProvider = gameControllerProvider(const GameFullId('qVChCOTcHSeW'));
 
-      expect(container.read(ctrlProvider).requireValue.promotionMove, isNotNull);
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNull);
 
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.tapAt(squareOffset(Square.fromName('e8'), boardRect));
       await tester.pump();
 
-      expect(container.read(ctrlProvider).requireValue.promotionMove, isNull);
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
     });
 
@@ -648,14 +649,14 @@ void main() {
         ),
       );
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(getBoardPieces(tester).length, 32);
 
       await playMove(tester, 'g1', 'f3');
 
       // see confirmation dialog
       expect(find.text('Confirm move'), findsOneWidget);
       // move is shown on board
-      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
       // move is not yet played so it doesn't appear in the move list
       expect(find.text('Nf3'), findsNothing);
 
@@ -664,129 +665,180 @@ void main() {
       await tester.pump();
 
       // move still shown on board
-      expect(find.byKey(const Key('f3-whiteknight')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
       // move appears in move list
       expect(find.text('Nf3'), findsOneWidget);
     });
 
-    testWidgets('illegal premove is cancelled after opponent move with move confirmation', (
-      WidgetTester tester,
-    ) async {
-      const gameFullId = GameFullId('qVChCOTcHSeW');
-      final gameSocketUri = GameController.socketUri(gameFullId);
+    group('Premoves', () {
+      testWidgets('premove is applied after opponent move', (WidgetTester tester) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
 
-      await createTestGame(
-        tester,
-        pgn: 'e4 e5',
-        clock: const (
-          running: true,
-          initial: Duration(minutes: 1),
-          increment: Duration.zero,
-          white: Duration(seconds: 58),
-          black: Duration(seconds: 54),
-          emerg: Duration(seconds: 10),
-        ),
-        serverPrefs: const ServerGamePrefs(
-          showRatings: true,
-          enablePremove: true,
-          autoQueen: .always,
-          confirmResign: true,
-          submitMove: true,
-          zenMode: .no,
-        ),
-      );
-      expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+        // After e4 it's black's turn, white can premove
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 58),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
 
-      // white plays d4 with confirmation
-      await playMove(tester, 'd2', 'd4');
-      expect(find.text('Confirm move'), findsOneWidget);
-      expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
 
-      // white premoves d4-d5 (push the d-pawn, anticipating d5 stays free)
-      await playMove(tester, 'd4', 'd5');
-      await tester.pump();
+        // white premoves d2-d4
+        await playMove(tester, 'd2', 'd4');
 
-      // premove indicators should be visible
-      expect(find.byKey(const ValueKey('d4-premove')), findsOneWidget);
-      expect(find.byKey(const ValueKey('d5-premove')), findsOneWidget);
+        // premove indicator should be visible
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
 
-      // confirm the move
-      await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
-      await tester.pump();
+        // opponent plays e7-e5 (ply 2)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 2, "uci": "e7e5", "san": "e5", "clock": {"white": 58, "black": 56}}}',
+        ]);
+        await tester.pump();
 
-      // premove indicators should still be visible after confirmation
-      expect(find.byKey(const ValueKey('d4-premove')), findsOneWidget);
-      expect(find.byKey(const ValueKey('d5-premove')), findsOneWidget);
+        // let the premove microtask run
+        await tester.pump(const Duration(milliseconds: 1));
+        // let the board rebuild from userMove
+        await tester.pump();
 
-      // server acknowledges white's d4 move (ply 3)
-      sendServerSocketMessages(gameSocketUri, [
-        '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "d2d4", "san": "d4", "clock": {"white": 57, "black": 54}}}',
-      ]);
-      await tester.pump();
+        // premove should have been played
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+      });
 
-      // opponent plays d7-d5 (ply 4), blocking the premove
-      sendServerSocketMessages(gameSocketUri, [
-        '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 57, "black": 52}}}',
-      ]);
-      await tester.pump();
+      testWidgets('illegal premove is cancelled after opponent move with move confirmation', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
 
-      // let the premove microtask run
-      await tester.pump(const Duration(milliseconds: 1));
+        await createTestGame(
+          tester,
+          pgn: 'e4 e5',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: true,
+            zenMode: .no,
+          ),
+        );
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(getBoardPieces(tester).length, 32);
 
-      // premove should be cancelled since d4-d5 is now illegal (d5 is occupied)
-      expect(find.byKey(const ValueKey('d4-premove')), findsNothing);
-      expect(find.byKey(const ValueKey('d5-premove')), findsNothing);
+        // white plays d4 with confirmation
+        await playMove(tester, 'd2', 'd4');
+        expect(find.text('Confirm move'), findsOneWidget);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
 
-      // d5 should have black's pawn (opponent's move was applied)
-      expect(find.byKey(const Key('d5-blackpawn')), findsOneWidget);
-      // d4 should still have white's pawn
-      expect(find.byKey(const Key('d4-whitepawn')), findsOneWidget);
-    });
+        // white premoves d4-d5 (push the d-pawn, anticipating d5 stays free)
+        await playMove(tester, 'd4', 'd5');
+        await tester.pump();
 
-    testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
-      const gameFullId = GameFullId('qVChCOTcHSeW');
-      final gameSocketUri = GameController.socketUri(gameFullId);
+        // premove indicators should be visible
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d4, to: Square.d5)), isTrue);
 
-      await createTestGame(
-        tester,
-        pgn: 'e4 d5 exd5',
-        variant: Variant.crazyhouse,
-        clock: const (
-          running: true,
-          initial: Duration(minutes: 1),
-          increment: Duration.zero,
-          white: Duration(seconds: 58),
-          black: Duration(seconds: 54),
-          emerg: Duration(seconds: 10),
-        ),
-        serverPrefs: const ServerGamePrefs(
-          showRatings: true,
-          enablePremove: true,
-          autoQueen: .always,
-          confirmResign: true,
-          submitMove: false,
-          zenMode: .no,
-        ),
-      );
+        // confirm the move
+        await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+        await tester.pump();
 
-      await playDropMove(tester, Side.white, Role.pawn, 'a4');
+        // premove indicators should still be visible after confirmation
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d4, to: Square.d5)), isTrue);
 
-      // premove indicator should be visible
-      expect(find.byKey(const ValueKey('a4-premove')), findsOneWidget);
+        // server acknowledges white's d4 move (ply 3)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "d2d4", "san": "d4", "clock": {"white": 57, "black": 54}}}',
+        ]);
+        await tester.pump();
 
-      // opponent plays Qxd5
-      sendServerSocketMessages(gameSocketUri, [
-        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 57, "black": 52}}}',
-      ]);
-      await tester.pump();
+        // opponent plays d7-d5 (ply 4), blocking the premove
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 57, "black": 52}}}',
+        ]);
+        await tester.pump();
 
-      // let the premove microtask run
-      await tester.pump(const Duration(milliseconds: 1));
+        // let the premove microtask run
+        await tester.pump(const Duration(milliseconds: 1));
 
-      // premove should have been played
-      expect(find.byKey(const ValueKey('a4-premove')), findsNothing);
-      expect(find.byKey(const Key('a4-whitepawn')), findsOneWidget);
+        // premove should be cancelled since d4-d5 is now illegal (d5 is occupied)
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d4, to: Square.d5)), isFalse);
+
+        // d5 should have black's pawn (opponent's move was applied)
+        expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
+        // d4 should still have white's pawn
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+      });
+
+      testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        await createTestGame(
+          tester,
+          pgn: 'e4 d5 exd5',
+          variant: Variant.crazyhouse,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        await playDropMove(tester, Side.white, Role.pawn, 'a4');
+
+        // premove indicator should be visible
+        expect(boardHasPremove(tester, const DropMove(to: Square.a4, role: Role.pawn)), isTrue);
+
+        // opponent plays Qxd5
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 57, "black": 52}}}',
+        ]);
+        await tester.pump();
+
+        // let the premove microtask run
+        await tester.pump(const Duration(milliseconds: 1));
+        // let the board rebuild from userMove
+        await tester.pump();
+
+        // premove should have been played
+        expect(boardHasPremove(tester, const DropMove(to: Square.a4, role: Role.pawn)), isFalse);
+        expect(boardHasPiece(tester, Square.a4, Piece.whitePawn), isTrue);
+      });
     });
 
     testWidgets('takeback', (WidgetTester tester) async {
@@ -803,14 +855,14 @@ void main() {
         ),
       );
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNWidgets(32));
+      expect(getBoardPieces(tester).length, 32);
 
       // black plays
       sendServerSocketMessages(testGameSocketUri, [
         '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "b8c6", "san": "Nc6", "clock": {"white": 58, "black": 52}}}',
       ]);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byKey(const Key('c6-blackknight')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isTrue);
       expect(
         tester.widgetList<Clock>(find.byType(Clock)).last.active,
         true,
@@ -863,8 +915,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1));
 
       // black move is cancelled
-      expect(find.byKey(const Key('c6-blackknight')), findsNothing);
-      expect(find.byKey(const Key('b8-blackknight')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isFalse);
+      expect(boardHasPiece(tester, Square.b8, Piece.blackKnight), isTrue);
       expect(tester.widget<Clock>(findClock(Side.black)).active, true);
       expect(tester.widget<Clock>(findClock(Side.white)).active, false);
       // black clock is ticking
@@ -892,27 +944,29 @@ void main() {
           tester,
         );
 
-        expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.e1, Piece.whiteKing), isTrue);
 
-        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        final boardRect = tester.getRect(find.byType(Chessboard));
+        await tester.tapAt(squareOffset(Square.e1, boardRect));
         await tester.pump();
 
+        final validMoves = getBoardValidMoves(tester);
         switch (castlingMethod) {
           case CastlingMethod.kingOverRook:
             // kingOverRook acts as either kingTwoSquares or kingOverRook
-            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+            expect(validMoves.contains(Square.f1), isTrue);
+            expect(validMoves.contains(Square.g1), isTrue);
+            expect(validMoves.contains(Square.h1), isTrue);
+            expect(validMoves.contains(Square.c1), isTrue);
+            expect(validMoves.contains(Square.d1), isTrue);
+            expect(validMoves.contains(Square.a1), isTrue);
           case CastlingMethod.kingTwoSquares:
-            expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('g1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('h1-dest')), findsNothing);
-            expect(find.byKey(const Key('c1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-            expect(find.byKey(const Key('a1-dest')), findsNothing);
+            expect(validMoves.contains(Square.f1), isTrue);
+            expect(validMoves.contains(Square.g1), isTrue);
+            expect(validMoves.contains(Square.h1), isFalse);
+            expect(validMoves.contains(Square.c1), isTrue);
+            expect(validMoves.contains(Square.d1), isTrue);
+            expect(validMoves.contains(Square.a1), isFalse);
         }
       });
     }
@@ -931,17 +985,19 @@ void main() {
           tester,
         );
 
-        await tester.tap(find.byKey(const Key('e1-whiteking')));
+        final boardRect = tester.getRect(find.byType(Chessboard));
+        await tester.tapAt(squareOffset(Square.e1, boardRect));
 
         await tester.pump();
 
         // in chess960, castling is only king over rook, no matter the preference
-        expect(find.byKey(const Key('f1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('g1-dest')), findsNothing);
-        expect(find.byKey(const Key('h1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('c1-dest')), findsNothing);
-        expect(find.byKey(const Key('d1-dest')), findsOneWidget);
-        expect(find.byKey(const Key('a1-dest')), findsOneWidget);
+        final validMoves = getBoardValidMoves(tester);
+        expect(validMoves.contains(Square.f1), isTrue);
+        expect(validMoves.contains(Square.g1), isFalse);
+        expect(validMoves.contains(Square.h1), isTrue);
+        expect(validMoves.contains(Square.c1), isFalse);
+        expect(validMoves.contains(Square.d1), isTrue);
+        expect(validMoves.contains(Square.a1), isTrue);
       });
     }
   });
@@ -1453,9 +1509,9 @@ void main() {
       await tester.pump();
 
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byKey(const Key('d3-whitebishop')), findsOneWidget);
-      expect(find.byKey(const Key('b5-lastMove')), findsOneWidget);
-      expect(find.byKey(const Key('d3-lastMove')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.d3, Piece.whiteBishop), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.b5), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.d3), isTrue);
       await tester.tap(find.byIcon(Icons.menu));
       await tester.pump(const Duration(milliseconds: 500));
       expect(find.byType(Dialog), findsOneWidget);
@@ -1465,10 +1521,10 @@ void main() {
         find.widgetWithText(AppBar, 'Analysis board'),
         findsOneWidget,
       ); // analysis screen is now open
-      expect(find.byKey(const Key('f3-whitequeen')), findsOneWidget);
-      expect(find.byKey(const Key('d3-whitebishop')), findsOneWidget);
-      expect(find.byKey(const Key('b5-lastMove')), findsOneWidget);
-      expect(find.byKey(const Key('d3-lastMove')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteQueen), isTrue);
+      expect(boardHasPiece(tester, Square.d3, Piece.whiteBishop), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.b5), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.d3), isTrue);
       expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
       // computer analysis is not available when game is not finished
       expect(find.bySemanticsLabel(RegExp('Computer analysis')), findsNothing);
@@ -1477,9 +1533,9 @@ void main() {
     testWidgets('for a finished game', (WidgetTester tester) async {
       await loadFinishedTestGame(tester);
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
-      expect(find.byKey(const Key('d5-lastMove')), findsOneWidget);
-      expect(find.byKey(const Key('e6-lastMove')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e6, Piece.whiteQueen), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.d5), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.e6), isTrue);
       await tester.pump(const Duration(milliseconds: 500)); // wait for popup
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
@@ -1488,9 +1544,9 @@ void main() {
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byType(Chessboard), findsOneWidget);
-      expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
-      expect(find.byKey(const Key('d5-lastMove')), findsOneWidget);
-      expect(find.byKey(const Key('e6-lastMove')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e6, Piece.whiteQueen), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.d5), isTrue);
+      expect(getBoardLastMove(tester)?.hasSquare(Square.e6), isTrue);
       expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
       expect(
         find.bySemanticsLabel(RegExp('Computer analysis')),
@@ -1590,9 +1646,38 @@ void main() {
       await tester.pumpAndSettle();
 
       // Pawn should appear on c4 (transient move before server ack)
-      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
 
       await dropExpectation;
+    });
+
+    testWidgets('pocket count display updates after a player drop move', (tester) async {
+      // Regression test: the pocket counts are rendered by the GameLayout from
+      // the board params. With the high-performance board, a move no longer
+      // rebuilds the layout shell, so the displayed pocket count could go stale
+      // (the dropped pawn would still show in the pocket after being played).
+
+      // After 1.e4 d5 2.exd5 Qxd5, white has a pawn in pocket and it's white's turn.
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.white,
+      );
+
+      final whitePawnPocket = find.byKey(const ValueKey('pocket-whitepawn'));
+      expect(whitePawnPocket, findsOneWidget);
+
+      // The white pawn pocket initially shows a count badge of 1.
+      expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsOneWidget);
+
+      // White drops the pawn to c4.
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pumpAndSettle();
+
+      // The pawn is on the board and the pocket count badge is gone (count 0).
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+      expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsNothing);
     });
 
     testWidgets("Cannot interact with the opponent's pockets", (tester) async {
@@ -1612,7 +1697,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
-      expect(find.byKey(const ValueKey('d6-blackpawn')), findsNothing);
+      expect(boardHasPiece(tester, Square.d6, Piece.blackPawn), isFalse);
     });
 
     testWidgets('correctly handles opponent drop move received from server', (tester) async {
@@ -1637,7 +1722,107 @@ void main() {
       await tester.pump();
 
       // White pawn should appear on c4
-      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+    });
+  });
+
+  group('Widget rebuilds', () {
+    // These tests guard the GameScreen performance optimization: a move must
+    // update the board through the ChessboardController WITHOUT rebuilding the
+    // expensive ancestors (GameScreen/GameBody, the GameLayout shell, the board).
+    // Only the leaf widgets that depend on the move (e.g. the player tables) may
+    // rebuild. The rebuild probe is widget-instance identity: if an ancestor does
+    // not rebuild, the child widget instance found in the tree is unchanged.
+
+    testWidgets('a local move does not rebuild GameBody, GameLayout or the board', (tester) async {
+      await createTestGame(tester, pgn: 'e4 e5'); // white (us) to move
+      // Flush the one-time load rebuilds (e.g. the real-time-playable future resolving).
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+      final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+      final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+      final playerBefore = tester.widgetList<GamePlayer>(find.byType(GamePlayer)).first;
+      final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
+
+      await playMove(tester, 'g1', 'f3');
+      await tester.pump();
+
+      // The move reached the board (controller-driven repaint)…
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+
+      // …but the expensive ancestors were not rebuilt.
+      expect(
+        identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+        isTrue,
+        reason: 'GameScreen must not rebuild GameBody on a move',
+      );
+      expect(
+        identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+        isTrue,
+        reason: 'the GameLayout shell must not rebuild on a move',
+      );
+      expect(
+        identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+        isTrue,
+        reason: 'the board must not rebuild on a move (the controller drives the repaint)',
+      );
+
+      // The player table (material diff) is a contained, necessary rebuild.
+      expect(
+        identical(tester.widgetList<GamePlayer>(find.byType(GamePlayer)).first, playerBefore),
+        isFalse,
+        reason: 'the player table should rebuild on a move',
+      );
+
+      // The bottom bar (minus the isolated prev/next nav buttons) watches only
+      // discrete flags that don't change on a plain move, so it must not rebuild.
+      expect(
+        identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+        isTrue,
+        reason: 'the bottom bar must not rebuild on a move',
+      );
+    });
+
+    testWidgets('an opponent move does not rebuild GameBody, GameLayout or the board', (
+      tester,
+    ) async {
+      await createTestGame(tester, pgn: 'e4 e5 Nf3'); // black (opponent) to move
+      await tester.pump(const Duration(milliseconds: 50));
+
+      final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+      final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+      final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+      final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
+
+      // Opponent (black) plays Nf6, received from the server.
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "g8f6", "san": "Nf6", "clock": {"white": 180, "black": 180}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(boardHasPiece(tester, Square.f6, Piece.blackKnight), isTrue);
+
+      expect(
+        identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+        isTrue,
+        reason: 'GameScreen must not rebuild GameBody on an opponent move',
+      );
+      expect(
+        identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+        isTrue,
+        reason: 'the GameLayout shell must not rebuild on an opponent move',
+      );
+      expect(
+        identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+        isTrue,
+        reason: 'the board must not rebuild on an opponent move',
+      );
+      expect(
+        identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+        isTrue,
+        reason: 'the bottom bar must not rebuild on an opponent move',
+      );
     });
   });
 
@@ -1684,6 +1869,70 @@ void main() {
         },
       );
     }
+  });
+
+  group('Claim win', () {
+    testWidgets('shows the countdown when the opponent leaves and claims victory', (
+      WidgetTester tester,
+    ) async {
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
+      await createTestGame(
+        tester,
+        socketFactory: socketFactory,
+        // fullmoves >= 2 so the game is resignable (not abortable), and it is the
+        // opponent's turn so the claim-win countdown is allowed to show.
+        pgn: 'e4 e5 Nf3',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 3),
+          increment: Duration(seconds: 2),
+          white: Duration(minutes: 2, seconds: 58),
+          black: Duration(minutes: 2, seconds: 54),
+          emerg: Duration(seconds: 30),
+        ),
+      );
+
+      // No countdown until the opponent leaves.
+      expect(find.byType(CountdownClockBuilder), findsNothing);
+
+      // 'goneIn' announces the opponent left and starts the claim-win countdown.
+      sendServerSocketMessages(testGameSocketUri, ['{"t": "goneIn", "v": 1, "d": 30}']);
+      await tester.pump();
+      expect(find.textContaining('claim victory in 30 seconds'), findsOneWidget);
+
+      final countdownButton = find.ancestor(
+        of: find.textContaining('claim victory in 30 seconds'),
+        matching: find.byType(InkWell),
+      );
+
+      // Victory is not claimable until the 'gone' threshold is reached, so the
+      // countdown is not tappable yet (InkWell.onTap is null).
+      await tester.tap(countdownButton, warnIfMissed: false);
+      await tester.pump();
+      expect(find.text('Claim victory'), findsNothing);
+
+      // 'gone' confirms the opponent has been gone long enough to claim.
+      sendServerSocketMessages(testGameSocketUri, ['{"t": "gone", "v": 2, "d": true}']);
+      await tester.pump();
+
+      // Tapping the countdown now opens the claim-win dialog. (warnIfMissed: the
+      // tap reaches the InkWell's gesture listener, but layered widgets mean the
+      // InkWell RenderBox isn't the topmost hit-test object at its center.)
+      await tester.tap(countdownButton, warnIfMissed: false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Claim victory'), findsOneWidget);
+      expect(find.text('Call draw'), findsOneWidget);
+
+      // Claiming victory sends the force-resign message and closes the dialog.
+      expectLater(socketFactory.outgoingMessages(testGameSocketUri), emits('{"t":"resign-force"}'));
+      await tester.tap(find.text('Claim victory'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Claim victory'), findsNothing);
+    });
   });
 }
 

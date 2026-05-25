@@ -1,9 +1,9 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -300,24 +300,28 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Chessboard.fixed(
+      child: StaticChessboard(
         size: size,
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes: <Shape>{
+        shapes: {
           Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
           Arrow(
             color: boardPrefs.shapeColor.color,
             orig: Square.fromName('b8'),
             dest: Square.fromName('c6'),
           ),
-        }.lock,
-        settings: boardPrefs.toBoardSettings().copyWith(
-          brightness: brightness,
-          hue: hue,
-          borderRadius: Styles.boardBorderRadius,
-          boxShadow: boardShadows,
+        },
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(Variant.standard)
+              .copyWith(
+                brightness: brightness,
+                hue: hue,
+                borderRadius: Styles.boardBorderRadius,
+                boxShadow: boardShadows,
+              ),
         ),
       ),
     );
