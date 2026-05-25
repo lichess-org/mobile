@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -242,6 +243,23 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
           ],
         ),
       },
+      floatingActionButton: authUser != null
+          ? FloatingActionButton.extended(
+              onPressed: () => showModalBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (context) => CreateStudyBottomSheet(
+                  user: authUser,
+                  onStudyCreated: (context, studyId) => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
+                ),
+              ),
+              label: Text(context.l10n.studyCreateStudy),
+            )
+          : null,
     );
   }
 }
