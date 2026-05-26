@@ -18,8 +18,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
 final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref) {
-  return () =>
-      FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn'], withData: true);
+  return () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn']);
 });
 
 class ImportPgnScreen extends StatelessWidget {
@@ -131,8 +130,9 @@ class _BodyState extends ConsumerState<_Body> {
     try {
       final result = await ref.read(pickPgnFileProvider)();
 
-      if (result != null && result.files.single.bytes != null) {
-        final content = utf8.decode(result.files.single.bytes!, allowMalformed: true);
+      if (result != null) {
+        final bytes = await result.files.single.readAsBytes();
+        final content = utf8.decode(bytes, allowMalformed: true);
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

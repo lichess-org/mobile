@@ -33,7 +33,7 @@ dependencies:
       url: https://github.com/veloce/flutter_dynamic_system_colors.git
       ref: main
   fast_immutable_collections: ^11.2.0
-  file_picker: ^12.0.0-beta.3
+  file_picker: ^12.0.0-beta.4
   firebase_core: ^4.9.0
   firebase_crashlytics: ^5.2.2
   firebase_messaging: ^16.2.2
@@ -49,11 +49,11 @@ dependencies:
   flutter_markdown: ^0.7.7+1
   flutter_native_splash: ^2.4.7
   flutter_riverpod: ^3.3.1
-  flutter_secure_storage: ^10.2.0
+  flutter_secure_storage: ^10.3.0
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
-  home_widget: ^0.9.1
+  home_widget: ^0.9.2
   http: ^1.6.0
   image_picker: ^1.2.2
   intl: ^0.20.2
