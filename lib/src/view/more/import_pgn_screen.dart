@@ -131,8 +131,9 @@ class _BodyState extends ConsumerState<_Body> {
       final result = await ref.read(pickPgnFileProvider)();
 
       if (result != null) {
-        final bytes = await result.files.single.readAsBytes();
-        final content = utf8.decode(bytes, allowMalformed: true);
+        final content = await const Utf8Decoder(
+          allowMalformed: true,
+        ).bind(result.files.single.readAsByteStream()).join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

@@ -21,7 +21,7 @@ class _FakePlatformFile extends PlatformFile {
   final Uint8List _fileBytes;
 
   @override
-  Future<Uint8List> readAsBytes() async => _fileBytes;
+  Stream<Uint8List> readAsByteStream() => Stream.value(_fileBytes);
 }
 
 void _mockClipboard(String text) {
