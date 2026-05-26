@@ -26,15 +26,15 @@ jobs:
           java-version: 17
           distribution: temurin
 
+      - name: Checkout mobile code
+        uses: actions/checkout@v6.0.2
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2.23.0
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
-      - run: flutter doctor -v
-
-      - name: Checkout mobile code
-        uses: actions/checkout@v6.0.2
+      - run: flutter --version
 
       - name: Install dependencies
         run: flutter pub get
