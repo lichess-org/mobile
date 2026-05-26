@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: a49d6cf99e8d8e7a8e93668d09ced0bbdb954d0b4fccc2f5f9241c6b87fad95c
+      sha256: "3b19a47f6ea7c2632760777c78174f47f6aec1e05f0cd611380d4593b8af1dbc"
       url: "https://pub.dev"
     source: hosted
-    version: "99.0.0"
+    version: "96.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -17,38 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.71"
-  analysis_server_plugin:
-    dependency: transitive
-    description:
-      name: analysis_server_plugin
-      sha256: "3960b28ee740004df39f85d5ebfc91785f7a90e51fd7c9a185e86a36b2f581b4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.14"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "663efa951fb8a45e06f491223a604c93820598f20e6a99c25617a1576065e8b7"
+      sha256: "0c516bc4ad36a1a75759e54d5047cb9d15cded4459df01aa35a0b5ec7db2c2a0"
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
-  analyzer_buffer:
-    dependency: transitive
-    description:
-      name: analyzer_buffer
-      sha256: bf559bc54530827a92cc4d9ee340fc76b4f17f386218c2b9e7cd33ed468a7e4d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.2"
-  analyzer_plugin:
-    dependency: transitive
-    description:
-      name: analyzer_plugin
-      sha256: "0057a98d64d7bb872b0c87dff6e73d2c2d80c77156e7a03f127a26f8aa240649"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.14.8"
+    version: "10.2.0"
   ansicolor:
     dependency: transitive
     description:
@@ -326,10 +302,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: a4c1ccfee44c7e75ed80484071a5c142a385345e658fd8bd7c4b5c97e7198f98
+      sha256: "29f7ecc274a86d32920b1d9cfc7502fa87220da41ec60b55f329559d5732e2b2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.8"
+    version: "3.1.7"
   dartchess:
     dependency: "direct main"
     description:
@@ -641,10 +617,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: be3aa640f053064e2238f8a308baa5be7270645e8b53b08484fd305bd5c1eb5d
+      sha256: "4e166be88e1dbbaa34a280bdb744aeae73b7ef25fdf8db7a3bb776760a3648e2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2-dev.2"
+    version: "3.3.1"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -724,10 +700,10 @@ packages:
     dependency: "direct dev"
     description:
       name: freezed
-      sha256: "8599ba37236328ff6f97269ecce875d251a367eb2929c9bbf9b811b2ce56c74e"
+      sha256: f23ea33b3863f119b58ed1b586e881a46bd28715ddcc4dbc33104524e3434131
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.6-dev.1"
+    version: "3.2.5"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -1341,26 +1317,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: da7233961958420e9d80edf4b7a735d5b6b732fe2381d2a12a388562e2042b3f
+      sha256: "8c22216be8ad3ef2b44af3a329693558c98eca7b8bd4ef495c92db0bba279f83"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2-dev.2"
-  riverpod_analyzer_utils:
-    dependency: transitive
-    description:
-      name: riverpod_analyzer_utils
-      sha256: "3e275138862ccc22ed61444a1f9a840f753094c367f28f4123f50289cd204d68"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0-dev.10"
-  riverpod_lint:
-    dependency: "direct dev"
-    description:
-      name: riverpod_lint
-      sha256: "4ef15442a9f2254ed6ee59a48db84c2c784580ef804061443861b7e0360ec106"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.4-dev.3"
+    version: "3.2.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -1878,14 +1838,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
-  yaml_edit:
-    dependency: transitive
-    description:
-      name: yaml_edit
-      sha256: "07c9e63ba42519745182b88ca12264a7ba2484d8239958778dfe4d44fe760488"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.4"
 sdks:
   dart: ">=3.11.5 <4.0.0"
   flutter: "3.44.0"
