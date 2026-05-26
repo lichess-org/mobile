@@ -625,11 +625,13 @@ class _GameMoveList extends ConsumerWidget {
     );
     if (data == null) return const SizedBox.shrink();
 
-    final moves = data.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
-
     return MoveList(
       type: type,
-      slicedMoves: moves.asMap().entries.slices(2),
+      slicedMoves: data.steps
+          .skip(1)
+          .indexed
+          .map((e) => MapEntry(e.$1, e.$2.sanMove!.san))
+          .slices(2),
       currentMoveIndex: data.cursor,
       onSelectMove: (moveIndex) {
         ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
